@@ -168,7 +168,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
                 this.level().playSound(null, this.blockPosition(), SE,
                         SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
-                this.soundEffectCooldown = soundEffectCooldownMax;
+                this.soundEffectCooldown = soundEffectCooldownMax + this.random.nextInt(0, 50);
             }
 
             if (this.hasTimeLimit) {
@@ -374,14 +374,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT,
-                SoundSource.PLAYERS, 1.5F, (float)(0.78+(Math.random()*0.04)));
+        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT,
+                SoundSource.PLAYERS, 1.3F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
-            if (this.tickCount % 40 == 9) {
-                this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
-                        this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                        0, 0, 0);
-            }
+
+            this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
+                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                    0, 0, 0);
+
         }
 
         this.discard();

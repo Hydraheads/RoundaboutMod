@@ -5,6 +5,8 @@ import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.KingBedBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -35,7 +37,9 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -49,6 +53,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -68,10 +73,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -337,6 +350,15 @@ public class PowersCalifornia extends NewDashPreset {
             case SKILL_4_NORMAL -> {
                 ruleSwitchClient();
             }
+            case SKILL_4_CROUCH -> {
+                placeBedClient();
+            }
+        }
+    }
+
+    public void placeBedClient(){
+        if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
     }
     @Override
@@ -418,7 +440,13 @@ public class PowersCalifornia extends NewDashPreset {
         if (canFallBrace()) {
             doFallBraceClient();
         } else {
-            dash();
+            tryMakeExpBishop();
+        }
+    }
+
+    public void tryMakeExpBishop(){
+        if (!onCooldown(PowerIndex.SKILL_3)) {
+            tryPowerPacket(PowerIndex.POWER_3);
         }
     }
 
@@ -506,14 +534,14 @@ public class PowersCalifornia extends NewDashPreset {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else {
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.EXPERIENCE_BISHOP, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 3, StandIcons.EXPERIENCE_BISHOP, PowerIndex.SKILL_3);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.GO_BEYOND, PowerIndex.SKILL_4_SNEAK);
+            setSkillIcon(context, x, y, 4, StandIcons.SLEEP, PowerIndex.SKILL_4_SNEAK);
         } else {
             ResourceLocation icon;
             if (isDoNotHurt()){
@@ -849,6 +877,10 @@ public class PowersCalifornia extends NewDashPreset {
             doTheStepRule();
         } else if (move == PowerIndex.SKILL_EXTRA_2){
             doTheLeaveRule();
+        } else if (move == PowerIndex.POWER_3){
+            saveBishop();
+        } else if (move == PowerIndex.POWER_4_SNEAK){
+            placeBedServer();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1133,13 +1165,130 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    void sendParticles(ServerPlayer sp){
+
+        Vec3 lvec = self.getLookAngle();
+        Position pn = self.getEyePosition().add(lvec.scale(3));
+        Vec3 rev = lvec.reverse();
+        ((ServerLevel) this.self.level()).sendParticles(ModParticles.MAGIC_HEART, pn.x(),
+                pn.y(), pn.z(),
+                0,
+                rev.x, rev.y, rev.z,
+                0.08);
+    }
+    public void saveBishop(){
+        if (!onCooldown(PowerIndex.SKILL_3)){
+            if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
+
+                sendParticles(pl);
+                ItemStack piece = ModItems.EXP_BISHOP.getDefaultInstance().copy();
+                MainUtil.addItem(pl,piece);
+                setCooldown(PowerIndex.SKILL_3,1200);
+            }
+        }
+    }
+
+    public void placeBedServer(){
+        if (!onCooldown(PowerIndex.SKILL_4_SNEAK)){
+            if (self instanceof ServerPlayer player){
+                HitResult hit = player.pick(5.0D, 0.0F, false);
+
+                if (hit instanceof BlockHitResult blockHit) {
+                    Entity stand = getStandEntity(self);
+                    if (stand instanceof CaliforniaKingBedEntity cbe) {
+                        BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
+                        Direction facing = player.getDirection();
+                        UUID standUUID = cbe.getUUID();
+
+                        if (placeKingBed(player, pos, facing,standUUID,cbe)) {
+                            setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                            animateStand(CaliforniaKingBedEntity.SLEEP);
+
+                            cbe.bedBlockBind = pos;
+                            cbe.setPos(pos.getCenter().subtract(0,0.5,0));
+                            this.poseStand(OffsetIndex.LOOSE);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing, UUID standUUID, CaliforniaKingBedEntity ckb) {
+        ServerLevel level = player.serverLevel();
+
+        BlockState footState = ModBlocks.KING_BED_BLOCK
+                .defaultBlockState()
+                .setValue(BedBlock.FACING, facing)
+                .setValue(BedBlock.PART, BedPart.FOOT)
+                .setValue(BedBlock.OCCUPIED, false);
+
+        BlockPos headPos = pos.relative(facing);
+
+        BlockState headState = footState
+                .setValue(BedBlock.PART, BedPart.HEAD);
+
+        // Height limit
+        if (!level.isInWorldBounds(pos) || !level.isInWorldBounds(headPos))
+            return false;
+
+        // Can the player build here?
+        if (!player.mayUseItemAt(pos, facing, ItemStack.EMPTY))
+            return false;
+
+        if (!player.mayUseItemAt(headPos, facing, ItemStack.EMPTY))
+            return false;
+
+        // Both positions must be replaceable
+        if (!level.getBlockState(pos).canBeReplaced())
+            return false;
+
+        if (!level.getBlockState(headPos).canBeReplaced())
+            return false;
+
+        // Can both halves survive?
+        if (!footState.canSurvive(level, pos))
+            return false;
+
+        if (!headState.canSurvive(level, headPos))
+            return false;
+
+        // Place the blocks
+        level.setBlock(pos, footState, Block.UPDATE_ALL);
+        level.setBlock(headPos, headState, Block.UPDATE_ALL);
+
+        if (level.getBlockEntity(pos) instanceof KingBedBlockEntity bed) {
+            bed.setStandUUID(standUUID);
+        }
+
+        if (level.getBlockEntity(headPos) instanceof KingBedBlockEntity bed) {
+            bed.setStandUUID(standUUID);
+        }
+
+        float yaw = footState.getValue(BedBlock.FACING).getOpposite().toYRot();
+
+        ckb.setYRot(yaw);
+        ckb.setYHeadRot(yaw);
+        ckb.setYBodyRot(yaw);
+        ckb.yRotO = yaw;
+        ckb.yHeadRotO = yaw;
+        ckb.yBodyRotO = yaw;
+        ckb.setXRot(0.01F); // if desired
+
+
+        // Vanilla callback
+        footState.getBlock().setPlacedBy(level, pos, footState, player, ItemStack.EMPTY);
+
+        level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
+
+        return true;
+    }
     public void saveLocation(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (self instanceof ServerPlayer pl){
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HYPNO_SWIRL,
-        self.getEyePosition().x, self.getEyePosition().y, self.getEyePosition().z,
-        0, 0, 1,0, 0.15);
+
+                sendParticles(pl);
                 ItemStack piece = getPieceType(self, false, false,14);
                 MainUtil.addItem(pl,piece);
                 setCooldown(PowerIndex.SKILL_2_SNEAK,1200);
@@ -1159,8 +1308,10 @@ public class PowersCalifornia extends NewDashPreset {
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 ||
                 num == PowerIndex.SKILL_1 ||
+                num == PowerIndex.SKILL_3 ||
                 num == PowerIndex.SKILL_EXTRA ||
                 num == PowerIndex.SKILL_2_SNEAK ||
+                num == PowerIndex.SKILL_4_SNEAK ||
                 num == PowerIndex.SKILL_EXTRA_2) {
             return true;
         }

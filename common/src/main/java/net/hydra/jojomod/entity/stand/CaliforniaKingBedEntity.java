@@ -1,9 +1,11 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public CaliforniaKingBedEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -14,8 +16,10 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             SUNSHINE = 2;
 
     public final AnimationState fall_brace = new AnimationState();
+    public final AnimationState sleep = new AnimationState();
     public static final byte
-            FALL_BRACE = 82;
+            FALL_BRACE = 82,
+            SLEEP = 83;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -25,10 +29,18 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             } else {
                 this.fall_brace.stop();
             }
+            if (this.getAnimation() == SLEEP) {
+                this.sleep.startIfStopped(this.tickCount);
+            } else {
+                this.sleep.stop();
+            }
         }
     }
     @Override
     public float getDistanceOutModified() {return getDistanceOut()*1.15F;}
     @Override
     public float getAnchorPlaceModified() {return getAnchorPlace()+10;}
+
+    public BlockPos bedBlockBind = null;
+
 }

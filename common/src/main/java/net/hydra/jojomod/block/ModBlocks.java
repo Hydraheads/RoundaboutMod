@@ -1,8 +1,11 @@
 package net.hydra.jojomod.block;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -166,6 +169,7 @@ public class ModBlocks {
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
     public static Block COFFIN_BLOCK;
+    public static Block KING_BED_BLOCK;
     //public static Block CHESSBOARD_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
@@ -179,6 +183,7 @@ public class ModBlocks {
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
+    public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
     //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
@@ -772,7 +777,15 @@ public class ModBlocks {
             DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
+    public static KingBedBlock KING_BED_BLOCK_PROPERTIES = new KingBedBlock(
+            DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(-1.0F, 3600000.0F).noLootTable()
+            .sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).lightLevel((L) -> {
+        return 1;
+    }));
 
+    private static Boolean never(BlockState $$0, BlockGetter $$1, BlockPos $$2, EntityType<?> $$3) {
+        return false;
+    }
     public static FancyLighterBlock FANCY_LIGHTER_PROPRETIES = new FancyLighterBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.01F, 0.01F).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).lightLevel(litBlockEmission(10)).noOcclusion().noCollission());
     /*public static ChessBoardBlock CHESSBOARD_BLOCK_PROPERTIES = new ChessBoardBlock(

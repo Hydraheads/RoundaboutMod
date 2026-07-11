@@ -233,6 +233,8 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/hurt.png");
     public static final ResourceLocation LEAVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/leave.png");
+    public static final ResourceLocation SLEEP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/sleep.png");
     public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/experience_bishop.png");
     public static final ResourceLocation STEAL_MEMORIES = new ResourceLocation(Roundabout.MOD_ID,

@@ -6,10 +6,13 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -50,6 +53,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     }
     public final AnimationState ripperEyes = new AnimationState();
 
+    public boolean playedSound = false;
     @Override
     public void tick() {
         if (!level().isClientSide()){
@@ -109,6 +113,18 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         }
 
         alreadyHitEntities.add(entity);
+        if (!playedSound){
+            playedSound = true;
+
+            this.level().playSound(null, this.blockPosition(),  ModSounds.DING_EVENT,
+                    SoundSource.PLAYERS, 0.8F, 1.4F);
+        }
+
+        ((ServerLevel) this.level()).sendParticles(ModParticles.ICE_SPARKLE, entity.getX(),
+                entity.getY()+(entity.getBbHeight()*0.5), entity.getZ(),
+                30,
+                1, 0.4, 1,
+                0.01);
     }
 
     public void onChangedBlockX(){

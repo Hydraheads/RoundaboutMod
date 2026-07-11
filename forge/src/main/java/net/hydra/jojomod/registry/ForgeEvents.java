@@ -156,6 +156,7 @@ public class ForgeEvents {
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = ForgeBlocks.EQUIPPABLE_STONE_MASK_BLOCK.get();
         ModBlocks.BLOODY_STONE_MASK_BLOCK = ForgeBlocks.BLOODY_STONE_MASK_BLOCK.get();
         ModBlocks.COFFIN_BLOCK = ForgeBlocks.COFFIN_BLOCK.get();
+        ModBlocks.KING_BED_BLOCK = ForgeBlocks.KING_BED_BLOCK.get();
         //ModBlocks.CHESSBOARD_BLOCK = ForgeBlocks.CHESSBOARD_BLOCK.get();
         ModBlocks.REGAL_FLOOR = ForgeBlocks.REGAL_FLOOR.get();
         ModBlocks.WOODEN_MANOR_TABLE = ForgeBlocks.WOODEN_MANOR_TABLE.get();
@@ -280,6 +281,7 @@ public class ForgeEvents {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
+        ModBlocks.KING_BED_BLOCK_ENTITY = ForgeBlocks.KING_BED_BLOCK_ENTITY.get();
         ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = ForgeBlocks.FANCY_LIGHTER_BLOCK_ENTITY.get();
         ModBlocks.FANCY_LIGHTER_BLOCK = ForgeBlocks.FANCY_LIGHTER_BLOCK.get();
         //ModBlocks.CHESSBOARD_BLOCK_ENTITY = ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get();
@@ -592,6 +594,7 @@ public class ForgeEvents {
         ModParticles.D4C_LINES = ForgeParticles.D4C_LINES.get();
         ModParticles.STITCH = ForgeParticles.STITCH.get();
         ModParticles.OCCULT = ForgeParticles.OCCULT.get();
+        ModParticles.AIRBUBBLE_PINK = ForgeParticles.AIRBUBBLE_PINK.get();
         ModParticles.HYPNO_SWIRL = ForgeParticles.HYPNO_SWIRL.get();
         ModParticles.TUSK_VORTEX = ForgeParticles.TUSK_VORTEX.get();
         ModParticles.METALLICA_NAIL = ForgeParticles.METALLICA_NAIL.get();
