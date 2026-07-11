@@ -221,6 +221,8 @@ public class StandIcons {
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
 
+    public static final ResourceLocation PIECE_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/piece_attack.png");
     public static final ResourceLocation FORBID_RULE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/forbid_rule.png");
     public static final ResourceLocation HURT_RULE = new ResourceLocation(Roundabout.MOD_ID,
@@ -241,6 +243,8 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/steal_memories.png");
     public static final ResourceLocation STEAL_MEMORIES_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/steal_memories_2.png");
+    public static final ResourceLocation STEP_SHADOW = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/step_shadow.png");
     public static final ResourceLocation SAVE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/save_location.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,

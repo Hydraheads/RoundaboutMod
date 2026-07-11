@@ -1595,6 +1595,38 @@
   "ability.roundabout.corner_cut": "Corner Cut",
   "ability.roundabout.corner_cut.desc": "Enable this to skip the process of direction adjustment when running off a wall to cut corners. Also inhibits accidental jumps and lowers speed. Think of it as training wheels.",
 
+  "ability.roundabout.steal_memories": "Steal Memories",
+  "ability.roundabout.steal_memories.desc": "After a mob breaks your currently set rule, allows you to turn a memory of theirs into a chess piece. Interacting reads the memory type. This ability generally makes mobs forget what they are doing, losing aggro on you. but it can also do other things like make villagers forget reputation, flip golem types, remove illager learned hatred, and make witches forget good and bad potions.",
+
+  "ability.roundabout.save_location": "Location Memory",
+  "ability.roundabout.save_location.desc": "Saves your current location into a chess piece. Using the piece creates particles that fly in the direction of the saved location. You can give these pieces to other people to help them find places, or just use them yourself to keep track of locations.",
+
+  "ability.roundabout.steal_memories_2": "Steal Experience",
+  "ability.roundabout.steal_memories_2.desc": "If possible, this variation of memory steal takes experience away from mobs, and using the chess piece will give it to you. This is useful for taking experience from mobs without killing them. On villagers, instead saves their workplaces. On players, saves their bed locations. Using the pieces leads you to the locations.",
+
+  "ability.roundabout.step_shadow": "Step Shadow",
+  "ability.roundabout.step_shadow.desc": "If someone you stole the memory of steps into your shadow (touching you without low light levels), any memories taken are returned to them from your inventory.",
+
+  "ability.roundabout.forbid_rule": "Forbid Rule",
+  "ability.roundabout.forbid_rule.desc": "Forbid people from stepping on the block you activate this skill on. If you step on the block, the rule is undone by a lack of fairness.",
+
+  "ability.roundabout.piece_attack": "Attack Piece",
+  "ability.roundabout.piece_attack.desc": "If you attack while holding stolen memories, you can hurt the people they belong to remotely, and even inflict bleed. However, the pieces lose this ability if their targets are not around.",
+
+  "ability.roundabout.leave_rule": "Leave Rule",
+  "ability.roundabout.leave_rule.desc": "Bind yourself to someone. If they leave your side and go far enough, they break this rule. Animals and villagers follow you automatically when tethered so you can use this to move them around. If you take certain movement actions, the rule is undone by a lack of fairness.",
+
+  "ability.roundabout.hurt_rule": "Hurt Rule",
+  "ability.roundabout.hurt_rule.desc": "Forbid people from hurting you while you are in the cowering stance this ability triggers. Stealing memories after using this mysteriously fixes resulting injuries, leg or otherwise? If you attack an opponent, the rule is undone by a lack of fairness.",
+
+  "ability.roundabout.exp_bishop": "Experience Bishop",
+  "ability.roundabout.exp_bishop.desc": "Creates a special chess piece that stores experience. Attacking stores up to 10 levels of exp (1 while holding shift), and using returns up to 10 levels to you (1 while holding shift).",
+
+  "ability.roundabout.rule_change": "Rule Change",
+  "ability.roundabout.rule_change.desc": "Changes the rule you currently are using. Essentially, cycles between the forbid/hurt/leave rules.",
+
+  "ability.roundabout.sleep": "Sleep",
+  "ability.roundabout.sleep.desc": "Your stand becomes a special bed that doesn't save your spawn point. Only works in worlds where sleeping is possible. You can also use this ability to make your stand a temporary platform.",
 
 
   "ability.roundabout.visage_creation": "Face Creation",

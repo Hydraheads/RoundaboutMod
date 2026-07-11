@@ -1396,12 +1396,6 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
     }
-    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
-        List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-       return $$1;
-    }
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
@@ -1419,8 +1413,41 @@ public class PowersCalifornia extends NewDashPreset {
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
+
     }
 
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.steal_memories",
+                "instruction.roundabout.press_skill", StandIcons.STEAL_MEMORIES,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.steal_memories_2",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STEAL_MEMORIES_2,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.piece_attack",
+                "instruction.roundabout.press_attack", StandIcons.PIECE_ATTACK,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.forbid_rule",
+                "instruction.roundabout.press_skill", StandIcons.FORBID,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.hurt_rule",
+                "instruction.roundabout.press_skill", StandIcons.HURT,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.leave_rule",
+                "instruction.roundabout.press_skill", StandIcons.LEAVE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.save_location",
+                "instruction.roundabout.press_skill_crouch", StandIcons.SAVE_LOCATION,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.roundabout.fall_brace",
+                "instruction.roundabout.press_skill_falling", StandIcons.CALIFORNIA_FALL_CATCH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.exp_bishop",
+                "instruction.roundabout.press_skill_crouch", StandIcons.EXPERIENCE_BISHOP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.rule_change",
+                "instruction.roundabout.press_skill", StandIcons.LEAVE_RULE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.sleep",
+                "instruction.roundabout.press_skill_crouch", StandIcons.SLEEP,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.step_shadow",
+                "instruction.roundabout.passive", StandIcons.STEP_SHADOW,0,level,bypas));
+        return $$1;
+    }
 
     @Override
     public boolean fallBraceInit() {
