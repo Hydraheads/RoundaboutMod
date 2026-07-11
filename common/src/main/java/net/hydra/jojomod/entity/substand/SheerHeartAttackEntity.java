@@ -26,6 +26,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
@@ -33,6 +34,8 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -82,6 +85,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.entityData.set(ANIM, anim);
 	}
 
+	public static float width = 0.5f;
+	public static float height = 0.3f;
+
 	@Override
 	protected PathNavigation createNavigation(Level $$0) {
 		StandEntityNavigation nav = new StandEntityNavigation(this, $$0);
@@ -95,7 +101,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public final AnimationState moving = new AnimationState();
 
 	int tickTargetFindCount = 0;
-	static final int tickTargetFindMax = 4;
+	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
 	static final int attackTickMax = 25;
@@ -298,6 +304,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		byte currentChoice = NONE;
 
         for (Entity entity : entities) {
+			if (!this.hasLineOfSight(entity)) {continue;}
+
 			int points = getEntityWarm(entity);
             if (points <= 0) { continue; }
 
@@ -322,9 +330,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			int points = -1;
 
-			points += (int)(info.getLightEmission() * 1.5);
+			points += (int)(info.getLightEmission() * 1.2);
 
-			if (points < 0) { continue; }
+			if (points < 0 || !canSeeBlock(pos)) { continue; }
 
 			double dist = pos.distToCenterSqr(this.position());
 
@@ -358,6 +366,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 	}
 
+	public boolean canSeeBlock(BlockPos pos) {
+		BlockHitResult hitResult = this.level().clip(new ClipContext(this.getEyePosition(), pos.getCenter(),
+				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+		if (hitResult.getType() == HitResult.Type.MISS) {
+			return true;
+		}
+		return (pos.closerToCenterThan(pos.getCenter(), 1.5));
+	}
+
 	public boolean shouldJump(Vec3 targetPos) {
 		if ((this.attackTick > 0 || this.jumpTick > 0)|| this.isClimbing()) {
 			return false;
@@ -366,6 +384,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		return (float)dist > (2.5f) && (float)dist < 4.0f;
 	}
+
 	public boolean shouldExplode(Vec3 targetPos) {
 		if (this.attackTick > 0) {
 			return false;
