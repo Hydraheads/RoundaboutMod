@@ -34,6 +34,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -200,6 +201,12 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    @Override
+    public void onStandSummon(boolean desummon) {
+        releaseStandFromBed();
+        super.onStandSummon(desummon);
+    }
+
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if (!$$0.is(DamageTypes.THORNS)){
@@ -359,7 +366,9 @@ public class PowersCalifornia extends NewDashPreset {
 
     public void placeBedClient(){
         if (!onCooldown(PowerIndex.SKILL_4_SNEAK)) {
-            tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            if (canPlaceBed()) {
+                tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            }
         }
     }
     @Override
@@ -367,6 +376,11 @@ public class PowersCalifornia extends NewDashPreset {
 
         if (slot == 1){
             if (clientEntityIds.isEmpty()){
+                return true;
+            }
+        }
+        if (slot == 4 && isHoldingSneak()){
+            if (!canPlaceBed()){
                 return true;
             }
         }
@@ -858,8 +872,20 @@ public class PowersCalifornia extends NewDashPreset {
     public void updateUniqueMoves() {
         super.updateUniqueMoves();
     }
+    public void releaseStandFromBed(){
+        if (!self.level().isClientSide()){
+            StandEntity stando = getStandEntity(self);
+            if (stando instanceof CaliforniaKingBedEntity cbe && cbe.bedUUID != null){
+                cbe.bedUUID = null;
+                cbe.bedBlockBind = null;
+                animateStand(StandEntity.IDLE);
+                cbe.setOffsetType(OffsetIndex.FOLLOW);
+            }
+        }
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        releaseStandFromBed();
         if (move == PowerIndex.EXTRA){
             return this.fallBraceInit();
         } else if (move == PowerIndex.FALL_BRACE_FINISH){
@@ -1244,10 +1270,10 @@ public class PowersCalifornia extends NewDashPreset {
             return false;
 
         // Both positions must be replaceable
-        if (!level.getBlockState(pos).canBeReplaced())
+        if (!level.getBlockState(pos).isAir())
             return false;
 
-        if (!level.getBlockState(headPos).canBeReplaced())
+        if (!level.getBlockState(headPos).isAir())
             return false;
 
         // Can both halves survive?
@@ -1291,6 +1317,8 @@ public class PowersCalifornia extends NewDashPreset {
         ckb.yBodyRotO = yaw;
         ckb.setXRot(0.01F); // if desired
 
+        ckb.yaw = yaw;
+
 
         // Vanilla callback
         footState.getBlock().setPlacedBy(level, pos, footState, player, ItemStack.EMPTY);
@@ -1298,6 +1326,11 @@ public class PowersCalifornia extends NewDashPreset {
         level.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
 
         return true;
+    }
+
+
+    public boolean canPlaceBed(){
+        return self.level().dimensionType().bedWorks();
     }
     public void saveLocation(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){

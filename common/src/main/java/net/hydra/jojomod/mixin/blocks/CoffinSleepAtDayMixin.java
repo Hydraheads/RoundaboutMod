@@ -46,7 +46,6 @@ public abstract class CoffinSleepAtDayMixin extends Player {
     public void rdbt$setRespawnPosition(ResourceKey<Level> $$0, BlockPos $$1, float $$2, boolean $$3, boolean $$4, CallbackInfo ci) {
         if (this.level().getBlockState($$1).is(ModBlocks.KING_BED_BLOCK)){
             ci.cancel();
-            Roundabout.LOGGER.info("1");
         }
     }
 }

@@ -48,4 +48,27 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public BlockPos bedBlockBind = null;
     public UUID bedUUID = null;
 
+
+    public void tick(){
+        super.tick();
+        if (!this.level().isClientSide()){
+
+            if (this.getAnimation() == SLEEP) {
+                assertYaw();
+            }
+        }
+    }
+
+    public float yaw = 0;
+    public void assertYaw(){
+        float rand = (float) (Math.random()*0.0001F);
+        float yaw2= yaw+rand;
+        setYRot(yaw2);
+        setYHeadRot(yaw2);
+        setYBodyRot(yaw2);
+        yRotO = yaw2;
+        yHeadRotO = yaw2;
+        yBodyRotO = yaw2;
+        setXRot(0.01F+rand); // if desired
+    }
 }
