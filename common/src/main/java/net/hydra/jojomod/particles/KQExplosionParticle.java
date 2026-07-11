@@ -17,9 +17,9 @@ public class KQExplosionParticle extends SimpleAnimatedParticle {
 	protected KQExplosionParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
             super(clientLevel, d, e, f, spriteSet, 1f);
             this.xd = 0;
-            this.yd = h*0.06f;
+            this.yd = h*0.03f;
             this.zd = 0;
-            this.friction = 0.96F;
+            //this.friction = 0.6F;
             this.gravity = 0;
             this.quadSize *= 3.5f + ((float)this.random.nextInt(5) / 10.0f);
             this.lifetime = 8 + this.random.nextInt(12);
