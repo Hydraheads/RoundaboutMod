@@ -1871,11 +1871,8 @@
   "ability.roundabout.kq_btd_day.desc":"Detonates Bites the Dust, everything restarts from the beginning of the day, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
   "ability.roundabout.kq_btd_combat":"Bites The Dust Combat mode",
   "ability.roundabout.kq_btd_combat.desc":"Detonates Bites the Dust, everything restarts from the last 20 seconds, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
-
-  "ability.roundabout.kq_stray_cat_lock" : "(LOCKED) You need stray cat to use this ability (WIP)",
-  "ability.roundabout.kq_stray_cat_lock.desc" : "You need stray cat to unlock this ability, obtain stray cat by shooting a arrow at a unworthy cat, tame it with fish and press skill 1 when facing or holding it",
-  "ability.roundabout.kq_btd_lock" : "(LOCKED) You need bites the dust to unlock this ability (SOON)",
-  "ability.roundabout.kq_btd_lock.desc" : "You need to stab you self with a standArrow again with killer queen summoned (TO BE DETERMINED)",
+  "ability.roundabout.add_stray_cat":"Add Stray Cat",
+  "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves",
 
   "ability.roundabout.meteor_shower":"Meteor Shower",
   "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.If shifting they will go towards your feet.",
