@@ -1084,7 +1084,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         !(MainUtil.isItemGrabBlacklisted(stack)) &&
                         !(stack.getItem() instanceof BlockItem
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
-                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
                     /**Boat throw*/
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {

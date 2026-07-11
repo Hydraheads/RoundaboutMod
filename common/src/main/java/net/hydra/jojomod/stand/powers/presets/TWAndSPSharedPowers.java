@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers.presets;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
@@ -288,7 +289,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
                 if ($$5 instanceof ItemEntity IE && stand.getSensing().hasLineOfSight($$5)){
-                    if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)){
+                    if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)){
                         stand.canAcquireHeldItem = true;
                         stand.setHeldItem(IE.getItem().copyWithCount(1));
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);

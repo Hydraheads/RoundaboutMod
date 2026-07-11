@@ -8,7 +8,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.BlackSabbathAnimations;
 import net.hydra.jojomod.client.models.stand.animations.ManhattanTransferAnimations;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.hydra.jojomod.stand.powers.PowersPlanetWaves;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -23,11 +26,9 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "unknown"), "main");
 	private final ModelPart stand2;
-	private final ModelPart head;
 	private final ModelPart head2;
 	private final ModelPart hat;
 	private final ModelPart jaw;
-	private final ModelPart body;
 	private final ModelPart body2;
 	private final ModelPart torso;
 	private final ModelPart upper_chest;
@@ -193,6 +194,8 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
+    StandPowers Power = new PowersBlackSabbath(null);
+
     @Override
     public ModelPart root() {
         return stand;
@@ -200,12 +203,13 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        defaultModifiers(pEntity);
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
         this.animate(pEntity.coat_open, BlackSabbathAnimations.CoatOpen, pAgeInTicks, 1f);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        super.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.BubbleScaffoldBlockEntity;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -1483,7 +1484,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 !(MainUtil.isItemGrabBlacklisted(stack)) &&
                 !(stack.getItem() instanceof BlockItem
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
-                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock) || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)) {
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopCooldown);
             if (!this.self.level().isClientSide()) {

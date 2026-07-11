@@ -251,6 +251,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 return Component.translatable(  "skins.roundabout.black_sabbath.departure");
             }else if (skinId == BlackSabbathEntity.PHANTOM){
                 return Component.translatable(  "skins.roundabout.black_sabbath.phantom");
+            }else if (skinId == BlackSabbathEntity.SWEET){
+                return Component.translatable(  "skins.roundabout.black_sabbath.sweet");
             }
             return Component.translatable(  "skins.roundabout.black_sabbath.anime");
     }
@@ -299,7 +301,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             VERDANT_SABBATH_SKIN = 5,
             NIGHT_SKIN = 6,
             DEPARTURE_SKIN = 7,
-            PHANTOM_SKIN = 8;
+            PHANTOM_SKIN = 8,
+            SWEET_SKIN = 9;
 
     @Override
     public List<Byte> getSkinList() {
@@ -311,7 +314,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 VERDANT_SABBATH_SKIN,
                 NIGHT_SKIN,
                 DEPARTURE_SKIN,
-                PHANTOM_SKIN
+                PHANTOM_SKIN,
+                SWEET_SKIN
         );
     }
 

@@ -38,7 +38,8 @@ public class BlackSabbathEntity extends StandEntity {
             VERDANT = 5,
             NIGHT = 6,
             DEPARTURE = 7,
-            PHANTOM = 8;
+            PHANTOM = 8,
+            SWEET = 9;
 
     public final AnimationState coat_open = new AnimationState();
 
