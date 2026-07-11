@@ -51,7 +51,7 @@ public class ExperienceBishopItem extends Item implements Vanishable {
         }
         player.swing(InteractionHand.MAIN_HAND, true);
 
-        int levels = player.isShiftKeyDown() ? 10 : 1;
+        int levels = player.isShiftKeyDown() ? 1 : 10;
 
         int removedXP;
 
@@ -62,6 +62,9 @@ public class ExperienceBishopItem extends Item implements Vanishable {
             // Player has enough levels, remove exactly N levels.
             removedXP = getXpToRemove(player, levels);
         }
+
+        if (removedXP <= 0)
+            return;
 
         player.giveExperiencePoints(-removedXP);
 
@@ -112,12 +115,16 @@ public class ExperienceBishopItem extends Item implements Vanishable {
 
         int storedXP = tag.getInt("StoredXP");
 
-        int levels = player.isShiftKeyDown() ? 10 : 1;
+        int levels = player.isShiftKeyDown() ? 1 : 10;
 
         int wantedXP = getXpToAdd(player, levels);
 
 // Can't withdraw more than is stored.
         int givenXP = Math.min(wantedXP, storedXP);
+
+
+        if (givenXP <= 0)
+            return;
 
         player.giveExperiencePoints(givenXP);
 

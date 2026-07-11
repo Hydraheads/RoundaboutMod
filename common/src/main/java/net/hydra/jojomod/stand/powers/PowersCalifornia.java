@@ -36,6 +36,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -418,7 +419,13 @@ public class PowersCalifornia extends NewDashPreset {
         if (canFallBrace()) {
             doFallBraceClient();
         } else {
-            dash();
+            tryMakeExpBishop();
+        }
+    }
+
+    public void tryMakeExpBishop(){
+        if (!onCooldown(PowerIndex.SKILL_3)) {
+            tryPowerPacket(PowerIndex.POWER_3);
         }
     }
 
@@ -506,7 +513,7 @@ public class PowersCalifornia extends NewDashPreset {
             setSkillIcon(context, x, y, 3, StandIcons.CALIFORNIA_FALL_CATCH, PowerIndex.SKILL_EXTRA);
         } else {
             if (isHoldingSneak()){
-                setSkillIcon(context, x, y, 3, StandIcons.EXPERIENCE_BISHOP, PowerIndex.GLOBAL_DASH);
+                setSkillIcon(context, x, y, 3, StandIcons.EXPERIENCE_BISHOP, PowerIndex.SKILL_3);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
@@ -849,6 +856,8 @@ public class PowersCalifornia extends NewDashPreset {
             doTheStepRule();
         } else if (move == PowerIndex.SKILL_EXTRA_2){
             doTheLeaveRule();
+        } else if (move == PowerIndex.POWER_3){
+            saveBishop();
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1133,13 +1142,35 @@ public class PowersCalifornia extends NewDashPreset {
         }
     }
 
+    void sendParticles(ServerPlayer sp){
+
+        Vec3 lvec = self.getLookAngle();
+        Position pn = self.getEyePosition().add(lvec.scale(3));
+        Vec3 rev = lvec.reverse();
+        ((ServerLevel) this.self.level()).sendParticles(ModParticles.MAGIC_HEART, pn.x(),
+                pn.y(), pn.z(),
+                0,
+                rev.x, rev.y, rev.z,
+                0.08);
+    }
+    public void saveBishop(){
+        if (!onCooldown(PowerIndex.SKILL_3)){
+            if (self instanceof ServerPlayer pl){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
+
+                sendParticles(pl);
+                ItemStack piece = ModItems.EXP_BISHOP.getDefaultInstance().copy();
+                MainUtil.addItem(pl,piece);
+                setCooldown(PowerIndex.SKILL_3,1200);
+            }
+        }
+    }
     public void saveLocation(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (self instanceof ServerPlayer pl){
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.20f + Math.random() * 0.03f));
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HYPNO_SWIRL,
-        self.getEyePosition().x, self.getEyePosition().y, self.getEyePosition().z,
-        0, 0, 1,0, 0.15);
+
+                sendParticles(pl);
                 ItemStack piece = getPieceType(self, false, false,14);
                 MainUtil.addItem(pl,piece);
                 setCooldown(PowerIndex.SKILL_2_SNEAK,1200);
@@ -1159,6 +1190,7 @@ public class PowersCalifornia extends NewDashPreset {
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_2 ||
                 num == PowerIndex.SKILL_1 ||
+                num == PowerIndex.SKILL_3 ||
                 num == PowerIndex.SKILL_EXTRA ||
                 num == PowerIndex.SKILL_2_SNEAK ||
                 num == PowerIndex.SKILL_EXTRA_2) {
