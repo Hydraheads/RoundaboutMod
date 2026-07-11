@@ -148,6 +148,10 @@ public class ModSounds {
     public static final ResourceLocation CKB_TILE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_TILE);
     public static SoundEvent CKB_TILE_EVENT = SoundEvent.createVariableRangeEvent(CKB_TILE_ID);
 
+    public static final String CKB_PLACE = "ckb_place";
+    public static final ResourceLocation CKB_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_PLACE);
+    public static SoundEvent CKB_PLACE_EVENT = SoundEvent.createVariableRangeEvent(CKB_PLACE_ID);
+
     public static final String CHESS_PIECE = "chess_piece";
     public static final ResourceLocation CHESS_PIECE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CHESS_PIECE);
     public static SoundEvent CHESS_PIECE_EVENT = SoundEvent.createVariableRangeEvent(CHESS_PIECE_ID);

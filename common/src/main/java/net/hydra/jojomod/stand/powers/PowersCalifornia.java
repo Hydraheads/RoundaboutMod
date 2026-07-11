@@ -1234,6 +1234,7 @@ public class PowersCalifornia extends NewDashPreset {
                                 setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
                                 animateStand(CaliforniaKingBedEntity.SLEEP);
 
+                                this.self.level().playSound(null, pos, ModSounds.CKB_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1f);
                                 cbe.bedBlockBind = pos;
                                 cbe.setPos(pos.getCenter().subtract(0,0.5,0));
                                 this.poseStand(OffsetIndex.LOOSE);
