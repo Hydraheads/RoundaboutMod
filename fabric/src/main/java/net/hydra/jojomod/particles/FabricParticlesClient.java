@@ -59,7 +59,11 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.STITCH, StitchParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD_DUST, MoldDustParticle.CosyProvider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.OCCULT, OccultParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_PINK, AirBubblePink.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_PINK, AirBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_GREEN, AirBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_CYAN, AirBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_YELLOW, AirBubbleParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.AIRBUBBLE_BOMB, AirBubbleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HYPNO_SWIRL, HypnoSwirlParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_VORTEX, TuskVortexParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MOLD, MoldParticle.Provider::new);

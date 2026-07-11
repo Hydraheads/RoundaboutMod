@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -43,6 +42,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -1962,7 +1962,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             Vec3 pos = getRandPos(KQE);
 
-            this.self.level().addAlwaysVisibleParticle(ModParticles.AIRBUBBLE_PINK,
+            this.self.level().addAlwaysVisibleParticle(getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
                     0, 0.0, 0);
 
@@ -2270,6 +2270,27 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.MINESWEEPER -> {return 4;}
             
             default -> {return 0;}
+        }
+    }
+
+    public SimpleParticleType getBubbleParticle() {
+        byte bubble = this.getBubbleSkin();
+        switch (bubble) {
+            case 1 -> {
+                return ModParticles.AIRBUBBLE_GREEN;
+            }
+            case 2 -> {
+                return ModParticles.AIRBUBBLE_YELLOW;
+            }
+            case 3 -> {
+                return ModParticles.AIRBUBBLE_CYAN;
+            }
+            case 4 -> {
+                return ModParticles.AIRBUBBLE_BOMB;
+            }
+            default -> {
+                return ModParticles.AIRBUBBLE_PINK;
+            }
         }
     }
 

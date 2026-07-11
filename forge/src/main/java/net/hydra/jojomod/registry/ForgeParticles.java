@@ -234,6 +234,22 @@ public class ForgeParticles {
             "airbubble_pink",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> AIRBUBBLE_CYAN = PARTICLES.register(
+            "airbubble_cyan",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> AIRBUBBLE_GREEN = PARTICLES.register(
+            "airbubble_green",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> AIRBUBBLE_YELLOW = PARTICLES.register(
+            "airbubble_yellow",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> AIRBUBBLE_BOMB = PARTICLES.register(
+            "airbubble_bomb",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> HYPNO_SWIRL = PARTICLES.register(
             "hypno_swirl",
             () -> new SimpleParticleType(true)

@@ -66,6 +66,10 @@ public class ModParticles {
     public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;
     public static SimpleParticleType AIRBUBBLE_PINK;
+    public static SimpleParticleType AIRBUBBLE_GREEN;
+    public static SimpleParticleType AIRBUBBLE_YELLOW;
+    public static SimpleParticleType AIRBUBBLE_CYAN;
+    public static SimpleParticleType AIRBUBBLE_BOMB;
 
     public static SimpleParticleType OCCULT;
 

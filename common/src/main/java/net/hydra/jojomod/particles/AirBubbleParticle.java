@@ -7,10 +7,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class AirBubblePink extends SimpleAnimatedParticle {
+public class AirBubbleParticle extends SimpleAnimatedParticle {
     private final SpriteSet sprites;
 
-    protected AirBubblePink(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
+    protected AirBubbleParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3, $$7, 1f);
         this.age = 0;
         this.lifetime = 10;
@@ -65,9 +65,9 @@ public class AirBubblePink extends SimpleAnimatedParticle {
         }
 
         public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
-            AirBubblePink part = new AirBubblePink($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
-            part.setColor(0.9F, 0.9F, 0.9F);
-            //part.setAlpha(0.7F);
+            AirBubbleParticle part = new AirBubbleParticle($$1, $$2, $$3, $$4, $$5,$$6,$$7, this.sprites);
+            part.setColor(1.0F, 1.0F, 1.0F);
+
             return part;
         }
     }

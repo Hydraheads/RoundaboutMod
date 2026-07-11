@@ -72,6 +72,10 @@ public class FabricParticles {
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType OCCULT = FabricParticleTypes.simple();
     public static final SimpleParticleType AIRBUBBLE_PINK = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_GREEN = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_YELLOW = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_BOMB = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_CYAN = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
@@ -141,6 +145,10 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("occult"), OCCULT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_pink"), AIRBUBBLE_PINK);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_cyan"), AIRBUBBLE_CYAN);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_bomb"), AIRBUBBLE_BOMB);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_yellow"), AIRBUBBLE_YELLOW);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_green"), AIRBUBBLE_GREEN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
@@ -237,6 +245,10 @@ public class FabricParticles {
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.OCCULT = OCCULT;
         ModParticles.AIRBUBBLE_PINK = AIRBUBBLE_PINK;
+        ModParticles.AIRBUBBLE_GREEN = AIRBUBBLE_GREEN;
+        ModParticles.AIRBUBBLE_CYAN = AIRBUBBLE_CYAN;
+        ModParticles.AIRBUBBLE_YELLOW = AIRBUBBLE_YELLOW;
+        ModParticles.AIRBUBBLE_BOMB = AIRBUBBLE_BOMB;
         ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.TUSK_VORTEX = TUSK_VORTEX;
         ModParticles.MOLD = MOLD;
