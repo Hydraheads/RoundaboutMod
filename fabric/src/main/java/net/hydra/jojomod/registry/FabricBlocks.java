@@ -234,6 +234,7 @@ public class FabricBlocks {
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
+    public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
     public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
@@ -252,6 +253,8 @@ public class FabricBlocks {
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
+    public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
+            registerBE("king_bed_block",BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK) );
     public static final BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY =
             registerBE("fancy_lighter_block",BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK) );
     /*public static final BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY =
@@ -443,12 +446,14 @@ public class FabricBlocks {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
+        ModBlocks.KING_BED_BLOCK_ENTITY = KING_BED_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
         ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
         ModBlocks.COFFIN_BLOCK = COFFIN_BLOCK;
+        ModBlocks.KING_BED_BLOCK = KING_BED_BLOCK;
         ModBlocks.FANCY_LIGHTER_BLOCK = FANCY_LIGHTER_BLOCK;
         ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = FANCY_LIGHTER_BLOCK_ENTITY;
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;

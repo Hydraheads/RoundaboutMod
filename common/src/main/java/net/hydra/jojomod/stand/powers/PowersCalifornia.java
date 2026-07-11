@@ -520,7 +520,7 @@ public class PowersCalifornia extends NewDashPreset {
         }
 
         if (isHoldingSneak()){
-            setSkillIcon(context, x, y, 4, StandIcons.GO_BEYOND, PowerIndex.SKILL_4_SNEAK);
+            setSkillIcon(context, x, y, 4, StandIcons.SLEEP, PowerIndex.SKILL_4_SNEAK);
         } else {
             ResourceLocation icon;
             if (isDoNotHurt()){
