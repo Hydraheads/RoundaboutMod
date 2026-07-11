@@ -16,8 +16,10 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             SUNSHINE = 2;
 
     public final AnimationState fall_brace = new AnimationState();
+    public final AnimationState sleep = new AnimationState();
     public static final byte
-            FALL_BRACE = 82;
+            FALL_BRACE = 82,
+            SLEEP = 83;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -26,6 +28,11 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
                 this.fall_brace.startIfStopped(this.tickCount);
             } else {
                 this.fall_brace.stop();
+            }
+            if (this.getAnimation() == SLEEP) {
+                this.sleep.startIfStopped(this.tickCount);
+            } else {
+                this.sleep.stop();
             }
         }
     }

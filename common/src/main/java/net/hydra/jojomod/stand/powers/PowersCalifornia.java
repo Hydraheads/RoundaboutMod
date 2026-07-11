@@ -1201,10 +1201,12 @@ public class PowersCalifornia extends NewDashPreset {
                         Direction facing = player.getDirection();
                         UUID standUUID = cbe.getUUID();
 
-                        if (placeKingBed(player, pos, facing,standUUID)) {
+                        if (placeKingBed(player, pos, facing,standUUID,cbe)) {
                             setCooldown(PowerIndex.SKILL_4_SNEAK, 40);
+                            animateStand(CaliforniaKingBedEntity.SLEEP);
+
                             cbe.bedBlockBind = pos;
-                            cbe.setPos(pos.getCenter());
+                            cbe.setPos(pos.getCenter().subtract(0,0.5,0));
                             this.poseStand(OffsetIndex.LOOSE);
                         }
                     }
@@ -1212,7 +1214,7 @@ public class PowersCalifornia extends NewDashPreset {
             }
         }
     }
-    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing, UUID standUUID) {
+    public static boolean placeKingBed(ServerPlayer player, BlockPos pos, Direction facing, UUID standUUID, CaliforniaKingBedEntity ckb) {
         ServerLevel level = player.serverLevel();
 
         BlockState footState = ModBlocks.KING_BED_BLOCK
@@ -1262,6 +1264,16 @@ public class PowersCalifornia extends NewDashPreset {
         if (level.getBlockEntity(headPos) instanceof KingBedBlockEntity bed) {
             bed.setStandUUID(standUUID);
         }
+
+        float yaw = footState.getValue(BedBlock.FACING).getOpposite().toYRot();
+
+        ckb.setYRot(yaw);
+        ckb.setYHeadRot(yaw);
+        ckb.setYBodyRot(yaw);
+        ckb.yRotO = yaw;
+        ckb.yHeadRotO = yaw;
+        ckb.yBodyRotO = yaw;
+        ckb.setXRot(0.01F); // if desired
 
 
         // Vanilla callback

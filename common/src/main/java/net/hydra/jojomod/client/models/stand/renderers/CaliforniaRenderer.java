@@ -35,6 +35,9 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
     @Override
     public void render(CaliforniaKingBedEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        if (mobEntity.sleep.isStarted()){
+            factor = 1.5F;
+        }
         matrixStack.translate(0,0.3F,0);
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
