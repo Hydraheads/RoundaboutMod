@@ -490,6 +490,8 @@ public class PowersCalifornia extends NewDashPreset {
             return Component.translatable("skins.roundabout.california_king_bed.sunshine");
         } else if (skinId == CaliforniaKingBedEntity.EGYPT) {
             return Component.translatable("skins.roundabout.california_king_bed.egypt");
+        } else if (skinId == CaliforniaKingBedEntity.SPOOKY) {
+            return Component.translatable("skins.roundabout.california_king_bed.spooky");
         }
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
@@ -1406,6 +1408,7 @@ public class PowersCalifornia extends NewDashPreset {
         $$1.add(CaliforniaKingBedEntity.PART_8_SKIN);
         $$1.add(CaliforniaKingBedEntity.SUNSHINE);
         $$1.add(CaliforniaKingBedEntity.EGYPT);
+        $$1.add(CaliforniaKingBedEntity.SPOOKY);
         return $$1;
     }
 
