@@ -727,8 +727,10 @@ public class PowersCalifornia extends NewDashPreset {
                         doTheLeaveRule();
                     }
                 } else {
-                    if (dist <= 10) {
-
+                    if (dist <= 10 && attackTarget.onGround()) {
+                        graceticks = 40;
+                        spawnPos = attackTarget.getOnPos();
+                        doTheStepRule();
                     }
                 }
             } else {
