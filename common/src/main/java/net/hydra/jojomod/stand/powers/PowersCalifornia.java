@@ -713,6 +713,13 @@ public class PowersCalifornia extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
         if (!self.level().isClientSide()) {
+
+            StandEntity stando = getStandEntity(self);
+            if (stando instanceof CaliforniaKingBedEntity cbe && cbe.bedUUID != null){
+                if (cbe.distanceTo(self) > 33){
+                    releaseStandFromBed();
+                }
+            }
             tickSpawnedEntities();
             if (!hurtEntities.isEmpty() && self instanceof ServerPlayer sp) {
                 Iterator<Map.Entry<Entity, Integer>> it = hurtEntities.entrySet().iterator();
