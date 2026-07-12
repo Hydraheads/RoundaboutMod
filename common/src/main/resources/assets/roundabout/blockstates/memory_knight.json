@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/memory_knight",
+      "y": 0
+    },
+    "facing=north": {
+      "model": "roundabout:block/memory_knight",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "roundabout:block/memory_knight",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "roundabout:block/memory_knight",
+      "y": 180
+    }
+  }
+}

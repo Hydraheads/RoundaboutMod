@@ -427,6 +427,58 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
     public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",
             () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "coffin_block")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_PAWN_ENTITY =
+            BLOCK_ENTITIES.register("memory_pawn",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_PAWN.get()).
+                            build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_pawn")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_KNIGHT_ENTITY =
+            BLOCK_ENTITIES.register("memory_knight",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_KNIGHT.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_knight")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_KING_ENTITY =
+            BLOCK_ENTITIES.register("memory_king",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_KING.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_king")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_QUEEN_ENTITY =
+            BLOCK_ENTITIES.register("memory_queen",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_QUEEN.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_queen")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_ROOK_ENTITY =
+            BLOCK_ENTITIES.register("memory_rook",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_ROOK.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_rook")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> BLACK_BISHOP_ENTITY =
+            BLOCK_ENTITIES.register("memory_bishop",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_BISHOP.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_bishop")));
+
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_PAWN_ENTITY =
+            BLOCK_ENTITIES.register("memory_pawn_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_PAWN.get()).
+                            build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_pawn_white")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_KNIGHT_ENTITY =
+            BLOCK_ENTITIES.register("memory_knight_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_KNIGHT.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_knight_white")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_KING_ENTITY =
+            BLOCK_ENTITIES.register("memory_king_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_KING.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_king_white")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_QUEEN_ENTITY =
+            BLOCK_ENTITIES.register("memory_queen_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_QUEEN.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_queen_white")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_ROOK_ENTITY =
+            BLOCK_ENTITIES.register("memory_rook_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_ROOK.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_rook_white")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> WHITE_BISHOP_ENTITY =
+            BLOCK_ENTITIES.register("memory_bishop_white",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_BISHOP.get())
+                            .build(Util.fetchChoiceType(References.BLOCK_ENTITY, "memory_bishop_white")));
+
+
+
     public static final RegistryObject<BlockEntityType<KingBedBlockEntity>> KING_BED_BLOCK_ENTITY = BLOCK_ENTITIES.register("king_bed_block",
             () -> BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "king_bed_block")));
     public static final RegistryObject<BlockEntityType<FancyLighterBlockEntity>> FANCY_LIGHTER_BLOCK_ENTITY = BLOCK_ENTITIES.register("fancy_lighter_block",
