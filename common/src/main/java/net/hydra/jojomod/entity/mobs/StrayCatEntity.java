@@ -7,7 +7,7 @@ import net.hydra.jojomod.entity.goals.StrayCatBegGoal;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.StrayCats.AbstractStrayCat;
+import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -234,7 +234,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             } else {
                 if (this.getPotted()) {
                     ItemStack item = new ItemStack(ModItems.STRAY_CAT_ANIME);
-                    AbstractStrayCat.saveStrayCatEntityInfo(item, this);
+                    StrayCatItem.saveStrayCatEntityInfo(item, this);
 
                     $$0.addItem(item);
 
@@ -247,7 +247,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                             $$2.shrink(1);
                         }
                         ItemStack item = new ItemStack(ModItems.STRAY_CAT_ANIME);
-                        AbstractStrayCat.saveStrayCatEntityInfo(item, this);
+                        StrayCatItem.saveStrayCatEntityInfo(item, this);
 
                         $$0.addItem(item);
 
