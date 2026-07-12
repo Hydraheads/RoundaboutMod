@@ -76,7 +76,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "Lloyd10").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "Lloyd10").withStyle(ChatFormatting.GREEN);
     }
     @Override
     public List<Byte> getSkinList(){
@@ -151,7 +151,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
-            if (canExecuteMoveWithLevel(StandTargetingLevel())) {
+            if (canExecuteMoveWithLevel(StandTargetingLevel()) && !isCanonMovesOnly()) {
                 if (!instandtargeting()) {
                     setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
                 } else {
@@ -210,6 +210,10 @@ public class PowersPlanetWaves extends NewDashPreset {
     @Override
     public byte getMaxLevel(){
         return 4;
+    }
+
+    public boolean isCanonMovesOnly(){
+        return ClientNetworking.getAppropriateConfig().PlanetWavesSettings.PWCanonMovesOnly;
     }
 
     @Override
@@ -293,12 +297,12 @@ public class PowersPlanetWaves extends NewDashPreset {
         return super.setPowerOther(move, lastMove);
     }
     public void attemptStandTargeting(){
-        if(canExecuteMoveWithLevel(StandTargetingLevel())) {
+        if(canExecuteMoveWithLevel(StandTargetingLevel()) && !isCanonMovesOnly()) {
             standtargeting();
         }
     }
     public void attemptStandRetrieving(){
-        if(canExecuteMoveWithLevel(StandTargetingLevel())) {
+        if(canExecuteMoveWithLevel(StandTargetingLevel()) && !isCanonMovesOnly()) {
             usertargeting();
         }
     }
@@ -373,6 +377,8 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setTrackingUser(inmeteortracking());
 
         meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
+        meteor.storeVec = spawnPos;
+        meteor.setOldPosAndRot2();
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
 
         meteor.setChain(0, true);
@@ -859,7 +865,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
         // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────────
-        if (!isTravelling && !isSinking && targetingstand && stand != null) {
+        if (!isTravelling && !isSinking && targetingstand && stand != null && !isCanonMovesOnly()) {
 
             if (restrainedEntity == null && grabCooldownTicks <= 0 && standTargetPos != null && standHitDirection != null) {
 
@@ -1291,6 +1297,17 @@ public class PowersPlanetWaves extends NewDashPreset {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof FollowingStandEntity FSE) {
                 FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+
+            if (stand != null && !isTravelling && !isSinking && !isPreSinking && standHitDirection != null) {
+                applyBurialRotation(stand);
+                byte burialAnim = switch (standHitDirection) {
+                    case UP   -> PlanetWavesEntity.BURY_UPWARDS;
+                    case DOWN -> PlanetWavesEntity.BURY_DOWNWARDS;
+                    default   -> PlanetWavesEntity.BURY_HORIZONTAL;
+                };
+                animateStand(burialAnim);
+                syncStandMode();
             }
         }
         return result;
