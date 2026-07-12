@@ -1613,7 +1613,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
-            if (this.detonateTimer > -1) {
+            if (this.detonateTimer == -1) {
                 this.explode();
             }
         }else {

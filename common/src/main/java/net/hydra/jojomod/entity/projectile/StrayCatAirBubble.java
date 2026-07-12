@@ -310,7 +310,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             return;
         }
         if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
-            if (!this.target.is(target) && !KQ.isContactModeEnabled()) {
+            if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
                 return;
             }
         }

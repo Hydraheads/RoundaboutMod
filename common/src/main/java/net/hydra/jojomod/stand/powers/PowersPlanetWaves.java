@@ -381,7 +381,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.playSound(null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
-                net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
 
         this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig()
                 .PlanetWavesSettings.meteorshowerCooldown);
@@ -521,7 +521,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_BIG_METEOR_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS,
-                1.0F,
+                0.5F,
                 1.0F
         );
     }
@@ -532,7 +532,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         ClipContext clipContext = new ClipContext(
                 eyePos, endPos,
-                ClipContext.Block.OUTLINE,
+                ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
                 this.self
         );
@@ -618,7 +618,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             float standHeight = (standForHeight != null) ? standForHeight.getBbHeight() : 1.95f;
             visualFaceCenter = faceCenter.subtract(0, standHeight / 2.0, 0);
         }
-        this.standSurfacePos = visualFaceCenter;
+
+        this.standSurfacePos = faceCenter;
 
         double sinkDepth;
         switch (hitResult.getDirection()) {
@@ -658,7 +659,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.playSound(null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
-                SoundSource.PLAYERS, 1.0F, 1.0F);
+                SoundSource.PLAYERS, 0.5F, 1.0F);
 
         if (!level.isClientSide()) {
             this.setCooldown(PowerIndex.SKILL_4,
@@ -1039,7 +1040,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.playSound(null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
-                SoundSource.PLAYERS, 1.0F, 1.0F);
+                SoundSource.PLAYERS, 0.5F, 1.0F);
     }
     private void meteortracking() {
         tracking = true;
@@ -1075,7 +1076,24 @@ public class PowersPlanetWaves extends NewDashPreset {
             syncStandMode();
             return true;
         }
-        return super.canInterruptPower(sauce,interrupter);
+
+        if (targetingstand && !isSinking && !isPreSinking) {
+            StandEntity stand = this.getStandEntity(this.self);
+            boolean interrupted = super.canInterruptPower(sauce, interrupter);
+            if (interrupted && stand != null && standHitDirection != null) {
+                applyBurialRotation(stand);
+                byte burialAnim = switch (standHitDirection) {
+                    case UP   -> PlanetWavesEntity.BURY_UPWARDS;
+                    case DOWN -> PlanetWavesEntity.BURY_DOWNWARDS;
+                    default   -> PlanetWavesEntity.BURY_HORIZONTAL;
+                };
+                animateStand(burialAnim);
+                syncStandMode();
+            }
+            return interrupted;
+        }
+
+        return super.canInterruptPower(sauce, interrupter);
     }
     private void meteornottracking() {
         tracking = false;
@@ -1137,7 +1155,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     this.self.blockPosition(),
                     ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT,
                     SoundSource.PLAYERS,
-                    1.5F,
+                    0.5F,
                     1.0F
             );
 
@@ -1418,7 +1436,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
 
     }
-    public byte getFireColor(){
+    public byte getFireballColor(){
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
@@ -1427,10 +1445,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
             case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> StandFireType.CREAM.id;*/
-            case PlanetWavesEntity.PURPLE_SKIN -> StandFireType.PURPLE.id;
-            case PlanetWavesEntity.BLUE_SKIN -> StandFireType.BLUE.id;
-            case PlanetWavesEntity.MANGA_SKIN -> StandFireType.CREAM.id;
-            default -> StandFireType.ORANGE.id;
+            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> 6;//ParticleTypes.SPLASH;
+            case PlanetWavesEntity.GREEN_SKIN-> 5; //ModParticles.GREEN_FLAME;
+            case PlanetWavesEntity.PURPLE_SKIN -> 4;//StandFireType.PURPLE.id;
+            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> 3;//StandFireType.BLUE.id;
+            case PlanetWavesEntity.MANGA_SKIN -> 1;//StandFireType.CREAM.id;
+            default -> 1; //StandFireType.ORANGE.id;
         };
     }
     public void createStandFire(BlockPos pos){
@@ -1451,10 +1471,11 @@ public class PowersPlanetWaves extends NewDashPreset {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
 
         return switch (skn) {
+            //case PlanetWavesEntity.SPARTA
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
-            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.BLUE_FLAME;
+            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
             case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
             default -> ModParticles.ORANGE_FLAME;
         };

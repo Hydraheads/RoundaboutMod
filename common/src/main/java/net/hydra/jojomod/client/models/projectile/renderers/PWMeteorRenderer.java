@@ -7,6 +7,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -78,13 +79,30 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
     }
 
 
-    public static final ResourceLocation PW_METEOR_TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor.png");
-
-
+    public static final ResourceLocation PW_METEOR_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor.png");
+    public static final ResourceLocation PW_METEOR_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_blue.png");
+    public static final ResourceLocation PW_METEOR_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_green.png");
+    public static final ResourceLocation PW_METEOR_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_purple.png");
+    public static final ResourceLocation PW_METEOR_WATER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_water.png");
+    public static final ResourceLocation PW_METEOR_WHITE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_white.png");
 
     @Override
     public ResourceLocation getTextureLocation(PWMeteorEntity entity) {
+        LivingEntity user = entity.getUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+            byte sft = PPW.getFireballColor();
+            if (sft == 3) {
+                return PW_METEOR_BLUE_TEXTURE;
+            } else if (sft == 4) {
+                return PW_METEOR_PURPLE_TEXTURE;
+            } else if (sft == 5) {
+                return PW_METEOR_GREEN_TEXTURE;
+            } else if (sft == 6) {
+                return PW_METEOR_WATER_TEXTURE;
+            } else if (sft == 7) {
+                return PW_METEOR_WHITE_TEXTURE;
+            }
+        }
         return PW_METEOR_TEXTURE;
     }
 }

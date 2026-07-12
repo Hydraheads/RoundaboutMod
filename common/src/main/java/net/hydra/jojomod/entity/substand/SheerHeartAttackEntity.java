@@ -292,10 +292,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void findTarget() {
-		List<Entity> entities = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), viewRange , viewRange , viewRange );
 		int harmest = 0;
 		double harmestDistance = -1;
-
 		Entity targetEnt = null;
 		int targetPosX = 0;
 		int targetPosY = 0;
@@ -303,7 +301,29 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		byte currentChoice = NONE;
 
-        for (Entity entity : entities) {
+		if (this.getTargetType() == BLOCK) {
+			harmest = -1 + getBlockWarm(this.blockTarget, this.level());
+			if (harmest > 0) {
+				currentChoice = BLOCK;
+				harmestDistance = this.blockTarget.distToCenterSqr(this.position());;
+
+				targetPosX = this.blockTarget.getX();
+				targetPosY = this.blockTarget.getY();
+				targetPosZ = this.blockTarget.getZ();
+			}
+		}else if (this.getTargetType() == ENTITY && this.entityTarget != null
+				&& this.entityTarget.isAlive()) {
+			harmest = getEntityWarm(this.entityTarget);
+			if (harmest > 0) {
+				currentChoice = ENTITY;
+				harmestDistance = this.entityTarget.distanceToSqr(this.position());
+				targetEnt = this.entityTarget;
+			}
+		}
+
+		List<Entity> entities = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), viewRange , viewRange , viewRange );
+
+		for (Entity entity : entities) {
 			if (!this.hasLineOfSight(entity)) {continue;}
 
 			int points = getEntityWarm(entity);
@@ -330,7 +350,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			int points = -1;
 
-			points += (int)(info.getLightEmission() * 1.2);
+			points += getBlockWarm(pos, this.level());
 
 			if (points < 0 || !canSeeBlock(pos)) { continue; }
 
@@ -373,7 +393,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (hitResult.getType() == HitResult.Type.MISS) {
 			return true;
 		}
-		return (pos.closerToCenterThan(pos.getCenter(), 1.5));
+		return (pos.closerToCenterThan(hitResult.getLocation(), 1.5));
 	}
 
 	public boolean shouldJump(Vec3 targetPos) {
@@ -534,6 +554,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 
+	public int getBlockWarm(BlockPos pos, Level level) {
+		BlockState info = level.getBlockState(pos);
+
+		return (int)(info.getLightEmission() * 1.5);
+	}
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;

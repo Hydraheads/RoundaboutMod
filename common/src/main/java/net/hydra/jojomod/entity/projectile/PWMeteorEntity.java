@@ -388,7 +388,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                     this.getZ(),
                     ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT,
                     SoundSource.PLAYERS,
-                    1.5F,
+                    0.5F,
                     1.0F
             );
         }
@@ -442,7 +442,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
         radialExplosion(null);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                ModSounds.FIREBALL_HIT_EVENT, SoundSource.PLAYERS, 2.5F, 1.0F);
+                ModSounds.FIREBALL_HIT_EVENT, SoundSource.PLAYERS, 0.1F, 1.0F);
         this.discard();
     }
 
@@ -561,7 +561,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                         this.getZ(),
                         ModSounds.FIREBALL_HIT_EVENT,
                         SoundSource.PLAYERS,
-                        2.5F,
+                        0.1F,
                         1.0F
                 );
 
