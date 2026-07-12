@@ -806,6 +806,9 @@ public class PowersCalifornia extends NewDashPreset {
                     if (leaded.distanceTo(self) > getCKBrange() && PowersCalifornia.canSteal(leaded)){
                         if (self instanceof Creeper cr){
                             self.teleportTo(leaded.getX(),leaded.getY(),leaded.getZ());
+                            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                                    this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
+                                    12, 2, 0.5,2, 0.015);
                             cr.ignite();
                         } else {
                             addToList(leaded);
