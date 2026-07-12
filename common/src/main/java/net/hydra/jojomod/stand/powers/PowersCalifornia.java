@@ -1220,7 +1220,8 @@ public class PowersCalifornia extends NewDashPreset {
                 if (hit instanceof BlockHitResult blockHit) {
                     Entity stand = getStandEntity(self);
                     if (stand instanceof CaliforniaKingBedEntity cbe) {
-                        if (self.level().getBlockState(blockHit.getBlockPos()).isSolid()){
+                        BlockState state = self.level().getBlockState(blockHit.getBlockPos());
+                        if (state.isSolid() && !state.is(ModBlocks.KING_BED_BLOCK)){
                             BlockPos pos = blockHit.getBlockPos().relative(blockHit.getDirection());
                             Direction facing = player.getDirection();
                             UUID standUUID = cbe.getUUID();

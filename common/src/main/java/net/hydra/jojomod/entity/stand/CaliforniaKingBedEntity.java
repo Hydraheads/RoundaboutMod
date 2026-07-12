@@ -85,7 +85,6 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         if (this.getAnimation() == SLEEP) {
-            Roundabout.LOGGER.info("1");
             return EntityDimensions.fixed(3F,0.7F);
         }
 
