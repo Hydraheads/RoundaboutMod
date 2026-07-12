@@ -714,6 +714,9 @@ public class PowersCalifornia extends NewDashPreset {
     int graceticks = 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
+        if (tickGenericFallBraceAI()){
+            return;
+        }
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             double dist = attackTarget.distanceTo(this.getSelf());
             boolean isCreeper = this.getSelf() instanceof Creeper;

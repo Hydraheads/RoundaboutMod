@@ -1061,19 +1061,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
     @Override
     public void tickMobAI(LivingEntity attackTarget){
 
-        if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
-                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
-                /**Fall Brace AI*/
-                if (!((StandUser) this.getSelf()).roundabout$isBubbleEncased()) {
-                    if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                        ((StandUser) this.getSelf()).roundabout$setBubbleEncased((byte) 1);
-                        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().softAndWetSettings.encasementBubbleCreateCooldown);
-                        return;
-                    }
-                }
-            }
+
+        if (tickGenericFallBraceAI()){
+            return;
         }
         if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
             boolean upAiNow = upAi(attackTarget);
