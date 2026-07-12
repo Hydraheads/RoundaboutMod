@@ -241,19 +241,8 @@ public class ForgeEvents {
         ModBlocks.BLUE_BLOOD_SPLATTER = ForgeBlocks.BLUE_BLOOD_SPLATTER.get();
         ModBlocks.ENDER_BLOOD_SPLATTER = ForgeBlocks.ENDER_BLOOD_SPLATTER.get();
 
-        ModBlocks.BLACK_PAWN = ForgeBlocks.BLACK_PAWN.get();
-        ModBlocks.BLACK_ROOK = ForgeBlocks.BLACK_ROOK.get();
-        ModBlocks.BLACK_BISHOP = ForgeBlocks.BLACK_BISHOP.get();
-        ModBlocks.BLACK_KING = ForgeBlocks.BLACK_KING.get();
-        ModBlocks.BLACK_QUEEN = ForgeBlocks.BLACK_QUEEN.get();
-        ModBlocks.BLACK_KNIGHT = ForgeBlocks.BLACK_KNIGHT.get();
-
-        ModBlocks.WHITE_PAWN = ForgeBlocks.WHITE_PAWN.get();
-        ModBlocks.WHITE_ROOK = ForgeBlocks.WHITE_ROOK.get();
-        ModBlocks.WHITE_BISHOP = ForgeBlocks.WHITE_BISHOP.get();
-        ModBlocks.WHITE_KNIGHT = ForgeBlocks.WHITE_KNIGHT.get();
-        ModBlocks.WHITE_QUEEN = ForgeBlocks.WHITE_QUEEN.get();
-        ModBlocks.WHITE_KING = ForgeBlocks.WHITE_KING.get();
+        ModBlocks.CHESS_PIECE = ForgeBlocks.CHESS_PIECE.get();
+        ModBlocks.CHESS_PIECE_BLOCK_ENTITY = ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get();
 
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
@@ -300,20 +289,6 @@ public class ForgeEvents {
         ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = ForgeBlocks.FANCY_LIGHTER_BLOCK_ENTITY.get();
         ModBlocks.FANCY_LIGHTER_BLOCK = ForgeBlocks.FANCY_LIGHTER_BLOCK.get();
         //ModBlocks.CHESSBOARD_BLOCK_ENTITY = ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get();
-
-
-        ModBlocks.BLACK_PAWN_ENTITY = ForgeBlocks.BLACK_PAWN_ENTITY.get();
-        ModBlocks.BLACK_KNIGHT_ENTITY = ForgeBlocks.BLACK_KNIGHT_ENTITY.get();
-        ModBlocks.BLACK_BISHOP_ENTITY = ForgeBlocks.BLACK_BISHOP_ENTITY.get();
-        ModBlocks.BLACK_KING_ENTITY = ForgeBlocks.BLACK_KING_ENTITY.get();
-        ModBlocks.BLACK_QUEEN_ENTITY = ForgeBlocks.BLACK_QUEEN_ENTITY.get();
-        ModBlocks.BLACK_ROOK_ENTITY = ForgeBlocks.BLACK_ROOK_ENTITY.get();
-        ModBlocks.WHITE_PAWN_ENTITY = ForgeBlocks.WHITE_PAWN_ENTITY.get();
-        ModBlocks.WHITE_KNIGHT_ENTITY = ForgeBlocks.WHITE_KNIGHT_ENTITY.get();
-        ModBlocks.WHITE_BISHOP_ENTITY = ForgeBlocks.WHITE_BISHOP_ENTITY.get();
-        ModBlocks.WHITE_KING_ENTITY = ForgeBlocks.WHITE_KING_ENTITY.get();
-        ModBlocks.WHITE_QUEEN_ENTITY = ForgeBlocks.WHITE_QUEEN_ENTITY.get();
-        ModBlocks.WHITE_ROOK_ENTITY = ForgeBlocks.WHITE_ROOK_ENTITY.get();
 
         ModItems.STAND_ARROW = ForgeItems.STAND_ARROW.get();
         ModItems.WORTHY_ARROW = ForgeItems.WORTHY_ARROW.get();

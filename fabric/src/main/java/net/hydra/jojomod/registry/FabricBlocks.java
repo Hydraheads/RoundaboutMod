@@ -30,29 +30,7 @@ public class FabricBlocks {
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
-    public static final Block BLACK_PAWN = registerBlockItemless("memory_pawn", ModBlocks.getChessBlock()
-    );
-    public static final Block BLACK_ROOK = registerBlockItemless("memory_rook", ModBlocks.getChessBlock()
-    );
-    public static final Block BLACK_BISHOP = registerBlockItemless("memory_bishop", ModBlocks.getChessBlock()
-    );
-    public static final Block BLACK_KING = registerBlockItemless("memory_king", ModBlocks.getChessBlock()
-    );
-    public static final Block BLACK_QUEEN = registerBlockItemless("memory_queen", ModBlocks.getChessBlock()
-    );
-    public static final Block BLACK_KNIGHT = registerBlockItemless("memory_knight", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_PAWN = registerBlockItemless("memory_pawn_white", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_ROOK = registerBlockItemless("memory_rook_white", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_BISHOP = registerBlockItemless("memory_bishop_white", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_KING = registerBlockItemless("memory_king_white", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_QUEEN = registerBlockItemless("memory_queen_white", ModBlocks.getChessBlock()
-    );
-    public static final Block WHITE_KNIGHT = registerBlockItemless("memory_knight_white", ModBlocks.getChessBlock()
+    public static final Block CHESS_PIECE = registerBlockItemless("chess_piece", ModBlocks.getChessBlock()
     );
     public static final Block AJA_ORE = registerBlock("aja_ore", ModBlocks.AJA_ORE_PROPERTIES
     );
@@ -278,31 +256,8 @@ public class FabricBlocks {
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
 
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_PAWN_ENTITY =
-            registerBE("memory_pawn",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_PAWN) );
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_KNIGHT_ENTITY =
-            registerBE("memory_knight",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_KNIGHT) );
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_KING_ENTITY =
-            registerBE("memory_king",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_KING) );
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_QUEEN_ENTITY =
-            registerBE("memory_queen",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_QUEEN) );
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_ROOK_ENTITY =
-            registerBE("memory_rook",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_ROOK) );
-    public static final BlockEntityType<ChessPieceBlockEntity> BLACK_BISHOP_ENTITY =
-            registerBE("memory_bishop",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, BLACK_BISHOP) );
-
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_PAWN_ENTITY =
-            registerBE("memory_pawn_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_PAWN) );
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_KNIGHT_ENTITY =
-            registerBE("memory_knight_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_KNIGHT) );
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_KING_ENTITY =
-            registerBE("memory_king_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_KING) );
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_QUEEN_ENTITY =
-            registerBE("memory_queen_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_QUEEN) );
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_ROOK_ENTITY =
-            registerBE("memory_rook_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_ROOK) );
-    public static final BlockEntityType<ChessPieceBlockEntity> WHITE_BISHOP_ENTITY =
-            registerBE("memory_bishop_white",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, WHITE_BISHOP) );
+    public static final BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY =
+            registerBE("chess_piece",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE) );
 
 
     public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
@@ -381,13 +336,6 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
-
-        ModBlocks.BLACK_PAWN = BLACK_PAWN;
-        ModBlocks.BLACK_ROOK = BLACK_ROOK;
-        ModBlocks.BLACK_BISHOP = BLACK_BISHOP;
-        ModBlocks.BLACK_KING = BLACK_KING;
-        ModBlocks.BLACK_QUEEN = BLACK_QUEEN;
-        ModBlocks.BLACK_KNIGHT = BLACK_KNIGHT;
 
         ModBlocks.WHITE_PAWN = WHITE_PAWN;
         ModBlocks.WHITE_ROOK = WHITE_ROOK;
@@ -513,19 +461,8 @@ public class FabricBlocks {
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
 
 
-        ModBlocks.BLACK_PAWN_ENTITY = BLACK_PAWN_ENTITY;
-        ModBlocks.BLACK_KNIGHT_ENTITY = BLACK_KNIGHT_ENTITY;
-        ModBlocks.BLACK_BISHOP_ENTITY = BLACK_BISHOP_ENTITY;
-        ModBlocks.BLACK_KING_ENTITY = BLACK_KING_ENTITY;
-        ModBlocks.BLACK_QUEEN_ENTITY = BLACK_QUEEN_ENTITY;
-        ModBlocks.BLACK_ROOK_ENTITY = BLACK_ROOK_ENTITY;
-
-        ModBlocks.WHITE_PAWN_ENTITY = WHITE_PAWN_ENTITY;
-        ModBlocks.WHITE_KNIGHT_ENTITY = WHITE_KNIGHT_ENTITY;
-        ModBlocks.WHITE_BISHOP_ENTITY = WHITE_BISHOP_ENTITY;
-        ModBlocks.WHITE_KING_ENTITY = WHITE_KING_ENTITY;
-        ModBlocks.WHITE_QUEEN_ENTITY = WHITE_QUEEN_ENTITY;
-        ModBlocks.WHITE_ROOK_ENTITY = WHITE_ROOK_ENTITY;
+        ModBlocks.CHESS_PIECE = CHESS_PIECE;
+        ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
 
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
