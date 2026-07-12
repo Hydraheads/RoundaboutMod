@@ -94,6 +94,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CenturyBoySettings centuryBoySettings;
     @NestedOption(group = "modded")
+    public CaliforniaKingBedSettings californiaKingBedSettings;
+    @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
     public WhiteAlbumSettings whiteAlbumSettings;
@@ -890,6 +892,16 @@ public class Config implements Cloneable {
         public Boolean buffedGroundStance;
     }
 
+    public static class CaliforniaKingBedSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCKB;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer doNotHurtMeBaseCD;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer doNotHurtMeRewindCD;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer postPunishDelay;
+    }
 
     public static class WhiteAlbumSettings {
         @BooleanOption(group = "inherit", value = true)

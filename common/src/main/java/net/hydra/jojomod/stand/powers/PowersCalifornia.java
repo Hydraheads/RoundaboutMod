@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.KingBedBlockEntity;
@@ -18,7 +17,6 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -34,7 +32,6 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -46,15 +43,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -73,14 +67,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -101,7 +90,7 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
-        return ClientNetworking.getAppropriateConfig().cinderellaSettings.enableCinderella;
+        return ClientNetworking.getAppropriateConfig().californiaKingBedSettings.enableCKB;
     }
 
     public DietSavedSecond rewindSnap = null;
@@ -926,7 +915,8 @@ public class PowersCalifornia extends NewDashPreset {
             if (rewindSnap != null && snapEntity != null && snapEntity.isAlive()
             && hurtEntities != null && hurtEntities.containsKey(snapEntity)){
                 rewindSnap.loadTime(self);
-                setCooldown(PowerIndex.SKILL_2,200);
+                setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().
+                        californiaKingBedSettings.doNotHurtMeRewindCD);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
@@ -957,7 +947,7 @@ public class PowersCalifornia extends NewDashPreset {
             clearAllSpawnedEntities();
             clearLeaded();
             snapEntity = null;
-            int length = 70;
+            int length = ClientNetworking.getAppropriateConfig().californiaKingBedSettings.postPunishDelay;
             setCooldown(PowerIndex.SKILL_1, length);
             setCooldown(PowerIndex.SKILL_2, length);
             setCooldown(PowerIndex.SKILL_EXTRA_2, length);
@@ -1191,7 +1181,8 @@ public class PowersCalifornia extends NewDashPreset {
     public void onPoseEmoteSwitch(byte from, byte to){
         if (!self.level().isClientSide()){
             if (from == 35 && !(to == 35)){
-                setCooldown(PowerIndex.SKILL_2,160);
+                setCooldown(PowerIndex.SKILL_2,
+                        ClientNetworking.getAppropriateConfig().californiaKingBedSettings.doNotHurtMeBaseCD);
             }
         }
     }
@@ -1215,7 +1206,7 @@ public class PowersCalifornia extends NewDashPreset {
                 sendParticles(pl);
                 ItemStack piece = ModItems.EXP_BISHOP.getDefaultInstance().copy();
                 MainUtil.addItem(pl,piece);
-                setCooldown(PowerIndex.SKILL_3,1200);
+                setCooldown(PowerIndex.SKILL_3,200);
             }
         }
     }
@@ -1345,7 +1336,7 @@ public class PowersCalifornia extends NewDashPreset {
                 sendParticles(pl);
                 ItemStack piece = getPieceType(self, false, false,14);
                 MainUtil.addItem(pl,piece);
-                setCooldown(PowerIndex.SKILL_2_SNEAK,1200);
+                setCooldown(PowerIndex.SKILL_2_SNEAK,400);
             }
         }
     }

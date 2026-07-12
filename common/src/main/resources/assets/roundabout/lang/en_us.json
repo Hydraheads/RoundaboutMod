@@ -2747,6 +2747,19 @@
   "config.roundabout.noGlaiveDuringPunchRecharge.name": "Punch Charge Anti-Glaive",
   "config.roundabout.noGlaiveDuringPunchRecharge.desc": "Makes glaives not work while on punch cooldown. This prevents the scuffed strategy of applying pressure to melee users to recharge stand punches.",
 
+  "config.roundabout.enableCKB.name": "Enable Stand",
+  "config.roundabout.enableCKB.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+
+  "config.roundabout.doNotHurtMeBaseCD.name": "Cower Cooldown",
+  "config.roundabout.doNotHurtMeBaseCD.desc": "This cooldown appears when your counter fails, or between non-acted upon counters.",
+
+  "config.roundabout.doNotHurtMeRewindCD.name": "Cower Success CD",
+  "config.roundabout.doNotHurtMeRewindCD.desc": "This cooldown appears when you restore health with your counter.",
+
+  "config.roundabout.postPunishDelay.name": "Punish Delay CD",
+  "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
+
+
   "config.roundabout.mountingHorsesInCreativeTamesThem.name": "Creative Mount To Tame",
   "config.roundabout.mountingHorsesInCreativeTamesThem.desc": "If you mount a horse in creative mode, you instantly tame it.",
 
