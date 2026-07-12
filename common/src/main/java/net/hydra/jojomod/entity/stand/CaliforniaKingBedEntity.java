@@ -76,9 +76,9 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
         super.tick();
         if (this.getAnimation() == SLEEP) {
             assertYaw();
-            if (lastanim != getAnimation()) {
-                    refreshDimensions();
-            }
+        }
+        if (lastanim != getAnimation()) {
+            refreshDimensions();
         }
         lastanim = getAnimation();
     }
