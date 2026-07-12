@@ -1314,7 +1314,7 @@ public class PowersCalifornia extends NewDashPreset {
         ckb.setXRot(0.01F); // if desired
 
         ckb.yaw = yaw;
-
+        ckb.setYawForce(yaw);
 
         // Vanilla callback
         footState.getBlock().setPlacedBy(level, pos, footState, player, ItemStack.EMPTY);
