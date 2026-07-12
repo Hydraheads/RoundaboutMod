@@ -2994,6 +2994,8 @@
   "config.roundabout.usertargetingCooldown.desc": "User targeting move cooldown",
   "config.roundabout.meteorTrackingPower.name": "Meteor Tracking Power",
   "config.roundabout.meteorTrackingPower.desc": "How much the meteors track you in meteor tracking mode",
+  "config.roundabout.PWCanonMovesOnly.name": "Planet Waves Canon Moves Only",
+  "config.roundabout.PWCanonMovesOnly.desc": "Block all non-canon moves",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",

@@ -31,7 +31,7 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
     public PWBigMeteorRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER));
+        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.PW_BIG_METEOR_LAYER));
     }
 
     @Override
@@ -48,6 +48,7 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
         poseStack.pushPose();
 
+        poseStack.scale(-1.0F, -1.0F, 1.0F); // convert Blockbench pixel-space to world space
 
         float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
@@ -55,24 +56,12 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
-
         float scale = entity.getMeteorScale();
         float finalScale = 2.6f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
-
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-
-        this.model.renderToBuffer(
-                poseStack,
-                consumer,
-                15728880,
-                OverlayTexture.NO_OVERLAY,
-                1.0F,
-                1.0F,
-                1.0F,
-                0.4f
-        );
+        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.4f);
 
         poseStack.popPose();
 

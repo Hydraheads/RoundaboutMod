@@ -767,6 +767,8 @@ public class Config implements Cloneable {
         public Integer usertargetingCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer meteorTrackingPower;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean PWCanonMovesOnly;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
