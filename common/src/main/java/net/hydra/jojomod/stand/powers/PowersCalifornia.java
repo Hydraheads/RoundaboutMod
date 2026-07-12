@@ -30,6 +30,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -1176,6 +1177,21 @@ public class PowersCalifornia extends NewDashPreset {
                 30, 1, 0.05, 1, 0.4);
     }
 
+    @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 80) {
+                ((StandUser)self).roundabout$deeplyRemoveAttackTarget();
+                if (self instanceof Mob mb){
+                    ((IMob)mb).roundabout$setConfusionTicks(50);
+                    ((ServerLevel) self.level()).sendParticles(ModParticles.QUESTION,
+                            self.getEyePosition().x, self.getEyePosition().y+0.5F, self.getEyePosition().z,
+                            0, 0, 0.5,0, 0.15);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onPoseEmoteSwitch(byte from, byte to){
@@ -1398,9 +1414,6 @@ public class PowersCalifornia extends NewDashPreset {
         return $$1;
     }
 
-    @Override
-    public void tickStandRejection(MobEffectInstance effect){
-    }
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
