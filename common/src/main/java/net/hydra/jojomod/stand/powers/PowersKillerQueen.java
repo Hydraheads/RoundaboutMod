@@ -26,7 +26,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.item.StrayCats.AbstractStrayCat;
+import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -92,7 +92,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 	// TODO Make bomb item
 	// TODO Bites The Dust
-    // TODO BUBBLES-SHIELD
+    // TODO BUBBLES-SHIELD enhance?
 	
 	// TODO Audio Translations (WIP)
 	
@@ -704,7 +704,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         ItemStack item = this.getSelf().getMainHandItem();
-        if (item.getItem() instanceof AbstractStrayCat) {
+        if (item.getItem() instanceof StrayCatItem) {
             return true;
         }
 
@@ -1565,7 +1565,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             ItemStack item = this.getSelf().getMainHandItem();
-            if (item.getItem() instanceof AbstractStrayCat) {
+            if (item.getItem() instanceof StrayCatItem) {
                 Player PL = (Player)this.getSelf();
                 if (!PL.getAbilities().instabuild) {
                     item.shrink(1);

@@ -1,15 +1,13 @@
-package net.hydra.jojomod.item.StrayCats;
+package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -23,15 +21,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-abstract public class AbstractStrayCat extends Item {
-    public AbstractStrayCat(Properties $$0) { super($$0); }
+public class StrayCatItem extends Item {
+    public final byte breed;
+    public StrayCatItem(Properties $$0) {
+        super($$0);
+        this.breed = 0;
+    }
+    public StrayCatItem(Properties $$0, byte variant) {
+        super($$0);
+        this.breed = variant;
+    }
 
-    public static final String NAME_TAG = "name";
     public static final String OWNER_UUID_TAG = "owner";
     public static final String SKIN_TAG = "skin";
 
     private static final float SPEED = 0.4f;
-    public byte getBubbleSkin() { return 0; }
+    public byte getBubbleSkin() {
+        if (breed == 1) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private static final int COOLDOWN = 13;
 
     static public void saveStrayCatEntityInfo(ItemStack stack, StrayCatEntity stray) {
         CompoundTag tag = stack.getOrCreateTag();
@@ -42,6 +55,10 @@ abstract public class AbstractStrayCat extends Item {
             tag.putByte(SKIN_TAG, stray.getBreed());
         }
 
+        if (stray.hasCustomName()) {
+            stack.setHoverName(stray.getCustomName());
+        }
+
         stack.setTag(tag);
     }
 
@@ -50,7 +67,8 @@ abstract public class AbstractStrayCat extends Item {
         if (livingEntity instanceof Player P) {
 
             if (!level.isClientSide && !isSleeping(level)) {
-                P.getCooldowns().addCooldown($$0.getItem(),13);
+                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA,COOLDOWN);
+                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME,COOLDOWN);
 
                 StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
                 if (bubble != null) {
@@ -93,9 +111,9 @@ abstract public class AbstractStrayCat extends Item {
 
         BlockPos abovePos = blockPos.above();
         BlockState aboveState = level.getBlockState(abovePos);
-        if (!aboveState.isAir()) return InteractionResult.FAIL;
+        if (!aboveState.isAir() || !player.isCrouching()) return InteractionResult.FAIL;
 
-        if (!level.isClientSide && player.isCrouching()) {
+        if (!level.isClientSide) {
             Vec3 spawnPos = Vec3.atCenterOf(abovePos);
 
             StrayCatEntity stray = ModEntities.STRAY_CAT.create(level);
@@ -106,10 +124,10 @@ abstract public class AbstractStrayCat extends Item {
                     stray.setOwnerUUID(tag.getUUID(OWNER_UUID_TAG));
                     stray.setTame(true);
                 }
-                if (tag.contains(SKIN_TAG)) {
-                    stray.setBreed(tag.getByte(SKIN_TAG));
+                stray.setBreed(breed);
+                if (item.hasCustomHoverName()) {
+                    stray.setCustomName(item.getHoverName());
                 }
-
                 stray.setPotted(true);
 
                 stray.moveTo(spawnPos.x, spawnPos.y, spawnPos.z, player.getYRot(), 0.0F);
@@ -130,15 +148,29 @@ abstract public class AbstractStrayCat extends Item {
         return dayTime >= 13000 && dayTime <= 23750;
     }
 
-    public float getCurrentPredicateValue(Level level) {
+
+    public float getCurrentPredicateValue(Level level, ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+        float value = 0.0f;
+
         if (level != null) {
             if (isSleeping(level)) {
-                return 0.2f;
+                value += 0.1f;
             }
         }
-        return 0.0f;
-    }
 
+        return value;
+    }
+    /*
+    public ItemStack getDefaultInstance() {
+        ItemStack stack = new ItemStack(this);
+        CompoundTag tag = stack.getOrCreateTag();
+        //tag.putByte(SKIN_TAG, breed);
+        stack.setTag(tag);
+
+        return stack;
+    }
+    */
     @Override public int getUseDuration(ItemStack $$0) {
         return 1;
     }

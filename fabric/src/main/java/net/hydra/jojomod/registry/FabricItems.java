@@ -10,7 +10,6 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.item.StrayCats.*;
 import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
@@ -199,8 +198,8 @@ public class FabricItems {
     public static Item GASOLINE_BUCKET = registerItem("gasoline_bucket", new GasolineBucketItem(new Item.Properties().stacksTo(1)));
     public static Item ROAD_ROLLER = registerItem("road_roller", new RoadRollerItem(new Item.Properties().stacksTo(1)));
 
-    public static Item STRAY_CAT_ANIME = registerItem("stray_cat_anime", new StrayCatAnime(new Item.Properties().stacksTo(1)));
-    public static Item STRAY_CAT_MANGA = registerItem("stray_cat_manga", new StrayCatManga(new Item.Properties().stacksTo(1)));
+    public static Item STRAY_CAT_ANIME = registerItem("stray_cat_anime", new StrayCatItem(new Item.Properties().stacksTo(1), (byte)0));
+    public static Item STRAY_CAT_MANGA = registerItem("stray_cat_manga", new StrayCatItem(new Item.Properties().stacksTo(1), (byte)1));
 
     public static Item FANCY_LIGHTER = registerItem("fancy_lighter_block", new FancyLighterItem(ModBlocks.FANCY_LIGHTER_BLOCK, new Item.Properties().stacksTo(1)));
 
@@ -208,10 +207,6 @@ public class FabricItems {
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
-    //public static Item HAND = registerItem("player_hand", new Item(new Item.Properties()));
-    //public static Item VILLAGER_HAND = registerItem("villager_hand", new Item(new Item.Properties()));
-    //public static Item ILLAGER_HAND = registerItem("illager_hand", new Item(new Item.Properties()));
-    //public static Item ROTTEN_HAND = registerItem("rotten_hand", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
     public static Item STREET_SIGN_RIGHT_BLOCK_ITEM = registerItem("street_sign_right_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_RIGHT, new Item.Properties().stacksTo(1)));
@@ -616,6 +611,7 @@ public class FabricItems {
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
                         entries.accept(STRAY_CAT_ANIME);
                         entries.accept(STRAY_CAT_MANGA);
+                        //entries.accept(STRAY_CAT_ITEM);
                         entries.accept(MEMORY_PAWN);
                         entries.accept(MEMORY_ROOK);
                         entries.accept(MEMORY_KNIGHT);
@@ -786,6 +782,7 @@ public class FabricItems {
 
         ModItems.STRAY_CAT_ANIME = STRAY_CAT_ANIME;
         ModItems.STRAY_CAT_MANGA = STRAY_CAT_MANGA;
+
 
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_DIO).referenceItem = STREET_SIGN_DIO_BLOCK_ITEM.getDefaultInstance();
         ((StreetSignBlock)FabricBlocks.STREET_SIGN_RIGHT).referenceItem = STREET_SIGN_RIGHT_BLOCK_ITEM.getDefaultInstance();
