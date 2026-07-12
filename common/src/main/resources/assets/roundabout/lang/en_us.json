@@ -133,18 +133,7 @@
   "item.roundabout.memory_king_white": "Location Memory",
 
 
-  "block.roundabout.memory_pawn": "Black Pawn",
-  "block.roundabout.memory_rook": "Black Rook",
-  "block.roundabout.memory_knight": "Black Knight",
-  "block.roundabout.memory_bishop": "Black Bishop",
-  "block.roundabout.memory_queen": "Black Queen",
-  "block.roundabout.memory_king": "Black King",
-  "block.roundabout.memory_pawn_white": "White Pawn",
-  "block.roundabout.memory_rook_white": "White Rook",
-  "block.roundabout.memory_knight_white": "White Knight",
-  "block.roundabout.memory_bishop_white": "White Bishop",
-  "block.roundabout.memory_queen_white": "White Queen",
-  "block.roundabout.memory_king_white": "White King",
+  "block.roundabout.chess_piece": "Chess Piece",
 
   "item.roundabout.exp_bishop": "Experience Bishop",
 

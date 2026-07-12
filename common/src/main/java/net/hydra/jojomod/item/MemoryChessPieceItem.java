@@ -281,7 +281,10 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         }
     }
 
-
+    @Override
+    public boolean isValidRepairItem(ItemStack $$0, ItemStack $$1) {
+        return false;
+    }
 
     public static void attackThePerson(Player player) {
         ItemStack stack = player.getMainHandItem();

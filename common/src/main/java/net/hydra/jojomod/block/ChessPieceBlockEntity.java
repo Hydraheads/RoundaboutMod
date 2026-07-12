@@ -16,34 +16,7 @@ public class ChessPieceBlockEntity extends BlockEntity {
     }
 
     public static BlockEntityType getBE(BlockPos $$0, BlockState $$1){
-        if ($$1.is(ModBlocks.BLACK_BISHOP)){
-            return ModBlocks.BLACK_BISHOP_ENTITY;
-        } if ($$1.is(ModBlocks.BLACK_QUEEN)){
-            return ModBlocks.BLACK_QUEEN_ENTITY;
-        } if ($$1.is(ModBlocks.BLACK_ROOK)){
-            return ModBlocks.BLACK_ROOK_ENTITY;
-        } if ($$1.is(ModBlocks.BLACK_KING)){
-            return ModBlocks.BLACK_KING_ENTITY;
-        } if ($$1.is(ModBlocks.BLACK_PAWN)){
-            return ModBlocks.BLACK_PAWN_ENTITY;
-        } if ($$1.is(ModBlocks.BLACK_KNIGHT)){
-            return ModBlocks.BLACK_KNIGHT_ENTITY;
-        }
-
-        if ($$1.is(ModBlocks.WHITE_BISHOP)){
-            return ModBlocks.WHITE_BISHOP_ENTITY;
-        } if ($$1.is(ModBlocks.WHITE_QUEEN)){
-            return ModBlocks.WHITE_QUEEN_ENTITY;
-        } if ($$1.is(ModBlocks.WHITE_ROOK)){
-            return ModBlocks.WHITE_ROOK_ENTITY;
-        } if ($$1.is(ModBlocks.WHITE_KING)){
-            return ModBlocks.WHITE_KING_ENTITY;
-        } if ($$1.is(ModBlocks.WHITE_PAWN)){
-            return ModBlocks.WHITE_PAWN_ENTITY;
-        } if ($$1.is(ModBlocks.WHITE_KNIGHT)){
-            return ModBlocks.WHITE_KNIGHT_ENTITY;
-        }
-        return ModBlocks.BLACK_PAWN_ENTITY;
+        return ModBlocks.CHESS_PIECE_BLOCK_ENTITY;
     }
 
     private static Direction getNeighbourDirection(BedPart $$0, Direction $$1) {
