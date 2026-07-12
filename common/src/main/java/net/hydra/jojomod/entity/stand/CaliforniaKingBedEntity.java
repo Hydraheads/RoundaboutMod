@@ -1,13 +1,12 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -72,11 +71,25 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     public UUID bedUUID = null;
 
 
+    public byte lastanim = 0;
     public void tick(){
         super.tick();
         if (this.getAnimation() == SLEEP) {
             assertYaw();
+            if (lastanim != getAnimation()) {
+                    refreshDimensions();
+            }
         }
+        lastanim = getAnimation();
+    }
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        if (this.getAnimation() == SLEEP) {
+            Roundabout.LOGGER.info("1");
+            return EntityDimensions.fixed(3F,0.7F);
+        }
+
+        return super.getDimensions(pose);
     }
 
     public float yaw = 0;
