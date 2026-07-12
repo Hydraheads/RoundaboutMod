@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
@@ -326,9 +327,11 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                     player.setItemSlot(EquipmentSlot.MAINHAND, stack);
                 }
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
-                float dmg = 3;
+                float dmg;
                 if (living instanceof Player pl){
-                    dmg = 1.5F;
+                    dmg = multiplyPowerByStandConfigPlayers(1.5F);
+                } else {
+                    dmg = multiplyPowerByStandConfigMobs(3);
                 }
                 if (living.hurt(ModDamageTypes.of(living.level(), ModDamageTypes.CHESS_STRIKE, player), dmg) && !living.isAlive()) {
                     player.getMainHandItem().hurtAndBreak(4, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
@@ -365,5 +368,15 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             stack.setDamageValue(0);
             player.setItemSlot(EquipmentSlot.MAINHAND, stack);
         }
+    }
+
+    public static float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                californiaKingBedSettings.chessMultOnPlayers *0.01));
+    }
+
+    public static float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                californiaKingBedSettings.chessMultOnMobs *0.01));
     }
 }

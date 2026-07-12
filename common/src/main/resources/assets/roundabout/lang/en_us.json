@@ -3011,6 +3011,11 @@
   "config.roundabout.fingerBiteCooldown.name":"Finger Bite Cooldown",
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
 
+  "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
+  "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.chessMultOnPlayers.name": "Chess Mob Dmg Mult",
+  "config.roundabout.chessMultOnPlayers.desc": "How much damage the stand deals to every other mob, same math as above.",
+
   "config.roundabout.walkingHeartAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.walkingHeartAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.walkingHeartAttackMultOnMobs.name": "Mob Damage Multiplier",

@@ -901,6 +901,10 @@ public class Config implements Cloneable {
         public Integer doNotHurtMeRewindCD;
         @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer postPunishDelay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnPlayers;
     }
 
     public static class WhiteAlbumSettings {
