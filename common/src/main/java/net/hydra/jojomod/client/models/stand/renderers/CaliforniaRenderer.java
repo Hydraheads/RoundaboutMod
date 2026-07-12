@@ -20,6 +20,7 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
     private static final ResourceLocation SUNSHINE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sunshine.png");
     private static final ResourceLocation EGYPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/egypt.png");
     private static final ResourceLocation SPOOKY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spooky.png");
+    private static final ResourceLocation EXPERIENCE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/experience.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);
@@ -32,6 +33,7 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
             case (CaliforniaKingBedEntity.SUNSHINE) -> SUNSHINE;
             case (CaliforniaKingBedEntity.EGYPT) -> EGYPT;
             case (CaliforniaKingBedEntity.SPOOKY) -> SPOOKY;
+            case (CaliforniaKingBedEntity.EXPERIENCE) -> EXPERIENCE;
             default -> PART_8_SKIN;
         };
     }

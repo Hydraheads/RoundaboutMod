@@ -21,7 +21,8 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             PART_8_SKIN = 1,
             SUNSHINE = 2,
             EGYPT = 3,
-            SPOOKY = 4;
+            SPOOKY = 4,
+            EXPERIENCE = 5;
 
     public final AnimationState fall_brace = new AnimationState();
     public final AnimationState sleep = new AnimationState();
