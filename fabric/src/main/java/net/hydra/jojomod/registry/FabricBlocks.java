@@ -30,6 +30,30 @@ public class FabricBlocks {
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
+    public static final Block BLACK_PAWN = registerBlockItemless("memory_pawn", ModBlocks.getChessBlock()
+    );
+    public static final Block BLACK_ROOK = registerBlockItemless("memory_rook", ModBlocks.getChessBlock()
+    );
+    public static final Block BLACK_BISHOP = registerBlockItemless("memory_bishop", ModBlocks.getChessBlock()
+    );
+    public static final Block BLACK_KING = registerBlockItemless("memory_king", ModBlocks.getChessBlock()
+    );
+    public static final Block BLACK_QUEEN = registerBlockItemless("memory_queen", ModBlocks.getChessBlock()
+    );
+    public static final Block BLACK_KNIGHT = registerBlockItemless("memory_knight", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_PAWN = registerBlockItemless("memory_pawn_white", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_ROOK = registerBlockItemless("memory_rook_white", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_BISHOP = registerBlockItemless("memory_bishop_white", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_KING = registerBlockItemless("memory_king_white", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_QUEEN = registerBlockItemless("memory_queen_white", ModBlocks.getChessBlock()
+    );
+    public static final Block WHITE_KNIGHT = registerBlockItemless("memory_knight_white", ModBlocks.getChessBlock()
+    );
     public static final Block AJA_ORE = registerBlock("aja_ore", ModBlocks.AJA_ORE_PROPERTIES
     );
     public static final Block DEEPSLATE_AJA_ORE = registerBlock("deepslate_aja_ore", ModBlocks.DEEPSLATE_AJA_ORE_PROPERTIES
@@ -329,6 +353,21 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+
+        ModBlocks.BLACK_PAWN = BLACK_PAWN;
+        ModBlocks.BLACK_ROOK = BLACK_ROOK;
+        ModBlocks.BLACK_BISHOP = BLACK_BISHOP;
+        ModBlocks.BLACK_KING = BLACK_KING;
+        ModBlocks.BLACK_QUEEN = BLACK_QUEEN;
+        ModBlocks.BLACK_KNIGHT = BLACK_KNIGHT;
+
+        ModBlocks.WHITE_PAWN = WHITE_PAWN;
+        ModBlocks.WHITE_ROOK = WHITE_ROOK;
+        ModBlocks.WHITE_BISHOP = WHITE_BISHOP;
+        ModBlocks.WHITE_KING = WHITE_KING;
+        ModBlocks.WHITE_QUEEN = WHITE_QUEEN;
+        ModBlocks.WHITE_KNIGHT = WHITE_KNIGHT;
+
         ModBlocks.AJA_ORE = AJA_ORE;
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
         ModBlocks.AJA_BLOCK = AJA_BLOCK;

@@ -90,6 +90,20 @@ public class ModBlocks {
 
     public static Block WIRE_TRAP;
 
+    public static Block BLACK_PAWN;
+    public static Block BLACK_ROOK;
+    public static Block BLACK_BISHOP;
+    public static Block BLACK_KING;
+    public static Block BLACK_QUEEN;
+    public static Block BLACK_KNIGHT;
+
+    public static Block WHITE_PAWN;
+    public static Block WHITE_ROOK;
+    public static Block WHITE_BISHOP;
+    public static Block WHITE_KING;
+    public static Block WHITE_QUEEN;
+    public static Block WHITE_KNIGHT;
+
     public static Block AJA_ORE;
     public static Block DEEPSLATE_AJA_ORE;
     public static Block AJA_BLOCK;
@@ -183,6 +197,7 @@ public class ModBlocks {
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
+    public static BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY;
     public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
@@ -683,6 +698,18 @@ public class ModBlocks {
                         .sound(SoundType.EMPTY)
                         .noCollission()
                         .replaceable()
+        );
+    }
+
+    public static ChessPieceBlock getChessBlock() {
+        return new ChessPieceBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.NONE)
+                        .noOcclusion()
+                        .pushReaction(PushReaction.IGNORE)
+                        .strength(0F, 0F)
+                        .sound(SoundType.EMPTY)
+                        .noCollission()
         );
     }
 

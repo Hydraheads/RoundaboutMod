@@ -240,6 +240,21 @@ public class ForgeEvents {
         ModBlocks.POISON_TRAIL_MUSHROOM = ForgeBlocks.POISON_TRAIL_MUSHROOM.get();
         ModBlocks.BLUE_BLOOD_SPLATTER = ForgeBlocks.BLUE_BLOOD_SPLATTER.get();
         ModBlocks.ENDER_BLOOD_SPLATTER = ForgeBlocks.ENDER_BLOOD_SPLATTER.get();
+
+        ModBlocks.BLACK_PAWN = ForgeBlocks.BLACK_PAWN.get();
+        ModBlocks.BLACK_ROOK = ForgeBlocks.BLACK_ROOK.get();
+        ModBlocks.BLACK_BISHOP = ForgeBlocks.BLACK_BISHOP.get();
+        ModBlocks.BLACK_KING = ForgeBlocks.BLACK_KING.get();
+        ModBlocks.BLACK_QUEEN = ForgeBlocks.BLACK_QUEEN.get();
+        ModBlocks.BLACK_KNIGHT = ForgeBlocks.BLACK_KNIGHT.get();
+
+        ModBlocks.WHITE_PAWN = ForgeBlocks.WHITE_PAWN.get();
+        ModBlocks.WHITE_ROOK = ForgeBlocks.WHITE_ROOK.get();
+        ModBlocks.WHITE_BISHOP = ForgeBlocks.WHITE_BISHOP.get();
+        ModBlocks.WHITE_KNIGHT = ForgeBlocks.WHITE_KNIGHT.get();
+        ModBlocks.WHITE_QUEEN = ForgeBlocks.WHITE_QUEEN.get();
+        ModBlocks.WHITE_KING = ForgeBlocks.WHITE_KING.get();
+
         ModBlocks.WIRE_TRAP = ForgeBlocks.WIRE_TRAP.get();
         ModBlocks.BARBED_WIRE = ForgeBlocks.BARBED_WIRE.get();
         ModBlocks.BARBED_WIRE_BUNDLE = ForgeBlocks.BARBED_WIRE_BUNDLE.get();

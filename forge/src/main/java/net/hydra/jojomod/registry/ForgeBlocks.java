@@ -45,6 +45,46 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> AJA_BLOCK = BLOCKS.register("aja_block",
             () -> AJA_BLOCK_PROPERTIES
     );
+
+
+
+    public static final RegistryObject<Block> BLACK_PAWN = BLOCKS.register("memory_pawn",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> BLACK_ROOK = BLOCKS.register("memory_rook",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> BLACK_BISHOP = BLOCKS.register("memory_bishop",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> BLACK_KING = BLOCKS.register("memory_king",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> BLACK_QUEEN = BLOCKS.register("memory_queen",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> BLACK_KNIGHT = BLOCKS.register("memory_knight",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_PAWN = BLOCKS.register("memory_pawn_white",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_ROOK = BLOCKS.register("memory_rook_white",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_BISHOP = BLOCKS.register("memory_bishop_white",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_KING = BLOCKS.register("memory_king_white",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_QUEEN = BLOCKS.register("memory_queen_white",
+            () -> ModBlocks.getChessBlock()
+    );
+    public static final RegistryObject<Block> WHITE_KNIGHT = BLOCKS.register("memory_knight_white",
+            () -> ModBlocks.getChessBlock()
+    );
+
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );
