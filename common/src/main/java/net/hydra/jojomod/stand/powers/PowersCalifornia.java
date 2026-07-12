@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -68,6 +69,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -709,6 +711,29 @@ public class PowersCalifornia extends NewDashPreset {
         return 20;
     }
 
+    int graceticks = 0;
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf())) {
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isCreeper = this.getSelf() instanceof Creeper;
+            if (graceticks <= 0) {
+                if (isCreeper) {
+                    if (dist <= 10 && (leaded == null || !leaded.isAlive())) {
+                        storedInt = attackTarget.getId();
+                        doTheLeaveRule();
+                    }
+                } else {
+                    if (dist <= 10) {
+
+                    }
+                }
+            } else {
+                graceticks--;
+            }
+        }
+        //tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
+    }
     public int timeSinceSwitch = 0;
     public void tickPower() {
         super.tickPower();
@@ -779,7 +804,12 @@ public class PowersCalifornia extends NewDashPreset {
                     }
 
                     if (leaded.distanceTo(self) > getCKBrange() && PowersCalifornia.canSteal(leaded)){
-                        addToList(leaded);
+                        if (self instanceof Creeper cr){
+                            self.teleportTo(leaded.getX(),leaded.getY(),leaded.getZ());
+                            cr.ignite();
+                        } else {
+                            addToList(leaded);
+                        }
                         playGotchaSound();
                         clearLeaded();
                     }
@@ -1408,9 +1438,6 @@ public class PowersCalifornia extends NewDashPreset {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FLUFF_FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
 
-    @Override
-    public void tickMobAI(LivingEntity attackTarget){
-    }
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
