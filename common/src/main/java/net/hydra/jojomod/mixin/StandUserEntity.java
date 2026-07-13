@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -5627,10 +5628,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
         }
+
         /// Stray Cat Spawn
         if (me instanceof Cat) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
-                // do spawn here lol
+                if (StrayCatEntity.canSurviveInBlock(me.getBlockStateOn())) {
+                    // Will be added when the stray cat is finished
+                }
             }
         }
 

@@ -2365,7 +2365,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
 
-                    if (target instanceof LivingEntity LE) {
+                    if (target instanceof LivingEntity LE && bStatus == PowersKillerQueen.BOMB_ENTITY) {
                         addEXP(bStatus == BOMB_ENTITY ? 10 : 5, LE);
                     }
 
