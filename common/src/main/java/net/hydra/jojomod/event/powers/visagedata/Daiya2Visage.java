@@ -53,4 +53,8 @@ public class Daiya2Visage extends VisageData {
         return true;
     }
 
+    @Override
+    public boolean rendersDaiyaEars(){
+        return true;
+    }
 }

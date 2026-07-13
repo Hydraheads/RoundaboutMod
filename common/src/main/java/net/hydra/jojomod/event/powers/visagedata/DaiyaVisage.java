@@ -52,5 +52,13 @@ public class DaiyaVisage extends VisageData {
     public boolean isSlim(){
         return true;
     }
+    @Override
+    public boolean rendersDaiyaFluff(){
+        return true;
+    }
 
+    @Override
+    public boolean rendersDaiyaEars(){
+        return true;
+    }
 }
