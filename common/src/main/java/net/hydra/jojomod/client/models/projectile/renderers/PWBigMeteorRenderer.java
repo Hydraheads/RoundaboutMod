@@ -47,8 +47,7 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         }
 
         poseStack.pushPose();
-
-        poseStack.scale(-1.0F, -1.0F, 1.0F); // convert Blockbench pixel-space to world space
+        poseStack.translate(0.0D, 0.30D, 0.0D);
 
         float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
@@ -57,7 +56,7 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
         float scale = entity.getMeteorScale();
-        float finalScale = 2.6f * scale;
+        float finalScale = 3.5f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));

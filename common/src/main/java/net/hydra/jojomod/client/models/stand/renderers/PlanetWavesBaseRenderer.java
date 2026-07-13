@@ -24,6 +24,8 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
     private static final ResourceLocation SYMPHONY_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/symphony_waves.png");
     private static final ResourceLocation SPARTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta.png");
     private static final ResourceLocation SPARTA2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta2.png");
+    private static final ResourceLocation HALLOWEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/halloween.png");
+
 
     private final StandModel<PlanetWavesEntity> baseModel;
     private final StandModel<PlanetWavesEntity> spartaModel;
@@ -53,6 +55,8 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
                 return SPARTA;
             case (PlanetWavesEntity.SPARTA2):
                 return SPARTA2;
+            case (PlanetWavesEntity.HALLOWEEN):
+                return HALLOWEEN;
             default:
                 return PART_6_SKIN;
         }
