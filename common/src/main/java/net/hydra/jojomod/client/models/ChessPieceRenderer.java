@@ -73,10 +73,13 @@ public class ChessPieceRenderer<T extends BlockEntity> implements BlockEntityRen
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 15).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 6).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 6).mirror().addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(0, 10).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
+                .texOffs(0, 1).addBox(-1.5F, 1.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(12, -1).addBox(-1.5F, -1.0F, -1.5F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(12, -1).addBox(1.5F, -1.0F, -1.5F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 2).addBox(-1.5F, -1.0F, -1.5F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 2).addBox(-1.5F, -1.0F, 1.5F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
@@ -84,11 +87,12 @@ public class ChessPieceRenderer<T extends BlockEntity> implements BlockEntityRen
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 15).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 6).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 10).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
+        PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 14).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 5).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).mirror().addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(0, 0).mirror().addBox(-1.5F, 1.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(12, 1).addBox(-1.5F, -1.0F, -1.5F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(30, 0).addBox(-0.5F, -2.0F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
@@ -96,11 +100,13 @@ public class ChessPieceRenderer<T extends BlockEntity> implements BlockEntityRen
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 15).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 6).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 10).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
+        PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 14).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 5).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).mirror().addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(0, 0).mirror().addBox(-1.5F, 1.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(12, 1).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 0).addBox(0.5F, -1.0F, 0.5F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(28, 3).addBox(-2.5F, -1.0F, 0.5F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
@@ -125,9 +131,9 @@ public class ChessPieceRenderer<T extends BlockEntity> implements BlockEntityRen
 
         PartDefinition piece = partdefinition.addOrReplaceChild("piece", CubeListBuilder.create().texOffs(0, 15).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 6).addBox(-1.0F, 3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 10).addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
+                .texOffs(0, 10).mirror().addBox(-1.5F, 5.0F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false)
+                .texOffs(0, 0).addBox(-1.0F, 0.0F, -1.5F, 2.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
+                .texOffs(12, -7).addBox(0.0F, -1.0F, -4.5F, 0.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 16.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
@@ -184,18 +190,23 @@ public class ChessPieceRenderer<T extends BlockEntity> implements BlockEntityRen
                 } else if (stack.is(ModItems.MEMORY_BISHOP)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(BLACK_BISHOP));
                     part = bishop;
+                    $$2.mulPose(Axis.YP.rotationDegrees(90));
                 } else if (stack.is(ModItems.MEMORY_BISHOP_WHITE)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(WHITE_BISHOP));
                     part = bishop;
+                    $$2.mulPose(Axis.YP.rotationDegrees(-90));
                 } else if (stack.is(ModItems.EXP_BISHOP)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(EXP_BISHOP));
                     part = exp_bishop;
+                    $$2.mulPose(Axis.YP.rotationDegrees(180));
                 } else if (stack.is(ModItems.MEMORY_KNIGHT)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(BLACK_KNIGHT));
                     part = knight;
+                    $$2.mulPose(Axis.YP.rotationDegrees(90));
                 } else if (stack.is(ModItems.MEMORY_KNIGHT_WHITE)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(WHITE_KNIGHT));
                     part = knight;
+                    $$2.mulPose(Axis.YP.rotationDegrees(-90));
                 } else if (stack.is(ModItems.MEMORY_PAWN_WHITE)){
                     vertexConsumer = $$3.getBuffer(RenderType.entityTranslucent(WHITE_PAWN));
                 } else {

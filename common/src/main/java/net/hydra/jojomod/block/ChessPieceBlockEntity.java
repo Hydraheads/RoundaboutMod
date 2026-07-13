@@ -1,9 +1,11 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -45,12 +47,17 @@ public class ChessPieceBlockEntity extends BlockEntity {
         if (itemStack.isEmpty()) {
             return;
         }
+
         storedStack = null;
-        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 1.01, 0.5);
+        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 0.3, 0.5);
         ItemStack itemStack2 = itemStack.copy();
         ItemEntity itemEntity = new ItemEntity(this.level, vec3.x(), vec3.y(), vec3.z(), itemStack2);
-        itemEntity.setDefaultPickUpDelay();
+        itemEntity.setPickUpDelay(2);
+        itemEntity.setDeltaMovement(0,0.1F,0);
         this.level.addFreshEntity(itemEntity);
+        level.playSound(null, vec3.x(), vec3.y(), vec3.z(),
+                ModSounds.CHESS_BREAK_EVENT, SoundSource.PLAYERS, 1F,
+                (float) (1.00f + Math.random() * 0.01f));
     }
 
     @Override
