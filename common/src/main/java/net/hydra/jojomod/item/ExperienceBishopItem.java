@@ -1,7 +1,9 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -13,6 +15,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,6 +55,18 @@ public class ExperienceBishopItem extends BlockItem implements Vanishable {
         return this.getDescriptionId();
     }
 
+    @Override
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level,
+                                                 @Nullable Player player, ItemStack stack, BlockState state) {
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (be instanceof ChessPieceBlockEntity chess) {
+            chess.setStoredStack(stack);
+        }
+
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+    }
     public static void attackThePerson(Player player) {
         ItemStack stack = player.getMainHandItem();
         if (stack != null && !(stack.getItem() instanceof ExperienceBishopItem)) {
