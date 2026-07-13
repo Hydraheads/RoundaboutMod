@@ -195,6 +195,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PARROT_MINION_LAYER, ParrotMinionModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PAWN_LAYER, ChessPieceRenderer::createPawnLayer);
+
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
@@ -273,6 +275,7 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.COFFIN_BLOCK_ENTITY, CoffinRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.CHESS_PIECE_BLOCK_ENTITY, ChessPieceRenderer::new);
         //BlockEntityRenderers.register(ModBlocks.CHESSBOARD_BLOCK_ENTITY, ChessBoardRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
