@@ -12,15 +12,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ExperienceBishopItem extends Item implements Vanishable {
-    public ExperienceBishopItem(Properties $$0) {
-        super($$0.defaultDurability(3));
+public class ExperienceBishopItem extends BlockItem implements Vanishable {
+    public ExperienceBishopItem(Block $$0, Properties $$1) {
+        super($$0, $$1.defaultDurability(3));
     }
 
     @Override
@@ -39,6 +40,16 @@ public class ExperienceBishopItem extends Item implements Vanishable {
         return 72000;
     }
 
+
+    @Override
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
+    }
+
+    @Override
+    public String getDescriptionId(ItemStack itemStack) {
+        return this.getDescriptionId();
+    }
 
     public static void attackThePerson(Player player) {
         ItemStack stack = player.getMainHandItem();

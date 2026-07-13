@@ -33,6 +33,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -40,9 +41,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MemoryChessPieceItem extends Item implements Vanishable {
-    public MemoryChessPieceItem(Properties $$0) {
-        super($$0.defaultDurability(3));
+public class MemoryChessPieceItem extends BlockItem implements Vanishable {
+    public MemoryChessPieceItem(Block $$0, Properties $$1) {
+        super($$0,$$1.defaultDurability(3));
     }
 
     @Override
@@ -54,6 +55,16 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);
         return InteractionResultHolder.consume($$3);
+    }
+
+    @Override
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
+    }
+
+    @Override
+    public String getDescriptionId(ItemStack itemStack) {
+        return this.getDescriptionId();
     }
     /**Default 72000*/
     @Override

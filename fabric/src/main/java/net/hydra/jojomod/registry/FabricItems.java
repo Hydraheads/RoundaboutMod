@@ -220,19 +220,19 @@ public class FabricItems {
     public static Item NEW_LOCACACA = registerItem("new_locacaca", new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA)));
     public static Item LUCKY_LIPSTICK = registerItem("lucky_lipstick", new LuckyLipstickItem(new Item.Properties().stacksTo(1)));
 
-    public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_KNIGHT = registerItem("memory_knight", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_BISHOP = registerItem("memory_bishop", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_KING = registerItem("memory_king", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_QUEEN = registerItem("memory_queen", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_PAWN_WHITE = registerItem("memory_pawn_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_ROOK_WHITE = registerItem("memory_rook_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_KNIGHT_WHITE = registerItem("memory_knight_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_BISHOP_WHITE = registerItem("memory_bishop_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_KING_WHITE = registerItem("memory_king_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item MEMORY_QUEEN_WHITE = registerItem("memory_queen_white", new MemoryChessPieceItem(new Item.Properties().stacksTo(1)));
-    public static Item EXP_BISHOP = registerItem("exp_bishop", new ExperienceBishopItem(new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_ROOK = registerItem("memory_rook", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_KNIGHT = registerItem("memory_knight", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_BISHOP = registerItem("memory_bishop", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_KING = registerItem("memory_king", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_QUEEN = registerItem("memory_queen", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_PAWN_WHITE = registerItem("memory_pawn_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_ROOK_WHITE = registerItem("memory_rook_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_KNIGHT_WHITE = registerItem("memory_knight_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_BISHOP_WHITE = registerItem("memory_bishop_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_KING_WHITE = registerItem("memory_king_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item MEMORY_QUEEN_WHITE = registerItem("memory_queen_white", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
+    public static Item EXP_BISHOP = registerItem("exp_bishop", new ExperienceBishopItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
 
 
     public static Item BLANK_MASK = registerItem("blank_mask", new MaskItem(new Item.Properties().stacksTo(1), new NonCharacterVisage(null)));
