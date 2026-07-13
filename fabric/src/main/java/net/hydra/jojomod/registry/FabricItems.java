@@ -461,6 +461,19 @@ public class FabricItems {
                         entries.accept(CHICKEN_REMAINS);
                         entries.accept(DOG_REMAINS);
                         entries.accept(AXOLOTL_REMAINS);
+                        entries.accept(MEMORY_PAWN);
+                        entries.accept(MEMORY_ROOK);
+                        entries.accept(MEMORY_KNIGHT);
+                        entries.accept(MEMORY_BISHOP);
+                        entries.accept(MEMORY_QUEEN);
+                        entries.accept(MEMORY_KING);
+                        entries.accept(MEMORY_PAWN_WHITE);
+                        entries.accept(MEMORY_ROOK_WHITE);
+                        entries.accept(MEMORY_KNIGHT_WHITE);
+                        entries.accept(MEMORY_BISHOP_WHITE);
+                        entries.accept(MEMORY_QUEEN_WHITE);
+                        entries.accept(MEMORY_KING_WHITE);
+                        entries.accept(EXP_BISHOP);
 
                     }).build());
 
@@ -604,6 +617,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_SURVIVOR);
                         entries.accept(STAND_DISC_HEY_YA);
                         entries.accept(STAND_DISC_MANDOM);
+                        entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
 
                     }).build());
 
@@ -616,20 +630,6 @@ public class FabricItems {
                         entries.accept(STRAY_CAT_ANIME);
                         entries.accept(STRAY_CAT_MANGA);
                         //entries.accept(STRAY_CAT_ITEM);
-                        entries.accept(MEMORY_PAWN);
-                        entries.accept(MEMORY_ROOK);
-                        entries.accept(MEMORY_KNIGHT);
-                        entries.accept(MEMORY_BISHOP);
-                        entries.accept(MEMORY_QUEEN);
-                        entries.accept(MEMORY_KING);
-                        entries.accept(MEMORY_PAWN_WHITE);
-                        entries.accept(MEMORY_ROOK_WHITE);
-                        entries.accept(MEMORY_KNIGHT_WHITE);
-                        entries.accept(MEMORY_BISHOP_WHITE);
-                        entries.accept(MEMORY_QUEEN_WHITE);
-                        entries.accept(MEMORY_KING_WHITE);
-                        entries.accept(EXP_BISHOP);
-                        entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);

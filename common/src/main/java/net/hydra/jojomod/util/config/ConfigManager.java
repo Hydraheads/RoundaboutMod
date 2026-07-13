@@ -246,11 +246,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv7 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv8 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv7)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv8)
             {
                 String[] split = disc.split(":");
 
@@ -302,11 +302,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv6 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv7 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv6)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv7)
             {
                 String[] split = disc.split(":");
 

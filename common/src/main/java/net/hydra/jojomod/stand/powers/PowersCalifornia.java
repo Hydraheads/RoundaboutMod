@@ -1520,22 +1520,6 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
 
-    @Override
-    public boolean isWip() {
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDev() {
-        return Component.literal("Hydra");
-    }
-
-    @Override
-    public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active");
-    }
-
-
     public List<Entity> spawnedEntities = new ArrayList<>();
 
     public void addSpawnedEntity(Entity che){
