@@ -1,8 +1,10 @@
 package net.hydra.jojomod.stand.powers;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -12,16 +14,31 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class PowersOasis extends NewDashPreset {
     public PowersOasis(LivingEntity self) {
@@ -60,6 +77,7 @@ public class PowersOasis extends NewDashPreset {
     public boolean interceptGuard(){
         return fistsOut;
     }
+
 
     public boolean fistsOut = false;
 
@@ -109,7 +127,6 @@ public class PowersOasis extends NewDashPreset {
         return heyFull;
     }
 
-
     public void toggleFistsClient() {
         if (self instanceof Player pl){
             pl.resetAttackStrengthTicker();
@@ -131,7 +148,6 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
-
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
@@ -150,7 +166,7 @@ public class PowersOasis extends NewDashPreset {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
             int barTexture = 0;
-            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            Entity TE = getTargetEntityThroughWalls(playerEntity, 3, getBrawlPunchAngle());
             float attackTimeMax = getAttackTimeMax();
             if (attackTimeMax > 0) {
                 float attackTime = getAttackTime();
@@ -182,7 +198,6 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
-
     @Override
     public void powerActivate(PowerContext context) {
         switch (context) {
@@ -207,8 +222,6 @@ public class PowersOasis extends NewDashPreset {
         return super.setPowerOther(move,lastMove);
     }
 
-
-
     @Override
     public void tickPower() {
 
@@ -229,9 +242,76 @@ public class PowersOasis extends NewDashPreset {
     }
 
     @Override
-    public boolean setPowerAttack(){
+    public boolean setPowerAttack() {
         setAttack();
         return false;
+    }
+
+    private BlockHitResult getLookedBlock(int reach) {
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
+        return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
+    }
+
+    public void spawnWallPunchParticles(Entity entity) {
+        if (!this.self.level().isClientSide()) {
+            Roundabout.LOGGER.info("spawned badass water particles");
+
+            BlockHitResult hit = this.getLookedBlock(3);
+
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                Vec3 eye = this.self.getEyePosition(1.0F);
+                double blockDist = eye.distanceTo(hit.getLocation());
+                AABB box = entity.getBoundingBox();
+                Vec3 nearest = new Vec3(Mth.clamp(eye.x, box.minX, box.maxX), Mth.clamp(eye.y, box.minY, box.maxY), Mth.clamp(eye.z, box.minZ, box.maxZ));
+                double entityDist = eye.distanceTo(nearest);
+
+                if (entityDist > blockDist) {
+                    Vec3 pos = hit.getLocation();
+                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
+
+                    float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
+                    this.self.level().playSound(null, hit.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setAttack(){
+        if (HeatUtil.isArmsFrozen(self)){
+            this.attackTimeMax= 12;
+        } else {
+            this.attackTimeMax= 7;
+        }
+        this.attackTimeDuring = 0;
+        this.setAttackTime(0);
+        setActivePower(PowerIndex.NONE);
+        setActivePowerPhase((byte) 1);
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            brawlPunchImpact(target);
+
+            if (target != null) {
+                spawnWallPunchParticles(target);
+            }
+        } else {
+            Entity TE = getTargetEntityThroughWalls(self, 3, getBrawlPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+                HitResult hit = Minecraft.getInstance().hitResult;
+                if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
+                    Roundabout.LOGGER.info("block detected");
+                }
+            }
+            tryIntPowerPacket(PowerIndex.ATTACK,id);
+        }
     }
 
     @Override
@@ -290,6 +370,14 @@ public class PowersOasis extends NewDashPreset {
             }
         }
     }
+
+
+    // inherited entity check will be used when a player is
+
+    // use gettargetentitythroughwalls, override setattack and standbarragehit with it maybe?
+
+    // spawn particle on block face plane using blockhitresult (only when hitting entity and looking at block
+    // when hitting entity, do blockhitresult then spawn particle
 
 
     @Override

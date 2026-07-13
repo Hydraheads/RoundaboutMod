@@ -180,7 +180,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                boolean hasOasisOut =user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
                 int oasisTicks = user.roundabout$getOasisVanishTicks();
                 float fadeAmt = 0;
                 byte oasisSkin = user.roundabout$getStandSkin();
