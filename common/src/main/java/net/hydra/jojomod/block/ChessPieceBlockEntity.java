@@ -46,7 +46,7 @@ public class ChessPieceBlockEntity extends BlockEntity {
             return;
         }
         storedStack = null;
-        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 1.01, 0.5).offsetRandom(this.level.random, 0.7f);
+        Vec3 vec3 = Vec3.atLowerCornerWithOffset(blockPos, 0.5, 1.01, 0.5);
         ItemStack itemStack2 = itemStack.copy();
         ItemEntity itemEntity = new ItemEntity(this.level, vec3.x(), vec3.y(), vec3.z(), itemStack2);
         itemEntity.setDefaultPickUpDelay();

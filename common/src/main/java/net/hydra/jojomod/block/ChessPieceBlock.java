@@ -38,7 +38,10 @@ public class ChessPieceBlock extends BaseEntityBlock {
     public boolean useShapeForLightOcclusion(BlockState state) {
         return true; // Ensures custom occlusion shape is used (if applicable)
     }
-
+    @Override
+    public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
+        // Do nothing
+    }
     @SuppressWarnings("deprecation")
     @Override
     public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {

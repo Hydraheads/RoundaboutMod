@@ -729,6 +729,8 @@
   "sounds.roundabout.ckb_tile": "Spot forbidden",
   "sounds.roundabout.ckb_place": "Pillow sounds",
   "sounds.roundabout.chess_piece": "Piece",
+  "sounds.roundabout.chess_place": "Chess place",
+  "sounds.roundabout.chess_break": "Chess remove",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",

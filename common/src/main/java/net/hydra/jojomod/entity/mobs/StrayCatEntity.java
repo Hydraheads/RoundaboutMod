@@ -236,7 +236,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             if (!this.getPotted()) {
                 BlockPos pos = this.getOnPos().below();
                 BlockState stateOn = this.level().getBlockState(pos);
-                Roundabout.LOGGER.info("Block Position Death Check: " + pos);
+                //Roundabout.LOGGER.info("Block Position Death Check: " + pos);
                 if (canSurviveInBlock(stateOn)) {
                     suffocatingTicks = 60;
                 } else {

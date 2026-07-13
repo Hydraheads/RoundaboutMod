@@ -127,6 +127,13 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_CALIFORNIA_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_CALIFORNIA);
     public static SoundEvent SUMMON_CALIFORNIA_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_CALIFORNIA_ID);
 
+    public static final String CHESS_PLACE = "chess_place";
+    public static final ResourceLocation CHESS_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CHESS_PLACE);
+    public static SoundEvent CHESS_PLACE_EVENT = SoundEvent.createVariableRangeEvent(CHESS_PLACE_ID);
+    public static final String CHESS_BREAK = "chess_break";
+    public static final ResourceLocation CHESS_BREAK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CHESS_BREAK);
+    public static SoundEvent CHESS_BREAK_EVENT = SoundEvent.createVariableRangeEvent(CHESS_BREAK_ID);
+
 
     public static final String CKB_STEAL = "ckb_steal";
     public static final ResourceLocation CKB_STEAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_STEAL);
