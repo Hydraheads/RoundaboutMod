@@ -1371,7 +1371,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doHairGrab();
         } else {
 
-            Entity TE = getTargetEntity(self, 5F, getBrawlPunchAngle());
+            Entity TE = getTargetEntity(self, 6F, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();

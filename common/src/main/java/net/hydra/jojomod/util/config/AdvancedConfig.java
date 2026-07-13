@@ -73,21 +73,21 @@ public class AdvancedConfig implements Cloneable {
     );
 
 
-    public Set<String> foodThatGivesBloodListV4 = new HashSet<>(
+    public Set<String> foodThatGivesBloodListV5 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:beef:3:0.8F",
-                    "roundabout:flesh_block:3:0.8F",
-                    "minecraft:chicken:2:0.6F",
-                    "minecraft:cod:2:0.6F",
-                    "minecraft:pufferfish:2:0.6F",
-                    "minecraft:tropical_fish:2:0.6F",
-                    "minecraft:cod:2:0.6F",
-                    "minecraft:mutton:2:0.8F",
-                    "minecraft:porkchop:3:0.8F",
-                    "minecraft:rabbit:3:0.6F",
-                    "minecraft:salmon:2:0.8F",
-                    "minecraft:rotten_flesh:2:0.6F",
-                    "minecraft:spider_eye:2:0.6F"
+                    "minecraft:beef:3:1.4F",
+                    "roundabout:flesh_block:3:1.4F",
+                    "minecraft:chicken:2:0.9F",
+                    "minecraft:cod:2:0.9F",
+                    "minecraft:pufferfish:2:0.9F",
+                    "minecraft:tropical_fish:2:0.9F",
+                    "minecraft:cod:2:0.9F",
+                    "minecraft:mutton:2:1.4F",
+                    "minecraft:porkchop:3:1.4F",
+                    "minecraft:rabbit:3:0.9F",
+                    "minecraft:salmon:2:1.4F",
+                    "minecraft:rotten_flesh:2:0.9F",
+                    "minecraft:spider_eye:2:0.9F"
             )
     );
 
