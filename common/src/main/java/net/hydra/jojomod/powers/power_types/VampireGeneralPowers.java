@@ -802,7 +802,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
-                if (entity.distanceTo(self) > 5.8){
+                if (entity.distanceTo(self) > 6.8){
                     return;
                 }
                 if (!(MainUtil.resistsKnockBack(entity))) {
