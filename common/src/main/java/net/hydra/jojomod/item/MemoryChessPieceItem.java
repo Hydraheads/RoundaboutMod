@@ -321,7 +321,6 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
         if (player.level().isClientSide()) {
             return;
         }
-        player.swing(InteractionHand.MAIN_HAND,true);
 
         CompoundTag tag = stack.getTag();
         if (tag == null){

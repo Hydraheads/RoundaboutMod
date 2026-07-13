@@ -76,7 +76,6 @@ public class ExperienceBishopItem extends BlockItem implements Vanishable {
         if (player.level().isClientSide()) {
             return;
         }
-        player.swing(InteractionHand.MAIN_HAND, true);
 
         int levels = player.isShiftKeyDown() ? 1 : 10;
 
