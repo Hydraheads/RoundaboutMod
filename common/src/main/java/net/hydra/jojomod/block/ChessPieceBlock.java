@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -64,6 +65,18 @@ public class ChessPieceBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext $$0) {
             return this.defaultBlockState()
                     .setValue(FACING, $$0.getHorizontalDirection());
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) instanceof ChessPieceBlockEntity $$5) {
+            ItemStack stack = $$5.getStoredStack();
+            if (stack != null){
+                return stack;
+            }
+        }
+        return super.getCloneItemStack(level,pos,state);
+
     }
 
     @SuppressWarnings("deprecation")
