@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 /**The specs of the Stereo are almost identical to MC jukebox code, out of need to function the same way*/
 public class ChessPieceBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    protected static final VoxelShape SHAPEA = Block.box(4.0, 0.1, 4.0, 13.0, 10.0, 12.0);
+    protected static final VoxelShape SHAPEA = Block.box(4.0, 0.1, 4.0, 12.0, 11.0, 12.0);
     protected ChessPieceBlock(Properties $$0) {
         super($$0);
     }
