@@ -1,7 +1,9 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -38,6 +40,7 @@ public class ChessPieceBlock extends BaseEntityBlock {
     public boolean useShapeForLightOcclusion(BlockState state) {
         return true; // Ensures custom occlusion shape is used (if applicable)
     }
+
     @Override
     public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
         // Do nothing

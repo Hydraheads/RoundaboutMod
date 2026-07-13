@@ -10,6 +10,7 @@ public class FabricSounds {
 
     public static void addSound(ResourceLocation ID, SoundEvent Event){
         Registry.register(BuiltInRegistries.SOUND_EVENT,ID, Event);
+
     }
 
     public static void register(){

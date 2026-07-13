@@ -671,7 +671,7 @@ public class ForgeEvents {
         ModEntities.SOFT_AND_WET_DEBUT = ForgeEntities.SOFT_AND_WET_DEBUT.get();
         ModEntities.SOFT_AND_WET_KILLER_QUEEN = ForgeEntities.SOFT_AND_WET_KILLER_QUEEN.get();
         ModEntities.KILLER_QUEEN = ForgeEntities.KILLER_QUEEN.get();
-        ModEntities.BLOCK_BOMB = ForgeEntities.BLOCK_BOMB.get();
+        ModEntities.setBlockBomb(ForgeEntities.BLOCK_BOMB.get());
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();

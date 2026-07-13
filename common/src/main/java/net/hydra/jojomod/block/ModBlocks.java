@@ -701,22 +701,22 @@ public class ModBlocks {
 
 
     public static ChessPieceBlock getChessBlock() {
+
+        SoundType stype = new SoundType(
+                1.0F,
+                1.0F,
+                ModSounds.CHESS_BREAK_EVENT,
+                SoundEvents.WOOD_STEP,
+                ModSounds.CHESS_PLACE_EVENT,
+                SoundEvents.WOOD_HIT,
+                SoundEvents.WOOD_FALL
+        );
         return new ChessPieceBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
                         .pushReaction(PushReaction.IGNORE)
                         .strength(0F, 0F)
-                        .sound(
-                                new SoundType(
-                                        1.0F,
-                                        1.0F,
-                                        ModSounds.CHESS_BREAK_EVENT,
-                                        SoundEvents.WOOD_STEP,
-                                        ModSounds.CHESS_PLACE_EVENT,
-                                        SoundEvents.WOOD_HIT,
-                                        SoundEvents.WOOD_FALL
-                                )
-                        )
+                        .sound(stype)
                         .noCollission()
         );
     }

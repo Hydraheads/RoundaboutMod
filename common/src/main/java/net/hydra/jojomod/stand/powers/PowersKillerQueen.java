@@ -1705,7 +1705,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		    	BlockState state = this.getSelf().level().getBlockState(pos);
 
 		    	if (!ExplosionUtil.isBlockBlackListed(state)) {
-                    this.bombBlock = ModEntities.BLOCK_BOMB.create(this.getSelf().level());
+                    this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
 		    		this.bombBlock.setUser(this.self);
 
 		    		this.bombBlock.setBlockPos(pos);

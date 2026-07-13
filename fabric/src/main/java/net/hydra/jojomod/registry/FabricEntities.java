@@ -30,7 +30,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -978,7 +977,7 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KING = SOFT_AND_WET_KING;
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
-                ModEntities.BLOCK_BOMB = BLOCK_BOMB;
+                ModEntities.setBlockBomb(BLOCK_BOMB);
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
