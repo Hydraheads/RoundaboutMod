@@ -51,7 +51,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Parrot;
@@ -1163,7 +1165,8 @@ public class PowersKillerQueen extends NewPunchingStand {
          }
 
          SoundEvent SE;
-        SoundEvent SHIBAE;
+         SoundEvent SHIBAE;
+         byte soundShiba = SHIBA;
          float pitch = 1F;
 
          if (entity != null) {
@@ -1177,6 +1180,7 @@ public class PowersKillerQueen extends NewPunchingStand {
              SE = ModSounds.PUNCH_2_SOUND_EVENT;
          }
          if (chargedFinal >= maxKickTime) {
+             soundShiba = SHIBABA;
              SHIBAE = ModSounds.KILLER_QUEEN_SHIBABA_EVENT;
          }else {
              SHIBAE = ModSounds.KILLER_QUEEN_SHIBA_EVENT;
@@ -1185,7 +1189,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
          if (!this.self.level().isClientSide()) {
              this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 1.05F, pitch);
-             this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.0F, 1.0f);
+             this.playStandUserOnlySoundsIfNearby(soundShiba, 15, false,
+                     true);
+             //this.self.level().playSound(null, this.self.blockPosition(), SHIBAE, SoundSource.PLAYERS, 1.0F, 1.0f);
          }
     }
     
@@ -1957,6 +1963,45 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.isClient()) {
+            if (effect.getDuration() == 10) {
+                this.playStandUserOnlySoundsIfNearby(SHIBABA, 15, false,
+                        true);
+            }
+
+            if (effect.getDuration() % 40 == 0) {
+                float pow = 2.5f;
+                float kbs = 0.3f;
+
+                if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
+                    takeDeterminedKnockback(this.self, this.getSelf(), kbs);
+                    if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+                        return;
+                    }
+                    if (MainUtil.isKnockbackImmune(this.getSelf())){
+                        return;
+                    }
+                    this.getSelf().hurtMarked = true;
+                    Vec3 vec3d2 = new Vec3(Mth.sin(
+                            this.getSelf().getYRot() * ((float) Math.PI / 180)),
+                            0,
+                            -Mth.cos(this.getSelf().getYRot() * ((float) Math.PI / 180))).normalize().scale(kbs).reverse();
+                    this.getSelf().setDeltaMovement(- vec3d2.x,
+                            this.getSelf().onGround() ? 0.28 : 0,
+                            - vec3d2.z);
+                    this.getSelf().hasImpulse = true;
+                }
+
+
+                float radius = this.self.getBbWidth() * 0.5f + 0.05f;
+                ExplosionUtil.explodeEffects(this.self.getPosition(0), this.self.level(), ModParticles.KILLER_QUEEN_EXPLOSION, radius, 12);
+                this.getSelf().level().playSound(null, this.self.getOnPos(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.3F, 1.0f);
+            }
+        }
+    }
+
+    @Override
     public void tickPower(){
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
@@ -2437,7 +2482,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     /*
                      * apparently, "die(dmg)" would result in the player been glitched
                      * and unable to respawn for some weird reason.
-                    */
+                     */
                     if (!pl.isCreative()) {
                         if (playersHitkill) { pl.hurt(dmg, 9999999999.0f); }
                         else { pl.hurt(dmg, hitPoints); }

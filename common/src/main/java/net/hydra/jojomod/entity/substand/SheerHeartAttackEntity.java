@@ -519,7 +519,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.getNavigation().stop();
 	}
 
-
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
 		if (ticksUntilNextPathRecalculation <= 0 ) {

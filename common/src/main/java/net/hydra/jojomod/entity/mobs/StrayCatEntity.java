@@ -137,7 +137,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     private int shootWindup = shootWindupMax;
 
     public static final int bubbleShieldTimerMax = 60;
-    public int bubbleShieldTimer = 60;
+    public int bubbleShieldTimer = 0;
 
     private List<StrayCatAirBubble> bubblesList;
 
