@@ -262,6 +262,8 @@ public class FabricItems {
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
+    public static Item DAIYA_MASK = registerItem("daiya_mask", new MaskItem(new Item.Properties().stacksTo(1), new DaiyaVisage(null)));
+    public static Item DAIYA_2_MASK = registerItem("daiya_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Daiya2Visage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
@@ -442,6 +444,8 @@ public class FabricItems {
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
+                        entries.accept(DAIYA_MASK);
+                        entries.accept(DAIYA_2_MASK);
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
                         entries.accept(RAT_MASK);
@@ -842,6 +846,8 @@ public class FabricItems {
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.CHAKA_MASK = CHAKA_MASK;
+        ModItems.DAIYA_MASK = DAIYA_MASK;
+        ModItems.DAIYA_2_MASK = DAIYA_2_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;
