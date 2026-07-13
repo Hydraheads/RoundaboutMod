@@ -5632,7 +5632,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         /// Stray Cat Spawn
         if (me instanceof Cat) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
-                if (StrayCatEntity.canSurviveInBlock(me.getBlockStateOn())) {
+                BlockPos pos = me.getOnPos().below();
+                BlockState stateOn = me.level().getBlockState(pos);
+
+                if (StrayCatEntity.canSurviveInBlock(stateOn)) {
+                    Roundabout.LOGGER.info("theres a not a cat here");
                     // Will be added when the stray cat is finished
                 }
             }
