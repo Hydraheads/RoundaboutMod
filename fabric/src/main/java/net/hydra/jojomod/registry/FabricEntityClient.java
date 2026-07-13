@@ -196,6 +196,12 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PAWN_LAYER, ChessPieceRenderer::createPawnLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_LAYER, ChessPieceRenderer::createKingLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.QUEEN_LAYER, ChessPieceRenderer::createQueenLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIGHT_LAYER, ChessPieceRenderer::createKnightLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROOK_LAYER, ChessPieceRenderer::createRookLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BISHOP_LAYER, ChessPieceRenderer::createBishopLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.EXP_BISHOP_LAYER, ChessPieceRenderer::createExpBishopLayer);
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);

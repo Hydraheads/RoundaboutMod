@@ -17,6 +17,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -403,6 +404,9 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                 californiaKingBedSettings.chessMultOnPlayers *0.01));
     }
 
+    public MutableComponent getDisplayName2() {
+        return Component.translatable(this.getDescriptionId() + ".desc");
+    }
     public static float multiplyPowerByStandConfigMobs(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
                 californiaKingBedSettings.chessMultOnMobs *0.01));

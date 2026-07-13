@@ -216,6 +216,12 @@ public class ClientForgeEvents {
 
 
         event.registerLayerDefinition(ModEntityRendererClient.PAWN_LAYER, ChessPieceRenderer::createPawnLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.KING_LAYER, ChessPieceRenderer::createKingLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.QUEEN_LAYER, ChessPieceRenderer::createQueenLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.KNIGHT_LAYER, ChessPieceRenderer::createKnightLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.ROOK_LAYER, ChessPieceRenderer::createRookLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BISHOP_LAYER, ChessPieceRenderer::createBishopLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.EXP_BISHOP_LAYER, ChessPieceRenderer::createExpBishopLayer);
         
         event.registerLayerDefinition(ModEntityRendererClient.SURVIVOR_LAYER, SurvivorModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);

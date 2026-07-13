@@ -20,6 +20,12 @@ public class ModEntityRendererClient {
 
 
     public static final ModelLayerLocation PAWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pawn"), "main");
+    public static final ModelLayerLocation KING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "king"), "main");
+    public static final ModelLayerLocation QUEEN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "queen"), "main");
+    public static final ModelLayerLocation BISHOP_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bishop"), "main");
+    public static final ModelLayerLocation EXP_BISHOP_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "exp_bishop"), "main");
+    public static final ModelLayerLocation ROOK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "rook"), "main");
+    public static final ModelLayerLocation KNIGHT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "knight"), "main");
 
     public static final ModelLayerLocation STRAY_CAT_ENTITY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
