@@ -212,8 +212,15 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 int itemTime = 5;
                 if ($$5 >= itemTime) {
                     if ($$2 instanceof Player PE) {
+
                         if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
-                            PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                            if (((StandUser) $$2).roundabout$getStandPowers().canUseStandArrow()) {
+                                 if (((StandUser) $$2).roundabout$getStandPowers().onStandArrowUse()) {
+                                     $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
+                                 }
+                            }else {
+                                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                            }
                         } else {
                             int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                             CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
