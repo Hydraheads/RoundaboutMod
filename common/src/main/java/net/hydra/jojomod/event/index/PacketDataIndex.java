@@ -78,6 +78,7 @@ public class PacketDataIndex {
     public static final byte CALIFORNIA_CHESS_HURT = 40;
     public static final byte CALIFORNIA_BISHOP_USE = 41;
     public static final byte FIX_COOLDOWN_FOR_SERVER = 50;
+    public static final byte SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY = 51;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -123,6 +124,7 @@ public class PacketDataIndex {
     public static final byte S2C_INT_CKB_REMOVE = 23;
     public static final byte S2C_INT_LEADED = 24;
     public static final byte S2C_INT_LVL_DECREASE = 25;
+    public static final byte S2C_BLACK_SABBATH_INVENTORY = 26;
 
 
     /**S2C BUNDLE packets*/

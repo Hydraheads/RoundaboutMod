@@ -5,15 +5,12 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
-import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
-import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -25,6 +22,8 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -42,6 +41,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
@@ -176,9 +176,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(player.level() != null) {
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
             }
-            if(isClient()) {
-                ClientUtil.openHairspryUI();
-            }
+            BlackSabbathPlayerInventory bi = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
+            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY);
         }
     }
 

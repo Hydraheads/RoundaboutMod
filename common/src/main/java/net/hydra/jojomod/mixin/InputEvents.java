@@ -7,9 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
-import net.hydra.jojomod.client.gui.NoCancelInputScreen;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -34,6 +32,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
+import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
@@ -1241,6 +1240,17 @@ public abstract class InputEvents implements IInputEvents {
                                     ClientUtil.checkthisdat);
                             player.containerMenu = powa;
                             Minecraft.getInstance().setScreen(new PowerInventoryScreen(player,powa));
+                            ClientUtil.checkthis = 0;
+                            ClientUtil.checkthisdat = 0;
+                        }
+
+                        if(ClientUtil.checkthis == 2){
+                            player.clientSideCloseContainer();
+
+                            BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                                    ClientUtil.checkthisdat);
+                            player.containerMenu = bsinv;
+                            Minecraft.getInstance().setScreen(new BlackSabbathPlayerInventoryScreen(bsinv, player.getInventory(), player));
                             ClientUtil.checkthis = 0;
                             ClientUtil.checkthisdat = 0;
                         }

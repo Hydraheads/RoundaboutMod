@@ -56,6 +56,7 @@ import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
@@ -259,6 +260,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected boolean rdbt$cooldownQuery = false;
     @Unique
     protected boolean rdbt$attemptedQuery = false;
+    @Unique
+    protected BlackSabbathPlayerInventory rdbt$blckSabbathInventory = new BlackSabbathPlayerInventory((Player) (Object) this);
+    @Unique
+    @Override
+    public BlackSabbathPlayerInventory roundabout$getBlckSabbathPlayerInventory() {
+        return this.rdbt$blckSabbathInventory;
+    }
+    @Override
+    @Unique
+    public void roundabout$setBlckSabbathPlayerInventory(BlackSabbathPlayerInventory bsi) {
+        this.rdbt$blckSabbathInventory.replaceWith(bsi);;
+    }
 
     @Unique
     private byte rdbt$respawnStrategy = 0;
@@ -1205,6 +1218,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
         }
+        $$0.put("BlackSabbathPlayerItems", this.rdbt$blckSabbathInventory.createTag());
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putInt("anchorPlaceAttack",roundabout$anchorPlaceAttack);
@@ -1284,6 +1298,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD){
                 this.roundabout$maskInventory.setItem(1,itemstack);
             }
+        }
+        if ($$0.contains("BlackSabbathPlayerItems", 9)) {
+            this.rdbt$blckSabbathInventory.fromTag($$0.getList("BlackSabbathPlayerItems", 10));
         }
         CompoundTag compoundtag2 = $$0.getCompound("roundabout");
         if (compoundtag2.contains("anchorPlace")) {

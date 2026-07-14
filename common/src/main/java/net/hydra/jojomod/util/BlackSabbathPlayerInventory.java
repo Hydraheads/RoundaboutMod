@@ -21,13 +21,8 @@ public class BlackSabbathPlayerInventory extends SimpleContainer {
 
     @Override
     public void setChanged() {
-     /*   IPlayerEntity play = ((IPlayerEntity)this.player);
-        if (!this.getItem(0).equals(play.roundabout$getBlackSabbathAttackSlot())) {
-            if (!this.player.level().isClientSide()) {
-                play.roundabout$setBlackSabbathAttackSlot(this.getItem(0));
-            }
-        }
-        super.setChanged();*/
+
+        super.setChanged();
     }
     public void update(){
         IPlayerEntity play = ((IPlayerEntity)this.player);
