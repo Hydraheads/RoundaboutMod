@@ -42,6 +42,10 @@ public class ForgeParticles {
             "heartbeat",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> MUD_SPLASH = PARTICLES.register(
+            "mud_splash",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> MENACING = PARTICLES.register(
             "menacing",
             () -> new SimpleParticleType(true)
