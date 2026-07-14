@@ -1346,6 +1346,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof NeutralMob mb){
             mb.setPersistentAngerTarget(null);
+            mb.stopBeingAngry();
         }
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
