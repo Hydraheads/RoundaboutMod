@@ -18,6 +18,9 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
 
     private static final ResourceLocation PART_8_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/california_king_bed/base.png");
     private static final ResourceLocation SUNSHINE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sunshine.png");
+    private static final ResourceLocation EGYPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/egypt.png");
+    private static final ResourceLocation SPOOKY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spooky.png");
+    private static final ResourceLocation EXPERIENCE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/experience.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);
@@ -28,6 +31,9 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
         return switch (entity.getSkin())
         {
             case (CaliforniaKingBedEntity.SUNSHINE) -> SUNSHINE;
+            case (CaliforniaKingBedEntity.EGYPT) -> EGYPT;
+            case (CaliforniaKingBedEntity.SPOOKY) -> SPOOKY;
+            case (CaliforniaKingBedEntity.EXPERIENCE) -> EXPERIENCE;
             default -> PART_8_SKIN;
         };
     }
@@ -35,6 +41,9 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
     @Override
     public void render(CaliforniaKingBedEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        if (mobEntity.sleep.isStarted()){
+            factor = 1.5F;
+        }
         matrixStack.translate(0,0.3F,0);
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);

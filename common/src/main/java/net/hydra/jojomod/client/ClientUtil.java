@@ -856,6 +856,9 @@ public class ClientUtil {
             if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
+        } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            ipe.rdbt$setLevelDecreaseTicks(data);
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -1944,9 +1947,12 @@ public class ClientUtil {
         }
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
-        double d3 = Mth.lerp((double)delta, victim.xo, victim.getX()) + d1;
-        double d4 = Mth.lerp((double)delta, victim.yo, victim.getY()) + vec31.y; //+3
-        double d5 = Mth.lerp((double)delta, victim.zo, victim.getZ()) + d2;
+        double victimX = victim.getX();
+        double victimY = victim.getY();
+        double victimZ = victim.getZ();
+        double d3 = Mth.lerp((double)delta, victim.xo, victimX) + d1;
+        double d4 = Mth.lerp((double)delta, victim.yo, victimY) + vec31.y; //+3
+        double d5 = Mth.lerp((double)delta, victim.zo, victimZ) + d2;
         poseStack.translate(d1, vec31.y, d2);
         float f = (float)(vec3.x - d3);
         float f1 = (float)(vec3.y - d4);

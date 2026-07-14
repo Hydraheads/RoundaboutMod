@@ -6,10 +6,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -29,6 +31,8 @@ public class FabricBlocks {
     public static final Block IMPACT_MOUND = registerBlock("impact_mound", ModBlocks.IMPACT_MOUND_PROPERTIES
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
+    );
+    public static final Block CHESS_PIECE = registerBlockItemless("chess_piece", ModBlocks.getChessBlock()
     );
     public static final Block AJA_ORE = registerBlock("aja_ore", ModBlocks.AJA_ORE_PROPERTIES
     );
@@ -234,6 +238,8 @@ public class FabricBlocks {
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
+    public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
+    public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
@@ -251,6 +257,15 @@ public class FabricBlocks {
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
+
+    public static final BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY =
+            registerBE("chess_piece",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE) );
+
+
+    public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
+            registerBE("king_bed_block",BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK) );
+    public static final BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY =
+            registerBE("fancy_lighter_block",BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK) );
     /*public static final BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY =
             registerBE("chessboard_block",BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK) );*/
 
@@ -311,6 +326,10 @@ public class FabricBlocks {
     private static Block registerCoffinBlock(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+
+    private static Block registerFancyLighter(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
     /*private static Block registerChessBoardBlock(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }*/
@@ -319,6 +338,7 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+
         ModBlocks.AJA_ORE = AJA_ORE;
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
@@ -434,14 +454,23 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
+
+
+        ModBlocks.CHESS_PIECE = CHESS_PIECE;
+        ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
+
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
+        ModBlocks.KING_BED_BLOCK_ENTITY = KING_BED_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
         ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
         ModBlocks.COFFIN_BLOCK = COFFIN_BLOCK;
+        ModBlocks.KING_BED_BLOCK = KING_BED_BLOCK;
+        ModBlocks.FANCY_LIGHTER_BLOCK = FANCY_LIGHTER_BLOCK;
+        ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = FANCY_LIGHTER_BLOCK_ENTITY;
         //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;

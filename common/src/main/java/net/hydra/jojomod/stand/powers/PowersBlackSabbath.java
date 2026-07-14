@@ -3,9 +3,16 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.client.gui.PowerInventoryScreen;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.Poses;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -19,8 +26,10 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -28,10 +37,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -62,10 +73,10 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.ANUBIS_EXP, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
        // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        setSkillIcon(context, x, y, 4, StandIcons.METALLICA_HEAL, PowerIndex.SKILL_4);
+        setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
         super.renderIcons(context, x, y);
     }
@@ -76,7 +87,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
-                if(!onCooldown(PowerIndex.SKILL_1)) {
+                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
                     openPolpoInventory();
                     this.setCooldown(PowerIndex.SKILL_1, 10);
                 }
@@ -121,20 +132,43 @@ public class PowersBlackSabbath extends NewDashPreset {
             if (!isClient()) {
                 if(ojiroSasame instanceof Player P && (!P.isCreative() || P.isSpectator())) {
                     ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
+                } if(ojiroSasame instanceof ServerPlayer P && (!P.isCreative() || P.isSpectator())){
+                    this.eatFingerServer();
+                    ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
                 }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
-                        ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.10, ojiroSasame.getZ(),
+                        ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.20, ojiroSasame.getZ(),
                         ModItems.FANCY_LIGHTER.getDefaultInstance());
-                if($$4.getItem().getItem() instanceof FancyLighterItem FI){
-                    FI.setLighterOwner($$4.getItem(), this.getSelf().getId());
+                if($$4.getItem().getItem() instanceof FancyLighterItem FI && this.getSelf() instanceof ServerPlayer P){
+                    FI.stuff($$4.getItem(), P);
                 }
                 $$4.setPickUpDelay(0);
                 $$4.setDeltaMovement(Vec3.ZERO);
                 ojiroSasame.level().addFreshEntity($$4);
-                ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
             }
         }
          return true;
+    }
+
+    public boolean checkIfYouAreInDark(){
+        Entity $$0 = this.getSelf();
+        BlockPos pos = $$0.blockPosition();
+        long timeOfDay = $$0.level().getDayTime() % 24000L;
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
+        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 11){
+            if(isDay){
+                if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11 || $$0.level().isRaining() || $$0.level().isThundering()){
+                    return true;
+                }
+            } else if (!isDay){
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return  false;
+       // return $$0.level().getBrightness(LightLayer.BLOCK, pos) < 11 && ((isDay && !($$0.level().canSeeSky(BlockPos.containing($$0.getEyePosition())) && $$0.level().canSeeSky(BlockPos.containing($$0.position())) || !isDay)));
     }
 
     public void openPolpoInventory(){
@@ -142,7 +176,19 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(player.level() != null) {
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
             }
+            if(isClient()) {
+                ClientUtil.openHairspryUI();
+            }
         }
+    }
+
+    public int fingerEatingTick = 0;
+    private  void setFingerEatingTick(int tick){fingerEatingTick = tick;}
+    public void eatFingerServer(){
+            if (self instanceof ServerPlayer pl){
+                setFingerEatingTick(16);
+                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
+            }
     }
 
     @Override
@@ -163,12 +209,50 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
+        if(slot == 1 && !this.checkIfYouAreInDark()){
+            return true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
     public void tickPower() {
+        if(fingerEatingTick > 0){
+            fingerEatingTick--;
+        } if (fingerEatingTick == 1){
+            if (self instanceof ServerPlayer pl){
+                this.setAttackTimeDuring(0);
+                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+            }
+        }
         super.tickPower();
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis){
+        if (isLarpingOjiroSasame()) {
+            basis*=0.0f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (isLarpingOjiroSasame()) {
+            return true;
+        }
+        return super.cancelJump();
+    }
+
+    @Override
+    public boolean cancelSprintParticles(){
+        if (isLarpingOjiroSasame()) {
+            return true;
+        }
+        return super.cancelSprintParticles();
+    }
+
+    public boolean isLarpingOjiroSasame(){
+        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 37;
     }
 
 
@@ -183,26 +267,37 @@ public class PowersBlackSabbath extends NewDashPreset {
         super.updateUniqueMoves();
     }
 
-    public static final byte
-            MANGA = 1,
-            GOTHIC = 2;
-
-
-    @Override
-    public List<Byte> getSkinList() {
-        return Arrays.asList(
-                MANGA,
-                GOTHIC
-        );
-    }
-
 
     @Override public Component getSkinName(byte skinId) {
-        return switch (skinId)
-        {
-            case GOTHIC -> Component.translatable("skins.roundabout.hey_ya.gothic");
-            default -> Component.translatable("skins.roundabout.hey_ya.manga");
-        };
+            if (skinId == BlackSabbathEntity.PART_5_ANIME){
+                return Component.translatable(  "skins.roundabout.black_sabbath.anime");
+            } else if (skinId == BlackSabbathEntity.PART_5_MANGA){
+                return Component.translatable(  "skins.roundabout.black_sabbath.manga");
+            }else if (skinId == BlackSabbathEntity.BURNING) {
+                return Component.translatable("skins.roundabout.black_sabbath.burning");
+            }else if (skinId == BlackSabbathEntity.GIO_GIO){
+                return Component.translatable(  "skins.roundabout.black_sabbath.giogio");
+            } else if (skinId == BlackSabbathEntity.VERDANT){
+                return Component.translatable(  "skins.roundabout.black_sabbath.verdant");
+            } else if (skinId == BlackSabbathEntity.NIGHT){
+                return Component.translatable(  "skins.roundabout.black_sabbath.night");
+            } else if (skinId == BlackSabbathEntity.DEPARTURE){
+                return Component.translatable(  "skins.roundabout.black_sabbath.departure");
+            }else if (skinId == BlackSabbathEntity.PHANTOM){
+                return Component.translatable(  "skins.roundabout.black_sabbath.phantom");
+            }else if (skinId == BlackSabbathEntity.SWEET){
+                return Component.translatable(  "skins.roundabout.black_sabbath.sweet");
+            }
+            return Component.translatable(  "skins.roundabout.black_sabbath.anime");
+    }
+
+    @Override
+    public int getDisplayPowerInventoryScale() {
+        return 40;
+    }
+    @Override
+    public int getDisplayPowerInventoryYOffset() {
+        return -10;
     }
 
     @Override
@@ -224,16 +319,69 @@ public class PowersBlackSabbath extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public Component getPosName(byte posID){
+        return Component.empty();
+    }
+    public List<Byte> getPosList(){
+        List<Byte> $$1 = Lists.newArrayList();
+        return $$1;
+    }
+
+    public static final byte
+            ANIME_SKIN = 1,
+            MANGA_SKIN = 2,
+            BURNING_SKIN = 3,
+            GIO_GIO_SKIN = 4,
+            VERDANT_SABBATH_SKIN = 5,
+            NIGHT_SKIN = 6,
+            DEPARTURE_SKIN = 7,
+            PHANTOM_SKIN = 8,
+            SWEET_SKIN = 9;
+
+    @Override
+    public List<Byte> getSkinList() {
+        return Arrays.asList(
+                ANIME_SKIN,
+                MANGA_SKIN,
+                BURNING_SKIN,
+                GIO_GIO_SKIN,
+                VERDANT_SABBATH_SKIN,
+                NIGHT_SKIN,
+                DEPARTURE_SKIN,
+                PHANTOM_SKIN,
+                SWEET_SKIN
+        );
+    }
+
+    @Override
+    public boolean returnFakeStandForHud(){
+        return true;
+    }
+
+    public StandEntity getStandForHUDIfFake(){
+        if (displayStand == null){
+            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+        }
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            if(displayStand instanceof BlackSabbathEntity BSE){
+                BSE.coat_open.start(BSE.tickCount);
+            }
+        }
+        return displayStand;
+    }
+
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
-                "instruction.roundabout.press_skill", StandIcons.ANUBIS_EXP, 1, level, bypass));
+                "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
-                "instruction.roundabout.press_skill", StandIcons.METALLICA_HEAL,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
         return $$1;
     }
 

@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -263,6 +264,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate").toString())
             );
+    public static final RegistryObject<EntityType<KingCrimsonEntity>> KING_CRIMSON =
+            ENTITY_TYPES.register("king_crimson", () ->
+                    EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson").toString())
+            );
     public static final RegistryObject<EntityType<StarPlatinumEntity>> STAR_PLATINUM =
             ENTITY_TYPES.register("star_platinum", () ->
                     EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -373,8 +380,8 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SheerHeartAttackEntity>> SHEER_HEART_ATTACK =
             ENTITY_TYPES.register("sheer_heart_attack", () ->
-                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.MISC).sized(0.40F, 0.30f).
-                            clientTrackingRange(15).
+                    EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.MISC).
+                            sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack").toString())
             );
     public static final RegistryObject<EntityType<CinderellaEntity>> CINDERELLA =
@@ -428,7 +435,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
             );
-
+    public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
+            ENTITY_TYPES.register("black_sabbath", () ->
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
+            );
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
                     EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -504,6 +516,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "step_rule").toString())
+            );
+    public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
+            ENTITY_TYPES.register("stray_cat_entity", () ->
+                    EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
+                            .sized(0.7f, 0.7f).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())
             );
     public static final RegistryObject<EntityType<MetallicaKnifeEntity>> METALLICA_KNIFE =
             ENTITY_TYPES.register("metallica_knife", () ->

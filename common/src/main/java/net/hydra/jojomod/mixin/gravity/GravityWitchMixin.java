@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.sounds.SoundEvents;
@@ -41,7 +42,8 @@ public abstract class GravityWitchMixin extends Raider implements RangedAttackMo
     )
     private void rdbt$performRangedAttack(LivingEntity target, float $$1, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
-        if (gravityDirection == Direction.DOWN)
+        boolean danger = ((IMob)this).rdbt$getStolen();
+        if (gravityDirection == Direction.DOWN && !danger)
             return;
         ci.cancel();
 
@@ -52,7 +54,7 @@ public abstract class GravityWitchMixin extends Raider implements RangedAttackMo
             double $$5 = target.position().add(RotationUtil.vecPlayerToWorld(0.0D, target.getEyeHeight() - 1.100000023841858D, 0.0D, gravityDirection)).z + $$2.z - this.getZ();
             double $$6 = Math.sqrt(Math.sqrt($$3 * $$3 + $$5 * $$5));
             Potion $$7 = Potions.HARMING;
-            if (target instanceof Raider) {
+            if (target instanceof Raider || (danger && Math.random() < 0.5F)) {
                 if (target.getHealth() <= 4.0F) {
                     $$7 = Potions.HEALING;
                 } else {

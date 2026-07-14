@@ -1378,4 +1378,30 @@ public class PoseAnimations {
                     new Keyframe(0.1667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
+    public static final AnimationDefinition Finger_bite = AnimationDefinition.Builder.withLength(0.6F)
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.degreeVec(30.9936F, 21.9386F, 5.1231F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.degreeVec(35.99F, 21.94F, 5.12F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5417F, KeyframeAnimations.degreeVec(-16.51F, 21.94F, 5.12F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("head", new AnimationChannel(AnimationChannel.Targets.POSITION,
+			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5417F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+			new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-72.3914F, -30.2452F, -13.4505F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.degreeVec(-73.9651F, -35.0353F, -15.1675F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5833F, KeyframeAnimations.degreeVec(-71.9216F, -32.6298F, -14.3478F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+			new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.1667F, KeyframeAnimations.posVec(-1.0F, 0.0F, 1.75F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.375F, KeyframeAnimations.posVec(-1.0F, 0.0F, 1.75F), AnimationChannel.Interpolations.LINEAR),
+            new Keyframe(0.5833F, KeyframeAnimations.posVec(-1.0F, 0.0F, 1.75F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .build();
 }

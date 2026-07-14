@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -354,6 +355,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
      */
     @Unique
     private int roundabout$IdleTime = -1;
+
+    @Unique
+    public boolean rdbt$experienceTaken = false;
+    @Unique
+    @Override
+    public boolean rdbt$getExperienceTaken(){
+        return rdbt$experienceTaken;
+    }
+    @Unique
+    @Override
+    public void rdbt$setExperienceTaken(boolean taken){
+        rdbt$experienceTaken = taken;
+    }
+    @Inject(method = "dropExperience", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$dropExperience(CallbackInfo ci) {
+        if (rdbt$getExperienceTaken()){
+            ci.cancel();
+        }
+    }
 
     @Unique
     @Override
@@ -818,6 +838,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$endTick(CallbackInfo ci) {
+        if(MoldTicks > 0){
+            MoldTicks -= 1;
+        }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
@@ -1324,6 +1347,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtByMob(null);
         this.setLastHurtByPlayer(null);
         this.setLastHurtMob(null);
+        if (((LivingEntity)(Object)this) instanceof NeutralMob mb){
+            mb.setPersistentAngerTarget(null);
+            mb.stopBeingAngry();
+        }
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
             ((IMob)mb).roundabout$deeplyRemoveTargets();
@@ -1365,6 +1392,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
+            if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
+            || roundabout$getBoundToID() != roundabout$getBoundTo().getId())){
+                roundabout$setBoundTo(null);
+            }
             if (!onGround()){
                 roundabout$setIdleTime(0);
             }
@@ -2216,6 +2247,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("bubbleEncased",roundabout$getBubbleEncased());
         compoundtag.putInt("heat",roundabout$getHeat());
+        compoundtag.putBoolean("expTaken",rdbt$getExperienceTaken());
 
         if (rdbt$fleshBudPlanted !=null){
             compoundtag.putUUID("fleshBud", rdbt$fleshBudPlanted);
@@ -2271,6 +2303,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             rdbt$fleshBudPlanted = compoundtag.getUUID("fleshBud");
         }
 
+        rdbt$experienceTaken = rdbt$getExperienceTaken();
         StandPowers powers = roundabout$getStandPowers();
         List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
         };
@@ -5619,10 +5652,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
         }
+
         /// Stray Cat Spawn
         if (me instanceof Cat) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
-                // do spawn here lol
+                BlockPos pos = me.getOnPos().below();
+                BlockState stateOn = me.level().getBlockState(pos);
+
+                if (StrayCatEntity.canSurviveInBlock(stateOn)) {
+                    Roundabout.LOGGER.info("theres a not a cat here");
+                    // Will be added when the stray cat is finished
+                }
             }
         }
 
@@ -5938,6 +5978,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+
+    public int MoldTicks;
+    @Override
+    public void SetInMoldTicks(int e) {
+        if(this.level().isClientSide) {
+            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
+            MoldTicks = e;
+        }
+    }
+
+    @Override
+    public int getMoldTicks() {
+        return MoldTicks;
     }
 
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)

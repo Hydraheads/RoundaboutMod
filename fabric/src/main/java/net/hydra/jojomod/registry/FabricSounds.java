@@ -10,6 +10,7 @@ public class FabricSounds {
 
     public static void addSound(ResourceLocation ID, SoundEvent Event){
         Registry.register(BuiltInRegistries.SOUND_EVENT,ID, Event);
+
     }
 
     public static void register(){
@@ -61,7 +62,13 @@ public class FabricSounds {
         addSound(ModSounds.CKB_STEAL_ID, ModSounds.CKB_STEAL_EVENT);
         addSound(ModSounds.CKB_YES_ID, ModSounds.CKB_YES_EVENT);
         addSound(ModSounds.CKB_NO_ID, ModSounds.CKB_NO_EVENT);
+        addSound(ModSounds.CKB_ATTACK_ID, ModSounds.CKB_ATTACK_EVENT);
         addSound(ModSounds.CKB_TILE_ID, ModSounds.CKB_TILE_EVENT);
+        addSound(ModSounds.CKB_PLACE_ID, ModSounds.CKB_PLACE_EVENT);
+        addSound(ModSounds.HEART_SPARKLE_ID, ModSounds.HEART_SPARKLE_EVENT);
+        addSound(ModSounds.CHESS_PIECE_ID, ModSounds.CHESS_PIECE_EVENT);
+        addSound(ModSounds.CHESS_PLACE_ID, ModSounds.CHESS_PLACE_EVENT);
+        addSound(ModSounds.CHESS_BREAK_ID, ModSounds.CHESS_BREAK_EVENT);
 
         addSound(ModSounds.OVA_BARRAGE_ID, ModSounds.OVA_BARRAGE_EVENT);
         addSound(ModSounds.OVA_BARRAGE_2_ID, ModSounds.OVA_BARRAGE_2_EVENT);
@@ -264,6 +271,7 @@ public class FabricSounds {
         addSound(ModSounds.MANHATTAN_VISION_ID, ModSounds.MANHATTAN_VISION_EVENT);
 
         addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
+        addSound(ModSounds.TURNING_ON_LIGHTER_ID, ModSounds.TURNING_ON_LIGHTER_EVENT);
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);
         addSound(ModSounds.CENTURY_BOY_HIT_ID, ModSounds.CENTURY_BOY_HIT_EVENT);
@@ -306,6 +314,9 @@ public class FabricSounds {
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_PUNCH_1_ID, ModSounds.KILLER_QUEEN_PUNCH_1_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_PUNCH_2_ID, ModSounds.KILLER_QUEEN_PUNCH_2_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_HEAVY_PUNCH_ID, ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHIBA_ID, ModSounds.KILLER_QUEEN_SHIBA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHIBABA_ID, ModSounds.KILLER_QUEEN_SHIBABA_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_SUMMON_ID, ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT);
@@ -317,14 +328,15 @@ public class FabricSounds {
         addSound(ModSounds.KILLER_QUEEN_SHA_MOVING_ID, ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BARRAGE_ID, ModSounds.KILLER_QUEEN_BARRAGE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
-        addSound(ModSounds.KILLER_QUEEN_SUMMON_1_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT_1);
-        addSound(ModSounds.KILLER_QUEEN_SUMMON_2_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT_2);
-        addSound(ModSounds.KILLER_QUEEN_SUMMON_3_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT_3);
-        addSound(ModSounds.KILLER_QUEEN_SUMMON_4_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT_4);
-        addSound(ModSounds.KILLER_QUEEN_SUMMON_5_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT_5);
+        addSound(ModSounds.KILLER_QUEEN_SUMMON_DARK_ID, ModSounds.KILLER_QUEEN_SUMMON_DARK_EVENT);
         addSound(ModSounds.KILLER_QUEEN_EXPLOSION_ID, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT);
         addSound(ModSounds.KILLER_QUEEN_DETONATE_ID, ModSounds.KILLER_QUEEN_DETONATE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_ID, ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT);
+
+        addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);
+        addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_2_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT);
+        addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
+        addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);

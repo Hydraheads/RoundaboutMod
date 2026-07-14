@@ -30,7 +30,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -287,6 +286,14 @@ public class FabricEntities {
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":the_world")
                 );
 
+    public static final EntityType<KingCrimsonEntity> KING_CRIMSON =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "king_crimson"),
+                    EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).
+                            sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_crimson")
+            );
+
         public static final EntityType<TheWorldEntity> THE_WORLD_ULTIMATE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -475,6 +482,14 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"),
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).
                             sized(0.70f, 0.60f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
+            );
+
+    public static final EntityType<BlackSabbathEntity> BLACK_SABBATH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"),
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).
+                            sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":black_sabbath")
             );
 
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
@@ -941,12 +956,13 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"),
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
-                            sized(0.40f, 0.30f).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
+                            sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
     
     public static void register() {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
+                ModEntities.KING_CRIMSON = KING_CRIMSON;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
@@ -970,13 +986,14 @@ public class FabricEntities {
                 ModEntities.SOFT_AND_WET_KING = SOFT_AND_WET_KING;
                 ModEntities.SOFT_AND_WET_KILLER_QUEEN = SOFT_AND_WET_KILLER_QUEEN;
                 ModEntities.KILLER_QUEEN = KILLER_QUEEN;
-                ModEntities.BLOCK_BOMB = BLOCK_BOMB;
+                ModEntities.setBlockBomb(BLOCK_BOMB);
                 ModEntities.CINDERELLA = CINDERELLA;
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
                 ModEntities.PLANET_WAVES_SPARTA = PLANET_WAVES_SPARTA;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
+                ModEntities.BLACK_SABBATH = BLACK_SABBATH;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
@@ -1082,6 +1099,7 @@ public class FabricEntities {
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
+                FabricDefaultAttributeRegistry.register(STRAY_CAT, StrayCatEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(ZOMBIEFISH, Zombiefish.createAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_GUARDIAN, AnubisGuardian.createAttributes());
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
@@ -1123,6 +1141,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(ROAD_ROLLER_ENTITY, RoadRollerEntity.createAttributes().build());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(KING_CRIMSON, StandEntity.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD_ULTIMATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());
@@ -1155,6 +1174,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_SPARTA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
 

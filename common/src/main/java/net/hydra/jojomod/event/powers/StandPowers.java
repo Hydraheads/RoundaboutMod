@@ -35,6 +35,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -123,6 +126,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void tickPowerEnd(){
     }
 
+    public boolean canWalkThroughDaze(){
+        return false;
+    }
 
     /// used to make mobs look at you during tickMobAi
     public void rotateMobHead(LivingEntity attackTarget) {
@@ -240,8 +246,35 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /** Override it if your stand can use Stand Arrow (Mostly probably to be
+     *   Golden Experience, Silver Chariot (they have requiem variants)
+     *   and Killer Queen (Bites the Dust)
+     */
+    public boolean canUseStandArrow() { return false; }
 
+    /** called when the standArrow is used (and the method above is true),
+     * Returns false when it fails, and true when sucessfull
+     * override it to yours needs*/
+    public boolean onStandArrowUse() {
+        /** Requiem stands like Golden Experience and silver chariot should
+         * probably make something like this
+         *
+         * if (this.self instanceof Player PL) {
+         *      if (PL.experienceLevel >= 50) {
+         *          // do requiem stuff here
+         *
+         *          if (!PE.isCreative()) {
+         *              PE.giveExperienceLevels(-50);
+         *          }
+         *          return true;
+         *      }else {
+         *          return false;
+         *      }
+         * }
+         */
 
+        return false;
+    }
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -417,6 +450,10 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**return true to cancel the onkill event*/
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
+        return false;
+    }
+    /**return true to cancel the push event*/
+    public boolean onCollide(Entity entity){
         return false;
     }
 
@@ -1208,6 +1245,22 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean tickGenericFallBraceAI(){
+        if (this.attackTimeDuring <= -1) {
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                /**Fall Brace AI*/
+                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
+                if (this.getSelf() instanceof Mob MB){
+                    ((IMob)MB).roundabout$setRetractTicks(140);
+                }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**Sets your active power to nothing*/
     @Override
     public boolean setPowerNone(){
@@ -1222,13 +1275,29 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+        boolean decreaseLevel = false;
+        if (self instanceof Player pl && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks()
+                > 0){
+            decreaseLevel = true;
+        }
+
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling
+        && !decreaseLevel) {
             return true;
         }
 
         if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || hasGoldenDisc() ||
-                    pl.isCreative()){
+            int level;
+            boolean skipsCheck = hasGoldenDisc() || pl.isCreative();
+            if (!skipsCheck){
+                level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+            } else {
+                level = getMaxLevel();
+            }
+            if (decreaseLevel){
+                level = 1;
+            }
+            if (level >= minLevel){
                 return true;
             }
             return false;

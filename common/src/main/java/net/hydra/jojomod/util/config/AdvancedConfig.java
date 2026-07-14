@@ -46,17 +46,18 @@ public class AdvancedConfig implements Cloneable {
                     //"roundabout:green_day_disc"
             )
     );
-    public Set<String> standArrowSecondaryPoolv6 = new HashSet<>(
+    public Set<String> standArrowSecondaryPoolv7 = new HashSet<>(
             Arrays.asList(
                     "roundabout:cinderella_disc",
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc",
                     "roundabout:survivor_disc",
                     "roundabout:achtung_baby_disc",
-                    "roundabout:manhattan_transfer_disc"
+                    "roundabout:manhattan_transfer_disc",
+                    "roundabout:california_king_bed_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv7 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv8 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -68,26 +69,27 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:walking_heart_disc",
                     "roundabout:ratt_disc",
                     "roundabout:white_album_disc",
-                    "roundabout:manhattan_transfer_disc"
+                    "roundabout:manhattan_transfer_disc",
+                    "roundabout:california_king_bed_disc"
             )
     );
 
 
-    public Set<String> foodThatGivesBloodListV4 = new HashSet<>(
+    public Set<String> foodThatGivesBloodListV5 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:beef:3:0.8F",
-                    "roundabout:flesh_block:3:0.8F",
-                    "minecraft:chicken:2:0.6F",
-                    "minecraft:cod:2:0.6F",
-                    "minecraft:pufferfish:2:0.6F",
-                    "minecraft:tropical_fish:2:0.6F",
-                    "minecraft:cod:2:0.6F",
-                    "minecraft:mutton:2:0.8F",
-                    "minecraft:porkchop:3:0.8F",
-                    "minecraft:rabbit:3:0.6F",
-                    "minecraft:salmon:2:0.8F",
-                    "minecraft:rotten_flesh:2:0.6F",
-                    "minecraft:spider_eye:2:0.6F"
+                    "minecraft:beef:3:1.4F",
+                    "roundabout:flesh_block:3:1.4F",
+                    "minecraft:chicken:2:0.9F",
+                    "minecraft:cod:2:0.9F",
+                    "minecraft:pufferfish:2:0.9F",
+                    "minecraft:tropical_fish:2:0.9F",
+                    "minecraft:cod:2:0.9F",
+                    "minecraft:mutton:2:1.4F",
+                    "minecraft:porkchop:3:1.4F",
+                    "minecraft:rabbit:3:0.9F",
+                    "minecraft:salmon:2:1.4F",
+                    "minecraft:rotten_flesh:2:0.9F",
+                    "minecraft:spider_eye:2:0.9F"
             )
     );
 

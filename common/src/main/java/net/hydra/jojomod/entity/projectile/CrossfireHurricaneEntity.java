@@ -508,7 +508,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 breakShield = (120);
 
             } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
-                //breakShield = (int) (10+ (size*0.5));
+                breakShield = 60;
             }
             if (breakShield > 0) {
                 MainUtil.knockShieldPlusStand(LE, breakShield);

@@ -2785,6 +2785,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
         return true;
     }
 
+    @Override
+    public boolean canWalkThroughDaze(){
+        if (hasHurricane()){
+            return true;
+        }
+        return super.canWalkThroughDaze();
+    }
+
     public void clearEverything(){
         this.snapNumber++;
         clearAllHurricanes();

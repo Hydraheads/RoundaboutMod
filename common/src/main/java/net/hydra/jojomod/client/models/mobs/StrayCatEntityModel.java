@@ -119,9 +119,15 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 
 	@Override
 	public void setupAnim(T strayCat, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+
+		this.getHead().yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+		this.getHead().xRot = pHeadPitch * ((float)Math.PI / 180F);
+
 		this.animate(strayCat.idle, StrayCatEntityAnimations.idle, pAgeInTicks, 1f);
-		this.animate(strayCat.begging, StrayCatEntityAnimations.interest_start, pAgeInTicks, 1f);
+		this.animate(strayCat.begging, StrayCatEntityAnimations.meow, pAgeInTicks, 1f);
 		this.animate(strayCat.unpotted, StrayCatEntityAnimations.unpotted, pAgeInTicks, 1f);
+		this.animate(strayCat.potted, StrayCatEntityAnimations.potted, pAgeInTicks, 1f);
 		this.animate(strayCat.shooting, StrayCatEntityAnimations.shoot, pAgeInTicks, 1f);
 		this.animate(strayCat.sleeping, StrayCatEntityAnimations.sleeping, pAgeInTicks, 1f);
 		this.animate(strayCat.sleepingPotted, StrayCatEntityAnimations.sleeping_potted, pAgeInTicks, 1f);

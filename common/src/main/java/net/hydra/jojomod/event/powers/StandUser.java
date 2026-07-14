@@ -155,6 +155,8 @@ public interface StandUser {
     void roundabout$setSafeToRemoveLove(boolean safe);
 
     StandPowers roundabout$getStandPowers();
+    boolean rdbt$getExperienceTaken();
+    void rdbt$setExperienceTaken(boolean taken);
 
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
@@ -363,6 +365,8 @@ public interface StandUser {
     /** Green Day stuff**/
 
     void DoMoldTick();
+    void SetInMoldTicks(int e);
+    int getMoldTicks();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();

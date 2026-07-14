@@ -182,11 +182,25 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     public void setBigMeteorScale(float scale) {
         this.entityData.set(BIG_METEOR_SCALE, scale);
     }
-
+    public float getMeteorScale() {
+        return this.entityData.get(BIG_METEOR_SCALE);
+    }
     @Override
     public void tick() {
         super.tick();
+        Vec3 vel = this.getDeltaMovement();
+        if (vel.lengthSqr() > 1.0E-7) {
+            float newYaw   = (float) (Mth.atan2(vel.x, vel.z) * (180F / Math.PI));
+            float newPitch = -(float) (Mth.atan2(vel.y, Math.sqrt(vel.x * vel.x + vel.z * vel.z)) * (180F / Math.PI));
 
+            this.setYRot(newYaw);
+            this.setXRot(newPitch);
+
+            if (this.tickCount <= 1) {
+                this.yRotO = newYaw;
+                this.xRotO = newPitch;
+            }
+        }
         if (this.level().isClientSide()) return;
         if (spawnPosition == null) {
             spawnPosition = this.position();

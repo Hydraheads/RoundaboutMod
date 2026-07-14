@@ -630,6 +630,18 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (thisEnt instanceof LivingEntity lv){
+            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+                ci.cancel();
+                return;
+            }
+        } if (entity instanceof LivingEntity lv){
+            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+                ci.cancel();
+                return;
+            }
+        }
         if (entity instanceof LivingEntity le && ((StandUser) le).roundabout$getStandPowers().cancelCollision(((Entity)(Object)this))) {
             ci.cancel();
         }

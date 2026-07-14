@@ -45,6 +45,13 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> AJA_BLOCK = BLOCKS.register("aja_block",
             () -> AJA_BLOCK_PROPERTIES
     );
+
+
+
+    public static final RegistryObject<Block> CHESS_PIECE = BLOCKS.register("chess_piece",
+            () -> ModBlocks.getChessBlock()
+    );
+
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );
@@ -150,6 +157,9 @@ public class ForgeBlocks {
     );
     public static final RegistryObject<Block> COFFIN_BLOCK = BLOCKS.register("coffin_block",
             () -> COFFIN_BLOCK_PROPERTIES
+    );
+    public static final RegistryObject<Block> KING_BED_BLOCK = BLOCKS.register("king_bed_block",
+            () -> KING_BED_BLOCK_PROPERTIES
     );
     /*public static final RegistryObject<Block> CHESSBOARD_BLOCK = BLOCKS.register("chessboard_block",
             () -> CHESSBOARD_BLOCK_PROPERTIES
@@ -368,6 +378,8 @@ public class ForgeBlocks {
             () -> ModBlocks.DREAD_FIRE_PROPERTIES);
     public static final RegistryObject<Block> CREAM_FIRE = BLOCKS.register("colored_fire_cream",
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
+            () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
     public static final RegistryObject<BlockEntityType<MirrorBlockEntity>> MIRROR_BLOCK_ENTITY = BLOCK_ENTITIES.register("mirror",
             () -> BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "mirror")));
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
@@ -382,6 +394,17 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
     public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",
             () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "coffin_block")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> CHESS_PIECE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("chess_piece",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE.get()).
+                            build(Util.fetchChoiceType(References.BLOCK_ENTITY, "chess_piece")));
+
+
+
+    public static final RegistryObject<BlockEntityType<KingBedBlockEntity>> KING_BED_BLOCK_ENTITY = BLOCK_ENTITIES.register("king_bed_block",
+            () -> BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "king_bed_block")));
+    public static final RegistryObject<BlockEntityType<FancyLighterBlockEntity>> FANCY_LIGHTER_BLOCK_ENTITY = BLOCK_ENTITIES.register("fancy_lighter_block",
+            () -> BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fancy_lighter_block")));
     //public static final RegistryObject<BlockEntityType<ChessBoardBlockEntity>> CHESSBOARD_BLOCK_ENTITY = BLOCK_ENTITIES.register("chessboard_block",
     //        () -> BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "chessboard_block")));
 

@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -21,6 +22,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -155,7 +158,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.exitBombConfig();
 
-        return super.mouseReleased($$0, $$1, $$2);
+        return true;
     }
 
     public void exitBombConfig() {
@@ -164,7 +167,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-
 
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
             PK.bombConfigPacket();
@@ -202,11 +204,19 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         this.currentlyHovered = -1;
         if (this.slots.get(0).isHoveredOrFocused()) {this.currentlyHovered = 0;}
         if (this.slots.get(1).isHoveredOrFocused()) {this.currentlyHovered = 1;}
-        
+
+        boolean shouldPlaySound = false;
+
         for (ToggableIcon MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
+            boolean lastState = MobSlot.isSelected;
             MobSlot.setSelected(this.currentlyHovered == MobSlot.context);
+            shouldPlaySound = lastState != MobSlot.isSelected || shouldPlaySound;
+        }
 
+        if (shouldPlaySound) {
+            SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
+            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
         
     }

@@ -494,6 +494,8 @@ public class AbilityScapeBasis {
     public int getAttackTimeDuring(){
         return this.attackTimeDuring;
     }
+    public void onEnderPearlThrow(){
+    }
     public byte getActivePower(){
         return this.activePower;
     }
@@ -1160,11 +1162,16 @@ public class AbilityScapeBasis {
         return this.getUserData(entity).roundabout$isDazed();
     }
     public static void setDazed(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
         if ((1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)) <= 0.0) {
             /*Warden, iron golems, and anything else knockback immmune can't be dazed**/
             return;
         } else if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
+            return;
+        }
+        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
+        if (powers.canWalkThroughDaze()){
             return;
         }
 
@@ -1188,6 +1195,7 @@ public class AbilityScapeBasis {
     }
 
     public static void setDazedTrue(LivingEntity entity, byte dazeTime){
+        if (entity == null){return;}
         if (MainUtil.isBossMob(entity)){
             /*Bosses can't be dazed**/
             return;
@@ -1789,10 +1797,10 @@ public class AbilityScapeBasis {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }

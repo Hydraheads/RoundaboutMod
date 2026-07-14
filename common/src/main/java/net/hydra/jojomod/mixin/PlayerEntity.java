@@ -183,6 +183,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         return rdbt$zombieFish;
     }
 
+    @Inject(
+            method = "isPushedByFluid",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            cir.setReturnValue(false);
+        }
+    }
+
     //0.00392156862
     @Unique
     private static final float rdbt$hairColorX =245f/255f;
@@ -480,6 +492,27 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     public Inventory roundabout$GetInventory(){
         return inventory;
+    }
+
+
+    @Unique
+    public int rdbt$levelDecreaseTicks = 0;
+    @Unique
+    @Override
+    public void rdbt$setLevelDecreaseTicks(int decreaseTicks){
+        rdbt$levelDecreaseTicks = decreaseTicks;
+        if (!level().isClientSide()){
+            S2CPacketUtil.sendGenericIntToClientPacket(
+                    ((Player) (Object)this),
+                    PacketDataIndex.S2C_INT_LVL_DECREASE,
+                    decreaseTicks
+            );
+        }
+    }
+    @Unique
+    @Override
+    public int rdbt$getLevelDecreaseTicks(){
+        return rdbt$levelDecreaseTicks;
     }
 
     /**Keep track of unique player animations like floating passive anims like dodging or posing*/
@@ -1175,6 +1208,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putInt("anchorPlaceAttack",roundabout$anchorPlaceAttack);
+        compoundtag.putInt("forgotStand",rdbt$getLevelDecreaseTicks());
         compoundtag.putFloat("distanceOut",roundabout$distanceOut);
         compoundtag.putFloat("idleRotation",roundabout$idleRotation);
         compoundtag.putFloat("idleYOffset",roundabout$idleYOffset);
@@ -1257,6 +1291,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
         if (compoundtag2.contains("anchorPlaceAttack")) {
             roundabout$anchorPlaceAttack = compoundtag2.getInt("anchorPlaceAttack");
+        }
+        if (compoundtag2.contains("forgotStand")) {
+            rdbt$levelDecreaseTicks = compoundtag2.getInt("forgotStand");
         }
         if (compoundtag2.contains("distanceOut")) {
             roundabout$distanceOut = compoundtag2.getFloat("distanceOut");
@@ -1642,6 +1679,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
+        if (rdbt$levelDecreaseTicks > 0){
+            rdbt$levelDecreaseTicks--;
+        }
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){

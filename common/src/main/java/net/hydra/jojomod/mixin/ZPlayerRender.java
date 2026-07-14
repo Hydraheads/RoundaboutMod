@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -1513,9 +1514,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI instanceof ModificationMaskItem MD){
-                   int height = visage.getOrCreateTagElement("modifications").getInt("height");
-                    int width = visage.getOrCreateTagElement("modifications").getInt("width");
-                    $$1.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
+                    if (visage.getTag() != null) {
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag.contains("height") || tag.contains("width")) {
+                            int height = visage.getOrCreateTagElement("modifications").getInt("height");
+                            int width = visage.getOrCreateTagElement("modifications").getInt("width");
+                            $$1.scale(0.798F + (((float) width) * 0.001F), 0.7F + (((float) height) * 0.001F), 0.798F + (((float) width) * 0.001F));
+                        }
+                    }
                 } else {
                     Vector3f scale = MI.visageData.scale();
                     $$1.scale(scale.x, scale.y, scale.z);

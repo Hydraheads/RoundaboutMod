@@ -19,7 +19,9 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
+import net.hydra.jojomod.item.ExperienceBishopItem;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.MemoryChessPieceItem;
 import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -237,10 +239,18 @@ public abstract class InputEvents implements IInputEvents {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
+            ItemStack mainhand = player.getMainHandItem();
 
             if (standComp.roundabout$isPossessed()) {
                 ci.setReturnValue(false);
                 return;
+            }
+            if (mainhand != null) {
+                if (mainhand.getItem() instanceof ExperienceBishopItem){
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
+                } else if (mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
+                }
             }
 
             if(powers instanceof PowersGreenDay PGD) {
@@ -1158,9 +1168,9 @@ public abstract class InputEvents implements IInputEvents {
                 if (poseEmote != Poses.NONE && poseEmote != Poses.VAMPIRE_TRANSFORMATION){
                     if (((options.keyUp.isDown() || options.keyDown.isDown() ||
                     options.keyLeft.isDown() || options.keyRight.isDown() || options.keyJump.isDown())
-                            && poseEmote != Poses.COWER)
+                            && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))
                             ||
-                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && poseEmote != Poses.COWER)){
+                    player.isUsingItem() || player.swinging || (player.hurtTime > 0 && (poseEmote != Poses.COWER && poseEmote != Poses.BITE_FINGERS))){
                         ((IPlayerEntity) player).roundabout$SetPos(Poses.NONE.id);
                         C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,Poses.NONE.id);
                     }

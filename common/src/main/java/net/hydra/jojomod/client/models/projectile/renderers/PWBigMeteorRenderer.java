@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
@@ -30,13 +31,11 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
     public PWBigMeteorRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER));
+        this.model = new PWBigMeteorModel($$0.bakeLayer(ModEntityRendererClient.PW_BIG_METEOR_LAYER));
     }
 
-
-
     @Override
-    public void render(PWBigMeteorEntity entity, float entityYaw, float partialTicks,
+    public void render(PWBigMeteorEntity entity, float entityYaw, float partialTick,
                        PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
 
         if (!ClientUtil.canSeeStands(Minecraft.getInstance().player)) {
@@ -44,120 +43,38 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         }
 
         if (((TimeStop) entity.level()).inTimeStopRange(entity)) {
-            partialTicks = 0;
+            partialTick = 0;
         }
 
         poseStack.pushPose();
+        poseStack.translate(0.0D, 0.30D, 0.0D);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(entity.getYRot()));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entity.getXRot()));
+        float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
+        float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
 
-        float meteorScale = entity.getBigMeteorScale();
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
-        float finalScale = 15.0F * meteorScale;
-
+        float scale = entity.getMeteorScale();
+        float finalScale = 3.5f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
-        VertexConsumer consumer = buffer.getBuffer(
-                RenderType.entityTranslucent(getTextureLocation(entity))
-        );
-
-        this.model.renderToBuffer(
-                poseStack,
-                consumer,
-                packedLight,
-                OverlayTexture.NO_OVERLAY,
-                1.0F, 1.0F, 1.0F, 0.4F
-        );
+        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.4f);
 
         poseStack.popPose();
 
+        super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
     }
 
 
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_cream.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_cream.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_cream.png");
+    public static final ResourceLocation PW_BIG_METEOR_TEXTURE =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
 
-    public ResourceLocation getThird(PWBigMeteorEntity var1){
-        LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW){
-            byte sft = PPW.getFireColor();
-            if (sft == StandFireType.BLUE.id){
-                return STAND_FIREBALL_TEXTURE_3_BLUE;
-            } else if (sft == StandFireType.PURPLE.id){
-                return STAND_FIREBALL_TEXTURE_3_PURPLE;
-            } else if (sft == StandFireType.GREEN.id){
-                return STAND_FIREBALL_TEXTURE_3_GREEN;
-            } else if (sft == StandFireType.DREAD.id){
-                return STAND_FIREBALL_TEXTURE_3_DREAD;
-            } else if (sft == StandFireType.CREAM.id){
-                return STAND_FIREBALL_TEXTURE_3_CREAM;
-            }
-        }
-        return STAND_FIREBALL_TEXTURE_3;
-    }
-    public ResourceLocation getFirst(PWBigMeteorEntity var1){
-        LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
-            byte sft = PMR.getFireColor();
-            if (sft == StandFireType.BLUE.id){
-                return STAND_FIREBALL_TEXTURE_BLUE;
-            } else if (sft == StandFireType.PURPLE.id){
-                return STAND_FIREBALL_TEXTURE_PURPLE;
-            } else if (sft == StandFireType.GREEN.id){
-                return STAND_FIREBALL_TEXTURE_GREEN;
-            } else if (sft == StandFireType.DREAD.id){
-                return STAND_FIREBALL_TEXTURE_DREAD;
-            } else if (sft == StandFireType.CREAM.id){
-                return STAND_FIREBALL_TEXTURE_CREAM;
-            }
-        }
-        return STAND_FIREBALL_TEXTURE;
-    }
-    public ResourceLocation getSecond(PWBigMeteorEntity var1){
-        LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
-            byte sft = PMR.getFireColor();
-            if (sft == StandFireType.BLUE.id){
-                return STAND_FIREBALL_TEXTURE_2_BLUE;
-            } else if (sft == StandFireType.PURPLE.id){
-                return STAND_FIREBALL_TEXTURE_2_PURPLE;
-            } else if (sft == StandFireType.GREEN.id){
-                return STAND_FIREBALL_TEXTURE_2_GREEN;
-            } else if (sft == StandFireType.DREAD.id){
-                return STAND_FIREBALL_TEXTURE_2_DREAD;
-            } else if (sft == StandFireType.CREAM.id){
-                return STAND_FIREBALL_TEXTURE_2_CREAM;
-            }
-        }
-        return STAND_FIREBALL_TEXTURE_2;
-    }
+
+
     @Override
-    public ResourceLocation getTextureLocation(PWBigMeteorEntity var1) {
-        int tc = var1.tickCount % 5;
-        if (tc > 3) {
-            return getThird(var1);
-        }
-        if (tc > 1) {
-            return getSecond(var1);
-        }
-        return getFirst(var1);
+    public ResourceLocation getTextureLocation(PWBigMeteorEntity entity) {
+        return PW_BIG_METEOR_TEXTURE;
     }
-
 }

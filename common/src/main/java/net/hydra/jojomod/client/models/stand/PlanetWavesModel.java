@@ -103,10 +103,9 @@ public class PlanetWavesModel<T extends PlanetWavesEntity> extends StandModel<T>
         this.animate(pEntity.grab_horizontal, PlanetWavesAnimations.grab_horizontal, pAgeInTicks, 1f);
         this.animate(pEntity.grab_downwards, PlanetWavesAnimations.grab_downwards, pAgeInTicks, 1f);
         this.animate(pEntity.grab_upwards, PlanetWavesAnimations.grab_upwards, pAgeInTicks, 1f);
-
-        // Apply burial rotation AFTER animations so it isn't overwritten
         byte anim = pEntity.getAnimation();
-        if (anim == PlanetWavesEntity.BURY_HORIZONTAL ||
+        if (anim == PlanetWavesEntity.FLOATING ||
+                anim == PlanetWavesEntity.BURY_HORIZONTAL ||
                 anim == PlanetWavesEntity.BURY_DOWNWARDS ||
                 anim == PlanetWavesEntity.BURY_UPWARDS ||
                 anim == PlanetWavesEntity.GRAB_HORIZONTAL ||
@@ -114,10 +113,11 @@ public class PlanetWavesModel<T extends PlanetWavesEntity> extends StandModel<T>
                 anim == PlanetWavesEntity.GRAB_UPWARDS) {
             float rotX = pEntity.getStandRotationX();
             float rotY = pEntity.getStandRotationY();
-            this.stand.xRot += rotX;
+            this.stand.xRot = rotX;
             this.stand.yRot = rotY;
         }
     }
+
     @Override
     public void rotateStand(T mobEntity, ModelPart stand, float tickDelta) {
         byte anim = mobEntity.getAnimation();
@@ -126,7 +126,8 @@ public class PlanetWavesModel<T extends PlanetWavesEntity> extends StandModel<T>
                 anim == PlanetWavesEntity.BURY_UPWARDS ||
                 anim == PlanetWavesEntity.GRAB_HORIZONTAL ||
                 anim == PlanetWavesEntity.GRAB_DOWNWARDS ||
-                anim == PlanetWavesEntity.GRAB_UPWARDS) {
+                anim == PlanetWavesEntity.GRAB_UPWARDS ||
+                anim == PlanetWavesEntity.FLOATING) {
             return;
         }
         super.rotateStand(mobEntity, stand, tickDelta);

@@ -41,6 +41,8 @@ public class ModParticles {
     public static SimpleParticleType GREEN_CLOCK;
     public static SimpleParticleType ORANGE_CLOCK;
     public static SimpleParticleType TIME_EMBER;
+    public static SimpleParticleType MAGIC_HEART;
+    public static SimpleParticleType QUESTION;
     public static SimpleParticleType ZAP;
     public static SimpleParticleType POINTER;
     public static SimpleParticleType POINTER_SOFT;
@@ -63,6 +65,11 @@ public class ModParticles {
     public static SimpleParticleType MAGIC_DUST;
     public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;
+    public static SimpleParticleType AIRBUBBLE_PINK;
+    public static SimpleParticleType AIRBUBBLE_GREEN;
+    public static SimpleParticleType AIRBUBBLE_YELLOW;
+    public static SimpleParticleType AIRBUBBLE_CYAN;
+    public static SimpleParticleType AIRBUBBLE_BOMB;
 
     public static SimpleParticleType OCCULT;
 

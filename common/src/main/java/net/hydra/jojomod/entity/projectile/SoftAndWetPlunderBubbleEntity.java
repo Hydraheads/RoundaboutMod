@@ -1169,7 +1169,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                     Entity $$5 = $$3.get($$4);
                     if ($$5 instanceof ItemEntity IE) {
-                        if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)) {
+                        if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)) {
                             this.setHeldItem(IE.getItem().copyWithCount(1));
                             startReturning();
 

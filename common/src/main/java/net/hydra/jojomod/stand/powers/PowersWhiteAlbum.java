@@ -1731,15 +1731,26 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             if (!MainUtil.canFreeze(entity)){
-                return 0.93F;
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.93F));
             }
-            return 0.8F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.8F));
         } else {
             if (!MainUtil.canFreeze(entity)){
-                return 2.5F;
+                return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
             }
-            return 2.2F;
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(2.2F));
         }
+    }
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                whiteAlbumSettings.whiteAlbumAttackMultOnPlayers *0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                whiteAlbumSettings.whiteAlbumAttackMultOnMobs *0.01));
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRenderer<PlanetWavesEntity> {
 
@@ -23,6 +24,8 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
     private static final ResourceLocation SYMPHONY_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/symphony_waves.png");
     private static final ResourceLocation SPARTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta.png");
     private static final ResourceLocation SPARTA2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta2.png");
+    private static final ResourceLocation HALLOWEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/halloween.png");
+
 
     private final StandModel<PlanetWavesEntity> baseModel;
     private final StandModel<PlanetWavesEntity> spartaModel;
@@ -52,6 +55,8 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
                 return SPARTA;
             case (PlanetWavesEntity.SPARTA2):
                 return SPARTA2;
+            case (PlanetWavesEntity.HALLOWEEN):
+                return HALLOWEEN;
             default:
                 return PART_6_SKIN;
         }
@@ -69,12 +74,6 @@ public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRendere
         float factor = 0.5F + (mobEntity.getSizePercent() / 2);
 
         matrixStack.pushPose();
-
-        float rotX = mobEntity.getStandRotationX();
-        if (rotX != 0.0F) {
-            matrixStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(rotX));
-        }
-
         if (mobEntity.isBaby()) {
             matrixStack.scale(0.5f * factor, 0.5f * factor, 0.5f * factor);
         } else {

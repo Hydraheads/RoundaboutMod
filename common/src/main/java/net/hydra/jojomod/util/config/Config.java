@@ -94,6 +94,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CenturyBoySettings centuryBoySettings;
     @NestedOption(group = "modded")
+    public CaliforniaKingBedSettings californiaKingBedSettings;
+    @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
     public OasisSettings oasisSettings;
@@ -456,13 +458,13 @@ public class Config implements Cloneable {
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 7.0F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
         @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
         public Float StrayCatAirBubblesDamage;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer blockPlantCooldown;
-        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer bubbleShootCooldown;
         @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
         public Integer mobPlantCooldown;
@@ -470,7 +472,7 @@ public class Config implements Cloneable {
         public Integer explosionActivationCooldown;
     	@IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer kickMinimumCooldown;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer sheerHeartAttackCooldown;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer sheerHeartAttackMaxExplosions;
@@ -484,6 +486,8 @@ public class Config implements Cloneable {
         public Boolean mobPlantHitkillMobs;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer maxAirBubbleTravelDistanceBeforePopping;
+        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer airBubbleGuardIncrease;
     }
     
     public static class SoftAndWetSettings {
@@ -663,9 +667,9 @@ public class Config implements Cloneable {
         public Integer greenDayStitchHeal;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer gDStitchcooldown;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
         public Integer moldDefaultRange;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Integer moldGrowthRate;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer moldMaxSize;
@@ -765,6 +769,8 @@ public class Config implements Cloneable {
         public Integer usertargetingCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer meteorTrackingPower;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean PWCanonMovesOnly;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -895,10 +901,28 @@ public class Config implements Cloneable {
         public Boolean buffedGroundStance;
     }
 
+    public static class CaliforniaKingBedSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCKB;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer doNotHurtMeBaseCD;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer doNotHurtMeRewindCD;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer postPunishDelay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnPlayers;
+    }
 
     public static class WhiteAlbumSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWhiteAlbum;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer whiteAlbumGuardPoints;
         @FloatOption(group = "inherit", value = 1.2F, min = 0F, max = 100F)

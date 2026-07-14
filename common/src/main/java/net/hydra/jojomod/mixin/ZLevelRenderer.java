@@ -332,11 +332,10 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
-            at = @At(value = "TAIL"))
-    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 0,shift = At.Shift.BEFORE))
+    private void roundabout$renderLevelLead(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                         Camera $$4, GameRenderer $$5, LightTexture $$6,
                                         Matrix4f $$7, CallbackInfo ci) {
-        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
 
         Player player = Minecraft.getInstance().player;
         if (player != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
@@ -348,6 +347,15 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             //ClientUtil.renderFirstPersonModelParts($$4.getEntity(), $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20, rdbt$getPackedLightCoords(player,partialTick));
             this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
+    }
+
+    @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
+            at = @At(value = "TAIL"))
+    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+                                        Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                        Matrix4f $$7, CallbackInfo ci) {
+        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
+
     }
     public final int rdbt$getPackedLightCoords(LivingEntity $$0, float $$1) {
         BlockPos $$2 = BlockPos.containing($$0.getLightProbePosition($$1));

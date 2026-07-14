@@ -131,6 +131,8 @@ public class StandIcons {
             "textures/misc/in_bubble.png");
     public static final ResourceLocation SUN_TINGE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/sun_tinge.png");
+    public static final ResourceLocation MOLD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/mold_overlay.png");
     public static final ResourceLocation STONE_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/mask_blur.png");
     public static final ResourceLocation BLOODY_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
@@ -221,6 +223,8 @@ public class StandIcons {
     public static final ResourceLocation DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/dodge.png");
 
+    public static final ResourceLocation PIECE_ATTACK = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/piece_attack.png");
     public static final ResourceLocation FORBID_RULE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/forbid_rule.png");
     public static final ResourceLocation HURT_RULE = new ResourceLocation(Roundabout.MOD_ID,
@@ -233,10 +237,18 @@ public class StandIcons {
             "textures/gui/icons/california_king_bed/hurt.png");
     public static final ResourceLocation LEAVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/leave.png");
+    public static final ResourceLocation SLEEP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/sleep.png");
     public static final ResourceLocation EXPERIENCE_BISHOP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/experience_bishop.png");
     public static final ResourceLocation STEAL_MEMORIES = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/california_king_bed/steal_memories.png");
+    public static final ResourceLocation STEAL_MEMORIES_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/steal_memories_2.png");
+    public static final ResourceLocation STEP_SHADOW = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/step_shadow.png");
+    public static final ResourceLocation SAVE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/california_king_bed/save_location.png");
     public static final ResourceLocation VAMP_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/powers/vampire/punch.png");
     public static final ResourceLocation VAMP_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
@@ -605,6 +617,11 @@ public class StandIcons {
             "textures/gui/icons/manhattan_transfer/manhattan_damage_boost.png");
     public static final ResourceLocation MANHATTAN_DODGE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/manhattan_transfer/manhattan_dash.png");
+
+    public static final ResourceLocation BITE_FINGERS_POLPO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/finger_bite_polpo.png");
+    public static final ResourceLocation POLPO_INVENTORY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/black_sabbath_chest.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
