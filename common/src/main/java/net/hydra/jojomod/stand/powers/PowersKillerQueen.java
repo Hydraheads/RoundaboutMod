@@ -43,6 +43,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -92,7 +93,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
-    @Override public boolean canUseStandArrow() { return true; }
+    @Override public boolean canUseStandArrow() { return !this.hasBitesTheDust; }
 
 	// TODO Make bomb item
 	// TODO Bites The Dust (WIP)
@@ -768,6 +769,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onStandArrowUse() {
+        if (this.self instanceof Player PE) {
+            if (this.canExecuteMoveWithLevel(this.getBitesTheDustLevel())) {
+                ((ServerLevel) PE.level()).sendParticles(ParticleTypes.FIREWORK, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        20, 0, 0, 0, 0.4);
+                this.hasBitesTheDust = true;
+            }else {
+                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.KillerQueenEXPFail", getBitesTheDustLevel()).withStyle(ChatFormatting.DARK_RED), true);
+            }
+        }
+        return false;
     }
 
     @Override
