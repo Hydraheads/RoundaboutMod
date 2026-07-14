@@ -3463,7 +3463,6 @@ public class MainUtil {
 
     public static Boolean isInMold(Entity entity){
         if (entity instanceof LivingEntity LE){
-            Roundabout.LOGGER.info("how bizzare (duh duh duh)");
             return ((StandUser)LE).getMoldTicks() > 0;
         }
         return false;

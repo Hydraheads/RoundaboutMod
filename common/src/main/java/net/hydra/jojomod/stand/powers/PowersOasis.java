@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -570,16 +571,48 @@ public class PowersOasis extends NewDashPreset {
 
     }
 
+    public static final byte
+            BASE = 1,
+            AGOGO =2,
+            BLANK =3,
+            COUNTDOWN =4,
+            INVERTED =5,
+            MANGA =6,
+            OPEN =7,
+            TESTAMENTI =8,
+            PS2 =9;
 
+    @Override
+    public List<Byte> getSkinList() {
+        List<Byte> $$1 = Lists.newArrayList();
+        $$1.add(BASE);
+        $$1.add(OPEN);
+        $$1.add(MANGA);
+        $$1.add(AGOGO);
+        $$1.add(BLANK);
+        $$1.add(COUNTDOWN);
+        $$1.add(INVERTED);
+        $$1.add(TESTAMENTI);
+        $$1.add(PS2);
+
+        return $$1;
+    }
 
     @Override
     public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.oasis."+getSkinString(skinId));
     }
-
     public static String getSkinString(byte skinId) {
         return switch (skinId)
         {
+            case AGOGO -> "agogo";
+            case BLANK -> "blank";
+            case COUNTDOWN -> "countdown";
+            case INVERTED -> "inverted";
+            case MANGA -> "manga";
+            case OPEN -> "open";
+            case TESTAMENTI -> "testamenti";
+            case PS2 -> "ps2";
             default -> "base";
         };
     }
