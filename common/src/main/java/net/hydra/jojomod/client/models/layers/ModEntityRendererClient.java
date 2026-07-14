@@ -30,6 +30,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation STRAY_CAT_ENTITY_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"), "main");
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
+    public static final ModelLayerLocation KING_CRIMSON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "king_crimson"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum"), "main");
     public static final ModelLayerLocation COFFIN_LEFT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "coffin_left"), "main");

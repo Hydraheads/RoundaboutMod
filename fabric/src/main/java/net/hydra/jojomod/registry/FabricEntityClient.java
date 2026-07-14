@@ -62,6 +62,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM_BASEBALL, StarPlatinumBaseballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD_ULTIMATE, TheWorldUltimateRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.KING_CRIMSON, KingCrimsonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE, JusticeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE_PIRATE, JusticePirateRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED, MagiciansRedRenderer::new);
@@ -205,6 +206,7 @@ public class FabricEntityClient {
 
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);

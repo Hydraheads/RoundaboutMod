@@ -65,6 +65,12 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
 
+    public static Item STAND_DISC_KING_CRIMSON = registerItem("king_crimson_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+    public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+
+
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
     public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
@@ -630,6 +636,8 @@ public class FabricItems {
                         entries.accept(STRAY_CAT_ANIME);
                         entries.accept(STRAY_CAT_MANGA);
                         //entries.accept(STRAY_CAT_ITEM);
+                        entries.accept(STAND_DISC_KING_CRIMSON);
+                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -689,6 +697,9 @@ public class FabricItems {
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
+        ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
+        ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;

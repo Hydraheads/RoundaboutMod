@@ -29,8 +29,4 @@ public class ValentineNPC extends StandUsingNPC implements NoVibrationEntity {
     public ItemStack getBasis(){
         return ModItems.VALENTINE_MASK.getDefaultInstance();
     }
-    @Override
-    public StandDiscItem getDisc(){
-        return ((StandDiscItem) ModItems.STAND_DISC_D4C);
-    }
 }
