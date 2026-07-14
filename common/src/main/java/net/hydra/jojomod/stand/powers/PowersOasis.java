@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -219,10 +220,23 @@ public class PowersOasis extends NewDashPreset {
             case PowerIndex.POWER_1 -> {
                 toggleFists();
             }
+            case PowerIndex.SNEAK_ATTACK -> {
+                kickAttack();
+            }
 
         }
 
         return super.setPowerOther(move,lastMove);
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        if (!self.level().isClientSide()) {
+            if (move == PowerIndex.SNEAK_ATTACK) {
+                attackTargetId = chargeTime;
+            }
+        }
+        return super.tryIntPower(move,forced,chargeTime);
     }
 
     @Override
@@ -347,19 +361,86 @@ public class PowersOasis extends NewDashPreset {
     }
      */
 
+
+
+
+
+
+    public void kickImpact(Entity entity) {
+        if (!this.self.level().isClientSide) {
+            if (entity != null) {
+                if (entity.distanceTo(self) > 3) {
+                    return;
+                }
+                Roundabout.LOGGER.info("reached kickImpact method");
+                float pow;
+                float knockbackStrength;
+                pow = 1;
+
+                knockbackStrength = 1.0f;
+                if (entity instanceof LivingEntity LE && LE.isBlocking()) {
+                    knockShield2(LE, 120);
+                    knockbackStrength = 0.10f;
+                }
+
+                if (DamageHandler.StandDamageEntity(entity, pow, this.self)) {
+                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    takeKnockbackUp(entity, knockbackStrength);
+
+                    this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
+                    hitParticles(entity);
+                } else {
+                    if (!this.self.level().isClientSide()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                    }
+                }
+            }
+        }
+    }
+
+    public void doKickHit(){
+        if (!self.level().isClientSide()) {
+            Entity target = null;
+            if (attackTargetId > 0) {
+                target = self.level().getEntity(attackTargetId);
+            }
+            kickImpact(target);
+        }
+    }
+
+    public void kickAttack() {
+        Roundabout.LOGGER.info("kick attack");
+
+        if (!self.level().isClientSide) {
+            Roundabout.LOGGER.info("server received");
+
+            if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
+                setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
+            }
+
+            doKickHit();
+        } else {
+            Entity TE = getTargetEntity(self, 2.0F, getBrawlPunchAngle());
+            int id = 0;
+            if (TE != null){
+                id = TE.getId();
+            }
+           tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,id);
+        }
+    }
+
+
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
             return;
         }
         if (keyIsDown) {
-            if (activePowerPhase == 0) {
-                if (isBrawling() && !isBarraging()) {
-                    if (!isHoldingSneak()) {
-                        this.tryPower(PowerIndex.ATTACK);
-                    } else if (self.onGround()) {
-
-                    }
+            if (activePowerPhase == 0 && isBrawling() && !isBarraging()) {
+                if (!isHoldingSneak()) {
+                    this.tryPower(PowerIndex.ATTACK);
+                } else if (self.onGround()) {
+                    this.tryPower(PowerIndex.SNEAK_ATTACK);
                 }
             }
         }
