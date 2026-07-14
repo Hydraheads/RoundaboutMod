@@ -43,6 +43,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -92,9 +93,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
+    @Override public boolean canUseStandArrow() { return !this.hasBitesTheDust; }
+
 	// TODO Make bomb item
-	// TODO Bites The Dust
-    // TODO BUBBLES-SHIELD enhance?
+	// TODO Bites The Dust (WIP)
+    // TODO BUBBLES-SHIELD improvement?
 	
 	// TODO Audio Translations (WIP)
 	
@@ -766,6 +769,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean onStandArrowUse() {
+        if (this.self instanceof Player PE) {
+            if (this.canExecuteMoveWithLevel(this.getBitesTheDustLevel())) {
+                ((ServerLevel) PE.level()).sendParticles(ParticleTypes.FIREWORK, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        20, 0, 0, 0, 0.4);
+                this.hasBitesTheDust = true;
+            }else {
+                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.KillerQueenEXPFail", getBitesTheDustLevel()).withStyle(ChatFormatting.DARK_RED), true);
+            }
+        }
+        return false;
     }
 
     @Override
@@ -1472,8 +1490,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public void detonateClient() {
-        if (this.currentBombStatus != BOMB_NONE && this.canAttack() && this.canAttack2()) {
-
+        if (this.currentBombStatus != BOMB_NONE) {
             ((StandUser) this.getSelf()).roundabout$tryPower(PowersKillerQueen.DETONATE, true);
             tryPowerPacket(PowersKillerQueen.DETONATE);
         }
@@ -1598,14 +1615,30 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (currentBombStatus == BOMB_BLOCK) {
                 this.bombBlock.discard();
                 this.bombBlock = null;
+                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
+                this.setCooldown(PowerIndex.SKILL_1, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
+                }
             }else if (currentBombStatus == BOMB_ENTITY) {
                 this.bombEntity = null;
+                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
+                this.setCooldown(PowerIndex.SKILL_2, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2, cooldownAmount);
+                }
+
             }else if (currentBombStatus == BOMB_BUBBLE) {
                 if (this.bombBubble != null) {
                     this.bombBubble.setHasTimeLimit(true);
                     this.bombBubble.setIsPlanted(false);
                 }
                 this.bombBubble = null;
+                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
+                this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                if (this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+                }
             }
     	}
     	
@@ -2329,10 +2362,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         {
             case KillerQueenEntity.MANGA, KillerQueenEntity.NOTW,
                  KillerQueenEntity.GOGO, KillerQueenEntity.CREEPER -> {return 1;}
-            case KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.GUNPOWDER,
+            case KillerQueenEntity.LIMBUSMORTIS,
                  KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
             case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
-                 KillerQueenEntity.ARTWORK -> {return 3;}
+                 KillerQueenEntity.ARTWORK, KillerQueenEntity.GUNPOWDER,
+                 KillerQueenEntity.UMBRA-> {return 3;}
             case KillerQueenEntity.MINESWEEPER -> {return 4;}
             
             default -> {return 0;}
@@ -2342,21 +2376,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     public SimpleParticleType getBubbleParticle() {
         byte bubble = this.getBubbleSkin();
         switch (bubble) {
-            case 1 -> {
-                return ModParticles.AIRBUBBLE_GREEN;
-            }
-            case 2 -> {
-                return ModParticles.AIRBUBBLE_YELLOW;
-            }
-            case 3 -> {
-                return ModParticles.AIRBUBBLE_CYAN;
-            }
-            case 4 -> {
-                return ModParticles.AIRBUBBLE_BOMB;
-            }
-            default -> {
-                return ModParticles.AIRBUBBLE_PINK;
-            }
+            case 1 -> { return ModParticles.AIRBUBBLE_GREEN; }
+            case 2 -> { return ModParticles.AIRBUBBLE_CYAN; }
+            case 3 -> { return ModParticles.AIRBUBBLE_YELLOW; }
+            case 4 -> { return ModParticles.AIRBUBBLE_BOMB; }
+            default -> { return ModParticles.AIRBUBBLE_PINK; }
         }
     }
 
@@ -2516,7 +2540,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public boolean detonate() {
-    	if (!this.isClient()) {
+    	if (!this.isClient() && this.detonateTimer == -1) {
             this.playSoundsIfNearby(DETONATE, 27, true);
 
             //int detonateWindup = getDetonateWindup();

@@ -86,6 +86,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState heavyStrike = new AnimationState();
     public final AnimationState shaSend = new AnimationState();
     public final AnimationState impale = new AnimationState();
+    public final AnimationState bitesTheDust = new AnimationState();
 
     public final AnimationState itemThrowAnimation = new AnimationState();
     public final AnimationState blockThrowAnimation = new AnimationState();
