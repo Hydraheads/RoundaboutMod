@@ -11,9 +11,11 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -44,6 +46,13 @@ public class PowersKingCrimson extends NewPunchingStand {
     }
 
     @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.STAR_SUMMON_SOUND_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+        @Override
     public StandEntity getNewStandEntity() {
         byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
         return ModEntities.KING_CRIMSON.create(this.getSelf().level());
