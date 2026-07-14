@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -33,6 +35,9 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -40,9 +45,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MemoryChessPieceItem extends Item implements Vanishable {
-    public MemoryChessPieceItem(Properties $$0) {
-        super($$0.defaultDurability(3));
+public class MemoryChessPieceItem extends BlockItem implements Vanishable {
+    public MemoryChessPieceItem(Block $$0, Properties $$1) {
+        super($$0,$$1.defaultDurability(3));
     }
 
     @Override
@@ -54,6 +59,28 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$1.startUsingItem($$2);
         return InteractionResultHolder.consume($$3);
+    }
+    @Override
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level,
+                                                 @Nullable Player player, ItemStack stack, BlockState state) {
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (be instanceof ChessPieceBlockEntity chess) {
+            chess.setStoredStack(stack);
+        }
+
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+    }
+
+    @Override
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
+    }
+
+    @Override
+    public String getDescriptionId(ItemStack itemStack) {
+        return this.getDescriptionId();
     }
     /**Default 72000*/
     @Override
@@ -295,7 +322,6 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
         if (player.level().isClientSide()) {
             return;
         }
-        player.swing(InteractionHand.MAIN_HAND,true);
 
         CompoundTag tag = stack.getTag();
         if (tag == null){
@@ -332,7 +358,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg;
                 if (living instanceof Player pl){
-                    dmg = multiplyPowerByStandConfigPlayers(1.5F);
+                    dmg = multiplyPowerByStandConfigPlayers(1.7F);
                 } else {
                     dmg = multiplyPowerByStandConfigMobs(3);
                 }
@@ -346,7 +372,7 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                     if (!player.getAbilities().instabuild) {
                         destroy++;
                     }
-                    MainUtil.makeBleed(living,0,200,player);
+                    MainUtil.makeBleed(living,0,300,player);
                     player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                     if (destroy >= 3 && !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof MemoryChessPieceItem){
@@ -378,6 +404,9 @@ public class MemoryChessPieceItem extends Item implements Vanishable {
                 californiaKingBedSettings.chessMultOnPlayers *0.01));
     }
 
+    public MutableComponent getDisplayName2() {
+        return Component.translatable(this.getDescriptionId() + ".desc");
+    }
     public static float multiplyPowerByStandConfigMobs(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
                 californiaKingBedSettings.chessMultOnMobs *0.01));

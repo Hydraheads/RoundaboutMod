@@ -363,6 +363,8 @@ public interface StandUser {
     /** Green Day stuff**/
 
     void DoMoldTick();
+    void SetInMoldTicks(int e);
+    int getMoldTicks();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();

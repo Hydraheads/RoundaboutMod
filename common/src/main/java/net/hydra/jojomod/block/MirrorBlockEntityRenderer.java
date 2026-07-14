@@ -186,12 +186,10 @@ public class MirrorBlockEntityRenderer<T extends LivingEntity, M extends EntityM
                                     //matrices.last().normal().set(Axis.ZP.rotationDegrees((Minecraft.getInstance().getCameraEntity().getYRot()%360)));
                                     matrices.last().normal().rotate(Axis.ZP.rotationDegrees(0+bam));
                                 }
-                                Lighting.setupLevel(matrices.last().pose());
 
                                 ER.render(lv, Mth.lerp(partialTick, lv.yRotO, lv.getYRot()), partialTick, matrices, buffer, LightTexture.pack(15, 15)); // replace with: LightTexture.pack(15, 15)) for fullbright;
                                 ClientUtil.mirrorCycles++;
                                 matrices.last().normal().set(norm1);
-                                RenderSystem.setShaderLights(first, second);
 
                                 Minecraft.getInstance().options.hideGui = hgui;
                                 ClientUtil.popPoseAndCooperate(matrices,3);

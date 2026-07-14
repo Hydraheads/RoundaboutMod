@@ -802,7 +802,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public void hairPullEntity(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (entity != null) {
-                if (entity.distanceTo(self) > 5.8){
+                if (entity.distanceTo(self) > 6.8){
                     return;
                 }
                 if (!(MainUtil.resistsKnockBack(entity))) {
@@ -1371,7 +1371,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             doHairGrab();
         } else {
 
-            Entity TE = getTargetEntity(self, 5F, getBrawlPunchAngle());
+            Entity TE = getTargetEntity(self, 6F, getBrawlPunchAngle());
             int id = 0;
             if (TE != null){
                 id = TE.getId();

@@ -47,6 +47,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
 
         poseStack.pushPose();
 
+        poseStack.translate(0.0D, 0.30D, 0.0D);
 
         float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());

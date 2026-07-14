@@ -83,6 +83,18 @@
       "roundabout:chess_piece"
     ]
   },
+  "chess_place": {
+    "subtitle": "sounds.roundabout.chess_place",
+    "sounds": [
+      "roundabout:chess_place"
+    ]
+  },
+  "chess_break": {
+    "subtitle": "sounds.roundabout.chess_break",
+    "sounds": [
+      "roundabout:chess_break"
+    ]
+  },
   "ice_blast_charge": {
     "subtitle": "sounds.roundabout.ice_blast_charge",
     "sounds": [

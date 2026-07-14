@@ -60,7 +60,7 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
-    public static EntityType<BlockBombEntity> BLOCK_BOMB;
+    private static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
@@ -201,5 +201,13 @@ public class ModEntities {
                 EntityType.Builder.of(factory, MobCategory.MISC).
                         sized(size.x(), size.y()).clientTrackingRange(14).build(location.toString())
         );
+    }
+
+    public static EntityType<BlockBombEntity> getBlockBomb() {
+        return BLOCK_BOMB;
+    }
+
+    public static void setBlockBomb(EntityType<BlockBombEntity> blockBomb) {
+        BLOCK_BOMB = blockBomb;
     }
 }

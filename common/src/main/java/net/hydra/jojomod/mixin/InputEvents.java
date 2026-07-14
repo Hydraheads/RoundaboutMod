@@ -248,12 +248,8 @@ public abstract class InputEvents implements IInputEvents {
             if (mainhand != null) {
                 if (mainhand.getItem() instanceof ExperienceBishopItem){
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
-                    ci.setReturnValue(false);
-                    return;
                 } else if (mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia) {
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_CHESS_HURT);
-                    ci.setReturnValue(false);
-                    return;
                 }
             }
 

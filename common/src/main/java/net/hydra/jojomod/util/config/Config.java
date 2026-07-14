@@ -665,9 +665,9 @@ public class Config implements Cloneable {
         public Integer greenDayStitchHeal;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer gDStitchcooldown;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
         public Integer moldDefaultRange;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Integer moldGrowthRate;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer moldMaxSize;

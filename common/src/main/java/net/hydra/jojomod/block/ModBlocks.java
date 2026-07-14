@@ -1,6 +1,8 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.DyeColor;
@@ -696,13 +698,28 @@ public class ModBlocks {
         );
     }
 
+
+
     public static ChessPieceBlock getChessBlock() {
+
+        SoundType stype = new SoundType(
+                1.0F,
+                1.0F,
+                ModSounds.CHESS_BREAK_EVENT,
+                SoundEvents.WOOD_STEP,
+                ModSounds.CHESS_PLACE_EVENT,
+                SoundEvents.WOOD_HIT,
+                SoundEvents.WOOD_FALL
+        );
         return new ChessPieceBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
-                        .pushReaction(PushReaction.IGNORE)
                         .strength(0F, 0F)
-                        .sound(SoundType.EMPTY)
+                        .sound(stype)
+                        .lightLevel((p_152607_) -> {
+                            return 1;
+                        })
+                        .pushReaction(PushReaction.DESTROY)
                         .noCollission()
         );
     }

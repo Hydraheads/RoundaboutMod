@@ -158,7 +158,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         this.exitBombConfig();
 
-        return super.mouseReleased($$0, $$1, $$2);
+        return true;
     }
 
     public void exitBombConfig() {
@@ -167,7 +167,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-
 
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
             PK.bombConfigPacket();
@@ -217,7 +216,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         if (shouldPlaySound) {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
         
     }

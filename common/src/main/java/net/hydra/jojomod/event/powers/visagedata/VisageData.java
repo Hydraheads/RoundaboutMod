@@ -96,6 +96,12 @@ public class VisageData {
     public boolean rendersDiegoHat(){
         return false;
     }
+    public boolean rendersDaiyaEars(){
+        return false;
+    }
+    public boolean rendersDaiyaFluff(){
+        return false;
+    }
     public boolean rendersJohnnyHat(){
         return false;
     }

@@ -6,10 +6,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -336,13 +338,6 @@ public class FabricBlocks {
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
-
-        ModBlocks.WHITE_PAWN = WHITE_PAWN;
-        ModBlocks.WHITE_ROOK = WHITE_ROOK;
-        ModBlocks.WHITE_BISHOP = WHITE_BISHOP;
-        ModBlocks.WHITE_KING = WHITE_KING;
-        ModBlocks.WHITE_QUEEN = WHITE_QUEEN;
-        ModBlocks.WHITE_KNIGHT = WHITE_KNIGHT;
 
         ModBlocks.AJA_ORE = AJA_ORE;
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;

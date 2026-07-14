@@ -131,6 +131,8 @@ public class StandIcons {
             "textures/misc/in_bubble.png");
     public static final ResourceLocation SUN_TINGE_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/sun_tinge.png");
+    public static final ResourceLocation MOLD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/mold_overlay.png");
     public static final ResourceLocation STONE_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/mask_blur.png");
     public static final ResourceLocation BLOODY_MASK_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,

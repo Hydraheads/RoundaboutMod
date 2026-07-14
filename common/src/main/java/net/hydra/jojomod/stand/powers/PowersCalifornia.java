@@ -657,7 +657,7 @@ public class PowersCalifornia extends NewDashPreset {
                         ModSounds.CKB_TILE_EVENT, SoundSource.PLAYERS, 1F,
                         (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
-                step.timing = 200;
+                step.timing = 400;
                 addSpawnedEntity(step);
                 self.level().addFreshEntity(step);
             }
@@ -1517,22 +1517,6 @@ public class PowersCalifornia extends NewDashPreset {
             playFallBraceInitSound();
         }
         return true;
-    }
-
-
-    @Override
-    public boolean isWip() {
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDev() {
-        return Component.literal("Hydra");
-    }
-
-    @Override
-    public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active");
     }
 
 

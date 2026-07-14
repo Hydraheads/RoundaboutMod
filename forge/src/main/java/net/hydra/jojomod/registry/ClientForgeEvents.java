@@ -37,6 +37,7 @@ import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -183,7 +184,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.VAN_GOUGH_PAINTING.get(), VanGoghPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MONA_LISA_PAINTING.get(), MonaLisaPaintingRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BIRTH_OF_VENUS_PAINTING.get(), VenusPaintingRenderer::new);
-
+        event.registerBlockEntityRenderer(ForgeBlocks.CHESS_PIECE_BLOCK_ENTITY.get(), ChessPieceRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get(), StandFireRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.MIRROR_BLOCK_ENTITY.get(), MirrorBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.COFFIN_BLOCK_ENTITY.get(), CoffinRenderer::new);
@@ -212,6 +213,15 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
         event.registerLayerDefinition(ModEntityRendererClient.COFFIN_RIGHT_LAYER, CoffinRenderer::createDoubleBodyRightLayer);
         //event.registerLayerDefinition(ModEntityRendererClient.CHESSBOARD_LAYER, ChessBoardRenderer::createBodyLayer);
+
+
+        event.registerLayerDefinition(ModEntityRendererClient.PAWN_LAYER, ChessPieceRenderer::createPawnLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.KING_LAYER, ChessPieceRenderer::createKingLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.QUEEN_LAYER, ChessPieceRenderer::createQueenLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.KNIGHT_LAYER, ChessPieceRenderer::createKnightLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.ROOK_LAYER, ChessPieceRenderer::createRookLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.BISHOP_LAYER, ChessPieceRenderer::createBishopLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.EXP_BISHOP_LAYER, ChessPieceRenderer::createExpBishopLayer);
         
         event.registerLayerDefinition(ModEntityRendererClient.SURVIVOR_LAYER, SurvivorModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.STAR_PLATINUM_BASEBALL_LAYER, StarPlatinumBaseballModel::getTexturedModelData);
@@ -310,6 +320,8 @@ public class ClientForgeEvents {
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
+        ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
+        ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
         ModStrayModels.JohngalliaHairPart = new JohngalliaHairPart();
         ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();

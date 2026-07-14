@@ -1472,9 +1472,9 @@ public class PowersSoftAndWet extends NewPunchingStand {
         ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
         if (!stack.isEmpty() &&
                 !(MainUtil.isItemGrabBlacklisted(stack)) &&
-                !(stack.getItem() instanceof BlockItem
-                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
-                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock) || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)) {
+                !(stack.getItem() instanceof BlockItem bi
+                        && (MainUtil.isBlockBlacklisted(bi.getBlock().defaultBlockState()) ||
+                        bi.getBlock() instanceof ShulkerBoxBlock || bi.getBlock() instanceof FancyLighterBlock))) {
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubbleShotCooldown);
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.itemBubblePopCooldown);
             if (!this.self.level().isClientSide()) {

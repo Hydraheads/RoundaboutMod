@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -15,6 +16,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -91,6 +93,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(PlanetWavesEntity.BLUE_SKIN);
                 $$1.add(PlanetWavesEntity.PURPLE_SKIN);
                 $$1.add(PlanetWavesEntity.GREEN_SKIN);
+                $$1.add(PlanetWavesEntity.HALLOWEEN);
             } if (Level > 2 || bypass){
                 $$1.add(PlanetWavesEntity.OCEAN_WAVES);
                 $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
@@ -132,6 +135,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             case SYMPHONY_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.symphony_waves");}
             case SPARTA  -> {return Component.translatable("skins.roundabout.planet_waves.sparta");}
             case SPARTA2  -> {return Component.translatable("skins.roundabout.planet_waves.sparta2");}
+            case HALLOWEEN  -> {return Component.translatable("skins.roundabout.planet_waves.halloween");}
 
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
@@ -139,7 +143,9 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
+        if (this.self.getY() > 319) {
+            setSkillIcon(context, x, y, 1, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_1);
+        } else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak()) {
@@ -261,12 +267,42 @@ public class PowersPlanetWaves extends NewDashPreset {
         return this.tracking;
     }
 
+    private void unlockcosmic() {
+        if (isTravelling) return;
+        if (this.onCooldown(PowerIndex.SKILL_1)) return;
+        if (this.self.level().isClientSide()) return;
 
+        if (this.getSelf() instanceof Player PE) {
+            Level lv = this.getSelf().level();
+            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            StandUser user = (StandUser) PE;
+            IPlayerEntity ipe = (IPlayerEntity) PE;
+            boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+
+            if (!ipe.roundabout$getUnlockedBonusSkin() && !bypass && this.self.getY() > 319) {
+                ipe.roundabout$setUnlockedBonusSkin(true);
+                lv.playSound(null, PE.getX(), PE.getY(),
+                        PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                        10, 0.5, 0.5, 0.5, 0.2);
+                user.roundabout$setStandSkin(PlanetWavesEntity.GREEN_SKIN); //COSMIC
+                ((ServerPlayer) PE).displayClientMessage(
+                        Component.translatable("unlock_skin.roundabout.planet_waves_cosmic"), true);
+                user.roundabout$summonStand(lv, true, false);
+            }
+        }
+        meteorshower();
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_1 -> { // Meteor Shower
-                meteorshower();
+                if (this.self.getY() > 319) {
+                   unlockcosmic();
+                } else {
+                    meteorshower();
+                }
                 return true;
             }
             case PowerIndex.POWER_2 -> { // Big Meteor
@@ -1466,7 +1502,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             case PlanetWavesEntity.GREEN_SKIN-> 5; //ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> 4;//StandFireType.PURPLE.id;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> 3;//StandFireType.BLUE.id;
-            case PlanetWavesEntity.MANGA_SKIN -> 1;//StandFireType.CREAM.id;
+            case PlanetWavesEntity.MANGA_SKIN,PlanetWavesEntity.HALLOWEEN -> 1;//StandFireType.CREAM.id;
             default -> 1; //StandFireType.ORANGE.id;
         };
     }
@@ -1490,7 +1526,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         return switch (skn) {
             //case PlanetWavesEntity.SPARTA
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
-            case PlanetWavesEntity.GREEN_SKIN-> ModParticles.GREEN_FLAME;
+            case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
             case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;

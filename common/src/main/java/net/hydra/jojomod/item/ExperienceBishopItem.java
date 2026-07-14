@@ -1,7 +1,9 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -12,15 +14,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ExperienceBishopItem extends Item implements Vanishable {
-    public ExperienceBishopItem(Properties $$0) {
-        super($$0.defaultDurability(3));
+public class ExperienceBishopItem extends BlockItem implements Vanishable {
+    public ExperienceBishopItem(Block $$0, Properties $$1) {
+        super($$0, $$1.defaultDurability(3));
     }
 
     @Override
@@ -40,6 +45,28 @@ public class ExperienceBishopItem extends Item implements Vanishable {
     }
 
 
+    @Override
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
+    }
+
+    @Override
+    public String getDescriptionId(ItemStack itemStack) {
+        return this.getDescriptionId();
+    }
+
+    @Override
+    protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level,
+                                                 @Nullable Player player, ItemStack stack, BlockState state) {
+
+        BlockEntity be = level.getBlockEntity(pos);
+
+        if (be instanceof ChessPieceBlockEntity chess) {
+            chess.setStoredStack(stack);
+        }
+
+        return super.updateCustomBlockEntityTag(pos, level, player, stack, state);
+    }
     public static void attackThePerson(Player player) {
         ItemStack stack = player.getMainHandItem();
         if (stack != null && !(stack.getItem() instanceof ExperienceBishopItem)) {
@@ -49,7 +76,6 @@ public class ExperienceBishopItem extends Item implements Vanishable {
         if (player.level().isClientSide()) {
             return;
         }
-        player.swing(InteractionHand.MAIN_HAND, true);
 
         int levels = player.isShiftKeyDown() ? 1 : 10;
 
