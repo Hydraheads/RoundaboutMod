@@ -372,7 +372,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                     if (!player.getAbilities().instabuild) {
                         destroy++;
                     }
-                    MainUtil.makeBleed(living,0,200,player);
+                    MainUtil.makeBleed(living,0,300,player);
                     player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                     if (destroy >= 3 && !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof MemoryChessPieceItem){
