@@ -46,6 +46,16 @@ public class MoldSporesEntity extends StandEntity {
 
     @Override
     public void tick() {
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
+        for(int j = 0;j<damages.size();j++) {
+            if (Objects.nonNull(this.getUser())) {
+                Entity entity = damages.get(j);
+                if(entity instanceof LivingEntity){
+                ((StandUser) entity).SetInMoldTicks(3);
+                }
+
+            }
+        }
         this.setFadeOut((byte) 1);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
@@ -60,11 +70,16 @@ public class MoldSporesEntity extends StandEntity {
             this.discard();
 
         }
-        if (!client) {
 
             if (user == null) {
                 this.discard();
-            }
+            }else{
+                if(user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
+                    if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
+                        this.discard();
+                    }
+                }
+;            }
             if (this.getDeltaMovement().y > 0.2){
                 this.setDeltaMovement(this.getDeltaMovement().add(0,-00.06,0));
             }else {
@@ -77,26 +92,28 @@ public class MoldSporesEntity extends StandEntity {
             if(range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize){
                 range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
             }
+        if (!client) {
             tickeffect();
             ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                        this.getX(),
-                        this.getY(),
-                        this.getZ(),
-                        (((int) range ^ 3) * 1) + 1, range, range, range, 0.005);
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    (((int) range ^ 3) * 1) + 1, range, range, range, 0.005);
 
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    (int) (((int) range ^ 3) * 0.25) +1, range, range, range, 0.005);
+                    (int) (((int) range ^ 3) * 0.25) + 1, range, range, range, 0.005);
+        }
 
 
-
+                super.tick();
             }
-            super.tick();
 
 
-    }
+
+
 
     public void tickeffect(){
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
@@ -104,14 +121,15 @@ public class MoldSporesEntity extends StandEntity {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
 
+
+
+
+
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
                 boolean isBoss = (MainUtil.isBossMob(entity));
-                boolean playerBalanceDetection = ((entity.getY() - 1.5 < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
-                if(!playerBalanceDetection){
-                    playerBalanceDetection = (((StandUser)entity).getStaringYPos()-0.5 > entity.getY());
-                }
+
                 if (entity instanceof LivingEntity) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
@@ -122,7 +140,7 @@ public class MoldSporesEntity extends StandEntity {
                             && !(entity instanceof FallenMob)
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
                             && !entity.equals(User)
-                            && playerBalanceDetection) {
+                            && ((StandUser)entity).getStaringYPos() -1 > entity.getY()){
                         if (!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
 
                             double width = entity.getBbWidth() / 2;

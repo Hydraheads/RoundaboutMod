@@ -838,6 +838,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$endTick(CallbackInfo ci) {
+        if(MoldTicks > 0){
+            MoldTicks -= 1;
+        }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
@@ -5955,6 +5958,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+
+    public int MoldTicks;
+    @Override
+    public void SetInMoldTicks(int e) {
+        if(this.level().isClientSide) {
+            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
+            MoldTicks = e;
+        }
+    }
+
+    @Override
+    public int getMoldTicks() {
+        return MoldTicks;
     }
 
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
