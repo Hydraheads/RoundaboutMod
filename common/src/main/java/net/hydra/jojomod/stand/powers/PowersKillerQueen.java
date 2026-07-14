@@ -2501,6 +2501,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     damage,
                     0.4f, 1.5f, dmgOnMobs, dmgOnPlayers);
 
+
             if (target != null && bStatus == BOMB_ENTITY) {
                 float hitPoints = config.mobPlantDesintegrationDamage;
 
@@ -2516,11 +2517,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                 boolean isBoss = MainUtil.isBossMob(target);
 
                 if (isBoss) { hitPoints *= 0.70f; }
+                DamageSource desintegrationDmg;
 
                 if (target instanceof LivingEntity LE) {
                     if (LE.hasLineOfSight(this.getSelf()) && !isBoss){
-                        dmg = sneakyDmg;
+                        desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.DISINTEGRATION, null);
+                    }else {
+                        desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.DISINTEGRATION, this.getSelf());
                     }
+                }else {
+                    desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.DISINTEGRATION, this.getSelf());
                 }
 
                 if (target instanceof Player pl) {
@@ -2529,12 +2535,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                      * and unable to respawn for some weird reason.
                      */
                     if (!pl.isCreative()) {
-                        if (playersHitkill) { pl.hurt(dmg, 9999999999.0f); }
-                        else { pl.hurt(dmg, hitPoints); }
+                        if (playersHitkill) { pl.hurt(desintegrationDmg, pl.getMaxHealth()); }
+                        else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
                 } else {
-                    if (mobsHitkill && !isBoss) { target.hurt(dmg, 9999999999.0f);}
-                    else {target.hurt(dmg, hitPoints);}
+                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
+                    else {target.hurt(desintegrationDmg, hitPoints);}
                 }
             }
 
