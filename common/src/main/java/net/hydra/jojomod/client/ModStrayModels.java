@@ -105,6 +105,16 @@ public class ModStrayModels {
     public static WhiteAlbumSlimLeftArmPart WhiteAlbumSlimLeftArm;
     public static WhiteAlbumSlimRightArmPart WhiteAlbumSlimRightArm;
 
+    public static OasisHeadPart OasisHead;
+    public static OasisChestPart OasisChest;
+    public static OasisBodyPart OasisBody;
+    public static OasisLeftLegPart OasisLeftLeg;
+    public static OasisRightLegPart OasisRightLeg;
+    public static OasisLeftArmPart OasisLeftArm;
+    public static OasisRightArmPart OasisRightArm;
+    public static OasisSlimLeftArmPart OasisSlimLeftArm;
+    public static OasisSlimRightArmPart OasisSlimRightArm;
+
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
     public static MoldLeftArm MoldLeftArm;

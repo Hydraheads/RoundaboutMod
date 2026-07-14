@@ -127,6 +127,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> BODY_BAG_EVENT =
             register(ModSounds.BODY_BAG, ModSounds.BODY_BAG_ID);
 
+    public static final RegistryObject<SoundEvent> SUMMON_OASIS_EVENT =
+            register(ModSounds.SUMMON_OASIS, ModSounds.SUMMON_OASIS_ID);
+
     public static final RegistryObject<SoundEvent> CREAM_SUMMON_EVENT =
             register(ModSounds.CREAM_SUMMON, ModSounds.CREAM_SUMMON_ID);
     public static final RegistryObject<SoundEvent> CREAM_VOID_ATTACK_EVENT =

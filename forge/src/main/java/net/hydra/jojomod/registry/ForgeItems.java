@@ -672,12 +672,15 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("max_white_album_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
 
-
     public static final RegistryObject<Item> STAND_DISC_KING_CRIMSON = addToDiscTab(ITEMS.register("king_crimson_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_KING_CRIMSON = addToDiscTab(ITEMS.register("max_king_crimson_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_OASIS = addToWIPTab(ITEMS.register("oasis_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_OASIS = addToWIPTab(ITEMS.register("max_oasis_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null))));
 
     public static final RegistryObject<Item> STAND_DISC_SOFT_AND_WET = addToDiscTab(ITEMS.register("soft_and_wet_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null))));
@@ -721,7 +724,6 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> STAND_DISC_CALIFORNIA_KING_BED = addToDiscTab(ITEMS.register("california_king_bed_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCalifornia(null))));
-
 
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));

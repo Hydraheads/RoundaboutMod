@@ -105,6 +105,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             delta = 0;
         }
         float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        float oasisAmt = PowersOasis.getOasisAmt(player, delta);
         if (whiteAmt > 0) {
             boolean isHurt = player.hurtTime > 0;
             float r = 1;
@@ -115,13 +116,13 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
-            && PW.cracked){
-                path = "cracked/"+path;
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                    && PW.cracked) {
+                path = "cracked/" + path;
             }
-                ClientUtil.pushPoseAndCooperate(poseStack,8);
+            ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
-                model.rightArm.translateAndRotate(poseStack);
+            model.rightArm.translateAndRotate(poseStack);
             if (((IPlayerModel) this.model).roundabout$getSlim()) {
                 ModStrayModels.WhiteAlbumSlimRightArm.render(
                         player, delta, poseStack, bufferSource, packedLight,
@@ -131,7 +132,29 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         player, delta, poseStack, bufferSource, packedLight,
                         r, g, b, whiteAmt, path);
             }
-                ClientUtil.popPoseAndCooperate(poseStack,8);
+            ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+        } else if (oasisAmt > 0) {
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersOasis.getSkinString(skin);
+
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+
+            model.rightArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.OasisSlimRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            } else {
+                ModStrayModels.OasisRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+
         } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
@@ -177,6 +200,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             delta = 0;
         }
         float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        float oasisAmt = PowersOasis.getOasisAmt(player, delta);
         if (whiteAmt > 0) {
             boolean isHurt = player.hurtTime > 0;
             float r = 1;
@@ -203,6 +227,27 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         r, g, b, whiteAmt, path);
             }
             ClientUtil.popPoseAndCooperate(poseStack,8);
+
+        } else if (oasisAmt > 0) {
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersOasis.getSkinString(skin);
+
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+            model.leftArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.OasisSlimLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            } else {
+                ModStrayModels.OasisLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+
         } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;

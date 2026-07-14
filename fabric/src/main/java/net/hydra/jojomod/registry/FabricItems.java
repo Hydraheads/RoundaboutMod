@@ -91,6 +91,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_METALLICA = registerItem("max_metallica_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
 
+    public static Item STAND_DISC_OASIS = registerItem("oasis_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null)));
+    public static Item MAX_STAND_DISC_OASIS = registerItem("max_oasis_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null)));
+
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
     public static Item MAX_STAND_DISC_SOFT_AND_WET = registerItem("max_soft_and_wet_disc",
@@ -653,6 +658,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
                         entries.accept(STAND_DISC_BLACK_SABBATH);
                         entries.accept(FANCY_LIGHTER);
+                        entries.accept(STAND_DISC_OASIS);
+                        entries.accept(MAX_STAND_DISC_OASIS);
 
 
                     }).build());
@@ -711,6 +718,9 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_WHITE_ALBUM = MAX_STAND_DISC_WHITE_ALBUM;
         ModItems.STAND_DISC_TUSK = STAND_DISC_TUSK;
         ((MaxStandDiscItem)MAX_STAND_DISC_TUSK).baseDisc = ((StandDiscItem)STAND_DISC_TUSK);
+        ModItems.STAND_DISC_OASIS = STAND_DISC_OASIS;
+        ModItems.MAX_STAND_DISC_OASIS = MAX_STAND_DISC_OASIS;
+        ((MaxStandDiscItem)MAX_STAND_DISC_OASIS).baseDisc = ((StandDiscItem)STAND_DISC_OASIS);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);

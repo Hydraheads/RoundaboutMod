@@ -373,6 +373,16 @@ public class ClientForgeEvents {
         ModStrayModels.WhiteAlbumLeftArm = new WhiteAlbumLeftArmPart();
         ModStrayModels.WhiteAlbumSlimLeftArm = new WhiteAlbumSlimLeftArmPart();
 
+        ModStrayModels.OasisHead = new OasisHeadPart();
+        ModStrayModels.OasisChest = new OasisChestPart();
+        ModStrayModels.OasisBody = new OasisBodyPart();
+        ModStrayModels.OasisLeftLeg = new OasisLeftLegPart();
+        ModStrayModels.OasisRightLeg = new OasisRightLegPart();
+        ModStrayModels.OasisRightArm = new OasisRightArmPart();
+        ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
+        ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
+        ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
+
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();
         ModStrayModels.VampireHairFlesh = new VampireHairFleshBudLayer();
@@ -404,6 +414,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.POINTER_SOFT.get(), SmallPointerParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AIR_CRACKLE.get(), AirCrackleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.HEARTBEAT.get(), HeartbeatParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.MUD_SPLASH.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MENACING.get(), MenacingParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VACUUM.get(), VacuumParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.ORANGE_FLAME.get(), StandFlameParticle.Provider::new);

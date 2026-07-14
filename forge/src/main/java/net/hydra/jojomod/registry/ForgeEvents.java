@@ -368,6 +368,10 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_RATT = ForgeItems.MAX_STAND_DISC_RATT.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_RATT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_RATT.get());
 
+        ModItems.STAND_DISC_OASIS = ForgeItems.STAND_DISC_OASIS.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_OASIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_OASIS.get());
+        ModItems.MAX_STAND_DISC_OASIS = ForgeItems.MAX_STAND_DISC_OASIS.get();
+
         ModItems.STAND_DISC_SOFT_AND_WET = ForgeItems.STAND_DISC_SOFT_AND_WET.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_SOFT_AND_WET.get());
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = ForgeItems.MAX_STAND_DISC_SOFT_AND_WET.get();

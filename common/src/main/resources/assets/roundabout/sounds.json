@@ -5,6 +5,12 @@
       "roundabout:summon_stand"
     ]
   },
+  "summon_oasis": {
+    "subtitle": "sounds.roundabout.summon_oasis",
+    "sounds": [
+      "roundabout:summon_oasis"
+    ]
+  },
   "summon_diver_down": {
     "subtitle": "sounds.roundabout.summon_diver_down",
     "sounds": [

@@ -39,6 +39,7 @@ public class FabricSounds {
         addSound(ModSounds.MELEE_GUARD_SOUND_ID, ModSounds.MELEE_GUARD_SOUND_EVENT);
         addSound(ModSounds.HIT_1_SOUND_ID, ModSounds.HIT_1_SOUND_EVENT);
         addSound(ModSounds.INHALE_ID, ModSounds.INHALE_EVENT);
+        addSound(ModSounds.SUMMON_OASIS_ID, ModSounds.SUMMON_OASIS_EVENT);
 
         addSound(ModSounds.TWAU_BARRAGE_ID, ModSounds.TWAU_BARRAGE_EVENT);
         addSound(ModSounds.TWAU_BARRAGE_2_ID, ModSounds.TWAU_BARRAGE_2_EVENT);
