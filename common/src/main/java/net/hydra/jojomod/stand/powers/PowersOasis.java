@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -21,6 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -255,10 +258,20 @@ public class PowersOasis extends NewDashPreset {
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
     }
 
+
     public void spawnWallPunchParticles(Entity entity) {
         if (!this.self.level().isClientSide()) {
             Roundabout.LOGGER.info("spawned badass water particles");
 
+            if (!this.self.hasLineOfSight(entity)) {
+                BlockHitResult hitBlock = this.getLookedBlock(3);
+                Vec3 pos = hitBlock.getLocation();
+                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
+                float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
+                this.self.level().playSound(null, hitBlock.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
+            }
+
+/*
             BlockHitResult hit = this.getLookedBlock(3);
 
             if (hit.getType() == HitResult.Type.BLOCK) {
@@ -276,8 +289,11 @@ public class PowersOasis extends NewDashPreset {
                     this.self.level().playSound(null, hit.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
                 }
             }
+
+ */
         }
     }
+
 
     @Override
     public void setAttack(){
@@ -371,6 +387,88 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
+
+    // in the for loop check if an entity (nearest bounding box) is farther than block, then don't run that code for subsequent loops.
+    // if at least one entity that is in barrage is behind a wall it is valid case for particles to spawn
+
+    // spawn particles in radius surrounding the hit block
+
+    // possible edge case where mob is in front of other mob encased in blocks, still being hit but no getLookedBlock
+    // (no because getLookedBlock ignores entities)
+
+    // look into hasLineOfSight solution
+
+    boolean runGate = true;
+
+    public void spawnBarrageParticles() {
+        if (!this.self.level().isClientSide) {
+
+            BlockHitResult hitBlock = this.getLookedBlock(3);
+            Vec3 pos = hitBlock.getLocation();
+            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .1, .1, .1, .05);
+            float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
+            this.self.level().playSound(null, hitBlock.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
+
+        }
+    }
+
+    @Override
+    public void barrageImpact(Entity entity, int hitNumber) {
+        super.barrageImpact(entity, hitNumber);
+
+        if (!this.self.level().isClientSide && !this.self.hasLineOfSight(entity)) {
+            Roundabout.LOGGER.info("target found behind wall");
+            spawnBarrageParticles();
+        }
+
+    }
+
+    @Override
+    public void standBarrageHit(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                List<Entity> listE = getTargetEntityListThroughWalls(this.self,-1, 25);
+                int id = -1;
+                if (storeEnt != null){
+                    id = storeEnt.getId();
+                }
+                C2SPacketUtil.standBarrageHitPacket(id, this.attackTimeDuring);
+                if (!listE.isEmpty() && ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect){
+                    for (int i = 0; i< listE.size(); i++){
+                        if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                            if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                                C2SPacketUtil.standBarrageHitPacket(listE.get(i).getId(), this.attackTimeDuring + 1000);
+                            }
+                        }
+                    }
+                }
+
+
+                if (this.attackTimeDuring == this.getBarrageLength()){
+                    this.attackTimeDuring = -10;
+                }
+            }
+        } else {
+            /*Caps how far out the barrage hit goes*/
+            Entity targetEntity = getTargetEntity(this.self,-1);
+
+            List<Entity> listE = getTargetEntityListThroughWalls(this.self,-1, 25);
+            barrageImpact(storeEnt, this.attackTimeDuring);
+            if (!listE.isEmpty()){
+
+                for (int i = 0; i< listE.size(); i++){
+                    if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
+                        if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < 3.5) {
+                            barrageImpact(listE.get(i), this.attackTimeDuring + 1000);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        findDeflectables();
+    }
 
     // inherited entity check will be used when a player is
 
