@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -49,6 +50,10 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
 
         if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
         && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+            return;
+        }
+        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit()
+                && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
             return;
         }
 

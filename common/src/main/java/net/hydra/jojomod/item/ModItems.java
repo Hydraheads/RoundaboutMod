@@ -45,6 +45,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_GREEN_DAY;
     public static Item MAX_STAND_DISC_GREEN_DAY;
+    public static Item STAND_DISC_OASIS;
+    public static Item MAX_STAND_DISC_OASIS;
     public static Item STAND_DISC_SOFT_AND_WET;
     public static Item MAX_STAND_DISC_SOFT_AND_WET;
     public static Item STAND_DISC_WHITE_ALBUM;

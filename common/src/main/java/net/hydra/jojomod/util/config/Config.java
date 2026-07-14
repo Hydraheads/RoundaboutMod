@@ -98,6 +98,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
+    public OasisSettings oasisSettings;
+    @NestedOption(group = "modded")
     public WhiteAlbumSettings whiteAlbumSettings;
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
@@ -853,6 +855,11 @@ public class Config implements Cloneable {
         public Integer survivorCupidCreativeRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canUseSurvivorOnBossesInSurvival;
+    }
+
+    public static class OasisSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableOasis;
     }
 
     public static class ManhattanTransferSettings {

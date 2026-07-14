@@ -2400,6 +2400,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
+    public int roundabout$oasisVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getOasisVanishTicks(){
+        return roundabout$oasisVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setOasisVanishTicks(int set){
+        roundabout$oasisVanishTicks = Mth.clamp(set,0,10);
+    }
+
+    @Unique
     public int roundabout$whiteAlbumVanishTicks = 0;
 
     @Unique
@@ -5234,6 +5248,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
+        }
+
+        if (roundabout$getStandPowers() instanceof PowersOasis && active){
+            roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks()+1);
+        } else {
+            roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks()-1);
         }
 
         if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active){
