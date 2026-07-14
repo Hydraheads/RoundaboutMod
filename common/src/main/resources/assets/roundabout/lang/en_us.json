@@ -164,6 +164,8 @@
   "item.roundabout.max_tusk_disc": "Stand Disc+",
   "item.roundabout.mandom_disc": "Stand Disc",
   "item.roundabout.walking_heart_disc": "Stand Disc",
+  "item.roundabout.king_crimson_disc": "Stand Disc",
+  "item.roundabout.max_king_crimson_disc": "Stand Disc+",
   "item.roundabout.max_walking_heart_disc": "Stand Disc+",
   "item.roundabout.max_star_platinum_disc": "Stand Disc+",
   "item.roundabout.max_white_album_disc": "Stand Disc+",
@@ -222,6 +224,7 @@
   "item.roundabout.white_album_disc.desc": "White Album",
   "item.roundabout.california_king_bed_disc.desc": "California King Bed",
   "item.roundabout.california_king_bed_disc.desc.short": "CA King Bed",
+  "item.roundabout.king_crimson_disc.desc": "King Crimson",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",
