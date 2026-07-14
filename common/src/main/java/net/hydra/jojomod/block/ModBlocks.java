@@ -716,6 +716,9 @@ public class ModBlocks {
                         .mapColor(MapColor.NONE)
                         .strength(0F, 0F)
                         .sound(stype)
+                        .lightLevel((p_152607_) -> {
+                            return 1;
+                        })
                         .pushReaction(PushReaction.DESTROY)
                         .noCollission()
         );
