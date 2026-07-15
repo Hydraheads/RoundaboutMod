@@ -12,6 +12,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -67,6 +68,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -96,6 +98,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -2812,7 +2816,21 @@ public class MainUtil {
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY){
+            BlackSabbathPlayerInventory $$6 = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
+            PowerTypes.initializeStandPower(player);
+
+            if (player.containerMenu != player.inventoryMenu) {
+                player.containerMenu = player.inventoryMenu;
+            }
+
+            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
+            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
+                    cid);
+            player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
+            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
+        }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {

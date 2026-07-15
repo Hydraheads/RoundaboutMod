@@ -75,12 +75,6 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player $$0, int $$1) {
-        ItemStack $$2 = ItemStack.EMPTY;
-        return $$2;
-    }
-
-    @Override
     public void slotsChanged(Container $$0) {
         super.slotsChanged($$0);
     }
@@ -102,6 +96,31 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
         if (!$$0.level().isClientSide) {
             this.clearContainer($$0, this.craftSlots);
         }
+    }
+
+    @Override
+    public ItemStack quickMoveStack(Player $$0, int $$1) {
+        ItemStack $$2 = ItemStack.EMPTY;
+        Slot $$3 = this.slots.get($$1);
+        if ($$3 != null && $$3.hasItem()) {
+            ItemStack $$4 = $$3.getItem();
+            $$2 = $$4.copy();
+            if ($$1 < 9) {
+                if (!this.moveItemStackTo($$4, 9, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo($$4, 0, 9, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if ($$4.isEmpty()) {
+                $$3.setByPlayer(ItemStack.EMPTY);
+            } else {
+                $$3.setChanged();
+            }
+        }
+
+        return $$2;
     }
 
     public CraftingContainer getCraftSlots() {

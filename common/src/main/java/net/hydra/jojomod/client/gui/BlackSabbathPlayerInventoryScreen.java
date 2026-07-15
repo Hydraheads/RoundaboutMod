@@ -80,9 +80,6 @@ public class BlackSabbathPlayerInventoryScreen
         LivingEntity se = null;
         int $$4 = (this.width - this.imageWidth) / 2;
         int $$5 = (this.height - this.imageHeight) / 2;
-        if(((StandUser)player).roundabout$getStandPowers() instanceof PowersBlackSabbath PS){
-            se = ModEntities.BLACK_SABBATH.create(player.level());
-        }
         $$0.blit(HORSE_INVENTORY_LOCATION, $$4, $$5, 0, 0, this.imageWidth, this.imageHeight);
             $$0.blit(HORSE_INVENTORY_LOCATION, $$4 + 79, $$5 + 17, 0, this.imageHeight, 9 * 18, 54);
 
@@ -90,7 +87,7 @@ public class BlackSabbathPlayerInventoryScreen
 
 
         InventoryScreen.renderEntityInInventoryFollowsMouse(
-                $$0, $$4 + 51, $$5 + 60, 17, (float)($$4 + 51) - this.xMouse, (float)($$5 + 75 - 50) - this.yMouse, se
+                $$0, $$4 + 51, $$5 + 60, 17, (float)($$4 + 51) - this.xMouse, (float)($$5 + 75 - 50) - this.yMouse, player
         );
     }
 

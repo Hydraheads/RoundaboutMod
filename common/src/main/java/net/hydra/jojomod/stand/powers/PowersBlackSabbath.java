@@ -176,7 +176,6 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(player.level() != null) {
                 this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
             }
-            BlackSabbathPlayerInventory bi = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
             C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY);
         }
     }

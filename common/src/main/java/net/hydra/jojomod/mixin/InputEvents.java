@@ -24,6 +24,7 @@ import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -1245,6 +1246,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
 
                         if(ClientUtil.checkthis == 2){
+                            BlackSabbathPlayerInventory $$4 = new BlackSabbathPlayerInventory(player);
                             player.clientSideCloseContainer();
 
                             BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
