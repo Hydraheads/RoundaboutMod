@@ -31,6 +31,7 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
     private static final ResourceLocation AQUA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/aqua.png");
     private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/heaven.png");
     private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/beta.png");
+    private static final ResourceLocation CONCEPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/concept_art.png");
 
     public KingCrimsonRenderer(EntityRendererProvider.Context context) {
         super(context, new KingCrimsonModel<>(context.bakeLayer(ModEntityRendererClient.KING_CRIMSON_LAYER)),0f);
@@ -66,6 +67,8 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
             return BLACK;
         } else if (BT == KingCrimsonEntity.BETA){
             return BETA;
+        } else if (BT == KingCrimsonEntity.CONCEPT){
+            return CONCEPT;
         }
         return PART_5_SKIN;
     }

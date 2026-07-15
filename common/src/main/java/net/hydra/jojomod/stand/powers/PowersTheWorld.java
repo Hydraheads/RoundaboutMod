@@ -373,10 +373,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.THE_NETHER);
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
-                $$1.add(TheWorldEntity.BETA);
                 $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
+                $$1.add(TheWorldEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }

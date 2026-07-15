@@ -92,6 +92,8 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.dark");
         }if (skinId == KingCrimsonEntity.BETA){
             return Component.translatable(  "skins.roundabout.king_crimson.beta");
+        }if (skinId == KingCrimsonEntity.CONCEPT){
+            return Component.translatable(  "skins.roundabout.king_crimson.concept");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
@@ -116,9 +118,10 @@ public class PowersKingCrimson extends NewPunchingStand {
                 $$1.add(KingCrimsonEntity.HEAVEN);
                 $$1.add(KingCrimsonEntity.AQUA);
                 $$1.add(KingCrimsonEntity.YELLOW);
-            } if (Level > 4 || bypass) {
                 $$1.add(KingCrimsonEntity.GREEN);
+            } if (Level > 4 || bypass) {
                 $$1.add(KingCrimsonEntity.STARLESS);
+                $$1.add(KingCrimsonEntity.CONCEPT);
                 $$1.add(KingCrimsonEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(KingCrimsonEntity.END);
