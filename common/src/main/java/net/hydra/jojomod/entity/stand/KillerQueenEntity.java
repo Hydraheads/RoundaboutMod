@@ -1,12 +1,17 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class KillerQueenEntity extends FollowingStandEntity {
 
@@ -99,6 +104,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
         MOB_PLANT = 123,
         MOB_PLANT_2 = 124,
         BUBBLE_SEND = 125,
+        BITES_THE_DUST_FOLLOW = 126,
         SHA_SEND = 88,
     	HEAVY_STRIKE = 26;
     
@@ -204,6 +210,26 @@ public class KillerQueenEntity extends FollowingStandEntity {
             } else {
                 this.blockThrowAnimation.stop();
             }
+
+            if (animation == BITES_THE_DUST_FOLLOW) {
+                this.bitesTheDust.startIfStopped(this.tickCount);
+            } else {
+                this.bitesTheDust.stop();
+            }
         }
+    }
+
+    @Override
+    public Vec3 getStandOffsetVector(LivingEntity standUser){
+
+        if (((StandUser)standUser).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.inBitesTheDustMode()) {
+            /**
+             * For some reason the "this.getFollowing()" will always return null
+             *
+            */
+            return getIdleOffset(this.getFollowing());
+        }
+
+        return super.getStandOffsetVector(standUser);
     }
 }
