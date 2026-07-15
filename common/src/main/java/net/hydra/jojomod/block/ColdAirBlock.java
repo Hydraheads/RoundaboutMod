@@ -44,7 +44,7 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
                                 }
                             }
                         } else {
-                            if (MainUtil.canFreeze($$3)) {
+                            if (MainUtil.canFreeze($$3) && LE.hurtTime <= 0) {
                                 $$3.makeStuckInBlock($$0, new Vec3((double) 0.88F, (double) 0.88F, (double) 0.88F));
                             }
                         }
