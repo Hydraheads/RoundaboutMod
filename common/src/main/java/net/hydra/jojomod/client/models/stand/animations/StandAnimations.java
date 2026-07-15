@@ -2205,12 +2205,8 @@ public class StandAnimations {
             ))
             .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.033F, KeyframeAnimations.degreeVec(18.0174F, -13.3F, 0.4607F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.0495F, KeyframeAnimations.degreeVec(17.4379F, -17.4879F, 0.5596F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.099F, KeyframeAnimations.degreeVec(20.1192F, -5.4737F, 0.2039F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.1155F, KeyframeAnimations.degreeVec(15.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.1815F, KeyframeAnimations.degreeVec(19.4928F, 21.504F, -1.0963F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.231F, KeyframeAnimations.degreeVec(15.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.1155F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.231F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.6014F, -1.9074F), AnimationChannel.Interpolations.CATMULLROM),
@@ -2392,6 +2388,16 @@ public class StandAnimations {
                     new Keyframe(0.066F, KeyframeAnimations.degreeVec(0.0F, 0.0F, -10.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1485F, KeyframeAnimations.degreeVec(0.0F, 7.5F, 7.5F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.231F, KeyframeAnimations.degreeVec(0.0F, -2.5F, 7.5F), AnimationChannel.Interpolations.LINEAR)
+            ))
+            .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.1155F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.231F, KeyframeAnimations.degreeVec(17.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+            ))
+            .addAnimation("torso", new AnimationChannel(AnimationChannel.Targets.POSITION,
+                    new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -0.6014F, -1.9074F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.1155F, KeyframeAnimations.posVec(0.0F, -0.6014F, -1.9074F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.231F, KeyframeAnimations.posVec(0.0F, -0.6014F, -1.9074F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .build();
 
