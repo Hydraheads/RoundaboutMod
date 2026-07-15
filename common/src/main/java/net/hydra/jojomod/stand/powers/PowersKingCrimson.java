@@ -96,6 +96,8 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.concept");
         }if (skinId == KingCrimsonEntity.RED){
             return Component.translatable(  "skins.roundabout.king_crimson.red");
+        }if (skinId == KingCrimsonEntity.BLUE){
+            return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
@@ -115,6 +117,7 @@ public class PowersKingCrimson extends NewPunchingStand {
                 $$1.add(KingCrimsonEntity.SPINE_ART);
                 $$1.add(KingCrimsonEntity.AGOGO);
             } if (Level > 2 || bypass) {
+                $$1.add(KingCrimsonEntity.BLUE);
                 $$1.add(KingCrimsonEntity.BLACK);
                 $$1.add(KingCrimsonEntity.DARK);
             } if (Level > 3 || bypass) {

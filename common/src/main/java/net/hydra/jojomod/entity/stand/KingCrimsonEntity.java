@@ -25,7 +25,8 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             BLACK = 13,
             BETA = 14,
             CONCEPT = 15,
-            RED = 16;
+            RED = 16,
+            BLUE = 17;
 
 
     public final AnimationState hideFists = new AnimationState();
