@@ -72,8 +72,24 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.end");
         } if (skinId == KingCrimsonEntity.END_2){
             return Component.translatable(  "skins.roundabout.king_crimson.end_2");
-        }  if (skinId == KingCrimsonEntity.STARLESS){
+        } if (skinId == KingCrimsonEntity.STARLESS){
             return Component.translatable(  "skins.roundabout.king_crimson.starless");
+        } if (skinId == KingCrimsonEntity.HEAVEN){
+            return Component.translatable(  "skins.roundabout.king_crimson.heaven");
+        }if (skinId == KingCrimsonEntity.AGOGO){
+            return Component.translatable(  "skins.roundabout.king_crimson.agogo");
+        }if (skinId == KingCrimsonEntity.SPINE_ART){
+            return Component.translatable(  "skins.roundabout.king_crimson.spine_art");
+        }if (skinId == KingCrimsonEntity.GREEN){
+            return Component.translatable(  "skins.roundabout.king_crimson.green");
+        }if (skinId == KingCrimsonEntity.YELLOW){
+            return Component.translatable(  "skins.roundabout.king_crimson.yellow");
+        }if (skinId == KingCrimsonEntity.AQUA){
+            return Component.translatable(  "skins.roundabout.king_crimson.aqua");
+        }if (skinId == KingCrimsonEntity.BLACK){
+            return Component.translatable(  "skins.roundabout.king_crimson.black");
+        }if (skinId == KingCrimsonEntity.DARK){
+            return Component.translatable(  "skins.roundabout.king_crimson.dark");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
@@ -86,9 +102,20 @@ public class PowersKingCrimson extends NewPunchingStand {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+
+            $$1.add(KingCrimsonEntity.MANGA_SKIN);
             if (Level > 1 || bypass) {
-                $$1.add(KingCrimsonEntity.MANGA_SKIN);
+                $$1.add(KingCrimsonEntity.SPINE_ART);
+                $$1.add(KingCrimsonEntity.AGOGO);
             } if (Level > 2 || bypass) {
+                $$1.add(KingCrimsonEntity.BLACK);
+                $$1.add(KingCrimsonEntity.DARK);
+            } if (Level > 3 || bypass) {
+                $$1.add(KingCrimsonEntity.HEAVEN);
+                $$1.add(KingCrimsonEntity.AQUA);
+            } if (Level > 4 || bypass) {
+                $$1.add(KingCrimsonEntity.YELLOW);
+                $$1.add(KingCrimsonEntity.GREEN);
                 $$1.add(KingCrimsonEntity.STARLESS);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(KingCrimsonEntity.END);
