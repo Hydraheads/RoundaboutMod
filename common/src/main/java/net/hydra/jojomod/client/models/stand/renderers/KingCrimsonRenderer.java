@@ -19,6 +19,18 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
 
     private static final ResourceLocation PART_5_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/anime.png");
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/manga.png");
+    private static final ResourceLocation END_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end.png");
+    private static final ResourceLocation END_2_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end_2.png");
+    private static final ResourceLocation STARLESS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/starless.png");
+    private static final ResourceLocation AGOGO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/agogo.png");
+    private static final ResourceLocation DARK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/dark.png");
+    private static final ResourceLocation BLACK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/black.png");
+    private static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/spine_art.png");
+    private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/green.png");
+    private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/yellow.png");
+    private static final ResourceLocation AQUA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/aqua.png");
+    private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/heaven.png");
+    private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/beta.png");
 
     public KingCrimsonRenderer(EntityRendererProvider.Context context) {
         super(context, new KingCrimsonModel<>(context.bakeLayer(ModEntityRendererClient.KING_CRIMSON_LAYER)),0f);
@@ -30,6 +42,30 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
         byte BT = entity.getSkin();
         if (BT == KingCrimsonEntity.MANGA_SKIN){
             return MANGA_SKIN;
+        } else if (BT == KingCrimsonEntity.STARLESS){
+            return STARLESS_SKIN;
+        } else if (BT == KingCrimsonEntity.END){
+            return END_SKIN;
+        } else if (BT == KingCrimsonEntity.END_2){
+            return END_2_SKIN;
+        } else if (BT == KingCrimsonEntity.AGOGO){
+            return AGOGO;
+        } else if (BT == KingCrimsonEntity.HEAVEN){
+            return HEAVEN;
+        } else if (BT == KingCrimsonEntity.SPINE_ART){
+            return SPINE_ART;
+        } else if (BT == KingCrimsonEntity.GREEN){
+            return GREEN;
+        } else if (BT == KingCrimsonEntity.YELLOW){
+            return YELLOW;
+        } else if (BT == KingCrimsonEntity.AQUA){
+            return AQUA;
+        } else if (BT == KingCrimsonEntity.DARK){
+            return DARK;
+        } else if (BT == KingCrimsonEntity.BLACK){
+            return BLACK;
+        } else if (BT == KingCrimsonEntity.BETA){
+            return BETA;
         }
         return PART_5_SKIN;
     }
