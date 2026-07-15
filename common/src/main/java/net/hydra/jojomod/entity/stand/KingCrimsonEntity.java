@@ -11,7 +11,10 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     }
     public static final byte
             PART_5_SKIN = 1,
-            MANGA_SKIN = 2;
+            MANGA_SKIN = 2,
+            STARLESS = 3,
+            END = 4,
+            END_2 = 5;
 
 
     public final AnimationState hideFists = new AnimationState();

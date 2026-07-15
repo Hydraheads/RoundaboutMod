@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -67,6 +68,12 @@ public class PowersKingCrimson extends NewPunchingStand {
     public static Component getSkinNameT(byte skinId){
         if (skinId == KingCrimsonEntity.MANGA_SKIN){
             return Component.translatable(  "skins.roundabout.king_crimson.manga");
+        } if (skinId == KingCrimsonEntity.END){
+            return Component.translatable(  "skins.roundabout.king_crimson.end");
+        } if (skinId == KingCrimsonEntity.END_2){
+            return Component.translatable(  "skins.roundabout.king_crimson.end_2");
+        }  if (skinId == KingCrimsonEntity.STARLESS){
+            return Component.translatable(  "skins.roundabout.king_crimson.starless");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
@@ -81,6 +88,11 @@ public class PowersKingCrimson extends NewPunchingStand {
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
                 $$1.add(KingCrimsonEntity.MANGA_SKIN);
+            } if (Level > 2 || bypass) {
+                $$1.add(KingCrimsonEntity.STARLESS);
+            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(KingCrimsonEntity.END);
+                $$1.add(KingCrimsonEntity.END_2);
             }
         }
         return $$1;

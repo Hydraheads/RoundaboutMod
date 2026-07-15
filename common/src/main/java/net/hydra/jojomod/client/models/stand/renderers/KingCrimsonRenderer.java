@@ -19,6 +19,9 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
 
     private static final ResourceLocation PART_5_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/anime.png");
     private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/manga.png");
+    private static final ResourceLocation END_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end.png");
+    private static final ResourceLocation END_2_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end_2.png");
+    private static final ResourceLocation STARLESS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/starless.png");
 
     public KingCrimsonRenderer(EntityRendererProvider.Context context) {
         super(context, new KingCrimsonModel<>(context.bakeLayer(ModEntityRendererClient.KING_CRIMSON_LAYER)),0f);
@@ -30,6 +33,12 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
         byte BT = entity.getSkin();
         if (BT == KingCrimsonEntity.MANGA_SKIN){
             return MANGA_SKIN;
+        } else if (BT == KingCrimsonEntity.STARLESS){
+            return STARLESS_SKIN;
+        } else if (BT == KingCrimsonEntity.END){
+            return END_SKIN;
+        } else if (BT == KingCrimsonEntity.END_2){
+            return END_2_SKIN;
         }
         return PART_5_SKIN;
     }
