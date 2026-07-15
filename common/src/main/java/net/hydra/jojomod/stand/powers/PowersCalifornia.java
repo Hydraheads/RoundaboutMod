@@ -486,6 +486,16 @@ public class PowersCalifornia extends NewDashPreset {
             return Component.translatable("skins.roundabout.california_king_bed.spooky");
         } else if (skinId == CaliforniaKingBedEntity.EXPERIENCE) {
             return Component.translatable("skins.roundabout.california_king_bed.experience");
+        } else if (skinId == CaliforniaKingBedEntity.CARD_SUIT) {
+            return Component.translatable("skins.roundabout.california_king_bed.card_suit");
+        } else if (skinId == CaliforniaKingBedEntity.COVER) {
+            return Component.translatable("skins.roundabout.california_king_bed.cover");
+        } else if (skinId == CaliforniaKingBedEntity.SPINE_ART) {
+            return Component.translatable("skins.roundabout.california_king_bed.spine_art");
+        } else if (skinId == CaliforniaKingBedEntity.HEAVEN) {
+            return Component.translatable("skins.roundabout.california_king_bed.heaven");
+        } else if (skinId == CaliforniaKingBedEntity.BLUE) {
+            return Component.translatable("skins.roundabout.california_king_bed.blue");
         }
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
@@ -1456,6 +1466,11 @@ public class PowersCalifornia extends NewDashPreset {
         $$1.add(CaliforniaKingBedEntity.EGYPT);
         $$1.add(CaliforniaKingBedEntity.SPOOKY);
         $$1.add(CaliforniaKingBedEntity.EXPERIENCE);
+        $$1.add(CaliforniaKingBedEntity.CARD_SUIT);
+        $$1.add(CaliforniaKingBedEntity.SPINE_ART);
+        $$1.add(CaliforniaKingBedEntity.HEAVEN);
+        $$1.add(CaliforniaKingBedEntity.COVER);
+        $$1.add(CaliforniaKingBedEntity.BLUE);
         return $$1;
     }
 

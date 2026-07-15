@@ -21,6 +21,11 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
     private static final ResourceLocation EGYPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/egypt.png");
     private static final ResourceLocation SPOOKY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spooky.png");
     private static final ResourceLocation EXPERIENCE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/experience.png");
+    private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/blue.png");
+    private static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spine_art.png");
+    private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/heaven.png");
+    private static final ResourceLocation COVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/cover.png");
+    private static final ResourceLocation CARD_SUIT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/card_suit.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);
@@ -34,6 +39,11 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
             case (CaliforniaKingBedEntity.EGYPT) -> EGYPT;
             case (CaliforniaKingBedEntity.SPOOKY) -> SPOOKY;
             case (CaliforniaKingBedEntity.EXPERIENCE) -> EXPERIENCE;
+            case (CaliforniaKingBedEntity.CARD_SUIT) -> CARD_SUIT;
+            case (CaliforniaKingBedEntity.COVER) -> COVER;
+            case (CaliforniaKingBedEntity.SPINE_ART) -> SPINE_ART;
+            case (CaliforniaKingBedEntity.HEAVEN) -> HEAVEN;
+            case (CaliforniaKingBedEntity.BLUE) -> BLUE;
             default -> PART_8_SKIN;
         };
     }
