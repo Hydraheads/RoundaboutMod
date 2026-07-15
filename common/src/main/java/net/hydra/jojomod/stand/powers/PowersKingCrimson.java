@@ -94,6 +94,8 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.beta");
         }if (skinId == KingCrimsonEntity.CONCEPT){
             return Component.translatable(  "skins.roundabout.king_crimson.concept");
+        }if (skinId == KingCrimsonEntity.RED){
+            return Component.translatable(  "skins.roundabout.king_crimson.red");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
@@ -101,12 +103,13 @@ public class PowersKingCrimson extends NewPunchingStand {
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(KingCrimsonEntity.PART_5_SKIN);
+        $$1.add(KingCrimsonEntity.RED);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
 
+            $$1.add(KingCrimsonEntity.PART_5_SKIN);
             $$1.add(KingCrimsonEntity.MANGA_SKIN);
             if (Level > 1 || bypass) {
                 $$1.add(KingCrimsonEntity.SPINE_ART);
