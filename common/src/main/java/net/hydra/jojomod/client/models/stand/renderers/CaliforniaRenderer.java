@@ -26,6 +26,7 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
     private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/heaven.png");
     private static final ResourceLocation COVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/cover.png");
     private static final ResourceLocation CARD_SUIT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/card_suit.png");
+    private static final ResourceLocation SLEEPY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sleepy.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);
@@ -44,6 +45,7 @@ public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
             case (CaliforniaKingBedEntity.SPINE_ART) -> SPINE_ART;
             case (CaliforniaKingBedEntity.HEAVEN) -> HEAVEN;
             case (CaliforniaKingBedEntity.BLUE) -> BLUE;
+            case (CaliforniaKingBedEntity.SLEEPY) -> SLEEPY;
             default -> PART_8_SKIN;
         };
     }

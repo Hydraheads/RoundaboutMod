@@ -27,7 +27,8 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             COVER = 7,
             SPINE_ART = 8,
             HEAVEN = 9,
-            BLUE = 10;
+            BLUE = 10,
+            SLEEPY = 11;
 
     public final AnimationState fall_brace = new AnimationState();
     public final AnimationState sleep = new AnimationState();
