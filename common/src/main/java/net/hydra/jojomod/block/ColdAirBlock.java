@@ -38,7 +38,7 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
                                     !((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND)
                             )){
                                 if (MainUtil.canFreeze(pl)) {
-                                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
+                                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.7F, (double) 0.7F, (double) 0.7F));
                                 } else {
                                     $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.9F, (double) 0.4F));
                                 }
