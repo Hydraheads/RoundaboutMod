@@ -190,7 +190,7 @@ public class StepRuleEntity extends Entity {
                                                     }
                                                     discard();
                                                 } else {
-                                                    mb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 1);
+                                                    mb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 3);
                                                     discard();
                                                 }
 
