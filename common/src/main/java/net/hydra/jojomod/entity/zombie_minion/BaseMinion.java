@@ -649,7 +649,9 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        if (this.controller != null) {
+        if (this.controller2 != null){
+            $$0.putUUID("Controller", this.controller2);
+        } else if (this.controller != null) {
             $$0.putUUID("Controller", this.controller.getUUID());
         }
         $$0.putByte("moveTactic",getMovementTactic());
