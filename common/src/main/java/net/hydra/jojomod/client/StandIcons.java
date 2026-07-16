@@ -413,6 +413,13 @@ public class StandIcons {
     public static final ResourceLocation PLANET_WAVES_GRAB= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/grab.png");
 
+    public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/impale.png");
+    public static final ResourceLocation KING_CRIMSON_EPITAPH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/epitaph.png");
+    public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/stand_ledge_grab.png");
+
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
     public static final ResourceLocation MANDOM_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,

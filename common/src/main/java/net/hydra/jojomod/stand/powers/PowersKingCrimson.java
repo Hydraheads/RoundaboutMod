@@ -160,7 +160,16 @@ public class PowersKingCrimson extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            setSkillIcon(context, x, y, 1, StandIcons.KING_CRIMSON_EPITAPH, PowerIndex.SKILL_1);
+        } else {
+            setSkillIcon(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK);
+        }
+        if (canVault()){
+            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
     }
 
     @Override
