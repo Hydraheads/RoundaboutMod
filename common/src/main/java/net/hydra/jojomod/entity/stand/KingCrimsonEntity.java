@@ -29,6 +29,8 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             BLUE = 17;
 
 
+    public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState impale = new AnimationState();
 
@@ -46,6 +48,17 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
+            }
+
+            if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
+                this.finalPunchWindup.startIfStopped(this.tickCount);
+            } else {
+                this.finalPunchWindup.stop();
+            }
+            if (this.getAnimation() == FINAL_ATTACK) {
+                this.finalPunch.startIfStopped(this.tickCount);
+            } else {
+                this.finalPunch.stop();
             }
         }
     }

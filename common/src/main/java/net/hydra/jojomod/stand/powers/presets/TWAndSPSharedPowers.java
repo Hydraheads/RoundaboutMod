@@ -351,7 +351,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
             } else {
                 if (keyIsDown) {
-                    Minecraft mc = Minecraft.getInstance();
                     if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
@@ -467,79 +466,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     }
 
-    public float getImpalePunchStrength(Entity entity){
-        return 0;
-    }
-    public float getImpaleKnockback(){
-        return 1.3F;
-    }
-
-    public void impaleImpact(Entity entity){
-        if (activePower == PowerIndex.POWER_1_SNEAK){
-        this.setAttackTimeDuring(-20);
-        if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
-            entity = null;
-        }
-        if (entity != null) {
-            hitParticlesCenter(entity);
-
-            float pow;
-            float knockbackStrength;
-            pow = getImpalePunchStrength(entity);
-            knockbackStrength = getImpaleKnockback();
-            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
-                    if (MainUtil.getMobBleed(entity)) {
-                        if (!airTriggered) {
-                            if ((((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity))) {
-                                MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                            } else {
-                                MainUtil.makeBleed(entity, 2, 200, this.getSelf());
-                            }
-                            MainUtil.makeMobBleed(entity);
-                        }
-                    }
-                }
-                takeDeterminedKnockback(this.self, entity, knockbackStrength);
-            } else {
-                knockShield2(entity, 100);
-            }
-        }
-
-        if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
-        }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
-        SoundEvent SE;
-        float pitch = 1F;
-            if (entity != null) {
-                playImpaleConnectSoundExtra();
-                if (airTriggered){
-                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                } else {
-                    SE = getImpaleSound();
-                }
-                pitch = 1.2F;
-            } else {
-                SE = ModSounds.PUNCH_2_SOUND_EVENT;
-            }
-
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-        }
-        }
-    }
 
 
-    public void playImpaleConnectSoundExtra(){
 
-    }
-
-    public SoundEvent getImpaleSound(){
-        return ModSounds.IMPALE_HIT_EVENT;
-
-    }
 
     public SoundEvent getFinalAttackSound(){
         return null;
@@ -1363,7 +1292,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.poseStand(OffsetIndex.ATTACK);
         return true;
     }
-    public static final float impaleRange = 3.5F;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1483,22 +1411,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 1/((float) this.getKickBarrageWindup() /20);
     }
 
-    public boolean airTriggered = false;
-    public boolean impale(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-
-            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
-            this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1_SNEAK);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
-            this.animateStand(StandEntity.IMPALE);
-            this.poseStand(OffsetIndex.GUARD);
-
-            return true;
-        }
-        return false;
-    }
 
     /**If a client is behind a server on TS charging somehow, and the server finishes charging, this packet rounds
      * things out*/

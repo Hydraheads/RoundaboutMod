@@ -34,9 +34,10 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
                                     BlockPos.containing(LE.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
                     ) {
                         if ($$3 instanceof Player pl ){
-                            if (!(pl.hurtTime > 0 ||
-                                    !((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND)
-                            )){
+                            if ((pl.hurtTime <= 0) ||
+                                    (((StandUser)pl).roundabout$getLogSource() == null) ||
+                            !(((StandUser)pl).roundabout$getLogSource() != null && ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND))
+                            ){
                                 if (MainUtil.canFreeze(pl)) {
                                     $$3.makeStuckInBlock($$0, new Vec3((double) 0.7F, (double) 0.7F, (double) 0.7F));
                                 } else {
