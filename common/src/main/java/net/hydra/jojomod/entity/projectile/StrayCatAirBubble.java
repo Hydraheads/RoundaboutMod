@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -46,7 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile {
+public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile, NoHitboxRendering {
     public StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, Level $$1) {
         super($$0, $$1);
         this.lifeSpan = 300;
