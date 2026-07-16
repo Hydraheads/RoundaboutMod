@@ -158,6 +158,9 @@ public class StandIcons {
     public static final ResourceLocation GENERIC_ICE_LAYER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/thin_ice.png");
 
+    public static final ResourceLocation OASIS_MUD_HIT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/mud_hit_icon.png");
+
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/stone_face.png");
     public static final ResourceLocation STONE_HEAD_OVERLAY_JOSUKE = new ResourceLocation(Roundabout.MOD_ID,
