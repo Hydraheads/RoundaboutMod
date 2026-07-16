@@ -81,10 +81,10 @@ public class PowersKingCrimson extends NewPunchingStand {
     @Override
     public float getImpalePunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (3F * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (4F * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (17F * (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (20.1F * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
     }
