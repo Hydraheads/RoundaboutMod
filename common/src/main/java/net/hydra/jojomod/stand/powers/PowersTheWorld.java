@@ -926,8 +926,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             MainUtil.makeBleed($$5, 0, 300, this.self);
                         } else if (!getAssaultEarlyTime()) {
                             MainUtil.makeBleed($$5, 0, 200, this.self);
-                        } else {
-                            MainUtil.makeBleed($$5, 0, 50, this.self);
                         }
                     } else if (((LivingEntity) $$5).isBlocking()) {
                         if (!getAssaultEarlyTime()) {
