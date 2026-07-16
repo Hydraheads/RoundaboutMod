@@ -340,9 +340,12 @@ public class RattDartEntity extends AbstractArrow {
 
         if ($$1.equals(this.getOwner())) {return;}
 
-        if ($$1 instanceof TamableAnimal TA){
-            if (this.getOwner() instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+        if (this.getOwner() instanceof TamableAnimal TT && TT.getOwner() != null){
+            if ($$1 instanceof TamableAnimal TA && TA.getOwner() != null &&
+                    TT.getOwner().is(TA.getOwner())){
+                return;
+            }
+            if ($$1.is(TT.getOwner())){
                 return;
             }
         }
