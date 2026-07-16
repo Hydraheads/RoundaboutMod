@@ -7,21 +7,17 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -37,6 +33,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PowersKingCrimson extends NewPunchingStand {
 
@@ -65,8 +62,31 @@ public class PowersKingCrimson extends NewPunchingStand {
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_KING_CRIMSON_EVENT;
+        } else if (soundChoice == IMPALE_NOISE) {
+            return ModSounds.IMPALE_CHARGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+    @Override
+    public SoundEvent getImpaleSound(){
+        return ModSounds.KING_CRIMSON_IMPALE_EVENT;
+
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+    }
+    @Override
+    public float getImpalePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (4F * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (20.1F * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
+        }
     }
         @Override
     public StandEntity getNewStandEntity() {
@@ -152,15 +172,52 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_CROUCH -> {
+                impaleClient();
+            }
             case SKILL_3_NORMAL -> {
-                dash();
+                tryToDashClient();
+            }
+        }
+    }
+    public void tryToDashClient(){
+        if (!doVault()) {
+            dash();
+        }
+    }
+
+    public int getImpaleLevel(){
+        return 1;
+    }
+    public void impaleClient(){
+        if (!canImpale()){
+            return;
+        }
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
             }
         }
     }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_EPITAPH, PowerIndex.SKILL_1, 0);
+        } else {
+            LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
+        }
+        if (canVault()){
+            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
     }
 
     @Override
@@ -212,9 +269,16 @@ public class PowersKingCrimson extends NewPunchingStand {
         return zamn >= 0.5F;
     }
 
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+        }
+        return super.tryPower(move,forced);
+    }
+
     //hold input
     public boolean holdDownClick = false;
-    public int impaleTicks = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {

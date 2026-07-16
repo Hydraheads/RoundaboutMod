@@ -55,6 +55,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc",
                     "roundabout:manhattan_transfer_disc",
                     "roundabout:california_king_bed_disc"
+                    //"roundabout:20th_century_boy_disc"
             )
     );
     public Set<String> naturalStandUserMobPoolv8 = new HashSet<>(
@@ -109,6 +110,7 @@ public class AdvancedConfig implements Cloneable {
             Arrays.asList(
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc"
+                    //"roundabout:20th_century_boy_disc"
             )
     );
 

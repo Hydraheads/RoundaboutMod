@@ -329,7 +329,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
         }
     }
-    public int impaleTicks = 0;
     public boolean holdDownClick = false;
 
     @Override
@@ -678,12 +677,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void tickPower(){
         super.tickPower();
-        if (ticksUntilCanImpale > 0){
-            ticksUntilCanImpale--;
-        }
-        if (impaleTicks > 0){
-            impaleTicks--;
-        }
+
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){

@@ -319,10 +319,6 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int hardBlocker = 0;
 
-    public int ticksUntilCanImpale = 0;
-    public boolean canImpale(){
-        return ticksUntilCanImpale <= 0;
-    }
     @SuppressWarnings("deprecation")
     @Override
     public boolean setPowerAttack(){

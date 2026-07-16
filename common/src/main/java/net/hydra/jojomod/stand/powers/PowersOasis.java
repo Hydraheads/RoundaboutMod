@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.platform.services.IPlatformHelper;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -54,22 +55,18 @@ public class PowersOasis extends NewDashPreset {
     public boolean isStandEnabled(){
         return ClientNetworking.getAppropriateConfig().oasisSettings.enableOasis;
     }
-
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersOasis(entity);
     }
-
     @Override
     public boolean canSummonStandAsEntity(){
         return false;
     }
-
     @Override
     public boolean rendersPlayer(){
         return true;
     }
-
     @Override
     public boolean isBrawling(){
         return fistsOut;
@@ -82,22 +79,11 @@ public class PowersOasis extends NewDashPreset {
     public boolean interceptGuard(){
         return fistsOut;
     }
-
+    public boolean isEntityInBrawlRange() {
+        return fistsOut && getTargetEntityThroughWalls(this.self, 3, getBrawlPunchAngle()) != null;
+    }
 
     public boolean fistsOut = false;
-
-    @Override
-    public boolean isWip() {
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.WHITE);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "kepich").withStyle(ChatFormatting.WHITE);
-    }
 
 
     public boolean renderSuit(){
@@ -132,13 +118,6 @@ public class PowersOasis extends NewDashPreset {
         return heyFull;
     }
 
-    public void toggleFistsClient() {
-        if (self instanceof Player pl){
-            pl.resetAttackStrengthTicker();
-        }
-        tryPowerPacket(PowerIndex.POWER_1);
-    }
-
     @Override
     public void onStandSummon(boolean desummon){
         if (self instanceof Player pl && fistsOut){
@@ -146,62 +125,34 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
+
+
+
+
+
+    public void toggleFistsClient() {
+        if (!onCooldown(PowerIndex.POWER_1)) {
+            if (self instanceof Player pl){
+                pl.resetAttackStrengthTicker();
+            }
+            this.setCooldown(PowerIndex.SKILL_1, 9);
+            tryPowerPacket(PowerIndex.POWER_1);
+        }
+    }
+
     public void toggleFists() {
+        this.setCooldown(PowerIndex.SKILL_4, 9);
+
         if (!this.self.level().isClientSide()){
             fistsOut = !fistsOut;
+            if (fistsOut){
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
+            }
             saveDiscAndSync();
         }
     }
 
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
-                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                float flashAlpha, float otherFlashAlpha) {
-        boolean powerOn = PowerTypes.hasStandActive(playerEntity);
-        int j = scaledHeight / 2 - 7 - 4;
-        int k = scaledWidth / 2 - 8;
 
-        float attackTimeDuring = getAttackTimeDuring();
-        if (powerOn && isBarrageAttacking() && attackTimeDuring > -1) {
-            int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-        } else if (powerOn && isBarrageCharging()) {
-            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
-        } else {
-            int barTexture = 0;
-            Entity TE = getTargetEntityThroughWalls(playerEntity, 3, getBrawlPunchAngle());
-            float attackTimeMax = getAttackTimeMax();
-            if (attackTimeMax > 0) {
-                float attackTime = getAttackTime();
-                float finalATime = attackTime / attackTimeMax;
-                if (finalATime <= 1) {
-
-                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
-                        barTexture = 24;
-                    } else if (TE != null && isBrawling()) {
-                        barTexture = 12;
-                    } else {
-                        barTexture = 18;
-                    }
-
-
-                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-                    int finalATimeInt = Math.round(finalATime * 15);
-                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
-
-                }
-            }
-            if (powerOn && isBrawling()) {
-                if (TE != null) {
-                    if (barTexture == 0) {
-                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
-                    }
-                }
-            }
-        }
-    }
 
     @Override
     public void powerActivate(PowerContext context) {
@@ -211,6 +162,9 @@ public class PowersOasis extends NewDashPreset {
                 toggleFistsClient();
             }
 
+            case SKILL_1_CROUCH -> {
+                mudHitClient();
+            }
         }
     }
 
@@ -224,11 +178,28 @@ public class PowersOasis extends NewDashPreset {
             case PowerIndex.SNEAK_ATTACK -> {
                 kickAttack();
             }
+            case PowerIndex.POWER_1_SNEAK -> {
+                mudHitCharge();
+            }
+
 
         }
 
         return super.setPowerOther(move,lastMove);
     }
+
+
+
+    @Override
+    public void updateUniqueMoves() {
+        if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+            updateMudHit();
+        }
+
+        super.updateUniqueMoves();
+    }
+
+
 
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
@@ -242,9 +213,96 @@ public class PowersOasis extends NewDashPreset {
 
     @Override
     public void tickPower() {
-
         super.tickPower();
+
+        if (this.self.level().isClientSide()) {
+            if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+                Roundabout.LOGGER.info("1");
+                if (attackTimeDuring > 4) {
+                    Roundabout.LOGGER.info("2");
+                    tryPowerPacket(NONE);
+
+                    if (getPlayerPos2() != PlayerPosIndex.OASIS_KICK) {
+                        setPlayerPos2(PlayerPosIndex.OASIS_KICK);
+                    }
+                }
+            }
+        } else {
+            byte pos2 = getPlayerPos2();
+            if (getActivePower() != PowerIndex.SNEAK_ATTACK && pos2 == PlayerPosIndex.OASIS_KICK) {
+                setPlayerPos2(PlayerPosIndex.NONE);
+            }
+            // possibly place this logic in the method where the tryPowerPacket(NONE) is received?
+            // probably copy over tryPower method
+        }
+
     }
+
+
+
+
+
+
+
+    /** mud hit stuff */
+    public void mudHitClient() {
+        if (!onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 5);
+            Roundabout.LOGGER.info("mud hit client");
+
+            //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
+
+    public void mudHitCharge() {
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.POWER_1_SNEAK);
+
+
+        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+    }
+
+    public void updateMudHit() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 24) {
+                doMudHit();
+            }
+        }
+    }
+
+
+    public void doMudHit() {
+        int blockReach = 3;
+        Roundabout.LOGGER.info("mudhit!");
+
+        BlockHitResult hitBlock = this.getLookedBlock(blockReach);
+        if (hitBlock.getType() == HitResult.Type.BLOCK) {
+            Roundabout.LOGGER.info("hit block");
+        } else {
+            Roundabout.LOGGER.info("combat variant");
+        }
+
+        this.setActivePower(PowerIndex.NONE);
+        this.setAttackTimeDuring(-10);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
@@ -259,12 +317,6 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
-    @Override
-    public boolean setPowerAttack() {
-        setAttack();
-        return false;
-    }
-
     private BlockHitResult getLookedBlock(int reach) {
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
@@ -274,41 +326,24 @@ public class PowersOasis extends NewDashPreset {
     }
 
 
+    @Override
+    public boolean setPowerAttack() {
+        setAttack();
+        return false;
+    }
+
     public void spawnWallPunchParticles(Entity entity) {
         if (!this.self.level().isClientSide()) {
-            Roundabout.LOGGER.info("spawned badass water particles");
-
             if (!this.self.hasLineOfSight(entity)) {
                 BlockHitResult hitBlock = this.getLookedBlock(3);
                 Vec3 pos = hitBlock.getLocation();
+
                 ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
                 float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
                 this.self.level().playSound(null, hitBlock.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
             }
-
-/*
-            BlockHitResult hit = this.getLookedBlock(3);
-
-            if (hit.getType() == HitResult.Type.BLOCK) {
-                Vec3 eye = this.self.getEyePosition(1.0F);
-                double blockDist = eye.distanceTo(hit.getLocation());
-                AABB box = entity.getBoundingBox();
-                Vec3 nearest = new Vec3(Mth.clamp(eye.x, box.minX, box.maxX), Mth.clamp(eye.y, box.minY, box.maxY), Mth.clamp(eye.z, box.minZ, box.maxZ));
-                double entityDist = eye.distanceTo(nearest);
-
-                if (entityDist > blockDist) {
-                    Vec3 pos = hit.getLocation();
-                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
-
-                    float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
-                    this.self.level().playSound(null, hit.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
-                }
-            }
-
- */
         }
     }
-
 
     @Override
     public void setAttack(){
@@ -346,21 +381,21 @@ public class PowersOasis extends NewDashPreset {
     }
 
     @Override
-    public boolean setPowerGuard(){
-        if (!self.level().isClientSide()) {
-            if (getPlayerPos2() != PlayerPosIndex.GUARD) {
-                setPlayerPos2(PlayerPosIndex.GUARD);
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+            return;
+        }
+        if (keyIsDown) {
+            if (activePowerPhase == 0 && isBrawling() && !isBarraging()) {
+                if (!isHoldingSneak()) {
+                    this.tryPower(PowerIndex.ATTACK);
+                } else if (self.onGround()) {
+                    this.kickAttackClient();
+                }
             }
         }
-        return super.setPowerGuard();
     }
 
-    /*
-    @Override
-    public void updateUniqueMoves(){
-        super.updateUniqueMoves();
-    }
-     */
 
 
 
@@ -385,7 +420,7 @@ public class PowersOasis extends NewDashPreset {
                 }
 
                 if (DamageHandler.StandDamageEntity(entity, pow, this.self)) {
-                    takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
+                    //takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                     takeKnockbackUp(entity, knockbackStrength);
 
                     this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
@@ -398,7 +433,6 @@ public class PowersOasis extends NewDashPreset {
             }
         }
     }
-
     public void doKickHit(){
         if (!self.level().isClientSide()) {
             Entity target = null;
@@ -409,14 +443,34 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
+    public void kickAttackClient() {
+        if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
+            this.setCooldown(PowerIndex.SKILL_EXTRA, 80);
+
+            Roundabout.LOGGER.info("kick triggered");
+
+            this.tryPower(PowerIndex.SNEAK_ATTACK);
+        }
+    }
+
     public void kickAttack() {
         Roundabout.LOGGER.info("kick attack");
 
-        if (!self.level().isClientSide) {
-            Roundabout.LOGGER.info("server received");
+        this.attackTimeMax= 5;
+        this.attackTimeDuring = 0;
+        this.setAttackTime(0);
+        setActivePowerPhase((byte) 1);
+        setActivePower(PowerIndex.SNEAK_ATTACK);
 
-            if (getPlayerPos2() != PlayerPosIndex.SWEEP_KICK) {
-                setPlayerPos2(PlayerPosIndex.SWEEP_KICK);
+
+
+        if (!self.level().isClientSide) {
+
+            Roundabout.LOGGER.info("server received");
+            this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+
+            if (getPlayerPos2() != PlayerPosIndex.OASIS_KICK) {
+                setPlayerPos2(PlayerPosIndex.OASIS_KICK);
             }
 
             doKickHit();
@@ -431,20 +485,22 @@ public class PowersOasis extends NewDashPreset {
     }
 
 
+
+
+
+
+
+
+
+
     @Override
-    public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
-            return;
-        }
-        if (keyIsDown) {
-            if (activePowerPhase == 0 && isBrawling() && !isBarraging()) {
-                if (!isHoldingSneak()) {
-                    this.tryPower(PowerIndex.ATTACK);
-                } else if (self.onGround()) {
-                    this.tryPower(PowerIndex.SNEAK_ATTACK);
-                }
+    public boolean setPowerGuard(){
+        if (!self.level().isClientSide()) {
+            if (getPlayerPos2() != PlayerPosIndex.GUARD) {
+                setPlayerPos2(PlayerPosIndex.GUARD);
             }
         }
+        return super.setPowerGuard();
     }
 
     @Override
@@ -457,10 +513,30 @@ public class PowersOasis extends NewDashPreset {
         return false;
     }
 
+
+
+
+
+
+/*
+if (keyIsDown) {
+    if (this.getAttackTime() >= this.getAttackTimeMax() ||
+            (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
+        if (isBrawling() && !isBarraging()) {
+            this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
+            tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
+        }
+    }
+}
+
+ */
+
+
     @Override
     public void buttonInputBarrage(boolean keyIsDown, Options options) {
         if (keyIsDown) {
-            if (activePowerPhase == 0 || this.getAttackTime() >= this.getAttackTimeMax()){
+            if (this.getAttackTime() >= this.getAttackTimeMax() ||
+                    (this.getActivePowerPhase() != this.getActivePowerPhaseMax())) {
                 if (isBrawling() && !isBarraging()) {
                     this.tryPower(PowerIndex.BARRAGE_CHARGE, true);
                     tryPowerPacket(PowerIndex.BARRAGE_CHARGE);
@@ -468,19 +544,6 @@ public class PowersOasis extends NewDashPreset {
             }
         }
     }
-
-
-    // in the for loop check if an entity (nearest bounding box) is farther than block, then don't run that code for subsequent loops.
-    // if at least one entity that is in barrage is behind a wall it is valid case for particles to spawn
-
-    // spawn particles in radius surrounding the hit block
-
-    // possible edge case where mob is in front of other mob encased in blocks, still being hit but no getLookedBlock
-    // (no because getLookedBlock ignores entities)
-
-    // look into hasLineOfSight solution
-
-    boolean runGate = true;
 
     public void spawnBarrageParticles() {
         if (!this.self.level().isClientSide) {
@@ -498,8 +561,7 @@ public class PowersOasis extends NewDashPreset {
     public void barrageImpact(Entity entity, int hitNumber) {
         super.barrageImpact(entity, hitNumber);
 
-        if (!this.self.level().isClientSide && !this.self.hasLineOfSight(entity)) {
-            Roundabout.LOGGER.info("target found behind wall");
+        if (entity != null && !this.self.level().isClientSide && !this.self.hasLineOfSight(entity)) {
             spawnBarrageParticles();
         }
 
@@ -552,21 +614,72 @@ public class PowersOasis extends NewDashPreset {
         findDeflectables();
     }
 
-    // inherited entity check will be used when a player is
 
-    // use gettargetentitythroughwalls, override setattack and standbarragehit with it maybe?
 
-    // spawn particle on block face plane using blockhitresult (only when hitting entity and looking at block
-    // when hitting entity, do blockhitresult then spawn particle
 
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean powerOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+
+        float attackTimeDuring = getAttackTimeDuring();
+        if (powerOn && isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / getBarrageLength()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else if (powerOn && isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / getBarrageWindup()) * 15);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+        } else {
+            int barTexture = 0;
+            Entity TE = getTargetEntityThroughWalls(playerEntity, 3, getBrawlPunchAngle());
+            float attackTimeMax = getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+
+                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else if (TE != null && isBrawling()) {
+                        barTexture = 12;
+                    } else {
+                        barTexture = 18;
+                    }
+
+
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                    int finalATimeInt = Math.round(finalATime * 15);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+
+                }
+            }
+            if (powerOn && isBrawling()) {
+                if (TE != null) {
+                    if (barTexture == 0) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        if (fistsOut) {
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT_2, PowerIndex.SKILL_1);
+        if (!isHoldingSneak()) {
+            if (fistsOut) {
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT_2, PowerIndex.SKILL_1);
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_1);
+            }
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.SUIT_COMBAT, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.OASIS_MUD_HIT, PowerIndex.SKILL_1_SNEAK);
         }
 
     }
@@ -597,7 +710,6 @@ public class PowersOasis extends NewDashPreset {
 
         return $$1;
     }
-
     @Override
     public Component getSkinName(byte skinId) {
         return Component.translatable("skins.roundabout.oasis."+getSkinString(skinId));
@@ -632,4 +744,16 @@ public class PowersOasis extends NewDashPreset {
         return super.getSoundFromByte(soundChoice);
     }
 
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+    @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.WHITE);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "kepich").withStyle(ChatFormatting.WHITE);
+    }
 }

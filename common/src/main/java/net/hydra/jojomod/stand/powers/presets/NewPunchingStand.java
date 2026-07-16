@@ -19,11 +19,13 @@ import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -35,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NewPunchingStand extends NewDashPreset {
     public NewPunchingStand(LivingEntity self) {
@@ -505,9 +508,108 @@ public class NewPunchingStand extends NewDashPreset {
     public float getPunchAngle(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
     }
+    public float getImpalePunchStrength(Entity entity){
+        return 0;
+    }
+    public float getImpaleKnockback(){
+        return 1.3F;
+    }
 
+    public static final float impaleRange = 3.5F;
+    public boolean airTriggered = false;
+    public void impaleImpact(Entity entity){
+        if (activePower == PowerIndex.POWER_1_SNEAK){
+            this.setAttackTimeDuring(-20);
+            if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+                entity = null;
+            }
+            if (entity != null) {
+                hitParticlesCenter(entity);
+
+                float pow;
+                float knockbackStrength;
+                pow = getImpalePunchStrength(entity);
+                knockbackStrength = getImpaleKnockback();
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(5, LE);
+                        if (MainUtil.getMobBleed(entity)) {
+                            if (!airTriggered) {
+                                if ((((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity))) {
+                                    MainUtil.makeBleed(entity, 0, 200, this.getSelf());
+                                } else {
+                                    MainUtil.makeBleed(entity, 2, 200, this.getSelf());
+                                }
+                                MainUtil.makeMobBleed(entity);
+                            }
+                        }
+                    }
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                } else {
+                    knockShield2(entity, 100);
+                }
+            }
+
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            SoundEvent SE;
+            float pitch = 1F;
+            if (entity != null) {
+                playImpaleConnectSoundExtra();
+                if (airTriggered){
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                } else {
+                    SE = getImpaleSound();
+                }
+                pitch = 1.2F;
+            } else {
+                SE = ModSounds.PUNCH_2_SOUND_EVENT;
+            }
+
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            }
+        }
+    }
+    public void playImpaleConnectSoundExtra(){
+
+    }
+
+    public static final byte IMPALE_NOISE = 105;
+    public boolean impale(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+
+            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1_SNEAK);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(StandEntity.IMPALE);
+            this.poseStand(OffsetIndex.GUARD);
+
+            return true;
+        }
+        return false;
+    }
+    public SoundEvent getImpaleSound(){
+        return ModSounds.IMPALE_HIT_EVENT;
+
+    }
+    public int impaleTicks = 0;
+    public int ticksUntilCanImpale = 0;
+    public boolean canImpale(){
+        return ticksUntilCanImpale <= 0;
+    }
     public int meltIFrames = 0;
     public void tickPower(){
+        if (ticksUntilCanImpale > 0){
+            ticksUntilCanImpale--;
+        }
+        if (impaleTicks > 0){
+            impaleTicks--;
+        }
         if (!self.level().isClientSide()){
             if (meltIFrames > 0){
                 meltIFrames--;

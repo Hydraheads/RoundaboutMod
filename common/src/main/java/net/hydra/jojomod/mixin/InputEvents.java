@@ -267,6 +267,13 @@ public abstract class InputEvents implements IInputEvents {
                 }
             }
 
+            if (powers instanceof PowersOasis PO) {
+                if (PO.isBrawling()) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
             if (powers.isPiloting()){
                 ci.setReturnValue(false);
                 powers.pilotInputAttack();
@@ -481,7 +488,12 @@ public abstract class InputEvents implements IInputEvents {
                     ci.cancel();
                     return;
                 }
-
+                if (powers instanceof PowersOasis PO) {
+                    if (PO.isEntityInBrawlRange()) {
+                        ci.cancel();
+                        return;
+                    }
+                }
                 if(powers instanceof PowersGreenDay PGD) {
                     if ((!PGD.HasMainArm) && !(standComp.roundabout$hasStandOut())) {
                         ci.cancel();
