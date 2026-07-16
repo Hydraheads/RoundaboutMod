@@ -159,7 +159,7 @@ public class StepRuleEntity extends Entity {
                                         break;
                                     } else {
                                         if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
-                                            if (userEntity instanceof Mob){
+                                            if (userEntity instanceof Mob mb){
                                                 if (mob instanceof Player player) {
                                                     player.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 1);
                                                     ((ServerLevel) mob.level()).sendParticles(ModParticles.QUESTION,
@@ -180,6 +180,9 @@ public class StepRuleEntity extends Entity {
                                                             player.stopUsingItem();
                                                         }
                                                     }
+                                                    discard();
+                                                } else {
+                                                    mb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 1);
                                                     discard();
                                                 }
 
