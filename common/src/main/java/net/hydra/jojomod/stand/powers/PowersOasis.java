@@ -79,6 +79,9 @@ public class PowersOasis extends NewDashPreset {
     public boolean interceptGuard(){
         return fistsOut;
     }
+    public boolean isEntityInBrawlRange() {
+        return fistsOut && getTargetEntityThroughWalls(this.self, 3, getBrawlPunchAngle()) != null;
+    }
 
     public boolean fistsOut = false;
 
@@ -442,8 +445,9 @@ public class PowersOasis extends NewDashPreset {
 
     public void kickAttackClient() {
         if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
-            this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
+            this.setCooldown(PowerIndex.SKILL_EXTRA, 80);
 
+            Roundabout.LOGGER.info("kick triggered");
 
             this.tryPower(PowerIndex.SNEAK_ATTACK);
         }
@@ -461,10 +465,6 @@ public class PowersOasis extends NewDashPreset {
 
 
         if (!self.level().isClientSide) {
-
-            if (this.onCooldown(PowerIndex.SKILL_EXTRA)) {
-                return;
-            }
 
             Roundabout.LOGGER.info("server received");
             this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
