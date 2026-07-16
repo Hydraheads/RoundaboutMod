@@ -479,6 +479,12 @@
       "roundabout:sha_alt_dede"
     ]
   },
+  "straycat_bubble_pop": {
+    "subtitle": "sounds.roundabout.straycat_bubble_pop",
+    "sounds": [
+      "roundabout:straycat_bubble_pop"
+    ]
+  },
   "straycat_bubble_sound": {
     "subtitle": "sounds.roundabout.straycat_bubble_sound",
     "sounds": [

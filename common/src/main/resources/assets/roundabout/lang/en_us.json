@@ -398,7 +398,7 @@
   "item.roundabout.stand_arrow.rerollOutcome": "Arrow Holds: ",
   "item.roundabout.stand_arrow.noStandsInPool": "No stands in arrow pool!",
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
-  "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Level %1$s required)",
+  "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Stand Level %1$s required)",
 
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
