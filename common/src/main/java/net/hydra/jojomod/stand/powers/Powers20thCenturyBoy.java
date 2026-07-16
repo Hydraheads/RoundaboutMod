@@ -103,7 +103,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.changing_stance",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_SETIINGS, 1, level, bypass));
+                "instruction.roundabout.press_skill", StandIcons.SWITCH_STANCE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.ground_stance",
                 "", StandIcons.GROUND_STANCE,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.neutral_stance",
@@ -153,7 +153,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         BETA = 18,
         PUMPKIN = 19,
         EVIL_PUMPKIN = 20,
-        GHOST = 21;
+        GHOST = 21,
+        WANDERING = 22;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -177,7 +178,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 BETA,
                 PUMPKIN,
                 EVIL_PUMPKIN,
-                GHOST
+                GHOST,
+                WANDERING
 
         );
     }
@@ -205,6 +207,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.pumpkin");
             case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.evil_pumpkin");
             case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
+            case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.roundabout.20_centuryboy.wandering");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -402,7 +405,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
                             source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
                             source.is(ModDamageTypes.SUNLIGHT)){
-                        return false;
+                        return true;
                     }
                 }
 

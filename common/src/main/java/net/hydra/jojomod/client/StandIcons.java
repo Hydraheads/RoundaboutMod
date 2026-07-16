@@ -438,6 +438,8 @@ public class StandIcons {
             "textures/gui/icons/20th_century_boy/activateinvincibility.png");
     public static final ResourceLocation DETOGGLE_INVINCIBILITY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/20th_century_boy/deactivateinvincibility.png");
+    public static final ResourceLocation SWITCH_STANCE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/20th_century_boy/stanceswitch.png");
 
 
 
