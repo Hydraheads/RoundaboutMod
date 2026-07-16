@@ -23,6 +23,30 @@
       "roundabout:summon_king_crimson"
     ]
   },
+  "king_crimson_impale": {
+    "subtitle": "sounds.roundabout.king_crimson_impale",
+    "sounds": [
+      "roundabout:king_crimson_impale"
+    ]
+  },
+  "king_crimson_punch": {
+    "subtitle": "sounds.roundabout.king_crimson_punch",
+    "sounds": [
+      "roundabout:king_crimson_punch"
+    ]
+  },
+  "king_crimson_punch_2": {
+    "subtitle": "sounds.roundabout.king_crimson_punch_2",
+    "sounds": [
+      "roundabout:king_crimson_punch_2"
+    ]
+  },
+  "king_crimson_punch_3": {
+    "subtitle": "sounds.roundabout.king_crimson_punch_3",
+    "sounds": [
+      "roundabout:king_crimson_punch_3"
+    ]
+  },
   "summon_california": {
     "subtitle": "sounds.roundabout.summon_california",
     "sounds": [

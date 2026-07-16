@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -187,14 +188,29 @@ public class PowersKingCrimson extends NewPunchingStand {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
         } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
-            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / getMaxSuperHitTime()) * 15));
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
+            float zamn = ((float) attackTimeDuring / getMaxSuperHitTime());
+            int ClashTime = Math.min(15,Math.round(zamn * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 111, 15, 6);
+            if (zamn >= 1){
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 132, ClashTime, 6);
+            } else if (crossedThreshold2(zamn)){
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 118, ClashTime, 6);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 125, ClashTime, 6);
+            }
         } else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
         }
     }
+    public boolean crossedThreshold(){
+        float zamn = ((float) attackTimeDuring / getMaxSuperHitTime());
+        return crossedThreshold2(zamn);
+    }
+    public boolean crossedThreshold2(float zamn){
+        return zamn >= 0.5F;
+    }
+
     //hold input
     public boolean holdDownClick = false;
     public int impaleTicks = 0;
@@ -287,6 +303,13 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
 
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (move == PowerIndex.SNEAK_ATTACK) {
+                this.chargedFinal = chargeTime;
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.VAULT){
@@ -427,8 +450,9 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
     public SoundEvent getFinalAttackSound(){
-        return null;
+        return ModSounds.KING_CRIMSON_PUNCH_3_EVENT;
     }
+
     public float getFinalAttackKnockback(){
         return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
     }
@@ -445,7 +469,7 @@ public class PowersKingCrimson extends NewPunchingStand {
     }
 
     public int getMaxSuperHitTime(){
-        return 25+(getMeltLevel()*2);
+        return 30+(getMeltLevel()*2);
     }
 
     public void updateFinalAttackCharge(){
@@ -459,6 +483,24 @@ public class PowersKingCrimson extends NewPunchingStand {
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
             }
         }
+    }
+
+    @Override
+    public float getPunchLandPitch(){
+        return 1.3F + 0.07F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 1F;
+    }
+
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.KING_CRIMSON_PUNCH_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.KING_CRIMSON_PUNCH_2_EVENT;
     }
 
 }

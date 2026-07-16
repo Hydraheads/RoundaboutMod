@@ -1289,6 +1289,20 @@ public class ModSounds {
     public static SoundEvent SUMMON_KING_CRIMSON_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_KING_CRIMSON_ID);
 
 
+    public static final String KING_CRIMSON_PUNCH = "king_crimson_punch";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH);
+    public static SoundEvent KING_CRIMSON_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_ID);
+    public static final String KING_CRIMSON_IMPALE = "king_crimson_impale";
+    public static final ResourceLocation KING_CRIMSON_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_IMPALE);
+    public static SoundEvent KING_CRIMSON_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_IMPALE_ID);
+
+    public static final String KING_CRIMSON_PUNCH_2 = "king_crimson_punch_2";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_2);
+    public static SoundEvent KING_CRIMSON_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_2_ID);
+    public static final String KING_CRIMSON_PUNCH_3 = "king_crimson_punch_3";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_3);
+    public static SoundEvent KING_CRIMSON_PUNCH_3_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_3_ID);
+
 
 
     public static final String EXTEND_SPIKES = "extend_spikes";

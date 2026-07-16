@@ -352,15 +352,15 @@ public class NewPunchingStand extends NewDashPreset {
             }
 
             if (entity != null) {
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                pitch = 1.2F;
+                SE = getPunchLandLastSound();
+                pitch = getPunchLandLastPitch();
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
             }
         } else {
             if (entity != null) {
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                pitch = 1.1F + 0.07F * activePowerPhase;
+                SE = getPunchLandSound();
+                pitch = getPunchLandPitch();
             } else {
                 SE = ModSounds.PUNCH_1_SOUND_EVENT;
             }
@@ -386,6 +386,20 @@ public class NewPunchingStand extends NewDashPreset {
         this.clashDone = false;
         playBarrageChargeSound();
         return true;
+    }
+
+    public float getPunchLandPitch(){
+        return 1.1F + 0.07F * activePowerPhase;
+    }
+    public float getPunchLandLastPitch(){
+        return 1.2F;
+    }
+
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.PUNCH_3_SOUND_EVENT;
+    }
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.PUNCH_4_SOUND_EVENT;
     }
 
     @Override

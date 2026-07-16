@@ -10,7 +10,7 @@ public class KingCrimsonEntity extends FollowingStandEntity {
         super(entityType, world);
     }
     public static final byte
-            PART_5_SKIN = 1,
+            RED = 1,
             MANGA_SKIN = 2,
             STARLESS = 3,
             END = 4,
@@ -25,7 +25,7 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             BLACK = 13,
             BETA = 14,
             CONCEPT = 15,
-            RED = 16,
+            PART_5_SKIN = 16,
             BLUE = 17;
 
 
@@ -33,7 +33,10 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState impale = new AnimationState();
+    public final AnimationState impale2 = new AnimationState();
 
+    public static final byte
+            IMPALE_2 = 84;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -48,6 +51,11 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.impale.startIfStopped(this.tickCount);
             } else {
                 this.impale.stop();
+            }
+            if (animation == IMPALE_2) {
+                this.impale2.startIfStopped(this.tickCount);
+            } else {
+                this.impale2.stop();
             }
 
             if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
