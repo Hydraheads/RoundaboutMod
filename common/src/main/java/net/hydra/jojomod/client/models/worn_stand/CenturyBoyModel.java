@@ -142,6 +142,8 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			"textures/stand/20_centuryboy/evil_pumkin.png");
 	public static ResourceLocation ghost = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/20_centuryboy/ghost.png");
+	public static ResourceLocation wandering = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/20_centuryboy/wandering.png");
 
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -166,6 +168,7 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 			case Powers20thCenturyBoy.PUMPKIN ->  {return  pumpkin;}
 			case Powers20thCenturyBoy.EVIL_PUMPKIN -> {return  evil_pumpkin;}
 			case Powers20thCenturyBoy.GHOST -> {return  ghost;}
+			case Powers20thCenturyBoy.WANDERING -> {return  wandering;}
 			default -> {return manga;}
 		}
 	}
