@@ -1502,11 +1502,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
         GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
         if (PowerTypes.hasStandActive(this) &&
-                (powers.canUseMiningStand()) || powers.isMiningRegardless()) {
+                (powers.canUseMiningStand()) || powers.isMiningRegardless()|| PowerTypes.isBrawling(this)) {
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction($$0,powers));
             return;
         }
-        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
+        if (PowerTypes.isUsingPower(this) &&
+                (((IPowersPlayer)this).rdbt$getPowers().isMining()
+                        || PowerTypes.isBrawling(this))){
             cir.setReturnValue(rdbt$mutualMiningSpeedFunction2($$0,gp));
             return;
         }
