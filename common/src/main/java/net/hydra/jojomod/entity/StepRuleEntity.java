@@ -16,10 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -148,10 +145,21 @@ public class StepRuleEntity extends Entity {
                             Entity.class,
                             wallBox)) {
 
-                        if (mob instanceof LivingEntity) {
+                        if (mob instanceof LivingEntity mbb) {
                             if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
                                     && mob.isAlive()) {
                                 if (mob.getBoundingBox().intersects(wallBox)) {
+
+                                    if (LE instanceof TamableAnimal TT && TT.getOwner() != null){
+                                        if (mbb instanceof TamableAnimal TA && TA.getOwner() != null &&
+                                                TT.getOwner().is(TA.getOwner())){
+                                            return;
+                                        }
+                                        if (mbb.is(TT.getOwner())){
+                                            return;
+                                        }
+                                    }
+
                                     if (mob.getUUID() == userEntity.getUUID()) {
                                         pca.playUnfairSound();
                                         pca.clearListServer();
@@ -159,7 +167,7 @@ public class StepRuleEntity extends Entity {
                                         break;
                                     } else {
                                         if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
-                                            if (userEntity instanceof Mob){
+                                            if (userEntity instanceof Mob mb){
                                                 if (mob instanceof Player player) {
                                                     player.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 1);
                                                     ((ServerLevel) mob.level()).sendParticles(ModParticles.QUESTION,
@@ -180,6 +188,9 @@ public class StepRuleEntity extends Entity {
                                                             player.stopUsingItem();
                                                         }
                                                     }
+                                                    discard();
+                                                } else {
+                                                    mb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 3);
                                                     discard();
                                                 }
 
