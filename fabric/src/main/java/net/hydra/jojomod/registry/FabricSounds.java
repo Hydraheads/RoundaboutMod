@@ -526,6 +526,8 @@ public class FabricSounds {
         addSound(ModSounds.KING_CRIMSON_PUNCH_ID,ModSounds.KING_CRIMSON_PUNCH_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_2_ID,ModSounds.KING_CRIMSON_PUNCH_2_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_3_ID,ModSounds.KING_CRIMSON_PUNCH_3_EVENT);
+        addSound(ModSounds.KING_CRIMSON_PUNCH_4_ID,ModSounds.KING_CRIMSON_PUNCH_4_EVENT);
+        addSound(ModSounds.KING_CRIMSON_PUNCH_5_ID,ModSounds.KING_CRIMSON_PUNCH_5_EVENT);
 
         addSound(ModSounds.PLANET_WAVES_SUMMON_ID,ModSounds.PLANET_WAVES_SUMMON_EVENT);
         addSound(ModSounds.PLANET_WAVES_METEOR_SHOWER_ID,ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT);

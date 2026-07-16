@@ -19,6 +19,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -408,6 +409,7 @@ public class PowersKingCrimson extends NewPunchingStand {
             entity = null;
         }
         if (entity != null) {
+            float charged = getChargedPercent();
             hitParticlesCenter(entity);
             float pow;
             float knockbackStrength;
@@ -415,14 +417,21 @@ public class PowersKingCrimson extends NewPunchingStand {
             knockbackStrength = getFinalAttackKnockback();
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    if (chargedFinal >= getMaxSuperHitTime()) {
+                    if (charged >= 1) {
                         addEXP(5, LE);
+                    } else if (charged > 0.5F){
+                        MainUtil.makeBleed(LE, 0, 200, this.self);
+                        addEXP(2, LE);
                     }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
                 if (chargedFinal >= getMaxSuperHitTime()) {
-                    knockShield2(entity, getFinalAttackKnockShieldTime());
+                    if (charged >= 1) {
+                        knockShield2(entity, 70);
+                    } else if (charged > 0.5F){
+                        knockShield2(entity, 50);
+                    }
                 }
             }
         } else {
@@ -440,7 +449,7 @@ public class PowersKingCrimson extends NewPunchingStand {
         float pitch = 1F;
         if (entity != null) {
             SE = getFinalAttackSound();
-            pitch = 1.2F;
+            pitch = getFinalAttackPitch();
         } else {
             SE = ModSounds.PUNCH_2_SOUND_EVENT;
         }
@@ -450,22 +459,70 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
     public SoundEvent getFinalAttackSound(){
+        float charged = getChargedPercent();
+        if (charged >= 1F){
+            return ModSounds.KING_CRIMSON_PUNCH_5_EVENT;
+        } else if (charged >= 0.5F){
+            return ModSounds.KING_CRIMSON_PUNCH_4_EVENT;
+        }
         return ModSounds.KING_CRIMSON_PUNCH_3_EVENT;
+    }
+    public float getFinalAttackPitch(){
+        float charged = getChargedPercent();
+        if (charged >= 1F){
+            return 1;
+        } else if (charged >= 0.5F){
+            return 1;
+        }
+        return 1.2F;
     }
 
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
+        float charge = getChargedPercent();
+        if (charge >= 1){
+            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
+        } else if (charge >= 0.5F){
+            return 0.7F;
+        }
+        return 0.1F;
     }
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
+            float ret = (getChargedPercent()*punchD);
+            if (this.chargedFinal >= getMaxSuperHitTime()){
+                ret +=0.5F;
+            }
+            return ret;
         } else {
-            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3;
+            float ret = (getChargedPercent()*punchD)+3;
+            if (this.chargedFinal >= getMaxSuperHitTime()){
+                ret +=2;
+            }
+            return ret;
         }
     }
-    public int getFinalAttackKnockShieldTime(){
-        return 20;
+
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
+        }
+    }
+
+    public float getChargedPercent(){
+        return (((float)this.chargedFinal/(float)getMaxSuperHitTime()));
     }
 
     public int getMaxSuperHitTime(){
@@ -474,7 +531,7 @@ public class PowersKingCrimson extends NewPunchingStand {
 
     public void updateFinalAttackCharge(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= 80) {
+            if (this.attackTimeDuring >= 60) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     tryPowerPacket(PowerIndex.NONE);

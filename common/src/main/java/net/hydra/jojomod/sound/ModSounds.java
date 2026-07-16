@@ -1302,6 +1302,12 @@ public class ModSounds {
     public static final String KING_CRIMSON_PUNCH_3 = "king_crimson_punch_3";
     public static final ResourceLocation KING_CRIMSON_PUNCH_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_3);
     public static SoundEvent KING_CRIMSON_PUNCH_3_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_3_ID);
+    public static final String KING_CRIMSON_PUNCH_4 = "king_crimson_punch_4";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_4);
+    public static SoundEvent KING_CRIMSON_PUNCH_4_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_4_ID);
+    public static final String KING_CRIMSON_PUNCH_5 = "king_crimson_punch_5";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_5);
+    public static SoundEvent KING_CRIMSON_PUNCH_5_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_5_ID);
 
 
 

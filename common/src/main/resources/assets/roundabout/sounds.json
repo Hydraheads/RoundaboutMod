@@ -47,6 +47,18 @@
       "roundabout:king_crimson_punch_3"
     ]
   },
+  "king_crimson_punch_4": {
+    "subtitle": "sounds.roundabout.king_crimson_punch_4",
+    "sounds": [
+      "roundabout:king_crimson_punch_4"
+    ]
+  },
+  "king_crimson_punch_5": {
+    "subtitle": "sounds.roundabout.king_crimson_punch_5",
+    "sounds": [
+      "roundabout:king_crimson_punch_5"
+    ]
+  },
   "summon_california": {
     "subtitle": "sounds.roundabout.summon_california",
     "sounds": [
