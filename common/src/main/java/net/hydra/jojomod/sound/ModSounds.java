@@ -729,6 +729,9 @@ public class ModSounds {
     public static final String SHA_MOVING = "sha_moving";
     public static final ResourceLocation SHA_MOVING_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SHA_MOVING);
     public static SoundEvent SHA_MOVING_EVENT = SoundEvent.createVariableRangeEvent(SHA_MOVING_ID);
+    public static final String STRAY_CAT_BUBBLE_POP = "straycat_bubble_pop";
+    public static final ResourceLocation STRAY_CAT_BUBBLE_POP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_BUBBLE_POP);
+    public static SoundEvent STRAY_CAT_BUBBLE_POP_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_BUBBLE_POP_ID);
     public static final String STRAY_CAT_BUBBLE_SOUND_1 = "straycat_bubble_sound";
     public static final ResourceLocation STRAY_CAT_BUBBLE_SOUND_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_BUBBLE_SOUND_1);
     public static SoundEvent STRAY_CAT_BUBBLE_SOUND_1_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_BUBBLE_SOUND_1_ID);
@@ -1280,6 +1283,25 @@ public class ModSounds {
     public static final String GREEN_DAY_STITCH = "green_day_stitch";
     public static final ResourceLocation GREEN_DAY_STITCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_STITCH);
     public static SoundEvent GREEN_DAY_STITCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_STITCH_ID);
+
+    public static final String SUMMON_KING_CRIMSON = "summon_king_crimson";
+    public static final ResourceLocation SUMMON_KING_CRIMSON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ SUMMON_KING_CRIMSON);
+    public static SoundEvent SUMMON_KING_CRIMSON_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_KING_CRIMSON_ID);
+
+
+    public static final String KING_CRIMSON_PUNCH = "king_crimson_punch";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH);
+    public static SoundEvent KING_CRIMSON_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_ID);
+    public static final String KING_CRIMSON_IMPALE = "king_crimson_impale";
+    public static final ResourceLocation KING_CRIMSON_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_IMPALE);
+    public static SoundEvent KING_CRIMSON_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_IMPALE_ID);
+
+    public static final String KING_CRIMSON_PUNCH_2 = "king_crimson_punch_2";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_2);
+    public static SoundEvent KING_CRIMSON_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_2_ID);
+    public static final String KING_CRIMSON_PUNCH_3 = "king_crimson_punch_3";
+    public static final ResourceLocation KING_CRIMSON_PUNCH_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_3);
+    public static SoundEvent KING_CRIMSON_PUNCH_3_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_3_ID);
 
 
 

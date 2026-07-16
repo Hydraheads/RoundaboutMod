@@ -333,6 +333,7 @@ public class FabricSounds {
         addSound(ModSounds.KILLER_QUEEN_DETONATE_ID, ModSounds.KILLER_QUEEN_DETONATE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_ID, ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT);
 
+        addSound(ModSounds.STRAY_CAT_BUBBLE_POP_ID, ModSounds.STRAY_CAT_BUBBLE_POP_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_SOUND_2_ID, ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
@@ -520,6 +521,11 @@ public class FabricSounds {
         addSound(ModSounds.GREEN_DAY_ARM_SPIN_ID,ModSounds.GREEN_DAY_ARM_SPIN_EVENT);
         addSound(ModSounds.GREEN_DAY_MOLD_SPREAD_ID,ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT);
         addSound(ModSounds.GREEN_DAY_STITCH_ID,ModSounds.GREEN_DAY_STITCH_EVENT);
+        addSound(ModSounds.SUMMON_KING_CRIMSON_ID,ModSounds.SUMMON_KING_CRIMSON_EVENT);
+        addSound(ModSounds.KING_CRIMSON_IMPALE_ID,ModSounds.KING_CRIMSON_IMPALE_EVENT);
+        addSound(ModSounds.KING_CRIMSON_PUNCH_ID,ModSounds.KING_CRIMSON_PUNCH_EVENT);
+        addSound(ModSounds.KING_CRIMSON_PUNCH_2_ID,ModSounds.KING_CRIMSON_PUNCH_2_EVENT);
+        addSound(ModSounds.KING_CRIMSON_PUNCH_3_ID,ModSounds.KING_CRIMSON_PUNCH_3_EVENT);
 
         addSound(ModSounds.PLANET_WAVES_SUMMON_ID,ModSounds.PLANET_WAVES_SUMMON_EVENT);
         addSound(ModSounds.PLANET_WAVES_METEOR_SHOWER_ID,ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT);

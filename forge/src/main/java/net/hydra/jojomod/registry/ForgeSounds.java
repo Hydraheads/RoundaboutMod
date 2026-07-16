@@ -321,6 +321,9 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_DETONATE, ModSounds.KILLER_QUEEN_DETONATE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_LAUNCH_EVENT =
             register(ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH, ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_ID);
+
+    public static final RegistryObject<SoundEvent> STRAY_CAT_BUBBLE_POP_EVENT =
+            register(ModSounds.STRAY_CAT_BUBBLE_POP, ModSounds.STRAY_CAT_BUBBLE_POP_ID);
     public static final RegistryObject<SoundEvent> STRAY_CAT_BUBBLE_SOUND_1_EVENT =
             register(ModSounds.STRAY_CAT_BUBBLE_SOUND_1, ModSounds.STRAY_CAT_BUBBLE_SOUND_1_ID);
     public static final RegistryObject<SoundEvent> STRAY_CAT_BUBBLE_SOUND_2_EVENT =
@@ -721,6 +724,16 @@ public class ForgeSounds {
             register(ModSounds.GREEN_DAY_MOLD_SPREAD, ModSounds.GREEN_DAY_MOLD_SPREAD_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_MOLD_STITCH =
             register(ModSounds.GREEN_DAY_STITCH, ModSounds.GREEN_DAY_STITCH_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_KING_CRIMSON =
+            register(ModSounds.SUMMON_KING_CRIMSON, ModSounds.SUMMON_KING_CRIMSON_ID);
+    public static final RegistryObject<SoundEvent> KING_CRIMSON_IMPALE =
+            register(ModSounds.KING_CRIMSON_IMPALE, ModSounds.KING_CRIMSON_IMPALE_ID);
+    public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH =
+            register(ModSounds.KING_CRIMSON_PUNCH, ModSounds.KING_CRIMSON_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH_2 =
+            register(ModSounds.KING_CRIMSON_PUNCH_2, ModSounds.KING_CRIMSON_PUNCH_2_ID);
+    public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH_3 =
+            register(ModSounds.KING_CRIMSON_PUNCH_3, ModSounds.KING_CRIMSON_PUNCH_3_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GOAT_CHARGE =

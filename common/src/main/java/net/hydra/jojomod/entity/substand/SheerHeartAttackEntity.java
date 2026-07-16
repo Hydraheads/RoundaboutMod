@@ -452,14 +452,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.explosions++;
 
 		if (this.getTargetType() == ENTITY){
-			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
+			Vec3 pos = this.position().add(this.getForward().scale(0.3));
+
+			ExplosionUtil.explosionHurt(pos, dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
+			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
 			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (this.entityTarget != null) {
-
 				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
 
 				if (!this.entityTarget.isAlive()) {
@@ -476,7 +477,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.12f, 4);
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
 			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();

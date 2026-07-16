@@ -279,7 +279,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             }
         }
 
-        MainUtil.makeBleed($$0, 1, 70, user);
+        MainUtil.makeBleed($$0, 1, 160, user);
     }
 
     @Override
@@ -382,8 +382,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT,
-                SoundSource.PLAYERS, 1.3F, (float)(0.78+(Math.random()*0.04)));
+        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 0.8F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
 
             this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
@@ -407,8 +407,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
 
     public void bubbleRedirect(){
-
-
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 
@@ -426,6 +424,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 (targetPos.y() - this.getY()),
                 (targetPos.z() - this.getZ())
         ).normalize().scale(this.getSped() * 0.75);
+
+        Vec3 lastDir = this.getDeltaMovement().normalize();
+        Vec3 newDir = vector.normalize();
+
+        if (lastDir.distanceTo(newDir) > 0.4f) {
+            // play redirect sound?
+        }
 
         this.setDeltaMovement(vector);
         this.hurtMarked = true;

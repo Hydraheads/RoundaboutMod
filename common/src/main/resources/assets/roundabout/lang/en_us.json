@@ -398,7 +398,7 @@
   "item.roundabout.stand_arrow.rerollOutcome": "Arrow Holds: ",
   "item.roundabout.stand_arrow.noStandsInPool": "No stands in arrow pool!",
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
-  "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Level %1$s required)",
+  "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Stand Level %1$s required)",
 
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
@@ -750,6 +750,7 @@
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
   "sounds.roundabout.summon_oasis": "Stand summoned",
+  "sounds.roundabout.summon_king_crimson": "Stand summoned",
   "sounds.roundabout.summon_anubis": "Stand summoned",
   "sounds.roundabout.summon_california": "Stand summoned",
   "sounds.roundabout.white_album_summon": "Stand summoned",
@@ -758,6 +759,10 @@
   "sounds.roundabout.evil_aura_blast": "Chilling Breeze",
   "sounds.roundabout.aura_impact": "Aura Impact",
   "sounds.roundabout.banish": "Banish",
+  "sounds.roundabout.king_crimson_impale": "Attack",
+  "sounds.roundabout.king_crimson_punch": "Attack",
+  "sounds.roundabout.king_crimson_punch_2": "Attack",
+  "sounds.roundabout.king_crimson_punch_3": "Attack",
 
   "sounds.roundabout.ice_skating": "Skating",
   "sounds.roundabout.skating_land": "Skate land",
@@ -2091,6 +2096,9 @@
   "skins.roundabout.king_crimson.dark": "Dark",
   "skins.roundabout.king_crimson.black": "Black",
   "skins.roundabout.king_crimson.beta": "Beta",
+  "skins.roundabout.king_crimson.red": "Deep Red",
+  "skins.roundabout.king_crimson.blue": "Blue",
+  "skins.roundabout.king_crimson.concept": "Concept Art",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -2396,6 +2404,7 @@
   "skins.roundabout.20_centuryboy.pumpkin": "Pumpkin",
   "skins.roundabout.20_centuryboy.evil_pumpkin": "Evil pumpkin",
   "skins.roundabout.20_centuryboy.ghost": "Ghost",
+  "skins.roundabout.20_centuryboy.wandering": "Wandering",
 
 
   "skins.roundabout.manhattan_transfer.manhattan_part_6": "Part 6",

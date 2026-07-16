@@ -41,24 +41,30 @@ public class ExplosionUtil {
 		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
-		explodeEffects(pos, level, particle, range, 18);
-	
+		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), 18);
+
 	}
 
     public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range, int amount) {
-    	
+		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), amount);
+	}
+
+	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, Vec3 range, int amount) {
+
     	((ServerLevel) level).sendParticles(particle,
                 pos.x,
                 pos.y+1.0f,
                 pos.z,
-                amount, range, range+0.3f, range, 1.0);
-    	
+                amount, range.x, range.y, range.z, 1.0);
+                //amount, range, range+0.3f, range, 1.0);
+
     	((ServerLevel) level).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2f),
     			pos.x,
                 pos.y+1.0f,
                 pos.z,
-                (int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
-    	
+                (int)Math.floor(amount*0.66), range.x, range.y+0.6, range.z, 0.001);
+                //(int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
+
     }
 
 	public static void explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
@@ -76,7 +82,7 @@ public class ExplosionUtil {
 	public static void explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
 	}
-	
+
 	public static void explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
 		explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
     }

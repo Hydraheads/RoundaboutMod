@@ -486,7 +486,7 @@ public class Config implements Cloneable {
         public Boolean mobPlantHitkillMobs;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer maxAirBubbleTravelDistanceBeforePopping;
-        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
     }
     

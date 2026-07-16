@@ -4,6 +4,7 @@
 package net.hydra.jojomod.client.models.stand;
 
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
+import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
 import net.hydra.jojomod.client.models.stand.animations.TheWorldAnimations;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -153,6 +154,9 @@ public class KingCrimsonModel<T extends KingCrimsonEntity> extends StandModel<T>
 		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
 		this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.impale, StandAnimations.IMPALE, pAgeInTicks, 1.04f);
+        this.animate(pEntity.finalPunchWindup, StarPlatinumAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
+        this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
+        this.animate(pEntity.impale2, StarPlatinumAnimations.Impale2, pAgeInTicks, 1.04f);
 	}
 
 	@Override
