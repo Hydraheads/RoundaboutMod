@@ -17,6 +17,12 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "summon_king_crimson": {
+    "subtitle": "sounds.roundabout.summon_king_crimson",
+    "sounds": [
+      "roundabout:summon_king_crimson"
+    ]
+  },
   "summon_california": {
     "subtitle": "sounds.roundabout.summon_california",
     "sounds": [

@@ -1281,6 +1281,11 @@ public class ModSounds {
     public static final ResourceLocation GREEN_DAY_STITCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ GREEN_DAY_STITCH);
     public static SoundEvent GREEN_DAY_STITCH_EVENT = SoundEvent.createVariableRangeEvent(GREEN_DAY_STITCH_ID);
 
+    public static final String SUMMON_KING_CRIMSON = "summon_king_crimson";
+    public static final ResourceLocation SUMMON_KING_CRIMSON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ SUMMON_KING_CRIMSON);
+    public static SoundEvent SUMMON_KING_CRIMSON_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_KING_CRIMSON_ID);
+
+
 
 
     public static final String EXTEND_SPIKES = "extend_spikes";

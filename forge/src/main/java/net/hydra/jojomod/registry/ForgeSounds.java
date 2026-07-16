@@ -721,6 +721,8 @@ public class ForgeSounds {
             register(ModSounds.GREEN_DAY_MOLD_SPREAD, ModSounds.GREEN_DAY_MOLD_SPREAD_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_MOLD_STITCH =
             register(ModSounds.GREEN_DAY_STITCH, ModSounds.GREEN_DAY_STITCH_ID);
+    public static final RegistryObject<SoundEvent> SUMMON_KING_CRIMSON =
+            register(ModSounds.SUMMON_KING_CRIMSON, ModSounds.SUMMON_KING_CRIMSON_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GOAT_CHARGE =

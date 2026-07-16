@@ -520,6 +520,7 @@ public class FabricSounds {
         addSound(ModSounds.GREEN_DAY_ARM_SPIN_ID,ModSounds.GREEN_DAY_ARM_SPIN_EVENT);
         addSound(ModSounds.GREEN_DAY_MOLD_SPREAD_ID,ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT);
         addSound(ModSounds.GREEN_DAY_STITCH_ID,ModSounds.GREEN_DAY_STITCH_EVENT);
+        addSound(ModSounds.SUMMON_KING_CRIMSON_ID,ModSounds.SUMMON_KING_CRIMSON_EVENT);
 
         addSound(ModSounds.PLANET_WAVES_SUMMON_ID,ModSounds.PLANET_WAVES_SUMMON_EVENT);
         addSound(ModSounds.PLANET_WAVES_METEOR_SHOWER_ID,ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT);
