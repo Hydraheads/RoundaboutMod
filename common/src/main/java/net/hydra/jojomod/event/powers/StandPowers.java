@@ -525,6 +525,7 @@ public class StandPowers extends AbilityScapeBasis {
     public float getBarrageDamageMob(){
         return 20;
     }
+
     public float getBarrageHitStrength(Entity entity){
         float barrageLength = this.getBarrageLength();
         float power;

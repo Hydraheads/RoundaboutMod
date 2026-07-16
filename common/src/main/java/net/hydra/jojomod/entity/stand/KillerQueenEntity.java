@@ -225,8 +225,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
         if (((StandUser)standUser).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.inBitesTheDustMode()) {
             /**
              * For some reason the "this.getFollowing()" will always return null
-             *
-            */
+             */
             return getIdleOffset(this.getFollowing());
         }
 
