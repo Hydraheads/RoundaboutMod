@@ -650,7 +650,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d = this.getSelf().getEyePosition(0);
                             Vec3 vec3d2 = this.getSelf().getViewVector(0);
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
-                            double mag = 0.05F;
+                            double mag = 0.1F;
 
                             if (attackTimeDuring > 10) {
                                 mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
