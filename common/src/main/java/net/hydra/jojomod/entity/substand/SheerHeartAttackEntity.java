@@ -407,6 +407,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
+		BlockHitResult hitResult = this.level().clip(new ClipContext(this.getEyePosition(), targetPos,
+				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+		if (hitResult.getType() != HitResult.Type.MISS) { return false; }
+
 		return (float)dist > (2.5f) && (float)dist < 4.0f;
 	}
 

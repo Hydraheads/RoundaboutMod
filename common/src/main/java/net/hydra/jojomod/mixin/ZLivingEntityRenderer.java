@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
@@ -21,7 +22,9 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersTusk;
+import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -65,7 +68,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity != null && ((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
+        if (PowersMetallica.hasAnyFadeActive(entity)) {
             cir.setReturnValue(true);
         }
     }
@@ -74,14 +77,38 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (entity != null && ((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
+        if (PowersMetallica.hasAnyFadeActive(entity)) {
             ResourceLocation texture = this.getTextureLocation(entity);
-            cir.setReturnValue(RenderType.itemEntityTranslucentCull(texture));
+            cir.setReturnValue(RenderType.entityTranslucent(texture));
+        }
+    }
+
+    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"))
+    private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+        if (PowersMetallica.hasAnyFadeActive(entity)) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.cameraEntity != null) {
+                double dist = entity.distanceTo(mc.cameraEntity);
+                float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(entity, dist, partialTicks);
+
+                if (buffer instanceof MultiBufferSource.BufferSource bs) {
+                    bs.endBatch();
+                }
+                RenderSystem.enableBlend();
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+            }
         }
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
     private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack matrixStack, MultiBufferSource buffer, int $$5, CallbackInfo ci) {
+        if (PowersMetallica.hasAnyFadeActive(entity)) {
+            if (buffer instanceof MultiBufferSource.BufferSource bs) {
+                bs.endBatch();
+            }
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.disableBlend();
+        }
         ClientUtil.setThrowFadeToTheEther(1.0F);
         MetallicaClientRenderer.renderMetalMeterBar(entity, matrixStack, buffer);
     }

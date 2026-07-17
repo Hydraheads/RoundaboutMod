@@ -588,6 +588,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (this.roundabout$getBleedLevel() > -1) {
+            if (!PowersMetallica.hasAnyFadeActive((LivingEntity)(Object)this)) {
             if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)){
                 this.level()
                         .addParticle(
@@ -626,6 +627,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         );
             }
         }
+    }
         if (this.roundabout$getOnlyBleeding() || this.getEffect(ModEffects.MELTING) != null) {
             return true;
         }
@@ -3413,6 +3415,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.entityData.set(ROUNDABOUT$METAL_METER, amount);
     }
 
+    @Unique
     @Override
     public float roundabout$getMetalMeter() {
         if (this.entityData.hasItem(ROUNDABOUT$METAL_METER)) {
@@ -3425,8 +3428,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public int roundabout$getMetallicaInvisibility() {
-        if (roundabout$getStandPowers() instanceof PowersMetallica PM) {
-            return PM.roundabout$metallicaInvisibility;
+        if (this.entityData.hasItem(ROUNDABOUT$METALLICA_INVISIBILITY)) {
+            return this.getEntityData().get(ROUNDABOUT$METALLICA_INVISIBILITY);
         }
         return -1;
     }
@@ -3434,8 +3437,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setMetallicaInvisibility(int invis) {
-        if (roundabout$getStandPowers() instanceof PowersMetallica PM) {
-            PM.roundabout$metallicaInvisibility = invis;
+        if (this.entityData.hasItem(ROUNDABOUT$METALLICA_INVISIBILITY)) {
+            this.getEntityData().set(ROUNDABOUT$METALLICA_INVISIBILITY, invis);
         }
     }
 
@@ -3721,23 +3724,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public int roundabout$getTrueInvisManhattan() {
         if (this.entityData.hasItem(ROUNDABOUT$MANHATTAN_INVISIBILITY)) {
             return this.getEntityData().get(ROUNDABOUT$MANHATTAN_INVISIBILITY);
-        }
-        return -1;
-    }
-
-    @Unique
-    @Override
-    public void roundabout$setMetallicaInvis(int invis) {
-        if (this.entityData.hasItem(ROUNDABOUT$METALLICA_INVISIBILITY)) {
-            this.getEntityData().set(ROUNDABOUT$METALLICA_INVISIBILITY, invis);
-        }
-    }
-
-    @Unique
-    @Override
-    public int roundabout$getMetallicaInvis() {
-        if (this.entityData.hasItem(ROUNDABOUT$METALLICA_INVISIBILITY)) {
-            return this.getEntityData().get(ROUNDABOUT$METALLICA_INVISIBILITY);
         }
         return -1;
     }

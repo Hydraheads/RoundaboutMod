@@ -765,6 +765,7 @@
   "sounds.roundabout.king_crimson_punch_3": "Impact",
   "sounds.roundabout.king_crimson_punch_4": "Bloody Impact",
   "sounds.roundabout.king_crimson_punch_5": "Heavy Impact",
+  "sounds.roundabout.king_crimson_barrage_hit": "Barrage",
 
   "sounds.roundabout.ice_skating": "Skating",
   "sounds.roundabout.skating_land": "Skate land",
@@ -1255,6 +1256,7 @@
   "sounds.roundabout.straycat_bubble_redirect": "Air Bubble Redirecting",
   "sounds.roundabout.straycat_bubble_sound": "Air Bubble shoot",
   "sounds.roundabout.killer_queen_heavy_punch" : "Heavy Punch",
+  "sounds.roundabout.straycat_bubble_pop": "Air Bubble pop",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
@@ -1383,6 +1385,7 @@
   "instruction.roundabout.press_skill_air_crouch": "Press Skill %1$s In The Air While Crouching",
   "instruction.roundabout.press_2_skill": "Press Skill %1$s While Using Skill %2$s",
   "instruction.roundabout.passive": "Passive",
+  "instruction.roundabout.stand_arrow": "Use stand arrow",
   "instruction.roundabout.shop_item": "Shop Item",
   "instruction.roundabout.use_item": "Item Interaction",
   "instruction.roundabout.press_skill_btd_mode": "Press Skill %1$s when bites the dust is planted",
@@ -1933,6 +1936,8 @@
   "ability.roundabout.kq_btd_combat.desc":"Detonates Bites the Dust, everything restarts from the last 20 seconds, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
   "ability.roundabout.add_stray_cat":"Add Stray Cat",
   "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves",
+  "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
+  "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
 
   "ability.roundabout.meteor_shower":"Meteor Shower",
   "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.If shifting they will go towards your feet.",
@@ -2101,6 +2106,7 @@
   "skins.roundabout.king_crimson.red": "Deep Red",
   "skins.roundabout.king_crimson.blue": "Blue",
   "skins.roundabout.king_crimson.concept": "Concept Art",
+  "skins.roundabout.king_crimson.vision": "Vision",
 
   "skins.roundabout.star_platinum.base": "Part 3",
   "skins.roundabout.star_platinum.manga": "Manga",
@@ -4034,6 +4040,13 @@
   "config.roundabout.simpleTimeStopShader.desc": "Whether or not stopping time renders a simple shader.",
   "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
+
+  "config.roundabout.advancedEpitaphShader.name": "Epitaph Shader",
+  "config.roundabout.advancedEpitaphShader.desc": "Whether or not epitaph renders its shader. Overrides simple shader when on.",
+
+  "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
+  "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
 
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
   "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",

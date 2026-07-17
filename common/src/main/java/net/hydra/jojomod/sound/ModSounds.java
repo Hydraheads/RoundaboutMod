@@ -1309,6 +1309,9 @@ public class ModSounds {
     public static final ResourceLocation KING_CRIMSON_PUNCH_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH_5);
     public static SoundEvent KING_CRIMSON_PUNCH_5_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_5_ID);
 
+    public static final String KING_CRIMSON_BARRAGE_HIT = "king_crimson_barrage_hit";
+    public static final ResourceLocation KING_CRIMSON_BARRAGE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_BARRAGE_HIT);
+    public static SoundEvent KING_CRIMSON_BARRAGE_HIT_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_BARRAGE_HIT_ID);
 
 
     public static final String EXTEND_SPIKES = "extend_spikes";

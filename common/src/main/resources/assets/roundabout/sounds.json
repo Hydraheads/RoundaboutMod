@@ -59,6 +59,12 @@
       "roundabout:king_crimson_punch_5"
     ]
   },
+  "king_crimson_barrage_hit": {
+    "subtitle": "sounds.roundabout.king_crimson_barrage_hit",
+    "sounds": [
+      "roundabout:king_crimson_barrage_hit"
+    ]
+  },
   "summon_california": {
     "subtitle": "sounds.roundabout.summon_california",
     "sounds": [

@@ -26,7 +26,8 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             BETA = 14,
             CONCEPT = 15,
             PART_5_SKIN = 16,
-            BLUE = 17;
+            BLUE = 17,
+            VISION = 18;
 
 
     public final AnimationState finalPunch = new AnimationState();

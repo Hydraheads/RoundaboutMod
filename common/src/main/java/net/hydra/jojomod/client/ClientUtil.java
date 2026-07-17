@@ -17,7 +17,6 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -44,7 +43,6 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -75,7 +73,6 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -96,7 +93,6 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
 
@@ -911,6 +907,31 @@ public class ClientUtil {
         return false;
     }
 
+    public static boolean isUsingEpitaph(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
+            if (PKC.hasStandActive(player)) {
+                return false;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    public static boolean canRenderEpitaphScreen() {
+        if (isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
+            if (ConfigManager.getClientConfig().generalSettings.epitaphScreenEffect) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean canEpitaphRenderShader() {
+        if (isUsingEpitaph() && ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
+            return true;
+        }
+        return false;
+    }
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1011,6 +1032,13 @@ public class ClientUtil {
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
+
+        if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
+            double dist = getCameradDistance(ent);
+            float metAlpha = PowersMetallica.getMetallicaInvisibilityAlpha(le, dist, delta);
+            throwFade = throwFade * metAlpha;
+        }
+
         if (ent instanceof Player pl){
             GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
             int interp = gp.fadeOutInterpolation;

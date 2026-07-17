@@ -108,6 +108,12 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+            if (ClientUtil.canRenderEpitaphScreen()){
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
+                        0.25F,1F,1F,1F);
+            }
+
 
             if (ClientUtil.isBlocked){
                 RenderSystem.enableBlend();
