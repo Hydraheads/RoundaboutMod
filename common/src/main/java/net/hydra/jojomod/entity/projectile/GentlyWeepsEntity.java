@@ -153,22 +153,17 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             }
                             if (MainUtil.canFreeze(mob)) {
                                 if (this.tickCount > 10) {
+                                    int heat = HeatUtil.getHeat(mob);
                                     if (mob instanceof Player pl) {
-                                        if (pl.hurtTime > 0){
-                                            HeatUtil.addHeat(mob, -1);
-                                        } else if (this.tickCount > 50) {
+                                        if (this.tickCount > 50 && heat < -30) {
                                             HeatUtil.addHeat(mob, -3);
-                                        } else if (this.tickCount > 30) {
+                                        } else if (this.tickCount > 30 && heat < -10) {
                                             HeatUtil.addHeat(mob, -2);
                                         }else {
                                             HeatUtil.addHeat(mob, -1);
                                         }
                                     } else {
-                                        if (this.tickCount > 30) {
-                                            HeatUtil.addHeat(mob, -2);
-                                        } else {
-                                            HeatUtil.addHeat(mob, -1);
-                                        }
+                                        HeatUtil.addHeat(mob, -1);
                                     }
                                 } else {
                                     if (mob instanceof Player pl) {

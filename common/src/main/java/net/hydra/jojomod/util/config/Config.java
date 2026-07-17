@@ -965,8 +965,8 @@ public class Config implements Cloneable {
         public Integer iceWallCooldown;
         @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer twisterLifespan;
-        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
-        public Integer gentlyWeepsLifespan;
+        @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
+        public Integer gentlyWeepsLifespanv2;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

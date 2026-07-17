@@ -3022,8 +3022,8 @@
   "config.roundabout.iceWallCooldown.desc": "The cooldown in ticks.",
   "config.roundabout.twisterLifespan.name": "Twister Lifespan",
   "config.roundabout.twisterLifespan.desc": "How long does the ability stay active?",
-  "config.roundabout.gentlyWeepsLifespan.name": "Gently Weeps Lifespan",
-  "config.roundabout.gentlyWeepsLifespan.desc": "How long does the ability stay active?",
+  "config.roundabout.gentlyWeepsLifespanv2.name": "Gently Weeps Lifespan",
+  "config.roundabout.gentlyWeepsLifespanv2.desc": "How long does the ability stay active?",
 
 
   "config.roundabout.cinderellaAttackMultOnPlayers.name": "Player Damage Multiplier",

@@ -911,7 +911,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
             level.addFreshEntity(twister);
-            twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespan;
+            twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespanv2;
         }
     }
 
@@ -1731,9 +1731,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             if (!MainUtil.canFreeze(entity)){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.93F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.96F));
             }
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.9F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.93F));
         } else {
             if (!MainUtil.canFreeze(entity)){
                 return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));

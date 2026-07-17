@@ -519,7 +519,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else {
                             self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
                         }
-                        Entity TE2 = getTargetEntity(self, 1.4F, 40);
+                        Entity TE2 = getTargetEntity(self, 1.7F, 40);
                         if (TE2 != null){
                             tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                             xTryPower(PowerIndex.NONE, true);
@@ -542,7 +542,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else {
                             self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
                         }
-                        Entity TE2 = getTargetEntity(self, 1.4F, 40);
+                        Entity TE2 = getTargetEntity(self, 1.7F, 40);
                         if (TE2 != null) {
                             xTryPower(PowerIndex.NONE, true);
                             tryIntPowerPacket(ICE_CLUTCH_ATTACK, TE2.getId());
@@ -842,7 +842,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getBrawlPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(0.72F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
+                return playerDmgMult(0.75F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
                 return mobDmgMult(2.6F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
