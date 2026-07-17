@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -111,7 +112,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         STRAY_CAT_ADD = 63,
         BUBBLE_BOMB = 63,
         BOMB_CONFIG = 64,
-        BITES_THE_DUST_DEFUSE = 65,
+        BITES_THE_DUST_DEFUSE = 67,
         BITES_THE_DUST_CHASE = 66,
 
     // COOLDOWN INDEXES
@@ -133,6 +134,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 		BOMB_BUBBLE=4,
         BLOCK_CONTACT = 5,
         BUBBLE_CONTACT = 6,
+        BITES_THE_DUST = 7,
 
     // Sheer Heart Attack Status things
         SHA_NONE = 0,
@@ -145,8 +147,14 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public void onStandSummon(boolean desummon) {
-        if (desummon && !isClient()) { btdDefuseServer(); }
         super.onStandSummon(desummon);
+        if (desummon && !isClient()) { btdDefuseServer(desummon); }
+        else if (this.currentBombStatus == BITES_THE_DUST) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
     }
 
     public void syncBombStatus(byte status) {
@@ -183,7 +191,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int bombBubbleID = -1;
     public SheerHeartAttackEntity SHA = null;
 
-    public int detonateTimer = -1;;
+    public int detonateTimer = -1;
 
     public int plantInventorySlot=1;
 
@@ -365,7 +373,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean inBitesTheDustMode() {
-        return this.activePower == BITES_THE_DUST_PLANT;
+        return this.currentBombStatus == BITES_THE_DUST;
     }
 
     // Level stufff
@@ -600,19 +608,29 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        		}else {
 	        			detonateClient();
 	        		}
-        		}
+        		}else {
+                    // detonate bites the dust
+                }
         	}
         	case SKILL_1_CROUCH -> {
-                if (this.currentBombStatus == BOMB_NONE) {
-                    if (this.canItemPlantBomb()) {
-                        //tryItemPlantBomb();
+                if (!this.inBitesTheDustMode()) {
+                    if (this.currentBombStatus == BOMB_NONE) {
+                        if (this.canItemPlantBomb()) {
+                            //tryItemPlantBomb();
+                        }
+                    } else {
+                        detonateClient();
                     }
                 }else {
-                    detonateClient();
+                    // detonate bites the dust
                 }
         	}
         	case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
-        		this.tryBombConfig();
+                if (!this.inBitesTheDustMode()) {
+                    this.tryBombConfig();
+                }else {
+                    // detonate bites the dust
+                }
         	}
         	case SKILL_2_NORMAL -> {
         		if (!this.inBitesTheDustMode()) {
@@ -623,7 +641,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        		}else {
 	        			defuseClient();
 	        		}
-        		}
+        		}else {
+                    // detonate bites the dust
+                }
         	}
             case SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 if (!this.inBitesTheDustMode()) {
@@ -634,12 +654,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                     } else {
                         defuseClient();
                     }
+                }else {
+                    // detonates dust the bite
                 }
             }
         	case SKILL_2_CROUCH -> {
                 if (!this.inBitesTheDustMode()) {
                     tryImpale();
-        		}
+        		}else {
+                    // bite the detonates dusto
+                }
         	}
         	case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -669,14 +693,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     // Can methods
 
-    public boolean isBitesTheDustPlanted() {
-        return this.getActivePower() == BITES_THE_DUST_COMBAT || this.getActivePower() == BITES_THE_DUST_DAY;
+    @Override
+    public boolean interceptAttack(){
+        return this.currentBombStatus != BITES_THE_DUST;
     }
 
+    @Override
+    public boolean interceptGuard(){
+        return this.currentBombStatus != BITES_THE_DUST;
+    }
 
     @Override
     public boolean canGuard(){
-    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.detonateTimer > -1 || isBitesTheDustPlanted()) {
+    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.detonateTimer > -1 || inBitesTheDustMode()) {
     		return false;
     	}
         return super.canGuard();
@@ -684,7 +713,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack() {
-    	if (this.detonateTimer > -1 || isBitesTheDustPlanted()) {
+    	if (this.detonateTimer > -1 || inBitesTheDustMode()) {
     		return false;
     	}
     	
@@ -693,7 +722,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack2() {
-    	if (isBitesTheDustPlanted()) {
+    	if (inBitesTheDustMode()) {
     		return false;
     	}
     	
@@ -1141,7 +1170,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (entity != null) {
                 SE = ModSounds.KILLER_QUEEN_PUNCH_2_EVENT;
-                volume = 1.05F;
+                volume = 1.15F;
                 pitch = 1.2F;
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
@@ -1150,7 +1179,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (entity != null) {
                 SE = ModSounds.KILLER_QUEEN_PUNCH_1_EVENT;
                 pitch = 1.1F + 0.07F * activePowerPhase;
-                volume = 1.05F;
+                volume = 1.15F;
             } else {
                 SE = ModSounds.PUNCH_1_SOUND_EVENT;
             }
@@ -1240,7 +1269,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          }
          if (chargedFinal >= maxKickTime) {
              soundShiba = SHIBABA;
-             if (entity != null) { volume = 1.9F; }
+             if (entity != null) { volume = 1.92F; }
          }
 
 
@@ -1249,8 +1278,31 @@ public class PowersKillerQueen extends NewPunchingStand {
              this.playStandUserOnlySoundsIfNearby(soundShiba, 15, false, true);
          }
     }
-    
-    
+    @Override
+    public void poseStand(byte r) {
+        if (this.currentBombStatus != BITES_THE_DUST || r == OffsetIndex.LOOSE) {
+            super.poseStand(r);
+        }
+    }
+
+    @Override
+    public void animateStand(byte r){
+        if (this.currentBombStatus != BITES_THE_DUST || r == KillerQueenEntity.BITES_THE_DUST_FOLLOW) {
+            super.animateStand(r);
+        }
+    }
+
+    @Override
+    public boolean setPowerNone() {
+        boolean result = super.setPowerNone();
+        if (this.currentBombStatus == BITES_THE_DUST) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.LOOSE);
+            }
+        }
+        return result;
+    }
     
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -1298,6 +1350,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean tryPower(int move, boolean forced) {
+        StandEntity stand = getStandEntity(this.self);
+
         if (!isClient()) {
             if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
@@ -1530,7 +1584,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	((StandUser) this.getSelf()).roundabout$tryPower(BITES_THE_DUST_DEFUSE, true);
         tryPowerPacket(BITES_THE_DUST_DEFUSE);
 
-        this.currentBombStatus = BOMB_NONE;
+        //this.currentBombStatus = BOMB_NONE;
     }
 
     public void detonateClient() {
@@ -1662,14 +1716,22 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean btdDefuseServer() {
+        return btdDefuseServer(false);
+    }
+
+    public boolean btdDefuseServer(boolean unsummon) {
         if (!this.isClient()) {
-            if (this.isBitesTheDustPlanted()) {
+            if (inBitesTheDustMode()) {
                 StandEntity stand = getStandEntity(this.self);
-                if (Objects.nonNull(stand)){
-                    stand.setFollowing(this.self);
+                if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE ){
+                    KQE.setPlantedBitesTheDust(null);
+                    if (!unsummon) {
+                        stand.setFadePercent(100);
+                    }
                 }
-                this.poseStand(OffsetIndex.FOLLOW);
+                syncBombStatus(BOMB_NONE);
                 this.setPowerNone();
+                syncActivePower();
             }
         }
 
@@ -1825,10 +1887,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (target != null) {
-            stand.setFollowing(target);
-            this.poseStand(OffsetIndex.FOLLOW);
-            this.setActivePower(BITES_THE_DUST_PLANT);
+        if (target != null && stand instanceof KillerQueenEntity KQE) {
+            KQE.setPlantedBitesTheDust(target);
+
+            this.syncBombStatus(BITES_THE_DUST);
+            this.setPowerNone();
+            syncActivePower();
         }
     }
 
@@ -1899,6 +1963,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             playSoundsIfNearby(BTD_NOISE, 27, false);
             this.setActivePower(BITES_THE_DUST_CHASE);
             this.poseStand(OffsetIndex.LOOSE);
+            stand.setFadePercent(50);
 
             Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
             Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
@@ -2284,6 +2349,35 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         AABB BB2 = stand.getBoundingBox();
                         tryBitesTheDustPlant(stand, BB1, BB2);
+                    }
+                }
+            }
+            else if (this.currentBombStatus == BITES_THE_DUST) {
+                StandEntity stand = this.getStandEntity(this.getSelf());
+                if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE) {
+                    Entity plantedBTD = KQE.getPlantedBitesTheDust();
+                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
+                        stand.setFadePercent(30);
+
+                        Vec3 pos = plantedBTD.getPosition(0);
+                        Vec3 offset = new Vec3(0, plantedBTD.getBbHeight() + 0.1f, 0);
+
+                        Direction gravD = ((IGravityEntity)plantedBTD).roundabout$getGravityDirection();
+                        if (gravD != Direction.DOWN){
+                            offset = RotationUtil.vecPlayerToWorld(offset, gravD);
+                        }
+
+                        //stand.setPos(pos.add(offset));
+                        stand.setPos(KQE.getIdleOffset((LivingEntity)plantedBTD));
+
+                        stand.setYRot(plantedBTD.getYHeadRot() % 360);
+                        stand.setXRot(plantedBTD.getXRot());
+                        stand.setYBodyRot(plantedBTD.getYHeadRot() % 360);
+                        stand.setYHeadRot(plantedBTD.getYHeadRot() % 360);
+
+                    }else {
+                        this.setPowerNone();
+                        this.btdDefuseServer();
                     }
                 }
             }

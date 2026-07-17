@@ -1928,7 +1928,7 @@
   "ability.roundabout.kq_sha_summon.desc":"Summons Sheer Heart Attack, it will target the hottest entity/block and explode it when contacting 'Look over here!'",
   "ability.roundabout.kq_sha_throw":"Sheer Heart Attack summon",
   "ability.roundabout.kq_sha_throw.desc":"Throws Sheer Heart Attack at the direction you are facing, it will target the hottest entity/block and explode it when contacting 'Nobody can escape Sheer Heart Attack'",
-  "ability.roundabout.kq_btd_mode":"Bites The Dust mode",
+  "ability.roundabout.kq_btd_mode":"Bites The Dust plant",
   "ability.roundabout.kq_btd_mode.desc":"Plants Bites the Dust in the Non stand user mob that you are facing, making ou unable to use killer queen afterwards",
   "ability.roundabout.kq_btd_day":"Bites The Dust Day mode",
   "ability.roundabout.kq_btd_day.desc":"Detonates Bites the Dust, everything restarts from the beginning of the day, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
