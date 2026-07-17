@@ -138,7 +138,14 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
         return Component.translatable(  "skins.roundabout.king_crimson.base");
     }
-
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
