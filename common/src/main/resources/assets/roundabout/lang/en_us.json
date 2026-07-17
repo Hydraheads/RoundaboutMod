@@ -4040,6 +4040,13 @@
   "config.roundabout.advancedTimeStopShader.name": "Advanced Shader",
   "config.roundabout.advancedTimeStopShader.desc": "Whether or not stopping time renders a bubble shader. Overrides simple shader when on.",
 
+  "config.roundabout.advancedEpitaphShader.name": "Epitaph Shader",
+  "config.roundabout.advancedEpitaphShader.desc": "Whether or not epitaph renders its shader. Overrides simple shader when on.",
+
+  "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
+  "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
+
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
   "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",
 
