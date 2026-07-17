@@ -92,6 +92,14 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             RPostShaderRegistry.WIND_VISION.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
             RPostShaderRegistry.WIND_VISION.roundabout$process(tickDelta);
         }
+        if(ClientUtil.canEpitaphRender()){
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+
+
+            RPostShaderRegistry.EPITAPH.roundabout$process(tickDelta);
+        }
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
