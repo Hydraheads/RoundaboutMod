@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -46,7 +47,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile {
+public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile, NoHitboxRendering {
     public StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, Level $$1) {
         super($$0, $$1);
         this.lifeSpan = 300;
@@ -57,6 +58,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.INT);
 
     public int lifeSpan = 300;
     public LivingEntity standUser;
@@ -87,6 +89,15 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setSkin(byte skin) {
         this.getEntityData().set(SKIN, skin);
     }
+    public void setTargetID(int t) { this.getEntityData().set(TARGET, t); }
+    public Entity getTarget() {
+        int id = this.getEntityData().get(TARGET);
+        if (id == -1) {
+            return null;
+        }
+
+        return this.level().getEntity(id);
+    }
 
 
     static final float damagePoints = 2.5f;
@@ -96,7 +107,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
 
     public Entity target;
-    public void setTarget(Entity t) {this.target = t; }
+    public void setTarget(Entity t) {
+        this.target = t;
+        if (t == null) {
+            setTargetID(-1);
+        }else {
+            setTargetID(t.getId());
+        }
+    }
 
     private static final int redirectCooldownMax = 30;
     private int redirectCooldown = redirectCooldownMax;
@@ -164,9 +182,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         if (!this.level().isClientSide()) {
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
-                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
+                //SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
                 if (Math.random() > 0.5) {
-                    SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+                    SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT;
+                 //   SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
                 }
 
                 this.level().playSound(null, this.blockPosition(), SE,
@@ -225,6 +245,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
     public void setUser(LivingEntity User) {
         standUser = User;
+        setOwner(User);
 
         this.getEntityData().set(USER_ID, User.getId());
         if (!this.level().isClientSide()){
@@ -383,7 +404,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void popBubble(){
         this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_POP_EVENT,
-                SoundSource.PLAYERS, 0.8F, (float)(0.78+(Math.random()*0.04)));
+                SoundSource.PLAYERS, 0.6F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
 
             this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
@@ -403,6 +424,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
         this.entityData.define(SKIN, (byte)0);
+        this.entityData.define(TARGET, -1);
     }
 
 
@@ -429,7 +451,13 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         Vec3 newDir = vector.normalize();
 
         if (lastDir.distanceTo(newDir) > 0.4f) {
-            // play redirect sound?
+            SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+            if (Math.random() > 0.5) {
+                SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+            }
+
+            this.level().playSound(null, this.blockPosition(), SE,
+                    SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
         }
 
         this.setDeltaMovement(vector);

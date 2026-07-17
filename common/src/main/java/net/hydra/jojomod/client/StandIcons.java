@@ -358,6 +358,8 @@ public class StandIcons {
     		"textures/gui/icons/killer_queen/bomb_select.png");
     public static final ResourceLocation KILLER_QUEEN_ADD_STRAY_CAT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/add_stray_cat.png");
+    public static final ResourceLocation KILLER_QUEEN_OBTAIN_BTD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/bites_the_dust.png");
     public static final ResourceLocation KILLER_QUEEN_BOMB_DETONATE = new ResourceLocation(Roundabout.MOD_ID,
     		"textures/gui/icons/killer_queen/detonate.png");
     public static final ResourceLocation KILLER_QUEEN_BOMB_DEFUSE = new ResourceLocation(Roundabout.MOD_ID,
