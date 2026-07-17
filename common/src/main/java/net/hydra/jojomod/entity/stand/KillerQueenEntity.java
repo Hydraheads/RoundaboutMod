@@ -6,19 +6,44 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class KillerQueenEntity extends FollowingStandEntity {
 
-
-
     public KillerQueenEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
+    }
+
+    protected static final EntityDataAccessor<Integer> PLANTED_BITES_THE_DUST = SynchedEntityData.defineId(FollowingStandEntity.class,
+            EntityDataSerializers.INT);
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        if (!this.entityData.hasItem(PLANTED_BITES_THE_DUST)) {
+            this.entityData.define(PLANTED_BITES_THE_DUST, -1);
+        }
+    }
+
+    public void setPlantedBitesTheDust(LivingEntity entity) {
+        if (entity == null) {
+            this.entityData.set(PLANTED_BITES_THE_DUST, -1);
+        }else {
+            int id = entity.getId();
+            this.entityData.set(PLANTED_BITES_THE_DUST, id);
+        }
+    }
+    public Entity getPlantedBitesTheDust() {
+        int id = this.entityData.get(PLANTED_BITES_THE_DUST);
+        if (id != -1) {
+            return this.level().getEntity(id);
+        }
+        return null;
     }
 
     public static Component getSkinNameT(byte skinId) {
@@ -219,16 +244,20 @@ public class KillerQueenEntity extends FollowingStandEntity {
         }
     }
 
+
+
+    /** unused, unless someone fix the followOffset to work with following
+    /*
     @Override
     public Vec3 getStandOffsetVector(LivingEntity standUser){
 
         if (((StandUser)standUser).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.inBitesTheDustMode()) {
             /**
              * For some reason the "this.getFollowing()" will always return null
-             */
+             *
             return getIdleOffset(this.getFollowing());
         }
 
         return super.getStandOffsetVector(standUser);
-    }
+    }*/
 }
