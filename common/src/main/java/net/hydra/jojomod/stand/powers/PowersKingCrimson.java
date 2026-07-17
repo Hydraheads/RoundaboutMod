@@ -17,14 +17,17 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -137,6 +140,19 @@ public class PowersKingCrimson extends NewPunchingStand {
     }
 
     @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
+            return true;
+        }
+        return super.canInterruptPower(sauce,interrupter);
+    }
+
+        @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(KingCrimsonEntity.RED);
