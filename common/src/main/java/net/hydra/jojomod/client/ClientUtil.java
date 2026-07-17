@@ -285,6 +285,23 @@ public class ClientUtil {
             ClientUtil.popSounds = null;
         }
 
+
+        Player pl = getPlayer();
+        if (pl != null){
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int cont = ipe.roundabout$getControlling();
+            if (cont > 0){
+                Entity zentity = pl.level().getEntity(cont);
+                if (zentity == null ||
+                        !zentity.level().dimension().equals(pl.level().dimension())
+                || zentity.isRemoved() || !zentity.isAlive()){
+                    ipe.roundabout$setIsControlling(0);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
+        }
+
         if (roadRollerPickingRRE != null) {
             if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
                 roadRollerPickingRRE = null;
