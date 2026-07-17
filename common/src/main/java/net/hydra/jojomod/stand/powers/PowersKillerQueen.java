@@ -258,25 +258,23 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.25F));
-            // 1.75
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5f));
         }
     } @Override public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
-            //return 2.5F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(5f));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5f));
         }
-    } @Override public float getBarrageFinisherStrength(Entity entity){
+    } /*@Override public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return 3;
         } else {
             return 6;
         }
-    }
+    }*/
 
     @Override
     public float multiplyPowerByStandConfigMobs(float power){
