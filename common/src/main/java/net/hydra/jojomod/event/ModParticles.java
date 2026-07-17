@@ -78,6 +78,7 @@ public class ModParticles {
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
     public static SimpleParticleType ALLURING_LIGHT;
 
+    public static SimpleParticleType MUD_RIPPLE;
     public static SimpleParticleType HYPNO_SWIRL;
 
     public static SimpleParticleType TUSK_VORTEX;

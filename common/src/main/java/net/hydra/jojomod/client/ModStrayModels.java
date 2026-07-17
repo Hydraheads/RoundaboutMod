@@ -48,6 +48,8 @@ public class ModStrayModels {
     public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
     public static JohnnyHatPart JohnnyHatPart;
+    public static DaiyaEarsPart DaiyaEarsPart;
+    public static DaiyaFluffPart DaiyaFluffPart;
     public static RipperEyesPart ripperEyesPart;
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;
@@ -102,6 +104,16 @@ public class ModStrayModels {
     public static WhiteAlbumRightArmPart WhiteAlbumRightArm;
     public static WhiteAlbumSlimLeftArmPart WhiteAlbumSlimLeftArm;
     public static WhiteAlbumSlimRightArmPart WhiteAlbumSlimRightArm;
+
+    public static OasisHeadPart OasisHead;
+    public static OasisChestPart OasisChest;
+    public static OasisBodyPart OasisBody;
+    public static OasisLeftLegPart OasisLeftLeg;
+    public static OasisRightLegPart OasisRightLeg;
+    public static OasisLeftArmPart OasisLeftArm;
+    public static OasisRightArmPart OasisRightArm;
+    public static OasisSlimLeftArmPart OasisSlimLeftArm;
+    public static OasisSlimRightArmPart OasisSlimRightArm;
 
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;

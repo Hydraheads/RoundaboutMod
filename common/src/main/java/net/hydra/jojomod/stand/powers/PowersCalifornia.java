@@ -486,6 +486,18 @@ public class PowersCalifornia extends NewDashPreset {
             return Component.translatable("skins.roundabout.california_king_bed.spooky");
         } else if (skinId == CaliforniaKingBedEntity.EXPERIENCE) {
             return Component.translatable("skins.roundabout.california_king_bed.experience");
+        } else if (skinId == CaliforniaKingBedEntity.CARD_SUIT) {
+            return Component.translatable("skins.roundabout.california_king_bed.card_suit");
+        } else if (skinId == CaliforniaKingBedEntity.COVER) {
+            return Component.translatable("skins.roundabout.california_king_bed.cover");
+        } else if (skinId == CaliforniaKingBedEntity.SPINE_ART) {
+            return Component.translatable("skins.roundabout.california_king_bed.spine_art");
+        } else if (skinId == CaliforniaKingBedEntity.HEAVEN) {
+            return Component.translatable("skins.roundabout.california_king_bed.heaven");
+        } else if (skinId == CaliforniaKingBedEntity.BLUE) {
+            return Component.translatable("skins.roundabout.california_king_bed.blue");
+        } else if (skinId == CaliforniaKingBedEntity.SLEEPY) {
+            return Component.translatable("skins.roundabout.california_king_bed.sleepy");
         }
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
@@ -657,7 +669,7 @@ public class PowersCalifornia extends NewDashPreset {
                         ModSounds.CKB_TILE_EVENT, SoundSource.PLAYERS, 1F,
                         (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
-                step.timing = 200;
+                step.timing = 400;
                 addSpawnedEntity(step);
                 self.level().addFreshEntity(step);
             }
@@ -1456,6 +1468,12 @@ public class PowersCalifornia extends NewDashPreset {
         $$1.add(CaliforniaKingBedEntity.EGYPT);
         $$1.add(CaliforniaKingBedEntity.SPOOKY);
         $$1.add(CaliforniaKingBedEntity.EXPERIENCE);
+        $$1.add(CaliforniaKingBedEntity.CARD_SUIT);
+        $$1.add(CaliforniaKingBedEntity.SPINE_ART);
+        $$1.add(CaliforniaKingBedEntity.HEAVEN);
+        $$1.add(CaliforniaKingBedEntity.SLEEPY);
+        $$1.add(CaliforniaKingBedEntity.COVER);
+        $$1.add(CaliforniaKingBedEntity.BLUE);
         return $$1;
     }
 
@@ -1517,22 +1535,6 @@ public class PowersCalifornia extends NewDashPreset {
             playFallBraceInitSound();
         }
         return true;
-    }
-
-
-    @Override
-    public boolean isWip() {
-        return true;
-    }
-
-    @Override
-    public Component ifWipListDev() {
-        return Component.literal("Hydra");
-    }
-
-    @Override
-    public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active");
     }
 
 

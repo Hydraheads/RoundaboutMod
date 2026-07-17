@@ -358,7 +358,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg;
                 if (living instanceof Player pl){
-                    dmg = multiplyPowerByStandConfigPlayers(1.5F);
+                    dmg = multiplyPowerByStandConfigPlayers(1.7F);
                 } else {
                     dmg = multiplyPowerByStandConfigMobs(3);
                 }
@@ -372,7 +372,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                     if (!player.getAbilities().instabuild) {
                         destroy++;
                     }
-                    MainUtil.makeBleed(living,0,200,player);
+                    MainUtil.makeBleed(living,0,300,player);
                     player.getMainHandItem().hurtAndBreak(1, player, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
                     if (destroy >= 3 && !player.getMainHandItem().isEmpty() && player.getMainHandItem().getItem() instanceof MemoryChessPieceItem){

@@ -108,6 +108,12 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+            if (ClientUtil.canRenderEpitaphScreen()){
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
+                        0.25F,1F,1F,1F);
+            }
+
 
             if (ClientUtil.isBlocked){
                 RenderSystem.enableBlend();
@@ -145,10 +151,10 @@ public abstract class HudRendering implements IHudAccess {
                 roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
-                if (FateTypes.takesSunlightDamage(this.minecraft.player)){
+                if (FateTypes.takesSunlightDamage(this.minecraft.player)) {
                     if (!(ClientNetworking.getAppropriateConfig().vampireSettings.canSurviveInRain
-                    && this.minecraft.player.level().isRaining())) {
-                    // Fade speed per tick — lower = slower fade
+                            && this.minecraft.player.level().isRaining())) {
+                        // Fade speed per tick — lower = slower fade
                         float fadeStep = 1.0F / 30.0F; // same as before: full fade over ~30 ticks
 
                         boolean checksOut = false;
@@ -162,13 +168,13 @@ public abstract class HudRendering implements IHudAccess {
                             for (var i = -range; i <= range; i++) {
                                 for (var j = -range; j <= range; j++) {
                                     if (!(i == 0 || j == 0)) {
-                                        if (this.minecraft.player.level().canSeeSky(BlockPos.containing(yes.add(i,0,j)))){
+                                        if (this.minecraft.player.level().canSeeSky(BlockPos.containing(yes.add(i, 0, j)))) {
                                             checksOut = true;
                                         }
                                     }
                                 }
                             }
-                            if (FateTypes.isInSunlight(this.minecraft.player)){
+                            if (FateTypes.isInSunlight(this.minecraft.player)) {
                                 checksOut = true;
                             }
                         }
@@ -194,6 +200,10 @@ public abstract class HudRendering implements IHudAccess {
 
                     }
 
+                }
+                if(MainUtil.isInMold(this.minecraft.player)) {
+
+                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 1);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {

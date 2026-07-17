@@ -65,6 +65,12 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
 
+    public static Item STAND_DISC_KING_CRIMSON = registerItem("king_crimson_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+    public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+
+
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
     public static Item MAX_STAND_DISC_ANUBIS = registerItem("max_anubis_disc",
@@ -84,6 +90,11 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
     public static Item MAX_STAND_DISC_METALLICA = registerItem("max_metallica_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null)));
+
+    public static Item STAND_DISC_OASIS = registerItem("oasis_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null)));
+    public static Item MAX_STAND_DISC_OASIS = registerItem("max_oasis_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null)));
 
     public static Item STAND_DISC_SOFT_AND_WET = registerItem("soft_and_wet_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSoftAndWet(null)));
@@ -262,6 +273,8 @@ public class FabricItems {
     public static Item CHAKA_MASK = registerItem("chaka_mask", new MaskItem(new Item.Properties().stacksTo(1), new ChakaVisage(null)));
     public static Item ENYA_MASK = registerItem("enya_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaVisage(null)));
     public static Item ENYA_OVA_MASK = registerItem("enya_ova_mask", new MaskItem(new Item.Properties().stacksTo(1), new EnyaOVAVisage(null)));
+    public static Item DAIYA_MASK = registerItem("daiya_mask", new MaskItem(new Item.Properties().stacksTo(1), new DaiyaVisage(null)));
+    public static Item DAIYA_2_MASK = registerItem("daiya_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Daiya2Visage(null)));
     public static Item AYA_MASK = registerItem("aya_mask", new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null)));
     public static Item RINGO_MASK = registerItem("ringo_mask", new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null)));
     public static Item POCOLOCO_MASK = registerItem("pocoloco_mask", new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null)));
@@ -442,6 +455,8 @@ public class FabricItems {
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
+                        entries.accept(DAIYA_MASK);
+                        entries.accept(DAIYA_2_MASK);
                         entries.accept(HATO_MASK);
                         entries.accept(SHIZUKA_MASK);
                         entries.accept(RAT_MASK);
@@ -457,6 +472,19 @@ public class FabricItems {
                         entries.accept(CHICKEN_REMAINS);
                         entries.accept(DOG_REMAINS);
                         entries.accept(AXOLOTL_REMAINS);
+                        entries.accept(MEMORY_PAWN);
+                        entries.accept(MEMORY_ROOK);
+                        entries.accept(MEMORY_KNIGHT);
+                        entries.accept(MEMORY_BISHOP);
+                        entries.accept(MEMORY_QUEEN);
+                        entries.accept(MEMORY_KING);
+                        entries.accept(MEMORY_PAWN_WHITE);
+                        entries.accept(MEMORY_ROOK_WHITE);
+                        entries.accept(MEMORY_KNIGHT_WHITE);
+                        entries.accept(MEMORY_BISHOP_WHITE);
+                        entries.accept(MEMORY_QUEEN_WHITE);
+                        entries.accept(MEMORY_KING_WHITE);
+                        entries.accept(EXP_BISHOP);
 
                     }).build());
 
@@ -600,6 +628,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_SURVIVOR);
                         entries.accept(STAND_DISC_HEY_YA);
                         entries.accept(STAND_DISC_MANDOM);
+                        entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
 
                     }).build());
 
@@ -612,20 +641,8 @@ public class FabricItems {
                         entries.accept(STRAY_CAT_ANIME);
                         entries.accept(STRAY_CAT_MANGA);
                         //entries.accept(STRAY_CAT_ITEM);
-                        entries.accept(MEMORY_PAWN);
-                        entries.accept(MEMORY_ROOK);
-                        entries.accept(MEMORY_KNIGHT);
-                        entries.accept(MEMORY_BISHOP);
-                        entries.accept(MEMORY_QUEEN);
-                        entries.accept(MEMORY_KING);
-                        entries.accept(MEMORY_PAWN_WHITE);
-                        entries.accept(MEMORY_ROOK_WHITE);
-                        entries.accept(MEMORY_KNIGHT_WHITE);
-                        entries.accept(MEMORY_BISHOP_WHITE);
-                        entries.accept(MEMORY_QUEEN_WHITE);
-                        entries.accept(MEMORY_KING_WHITE);
-                        entries.accept(EXP_BISHOP);
-                        entries.accept(STAND_DISC_CALIFORNIA_KING_BED);
+                        entries.accept(STAND_DISC_KING_CRIMSON);
+                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -641,6 +658,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_PLANET_WAVES);
                         entries.accept(STAND_DISC_BLACK_SABBATH);
                         entries.accept(FANCY_LIGHTER);
+                        entries.accept(STAND_DISC_OASIS);
+                        entries.accept(MAX_STAND_DISC_OASIS);
 
 
                     }).build());
@@ -685,6 +704,9 @@ public class FabricItems {
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
+        ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
+        ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
@@ -696,6 +718,9 @@ public class FabricItems {
         ModItems.MAX_STAND_DISC_WHITE_ALBUM = MAX_STAND_DISC_WHITE_ALBUM;
         ModItems.STAND_DISC_TUSK = STAND_DISC_TUSK;
         ((MaxStandDiscItem)MAX_STAND_DISC_TUSK).baseDisc = ((StandDiscItem)STAND_DISC_TUSK);
+        ModItems.STAND_DISC_OASIS = STAND_DISC_OASIS;
+        ModItems.MAX_STAND_DISC_OASIS = MAX_STAND_DISC_OASIS;
+        ((MaxStandDiscItem)MAX_STAND_DISC_OASIS).baseDisc = ((StandDiscItem)STAND_DISC_OASIS);
         ModItems.STAND_DISC_SOFT_AND_WET = STAND_DISC_SOFT_AND_WET;
         ModItems.MAX_STAND_DISC_SOFT_AND_WET = MAX_STAND_DISC_SOFT_AND_WET;
         ((MaxStandDiscItem)MAX_STAND_DISC_SOFT_AND_WET).baseDisc = ((StandDiscItem)STAND_DISC_SOFT_AND_WET);
@@ -842,6 +867,8 @@ public class FabricItems {
         ModItems.HATO_MASK = HATO_MASK;
         ModItems.SHIZUKA_MASK = SHIZUKA_MASK;
         ModItems.CHAKA_MASK = CHAKA_MASK;
+        ModItems.DAIYA_MASK = DAIYA_MASK;
+        ModItems.DAIYA_2_MASK = DAIYA_2_MASK;
         ModItems.ENYA_MASK = ENYA_MASK;
         ModItems.ENYA_OVA_MASK = ENYA_OVA_MASK;
         ModItems.AYA_MASK = AYA_MASK;

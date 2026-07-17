@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -475,6 +476,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 delta = 0;
             }
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            float oasisAmt = PowersOasis.getOasisAmt(player, delta);
             if (whiteAmt > 0) {
                 byte skin = ((StandUser) player).roundabout$getStandSkin();
                 String path = PowersWhiteAlbum.getSkinString(skin);
@@ -487,13 +489,31 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 if (((IPlayerModel) plm).roundabout$getSlim()) {
                     ModStrayModels.WhiteAlbumSlimRightArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
+                            r, g, b, Math.min(whiteAmt, barrageAlpha), path);
                 } else {
                     ModStrayModels.WhiteAlbumRightArm.render(
                             player, delta, poseStack, bSource, light,
-                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
+                            r, g, b, Math.min(whiteAmt, barrageAlpha), path);
                 }
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (oasisAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersOasis.getSkinString(skin);
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.OasisSlimRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                } else {
+                    ModStrayModels.OasisRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
             } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                 poseStack.pushPose();
                 VertexConsumer consumerX = bSource.getBuffer
@@ -560,6 +580,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 delta = 0;
             }
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            float oasisAmt = PowersOasis.getOasisAmt(player, delta);
             if (whiteAmt > 0) {
                 byte skin = ((StandUser) player).roundabout$getStandSkin();
                 String path = PowersWhiteAlbum.getSkinString(skin);
@@ -579,6 +600,24 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                             r, g, b, Math.min(whiteAmt,barrageAlpha), path);
                 }
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (oasisAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersOasis.getSkinString(skin);
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.OasisSlimLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                } else {
+                    ModStrayModels.OasisLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
             } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
                 poseStack.pushPose();
                 VertexConsumer consumerX = bSource.getBuffer

@@ -116,6 +116,10 @@ public class ClientConfig implements Cloneable {
     public static class GeneralSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean onlyStandUsersCanSeeStands;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean advancedEpitaphShader;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphScreenEffect;
     }
     public static class ConfigSettings {
 

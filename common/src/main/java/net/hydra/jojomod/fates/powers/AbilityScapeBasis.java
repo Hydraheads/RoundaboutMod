@@ -2209,6 +2209,9 @@ public class AbilityScapeBasis {
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
             distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
+        } else {
+            distMax = this.getDistanceOut(User, distMax, false);
+            distMax = Math.min(this.getDistanceOut(User, distMax, false),distMax);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 

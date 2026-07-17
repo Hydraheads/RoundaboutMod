@@ -19,6 +19,7 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
@@ -105,6 +106,31 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                         }
                     }
 
+                    boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                    int oasisTicks = user.roundabout$getOasisVanishTicks();
+                    float fadeAmt = 0;
+                    byte oasisSkin = user.roundabout$getStandSkin();
+                    if (hasOasisOut || oasisTicks > 0){
+                        if (user.roundabout$getLastStandSkin() != oasisSkin){
+                            user.roundabout$setLastStandSkin(oasisSkin);
+                            oasisTicks = 0;
+                            user.roundabout$setOasisVanishTicks(0);
+                        }
+
+                        float partialTicks2 = partialTicks % 1;
+                        if (hasOasisOut){
+                            fadeAmt = oasisTicks+partialTicks2;
+                            fadeAmt = Math.min(fadeAmt/10,1f);
+                        } else {
+                            fadeAmt = oasisTicks-partialTicks2;
+                            fadeAmt = Math.max(fadeAmt/10,0);
+                        }
+
+                        if (fadeAmt > 0){
+                            hideExtraPartsWithSuit = true;
+                        }
+                    }
+
                     if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
 
                         if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
@@ -149,6 +175,39 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                             if (pw.hasSkatesActivated()) {
                                 renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                         partialTicks, path, r, g, b, heyFull);
+                            }
+
+                            poseStack.popPose();
+                        }
+                    }
+
+                    if (hasOasisOut || oasisTicks > 0) {
+
+                        if (user.roundabout$getStandPowers() instanceof PowersOasis po) {
+
+                            String path = PowersOasis.getSkinString(skin);
+                            String path2 = path;
+                            poseStack.pushPose();
+                            renderOasisHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                            renderOasisBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+
+                            renderOasisRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                            renderOasisLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                                renderOasisSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
+                                renderOasisSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
+                            } else {
+                                renderOasisRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
+                                renderOasisLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
                             }
 
                             poseStack.popPose();
@@ -270,6 +329,87 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.WhiteAlbumHead.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisBodyPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                    float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack, 36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.OasisBody.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack, 36);
+    }
+    public void renderOasisRightLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                        float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.OasisRightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisLeftLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                       float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.OasisLeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                       float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisSlimLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                           float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisSlimLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                        float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisSlimRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisSlimRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisChestPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                     float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.OasisChest.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisHeadPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                    float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.OasisHead.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, alpha, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

@@ -289,7 +289,7 @@ public class BaseMinion extends PathfinderMob {
 
         }
 
-        if (getController() <= 0 && controller2 == null || convertedByZombie) {
+        if ((getController() <= 0 && controller2 == null) || convertedByZombie) {
             if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
                 sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
                 setController(sp);
@@ -649,7 +649,9 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        if (this.controller != null) {
+        if (this.controller2 != null){
+            $$0.putUUID("Controller", this.controller2);
+        } else if (this.controller != null) {
             $$0.putUUID("Controller", this.controller.getUUID());
         }
         $$0.putByte("moveTactic",getMovementTactic());

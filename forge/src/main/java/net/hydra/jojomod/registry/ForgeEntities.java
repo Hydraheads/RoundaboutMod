@@ -264,6 +264,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate").toString())
             );
+    public static final RegistryObject<EntityType<KingCrimsonEntity>> KING_CRIMSON =
+            ENTITY_TYPES.register("king_crimson", () ->
+                    EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson").toString())
+            );
     public static final RegistryObject<EntityType<StarPlatinumEntity>> STAR_PLATINUM =
             ENTITY_TYPES.register("star_platinum", () ->
                     EntityType.Builder.of(StarPlatinumEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

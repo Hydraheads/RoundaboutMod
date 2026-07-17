@@ -377,8 +377,30 @@ public class PowersGreenDay extends NewPunchingStand {
     public void tickPower() {
         if(this.self instanceof Player) {
             if (!this.self.level().isClientSide) {
+                if(OffhandItemToReturn != null){
+                    if(this.self.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof AirItem){
+                        this.self.setItemInHand(InteractionHand.OFF_HAND,OffhandItemToReturn);
+                    }else {
+                        this.self.spawnAtLocation(OffhandItemToReturn);
+                    }
+                    OffhandItemToReturn = null;
+                }
+
                 this.updatePowerInt(PowerIndex.POWER_3, legGoneTicks);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowerIndex.POWER_3, legGoneTicks);
+
+                if(OffhandSpinThrowCharge >0){
+                    OffhandSpinThrowCharge -= 1;
+                    if(OffhandSpinThrowCharge == 0){
+                        OffHandSpinAndThrow();
+                    }
+                }
+                if(MainhandSpinThrowCharge >0){
+                    MainhandSpinThrowCharge -= 1;
+                    if(MainhandSpinThrowCharge == 0){
+                        MainHandSpinAndThrow();
+                    }
+                }
             }
         }
 
@@ -683,7 +705,11 @@ public class PowersGreenDay extends NewPunchingStand {
            //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, CurrentCheckPos.x, CurrentCheckPos.y, CurrentCheckPos.z, 1, 0, 0, 0, 0);
            // }
             BlockPos bp = (BlockPos.containing(CurrentCheckPos));
-            if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR){
+            if(this.self.level().getBlockState(bp).getBlock() != Blocks.AIR
+                    && this.self.level().getBlockState(bp).getBlock()!=Blocks.WATER
+                    && this.self.level().getBlockState(bp).getBlock()!=Blocks.LAVA
+                    && !this.self.level().getBlockState(bp).canBeReplaced()
+            ) {
                // if(!this.self.level().isClientSide) {
 
                //     ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD, bp.getCenter().x, bp.getCenter().y, bp.getCenter().z, 1, 0, 0, 0, 0);
@@ -707,6 +733,8 @@ public class PowersGreenDay extends NewPunchingStand {
     public SeperatedArmEntity Off_hand_entity = null;
     public boolean HasOffHandCharge = true;
     public boolean HasOffHand = true;
+    public int OffhandSpinThrowCharge = 0;
+    public ItemStack OffhandItemToReturn;
 
 
     public boolean OffHandThrowServer(SeperatedArmEntity SAE){
@@ -791,13 +819,12 @@ public class PowersGreenDay extends NewPunchingStand {
         //this.self.level().addFreshEntity($$2);
         Player player = (Player)this.self;
         if(this.self.getOffhandItem().getItem() instanceof AirItem){
-            ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
-            $$2.setPickUpDelay(1);
-            this.self.level().addFreshEntity($$2);
+            OffhandItemToReturn = Off_hand_entity.getMainHandItem();
         }else {
-            ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
-            $$2.setPickUpDelay(1);
-            this.self.level().addFreshEntity($$2);
+            OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+           // ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
+            //$$2.setPickUpDelay(1);
+           // this.self.level().addFreshEntity($$2);
         }
 
         Off_hand_entity.setUser(null);
@@ -820,22 +847,43 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public void OffHandSpin(){
-        if(!this.onCooldown(PowerIndex.SKILL_2)) {
-            if(HasOffHand){
-                OffHandThrow();
+
+
+            if (!this.onCooldown(PowerIndex.SKILL_2)) {
+                tryPowerPacket(PowerIndex.POWER_2_BLOCK);
+                setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
             }
-            tryPowerPacket(PowerIndex.POWER_2_BLOCK);
-            setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
-        }
+
 
 
     }
 
+
     public boolean OffHandSpinServer(){
+        if(Off_hand_entity != null) {
+            InstantOffHandSpin();
+        }else{
+            BeginOffhandSpinThrow();
+        }
+        return true;
+    }
+
+    public void InstantOffHandSpin(){
         this.self.level().playSound(null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Off_hand_entity.flyingTicks = 0;
-        return true;
+    }
+
+    public void OffHandSpinAndThrow(){
+        OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+        this.self.level().playSound(null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
+        Off_hand_entity.flyingTicks = 0;
+    }
+
+    public void BeginOffhandSpinThrow(){
+        OffhandSpinThrowCharge = 10;
+        ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
 
@@ -843,25 +891,44 @@ public class PowersGreenDay extends NewPunchingStand {
     /**
      * Main Arm Stuff
      */
+    int MainhandSpinThrowCharge = 0;
+
+
+    public void InstantMainHandSpin(){
+        this.self.level().playSound(null,Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
+        Main_arm.flyingTicks = 0;
+
+    }
+
+    public void MainHandSpinAndThrow(){
+        MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
+        this.self.level().playSound(null,Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
+        Main_arm.flyingTicks = 0;
+    }
+
+    public void BeginMainhandSpinThrow(){
+        MainhandSpinThrowCharge = 10;
+        ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
+    }
 
     public SeperatedArmEntity Main_arm = null;
 
     public void MainArmSpin(){
-        if(!this.onCooldown(PowerIndex.SKILL_1)) {
-            if(HasMainArm){
-                MainArmThrow();
-            }
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
             tryPowerPacket(PowerIndex.POWER_1_BLOCK);
-            setCooldown(PowerIndex.SKILL_1,ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown );
+            setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
         }
-
 
     }
 
     public boolean MainArmSpinServer(){
-            this.self.level().playSound(null, Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
-            Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
-            Main_arm.flyingTicks = 0;
+        if(Main_arm != null) {
+            InstantMainHandSpin();
+        }else{
+            BeginMainhandSpinThrow();
+        }
         return true;
     }
 
@@ -1091,7 +1158,7 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public boolean highlightsEntity(Entity ent, Player player) {
         if(hasStandActive(this.self)) {
-            if (player.isCrouching()) {
+            if (player.isCrouching() || isHoldingSneak()) {
                 if (ent instanceof LivingEntity) {
                     if (allies.contains(ent.getStringUUID()) && player.hasLineOfSight(ent)) {
                         return true;

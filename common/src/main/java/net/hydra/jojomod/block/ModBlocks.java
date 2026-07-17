@@ -714,9 +714,12 @@ public class ModBlocks {
         return new ChessPieceBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.NONE)
-                        .pushReaction(PushReaction.IGNORE)
                         .strength(0F, 0F)
                         .sound(stype)
+                        .lightLevel((p_152607_) -> {
+                            return 1;
+                        })
+                        .pushReaction(PushReaction.DESTROY)
                         .noCollission()
         );
     }

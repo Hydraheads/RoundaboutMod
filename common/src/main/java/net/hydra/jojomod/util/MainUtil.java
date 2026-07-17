@@ -11,6 +11,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -35,6 +36,8 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -43,6 +46,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -2056,7 +2060,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
-                || sauce.is(ModDamageTypes.ANUBIS_SPIN) ){
+                || sauce.is(ModDamageTypes.ANUBIS_SPIN)
+                || sauce.is(ModDamageTypes.DISINTEGRATION)){
             return true;
         }
         return false;
@@ -3456,6 +3461,13 @@ public class MainUtil {
         return false;
     }
 
+    public static Boolean isInMold(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            return ((StandUser)LE).getMoldTicks() > 0;
+        }
+        return false;
+    }
+
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 
@@ -3565,6 +3577,26 @@ public class MainUtil {
             IPlayerEntity pl = ((IPlayerEntity) player);
             ItemStack visage = pl.roundabout$getMaskSlot();
             if(Objects.nonNull(visage)) {
+
+                if(FateTypes.isZombie(player)){
+                    if (FateTypes.isUndisguisedZombie(player)) {
+
+
+
+                        if (visage.getItem() instanceof MaskItem MI) {
+                            if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
+                                //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
+                                return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                            }
+                        }
+                        PlayerModel pm = ClientUtil.getPlayerModel(player);
+                        if (pm != null && (((IPlayerModel) pm).roundabout$getSlim())) {
+                            return (StandIcons.ZOMBIE_SKIN_SLIM);
+                        } else {
+                            return (StandIcons.ZOMBIE_SKIN);
+                        }
+                    }
+                }
 
                 if (visage.getItem() instanceof MaskItem MI) {
                     if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {

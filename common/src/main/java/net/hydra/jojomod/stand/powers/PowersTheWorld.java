@@ -373,10 +373,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.THE_NETHER);
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
-                $$1.add(TheWorldEntity.BETA);
                 $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
+                $$1.add(TheWorldEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }
@@ -650,7 +650,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d = this.getSelf().getEyePosition(0);
                             Vec3 vec3d2 = this.getSelf().getViewVector(0);
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
-                            double mag = 0.05F;
+                            double mag = 0.1F;
 
                             if (attackTimeDuring > 10) {
                                 mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
@@ -705,7 +705,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
 
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
-                                    stand.position().distanceTo(this.getSelf().position()) > 10){
+                                    stand.position().distanceTo(this.getSelf().position()) > 12){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
@@ -920,14 +920,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             addEXP(3,LE);
                         }
                         if (build >= 80) {
-                            MainUtil.makeBleed($$5, 0, 400, null);
+                            MainUtil.makeBleed($$5, 0, 400, this.self);
                             MainUtil.makeMobBleed($$5);
                         } else if (build > 50) {
-                            MainUtil.makeBleed($$5, 0, 300, null);
+                            MainUtil.makeBleed($$5, 0, 300, this.self);
                         } else if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 200, null);
-                        } else {
-                            MainUtil.makeBleed($$5, 0, 50, null);
+                            MainUtil.makeBleed($$5, 0, 200, this.self);
                         }
                     } else if (((LivingEntity) $$5).isBlocking()) {
                         if (!getAssaultEarlyTime()) {
@@ -972,17 +970,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (attackTimeDuring > 70){
             mult =2.2F;
         } else if (attackTimeDuring > 60){
-            mult = 1.8F;
+            mult = 2.0F;
         } else if (attackTimeDuring > 45){
-            mult = 1.5F;
+            mult = 1.8F;
         } else if (attackTimeDuring > 30){
-            mult = 1.4F;
+            mult = 1.6F;
         } else if (attackTimeDuring > 25){
-            mult = 1.3F;
+            mult = 1.5F;
         } else if (attackTimeDuring >= 20){
-            mult = 1.2F;
+            mult = 1.3F;
         } else if (getAssaultEarlyTime() && isReduced){
-            mult = 0.75F;
+            mult = 0.87F;
         }
 
         if (isReduced){

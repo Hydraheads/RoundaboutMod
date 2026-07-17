@@ -27,7 +27,9 @@ public class PowersItemStack {
     protected void roundabout$mineBlock(Level $$0, BlockState $$1, BlockPos $$2, Player $$3, CallbackInfo ci) {
         StandPowers powers = ((StandUser) $$3).roundabout$getStandPowers();
         if (PowerTypes.hasStandActive($$3) && powers.canUseMiningStand()) {
-            powers.gainExpFromSpecialMining($$1,$$2);
+            powers.gainExpFromSpecialMining($$1, $$2);
+            ci.cancel();
+        } else if (PowerTypes.isBrawling($$3)){
             ci.cancel();
         } else {
             powers.gainExpFromStandardMining($$1,$$2);

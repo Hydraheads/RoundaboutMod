@@ -150,9 +150,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 			guiGraphics.blit(KILLER_QUEEN_BOMB_LOCATION, this.getX() + 4, this.getY()+4, status*18, 26+7 + this.context*18, 18, 18, 192, 192);
 
 		}
-		
     }
-    
 
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
@@ -167,7 +165,6 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-
 
         if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
             PK.bombConfigPacket();
@@ -217,7 +214,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
         if (shouldPlaySound) {
             SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
-            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.BUBBLE_HOVERED_OVER_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
+            soundmanager.play(SimpleSoundInstance.forUI(ModSounds.KILLER_QUEEN_DETONATE_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
         }
         
     }
@@ -241,7 +238,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             int conf = this.slots.get(0).getMode(this.currentlyHovered == 0);
             conf += this.slots.get(1).getMode(this.currentlyHovered == 1)*2;
             
-            clientConfig.dynamicSettings.KillerQueenCurrentBombConfig = (int) conf;
+            clientConfig.dynamicSettings.KillerQueenCurrentBombConfig = conf;
             ConfigManager.saveClientConfig();
             
         }

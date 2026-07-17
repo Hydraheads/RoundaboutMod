@@ -98,6 +98,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
+    public OasisSettings oasisSettings;
+    @NestedOption(group = "modded")
     public WhiteAlbumSettings whiteAlbumSettings;
     @NestedOption(group = "modded")
     public RattSettings rattSettings;
@@ -484,7 +486,7 @@ public class Config implements Cloneable {
         public Boolean mobPlantHitkillMobs;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer maxAirBubbleTravelDistanceBeforePopping;
-        @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
     }
     
@@ -665,9 +667,9 @@ public class Config implements Cloneable {
         public Integer greenDayStitchHeal;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer gDStitchcooldown;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
         public Integer moldDefaultRange;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Integer moldGrowthRate;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer moldMaxSize;
@@ -853,6 +855,11 @@ public class Config implements Cloneable {
         public Integer survivorCupidCreativeRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canUseSurvivorOnBossesInSurvival;
+    }
+
+    public static class OasisSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableOasis;
     }
 
     public static class ManhattanTransferSettings {

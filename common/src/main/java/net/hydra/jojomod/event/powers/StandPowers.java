@@ -246,8 +246,35 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /** Override it if your stand can use Stand Arrow (Mostly probably to be
+     *   Golden Experience, Silver Chariot (they have requiem variants)
+     *   and Killer Queen (Bites the Dust)
+     */
+    public boolean canUseStandArrow() { return false; }
 
+    /** called when the standArrow is used (and the method above is true),
+     * Returns false when it fails, and true when sucessfull
+     * override it to yours needs*/
+    public boolean onStandArrowUse() {
+        /** Requiem stands like Golden Experience and silver chariot should
+         * probably make something like this
+         *
+         * if (this.self instanceof Player PL) {
+         *      if (PL.experienceLevel >= 50) {
+         *          // do requiem stuff here
+         *
+         *          if (!PE.isCreative()) {
+         *              PE.giveExperienceLevels(-50);
+         *          }
+         *          return true;
+         *      }else {
+         *          return false;
+         *      }
+         * }
+         */
 
+        return false;
+    }
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -498,6 +525,7 @@ public class StandPowers extends AbilityScapeBasis {
     public float getBarrageDamageMob(){
         return 20;
     }
+
     public float getBarrageHitStrength(Entity entity){
         float barrageLength = this.getBarrageLength();
         float power;
@@ -2193,6 +2221,7 @@ public class StandPowers extends AbilityScapeBasis {
             return;
         this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
     }
+
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

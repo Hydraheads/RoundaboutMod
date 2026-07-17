@@ -840,6 +840,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void roundabout$endTick(CallbackInfo ci) {
+        if(MoldTicks > 0){
+            MoldTicks -= 1;
+        }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
@@ -1348,6 +1351,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.setLastHurtMob(null);
         if (((LivingEntity)(Object)this) instanceof NeutralMob mb){
             mb.setPersistentAngerTarget(null);
+            mb.stopBeingAngry();
         }
         if (((LivingEntity)(Object)this) instanceof Mob mb){
             mb.setTarget(null);
@@ -2395,6 +2399,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void roundabout$setHeyYaVanishTicks(int set){
         roundabout$heyYaVanishTicks = Mth.clamp(set,0,10);
+    }
+
+    @Unique
+    public int roundabout$oasisVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getOasisVanishTicks(){
+        return roundabout$oasisVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setOasisVanishTicks(int set){
+        roundabout$oasisVanishTicks = Mth.clamp(set,0,10);
     }
 
     @Unique
@@ -4349,14 +4367,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (stack != null && !stack.isEmpty()) {
                     if (stack.is(ModItems.SCISSORS) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                         if (MainUtil.getMobBleed(this)) {
-                            MainUtil.makeBleed(this, 0, 300, LE);
+                            MainUtil.makeBleed(this, 0, 400, LE);
                         }
                         stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                     }
 
                     if (stack.is(ModItems.SACRIFICIAL_DAGGER) && ($$0.is(DamageTypes.PLAYER_ATTACK) || $$0.is(DamageTypes.MOB_ATTACK))) {
                         if (MainUtil.getMobBleed(this)) {
-                            MainUtil.makeBleed(this, 0, 300, LE);
+                            MainUtil.makeBleed(this, 0, 400, LE);
                         }
                         stack.hurtAndBreak(1, LE, $$0x -> $$0x.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                     }
@@ -5218,6 +5236,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()-1);
         }
 
+        if (roundabout$getStandPowers() instanceof PowersOasis && active){
+            roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks()+1);
+        } else {
+            roundabout$setOasisVanishTicks(roundabout$getOasisVanishTicks()-1);
+        }
+
         if (roundabout$getStandPowers() instanceof PowersWhiteAlbum && active){
             roundabout$setWhiteAlbumVanishTicks(roundabout$getWhiteAlbumVanishTicks()+1);
         } else {
@@ -5618,7 +5642,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         /// Stray Cat Spawn
         if (me instanceof Cat) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
-                if (StrayCatEntity.canSurviveInBlock(me.getBlockStateOn())) {
+                BlockPos pos = me.getOnPos().below();
+                BlockState stateOn = me.level().getBlockState(pos);
+
+                if (StrayCatEntity.canSurviveInBlock(stateOn)) {
+                    Roundabout.LOGGER.info("theres a not a cat here");
                     // Will be added when the stray cat is finished
                 }
             }
@@ -5936,6 +5964,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
     public void   MoldDetection(Vec3 movement,CallbackInfo info) {
         rdbt$doMoldDetection(movement);
+    }
+
+
+    public int MoldTicks;
+    @Override
+    public void SetInMoldTicks(int e) {
+        if(this.level().isClientSide) {
+            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
+            MoldTicks = e;
+        }
+    }
+
+    @Override
+    public int getMoldTicks() {
+        return MoldTicks;
     }
 
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)

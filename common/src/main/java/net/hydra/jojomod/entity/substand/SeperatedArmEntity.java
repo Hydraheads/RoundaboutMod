@@ -493,9 +493,9 @@ public class SeperatedArmEntity extends StandEntity {
         Item item = (this.getMainHandItem().getItem());
         List<Entity> damages = List.of();
         if(Can_activate_special || Can_activate) {
-             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1);
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1.5);
             if (SpinTicks > 0) {
-                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2);
+                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2.5);
             }
         }
 
@@ -505,14 +505,15 @@ public class SeperatedArmEntity extends StandEntity {
 
 
             Entity entity = damages.get(j);
-            if (!(SpinTicks > 0) && (Math.random() > 0.5)) {
-                if(user != null) {
-                    ((StandUser) user).roundabout$getStandPowers().addEXP(1);
-                }
-            }
+
 
 
                 if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                    if (!(SpinTicks > 0)) {
+                        if(user != null) {
+                            ((StandUser) user).roundabout$getStandPowers().addEXP(1);
+                        }
+                    }
                     if (flyingTicks > 2 && SpinTicks > 0) {
                         BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
                         if ((level().getBlockState(new BlockPos(pos)).isAir())) {

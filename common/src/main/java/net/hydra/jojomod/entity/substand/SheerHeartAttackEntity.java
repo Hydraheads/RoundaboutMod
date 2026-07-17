@@ -25,7 +25,12 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -402,6 +407,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		double dist = Math.abs(this.position().distanceTo(targetPos));
 
+		BlockHitResult hitResult = this.level().clip(new ClipContext(this.getEyePosition(), targetPos,
+				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+		if (hitResult.getType() != HitResult.Type.MISS) { return false; }
+
 		return (float)dist > (2.5f) && (float)dist < 4.0f;
 	}
 
@@ -447,14 +457,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.explosions++;
 
 		if (this.getTargetType() == ENTITY){
-			ExplosionUtil.explosionHurt(this.position(), dmg, this.level(),
+			Vec3 pos = this.position().add(this.getForward().scale(0.3));
+
+			ExplosionUtil.explosionHurt(pos, dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.3f, 8);
+			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
 			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (this.entityTarget != null) {
-
 				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
 
 				if (!this.entityTarget.isAlive()) {
@@ -471,7 +482,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.12f, 4);
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
 			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
@@ -518,7 +529,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.getNavigation().setSpeedModifier(0.0);
 		this.getNavigation().stop();
 	}
-
 
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
@@ -642,8 +652,30 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return 1.0f;
 	}
 
-    @Override public boolean hurt(DamageSource source, float amount) { return false;}
+	public boolean mobAiShouldRetreactDetect(Entity Owner) {
+		if (this.getTargetType() == ENTITY) {
+			Entity target = entityTarget;
 
+			if (Owner instanceof AbstractVillager || Owner instanceof IronGolem) {
+				if (target instanceof AbstractVillager || target instanceof IronGolem) {
+					return true;
+				}
+			}
+			if (Owner instanceof Raider || Owner instanceof AbstractVillager) {
+				if (target instanceof Raider || target instanceof AbstractVillager) {
+					return true;
+				}
+			}
+			if (Owner instanceof AbstractPiglin) {
+				if (target instanceof AbstractPiglin) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+    @Override public boolean hurt(DamageSource source, float amount) { return false;}
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
 	@Override public boolean hasNoPhysics() { return false;}
