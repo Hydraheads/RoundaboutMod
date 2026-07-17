@@ -1733,7 +1733,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (!MainUtil.canFreeze(entity)){
                 return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.93F));
             }
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.8F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.9F));
         } else {
             if (!MainUtil.canFreeze(entity)){
                 return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
@@ -1795,8 +1795,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
             addEXP(1,LV);
         }
         if (targ instanceof Player PL){
-            int heat = HeatUtil.getHeat(PL);
-            HeatUtil.addHeat(PL, -3);
+            if (!HeatUtil.isLegsFrozen(PL)){
+                HeatUtil.addHeat(PL, -4);
+            } else {
+                HeatUtil.addHeat(PL, -3);
+            }
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }
