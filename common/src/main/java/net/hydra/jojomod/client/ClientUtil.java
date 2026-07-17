@@ -908,7 +908,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
             if (PKC.hasStandActive(player)) {
-                return true;
+                return false;
             } else {
                 return false;
             }
