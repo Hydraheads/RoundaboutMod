@@ -1008,6 +1008,13 @@ public class ClientUtil {
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
+
+        if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
+            double dist = getCameradDistance(ent);
+            float metAlpha = PowersMetallica.getMetallicaInvisibilityAlpha(le, dist, delta);
+            throwFade = throwFade * metAlpha;
+        }
+
         if (ent instanceof Player pl){
             GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
             int interp = gp.fadeOutInterpolation;
