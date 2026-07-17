@@ -3144,6 +3144,17 @@ public class AbilityScapeBasis {
     }
 
 
+
+    public boolean isUsingShield(LivingEntity entity) {
+        if (entity.isUsingItem()) {
+            InteractionHand hand = entity.getUsedItemHand();
+            ItemStack item = entity.getItemInHand(hand);
+            if (item.getItem() instanceof ShieldItem) {
+                return true;
+            }
+        }
+        return false;
+    }
     public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
@@ -3164,6 +3175,9 @@ public class AbilityScapeBasis {
                     boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
                     if (bool && entity instanceof LivingEntity LE) {
                         LE.setLastHurtMob(entity);
+                        if (isUsingShield(LE)){
+                            knockShield2(LE, 200);
+                        }
                     }
 
                     if (bool) {
