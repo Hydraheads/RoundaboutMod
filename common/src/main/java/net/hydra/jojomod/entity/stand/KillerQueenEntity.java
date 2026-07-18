@@ -276,7 +276,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
         Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
         Vec3 offset = new Vec3(
                 (- (-1 * (r * (Math.sin(ang / 180))))),
-                (0.7f - yy),
+                (0.9f - yy),
                 (-(r * (Math.cos(ang / 180))))
         );
         if (dir != Direction.DOWN){
