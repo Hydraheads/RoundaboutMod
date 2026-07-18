@@ -1,10 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -244,6 +247,48 @@ public class KillerQueenEntity extends FollowingStandEntity {
         }
     }
 
+
+    public Vec3 getBitesTheDustOffset(LivingEntity standUser) {
+        double r = 0.7;
+
+        double yawfix = standUser.getYRot();
+        yawfix += this.getAnchorPlace() + 125;
+        if (yawfix > 360) {
+            yawfix -= 360;
+        } else if (yawfix < 0) {
+            yawfix += 360;
+        }
+        double ang = (yawfix - 180) * Math.PI;
+
+        double mcap = 0.3;
+        Vec3 xyz = standUser.getDeltaMovement();
+        double yy = xyz.y() * 0.3;
+        if (yy > mcap) {
+            yy = mcap;
+        } else if (yy < -mcap) {
+            yy = -mcap;
+        }
+        if (isSwimming() || isVisuallyCrawling() || isFallFlying()) {
+            yy += 1;
+        }
+
+
+        Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+        Vec3 offset = new Vec3(
+                (- (-1 * (r * (Math.sin(ang / 180))))),
+                (0.7f - yy),
+                (-(r * (Math.cos(ang / 180))))
+        );
+        if (dir != Direction.DOWN){
+            offset = RotationUtil.vecPlayerToWorld(offset,dir);
+        }
+
+        double x1 = standUser.getX() +offset.x;
+        double y1 = standUser.getY() +offset.y;
+        double z1 = standUser.getZ() +offset.z;
+
+        return new Vec3(x1, y1, z1);
+    }
 
 
     /** unused, unless someone fix the followOffset to work with following

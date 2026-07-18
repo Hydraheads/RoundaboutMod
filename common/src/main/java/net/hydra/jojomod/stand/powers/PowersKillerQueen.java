@@ -2359,16 +2359,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
                         stand.setFadePercent(30);
 
-                        Vec3 pos = plantedBTD.getPosition(0);
-                        Vec3 offset = new Vec3(0, plantedBTD.getBbHeight() + 0.1f, 0);
-
-                        Direction gravD = ((IGravityEntity)plantedBTD).roundabout$getGravityDirection();
-                        if (gravD != Direction.DOWN){
-                            offset = RotationUtil.vecPlayerToWorld(offset, gravD);
-                        }
-
-                        //stand.setPos(pos.add(offset));
-                        stand.setPos(KQE.getIdleOffset((LivingEntity)plantedBTD));
+                        stand.setPos(KQE.getBitesTheDustOffset((LivingEntity)plantedBTD));
 
                         stand.setYRot(plantedBTD.getYHeadRot() % 360);
                         stand.setXRot(plantedBTD.getXRot());
