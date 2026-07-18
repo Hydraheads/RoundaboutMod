@@ -1851,10 +1851,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 this.bombBubble = bubble;
 
-                if (this.entityTargetBuffer == null) {
-                    Roundabout.LOGGER.info("is null what?");
-                }
-
                 this.bombBubble.setTarget(this.entityTargetBuffer);
                 this.entityTargetBuffer = null;
 
