@@ -3411,8 +3411,8 @@
   "config.roundabout.miningSpeedBuff.desc": "Increases the speed of breaking blocks with justice active. By default, the stand increases your mining speed by 30%.",
   "config.roundabout.miningSpeedBuffWhite.name": "Mining Speed Buff",
   "config.roundabout.miningSpeedBuffWhite.desc": "Increases the speed of breaking blocks with white album active. By default, the stand increases your mining speed by 15%.",
-  "config.roundabout.bonusPlayerDMGWhite.name": "Bonus Player Damage",
-  "config.roundabout.bonusPlayerDMGWhite.desc": "This % melee damage increase.",
+  "config.roundabout.bonusPlayerDMGWhitev2.name": "Bonus Player Damage",
+  "config.roundabout.bonusPlayerDMGWhitev2.desc": "This % melee damage increase.",
   "config.roundabout.bonusMobDMGWhite.name": "Bonus Mob Damage",
   "config.roundabout.bonusMobDMGWhite.desc": "This % melee damage increase.",
 

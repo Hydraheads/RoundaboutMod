@@ -722,7 +722,7 @@ public class VampireFate extends VampiricFate {
     public float getDamageAdd(DamageSource source, float amt, Entity target){
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             if (target instanceof Player pl){
-                return 0.2F + (getVampireData().strengthLevel*0.02F);
+                return 0.15F + (getVampireData().strengthLevel*0.02F);
             } else {
                 return 0.2F + (getVampireData().strengthLevel*0.04F);
             }

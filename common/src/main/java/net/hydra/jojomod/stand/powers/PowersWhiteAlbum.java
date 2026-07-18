@@ -827,7 +827,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (PowerTypes.hasStandActive(self)) {
             if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
                 if (target instanceof Player pl) {
-                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusPlayerDMGWhite;
+                    return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusPlayerDMGWhitev2;
                 } else {
                     return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.bonusMobDMGWhite;
                 }
@@ -1731,9 +1731,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             if (!MainUtil.canFreeze(entity)){
-                return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.96F));
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.0F));
             }
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.93F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.95F));
         } else {
             if (!MainUtil.canFreeze(entity)){
                 return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
