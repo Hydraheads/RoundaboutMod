@@ -47,7 +47,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0D, 0.30D, 0.0D);
+        poseStack.translate(0.0D, 0.0D, 0.0D);
 
         float yaw   = Mth.rotLerp(partialTick, entity.yRotO, entity.getYRot());
         float pitch = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
@@ -55,11 +55,11 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
         poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
 
+        this.model.setLayerRotation((float) Math.toRadians(90.0F), 0.0F, -2.5F, 0.0F);
 
         float scale = entity.getMeteorScale();
         float finalScale = 2.6f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
-
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
 
@@ -86,6 +86,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
     public static final ResourceLocation PW_METEOR_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_purple.png");
     public static final ResourceLocation PW_METEOR_WATER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_water.png");
     public static final ResourceLocation PW_METEOR_WHITE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_white.png");
+    public static final ResourceLocation PW_METEOR_COMET_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_comet.png");
 
     @Override
     public ResourceLocation getTextureLocation(PWMeteorEntity entity) {
@@ -101,7 +102,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
             } else if (sft == 6) {
                 return PW_METEOR_WATER_TEXTURE;
             } else if (sft == 7) {
-                return PW_METEOR_WHITE_TEXTURE;
+                return PW_METEOR_COMET_TEXTURE;
             }
         }
         return PW_METEOR_TEXTURE;

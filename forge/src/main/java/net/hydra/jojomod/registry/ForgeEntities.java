@@ -408,7 +408,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta").toString())
             );
-
+    public static final RegistryObject<EntityType<PlanetWavesCosmicEntity>> PLANET_WAVES_COSMIC =
+            ENTITY_TYPES.register("planet_waves_cosmic", () ->
+                    EntityType.Builder.of(PlanetWavesCosmicEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic").toString())
+            );
     public static final RegistryObject<EntityType<PWMeteorEntity>> PW_METEOR =
             ENTITY_TYPES.register("pw_meteor", () ->
                     EntityType.Builder.<PWMeteorEntity>of(PWMeteorEntity::new, MobCategory.MISC).sized(0.9F, 0.9F).

@@ -70,11 +70,28 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
     public static final ResourceLocation PW_BIG_METEOR_TEXTURE =
             new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
+    public static final ResourceLocation PW_BIG_METEOR_COSMIC_TEXTURE =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_cosmic.png");
 
 
 
     @Override
     public ResourceLocation getTextureLocation(PWBigMeteorEntity entity) {
+        LivingEntity user = entity.getUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+            byte sft = PPW.getFireballColor();
+            if (sft == 3) {
+                //return PW_METEOR_BLUE_TEXTURE;
+            } else if (sft == 4) {
+               // return PW_METEOR_PURPLE_TEXTURE;
+            } else if (sft == 5) {
+                //return PW_METEOR_GREEN_TEXTURE;
+            } else if (sft == 6) {
+                //return PW_METEOR_WATER_TEXTURE;
+            } else if (sft == 7) {
+                return PW_BIG_METEOR_COSMIC_TEXTURE;
+            }
+        }
         return PW_BIG_METEOR_TEXTURE;
     }
 }
