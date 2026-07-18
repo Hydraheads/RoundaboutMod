@@ -791,7 +791,7 @@ public class Config implements Cloneable {
         public Integer detectedOreLightDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer oreDetectionRadius;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
         public Integer oreDetectionMaximum;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oreDetectionCooldown;
