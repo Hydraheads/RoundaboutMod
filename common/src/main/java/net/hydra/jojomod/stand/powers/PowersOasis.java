@@ -7,10 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -25,6 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -36,14 +34,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PowersOasis extends NewDashPreset {
@@ -82,6 +83,12 @@ public class PowersOasis extends NewDashPreset {
     public boolean isEntityInBrawlRange() {
         return fistsOut && getTargetEntityThroughWalls(this.self, 3, getBrawlPunchAngle()) != null;
     }
+
+
+    public static final byte MUD_HIT_WINDUP = PowerIndex.POWER_1_SNEAK;
+    public static final byte POWER_1_SNEAK_EXTRA = 52;
+
+
 
     public boolean fistsOut = false;
 
@@ -181,6 +188,9 @@ public class PowersOasis extends NewDashPreset {
             case PowerIndex.POWER_1_SNEAK -> {
                 mudHitCharge();
             }
+            case PowerIndex.EXTRA -> {
+                mudHitBlockImpact();
+            }
 
 
         }
@@ -211,15 +221,21 @@ public class PowersOasis extends NewDashPreset {
         return super.tryIntPower(move,forced,chargeTime);
     }
 
+    public BlockPos fallingBlockPos = BlockPos.ZERO;
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
+        fallingBlockPos = pos;
+        return super.tryBlockPosPower(move, forced,pos);
+    }
+
+
     @Override
     public void tickPower() {
         super.tickPower();
 
         if (this.self.level().isClientSide()) {
             if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
-                Roundabout.LOGGER.info("1");
                 if (attackTimeDuring > 4) {
-                    Roundabout.LOGGER.info("2");
                     tryPowerPacket(NONE);
 
                     if (getPlayerPos2() != PlayerPosIndex.OASIS_KICK) {
@@ -232,10 +248,22 @@ public class PowersOasis extends NewDashPreset {
             if (getActivePower() != PowerIndex.SNEAK_ATTACK && pos2 == PlayerPosIndex.OASIS_KICK) {
                 setPlayerPos2(PlayerPosIndex.NONE);
             }
-            // possibly place this logic in the method where the tryPowerPacket(NONE) is received?
-            // probably copy over tryPower method
+            // do actualy check in tryPower like vamp and set power active to none here instead? (would be more reactive when immediately switching moves?)
         }
 
+
+        if (!this.self.level().isClientSide && !fallingMudBlocks.isEmpty()) {
+            fallingMudBlocks.removeIf(fallingBlock -> {
+                if (!fallingBlock.isAlive()) {
+                    if (fallingBlock.tickCount > 2) {
+                        onFallingBlockLand(fallingBlock.blockPosition(), fallingBlock.getBlockState());
+                        Roundabout.LOGGER.info("is not alive");
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
     }
 
 
@@ -247,46 +275,130 @@ public class PowersOasis extends NewDashPreset {
     /** mud hit stuff */
     public void mudHitClient() {
         if (!onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 5);
-            Roundabout.LOGGER.info("mud hit client");
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 160);
 
-            //((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+            tryPower(MUD_HIT_WINDUP);
+            tryPowerPacket(MUD_HIT_WINDUP);
         }
     }
 
     public void mudHitCharge() {
         this.setAttackTimeDuring(0);
         this.setActivePower(PowerIndex.POWER_1_SNEAK);
+        Roundabout.LOGGER.info("charge");
 
-
-        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        if (!this.self.level().isClientSide) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+        }
     }
 
     public void updateMudHit() {
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 24) {
-                doMudHit();
+            if (this.attackTimeDuring > 18) {
+                if (this.self.level().isClientSide) {
+                    doMudHit();
+                }
+            } else {
+
+                if (this.self.level().isClientSide) {
+                    // first person wind up anim?
+                } else {
+                    // third person anim (maybe menacing particles)
+                }
+
             }
         }
     }
 
 
-    public void doMudHit() {
-        int blockReach = 3;
-        Roundabout.LOGGER.info("mudhit!");
-
-        BlockHitResult hitBlock = this.getLookedBlock(blockReach);
-        if (hitBlock.getType() == HitResult.Type.BLOCK) {
-            Roundabout.LOGGER.info("hit block");
-        } else {
-            Roundabout.LOGGER.info("combat variant");
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == MUD_HIT_WINDUP){
+            mudHitEntityImpact(target);
         }
+    }
+
+
+
+    public void doMudHit() {
+        int blockReach = 5;
+
+
+        if (this.self.level().isClientSide) {
+            Roundabout.LOGGER.info("block hit fired on client");
+
+            BlockHitResult hitBlock = this.getLookedBlock(blockReach);
+            if (hitBlock.getType() == HitResult.Type.BLOCK) {
+
+                BlockPos blockPos = hitBlock.getBlockPos();
+                tryBlockPosPowerPacket(PowerIndex.EXTRA,blockPos);
+
+            } else {
+
+                Entity targetEntity = getTargetEntity(this.self, 3, getBrawlPunchAngle());
+                int id = 0;
+                if (targetEntity != null) {
+                    id = targetEntity.getId();
+                }
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK, id);
+                Roundabout.LOGGER.info(String.valueOf(id));
+
+            }
+        }
+    }
+
+    public void mudHitEntityImpact(Entity entity) {
 
         this.setActivePower(PowerIndex.NONE);
         this.setAttackTimeDuring(-10);
+
+        if (entity != null) {
+
+            if (entity instanceof LivingEntity LE && LE.isBlocking()) {
+                knockShield(LE, 120);
+                takeDeterminedKnockbackWithY2(this.self, entity, .20f);
+            }
+
+
+        }
     }
 
+    List<FallingBlockEntity> fallingMudBlocks = new ArrayList<>();
+    public void mudHitBlockImpact() {
+
+        this.setActivePower(PowerIndex.NONE);
+        this.setAttackTimeDuring(-10);
+
+
+        for (int i = -1; i <= 2; i++) {
+            for (int j = -1; j <= 2; j++) {
+                BlockPos newBlockPos = fallingBlockPos.offset(i, 0, j);
+                BlockState newBlockState = this.self.level().getBlockState(newBlockPos);
+
+                if (newBlockState.getBlock() == Blocks.AIR) {
+                    continue;
+                }
+
+                FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), newBlockPos, newBlockState);
+                fallingMudBlocks.add(fallingBlock);
+            }
+        }
+
+        BlockState state = this.self.level().getBlockState(fallingBlockPos);
+        FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), fallingBlockPos, state);
+        fallingMudBlocks.add(fallingBlock);
+
+    }
+
+    public void onFallingBlockLand(BlockPos blockPos, BlockState blockState) {
+        if (!this.self.level().isClientSide) {
+            ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5, 30, 0.3, 0.1, 0.3, 0.15);
+
+            Roundabout.LOGGER.info("landed!");
+            float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
+            this.self.level().playSound(null, blockPos, SoundEvents.GRAVEL_FALL, SoundSource.PLAYERS, 0.9f, pitch);
+        }
+    }
 
 
 
@@ -454,7 +566,6 @@ public class PowersOasis extends NewDashPreset {
     }
 
     public void kickAttack() {
-        Roundabout.LOGGER.info("kick attack");
 
         this.attackTimeMax= 5;
         this.attackTimeDuring = 0;
@@ -465,9 +576,6 @@ public class PowersOasis extends NewDashPreset {
 
 
         if (!self.level().isClientSide) {
-
-            Roundabout.LOGGER.info("server received");
-            this.setCooldown(PowerIndex.SKILL_EXTRA, 20);
 
             if (getPlayerPos2() != PlayerPosIndex.OASIS_KICK) {
                 setPlayerPos2(PlayerPosIndex.OASIS_KICK);
@@ -693,7 +801,8 @@ if (keyIsDown) {
             MANGA =6,
             OPEN =7,
             TESTAMENTI =8,
-            PS2 =9;
+            PS2 =9,
+            FLESH = 10;
 
     @Override
     public List<Byte> getSkinList() {
@@ -707,6 +816,7 @@ if (keyIsDown) {
         $$1.add(INVERTED);
         $$1.add(TESTAMENTI);
         $$1.add(PS2);
+        $$1.add(FLESH);
 
         return $$1;
     }
@@ -725,6 +835,7 @@ if (keyIsDown) {
             case OPEN -> "open";
             case TESTAMENTI -> "testamenti";
             case PS2 -> "ps2";
+            case FLESH -> "flesh";
             default -> "base";
         };
     }
