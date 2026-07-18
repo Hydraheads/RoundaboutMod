@@ -358,7 +358,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg;
                 if (living instanceof Player pl){
-                    dmg = multiplyPowerByStandConfigPlayers(2F);
+                    dmg = multiplyPowerByStandConfigPlayers(1.8F);
                 } else {
                     dmg = multiplyPowerByStandConfigMobs(3);
                 }
