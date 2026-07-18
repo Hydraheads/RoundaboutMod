@@ -79,7 +79,7 @@ void main() {
     // -- Color Compression (increasing the floor of the signal without affecting the ceiling) --
     ScanlineTexel = Floor + (One.xyz - Floor) * ScanlineTexel;
     vec3 redTint = vec3(1.0, 0.0, 0.0);
-    ScanlineTexel = mix(ScanlineTexel, redTint, 0.2);
+    ScanlineTexel = mix(ScanlineTexel, redTint, 0.17);
 
     // Pulsing
     float pulse = sin(GameTime * 0.3) * 0.03 + 1.0;
