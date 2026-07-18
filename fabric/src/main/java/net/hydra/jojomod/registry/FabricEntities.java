@@ -466,7 +466,13 @@ public class FabricEntities {
                         EntityType.Builder.of(PlanetWavesSpartaEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_sparta")
                 );
-
+        public static final EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic"),
+                        EntityType.Builder.of(PlanetWavesCosmicEntity::new, MobCategory.MISC).
+                               sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_cosmic")
+                );
 
     public static final EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER =
             Registry.register(
@@ -991,6 +997,7 @@ public class FabricEntities {
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
                 ModEntities.PLANET_WAVES_SPARTA = PLANET_WAVES_SPARTA;
+                ModEntities.PLANET_WAVES_COSMIC = PLANET_WAVES_COSMIC;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
@@ -1172,6 +1179,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(CALIFORNIA_KING_BED, CaliforniaKingBedEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_SPARTA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PLANET_WAVES_COSMIC, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());

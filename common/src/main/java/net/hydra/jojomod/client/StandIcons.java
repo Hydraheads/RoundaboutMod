@@ -421,6 +421,8 @@ public class StandIcons {
                 "textures/gui/icons/planet_waves/forced_disintegration.png");
     public static final ResourceLocation PLANET_WAVES_GRAB= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/grab.png");
+    public static final ResourceLocation PLANET_WAVES_COSMIC_ICON= new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/cosmic_icon.png");
 
     public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/impale.png");

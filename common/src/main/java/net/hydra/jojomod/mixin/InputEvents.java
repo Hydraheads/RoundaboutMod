@@ -269,7 +269,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (powers instanceof PowersOasis PO) {
-                if (PO.isBrawling()) {
+                if (PO.isBrawling() && PO.hasStandActive(PO.getSelf())) {
                     ci.setReturnValue(false);
                     return;
                 }
