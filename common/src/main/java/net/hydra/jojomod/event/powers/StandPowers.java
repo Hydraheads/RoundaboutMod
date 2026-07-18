@@ -638,17 +638,6 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    public boolean isUsingShield(LivingEntity entity) {
-        if (entity.isUsingItem()) {
-            InteractionHand hand = entity.getUsedItemHand();
-            ItemStack item = entity.getItemInHand(hand);
-            if (item.getItem() instanceof ShieldItem) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){

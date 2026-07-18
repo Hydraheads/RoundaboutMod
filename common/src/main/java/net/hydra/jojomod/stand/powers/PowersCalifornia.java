@@ -651,7 +651,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
-                setCooldown(PowerIndex.SKILL_EXTRA, 15);
+                setCooldown(PowerIndex.SKILL_EXTRA, 12);
 
                 Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.5),
                         (float) (spawnPos.getY() + 1),
@@ -669,7 +669,7 @@ public class PowersCalifornia extends NewDashPreset {
                         ModSounds.CKB_TILE_EVENT, SoundSource.PLAYERS, 1F,
                         (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
-                step.timing = 400;
+                step.timing = 440;
                 addSpawnedEntity(step);
                 self.level().addFreshEntity(step);
             }

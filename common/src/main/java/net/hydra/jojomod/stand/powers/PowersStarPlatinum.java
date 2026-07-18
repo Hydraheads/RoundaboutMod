@@ -751,6 +751,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
                     addEXP(1, LE);
+                    if (isUsingShield(LE)){
+                        knockShield2(LE, 200);
+                    }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0,0.2,0));

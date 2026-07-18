@@ -458,6 +458,7 @@ public class RoundaboutCommands {
                     ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
                     ((StandUser) PE).roundabout$updateSealedTicks(-1);
+                    ((IPlayerEntity) PE).rdbt$setLevelDecreaseTicks(0);
                 }
 
             }
