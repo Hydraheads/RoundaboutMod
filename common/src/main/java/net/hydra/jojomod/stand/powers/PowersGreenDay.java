@@ -1529,7 +1529,10 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
             }else
             if( (RNG > 0.95) && (this.self.getHealth() < this.self.getMaxHealth())){
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                if(!onCooldown(PowerIndex.POWER_4)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                    setCooldown(PowerIndex.POWER_4,200);
+                }
             }
 
             Entity targetEntity = getTargetEntity(this.self, -1);

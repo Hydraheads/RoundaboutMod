@@ -1888,7 +1888,7 @@
   "ability.roundabout.gd_return_left": "Main Arm Reattach",
   "ability.roundabout.gd_return_left.desc": "Return your detatched Main hand",
   "ability.roundabout.gd_spin_left": "Main Arm Spin",
-  "ability.roundabout.gd_spin_left.desc": "Causes your seperated main arm to spin in place, repeatedly attacking nearby entities. If the arm is in the air, knocks anything it hits upwards.",
+  "ability.roundabout.gd_spin_left.desc": "Causes your seperated main arm to spin in place, repeatedly attacking nearby entities. If the arm hits a targets head, it knocks anything it hits upwards.",
   "ability.roundabout.gd_punch_right": "Off Hand Launch",
   "ability.roundabout.gd_return_right": "Off Hand Reattach",
   "ability.roundabout.gd_spin_right": "Off Hand Spin",
