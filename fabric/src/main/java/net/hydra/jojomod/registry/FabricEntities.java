@@ -479,7 +479,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("manhattan_transfer"),
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.60f).clientTrackingRange(20).build(Roundabout.MOD_ID+":manhattan_transfer")
+                            sized(0.70f, 0.60f).clientTrackingRange(30).build(Roundabout.MOD_ID+":manhattan_transfer")
             );
 
     public static final EntityType<PollinationTransferEntity> POLLINATION_TRANSFER =
