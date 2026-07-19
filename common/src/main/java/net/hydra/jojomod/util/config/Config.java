@@ -521,7 +521,7 @@ public class Config implements Cloneable {
         public Boolean directFrictionStopsJumping;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer frictionStealingDurationInTicks;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer playerFrictionStealingDurationInTicks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseFriction;
@@ -573,7 +573,7 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
         public Integer woundPlugCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
