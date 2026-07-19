@@ -101,6 +101,7 @@ public class PowersKingCrimson extends NewPunchingStand {
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
                         if (!(living instanceof StandEntity)) {
                             Vec3 pos = living.position();
+                            pos = new Vec3(pos.x+5,pos.y,pos.z);
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
 

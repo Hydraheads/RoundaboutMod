@@ -952,6 +952,13 @@ public class ClientUtil {
         return false;
     }
 
+    public static float getGameTimeStart(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            return player.tickCount - GameTimeStart;
+        }
+        return 0;
+    }
     public static float GameTimeStart = 0;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;

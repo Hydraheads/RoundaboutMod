@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
@@ -108,11 +109,26 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     instanceof PowersKingCrimson pkc){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
                 if (skip != null){
+                    float progress = Mth.clamp(
+                            (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
+                            0.0F,
+                            1.0F
+                    );
                     double $$7 = skip.position.x;
                     double $$8 = skip.position.y;
                     double $$9 = skip.position.z;
+                    if (progress < 1){
+                        double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
+                        double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
+                        double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
 
-                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, skip.yRot, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                        $$7 = Mth.lerp(progress, x, $$7);
+                        $$8 = Mth.lerp(progress, y, $$8);
+                        $$9 = Mth.lerp(progress, z, $$9);
+                    }
+                    float renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+
+                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
 
                 }
                 ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
