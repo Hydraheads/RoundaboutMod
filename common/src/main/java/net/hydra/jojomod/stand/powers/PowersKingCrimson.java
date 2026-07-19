@@ -32,9 +32,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -89,6 +92,40 @@ public class PowersKingCrimson extends NewPunchingStand {
     public boolean isUsingEpitaph(){
         return !epitaph.isEmpty();
     }
+    public static Vec3 predictPosition(Mob mob, int ticks) {
+        Path path = mob.getNavigation().getPath();
+
+        if (path == null) {
+            return mob.position();
+        }
+
+        double remaining = mob.getSpeed() * ticks;
+        Vec3 current = mob.position();
+
+        int index = path.getNextNodeIndex();
+
+        while (index < path.getNodeCount()) {
+            Node node = path.getNode(index);
+
+            Vec3 next = new Vec3(
+                    node.x + 0.5,
+                    node.y,
+                    node.z + 0.5
+            );
+
+            double segment = current.distanceTo(next);
+
+            if (remaining <= segment) {
+                return current.lerp(next, remaining / segment);
+            }
+
+            remaining -= segment;
+            current = next;
+            index++;
+        }
+
+        return current;
+    }
 
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
@@ -100,19 +137,23 @@ public class PowersKingCrimson extends NewPunchingStand {
                     int id = living.getId();
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
                         if (!(living instanceof StandEntity)) {
-                            Vec3 pos = living.position();
-                            pos = new Vec3(pos.x+5,pos.y,pos.z);
+                            Vec3 predicted = living.position();
+                            if (living instanceof Mob mob) {
+                                predicted = predictPosition(mob, 100);
+                            } else {
+                                // Fallback for players, armor stands, etc.
+                            }
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
 
 
                             epitaph.put(living.getId(), new TimeSkipSnapshot(
                                     id,
-                                    pos,
+                                    predicted,
                                     xRot,
                                     yRot
                             ));
-                            S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
+                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                         }
                     }
 
