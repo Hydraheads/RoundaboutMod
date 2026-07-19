@@ -751,7 +751,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "iron_ball"),
                     EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).
-                            sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
+                            sized(0.9f, 0.9f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
             );
         public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
                 Registry.register(

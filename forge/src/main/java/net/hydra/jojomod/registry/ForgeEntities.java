@@ -667,7 +667,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<IronBallEntity>> IRON_BALL =
             ENTITY_TYPES.register("iron_ball", () ->
-                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).
                             clientTrackingRange(6).
                             build(new ResourceLocation(Roundabout.MOD_ID, "iron_ball").toString())
             );
