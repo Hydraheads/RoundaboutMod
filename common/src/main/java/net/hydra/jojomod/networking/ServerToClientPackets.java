@@ -54,6 +54,8 @@ public class ServerToClientPackets {
             SyncPossessor("sync_possessor"),
             ShatterIce("shatter_ice"),
             SyncAllies("sync_allies"),
+            SyncMoldRange("sync_mold_range"),
+            SyncMoldDuration("sync_mold_duration"),
             AddEpitaph("add_epitaph"),
             ClearEpitaph("clear_epitaph");
 

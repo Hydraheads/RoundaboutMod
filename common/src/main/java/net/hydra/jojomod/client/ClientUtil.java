@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -769,7 +770,22 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.clear();
                     }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                    float data = (float) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.range = data;
+
+
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
+                    int data = (int) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.lifetime = data;
+
+
                 }
+
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
