@@ -487,7 +487,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"),
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.60f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
+                            sized(0.70f, 0.60f).clientTrackingRange(30).build(Roundabout.MOD_ID+":pollination_transfer")
             );
 
     public static final EntityType<BlackSabbathEntity> BLACK_SABBATH =

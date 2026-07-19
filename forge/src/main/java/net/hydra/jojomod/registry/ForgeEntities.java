@@ -437,7 +437,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<PollinationTransferEntity>> POLLINATION_TRANSFER =
             ENTITY_TYPES.register("pollination_transfer", () ->
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).sized(0.70F, 0.60f).
-                            clientTrackingRange(14).
+                            clientTrackingRange(30).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
             );
     public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
