@@ -13,6 +13,7 @@ import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -46,11 +47,18 @@ public class MoldSporesEntity extends StandEntity {
 
     @Override
     public void tick() {
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
+        if(!level().isClientSide) {
+            Roundabout.LOGGER.info("ServerRange:" + Float.toString(range));
+        }else {
+            Roundabout.LOGGER.info("ClientRange:" + Float.toString(range));
+        }
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range ,range );
         for(int j = 0;j<damages.size();j++) {
+
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
                 if(entity instanceof LivingEntity){
+
                 ((StandUser) entity).SetInMoldTicks(3);
                 }
 
@@ -85,12 +93,14 @@ public class MoldSporesEntity extends StandEntity {
             }else {
                 this.setDeltaMovement(0, -0.2, 0);
             }
-            if (!onGround()) {
-                range += (float) (0.09 * ((double) ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100));
-                //this.setDeltaMovement(0,-0.4,0);
-            }
-            if(range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize){
-                range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
+            if(!client) {
+                if (!onGround()) {
+                    range += (float) (0.09 * ((double) ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100));
+                    //this.setDeltaMovement(0,-0.4,0);
+                }
+                if (range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize) {
+                    range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
+                }
             }
         if (!client) {
             tickeffect();
@@ -98,13 +108,15 @@ public class MoldSporesEntity extends StandEntity {
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    (((int) range ^ 3) * 1) + 1, range, range, range, 0.005);
+                    (int)(((int) range ^ 3) * 0.5) + 1, range/2, range/2, range/2, 0.005);
 
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    (int) (((int) range ^ 3) * 0.25) + 1, range, range, range, 0.005);
+                    (int) (((int) range ^ 3) * 0.125) + 1, range/2, range/2, range/2, 0.005);
+            S2CPacketUtil.sync_mold_duration(lifetime,this.getId());
+            S2CPacketUtil.sync_mold_range(range,this.getId());
         }
 
 
@@ -116,7 +128,7 @@ public class MoldSporesEntity extends StandEntity {
 
 
     public void tickeffect(){
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range * 2,range * 2,range * 2);
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range,range);
         for(int j = 0;j<damages.size();j++) {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);

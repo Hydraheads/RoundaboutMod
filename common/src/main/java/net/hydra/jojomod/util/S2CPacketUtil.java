@@ -1,6 +1,7 @@
 package net.hydra.jojomod.util;
 
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -248,6 +249,7 @@ public class S2CPacketUtil {
             );
         }
     }
+
     public static void sendGenericIntIntToClientPacket(Player player, byte context, int data1, int data){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
@@ -417,5 +419,20 @@ public class S2CPacketUtil {
                     allies
             );
         }
+    }
+
+    public static void sync_mold_range( float range, int entity) {
+        ModMessageEvents.sendToAll(
+                ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value,
+                range,entity
+        );
+    }
+
+    public static void sync_mold_duration( int dur, int entity) {
+            ModMessageEvents.sendToAll(
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value,
+                    dur,entity
+            );
+
     }
 }

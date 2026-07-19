@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -206,159 +207,151 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void tickeffects() {
-        if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage()-1){
-            Can_activate = false;
-            Can_activate_special = false;
+            if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage() - 1) {
+                Can_activate = false;
+                Can_activate_special = false;
+            }
+            this.setFadeOut((byte) 1);
+            boolean client = this.level().isClientSide();
+            LivingEntity user = this.getUser();
+            if (!client) {
+
+                if (user == null) {
+                    spawnAtLocation(this.getMainHandItem());
+                    this.discard();
+                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                    spawnAtLocation(this.getMainHandItem());
+                    this.discard();
+                } if (user != null) {
+
+                    if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            spawnAtLocation(this.getMainHandItem());
+                            this.discard();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                            spawnAtLocation(this.getMainHandItem());
+                            this.discard();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            spawnAtLocation(this.getMainHandItem());
+                            this.discard();
+                        }
+                    }
+                }
+                    if (!onGround()) {
+                        flyingTicks += 1;
+                    } else {
+                        flyingTicks = 0;
+                    }
+                    if (Can_activate_special || (Can_activate)) {
+                        ItemStack item = (this.getMainHandItem());
+                        if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
+
+                            BlockState block = (this.level().getBlockState(MiningPos));
+
+
+                            boolean RightTier = false;
+
+                            if (item.getItem() instanceof DiggerItem DI) {
+                                RightTier = (
+                                        (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
+                                                ||
+                                                (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
+                                                ||
+                                                !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
+                                );
+                            }
+
+                            RightTier = true;
+
+                            boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
+                            boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
+                            boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
+
+                            BlockState state = this.level().getBlockState(MiningPos);
+                            ServerLevel level = (ServerLevel) this.level();
+
+                            BlockPos targetpos = MiningPos;
+
+                            if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
+                                if (pickaxeable) {
+                                    level.destroyBlock(targetpos, true, this);
+                                    this.setDeltaMovement(0, 0, 0);
+
+                                    if (Can_activate) {
+                                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                    }
+                                    Can_activate = false;
+                                }
+
+                            } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                                if (shovelable) {
+                                    level.destroyBlock(targetpos, true, this);
+                                    this.setDeltaMovement(0, 0, 0);
+
+                                    if (Can_activate) {
+                                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                    }
+                                    Can_activate = false;
+                                }
+
+                            } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                                if (axeable) {
+                                    level.destroyBlock(targetpos, true, this);
+
+                                    this.setDeltaMovement(0, 0, 0);
+                                    if (Can_activate) {
+                                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                    }
+                                    Can_activate = false;
+                                }
+
+                            }
+                        }
+                        doAttack();
+                        Can_activate_special = false;
+                    }
+                    attractMobs();
+                    pickUpItems();
+                    doSpin();
+
+                if (FireworkLaunchTicks > 0) {
+                    FireworkLaunchTicks--;
+                    this.setDeltaMovement(LaunchAngle);
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
+
+                }
+
+                for (int i = 0; i < 2; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                            this.getX() + randX,
+                            this.getY() + randY + 0.15,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                }
+                if (Can_activate && !onGround()) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
+                }
+            }
+
+            super.tick();
         }
-        this.setFadeOut((byte)1);
-        boolean client = this.level().isClientSide();
-        LivingEntity user = this.getUser();
-        if (!client) {
-           if(user != null) {
-               if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                   if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                       spawnAtLocation(this.getMainHandItem());
-                       this.discard();
-                   }
-               }
-                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                    if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
-                        spawnAtLocation(this.getMainHandItem());
-                        this.discard();
-                    }
-                }
-                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                    if (!( (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                        spawnAtLocation(this.getMainHandItem());
-                        this.discard();
-                    }
-                }
-            }
-            if(user == null){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }
-            else{
-                if(!onGround()){
-                    flyingTicks +=1;
-                }else{
-                    flyingTicks = 0;
-                }
-                if( Can_activate_special || (Can_activate )) {
-                    ItemStack item = (this.getMainHandItem());
-                    if ((MainUtil.cheapDistanceTo(this.getX(),this.getY(),this.getZ(),MiningPos.getX(),MiningPos.getY(),MiningPos.getZ()) < 2)) {
-
-                        BlockState block = (this.level().getBlockState(MiningPos));
-
-
-
-
-                        boolean RightTier = false;
-
-                        if (item.getItem() instanceof DiggerItem DI) {
-                            RightTier = (
-                                    (block.is(BlockTags.NEEDS_STONE_TOOL) && !(DI.getTier().equals(Tiers.WOOD)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_IRON_TOOL) && (DI.getTier().equals(Tiers.IRON) || DI.getTier().equals(Tiers.DIAMOND) || DI.getTier().equals(Tiers.NETHERITE)))
-                                            ||
-                                            (block.is(BlockTags.NEEDS_DIAMOND_TOOL) && DI.getTier().equals(Tiers.NETHERITE) || DI.getTier().equals(Tiers.DIAMOND))
-                                            ||
-                                            !(block.is(BlockTags.NEEDS_DIAMOND_TOOL) || block.is(BlockTags.NEEDS_STONE_TOOL) || block.is(BlockTags.NEEDS_IRON_TOOL))
-                            );
-                        }
-
-                        RightTier = true;
-
-                        boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
-                        boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
-                        boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
-
-                        BlockState state = this.level().getBlockState(MiningPos);
-                        ServerLevel level = (ServerLevel) this.level();
-
-                        BlockPos targetpos = MiningPos;
-                        
-                        if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
-                            if (pickaxeable) {
-                                level.destroyBlock(targetpos, true,this);
-                                this.setDeltaMovement(0, 0, 0);
-
-                                if(Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                                }
-                                Can_activate = false;
-                            }
-
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
-                            if (shovelable) {
-                                level.destroyBlock(targetpos, true, this);
-                                this.setDeltaMovement(0, 0, 0);
-
-                                if(Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                                }
-                                Can_activate = false;
-                            }
-
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof AxeItem) {
-                            if (axeable) {
-                                level.destroyBlock(targetpos, true,this);
-
-                                this.setDeltaMovement(0, 0, 0);
-                                if(Can_activate) {
-                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
-                                }
-                                Can_activate = false;
-                            }
-
-                        }
-                    }
-                    doAttack();
-                    Can_activate_special = false;
-                }
-                attractMobs();
-                pickUpItems();
-                doSpin();
-            }
-
-            if(FireworkLaunchTicks > 0){
-                FireworkLaunchTicks --;
-                this.setDeltaMovement(LaunchAngle);
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
-                        this.getX(),
-                        this.getY() + 0.15 ,
-                        this.getZ(),
-                        1,0,0,0,0);
-
-            }
-
-            for(int i = 0; i < 2; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
-                double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
-                        this.getX()+randX,
-                        this.getY()+randY + 0.15 ,
-                        this.getZ() + randZ,
-                        1,0,0,0,0);
-            }
-            if(Can_activate && !onGround()) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                        this.getX(),
-                        this.getY() + 0.15,
-                        this.getZ(),
-                        1, 0, 0, 0, 0);
-            }
-
-        }
-
-        super.tick();
-    }
 
     public boolean hasUsedItem = false;
 
