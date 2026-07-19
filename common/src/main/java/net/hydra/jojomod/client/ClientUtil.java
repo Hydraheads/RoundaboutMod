@@ -952,6 +952,7 @@ public class ClientUtil {
         return false;
     }
 
+    public static float GameTimeStart = 0;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
@@ -959,8 +960,12 @@ public class ClientUtil {
             if (PKC.isUsingEpitaph()){
                 return true;
             } else {
+                GameTimeStart = player.tickCount;
                 return false;
             }
+        }
+        if (player != null){
+            GameTimeStart = player.tickCount;
         }
         return false;
     }

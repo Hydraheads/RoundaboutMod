@@ -86,8 +86,6 @@ public class PowersKingCrimson extends NewPunchingStand {
 
     }
 
-
-
     public boolean isUsingEpitaph(){
         return !epitaph.isEmpty();
     }

@@ -7,6 +7,8 @@ in vec2 oneTexel;
 
 uniform vec2 InSize;
 uniform float GameTime;
+uniform float GameTimeStart;
+uniform float PartialTick;
 
 const vec4 Zero = vec4(0.0);
 const vec4 Half = vec4(0.5);
@@ -58,10 +60,19 @@ void main() {
     ScreenClipCoord += CurvatureClipCurve;
 
     // -- Alpha Clipping --
-    if (ScanCoord.x < 0.0) discard;
-    if (ScanCoord.y < 0.0) discard;
-    if (ScanCoord.x > 1.0) discard;
-    if (ScanCoord.y > 1.0) discard;
+float left   = max(0.0, -ScreenClipCoord.x);
+float right  = max(0.0, ScreenClipCoord.x - 1.0);
+float top    = max(0.0, -ScreenClipCoord.y);
+float bottom = max(0.0, ScreenClipCoord.y - 1.0);
+
+float outside = max(max(left, right), max(top, bottom));
+float time = (GameTime + PartialTick) - GameTimeStart;
+float appear = clamp(time / 8.0, 0.0, 1.0);
+appear = appear * appear * (3.0 - 2.0 * appear);
+
+float threshold = (1.0 - appear) * 0.05;
+if (outside > threshold)
+    discard;
 
     // -- Scanline Simulation --
     float offset = sin(GameTime * 0.5) * 2.0;
