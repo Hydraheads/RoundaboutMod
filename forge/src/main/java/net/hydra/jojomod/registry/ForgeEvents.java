@@ -75,6 +75,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
         event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
         event.put(ForgeEntities.PLANET_WAVES.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PLANET_WAVES_SPARTA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PLANET_WAVES_COSMIC.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
@@ -690,6 +692,8 @@ public class ForgeEvents {
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
         ModEntities.PLANET_WAVES = ForgeEntities.PLANET_WAVES.get();
+        ModEntities.PLANET_WAVES_SPARTA = ForgeEntities.PLANET_WAVES_SPARTA.get();
+        ModEntities.PLANET_WAVES_COSMIC = ForgeEntities.PLANET_WAVES_COSMIC.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();
