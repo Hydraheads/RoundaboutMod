@@ -623,7 +623,8 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<UltravioletProjectile>> ULTRAVIOLET_PROJECTILE =
             ENTITY_TYPES.register("uv", () ->
-                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC)
+                            .sized(1.4F, 1.4F).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "uv").toString())
             );

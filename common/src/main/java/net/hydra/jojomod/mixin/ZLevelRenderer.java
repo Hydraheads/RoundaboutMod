@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
@@ -15,10 +16,12 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
@@ -109,7 +112,24 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             entityAndData.roundabout$setExclusiveLayers(true);
         }
 
+        if (ClientUtil.isUsingEpitaph() && entity != null){
+            if (ClientUtil.getPlayer() != null && ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers()
+                    instanceof PowersKingCrimson pkc){
+                TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
+                if (skip != null){
+                    double $$7 = skip.position.x;
+                    double $$8 = skip.position.y;
+                    double $$9 = skip.position.z;
+
+                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, skip.yRot, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                    ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         if (!roundabout$recurse) {
+
             if (entity.level().isClientSide()) {
                 if (entity instanceof CinderellaVisageDisplayEntity pre) {
                     ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);

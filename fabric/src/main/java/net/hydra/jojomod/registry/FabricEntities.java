@@ -700,7 +700,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "uv"),
                     EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).
-                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
+                            sized(1.4F, 1.4F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
             );
     public static final EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE =
             Registry.register(
