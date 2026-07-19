@@ -53,7 +53,9 @@ public class ServerToClientPackets {
             GunRecoil("gun_recoil"),
             SyncPossessor("sync_possessor"),
             ShatterIce("shatter_ice"),
-            SyncAllies("sync_allies");
+            SyncAllies("sync_allies"),
+            AddEpitaph("add_epitaph"),
+            ClearEpitaph("clear_epitaph");
 
             public final String value;
 

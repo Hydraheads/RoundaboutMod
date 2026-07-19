@@ -7,6 +7,7 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.joml.Vector3f;
 
@@ -391,6 +392,22 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value,
                     entityId
             );
+    }
+
+    public static void addEpitaph(Player player, int id, Vec3 vec3, float xrot, float yrot) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value,
+                    id, vec3.x, vec3.y, vec3.z, xrot, yrot
+            );
+        }
+    }
+    public static void clearEpitaph(Player player) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value
+            );
+        }
     }
 
     public static void sync_allies(Player player,String allies) {

@@ -14,6 +14,7 @@ import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
@@ -754,6 +755,20 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
                     }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value)) {
+                    int i = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    float xrot = (float) vargs[4];
+                    float yrot = (float) vargs[4];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value)) {
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.clear();
+                    }
                 }
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
@@ -924,8 +939,9 @@ public class ClientUtil {
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
-            if (PKC.hasStandActive(player)) {
-                return false;
+
+            if (PKC.isUsingEpitaph()){
+                return true;
             } else {
                 return false;
             }

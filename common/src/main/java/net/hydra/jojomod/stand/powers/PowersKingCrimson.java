@@ -1,10 +1,12 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -33,9 +35,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PowersKingCrimson extends NewPunchingStand {
@@ -43,6 +48,7 @@ public class PowersKingCrimson extends NewPunchingStand {
     public PowersKingCrimson(LivingEntity self) {
         super(self);
     }
+    public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
 
     @Override
     /**Override to add disable config*/
@@ -74,6 +80,41 @@ public class PowersKingCrimson extends NewPunchingStand {
     public SoundEvent getImpaleSound(){
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
+    }
+
+
+
+    public boolean isUsingEpitaph(){
+        return !epitaph.isEmpty();
+    }
+
+    public void epitaph() {
+        if (self instanceof Player pl) {
+            if (epitaph.isEmpty()) {
+                AABB area = self.getBoundingBox().inflate(50.0);
+
+                for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+                    int id = living.getId();
+                    Vec3 pos = living.position();
+                    float xRot = living.getXRot();
+                    float yRot = living.getYRot();
+
+
+                    epitaph.put(living.getId(), new TimeSkipSnapshot(
+                            id,
+                            pos,
+                            xRot,
+                            yRot
+                    ));
+                    S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
+                }
+            } else {
+                epitaph.clear();
+                S2CPacketUtil.clearEpitaph(pl);
+            }
+
+            Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
+        }
     }
 
     @Override
@@ -129,14 +170,14 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.beta");
         }if (skinId == KingCrimsonEntity.CONCEPT){
             return Component.translatable(  "skins.roundabout.king_crimson.concept");
-        }if (skinId == KingCrimsonEntity.RED){
-            return Component.translatable(  "skins.roundabout.king_crimson.red");
+        }if (skinId == KingCrimsonEntity.PART_5_SKIN){
+            return Component.translatable(  "skins.roundabout.king_crimson.base");
         }if (skinId == KingCrimsonEntity.BLUE){
             return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }if (skinId == KingCrimsonEntity.VISION){
             return Component.translatable(  "skins.roundabout.king_crimson.vision");
         }
-        return Component.translatable(  "skins.roundabout.king_crimson.base");
+        return Component.translatable(  "skins.roundabout.king_crimson.red");
     }
     @Override
     public boolean cancelSprintJump(){
@@ -198,6 +239,10 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+
+            case SKILL_1_NORMAL-> {
+                epitaphClient();
+            }
             case SKILL_1_CROUCH -> {
                 impaleClient();
             }
@@ -206,11 +251,18 @@ public class PowersKingCrimson extends NewPunchingStand {
             }
         }
     }
+
+    public void epitaphClient(){
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
+
     public void tryToDashClient(){
         if (!doVault()) {
             dash();
         }
     }
+
 
     public int getImpaleLevel(){
         return 1;
@@ -407,6 +459,8 @@ public class PowersKingCrimson extends NewPunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
+        } else if (move == PowerIndex.POWER_1){
+            this.epitaph();
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
