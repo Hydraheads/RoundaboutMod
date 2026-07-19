@@ -749,18 +749,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tryBlip() {
         if (ClientUtil.skipInterpolation) {
             if (ClientUtil.isPlayerOrCamera(this)) {
-            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-            double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
-            double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
-            double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
+                if (!(this.getPassengers() != null && !this.getPassengers().isEmpty())) {
+                    ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                    double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
+                    double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
+                    double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
 
-            this.xo = lerpx;
-            this.yo = lerpy;
-            this.zo = lerpz;
-            this.xOld = lerpx;
-            this.yOld = lerpy;
-            this.zOld = lerpz;
-            this.setPos(lerpx, lerpy, lerpz);
+                    this.xo = lerpx;
+                    this.yo = lerpy;
+                    this.zo = lerpz;
+                    this.xOld = lerpx;
+                    this.yOld = lerpy;
+                    this.zOld = lerpz;
+                    this.setPos(lerpx, lerpy, lerpz);
+                }
             }
         } if (roundabout$blip && roundabout$blipVector !=null){
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
