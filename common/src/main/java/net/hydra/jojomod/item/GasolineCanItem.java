@@ -11,11 +11,9 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -56,6 +54,25 @@ public class GasolineCanItem extends Item implements Vanishable {
                     }
                 }
         $$2.getCooldowns().addCooldown(this, 40);
+                int itemcds = 30;
+
+        Inventory inv = $$2.getInventory();
+
+        for (ItemStack stack : inv.items) {
+            if (stack.getItem() instanceof BowItem) {
+                $$2.getCooldowns().addCooldown(stack.getItem(), itemcds);
+            }
+        }
+        for (ItemStack stack : inv.offhand) {
+            if (stack.getItem() instanceof CrossbowItem) {
+                $$2.getCooldowns().addCooldown(stack.getItem(), itemcds);
+            }
+        }
+
+        $$2.getCooldowns().addCooldown(Items.FLINT_AND_STEEL, itemcds);
+        $$2.getCooldowns().addCooldown(Items.FIRE_CHARGE, itemcds);
+        $$2.getCooldowns().addCooldown(ModItems.MATCH, itemcds);
+        $$2.getCooldowns().addCooldown(ModItems.MATCH_BUNDLE, itemcds);
                 $$2.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.consume(hand);
     }

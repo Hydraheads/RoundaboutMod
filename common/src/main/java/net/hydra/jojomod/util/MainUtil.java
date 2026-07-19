@@ -1846,10 +1846,12 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,np*=0.6f);
+                            np*=0.9f;
+                            value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,np*=0.6f);
+                            np*=0.9f;
+                            value.hurt($$5,np);
                         }
                     }
                 }
