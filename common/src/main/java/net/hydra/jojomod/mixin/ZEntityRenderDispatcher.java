@@ -255,6 +255,10 @@ public abstract class ZEntityRenderDispatcher {
             ci.cancel();
             return;
         }
+        if (ClientUtil.isUsingEpitaph()){
+            ci.cancel();
+            return;
+        }
         if ($$2 instanceof Player PL){
             byte playerP = ((IPlayerEntity)PL).roundabout$GetPos();
 
