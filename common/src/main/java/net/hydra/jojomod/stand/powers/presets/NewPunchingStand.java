@@ -588,6 +588,8 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
     public static final byte IMPALE_NOISE = 105;
+    public static final byte EPITAPH_NOISE = 106;
+    public static final byte EPITAPH_FADE_NOISE = 107;
     public boolean impale(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){

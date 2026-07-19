@@ -1288,6 +1288,14 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_KING_CRIMSON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ SUMMON_KING_CRIMSON);
     public static SoundEvent SUMMON_KING_CRIMSON_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_KING_CRIMSON_ID);
 
+    public static final String EPITAPH_ACTIVATE = "epitaph_activate";
+    public static final ResourceLocation EPITAPH_ACTIVATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ EPITAPH_ACTIVATE);
+    public static SoundEvent EPITAPH_ACTIVATE_EVENT = SoundEvent.createVariableRangeEvent(EPITAPH_ACTIVATE_ID);
+
+    public static final String EPITAPH_FADE = "epitaph_fade";
+    public static final ResourceLocation EPITAPH_FADE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ EPITAPH_FADE);
+    public static SoundEvent EPITAPH_FADE_EVENT = SoundEvent.createVariableRangeEvent(EPITAPH_FADE_ID);
+
 
     public static final String KING_CRIMSON_PUNCH = "king_crimson_punch";
     public static final ResourceLocation KING_CRIMSON_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH);

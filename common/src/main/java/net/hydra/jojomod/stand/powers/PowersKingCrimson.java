@@ -73,6 +73,10 @@ public class PowersKingCrimson extends NewPunchingStand {
             return ModSounds.SUMMON_KING_CRIMSON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
+        } else if (soundChoice == EPITAPH_NOISE) {
+            return ModSounds.EPITAPH_ACTIVATE_EVENT;
+        } else if (soundChoice == EPITAPH_FADE_NOISE) {
+            return ModSounds.EPITAPH_FADE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -89,7 +93,7 @@ public class PowersKingCrimson extends NewPunchingStand {
     }
 
     public void epitaph() {
-        if (self instanceof Player pl) {
+        if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
                 AABB area = self.getBoundingBox().inflate(50.0);
 
@@ -112,13 +116,25 @@ public class PowersKingCrimson extends NewPunchingStand {
                             S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
                         }
                     }
+
                 }
+                epitaph.put(-1, new TimeSkipSnapshot(
+                        -1,
+                        Vec3.ZERO,
+                        0,
+                        0
+                ));
+                S2CPacketUtil.addEpitaph(pl, -1,  Vec3.ZERO, 0, 0);
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
             } else {
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
                 epitaph.clear();
                 S2CPacketUtil.clearEpitaph(pl);
             }
 
-            Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
+            //Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
         }
     }
 

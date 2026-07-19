@@ -65,6 +65,18 @@
       "roundabout:king_crimson_barrage_hit"
     ]
   },
+  "epitaph_activate": {
+    "subtitle": "sounds.roundabout.epitaph_activate",
+    "sounds": [
+      "roundabout:epitaph_activate"
+    ]
+  },
+  "epitaph_fade": {
+    "subtitle": "sounds.roundabout.epitaph_fade",
+    "sounds": [
+      "roundabout:epitaph_fade"
+    ]
+  },
   "summon_california": {
     "subtitle": "sounds.roundabout.summon_california",
     "sounds": [
