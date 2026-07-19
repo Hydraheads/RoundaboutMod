@@ -346,6 +346,11 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
+
+                    if (this.self.level().isClientSide() && self instanceof Player pl){
+                        pl.resetAttackStrengthTicker();
+                    }
+
                     if (!this.getSelf().level().isClientSide && hardBlocker < 1) {
                         hardBlocker = 3;
 
