@@ -1,33 +1,23 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.FastColor;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
@@ -113,7 +103,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
 
         if (ClientUtil.isUsingEpitaph() && entity != null){
-            if (ClientUtil.getPlayer() != null && ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers()
+            Player pl = ClientUtil.getPlayer();
+            if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
                     instanceof PowersKingCrimson pkc){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
                 if (skip != null){
@@ -122,7 +113,11 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     double $$9 = skip.position.z;
 
                     this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, skip.yRot, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-                    ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
+
+                }
+                ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
+                if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
+                        SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
                     ci.cancel();
                     return;
                 }

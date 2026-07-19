@@ -94,19 +94,24 @@ public class PowersKingCrimson extends NewPunchingStand {
                 AABB area = self.getBoundingBox().inflate(50.0);
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+                    StandEntity stand = getStandEntity(self);
                     int id = living.getId();
-                    Vec3 pos = living.position();
-                    float xRot = living.getXRot();
-                    float yRot = living.getYRot();
+                    if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
+                        if (!(living instanceof StandEntity)) {
+                            Vec3 pos = living.position();
+                            float xRot = living.getXRot();
+                            float yRot = living.getYRot();
 
 
-                    epitaph.put(living.getId(), new TimeSkipSnapshot(
-                            id,
-                            pos,
-                            xRot,
-                            yRot
-                    ));
-                    S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
+                            epitaph.put(living.getId(), new TimeSkipSnapshot(
+                                    id,
+                                    pos,
+                                    xRot,
+                                    yRot
+                            ));
+                            S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
+                        }
+                    }
                 }
             } else {
                 epitaph.clear();
