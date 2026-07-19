@@ -2147,16 +2147,33 @@ public class ClientUtil {
     }
 
     public static boolean forceEntityRendering(Entity entity){
-        if (entity instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
-                return true;
+        if (entity != null){
+            if (entity instanceof Player pl) {
+                if (((IPlayerEntity) pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    return true;
+                }
             }
-        } if (entity instanceof LivingEntity LE){
-            StandUser su = ((StandUser)LE);
-            if (su.roundabout$hasStandOut()){
-                return true;
-            } else if (su.roundabout$getBoundTo() != null){
-                return true;
+            if (entity instanceof LivingEntity LE) {
+                StandUser su = ((StandUser) LE);
+                if (su.roundabout$hasStandOut()) {
+                    return true;
+                } else if (su.roundabout$getBoundTo() != null) {
+                    return true;
+                }
+            }
+            if (isUsingEpitaph()) {
+                Player pl = getPlayer();
+                if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc) {
+                    Entity root = entity.getRootVehicle();
+                    if (pkc.epitaph.containsKey(entity.getId()) ||
+                            (root != null && pkc.epitaph.containsKey(root.getId()))){
+                        return true;
+                    }
+                }
+                if (entity instanceof StandEntity){
+                    return true;
+                }
             }
         }
         return false;
