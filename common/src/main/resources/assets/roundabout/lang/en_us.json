@@ -1235,6 +1235,12 @@
   "sounds.roundabout.hey_ya_6": "Stand Talking",
   "sounds.roundabout.hey_ya_7": "Stand Talking",
 
+  "sounds.roundabout.summon_green_day": "Stand summoned",
+  "sounds.roundabout.green_day_arm_spin":  "Arm Spins",
+  "sounds.roundabout.green_day_split":  "Body Part Detatches",
+  "sounds.roundabout.green_day_stitch":  "Stitch",
+  "sounds.roundabout.green_day_mold_spread":  "Mold Spreads",
+
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",

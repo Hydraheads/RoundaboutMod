@@ -882,7 +882,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
                 }
 
-
+                setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                 setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
             }
 
@@ -996,6 +996,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
             setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+            setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
         }
 
     }
@@ -1600,6 +1601,15 @@ public class PowersGreenDay extends NewPunchingStand {
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+        }
+    }
+
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
         }
     }
 
