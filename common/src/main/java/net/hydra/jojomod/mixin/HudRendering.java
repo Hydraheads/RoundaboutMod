@@ -114,6 +114,13 @@ public abstract class HudRendering implements IHudAccess {
                         0.25F,1F,1F,1F);
             }
 
+            if (ClientUtil.timeSkipTicker > -1){
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                        "textures/misc/king_crimson/frame_" + ClientUtil.timeSkipTicker + ".png"),
+                        ConfigManager.getClientConfig().generalSettings.timeSkipOpacity, 1F, 1F, 1F);
+            }
+
 
             if (ClientUtil.isBlocked){
                 RenderSystem.enableBlend();

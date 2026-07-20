@@ -382,6 +382,13 @@ public class FabricEntities {
                         EntityType.Builder.<FleshPileEntity>of(FleshPileEntity::new, MobCategory.MISC).
                                 sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":flesh_pile")
                 );
+        public static final EntityType<PurpleHazeEntity> PURPLE_HAZE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("purple_haze"),
+                    EntityType.Builder.of(PurpleHazeEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":purple_haze")
+            );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -985,6 +992,7 @@ public class FabricEntities {
                 ModEntities.REDD = REDD;
                 ModEntities.CHAIR_RATT = CHAIR_RATT;
                 ModEntities.FLESH_PILE = FLESH_PILE;
+                ModEntities.PURPLE_HAZE = PURPLE_HAZE;
                 ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;
@@ -1160,6 +1168,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(REDD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CHAIR_RATT, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PURPLE_HAZE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SURVIVOR, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());

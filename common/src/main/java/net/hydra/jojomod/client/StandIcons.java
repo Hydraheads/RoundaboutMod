@@ -697,6 +697,12 @@ public class StandIcons {
     public static final ResourceLocation RATT_BUCKET = Roundabout.location("textures/item/flesh_bucket.png");
     public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
 
+    public static final ResourceLocation PODS_STOCKS = Roundabout.location("textures/gui/icons/purple_haze/pods_stock.png");
+    public static final ResourceLocation STAND_LEAP_PURPLE_HAZE = Roundabout.location("textures/gui/icons/purple_haze/stand_leap.png");
+    public static final ResourceLocation STAND_LEAP_REBOUND_PURPLE_HAZE = Roundabout.location("textures/gui/icons/purple_haze/stand_leap_rebound.png");
+    public static final ResourceLocation PURPLE_HAZE_LEDGE_GRAB = Roundabout.location("textures/gui/icons/purple_haze/stand_ledge_grab.png");
+    public static final ResourceLocation PURPLE_HAZE_FALL_CATCH = Roundabout.location("textures/gui/icons/purple_haze/fall_brace.png");
+
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");
     public static final ResourceLocation ANUBIS_ALLURING_LIGHT = Roundabout.location("textures/gui/icons/anubis/alluring_light.png");
