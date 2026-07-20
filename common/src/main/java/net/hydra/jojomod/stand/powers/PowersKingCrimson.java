@@ -16,6 +16,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -37,6 +38,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +49,7 @@ import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -105,20 +108,24 @@ public class PowersKingCrimson extends BlockGrabPreset {
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
+        Roundabout.LOGGER.info("what");
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
+            Roundabout.LOGGER.info("what2");
         }
+        float sped = Math.max(0.1F,liv.getSpeed());
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
-                .scale(liv.getSpeed() * speed);
+                .scale(sped * speed);
         if (basevelocity.y > 0)
             basevelocity = basevelocity.multiply(1, 0, 1);
         for (int i = 0; i < ticks; i++) {
 
+            Roundabout.LOGGER.info("what3");
             Vec3 velocity = basevelocity;
             velocity = velocity.add(0, -1, 0);
 
@@ -138,16 +145,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             if (!ground.blocksMotion()) {
                 // Don't move there
+                Roundabout.LOGGER.info("what4");
                 break;
             }
             if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+                Roundabout.LOGGER.info("what5");
                 return predicted;
             }
 
+            Roundabout.LOGGER.info("what6");
             predicted = predicted.add(collided);
             box = box.move(collided);
         }
 
+        Roundabout.LOGGER.info("what7");
         return predicted;
     }
 
@@ -170,7 +181,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             oldPos = third;
         }
-        if (player.position().distanceTo(oldPos) < 0.1){
+        if (player.position().distanceTo(oldPos) < 0.4){
             return predictIdle(player,ticks);
         }
         Vec3 baseVelocity = player.position()
@@ -260,7 +271,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static Vec3 predictPosition(Mob mob, int ticks) {
         Path path = mob.getNavigation().getPath();
 
-        if (path == null) {
+        if (path == null || path.isDone() || path.notStarted() || !path.canReach()) {
             return predictIdle(mob,ticks);
         }
 
@@ -289,7 +300,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             index++;
         }
 
-        if (current.distanceTo(mob.position()) < 0.1){
+        if (current.distanceTo(mob.position()) < 0.4){
             return predictIdle(mob,ticks);
         }
 
@@ -321,17 +332,91 @@ public class PowersKingCrimson extends BlockGrabPreset {
     //This variable makes a player turn around when they hit a wall to sell a believable reaction
     public boolean hitWall2 = false;
 
+    public void timeSkip() {
+        if (!(self instanceof ServerPlayer pl)) {
+            return;
+        }
+
+        if (epitaph.isEmpty()) {
+            return;
+        }
+
+        Level level = self.level();
+
+        for (TimeSkipSnapshot snapshot : epitaph.values()) {
+
+            if (snapshot.getEntityId() == -1) {
+                continue;
+            }
+
+            Entity entity = level.getEntity(snapshot.getEntityId());
+
+            if (entity == null || !entity.isAlive()) {
+                continue;
+            }
+
+            packetNearby(new Vector3f((float) snapshot.position.x,
+                            (float) snapshot.position.y,
+                            (float) snapshot.position.z),
+                    entity.getId());
+
+            entity.teleportTo(
+                    snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z
+            );
+            entity.setYRot(snapshot.yRot);
+            entity.setYHeadRot(snapshot.yRot);
+            entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z,
+                    Set.of(
+                            RelativeMovement.X,
+                            RelativeMovement.Y,
+                            RelativeMovement.Z),
+                    snapshot.yRot,entity.getXRot());
+        }
+
+        S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+        S2CPacketUtil.sendPlaySoundPacket(pl, self.getId(), EPITAPH_FADE_NOISE);
+        epitaph.clear();
+        S2CPacketUtil.clearEpitaph(pl);
+    }
+    public int getSkipRange(){
+        return 50;
+    }
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
+    }
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
                 //debugPlayer();
-                AABB area = self.getBoundingBox().inflate(50.0);
+                AABB area = self.getBoundingBox().inflate(getSkipRange());
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
                     StandEntity stand = getStandEntity(self);
                     int id = living.getId();
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
-                        if (!(living instanceof StandEntity)) {
+                        if (!(living instanceof StandEntity) &&
+                                !(living instanceof Player pk && pk.isCreative()
+                                        && pk.getId() != self.getId())
+                        ) {
                             Vec3 predicted = living.position();
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
@@ -531,12 +616,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return false;
     }
     public void timeSkipClient() {
-
         if (hasBlock()){
             itemGrabClient();
             return;
         }
-
+        tryPowerPacket(PowerIndex.POWER_2);
     }
 
 
@@ -544,7 +628,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (hasBlock())
             return;
-        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
         tryPowerPacket(PowerIndex.POWER_1);
     }
 
@@ -784,6 +867,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return this.impale();
         } else if (move == PowerIndex.POWER_1){
             this.epitaph();
+        } else if (move == PowerIndex.POWER_2){
+            this.timeSkip();
+            return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){

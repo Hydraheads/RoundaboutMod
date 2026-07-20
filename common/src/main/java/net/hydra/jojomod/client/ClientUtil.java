@@ -473,7 +473,13 @@ public class ClientUtil {
         instance.execute(() -> {
             if (player != null) {
                 /**Mandom's time rewind flashes on people and makes their screen interpolate*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.FullBlip.value)) {
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
@@ -1395,6 +1401,7 @@ public class ClientUtil {
                 if (SE != null) {
                     ((StandUser) SE).roundabout$setBlip(vec);
                 }
+                ((StandUser) target).roundabout$tryBlip();
             }
         }
     }
