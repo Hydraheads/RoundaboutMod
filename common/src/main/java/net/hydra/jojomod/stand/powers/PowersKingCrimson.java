@@ -252,7 +252,7 @@ public class PowersKingCrimson extends NewPunchingStand {
         Path path = mob.getNavigation().getPath();
 
         if (path == null) {
-            return mob.position();
+            return predictIdle(mob,ticks);
         }
 
         double remaining = mob.getSpeed() * ticks;
