@@ -2046,7 +2046,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (this.currentShaStatus == SHA_NONE) {
                 if (shaThrow) {
-                    this.animateStand(KillerQueenEntity.FIRST_PUNCH);
+                    this.animateStand(KillerQueenEntity.HEAVY_STRIKE);
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_PUNCH_EVENT, SoundSource.PLAYERS, 0.9F, 1.0f);
                 } else {
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_SHA_SUMMON_EVENT, SoundSource.PLAYERS, 0.9F, 1.0f);
