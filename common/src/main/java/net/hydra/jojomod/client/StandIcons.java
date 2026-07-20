@@ -434,6 +434,10 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/time_erase.png");
     public static final ResourceLocation TIME_SKIP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/time_skip.png");
+    public static final ResourceLocation TIME_SKIP_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_2.png");
+    public static final ResourceLocation TIME_SKIP_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_3.png");
     public static final ResourceLocation KING_CRIMSON_ITEM_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/grab_item.png");
 

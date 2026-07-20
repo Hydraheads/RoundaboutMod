@@ -556,7 +556,15 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
 
         if (!isHoldingSneak()){
-            LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2, 0);
+            if (isUsingEpitaph()){
+                if (isGuarding()){
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2, 0);
+                } else {
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2, 0);
+                }
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2, 0);
+            }
         } else {
             LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
         }
