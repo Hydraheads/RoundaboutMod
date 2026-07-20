@@ -39,6 +39,7 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -117,6 +118,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int struckMaxTicks = 12;
 	public int flyngTicks = 0;
 
+	static final int
+		THROWED = 2,
+		HAS_BEEN = 1,
+		NEVER = 0;
+
+	public int throwStatus = NEVER;
+
 	private int soundsDelay = 40;
 
 	static final float explosionRadius = 1.3f;
@@ -134,7 +142,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int returnTicks = 0;
 	private static final int returnMaxTicks = 300;
 	public int inativeTicks = 0;
-	private static final int inativeMaxTicks = 140;
+	private static final int inativeMaxTicks = 240;
 
 	public int explosions = 0;
 
@@ -245,6 +253,21 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}else {
 					this.setAnim(IDLE);
 				}
+
+				if (throwStatus == THROWED) {
+					if (this.onGround() || this.onClimbable()) {
+						throwStatus = HAS_BEEN;
+					}else if (this.flyngTicks > 8){
+						AABB bb = this.getBoundingBox().inflate(1.5);
+						List<Entity> SHAAA = this.level().getEntities(this, bb);
+						for (Entity ent : SHAAA) {
+							if (ent instanceof LivingEntity LE) {
+								LE.hurt(ModDamageTypes.of(LE.level(), ModDamageTypes.STAND), 0.3f);
+							}
+						}
+					}
+				}
+
 			}
 		}
 
@@ -513,6 +536,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 	public void shoot(Vec3 shootToPos){
+		this.throwStatus = THROWED;
 		this.lookAt(EntityAnchorArgument.Anchor.EYES,shootToPos);
 		this.setDeltaMovement((this.getLookAngle().multiply(1.6,1.6,1.6)).add(0,0.001,0));
 	}
@@ -677,7 +701,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return false;
 	}
 
-    @Override public boolean hurt(DamageSource source, float amount) { return false;}
+    @Override public boolean hurt(DamageSource source, float amount) {
+		Entity causer = source.getEntity();
+		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()) {
+			return MainUtil.isStandDamage(source);
+		}
+
+		return false;
+	}
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
 	@Override public boolean hasNoPhysics() { return false;}

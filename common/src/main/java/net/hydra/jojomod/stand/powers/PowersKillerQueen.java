@@ -125,6 +125,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHIBABA = -110,
         AIRBUBBLE = -111,
         BTD_NOISE = -112,
+        DETONATE_NOISE = -113,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -1269,7 +1270,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          }
          if (chargedFinal >= maxKickTime) {
              soundShiba = SHIBABA;
-             if (entity != null) { volume = 1.92F; }
+             if (entity != null) { volume = 2.61F; }
          }
 
 
@@ -1327,7 +1328,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     		return this.sendOrReturnSHA(false);
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.sendOrReturnSHA(true);
-    	} else if (move == PowersKillerQueen.DETONATE) {
+    	} else if (move == DETONATE_NOISE) {
     		return detonate();
     	} else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerKickWindup();
@@ -1379,6 +1380,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_2_EXTRA) {
             Entity ent = this.getSelf().level().getEntity(chargeTime);
             if (this.canBubbleTarget(ent)) {
+                if (isClient()) {
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.JUSTICE_SELECT_EVENT,SoundSource.PLAYERS,0.3F,(float)(1.1+Math.random()*0.2));
+                }
+
                 if (this.bombBubble != null && !this.bombBubble.isRemoved()) {
                     this.bombBubble.setTarget(ent);
                 }else {
@@ -1860,7 +1865,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.BUBBLE_BOMB, entID);
 
                 syncBombStatus(BOMB_BUBBLE);
-
             }
         }
     }
@@ -2248,15 +2252,19 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (this.SHA != null && !this.SHA.isRemoved()) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
-                    this.SHA.discard();
                     this.syncShaStatus(SHA_NONE);
                     int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
+
+                    if (this.SHA.throwStatus >= 1) { shaCooldown += 120; }
+
+                    shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions), 60);
+
                     this.setCooldown(SHA_COOLDOWN, shaCooldown);
                     if (this.getSelf() instanceof Player P) {
                         S2CPacketUtil.sendCooldownSyncPacket(P, SHA_COOLDOWN, shaCooldown);
                     }
+                    this.SHA.discard();
                     this.SHA = null;
-                    Roundabout.LOGGER.info("something something: " + this.currentShaStatus);
                 }
             }else if (this.currentShaStatus != SHA_NONE){
                 int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
@@ -2488,11 +2496,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.entityTargetBuffer == ent || (this.bombBubble != null
                 && this.bombBubble.getTarget() == ent)) {
-            return 0xffffff;
+            return 0x6e44b3;
         }
 
         if (this.currentBombStatus == BOMB_BUBBLE || this.activePower == PowerIndex.POWER_2_BLOCK) {
-            return 0x6e44b3;
+            return 0xffffff;
         }
 
         return super.highlightsEntityColor(ent, player);
@@ -2801,9 +2809,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     public boolean detonate() {
     	if (!this.isClient() && this.detonateTimer == -1) {
-            this.playSoundsIfNearby(DETONATE, 27, true);
-
-            //int detonateWindup = getDetonateWindup();
+            this.playSoundsIfNearby(DETONATE_NOISE, 27, true);
 
             if (this.currentBombStatus == BOMB_ITEM) {
                 StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
