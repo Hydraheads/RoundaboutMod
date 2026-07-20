@@ -170,9 +170,9 @@ public class MoldSporesEntity extends StandEntity {
                             //     range += 4;
                             //}
                             if (MainUtil.getReducedDamage(entity)) {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.8)));
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6)));
                             } else {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.8)));
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6)));
                             }
                             if(!entity.isAlive()){
                                 range += 4;
