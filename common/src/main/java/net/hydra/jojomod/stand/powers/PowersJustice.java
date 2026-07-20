@@ -455,6 +455,7 @@ public class PowersJustice extends NewDashPreset {
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
@@ -463,7 +464,6 @@ public class PowersJustice extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public LivingEntity rollCorpse(){
