@@ -882,7 +882,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
                 }
 
-
+                setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
                 setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
             }
 
@@ -931,11 +931,13 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void BeginOffhandSpinThrow(){
         OffhandSpinThrowChargeThick = 10;
+        ((ServerLevel)this.getSelf().level()).playSound(null,self.getOnPos(), ModSounds.STAND_BARRAGE_WINDUP_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
     public void BeginOffhandSpinThrowSlim(){
         OffhandSpinThrowChargeSlim = 10;
+        ((ServerLevel)this.getSelf().level()).playSound(null,self.getOnPos(), ModSounds.STAND_BARRAGE_WINDUP_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
@@ -971,11 +973,13 @@ public class PowersGreenDay extends NewPunchingStand {
 
     public void BeginMainhandSpinThrow(){
         MainhandSpinThrowChargeThick = 10;
+        ((ServerLevel)this.getSelf().level()).playSound(null,self.getOnPos(), ModSounds.STAND_BARRAGE_WINDUP_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
     public void BeginMainhandSpinThrowSlim(){
         MainhandSpinThrowChargeSlim = 10;
+        ((ServerLevel)this.getSelf().level()).playSound(null,self.getOnPos(), ModSounds.STAND_BARRAGE_WINDUP_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         ((ServerLevel)this.getSelf().level()).sendParticles(ModParticles.MENACING,this.self.getX(),this.self.getY() + 1,this.self.getZ(),5,0.25,0.5,0.25,0);
     }
 
@@ -996,6 +1000,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
             setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+            setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
         }
 
     }
@@ -1529,7 +1534,10 @@ public class PowersGreenDay extends NewPunchingStand {
                 }
             }else
             if( (RNG > 0.95) && (this.self.getHealth() < this.self.getMaxHealth())){
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                if(!onCooldown(PowerIndex.POWER_4)) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+                    setCooldown(PowerIndex.POWER_4,200);
+                }
             }
 
             Entity targetEntity = getTargetEntity(this.self, -1);
@@ -1597,6 +1605,15 @@ public class PowersGreenDay extends NewPunchingStand {
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
+        }
+    }
+
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.0F));
         }
     }
 
