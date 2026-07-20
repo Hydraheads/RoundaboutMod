@@ -35,10 +35,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -108,14 +105,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
-        Roundabout.LOGGER.info("what");
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
-            Roundabout.LOGGER.info("what2");
         }
         float sped = Math.max(0.1F,liv.getSpeed());
         Vec3 basevelocity = getPredictedDirection()
@@ -125,9 +120,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             basevelocity = basevelocity.multiply(1, 0, 1);
         for (int i = 0; i < ticks; i++) {
 
-            Roundabout.LOGGER.info("what3");
             Vec3 velocity = basevelocity;
-            velocity = velocity.add(0, -1, 0);
+            if (!liv.isInWater()) {
+                velocity = velocity.add(0, -1, 0);
+            }
 
             // ----- Normal collision -----
             Vec3 collided = Entity.collideBoundingBox(
@@ -145,20 +141,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             if (!ground.blocksMotion()) {
                 // Don't move there
-                Roundabout.LOGGER.info("what4");
                 break;
             }
             if (MainUtil.isDangerous(liv.level(), feet,ground2)){
-                Roundabout.LOGGER.info("what5");
                 return predicted;
             }
 
-            Roundabout.LOGGER.info("what6");
             predicted = predicted.add(collided);
             box = box.move(collided);
         }
 
-        Roundabout.LOGGER.info("what7");
         return predicted;
     }
 
@@ -199,8 +191,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             Vec3 velocity = baseVelocity;
 
-
-            velocity = velocity.add(0, -1, 0);
+            if (!player.isInWater() && !player.isFallFlying()) {
+                velocity = velocity.add(0, -1, 0);
+            }
 
             // ----- Normal collision -----
             Vec3 collided = Entity.collideBoundingBox(
@@ -300,7 +293,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             index++;
         }
 
-        if (current.distanceTo(mob.position()) < 0.4){
+        if (current.distanceTo(mob.position()) < 0.4 && !MainUtil.isBossMob(mob)
+        && !(mob instanceof FlyingMob)){
             return predictIdle(mob,ticks);
         }
 
