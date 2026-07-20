@@ -61,7 +61,12 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
         float finalScale = 2.6f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
+        ResourceLocation texture = getTextureLocation(entity);
+        float alpha = (texture == PW_METEOR_COMET_TEXTURE) ? 1.0F : 0.4F;
+
+        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
+        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+
 
         this.model.renderToBuffer(
                 poseStack,

@@ -63,6 +63,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     public StandEntity getNewStandEntity(){
         if (this.getSelf() instanceof Player PE) {
             byte skin = ((StandUser) PE).roundabout$getStandSkin();
+            System.out.println("SKIN: " + skin + " COSMIC_CONST: " + PlanetWavesEntity.COSMIC + " ENTITY_TYPE: " + ModEntities.PLANET_WAVES_COSMIC);
             if (skin == PlanetWavesEntity.COSMIC) {
                 return ModEntities.PLANET_WAVES_COSMIC.create(this.getSelf().level());
             }
@@ -600,16 +601,21 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setUser(this.self);
         meteor.setOwner(this.self);
 
+        boolean targetingActive = instandtargeting();
+        meteor.setCraterMultiplier(targetingActive ? 1.5F : 1.0F);
+
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
 
         level.addFreshEntity(meteor);
 
 
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.bigmeteorCooldown);
+        int baseCooldown = ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown;
+        int appliedCooldown = targetingActive ? Math.round(baseCooldown * 1.5F) : baseCooldown;
+
+        this.setCooldown(PowerIndex.SKILL_2, appliedCooldown);
         if (this.getSelf() instanceof ServerPlayer sp) {
-            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2,
-                    ClientNetworking.getAppropriateConfig().PlanetWavesSettings.bigmeteorCooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2, appliedCooldown);
         }
 
         level.playSound(
@@ -688,6 +694,9 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
         if (state.isAir()) return;
         if (eyePos.distanceTo(Vec3.atCenterOf(pos)) > 30.0) return; //  límite de 30 bloques de stand targeting
+        if (inmeteortracking()) {
+            meteornottracking();
+        }
         Vec3 horizontalLook = new Vec3(lookVec.x, 0, lookVec.z);
         this.standApproachDir = (horizontalLook.lengthSqr() > 1.0E-4)
                 ? horizontalLook.normalize()

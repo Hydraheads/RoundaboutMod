@@ -10,6 +10,9 @@ import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Deque;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
@@ -20,6 +23,7 @@ public interface IPlayerEntity {
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
+    Deque<Vec3> rdbt$getMovementHistory();
     void roundabout$SetPos2(byte Pos);
     void rdbt$setLevelDecreaseTicks(int decreaseTicks);
     int rdbt$getLevelDecreaseTicks();

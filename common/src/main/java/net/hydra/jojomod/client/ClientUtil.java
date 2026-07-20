@@ -762,7 +762,7 @@ public class ClientUtil {
                     double y = (double) vargs[2];
                     double z = (double) vargs[3];
                     float xrot = (float) vargs[4];
-                    float yrot = (float) vargs[4];
+                    float yrot = (float) vargs[5];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
                     }
@@ -952,6 +952,14 @@ public class ClientUtil {
         return false;
     }
 
+    public static float getGameTimeStart(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            return player.tickCount - GameTimeStart;
+        }
+        return 0;
+    }
+    public static float GameTimeStart = 0;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
@@ -959,8 +967,12 @@ public class ClientUtil {
             if (PKC.isUsingEpitaph()){
                 return true;
             } else {
+                GameTimeStart = player.tickCount;
                 return false;
             }
+        }
+        if (player != null){
+            GameTimeStart = player.tickCount;
         }
         return false;
     }

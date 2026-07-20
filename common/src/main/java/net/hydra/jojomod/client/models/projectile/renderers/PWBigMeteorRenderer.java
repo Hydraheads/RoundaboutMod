@@ -59,8 +59,11 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         float finalScale = 3.5f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.4f);
+        ResourceLocation texture = getTextureLocation(entity);
+        float alpha = (texture == PW_BIG_METEOR_COSMIC_TEXTURE) ? 1.0F : 0.4F;
+
+        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
+        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
 
         poseStack.popPose();
 

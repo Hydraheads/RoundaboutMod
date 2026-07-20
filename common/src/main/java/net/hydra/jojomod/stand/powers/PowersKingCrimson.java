@@ -23,25 +23,29 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersKingCrimson extends NewPunchingStand {
 
@@ -86,15 +90,235 @@ public class PowersKingCrimson extends NewPunchingStand {
 
     }
 
-
-
     public boolean isUsingEpitaph(){
         return !epitaph.isEmpty();
     }
 
+
+    public static Vec3 getPredictedDirection() {
+        return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
+    }
+    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+        //Mobs and Players that are still still need to move when idle
+        Level level = liv.level();
+
+        Vec3 predicted = liv.position();
+        AABB box = liv.getBoundingBox();
+
+        float speed = (float) (Math.random()*1F);
+        Vec3 basevelocity = getPredictedDirection()
+                .normalize()
+                .scale(liv.getSpeed() * speed);
+        if (basevelocity.y > 0)
+            basevelocity = basevelocity.multiply(1, 0, 1);
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 velocity = basevelocity;
+            velocity = velocity.add(0, -1, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    liv,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+            Vec3 nextPos = predicted.add(collided);
+            BlockPos feet = BlockPos.containing(nextPos);
+            BlockPos below = feet.below();
+            BlockState ground = level.getBlockState(below);
+            BlockState ground2 = level.getBlockState(feet);
+
+            if (!ground.blocksMotion()) {
+                // Don't move there
+                break;
+            }
+            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+                return predicted;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+
+    public Vec3 predictPlayer(Player player, int ticks) {
+        Level level = player.level();
+
+        Vec3 predicted = player.position();
+        AABB box = player.getBoundingBox();
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+        if (player.position().distanceTo(oldPos) < 0.1){
+            return predictIdle(player,ticks);
+        }
+        Vec3 baseVelocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
+        if (baseVelocity.y > 0)
+            baseVelocity = baseVelocity.multiply(1, 0, 1);
+
+        for (int i = 0; i < ticks; i++) {
+
+            // ----- Estimate movement direction -----
+
+
+
+            Vec3 velocity = baseVelocity;
+
+
+            velocity = velocity.add(0, -1, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    player,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // ----- Try stepping up -----
+            boolean hitWall =
+                    collided.x != velocity.x ||
+                            collided.z != velocity.z;
+
+            if (hitWall) {
+                i+=3;
+                double stepHeight = 1.0;
+
+                // Move upward first
+                Vec3 up = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, stepHeight, 0),
+                        box,
+                        level,
+                        List.of()
+                );
+
+                AABB steppedBox = box.move(up);
+
+                // Move horizontally while elevated
+                Vec3 forward = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(velocity.x, 0, velocity.z),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                steppedBox = steppedBox.move(forward);
+
+                // Move back down
+                Vec3 down = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, -stepHeight, 0),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                Vec3 steppedMove = up.add(forward).add(down);
+
+                // Prefer whichever gives more horizontal travel
+                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                    collided = steppedMove;
+                }
+                if (collided.y <= 0){
+                    hitWall2 = true;
+                }
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+    public static Vec3 predictPosition(Mob mob, int ticks) {
+        Path path = mob.getNavigation().getPath();
+
+        if (path == null) {
+            return predictIdle(mob,ticks);
+        }
+
+        double remaining = mob.getSpeed() * ticks;
+        Vec3 current = mob.position();
+
+        int index = path.getNextNodeIndex();
+
+        while (index < path.getNodeCount()) {
+            Node node = path.getNode(index);
+
+            Vec3 next = new Vec3(
+                    node.x + 0.5,
+                    node.y,
+                    node.z + 0.5
+            );
+
+            double segment = current.distanceTo(next);
+
+            if (remaining <= segment) {
+                return current.lerp(next, remaining / segment);
+            }
+
+            remaining -= segment;
+            current = next;
+            index++;
+        }
+
+        if (current.distanceTo(mob.position()) < 0.1){
+            return predictIdle(mob,ticks);
+        }
+
+        return current;
+    }
+
+    public void debugPlayer(){
+        if (self instanceof Player pl) {
+            int id = self.getId();
+            float xRot = self.getXRot();
+            float yRot = self.getYRot();
+            Vec3 predicted = self.position();
+
+            hitWall2 = false;
+            predicted = predictPlayer(pl, 40);
+            if (hitWall2){
+                yRot = Mth.wrapDegrees(yRot + 180.0F);
+            }
+            epitaph.put(self.getId(), new TimeSkipSnapshot(
+                    id,
+                    predicted,
+                    xRot,
+                    yRot
+            ));
+            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+        }
+    }
+
+    //This variable makes a player turn around when they hit a wall to sell a believable reaction
+    public boolean hitWall2 = false;
+
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
+                //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(50.0);
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
@@ -102,18 +326,28 @@ public class PowersKingCrimson extends NewPunchingStand {
                     int id = living.getId();
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
                         if (!(living instanceof StandEntity)) {
-                            Vec3 pos = living.position();
+                            Vec3 predicted = living.position();
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
+                            if (living instanceof Mob mob) {
+                                predicted = predictPosition(mob, 100);
+                            } else if (living instanceof Player player) {
+                                // Fallback for players, armor stands, etc.
+                                hitWall2 = false;
+                                predictPlayer(player,40);
+                                if (hitWall2){
+                                    yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                }
+                            }
 
 
                             epitaph.put(living.getId(), new TimeSkipSnapshot(
                                     id,
-                                    pos,
+                                    predicted,
                                     xRot,
                                     yRot
                             ));
-                            S2CPacketUtil.addEpitaph(pl, id, pos, xRot, yRot);
+                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                         }
                     }
 
