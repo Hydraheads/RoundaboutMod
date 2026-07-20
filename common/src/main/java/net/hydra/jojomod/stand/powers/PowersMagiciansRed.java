@@ -190,14 +190,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitch(){
-        clearEverything();
         super.onStandSwitch();
+        clearEverything();
     }
 
     @Override
     public void onPowerSwitch(){
-        clearEverything();
         super.onPowerSwitch();
+        clearEverything();
     }
 
     @Override
@@ -3513,6 +3513,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
@@ -3523,7 +3524,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
             this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public boolean isInRain() {

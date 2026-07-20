@@ -108,7 +108,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
                     instanceof PowersKingCrimson pkc){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                if (skip != null){
+                if (skip != null && !entity.isPassenger()){
                     float progress = Mth.clamp(
                             (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
                             0.0F,

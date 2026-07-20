@@ -300,6 +300,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     public void rdbt$setCooldownQuery(boolean query){
         rdbt$cooldownQuery = query;
     }
+    @Unique
+    @Override
+    public void rdbt$setCooldownQuery2(){
+        rdbt$cooldownQuery = false;
+        rdbt$attemptedQuery = false;
+    }
 
     @Unique
     @Override

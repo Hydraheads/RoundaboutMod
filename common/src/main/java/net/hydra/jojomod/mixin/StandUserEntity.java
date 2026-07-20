@@ -3013,6 +3013,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (standDisc.getItem() instanceof StandDiscItem SE){
                     if (!(this.roundabout$Powers != null && this.roundabout$Powers.getClass() == SE.standPowers.getClass())) {
                         SE.generateStandPowers((LivingEntity)(Object)this);
+                        if (rdbt$this() instanceof Player pl){
+                            ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                        }
                     }
                     roundabout$itemParityClient = standDisc;
 
@@ -3034,6 +3037,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
                 if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
                     SD.generateStandPowers((LivingEntity) (Object) this);
+                    if (this.level().isClientSide && rdbt$this() instanceof Player pl){
+                        ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                    }
                     if (this.level().isClientSide()){
                         if (this.roundabout$Powers != null) {
                             CompoundTag $$4 = StandDisc.getTagElement("Memory");

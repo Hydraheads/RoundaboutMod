@@ -23,6 +23,7 @@ public interface IPlayerEntity {
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
+    void rdbt$setCooldownQuery2();
     Deque<Vec3> rdbt$getMovementHistory();
     void roundabout$SetPos2(byte Pos);
     void rdbt$setLevelDecreaseTicks(int decreaseTicks);
