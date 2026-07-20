@@ -219,8 +219,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int chargedFinal;
     public boolean holdDownClick = false;
 	public static int maxKickTime = 25;
+    public int getMaxKickTime() {
+        return maxKickTime+(getMeltLevel()*2);
+    }
 
-    private static final int blockPlantMaxTicks = 5;
+    private static final int blockPlantMaxTicks = 7;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public static final float mobPlantRange = 3.5F;
@@ -340,16 +343,16 @@ public class PowersKillerQueen extends NewPunchingStand {
         return str;
     }
 
-    public float getKickAttackKnockback(){ return (((float)this.chargedFinal/(float)maxKickTime)*1.3F); }
+    public float getKickAttackKnockback(){ return (((float)this.chargedFinal/(float)getMaxKickTime())*1.3F); }
     public int getKickAttackKnockShieldTime(){ return 40; }
 
     public float getKickAttackStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*1.9F+this.getHeavyPunchStrength(entity);
 
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxKickTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxKickTime())*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxKickTime)*punchD)+1;
+            return (((float)this.chargedFinal/(float)getMaxKickTime())*punchD)+1;
         }
     }
 
@@ -708,7 +711,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean canGuard(){
-    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.detonateTimer > -1 || inBitesTheDustMode()) {
+    	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == PowerIndex.POWER_3
+                || this.detonateTimer > -1 || inBitesTheDustMode()) {
     		return false;
     	}
         return super.canGuard();
@@ -1204,7 +1208,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             entity = null;
         }
          if (entity != null) {
-             if (chargedFinal < maxKickTime) {
+             if (chargedFinal < getMaxKickTime()) {
             	 hitParticles(entity);
              }else {
                  hitParticlesCenter(entity);
@@ -1217,7 +1221,7 @@ public class PowersKillerQueen extends NewPunchingStand {
              
              if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                  if (entity instanceof LivingEntity LE) {
-                     if (chargedFinal >= maxKickTime) {
+                     if (chargedFinal >= getMaxKickTime()) {
                          addEXP(5, LE);
                      } else {
                          addEXP(1, LE);
@@ -1225,13 +1229,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                  }
                  takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
              } else {
-                 if (chargedFinal >= maxKickTime) {
+                 if (chargedFinal >= getMaxKickTime()) {
                      knockShield2(entity, getKickAttackKnockShieldTime());
                  }
              }
 
              if (entity instanceof LivingEntity LE && !(LE instanceof Player PE && PE.isCreative())) {
-                 if (chargedFinal >= maxKickTime) {
+                 if (chargedFinal >= getMaxKickTime()) {
                      StandUser SE = ((StandUser) LE);
 
                      SE.roundabout$setStoredVelocity(
@@ -1261,7 +1265,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          float pitch = 1F;
 
          if (entity != null) {
-             if (chargedFinal >= maxKickTime) {
+             if (chargedFinal >= getMaxKickTime()) {
                  SE = ModSounds.KILLER_QUEEN_HEAVY_PUNCH_EVENT;
              }else {
                  SE = ModSounds.KILLER_QUEEN_PUNCH_EVENT;
@@ -1270,7 +1274,7 @@ public class PowersKillerQueen extends NewPunchingStand {
          } else {
              SE = ModSounds.PUNCH_2_SOUND_EVENT;
          }
-         if (chargedFinal >= maxKickTime) {
+         if (chargedFinal >= getMaxKickTime()) {
              soundShiba = SHIBABA;
              if (entity != null) { volume = 2.61F; }
          }
@@ -1508,10 +1512,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void updateKickAttackCharge(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= maxKickTime &&
+            if (this.attackTimeDuring >= getMaxKickTime() &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true, maxKickTime);
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true, getMaxKickTime());
                 if (this.self.level().isClientSide()){
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
                 }
@@ -1522,7 +1526,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void updateKickAttack(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 5) {
-            	if (chargedFinal >= maxKickTime) {
+            	if (chargedFinal >= getMaxKickTime()) {
                     this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().killerQueenSettings.kickMinimumCooldown + chargedFinal * 1.5));
                 } else {
                     this.setAttackTimeMax((int) (ClientNetworking.getAppropriateConfig().killerQueenSettings.kickMinimumCooldown + chargedFinal));
@@ -2060,7 +2064,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if (shaThrow) {
                             sha.setPos(this.self.getEyePosition());
                         } else {
-                            sha.setPos(getRayBlock(this.self, 0.5f).add(0, -0.3, 0));
+                            sha.setPos(getRayBlock(this.self, 0.5f).add(0, -1, 0));
                         }
                         this.self.level().addFreshEntity(sha);
 
@@ -2257,9 +2261,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.syncShaStatus(SHA_NONE);
                     int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
 
-                    if (this.SHA.throwStatus >= 1) { shaCooldown += 120; }
-
                     shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions), 60);
+
+                    if (this.SHA.throwStatus >= 1) { shaCooldown += 120; }
 
                     this.setCooldown(SHA_COOLDOWN, shaCooldown);
                     if (this.getSelf() instanceof Player P) {
@@ -2471,6 +2475,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
+        if (ent == this.SHA) {
+            return true;
+        }
+
         if (this.getSelf().hasLineOfSight(ent)) {
             if (this.currentBombStatus == BOMB_ENTITY) {
                 if (this.getBombEntity() != null) {
@@ -2490,6 +2498,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (ent == this.SHA) { return 0xffffff; }
         if(this.currentBombStatus == BOMB_ENTITY) {
             if (this.getBombEntity() != null && ent == this.getBombEntity()) {
                 if (this.getSelf().hasLineOfSight(ent)) { return 16150472; }
@@ -2593,7 +2602,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / maxKickTime) * 15));
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxKickTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (this.getActivePower() == PowerIndex.POWER_2_SNEAK){
@@ -2877,13 +2886,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,maxKickTime);
-        if (chargedFinal >= maxKickTime){
+        chargedFinal = Math.min(this.chargedFinal,getMaxKickTime());
+        if (chargedFinal >= getMaxKickTime()){
             this.animateStand(KillerQueenEntity.HEAVY_STRIKE);
         } else {
             this.animateStand(KillerQueenEntity.KICK);
         }
-        //playBarrageCrySound();
         return true;
     }
     public boolean setPowerKickWindup() {
