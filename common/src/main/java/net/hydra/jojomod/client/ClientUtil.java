@@ -263,11 +263,19 @@ public class ClientUtil {
         return frozenLevel;
     }
     public static int clientTicker;
+    public static int timeSkipTicker = -1;
     public static int getClientTicker(){
         return clientTicker;
     }
     public static void tickClientUtilStuff(){
         clientTicker++;
+
+        if (timeSkipTicker > -1){
+            timeSkipTicker++;
+            if (timeSkipTicker > 8){
+                timeSkipTicker = -1;
+            }
+        }
 
         if (heldSwap > 0){
             heldSwap--;
@@ -1721,6 +1729,8 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_RESPAWN){
             Minecraft.getInstance().player.respawn();
+        } else if (context == PacketDataIndex.TIME_SKIP){
+            timeSkipTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());

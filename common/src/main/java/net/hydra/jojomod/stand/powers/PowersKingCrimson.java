@@ -166,6 +166,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return predicted;
     }
 
+    public void releaseTimeSkip(){
+
+    }
+
     public Vec3 predictPlayer(Player player, int ticks) {
         Level level = player.level();
 
@@ -185,7 +189,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             oldPos = third;
         }
-        if (player.position().distanceTo(oldPos) < 0.4){
+        if (player.position().distanceTo(oldPos) < 0.1){
             return predictIdle(player,ticks);
         }
         Vec3 baseVelocity = player.position()
@@ -342,7 +346,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             index++;
         }
 
-        if (current.distanceTo(mob.position()) < 0.4 && !MainUtil.isBossMob(mob)
+        if (current.distanceTo(mob.position()) < 0.1 && !MainUtil.isBossMob(mob)
         && !(mob instanceof FlyingMob)){
             return predictIdle(mob,ticks);
         }
@@ -464,12 +468,35 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 100, true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
+        scatterPackets();
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
     }
+
+    public void scatterPackets(){
+        packetNearby2();
+    }
     public int getSkipRange(){
         return 50;
+    }
+    public final void packetNearby2() {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 75)) {
+                    S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.TIME_SKIP);
+                }
+            }
+        }
     }
     public final void packetNearby(Vector3f blip, int entId) {
         if (!this.self.level().isClientSide) {
