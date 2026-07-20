@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -124,7 +125,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int attackTick = 0;
 	static final int attackTickMax = 25;
 	int jumpTick = 0;
-	static final int jumpTickMax = 30;
+	static final int jumpTickMax = 38;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
@@ -272,12 +273,24 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (throwStatus == THROWED) {
 					if (this.onGround() || this.onClimbable()) {
 						throwStatus = HAS_BEEN;
-					}else if (this.flyngTicks > 8){
+					}else if (this.flyngTicks > 6){
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
 							if (ent instanceof LivingEntity LE) {
-								LE.hurt(ModDamageTypes.of(LE.level(), ModDamageTypes.STAND), 0.3f);
+								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
+
+								if (MainUtil.getReducedDamage(LE)) {
+									if (user instanceof Player && (StandUser)((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
+									}
+									LE.hurt(dmg, 0.25f);
+								}else {
+									if (user instanceof Player && (StandUser)((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
+									}
+									LE.hurt(dmg, 0.35f);
+								}
 							}
 						}
 					}
@@ -491,16 +504,22 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 	public void attack() {
-
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
 		this.explosions++;
 
 		if (this.getTargetType() == ENTITY){
 			Vec3 pos = this.position().add(this.getForward().scale(0.3));
+			float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
-			ExplosionUtil.explosionHurt(pos, dmg, this.level(),
-					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
+			StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+
+			if (!(SP instanceof PowersKillerQueen)) { return; }
+
+			PowersKillerQueen KQ = (PowersKillerQueen)SP;
+
+			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
+					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
 			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
 			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
