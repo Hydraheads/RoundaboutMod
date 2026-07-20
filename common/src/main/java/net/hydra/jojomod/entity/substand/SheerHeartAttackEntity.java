@@ -201,7 +201,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (!client) {
 			if(user == null){
 				this.discard();
-			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
+			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())
+			|| MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 100){
 				this.discard();
 			}else {
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {

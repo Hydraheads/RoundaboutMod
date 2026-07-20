@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -41,6 +42,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -2566,6 +2568,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                 "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
 
         return $$1;
+    }
+
+    @Override
+    public boolean replaceHudActively() {
+        return this.SHA != null && this.SHA.getHaveToReturn() && this.isHoldingSneak();
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum) {
+        double distance = getStandEntity(getSelf()).distanceTo(getSelf());
+        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0,100,0x6e44b3);
     }
 
     @Override
