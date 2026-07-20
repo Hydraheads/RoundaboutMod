@@ -35,6 +35,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -105,7 +106,10 @@ public class PowersKingCrimson extends NewPunchingStand {
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
-        float speed = (float) (Math.random()*1F);
+        float speed = (float) (Math.random()*0.9F);
+        if (liv instanceof WanderingTrader){
+            speed = (float) (Math.random()*0.4F);
+        }
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
                 .scale(liv.getSpeed() * speed);
