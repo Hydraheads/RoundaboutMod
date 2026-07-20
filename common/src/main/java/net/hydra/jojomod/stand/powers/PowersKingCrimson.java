@@ -329,14 +329,18 @@ public class PowersKingCrimson extends NewPunchingStand {
                             Vec3 predicted = living.position();
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
-                            if (living instanceof Mob mob) {
-                                predicted = predictPosition(mob, 100);
-                            } else if (living instanceof Player player) {
-                                // Fallback for players, armor stands, etc.
-                                hitWall2 = false;
-                                predictPlayer(player,40);
-                                if (hitWall2){
-                                    yRot = Mth.wrapDegrees(yRot + 180.0F);
+                            if (!living.isSleeping()){
+                                if (living instanceof Mob mob) {
+                                    if (!mob.isLeashed()) {
+                                        predicted = predictPosition(mob, 100);
+                                    }
+                                } else if (living instanceof Player player) {
+                                    // Fallback for players, armor stands, etc.
+                                    hitWall2 = false;
+                                    predictPlayer(player, 40);
+                                    if (hitWall2) {
+                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                    }
                                 }
                             }
 
