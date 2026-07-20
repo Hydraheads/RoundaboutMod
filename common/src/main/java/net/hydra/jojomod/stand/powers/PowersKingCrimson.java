@@ -170,7 +170,7 @@ public class PowersKingCrimson extends NewPunchingStand {
         Vec3 baseVelocity = player.position()
                 .subtract(oldPos)
                 .normalize()
-                .scale(player.getSpeed() * 3.0);
+                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
         if (baseVelocity.y > 0)
             baseVelocity = baseVelocity.multiply(1, 0, 1);
 
