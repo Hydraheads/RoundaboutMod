@@ -947,9 +947,9 @@ public class Config implements Cloneable {
         public Boolean freezesSnow;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;
-        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
         public Float bonusPlayerDMGWhitev2;
-        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
         public Float bonusMobDMGWhite;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer miningSpeedMultiplierWhiteAlbum;
