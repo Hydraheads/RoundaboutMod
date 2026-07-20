@@ -336,6 +336,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "flesh_pile").toString())
             );
+    public static final RegistryObject<EntityType<PurpleHazeEntity>> PURPLE_HAZE =
+            ENTITY_TYPES.register("purple_haze", () ->
+                    EntityType.Builder.of(PurpleHazeEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "purple_haze").toString())
+            );
     public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET =
             ENTITY_TYPES.register("soft_and_wet", () ->
                     EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

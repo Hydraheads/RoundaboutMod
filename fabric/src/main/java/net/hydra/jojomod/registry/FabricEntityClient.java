@@ -72,6 +72,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.RATT, RattRenderer::new);
         EntityRendererRegistry.register(FabricEntities.REDD, ReddRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CHAIR_RATT, ChairRattRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PURPLE_HAZE, PurpleHazeRenderer:: new);
         EntityRendererRegistry.register(FabricEntities.SURVIVOR, SurvivorRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
@@ -224,6 +225,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER, PurpleHazeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);

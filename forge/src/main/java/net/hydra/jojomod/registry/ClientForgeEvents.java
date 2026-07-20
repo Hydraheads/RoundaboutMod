@@ -74,6 +74,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
         event.registerEntityRenderer(ForgeEntities.REDD.get(), ReddRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CHAIR_RAT.get(), ChairRattRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PURPLE_HAZE.get(), PurpleHazeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET.get(), SoftAndWetRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DROWNED.get(), SoftAndWetDrownedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DEBUT.get(), SoftAndWetDebutRenderer::new);
@@ -293,6 +294,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.PURPLE_HAZE_LAYER, PurpleHazeModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.EMPEROR_SHOOTING_ARM = new EmperorShootingArmModel();
         ModStrayModels.EMPEROR_MODEL = new EmperorModel();

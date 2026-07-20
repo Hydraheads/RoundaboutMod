@@ -45,6 +45,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation RATT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ratt"), "main");
     public static final ModelLayerLocation REDD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "redd"), "main");
     public static final ModelLayerLocation CHAIR_RATT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chair_ratt"), "main");
+    public static final ModelLayerLocation PURPLE_HAZE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "purple_haze"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_king"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_drowned"), "main");

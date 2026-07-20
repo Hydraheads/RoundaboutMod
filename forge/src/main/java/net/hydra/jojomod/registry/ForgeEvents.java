@@ -65,6 +65,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.REDD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CHAIR_RAT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PURPLE_HAZE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KING.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DROWNED.get(), StandEntity.createStandAttributes().build());
@@ -369,6 +370,10 @@ public class ForgeEvents {
         ModItems.STAND_DISC_RATT = ForgeItems.STAND_DISC_RATT.get();
         ModItems.MAX_STAND_DISC_RATT = ForgeItems.MAX_STAND_DISC_RATT.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_RATT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_RATT.get());
+
+        ModItems.STAND_DISC_PURPLE_HAZE = ForgeItems.STAND_DISC_PURPLE_HAZE.get();
+        ModItems.MAX_STAND_DISC_PURPLE_HAZE = ForgeItems.MAX_STAND_DISC_PURPLE_HAZE.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_PURPLE_HAZE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_PURPLE_HAZE.get());
 
         ModItems.STAND_DISC_OASIS = ForgeItems.STAND_DISC_OASIS.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_OASIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_OASIS.get());
@@ -681,6 +686,7 @@ public class ForgeEvents {
         ModEntities.REDD = ForgeEntities.REDD.get();
         ModEntities.CHAIR_RATT = ForgeEntities.CHAIR_RAT.get();
         ModEntities.FLESH_PILE = ForgeEntities.FLESH_PILE.get();
+        ModEntities.PURPLE_HAZE = ForgeEntities.PURPLE_HAZE.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();
         ModEntities.SOFT_AND_WET_DROWNED = ForgeEntities.SOFT_AND_WET_DROWNED.get();
