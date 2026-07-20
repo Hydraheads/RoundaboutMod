@@ -63,6 +63,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -1534,6 +1535,24 @@ public class MainUtil {
 
     }
 
+
+    public static boolean isDangerous(Level level, BlockPos pos, BlockState state){
+        if (state.is(Blocks.COBWEB)
+                || state.is(Blocks.FIRE)
+                || state.is(Blocks.SOUL_FIRE)
+                || state.is(Blocks.CACTUS)
+                || state.is(ModBlocks.BARBED_WIRE)
+                || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.STAND_FIRE)
+                || state.is(ModBlocks.COLD_AIR)
+                || state.is(ModBlocks.BARBED_WIRE_BUNDLE)
+                || state.is(Blocks.SWEET_BERRY_BUSH)
+                || level.getFluidState(pos).is(FluidTags.LAVA)) {
+            return true;
+
+        }
+        return false;
+    }
 
 
     public static float getNetheriteMultiplier(Entity entity) {

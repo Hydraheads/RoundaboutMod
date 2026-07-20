@@ -75,6 +75,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -143,6 +145,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Rotations> ROUNDABOUT$HAIR_COLOR = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.ROTATIONS);
+
+    @Unique
+    public Deque<Vec3> rdbt$movementHistory = new ArrayDeque<>();
+
+    @Unique
+    @Override
+    public Deque<Vec3> rdbt$getMovementHistory(){
+        return rdbt$movementHistory;
+    }
 
     @Shadow
     @Final
@@ -288,6 +299,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void rdbt$setCooldownQuery(boolean query){
         rdbt$cooldownQuery = query;
+    }
+    @Unique
+    @Override
+    public void rdbt$setCooldownQuery2(){
+        rdbt$cooldownQuery = false;
+        rdbt$attemptedQuery = false;
     }
 
     @Unique
@@ -1683,6 +1700,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected void roundabout$Tick(CallbackInfo ci) {
         if (rdbt$levelDecreaseTicks > 0){
             rdbt$levelDecreaseTicks--;
+        }
+        rdbt$movementHistory.addLast(this.position());
+        if (rdbt$movementHistory.size() > 10) {
+            rdbt$movementHistory.removeFirst();
         }
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){

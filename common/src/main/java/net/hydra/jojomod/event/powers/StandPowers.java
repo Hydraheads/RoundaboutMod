@@ -173,6 +173,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Runs this code while switching into stand with a disc*/
     public void onStandSwitchInto(){
+        refreshCooldowns();
     }
 
     public void onReleaseGuard(){

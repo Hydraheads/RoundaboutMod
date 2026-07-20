@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -17,36 +18,39 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-public class PowersKingCrimson extends NewPunchingStand {
+public class PowersKingCrimson extends BlockGrabPreset {
 
     public PowersKingCrimson(LivingEntity self) {
         super(self);
@@ -92,11 +96,172 @@ public class PowersKingCrimson extends NewPunchingStand {
     public boolean isUsingEpitaph(){
         return !epitaph.isEmpty();
     }
+
+
+    public static Vec3 getPredictedDirection() {
+        return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
+    }
+    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+        //Mobs and Players that are still still need to move when idle
+        Level level = liv.level();
+
+        Vec3 predicted = liv.position();
+        AABB box = liv.getBoundingBox();
+
+        float speed = (float) (Math.random()*0.9F);
+        if (liv instanceof WanderingTrader){
+            speed = (float) (Math.random()*0.3F);
+        }
+        Vec3 basevelocity = getPredictedDirection()
+                .normalize()
+                .scale(liv.getSpeed() * speed);
+        if (basevelocity.y > 0)
+            basevelocity = basevelocity.multiply(1, 0, 1);
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 velocity = basevelocity;
+            velocity = velocity.add(0, -1, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    liv,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+            Vec3 nextPos = predicted.add(collided);
+            BlockPos feet = BlockPos.containing(nextPos);
+            BlockPos below = feet.below();
+            BlockState ground = level.getBlockState(below);
+            BlockState ground2 = level.getBlockState(feet);
+
+            if (!ground.blocksMotion()) {
+                // Don't move there
+                break;
+            }
+            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+                return predicted;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+
+    public Vec3 predictPlayer(Player player, int ticks) {
+        Level level = player.level();
+
+        Vec3 predicted = player.position();
+        AABB box = player.getBoundingBox();
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+        if (player.position().distanceTo(oldPos) < 0.1){
+            return predictIdle(player,ticks);
+        }
+        Vec3 baseVelocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
+        if (baseVelocity.y > 0)
+            baseVelocity = baseVelocity.multiply(1, 0, 1);
+
+        for (int i = 0; i < ticks; i++) {
+
+            // ----- Estimate movement direction -----
+
+
+
+            Vec3 velocity = baseVelocity;
+
+
+            velocity = velocity.add(0, -1, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    player,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // ----- Try stepping up -----
+            boolean hitWall =
+                    collided.x != velocity.x ||
+                            collided.z != velocity.z;
+
+            if (hitWall) {
+                i+=3;
+                double stepHeight = 1.0;
+
+                // Move upward first
+                Vec3 up = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, stepHeight, 0),
+                        box,
+                        level,
+                        List.of()
+                );
+
+                AABB steppedBox = box.move(up);
+
+                // Move horizontally while elevated
+                Vec3 forward = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(velocity.x, 0, velocity.z),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                steppedBox = steppedBox.move(forward);
+
+                // Move back down
+                Vec3 down = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, -stepHeight, 0),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                Vec3 steppedMove = up.add(forward).add(down);
+
+                // Prefer whichever gives more horizontal travel
+                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                    collided = steppedMove;
+                }
+                if (collided.y <= 0){
+                    hitWall2 = true;
+                }
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
     public static Vec3 predictPosition(Mob mob, int ticks) {
         Path path = mob.getNavigation().getPath();
 
         if (path == null) {
-            return mob.position();
+            return predictIdle(mob,ticks);
         }
 
         double remaining = mob.getSpeed() * ticks;
@@ -124,12 +289,42 @@ public class PowersKingCrimson extends NewPunchingStand {
             index++;
         }
 
+        if (current.distanceTo(mob.position()) < 0.1){
+            return predictIdle(mob,ticks);
+        }
+
         return current;
     }
+
+    public void debugPlayer(){
+        if (self instanceof Player pl) {
+            int id = self.getId();
+            float xRot = self.getXRot();
+            float yRot = self.getYRot();
+            Vec3 predicted = self.position();
+
+            hitWall2 = false;
+            predicted = predictPlayer(pl, 40);
+            if (hitWall2){
+                yRot = Mth.wrapDegrees(yRot + 180.0F);
+            }
+            epitaph.put(self.getId(), new TimeSkipSnapshot(
+                    id,
+                    predicted,
+                    xRot,
+                    yRot
+            ));
+            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+        }
+    }
+
+    //This variable makes a player turn around when they hit a wall to sell a believable reaction
+    public boolean hitWall2 = false;
 
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
+                //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(50.0);
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
@@ -138,13 +333,22 @@ public class PowersKingCrimson extends NewPunchingStand {
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
                         if (!(living instanceof StandEntity)) {
                             Vec3 predicted = living.position();
-                            if (living instanceof Mob mob) {
-                                predicted = predictPosition(mob, 100);
-                            } else {
-                                // Fallback for players, armor stands, etc.
-                            }
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
+                            if (!living.isSleeping()){
+                                if (living instanceof Mob mob) {
+                                    if (!mob.isLeashed()) {
+                                        predicted = predictPosition(mob, 100);
+                                    }
+                                } else if (living instanceof Player player) {
+                                    // Fallback for players, armor stands, etc.
+                                    hitWall2 = false;
+                                    predictPlayer(player, 40);
+                                    if (hitWall2) {
+                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                    }
+                                }
+                            }
 
 
                             epitaph.put(living.getId(), new TimeSkipSnapshot(
@@ -300,12 +504,18 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-
             case SKILL_1_NORMAL-> {
                 epitaphClient();
             }
             case SKILL_1_CROUCH -> {
                 impaleClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                timeSkipClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -313,12 +523,34 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
 
+    @Override
+    public boolean isAppropriateToGrab(){
+        if (!hasBlock()) {
+            return true;
+        }
+        return false;
+    }
+    public void timeSkipClient() {
+
+        if (hasBlock()){
+            itemGrabClient();
+            return;
+        }
+
+    }
+
+
     public void epitaphClient(){
+
+        if (hasBlock())
+            return;
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
         tryPowerPacket(PowerIndex.POWER_1);
     }
 
     public void tryToDashClient(){
+        if (hasBlock())
+            return;
         if (!doVault()) {
             dash();
         }
@@ -332,6 +564,9 @@ public class PowersKingCrimson extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
+
+        if (hasBlock())
+            return;
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -352,10 +587,37 @@ public class PowersKingCrimson extends NewPunchingStand {
         } else {
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
         }
+
+        if (!isHoldingSneak()){
+            if (hasBlock()){
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
+
+            } else if (isUsingEpitaph()){
+                if (isGuarding()){
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2, 0);
+                } else {
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2, 0);
+                }
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2, 0);
+            }
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
+        }
+
         if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            if (!isHoldingSneak()){
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            }
+        }
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
+        } else {
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
         }
     }
 
@@ -680,6 +942,19 @@ public class PowersKingCrimson extends NewPunchingStand {
             return 1;
         }
         return 1.2F;
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (hasBlock()){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.TWTHROW;
     }
 
     public float getFinalAttackKnockback(){

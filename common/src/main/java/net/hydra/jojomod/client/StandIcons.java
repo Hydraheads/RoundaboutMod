@@ -430,6 +430,16 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/stand_ledge_grab.png");
+    public static final ResourceLocation TIME_ERASE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_erase.png");
+    public static final ResourceLocation TIME_SKIP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip.png");
+    public static final ResourceLocation TIME_SKIP_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_2.png");
+    public static final ResourceLocation TIME_SKIP_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_3.png");
+    public static final ResourceLocation KING_CRIMSON_ITEM_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/grab_item.png");
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");

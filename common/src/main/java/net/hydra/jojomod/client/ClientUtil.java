@@ -762,7 +762,7 @@ public class ClientUtil {
                     double y = (double) vargs[2];
                     double z = (double) vargs[3];
                     float xrot = (float) vargs[4];
-                    float yrot = (float) vargs[4];
+                    float yrot = (float) vargs[5];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
                     }

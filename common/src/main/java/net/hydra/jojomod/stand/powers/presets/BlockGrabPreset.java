@@ -249,6 +249,10 @@ public class BlockGrabPreset extends NewPunchingStand {
             }
         }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+
+            if (freezeAttackInput > -1){
+                freezeAttackInput--;
+            }
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
