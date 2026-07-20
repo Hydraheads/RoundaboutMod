@@ -109,7 +109,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return super.tryPower(move, forced);
     }
 
-
     @Override
     public StandEntity getNewStandEntity () {
         return ModEntities.PURPLE_HAZE.create(this.getSelf().level());
