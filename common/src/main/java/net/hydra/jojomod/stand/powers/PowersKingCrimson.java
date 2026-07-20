@@ -23,12 +23,14 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,6 +39,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -91,37 +94,94 @@ public class PowersKingCrimson extends NewPunchingStand {
         return !epitaph.isEmpty();
     }
 
-    public boolean hitwall = false;
+
+    public static Vec3 getPredictedDirection() {
+        return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
+    }
+    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+        //Mobs and Players that are still still need to move when idle
+        Level level = liv.level();
+
+        Vec3 predicted = liv.position();
+        AABB box = liv.getBoundingBox();
+
+        float speed = (float) (Math.random()*1F);
+        Vec3 basevelocity = getPredictedDirection()
+                .normalize()
+                .scale(liv.getSpeed() * speed);
+        if (basevelocity.y > 0)
+            basevelocity = basevelocity.multiply(1, 0, 1);
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 velocity = basevelocity;
+            velocity = velocity.add(0, -0.2, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    liv,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+            Vec3 nextPos = predicted.add(collided);
+            BlockPos feet = BlockPos.containing(nextPos);
+            BlockPos below = feet.below();
+            BlockState ground = level.getBlockState(below);
+            BlockState ground2 = level.getBlockState(feet);
+
+            if (!ground.blocksMotion()) {
+                // Don't move there
+                break;
+            }
+            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+                return predicted;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+
     public static Vec3 predictPlayer(Player player, int ticks) {
         Level level = player.level();
 
         Vec3 predicted = player.position();
         AABB box = player.getBoundingBox();
 
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+        if (player.position().distanceTo(oldPos) < 0.1){
+            return predictIdle(player,ticks);
+        }
+        Vec3 baseVelocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(player.getSpeed() * 3.0);
+        if (baseVelocity.y > 0)
+            baseVelocity = baseVelocity.multiply(1, 0, 1);
+
         for (int i = 0; i < ticks; i++) {
 
             // ----- Estimate movement direction -----
-            Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
 
-            Vec3 oldPos = player.position();
 
-            if (history != null && history.size() >= 2) {
-                Iterator<Vec3> it = history.descendingIterator();
 
-                Vec3 newest = it.next();
-                Vec3 previous = it.hasNext() ? it.next() : newest;
-                Vec3 third = it.hasNext() ? it.next() : previous;
+            Vec3 velocity = baseVelocity;
 
-                oldPos = third;
-            }
-
-            Vec3 velocity = player.position()
-                    .subtract(oldPos)
-                    .normalize()
-                    .scale(player.getSpeed() * 3.0);
-
-            if (velocity.y > 0)
-                velocity = velocity.multiply(1, 0, 1);
 
             velocity = velocity.add(0, -0.2, 0);
 
@@ -140,7 +200,7 @@ public class PowersKingCrimson extends NewPunchingStand {
                             collided.z != velocity.z;
 
             if (hitWall) {
-
+                i+=3;
                 double stepHeight = 1.0;
 
                 // Move upward first
@@ -218,6 +278,10 @@ public class PowersKingCrimson extends NewPunchingStand {
             remaining -= segment;
             current = next;
             index++;
+        }
+
+        if (current.distanceTo(mob.position()) < 0.1){
+            return predictIdle(mob,ticks);
         }
 
         return current;

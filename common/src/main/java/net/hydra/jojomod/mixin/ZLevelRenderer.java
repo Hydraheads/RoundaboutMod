@@ -117,6 +117,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     double $$7 = skip.position.x;
                     double $$8 = skip.position.y;
                     double $$9 = skip.position.z;
+                    float renderYaw = skip.yRot;
                     if (progress < 1){
                         double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
                         double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
@@ -125,8 +126,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         $$7 = Mth.lerp(progress, x, $$7);
                         $$8 = Mth.lerp(progress, y, $$8);
                         $$9 = Mth.lerp(progress, z, $$9);
+                        renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
                     }
-                    float renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
 
                     this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
 
