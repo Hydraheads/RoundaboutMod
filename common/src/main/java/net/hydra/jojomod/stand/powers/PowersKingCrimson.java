@@ -36,15 +36,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PowersKingCrimson extends NewPunchingStand {
 
@@ -92,6 +90,104 @@ public class PowersKingCrimson extends NewPunchingStand {
     public boolean isUsingEpitaph(){
         return !epitaph.isEmpty();
     }
+
+    public boolean hitwall = false;
+    public static Vec3 predictPlayer(Player player, int ticks) {
+        Level level = player.level();
+
+        Vec3 predicted = player.position();
+        AABB box = player.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // ----- Estimate movement direction -----
+            Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+            Vec3 oldPos = player.position();
+
+            if (history != null && history.size() >= 2) {
+                Iterator<Vec3> it = history.descendingIterator();
+
+                Vec3 newest = it.next();
+                Vec3 previous = it.hasNext() ? it.next() : newest;
+                Vec3 third = it.hasNext() ? it.next() : previous;
+
+                oldPos = third;
+            }
+
+            Vec3 velocity = player.position()
+                    .subtract(oldPos)
+                    .normalize()
+                    .scale(player.getSpeed() * 3.0);
+
+            if (velocity.y > 0)
+                velocity = velocity.multiply(1, 0, 1);
+
+            velocity = velocity.add(0, -0.2, 0);
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    player,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // ----- Try stepping up -----
+            boolean hitWall =
+                    collided.x != velocity.x ||
+                            collided.z != velocity.z;
+
+            if (hitWall) {
+
+                double stepHeight = 1.0;
+
+                // Move upward first
+                Vec3 up = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, stepHeight, 0),
+                        box,
+                        level,
+                        List.of()
+                );
+
+                AABB steppedBox = box.move(up);
+
+                // Move horizontally while elevated
+                Vec3 forward = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(velocity.x, 0, velocity.z),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                steppedBox = steppedBox.move(forward);
+
+                // Move back down
+                Vec3 down = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, -stepHeight, 0),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                Vec3 steppedMove = up.add(forward).add(down);
+
+                // Prefer whichever gives more horizontal travel
+                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                    collided = steppedMove;
+                }
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
     public static Vec3 predictPosition(Mob mob, int ticks) {
         Path path = mob.getNavigation().getPath();
 
@@ -127,9 +223,27 @@ public class PowersKingCrimson extends NewPunchingStand {
         return current;
     }
 
+    public void debugPlayer(){
+        if (self instanceof Player pl) {
+            int id = self.getId();
+            float xRot = self.getXRot();
+            float yRot = self.getYRot();
+            Vec3 predicted = self.position();
+            predicted = predictPlayer(pl, 40);
+            epitaph.put(self.getId(), new TimeSkipSnapshot(
+                    id,
+                    predicted,
+                    xRot,
+                    yRot
+            ));
+            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+        }
+    }
+
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
+                debugPlayer();
                 AABB area = self.getBoundingBox().inflate(50.0);
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
@@ -138,13 +252,14 @@ public class PowersKingCrimson extends NewPunchingStand {
                     if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
                         if (!(living instanceof StandEntity)) {
                             Vec3 predicted = living.position();
-                            if (living instanceof Mob mob) {
-                                predicted = predictPosition(mob, 100);
-                            } else {
-                                // Fallback for players, armor stands, etc.
-                            }
                             float xRot = living.getXRot();
                             float yRot = living.getYRot();
+                            if (living instanceof Mob mob) {
+                                predicted = predictPosition(mob, 100);
+                            } else if (living instanceof Player player) {
+                                // Fallback for players, armor stands, etc.
+                                predictPlayer(player,40);
+                            }
 
 
                             epitaph.put(living.getId(), new TimeSkipSnapshot(
