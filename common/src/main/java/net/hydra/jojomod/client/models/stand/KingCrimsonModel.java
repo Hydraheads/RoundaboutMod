@@ -157,6 +157,13 @@ public class KingCrimsonModel<T extends KingCrimsonEntity> extends StandModel<T>
         this.animate(pEntity.finalPunchWindup, StarPlatinumAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1f);
         this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
         this.animate(pEntity.impale2, StarPlatinumAnimations.Impale2, pAgeInTicks, 1.04f);
+
+        this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
+        this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
+        this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
+        this.animate(pEntity.itemThrowAnimation, StandAnimations.THROW_ITEM, pAgeInTicks, 1.25f);
+        this.animate(pEntity.blockRetractAnimation, StandAnimations.RETRACT_BLOCK, pAgeInTicks, 1.25f);
+        this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
 	}
 
 	@Override

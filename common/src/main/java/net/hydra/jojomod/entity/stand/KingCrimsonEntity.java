@@ -35,6 +35,12 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState impale = new AnimationState();
     public final AnimationState impale2 = new AnimationState();
+    public final AnimationState blockGrabAnimation = new AnimationState();
+    public final AnimationState blockThrowAnimation = new AnimationState();
+    public final AnimationState itemGrabAnimation = new AnimationState();
+    public final AnimationState itemThrowAnimation = new AnimationState();
+    public final AnimationState blockRetractAnimation = new AnimationState();
+    public final AnimationState itemRetractAnimation = new AnimationState();
 
     public static final byte
             IMPALE_2 = 84;
@@ -59,6 +65,37 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.impale2.stop();
             }
 
+            if (this.getAnimation() == ITEM_GRAB) {
+                this.itemGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemGrabAnimation.stop();
+            }
+            if (this.getAnimation() == ITEM_THROW) {
+                this.itemThrowAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemThrowAnimation.stop();
+            }
+            if (this.getAnimation() == BLOCK_GRAB) {
+                this.blockGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.blockGrabAnimation.stop();
+            }
+            if (this.getAnimation() == BLOCK_THROW) {
+                this.blockThrowAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.blockThrowAnimation.stop();
+            }
+            if (this.getAnimation() == BLOCK_RETRACT) {
+                this.blockRetractAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.blockRetractAnimation.stop();
+            }
+
+            if (this.getAnimation() == ITEM_RETRACT) {
+                this.itemRetractAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemRetractAnimation.stop();
+            }
             if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
                 this.finalPunchWindup.startIfStopped(this.tickCount);
             } else {

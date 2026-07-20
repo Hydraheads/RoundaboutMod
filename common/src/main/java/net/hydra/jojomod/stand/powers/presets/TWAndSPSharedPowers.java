@@ -697,9 +697,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 this.forwardBarrage = false;
             }
 
-            if (freezeAttackInput > -1){
-                freezeAttackInput--;
-            }
 
             if (spacedJumpTime > -1){
                 spacedJumpTime--;

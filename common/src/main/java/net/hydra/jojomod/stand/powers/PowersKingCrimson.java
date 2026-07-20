@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -48,7 +50,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
-public class PowersKingCrimson extends NewPunchingStand {
+public class PowersKingCrimson extends BlockGrabPreset {
 
     public PowersKingCrimson(LivingEntity self) {
         super(self);
@@ -502,12 +504,18 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-
             case SKILL_1_NORMAL-> {
                 epitaphClient();
             }
             case SKILL_1_CROUCH -> {
                 impaleClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                timeSkipClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
@@ -515,12 +523,34 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
 
+    @Override
+    public boolean isAppropriateToGrab(){
+        if (!hasBlock()) {
+            return true;
+        }
+        return false;
+    }
+    public void timeSkipClient() {
+
+        if (hasBlock()){
+            itemGrabClient();
+            return;
+        }
+
+    }
+
+
     public void epitaphClient(){
+
+        if (hasBlock())
+            return;
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
         tryPowerPacket(PowerIndex.POWER_1);
     }
 
     public void tryToDashClient(){
+        if (hasBlock())
+            return;
         if (!doVault()) {
             dash();
         }
@@ -534,6 +564,9 @@ public class PowersKingCrimson extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
+
+        if (hasBlock())
+            return;
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -556,7 +589,10 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
 
         if (!isHoldingSneak()){
-            if (isUsingEpitaph()){
+            if (hasBlock()){
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
+
+            } else if (isUsingEpitaph()){
                 if (isGuarding()){
                     LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2, 0);
                 } else {
@@ -906,6 +942,19 @@ public class PowersKingCrimson extends NewPunchingStand {
             return 1;
         }
         return 1.2F;
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (hasBlock()){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.TWTHROW;
     }
 
     public float getFinalAttackKnockback(){
