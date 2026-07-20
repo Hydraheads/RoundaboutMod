@@ -114,8 +114,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         STRAY_CAT_ADD = 63,
         BUBBLE_BOMB = 63,
         BOMB_CONFIG = 64,
-        BITES_THE_DUST_DEFUSE = 67,
         BITES_THE_DUST_CHASE = 66,
+        BITES_THE_DUST_DEFUSE = 67,
+        ENTITY_SHA = 68,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -219,9 +220,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int chargedFinal;
     public boolean holdDownClick = false;
 	public static int maxKickTime = 25;
-    public int getMaxKickTime() {
-        return maxKickTime+(getMeltLevel()*2);
-    }
+    public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
     private static final int blockPlantMaxTicks = 7;
     public int mobPlantTicks = 0;
@@ -1426,10 +1425,16 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             case PowersKillerQueen.SHEER_HEART_ATTACK-> {
                 this.currentShaStatus = (byte)data;
+                if (this.currentShaStatus == SHA_NONE && this.isClient()) {
+                    this.SHA = null;
+                }
             }
             case PowersKillerQueen.ENTITY_BOMB -> {
                 this.bombEntityID = data;
                 this.bombEntity = this.getSelf().level().getEntity(data);
+            }
+            case PowersKillerQueen.ENTITY_SHA -> {
+                this.SHA = (SheerHeartAttackEntity) this.getSelf().level().getEntity(data);
             }
             case PowersKillerQueen.BUBBLE_BOMB -> {
                 this.bombBubbleID = data;
@@ -2040,7 +2045,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean sendOrReturnSHA(boolean shaThrow) {
         if (canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (this.currentShaStatus == SHA_NONE) {
-                //this.playSoundsIfNearby(SHEER_HEART_ATTACK, 27, true);
                 if (shaThrow) {
                     this.animateStand(KillerQueenEntity.FIRST_PUNCH);
                     this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_PUNCH_EVENT, SoundSource.PLAYERS, 0.9F, 1.0f);
@@ -2074,6 +2078,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                             SHA.shoot(getRayBlock(this.self, 4f));
                         }
                         this.syncShaStatus(SHA_SEND);
+
+                        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.ENTITY_SHA, this.SHA.getId());
+
                     }
 
                 } else {
@@ -2258,7 +2265,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (this.SHA != null && !this.SHA.isRemoved()) {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
-                    this.syncShaStatus(SHA_NONE);
                     int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
 
                     shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions), 60);
@@ -2269,8 +2275,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (this.getSelf() instanceof Player P) {
                         S2CPacketUtil.sendCooldownSyncPacket(P, SHA_COOLDOWN, shaCooldown);
                     }
+
                     this.SHA.discard();
                     this.SHA = null;
+                    this.syncShaStatus(SHA_NONE);
                 }
             }else if (this.currentShaStatus != SHA_NONE){
                 int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
@@ -2476,7 +2484,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
         if (ent == this.SHA) {
-            return true;
+            return this.SHA.getReturnStatus();
         }
 
         if (this.getSelf().hasLineOfSight(ent)) {
@@ -2581,7 +2589,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean replaceHudActively() {
-        return this.SHA != null && this.SHA.getHaveToReturn() && this.isHoldingSneak();
+        return this.SHA != null && this.SHA.getReturnStatus() && this.isHoldingSneak();
     }
 
     @Override

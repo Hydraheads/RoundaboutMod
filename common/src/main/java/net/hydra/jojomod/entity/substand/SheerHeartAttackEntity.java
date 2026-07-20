@@ -59,6 +59,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Byte> ANIM = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
 			EntityDataSerializers.BYTE);
+	private static final EntityDataAccessor<Boolean> RETURN_STATUS = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BOOLEAN);
 
 	@Override
 	protected void defineSynchedData() {
@@ -66,6 +68,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.entityData.define(TARGET_STATUS, NONE);
 		this.entityData.define(DATA_FLAGS_ID, (byte)0);
 		this.entityData.define(ANIM, (byte)0);
+		this.entityData.define(RETURN_STATUS, false);
+	}
+
+	public boolean getReturnStatus() {
+		return this.entityData.get(RETURN_STATUS);
+	}
+
+
+	public void setReturnStatus(boolean value) {
+		this.entityData.set(RETURN_STATUS, value);
 	}
 
 	public boolean isClimbing() {
@@ -211,6 +223,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 						return;
 					}
 				}
+
+				this.setReturnStatus(this.getHaveToReturn());
 
 				this.setClimbing(this.horizontalCollision);
 
