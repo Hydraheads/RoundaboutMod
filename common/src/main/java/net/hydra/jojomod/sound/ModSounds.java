@@ -33,6 +33,14 @@ public class ModSounds {
     public static final ResourceLocation BONE_CHOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BONE_CHOMP);
     public static SoundEvent BONE_CHOMP_EVENT = SoundEvent.createVariableRangeEvent(BONE_CHOMP_ID);
 
+    public static final String SKIP_TIME_1 = "skip_time_1";
+    public static final ResourceLocation SKIP_TIME_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKIP_TIME_1);
+    public static SoundEvent SKIP_TIME_1_EVENT = SoundEvent.createVariableRangeEvent(SKIP_TIME_1_ID);
+
+    public static final String SKIP_TIME_2 = "skip_time_2";
+    public static final ResourceLocation SKIP_TIME_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKIP_TIME_2);
+    public static SoundEvent SKIP_TIME_2_EVENT = SoundEvent.createVariableRangeEvent(SKIP_TIME_2_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);

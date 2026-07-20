@@ -35,6 +35,18 @@
       "roundabout:king_crimson_punch"
     ]
   },
+  "skip_time_1": {
+    "subtitle": "sounds.roundabout.skip_time_1",
+    "sounds": [
+      "roundabout:skip_time_1"
+    ]
+  },
+  "skip_time_2": {
+    "subtitle": "sounds.roundabout.skip_time_2",
+    "sounds": [
+      "roundabout:skip_time_2"
+    ]
+  },
   "king_crimson_punch_2": {
     "subtitle": "sounds.roundabout.king_crimson_punch_2",
     "sounds": [

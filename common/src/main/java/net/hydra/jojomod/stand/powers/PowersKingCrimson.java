@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -23,6 +24,7 @@ import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,6 +43,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
@@ -84,9 +88,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.EPITAPH_ACTIVATE_EVENT;
         } else if (soundChoice == EPITAPH_FADE_NOISE) {
             return ModSounds.EPITAPH_FADE_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
+    public static final byte EPITAPH_NOISE = 106;
+    public static final byte EPITAPH_FADE_NOISE = 107;
+    public static final byte TIME_SKIP_1 = 108;
+    public static final byte TIME_SKIP_2 = 109;
     @Override
     public SoundEvent getImpaleSound(){
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
@@ -259,12 +271,49 @@ public class PowersKingCrimson extends BlockGrabPreset {
             box = box.move(collided);
         }
 
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker) {
+            // 2. Check for dangerous blocks inside target box
+            boolean cancel = false;
+            double width = player.getBbWidth();
+            double height = player.getBbHeight();
+            AABB targetBox = new AABB(
+                    predicted.x - width / 2.0, predicted.y, predicted.z - width / 2.0,
+                    predicted.x + width / 2.0, predicted.y + height, predicted.z + width / 2.0
+            );
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)player).roundabout$getGravityDirection());
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    cancel = true;
+                    break;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    cancel = true;
+                    break;
+                }
+            }
+            if (cancel){
+                return player.position();
+            }
+        }
+
         return predicted;
     }
     public static Vec3 predictPosition(Mob mob, int ticks) {
         Path path = mob.getNavigation().getPath();
 
-        if (path == null || path.isDone() || path.notStarted() || !path.canReach()) {
+        if (path == null) {
             return predictIdle(mob,ticks);
         }
 
@@ -349,6 +398,49 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 continue;
             }
 
+            double width = entity.getBbWidth();
+            double height = entity.getBbHeight();
+
+            // Construct bounding box at the target position
+            AABB targetBox = new AABB(
+                    snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
+                    snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
+            );
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
+
+            if (!level.noCollision(entity, targetBox)) {
+                continue;
+            }
+
+            boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+            if (deviousStratBlocker && entity instanceof Player) {
+                // 2. Check for dangerous blocks inside target box
+                boolean cancel = false;
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                        Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                    BlockState state = level.getBlockState(pos);
+                    Block block = state.getBlock();
+
+                    // List of bad blocks to avoid
+                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                        cancel = true;
+                        break;
+                    }
+
+                    // Optional: also avoid fire or cactus
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                        cancel = true;
+                        break;
+                    }
+                }
+                if (cancel){
+                    continue;
+                }
+            }
+
             packetNearby(new Vector3f((float) snapshot.position.x,
                             (float) snapshot.position.y,
                             (float) snapshot.position.z),
@@ -372,7 +464,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        S2CPacketUtil.sendPlaySoundPacket(pl, self.getId(), EPITAPH_FADE_NOISE);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 100, true, false);
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
     }
