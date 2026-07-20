@@ -129,7 +129,23 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
                     }
 
-                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+
+
+                    if (entity instanceof  LivingEntity LE) {
+                        float oldYaw = entity.getYRot();
+                        float oldYawO = entity.yRotO;
+
+                        entity.setYRot(renderYaw);
+                        entity.yRotO = renderYaw;
+
+                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+
+                        entity.setYRot(oldYaw);
+                        entity.yRotO = oldYawO;
+                    } else {
+
+                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                    }
 
                 }
                 ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
