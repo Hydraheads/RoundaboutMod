@@ -108,7 +108,7 @@ public class PowersKingCrimson extends NewPunchingStand {
 
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
-            speed = (float) (Math.random()*0.4F);
+            speed = (float) (Math.random()*0.3F);
         }
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
