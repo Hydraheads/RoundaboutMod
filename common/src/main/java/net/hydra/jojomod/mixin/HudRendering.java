@@ -202,7 +202,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
-                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 1);
+                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {

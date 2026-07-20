@@ -47,11 +47,7 @@ public class MoldSporesEntity extends StandEntity {
 
     @Override
     public void tick() {
-        if(!level().isClientSide) {
-            Roundabout.LOGGER.info("ServerRange:" + Float.toString(range));
-        }else {
-            Roundabout.LOGGER.info("ClientRange:" + Float.toString(range));
-        }
+
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range ,range );
         for(int j = 0;j<damages.size();j++) {
 
@@ -79,15 +75,17 @@ public class MoldSporesEntity extends StandEntity {
 
         }
 
-            if (user == null) {
-                this.discard();
-            }else{
-                if(user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
-                    if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
-                        this.discard();
-                    }
+        if (user == null) {
+            this.discard();
+        }else{
+            if(user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
+                if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
+                    this.discard();
                 }
-;            }
+            }if(!getUser().isAlive()){
+                this.discard();
+            }
+;      }
             if (this.getDeltaMovement().y > 0.2){
                 this.setDeltaMovement(this.getDeltaMovement().add(0,-00.06,0));
             }else {
@@ -152,7 +150,7 @@ public class MoldSporesEntity extends StandEntity {
                             && !(entity instanceof FallenMob)
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
                             && !entity.equals(User)){
-                        if (!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
+                        if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !( User instanceof Player)) {
 
                             double width = entity.getBbWidth() / 2;
                             double height = entity.getBbHeight() / 2;
@@ -170,9 +168,9 @@ public class MoldSporesEntity extends StandEntity {
                             //     range += 4;
                             //}
                             if (MainUtil.getReducedDamage(entity)) {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6)));
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6F)));
                             } else {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6)));
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6F)));
                             }
                             if(!entity.isAlive()){
                                 range += 4;
