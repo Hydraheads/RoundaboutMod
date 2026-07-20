@@ -132,14 +132,29 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
 
                     if (entity instanceof  LivingEntity LE) {
+                        float oldBody = LE.yBodyRot;
+                        float oldBodyO = LE.yBodyRotO;
+                        float oldHead = LE.yHeadRot;
+                        float oldHeadO = LE.yHeadRotO;
                         float oldYaw = entity.getYRot();
                         float oldYawO = entity.yRotO;
+                        float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
+                        float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
+
+                        LE.yBodyRot = renderYaw;
+                        LE.yBodyRotO = renderYaw;
+                        LE.yHeadRot = renderYaw + headOffset;
+                        LE.yHeadRotO = renderYaw + headOffsetO;
 
                         entity.setYRot(renderYaw);
                         entity.yRotO = renderYaw;
 
                         this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
 
+                        LE.yBodyRot = oldBody;
+                        LE.yBodyRotO = oldBodyO;
+                        LE.yHeadRot = oldHead;
+                        LE.yHeadRotO = oldHeadO;
                         entity.setYRot(oldYaw);
                         entity.yRotO = oldYawO;
                     } else {

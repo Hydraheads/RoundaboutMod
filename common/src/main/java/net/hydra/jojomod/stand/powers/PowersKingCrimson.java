@@ -114,7 +114,7 @@ public class PowersKingCrimson extends NewPunchingStand {
         for (int i = 0; i < ticks; i++) {
 
             Vec3 velocity = basevelocity;
-            velocity = velocity.add(0, -0.2, 0);
+            velocity = velocity.add(0, -1, 0);
 
             // ----- Normal collision -----
             Vec3 collided = Entity.collideBoundingBox(
@@ -145,7 +145,7 @@ public class PowersKingCrimson extends NewPunchingStand {
         return predicted;
     }
 
-    public static Vec3 predictPlayer(Player player, int ticks) {
+    public Vec3 predictPlayer(Player player, int ticks) {
         Level level = player.level();
 
         Vec3 predicted = player.position();
@@ -183,7 +183,7 @@ public class PowersKingCrimson extends NewPunchingStand {
             Vec3 velocity = baseVelocity;
 
 
-            velocity = velocity.add(0, -0.2, 0);
+            velocity = velocity.add(0, -1, 0);
 
             // ----- Normal collision -----
             Vec3 collided = Entity.collideBoundingBox(
@@ -240,6 +240,9 @@ public class PowersKingCrimson extends NewPunchingStand {
                 if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
                     collided = steppedMove;
                 }
+                if (collided.y <= 0){
+                    hitWall2 = true;
+                }
             }
 
             predicted = predicted.add(collided);
@@ -293,7 +296,12 @@ public class PowersKingCrimson extends NewPunchingStand {
             float xRot = self.getXRot();
             float yRot = self.getYRot();
             Vec3 predicted = self.position();
+
+            hitWall2 = false;
             predicted = predictPlayer(pl, 40);
+            if (hitWall2){
+                yRot = Mth.wrapDegrees(yRot + 180.0F);
+            }
             epitaph.put(self.getId(), new TimeSkipSnapshot(
                     id,
                     predicted,
@@ -304,10 +312,13 @@ public class PowersKingCrimson extends NewPunchingStand {
         }
     }
 
+    //This variable makes a player turn around when they hit a wall to sell a believable reaction
+    public boolean hitWall2 = false;
+
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
-                debugPlayer();
+                //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(50.0);
 
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
@@ -322,7 +333,11 @@ public class PowersKingCrimson extends NewPunchingStand {
                                 predicted = predictPosition(mob, 100);
                             } else if (living instanceof Player player) {
                                 // Fallback for players, armor stands, etc.
+                                hitWall2 = false;
                                 predictPlayer(player,40);
+                                if (hitWall2){
+                                    yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                }
                             }
 
 
