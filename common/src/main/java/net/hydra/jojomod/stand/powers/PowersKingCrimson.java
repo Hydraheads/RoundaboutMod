@@ -810,7 +810,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
         if (isUsingEpitaph()){
-            tryPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA);
+            tryPowerPacket(PowerIndex.EXTRA);
         }
     }
     public void timeSkipClient() {
@@ -823,7 +823,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 Math.abs(self.getDeltaMovement().z) > 0.01 ||
                 !self.onGround());
         if (isMoving && !isUsingEpitaph()){
-            tryPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA);
+            tryPowerPacket(PowerIndex.EXTRA);
         } else {
             tryPowerPacket(PowerIndex.POWER_2);
         }
@@ -1076,7 +1076,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } else if (move == PowerIndex.POWER_2){
             this.timeSkip(false);
             return true;
-        } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA){
+        } else if (move == PowerIndex.EXTRA){
             this.timeSkip(true);
             return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
