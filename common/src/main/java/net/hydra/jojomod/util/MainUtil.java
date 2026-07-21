@@ -1536,6 +1536,12 @@ public class MainUtil {
     }
 
 
+    public static boolean inWater(BlockState state){
+        if (state.is(Blocks.WATER)) {
+            return true;
+        }
+        return false;
+    }
     public static boolean isDangerous(Level level, BlockPos pos, BlockState state){
         if (state.is(Blocks.COBWEB)
                 || state.is(Blocks.FIRE)

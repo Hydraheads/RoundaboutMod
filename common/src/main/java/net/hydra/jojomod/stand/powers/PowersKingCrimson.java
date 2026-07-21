@@ -135,8 +135,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         for (int i = 0; i < ticks; i++) {
 
             Vec3 velocity = basevelocity;
-            if (!liv.isInWater()) {
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!liv.isInWater() && !MainUtil.inWater(level.getBlockState(ft))) {
                 velocity = velocity.add(0, -1, 0);
+            } else {
+                velocity.multiply(1,0,1);
             }
 
             // ----- Normal collision -----
@@ -209,8 +212,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             Vec3 velocity = baseVelocity;
 
-            if (!player.isInWater() && !player.isFallFlying()) {
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))) {
                 velocity = velocity.add(0, -1, 0);
+            }  else {
+                velocity.multiply(1,0,1);
             }
 
             // ----- Normal collision -----
@@ -387,6 +393,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
             if (!skipSelf && living.getId() == self.getId()){
                 continue;
+            } else if (living instanceof StandEntity){
+                continue;
             }
             StandEntity stand = getStandEntity(self);
             int id = living.getId();
@@ -452,6 +460,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Entity entity = level.getEntity(snapshot.getEntityId());
 
         if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (entity instanceof StandEntity) {
             return;
         }
 
