@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -347,7 +348,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             index++;
         }
 
-        if (current.distanceTo(mob.position()) < 0.1 && !MainUtil.isBossMob(mob)
+        if (current.distanceTo(mob.position()) < 0.01 && !MainUtil.isBossMob(mob)
         && !(mob instanceof FlyingMob)){
             return predictIdle(mob,ticks);
         }
@@ -508,6 +509,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         RelativeMovement.Y,
                         RelativeMovement.Z),
                 snapshot.yRot,entity.getXRot());
+        if (entity instanceof Mob mb){
+            mb.getNavigation().stop();
+            ((IMob)mb).roundabout$setConfusionTicks(7);
+        }
     }
     public void timeSkip() {
         if (!(self instanceof ServerPlayer pl)) {
