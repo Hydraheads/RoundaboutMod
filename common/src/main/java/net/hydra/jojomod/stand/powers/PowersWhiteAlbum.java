@@ -1466,6 +1466,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             YUKI =11;
 
 
+    public static final int coldFromBlockLaunch = -8;
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();

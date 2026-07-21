@@ -167,7 +167,7 @@ public class BlockWallEntity extends Entity {
                             Blocks.PACKED_ICE.asItem().getDefaultInstance().copy(),
                             false);
 
-                    thrownBlockOrItem.heat = -10;
+                    thrownBlockOrItem.heat = PowersWhiteAlbum.coldFromBlockLaunch;
                     thrownBlockOrItem.standDamageMob = pwa.getIceDamageMob();
                     thrownBlockOrItem.standDamagePlayer = pwa.getIceDamagePlayer();
                     thrownBlockOrItem.shootFromRotation(LE, LE.getXRot(),
