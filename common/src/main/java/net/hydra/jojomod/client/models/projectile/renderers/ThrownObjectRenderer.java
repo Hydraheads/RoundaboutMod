@@ -49,13 +49,7 @@ public class ThrownObjectRenderer<T extends Entity>
         return this.fullBright ? 15 : super.getBlockLightLevel(entity, blockPos);
     }
 
-    @Override
-    public boolean shouldRender(T $$0, Frustum $$1, double $$2, double $$3, double $$4) {
-        if (($$0 instanceof ThrownObjectEntity te && te.getStyle() == ThrownObjectEntity.STAND_DAMAGE)){
-            return true;
-        }
-        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
-    }
+
 
     @Override
     public void render(T entity, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
