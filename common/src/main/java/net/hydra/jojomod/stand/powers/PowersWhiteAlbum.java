@@ -1219,7 +1219,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
                     bubble.setUser(self);
                     bubble.setOwner(self);
-                    bubble.shootThis(pl);
+                    bubble.shootThis2(pl,1.8F);
                     self.level().addFreshEntity(bubble);
                 }
             }
