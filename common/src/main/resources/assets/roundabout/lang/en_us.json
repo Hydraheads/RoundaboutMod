@@ -1459,7 +1459,7 @@
   "ability.roundabout.ice_wall.desc": "Makes a wall of ice appear from the ground. In front of you, it can block mobs and projectiles. If aimed beneath you, you can rise up along with it. Damaging the blocks with enough force breaks them. You can use this to your advantage to carve into the wall and jump on top of it.",
 
   "ability.roundabout.ice_wall_behind": "Ice Wall (Behind)",
-  "ability.roundabout.ice_wall_behind.desc": "Makes a wall of ice appear from the ground behind you. This replaces dash while skating, and is good from blocking those chasing you using with your trail.",
+  "ability.roundabout.ice_wall_behind.desc": "Makes a wall of ice appear from the ground behind you. This replaces dash while skating, and is good from blocking those chasing you using with your trail. With punching mode, the ice wall blocks can be launched as damaging projectiles.",
 
   "ability.roundabout.skate_activate": "Skate Activation",
   "ability.roundabout.skate_activate.desc": "Attaches skates to your armor, granting you speed and gradual acceleration. Skating uphill lowers your acceleration, while skating downhill increases it. You leave a trail of ice that others swiftly slide across to catch up to you, and you can easily use your other abilities to lace it with traps. Freezes water in a manner similar to frost walker.",

@@ -133,7 +133,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             }
 
 
-                AABB wallBox = this.getBoundingBox();
+                AABB wallBox = this.getBoundingBox().inflate(0.4);
 
                 for (Entity mob : level().getEntitiesOfClass(
                         Entity.class,

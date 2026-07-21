@@ -327,6 +327,17 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
     }
 
 
+    public void shootThis2(Player player,float speed){
+        Vec3 addToPosition = new Vec3(0,player.getBbHeight()*0.7F,0);
+        Direction direction = ((IGravityEntity)player).roundabout$getGravityDirection();
+        if (direction != Direction.DOWN){
+            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
+        }
+        this.setPos(player.getX()+addToPosition.x, player.getY()+addToPosition.y, player.getZ()+addToPosition.z);
+        this.shootFromRotationDeltaAgnostic(player, player.getXRot(), player.getYRot(), speed, 0f, 0);
+        this.setYRot(player.getYRot());
+        this.setXRot(player.getXRot());
+    }
     public void shootThis(Player player){
         Vec3 addToPosition = new Vec3(0,player.getBbHeight()*0.7F,0);
         Direction direction = ((IGravityEntity)player).roundabout$getGravityDirection();
