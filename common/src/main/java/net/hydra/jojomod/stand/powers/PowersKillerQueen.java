@@ -45,6 +45,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.entity.CreeperRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -2246,7 +2247,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void tickPower(){
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
-
+        
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
