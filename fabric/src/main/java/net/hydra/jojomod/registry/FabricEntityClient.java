@@ -72,6 +72,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.RATT, RattRenderer::new);
         EntityRendererRegistry.register(FabricEntities.REDD, ReddRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CHAIR_RATT, ChairRattRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PURPLE_HAZE, PurpleHazeRenderer:: new);
         EntityRendererRegistry.register(FabricEntities.SURVIVOR, SurvivorRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
@@ -84,6 +85,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CALIFORNIA_KING_BED, CaliforniaRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES, PlanetWavesRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_SPARTA, PlanetWavesSpartaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_COSMIC, PlanetWavesCosmicRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLACK_SABBATH, BlackSabbathRenderer::new);
@@ -223,6 +225,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER, PurpleHazeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);
@@ -236,6 +239,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_COSMIC_LAYER, PlanetWavesCosmicModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLACK_SABBATH_LAYER, BlackSabbathModel::getTexturedModelData);

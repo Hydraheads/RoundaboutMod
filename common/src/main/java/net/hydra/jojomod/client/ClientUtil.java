@@ -14,10 +14,12 @@ import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -261,11 +263,19 @@ public class ClientUtil {
         return frozenLevel;
     }
     public static int clientTicker;
+    public static int timeSkipTicker = -1;
     public static int getClientTicker(){
         return clientTicker;
     }
     public static void tickClientUtilStuff(){
         clientTicker++;
+
+        if (timeSkipTicker > -1){
+            timeSkipTicker++;
+            if (timeSkipTicker > 9){
+                timeSkipTicker = -1;
+            }
+        }
 
         if (heldSwap > 0){
             heldSwap--;
@@ -283,6 +293,23 @@ public class ClientUtil {
         if (ClientUtil.popSounds != null){
             ClientUtil.popSounds.popSounds();
             ClientUtil.popSounds = null;
+        }
+
+
+        Player pl = getPlayer();
+        if (pl != null){
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int cont = ipe.roundabout$getControlling();
+            if (cont > 0){
+                Entity zentity = pl.level().getEntity(cont);
+                if (zentity == null ||
+                        !zentity.level().dimension().equals(pl.level().dimension())
+                || zentity.isRemoved() || !zentity.isAlive()){
+                    ipe.roundabout$setIsControlling(0);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
         }
 
         if (roadRollerPickingRRE != null) {
@@ -454,7 +481,13 @@ public class ClientUtil {
         instance.execute(() -> {
             if (player != null) {
                 /**Mandom's time rewind flashes on people and makes their screen interpolate*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.FullBlip.value)) {
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
@@ -737,7 +770,36 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
                     }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value)) {
+                    int i = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    float xrot = (float) vargs[4];
+                    float yrot = (float) vargs[5];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value)) {
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.clear();
+                    }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                    float data = (float) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.range = data;
+
+
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
+                    int data = (int) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.lifetime = data;
+
+
                 }
+
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -907,14 +969,27 @@ public class ClientUtil {
         return false;
     }
 
+    public static float getGameTimeStart(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            return player.tickCount - GameTimeStart;
+        }
+        return 0;
+    }
+    public static float GameTimeStart = 0;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
-            if (PKC.hasStandActive(player)) {
-                return false;
+
+            if (PKC.isUsingEpitaph()){
+                return true;
             } else {
+                GameTimeStart = player.tickCount;
                 return false;
             }
+        }
+        if (player != null){
+            GameTimeStart = player.tickCount;
         }
         return false;
     }
@@ -1337,6 +1412,7 @@ public class ClientUtil {
                 if (SE != null) {
                     ((StandUser) SE).roundabout$setBlip(vec);
                 }
+                ((StandUser) target).roundabout$tryBlip();
             }
         }
     }
@@ -1656,6 +1732,8 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_RESPAWN){
             Minecraft.getInstance().player.respawn();
+        } else if (context == PacketDataIndex.TIME_SKIP){
+            timeSkipTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
@@ -2117,16 +2195,33 @@ public class ClientUtil {
     }
 
     public static boolean forceEntityRendering(Entity entity){
-        if (entity instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
-                return true;
+        if (entity != null){
+            if (entity instanceof Player pl) {
+                if (((IPlayerEntity) pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    return true;
+                }
             }
-        } if (entity instanceof LivingEntity LE){
-            StandUser su = ((StandUser)LE);
-            if (su.roundabout$hasStandOut()){
-                return true;
-            } else if (su.roundabout$getBoundTo() != null){
-                return true;
+            if (entity instanceof LivingEntity LE) {
+                StandUser su = ((StandUser) LE);
+                if (su.roundabout$hasStandOut()) {
+                    return true;
+                } else if (su.roundabout$getBoundTo() != null) {
+                    return true;
+                }
+            }
+            if (isUsingEpitaph()) {
+                Player pl = getPlayer();
+                if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc) {
+                    Entity root = entity.getRootVehicle();
+                    if (pkc.epitaph.containsKey(entity.getId()) ||
+                            (root != null && pkc.epitaph.containsKey(root.getId()))){
+                        return true;
+                    }
+                }
+                if (entity instanceof StandEntity){
+                    return true;
+                }
             }
         }
         return false;

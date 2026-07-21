@@ -222,6 +222,18 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
+    /** Heavens Door and bites the dust related*/
+    @Unique
+    public SavedSecond roundabout$birthSpawnSecond;
+    @Unique
+    public int roundabout$birthSpawnTime = 0;
+
+    @Unique
+    public void roundabout$setBirthSpawnInfo() {
+        /// probably would be better to be just the spawn location rather the entire data of the spawn
+        //this.roundabout$birthSpawnSecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
+        this.roundabout$birthSpawnTime = (int) (((Entity) (Object) this).level().getDayTime() % 24000.0f);
+    }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique

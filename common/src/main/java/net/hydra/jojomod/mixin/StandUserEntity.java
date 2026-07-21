@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -748,18 +749,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tryBlip() {
         if (ClientUtil.skipInterpolation) {
             if (ClientUtil.isPlayerOrCamera(this)) {
-            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-            double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
-            double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
-            double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
+                if (!(this.getPassengers() != null && !this.getPassengers().isEmpty()) &&
+                        (!this.isPassenger())) {
+                    ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                    double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
+                    double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
+                    double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
 
-            this.xo = lerpx;
-            this.yo = lerpy;
-            this.zo = lerpz;
-            this.xOld = lerpx;
-            this.yOld = lerpy;
-            this.zOld = lerpz;
-            this.setPos(lerpx, lerpy, lerpz);
+                    this.xo = lerpx;
+                    this.yo = lerpy;
+                    this.zo = lerpz;
+                    this.xOld = lerpx;
+                    this.yOld = lerpy;
+                    this.zOld = lerpz;
+                    this.setPos(lerpx, lerpy, lerpz);
+                }
             }
         } if (roundabout$blip && roundabout$blipVector !=null){
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
@@ -2323,7 +2327,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
         List<Entity> listE= new ArrayList<>();
         for (Entity entity : list) {
-            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin()) && !(entity.is(this.roundabout$getThrower()))) {
+            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin())
+                    &&
+                    !(entity instanceof TridentsIgnoreThis)
+                    && !(this.roundabout$getThrower() != null && entity.is(this.roundabout$getThrower()))) {
                 listE.add(entity);
             }
         }
@@ -3006,6 +3013,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (standDisc.getItem() instanceof StandDiscItem SE){
                     if (!(this.roundabout$Powers != null && this.roundabout$Powers.getClass() == SE.standPowers.getClass())) {
                         SE.generateStandPowers((LivingEntity)(Object)this);
+                        if (rdbt$this() instanceof Player pl){
+                            ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                        }
                     }
                     roundabout$itemParityClient = standDisc;
 
@@ -3027,6 +3037,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
                 if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
                     SD.generateStandPowers((LivingEntity) (Object) this);
+                    if (this.level().isClientSide && rdbt$this() instanceof Player pl){
+                        ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                    }
                     if (this.level().isClientSide()){
                         if (this.roundabout$Powers != null) {
                             CompoundTag $$4 = StandDisc.getTagElement("Memory");

@@ -24,6 +24,10 @@ public class ForgeSounds {
             register(ModSounds.SIGN_HIT, ModSounds.SIGN_HIT_ID);
     public static final RegistryObject<SoundEvent> BONE_CHOMP_EVENT =
             register(ModSounds.BONE_CHOMP, ModSounds.BONE_CHOMP_ID);
+    public static final RegistryObject<SoundEvent> SKIP_TIME_1 =
+            register(ModSounds.SKIP_TIME_1, ModSounds.SKIP_TIME_1_ID);
+    public static final RegistryObject<SoundEvent> SKIP_TIME_2 =
+            register(ModSounds.SKIP_TIME_2, ModSounds.SKIP_TIME_2_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
@@ -726,6 +730,10 @@ public class ForgeSounds {
             register(ModSounds.GREEN_DAY_STITCH, ModSounds.GREEN_DAY_STITCH_ID);
     public static final RegistryObject<SoundEvent> SUMMON_KING_CRIMSON =
             register(ModSounds.SUMMON_KING_CRIMSON, ModSounds.SUMMON_KING_CRIMSON_ID);
+    public static final RegistryObject<SoundEvent> EPITAPH_ACTIVATE =
+            register(ModSounds.EPITAPH_ACTIVATE, ModSounds.EPITAPH_ACTIVATE_ID);
+    public static final RegistryObject<SoundEvent> EPITAPH_FADE =
+            register(ModSounds.EPITAPH_FADE, ModSounds.EPITAPH_FADE_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_IMPALE =
             register(ModSounds.KING_CRIMSON_IMPALE, ModSounds.KING_CRIMSON_IMPALE_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH =

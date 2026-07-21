@@ -9,12 +9,11 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -253,6 +252,10 @@ public abstract class ZEntityRenderDispatcher {
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if (!((IEntityAndData)$$2).roundabout$getShadow()){
             ((IEntityAndData)$$2).roundabout$setShadow(true);
+            ci.cancel();
+            return;
+        }
+        if (ClientUtil.isUsingEpitaph()){
             ci.cancel();
             return;
         }

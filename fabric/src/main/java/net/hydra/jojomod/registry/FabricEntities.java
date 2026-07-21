@@ -382,6 +382,13 @@ public class FabricEntities {
                         EntityType.Builder.<FleshPileEntity>of(FleshPileEntity::new, MobCategory.MISC).
                                 sized(0.8f, 0.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":flesh_pile")
                 );
+        public static final EntityType<PurpleHazeEntity> PURPLE_HAZE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("purple_haze"),
+                    EntityType.Builder.of(PurpleHazeEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":purple_haze")
+            );
         public static final EntityType<GreenDayEntity> GREEN_DAY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -466,14 +473,20 @@ public class FabricEntities {
                         EntityType.Builder.of(PlanetWavesSpartaEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_sparta")
                 );
-
+        public static final EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic"),
+                        EntityType.Builder.of(PlanetWavesCosmicEntity::new, MobCategory.MISC).
+                               sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_cosmic")
+                );
 
     public static final EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("manhattan_transfer"),
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.60f).clientTrackingRange(20).build(Roundabout.MOD_ID+":manhattan_transfer")
+                            sized(0.70f, 0.60f).clientTrackingRange(32).build(Roundabout.MOD_ID+":manhattan_transfer")
             );
 
     public static final EntityType<PollinationTransferEntity> POLLINATION_TRANSFER =
@@ -481,7 +494,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"),
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).
-                            sized(0.70f, 0.60f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pollination_transfer")
+                            sized(0.70f, 0.60f).clientTrackingRange(32).build(Roundabout.MOD_ID+":pollination_transfer")
             );
 
     public static final EntityType<BlackSabbathEntity> BLACK_SABBATH =
@@ -694,7 +707,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "uv"),
                     EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).
-                            sized(1F, 1F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
+                            sized(1.4F, 1.4F).clientTrackingRange(15).build(Roundabout.MOD_ID+":uv")
             );
     public static final EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE =
             Registry.register(
@@ -745,7 +758,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "iron_ball"),
                     EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).
-                            sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
+                            sized(0.9f, 0.9f).clientTrackingRange(6).build(Roundabout.MOD_ID+":iron_ball")
             );
         public static final EntityType<ThrownObjectEntity> THROWN_OBJECT =
                 Registry.register(
@@ -979,6 +992,7 @@ public class FabricEntities {
                 ModEntities.REDD = REDD;
                 ModEntities.CHAIR_RATT = CHAIR_RATT;
                 ModEntities.FLESH_PILE = FLESH_PILE;
+                ModEntities.PURPLE_HAZE = PURPLE_HAZE;
                 ModEntities.SURVIVOR = SURVIVOR;
                 ModEntities.SOFT_AND_WET = SOFT_AND_WET;
                 ModEntities.SOFT_AND_WET_DROWNED = SOFT_AND_WET_DROWNED;
@@ -991,6 +1005,7 @@ public class FabricEntities {
                 ModEntities.CALIFORNIA_KING_BED = CALIFORNIA_KING_BED;
                 ModEntities.PLANET_WAVES = PLANET_WAVES;
                 ModEntities.PLANET_WAVES_SPARTA = PLANET_WAVES_SPARTA;
+                ModEntities.PLANET_WAVES_COSMIC = PLANET_WAVES_COSMIC;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
@@ -1153,6 +1168,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(RATT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(REDD, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CHAIR_RATT, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PURPLE_HAZE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SURVIVOR, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SOFT_AND_WET_DROWNED, StandEntity.createStandAttributes());
@@ -1172,6 +1188,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(CALIFORNIA_KING_BED, CaliforniaKingBedEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_SPARTA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PLANET_WAVES_COSMIC, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());

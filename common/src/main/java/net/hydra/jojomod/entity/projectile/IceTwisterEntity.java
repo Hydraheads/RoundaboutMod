@@ -58,7 +58,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 discard();
             }
 
-            AABB wallBox = this.getBoundingBox();
+            AABB wallBox = this.getBoundingBox().inflate(0.4);
 
             for (LivingEntity mob : level().getEntitiesOfClass(
                     LivingEntity.class,
@@ -72,7 +72,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                     }
                     if (MainUtil.canFreeze(mob)) {
                         if (mob instanceof Player pl){
-                            if (this.tickCount%2==0){
+                            if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33){
                                 if (HeatUtil.getHeat(pl)> -102) {
                                     HeatUtil.addHeat(mob, -1);
                                 }
@@ -93,9 +93,9 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 }
             }
 
-            if (tickCount > 6) {
+            if (tickCount > 5) {
                 int range = 0;
-                if (tickCount > 10) {
+                if (tickCount > 9) {
                     range = 1;
                 }
                 for (int y = 0; y < 3; y++) {

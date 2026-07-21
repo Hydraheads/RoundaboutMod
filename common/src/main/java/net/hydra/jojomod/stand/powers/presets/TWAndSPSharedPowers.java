@@ -142,6 +142,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
@@ -696,9 +697,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 this.forwardBarrage = false;
             }
 
-            if (freezeAttackInput > -1){
-                freezeAttackInput--;
-            }
 
             if (spacedJumpTime > -1){
                 spacedJumpTime--;
@@ -1343,6 +1341,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.getMaxChargeTSTime())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
         tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
 
@@ -1357,7 +1356,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public static final byte KICK_BARRAGE_NOISE = 106;

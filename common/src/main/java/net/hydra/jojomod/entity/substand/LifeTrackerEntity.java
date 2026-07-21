@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LifeTrackerEntity extends LivingEntity {
+public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThis {
     public LifeTrackerEntity(EntityType<LifeTrackerEntity> $$0, Level $$1) {
         super($$0, $$1);
     }

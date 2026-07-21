@@ -65,6 +65,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.RATT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.REDD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CHAIR_RAT.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PURPLE_HAZE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_KING.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.SOFT_AND_WET_DROWNED.get(), StandEntity.createStandAttributes().build());
@@ -75,6 +76,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
         event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
         event.put(ForgeEntities.PLANET_WAVES.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PLANET_WAVES_SPARTA.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PLANET_WAVES_COSMIC.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
@@ -367,6 +370,10 @@ public class ForgeEvents {
         ModItems.STAND_DISC_RATT = ForgeItems.STAND_DISC_RATT.get();
         ModItems.MAX_STAND_DISC_RATT = ForgeItems.MAX_STAND_DISC_RATT.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_RATT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_RATT.get());
+
+        ModItems.STAND_DISC_PURPLE_HAZE = ForgeItems.STAND_DISC_PURPLE_HAZE.get();
+        ModItems.MAX_STAND_DISC_PURPLE_HAZE = ForgeItems.MAX_STAND_DISC_PURPLE_HAZE.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_PURPLE_HAZE.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_PURPLE_HAZE.get());
 
         ModItems.STAND_DISC_OASIS = ForgeItems.STAND_DISC_OASIS.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_OASIS.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_OASIS.get());
@@ -679,6 +686,7 @@ public class ForgeEvents {
         ModEntities.REDD = ForgeEntities.REDD.get();
         ModEntities.CHAIR_RATT = ForgeEntities.CHAIR_RAT.get();
         ModEntities.FLESH_PILE = ForgeEntities.FLESH_PILE.get();
+        ModEntities.PURPLE_HAZE = ForgeEntities.PURPLE_HAZE.get();
         ModEntities.SOFT_AND_WET = ForgeEntities.SOFT_AND_WET.get();
         ModEntities.SOFT_AND_WET_KING = ForgeEntities.SOFT_AND_WET_KING.get();
         ModEntities.SOFT_AND_WET_DROWNED = ForgeEntities.SOFT_AND_WET_DROWNED.get();
@@ -690,6 +698,8 @@ public class ForgeEvents {
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
         ModEntities.PLANET_WAVES = ForgeEntities.PLANET_WAVES.get();
+        ModEntities.PLANET_WAVES_SPARTA = ForgeEntities.PLANET_WAVES_SPARTA.get();
+        ModEntities.PLANET_WAVES_COSMIC = ForgeEntities.PLANET_WAVES_COSMIC.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();

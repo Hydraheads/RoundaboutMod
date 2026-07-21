@@ -65,6 +65,11 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
 
+    public static Item STAND_DISC_PURPLE_HAZE = registerItem("purple_haze_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null)));
+    public static Item MAX_STAND_DISC_PURPLE_HAZE = registerItem("max_purple_haze_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null)));
+
     public static Item STAND_DISC_KING_CRIMSON = registerItem("king_crimson_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
@@ -650,6 +655,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_TUSK);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
+                        entries.accept(STAND_DISC_PURPLE_HAZE);
+                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(STAND_DISC_EMPEROR);
@@ -704,6 +711,9 @@ public class FabricItems {
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ModItems.MAX_STAND_DISC_PURPLE_HAZE = MAX_STAND_DISC_PURPLE_HAZE;
+        ModItems.STAND_DISC_PURPLE_HAZE = STAND_DISC_PURPLE_HAZE;
+        ((MaxStandDiscItem)MAX_STAND_DISC_PURPLE_HAZE).baseDisc = ((StandDiscItem)STAND_DISC_PURPLE_HAZE);
         ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
         ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
         ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;

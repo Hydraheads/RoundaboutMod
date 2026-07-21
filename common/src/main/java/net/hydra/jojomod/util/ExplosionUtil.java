@@ -67,32 +67,34 @@ public class ExplosionUtil {
 
     }
 
-	public static void explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
-		explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	public static int explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static void explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
-		explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	public static int explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static void explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
+	public static int explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static void explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
+	public static int explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static void explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
+	public static int explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
     }
 
-	public static void explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static int explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
+
+		int amountOfVictims = 0;
 
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
@@ -102,6 +104,8 @@ public class ExplosionUtil {
 			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
 				continue;
 			}
+
+			if (entity instanceof LivingEntity) { amountOfVictims++; }
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
@@ -128,12 +132,13 @@ public class ExplosionUtil {
 				}
 			}
 
-
 			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
 			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
 
 			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
 		}
+
+		return amountOfVictims;
 	}
 
 	public static void explodeBlocks(BlockPos location, Level level, Float range) {

@@ -240,12 +240,13 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
             ItemStack mainhand = player.getMainHandItem();
+            boolean inTSRange = ((TimeStop) player.level()).CanTimeStopEntity(player);
 
             if (standComp.roundabout$isPossessed()) {
                 ci.setReturnValue(false);
                 return;
             }
-            if (mainhand != null) {
+            if (mainhand != null && !inTSRange) {
                 if (mainhand.getItem() instanceof ExperienceBishopItem){
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
                 } else if (mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia) {
@@ -268,7 +269,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (powers instanceof PowersOasis PO) {
-                if (PO.isBrawling()) {
+                if (PO.isBrawling() && PO.hasStandActive(PO.getSelf())) {
                     ci.setReturnValue(false);
                     return;
                 }

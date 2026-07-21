@@ -70,6 +70,7 @@ import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -189,14 +190,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitch(){
-        clearEverything();
         super.onStandSwitch();
+        clearEverything();
     }
 
     @Override
     public void onPowerSwitch(){
-        clearEverything();
         super.onPowerSwitch();
+        clearEverything();
     }
 
     @Override
@@ -3098,7 +3099,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public void standPunch(){
 
-        if (this.self instanceof Player){
+        if (this.self instanceof Player pl){
             if (isPacketPlayer()){
                 this.attackTimeDuring = -10;
 
@@ -3118,6 +3119,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 C2SPacketUtil.standPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
                             }
                         }
+                    }
+                }
+                if (this.activePowerPhase >= this.activePowerPhaseMax){
+                    if (self.getMainHandItem().getItem() instanceof TieredItem
+                    ){
+                        pl.resetAttackStrengthTicker();
                     }
                 }
             }
@@ -3506,6 +3513,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
@@ -3516,7 +3524,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
             this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public boolean isInRain() {

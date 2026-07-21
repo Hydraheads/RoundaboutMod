@@ -30,6 +30,7 @@ import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
@@ -112,6 +113,15 @@ public abstract class HudRendering implements IHudAccess {
                 RenderSystem.enableBlend();
                 roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
                         0.25F,1F,1F,1F);
+            }
+
+            if (ClientUtil.timeSkipTicker > -1){
+                if (ClientUtil.canSeeStands(this.minecraft.player)) {
+                    RenderSystem.enableBlend();
+                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                                    "textures/misc/king_crimson/frame_" + ClientUtil.timeSkipTicker + ".png"),
+                            ConfigManager.getClientConfig().generalSettings.timeSkipOpacity, 1F, 1F, 1F);
+                }
             }
 
 
@@ -202,8 +212,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
-
-                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 1);
+                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {

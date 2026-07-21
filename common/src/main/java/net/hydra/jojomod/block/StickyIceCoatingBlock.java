@@ -79,7 +79,7 @@ public class StickyIceCoatingBlock
                                 $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.8F, (double) 0.4F));
                             }
                         } else {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.85F, (double) 0.8F, (double) 0.85F));
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
                         }
                     }
                 }

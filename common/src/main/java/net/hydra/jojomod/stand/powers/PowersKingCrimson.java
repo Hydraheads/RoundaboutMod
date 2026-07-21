@@ -1,10 +1,15 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -13,33 +18,50 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class PowersKingCrimson extends NewPunchingStand {
+public class PowersKingCrimson extends BlockGrabPreset {
 
     public PowersKingCrimson(LivingEntity self) {
         super(self);
     }
+    public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
+    public final Map<Integer, TimeSkipSnapshot> skip_dump = new HashMap<>();
 
     @Override
     /**Override to add disable config*/
@@ -64,13 +86,583 @@ public class PowersKingCrimson extends NewPunchingStand {
             return ModSounds.SUMMON_KING_CRIMSON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
+        } else if (soundChoice == EPITAPH_NOISE) {
+            return ModSounds.EPITAPH_ACTIVATE_EVENT;
+        } else if (soundChoice == EPITAPH_FADE_NOISE) {
+            return ModSounds.EPITAPH_FADE_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
+    public static final byte EPITAPH_NOISE = 106;
+    public static final byte EPITAPH_FADE_NOISE = 107;
+    public static final byte TIME_SKIP_1 = 108;
+    public static final byte TIME_SKIP_2 = 109;
     @Override
     public SoundEvent getImpaleSound(){
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
+    }
+
+    public boolean isUsingEpitaph(){
+        return !epitaph.isEmpty();
+    }
+
+
+    public static Vec3 getPredictedDirection() {
+        return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
+    }
+    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+        //Mobs and Players that are still still need to move when idle
+        Level level = liv.level();
+
+        Vec3 predicted = liv.position();
+        AABB box = liv.getBoundingBox();
+
+        float speed = (float) (Math.random()*0.9F);
+        if (liv instanceof WanderingTrader){
+            speed = (float) (Math.random()*0.3F);
+        }
+        float sped = Math.max(0.1F,liv.getSpeed());
+        Vec3 basevelocity = getPredictedDirection()
+                .normalize()
+                .scale(sped * speed);
+        if (basevelocity.y > 0)
+            basevelocity = basevelocity.multiply(1, 0, 1);
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 velocity = basevelocity;
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!liv.isInWater() && !MainUtil.inWater(level.getBlockState(ft))) {
+                velocity = velocity.add(0, -1, 0);
+            } else {
+                velocity.multiply(1,0,1);
+            }
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    liv,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+            Vec3 nextPos = predicted.add(collided);
+            BlockPos feet = BlockPos.containing(nextPos);
+            BlockPos below = feet.below();
+            BlockState ground = level.getBlockState(below);
+            BlockState ground2 = level.getBlockState(feet);
+
+            if (!ground.blocksMotion()) {
+                // Don't move there
+                break;
+            }
+            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+                return predicted;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+
+    public void releaseTimeSkip(){
+
+    }
+
+    public Vec3 predictPlayer(Player player, int ticks) {
+        Level level = player.level();
+
+        Vec3 predicted = player.position();
+        AABB box = player.getBoundingBox();
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+        if (player.position().distanceTo(oldPos) < 0.1 && player.getId() != self.getId()){
+            return predictIdle(player,ticks);
+        }
+        Vec3 baseVelocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
+        if (baseVelocity.y > 0)
+            baseVelocity = baseVelocity.multiply(1, 0, 1);
+
+        for (int i = 0; i < ticks; i++) {
+
+            // ----- Estimate movement direction -----
+
+
+
+            Vec3 velocity = baseVelocity;
+
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))) {
+                velocity = velocity.add(0, -1, 0);
+            }  else {
+                velocity.multiply(1,0,1);
+            }
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    player,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // ----- Try stepping up -----
+            boolean hitWall =
+                    collided.x != velocity.x ||
+                            collided.z != velocity.z;
+
+            if (hitWall) {
+                i+=3;
+                double stepHeight = 1.0;
+
+                // Move upward first
+                Vec3 up = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, stepHeight, 0),
+                        box,
+                        level,
+                        List.of()
+                );
+
+                AABB steppedBox = box.move(up);
+
+                // Move horizontally while elevated
+                Vec3 forward = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(velocity.x, 0, velocity.z),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                steppedBox = steppedBox.move(forward);
+
+                // Move back down
+                Vec3 down = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, -stepHeight, 0),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                Vec3 steppedMove = up.add(forward).add(down);
+
+                // Prefer whichever gives more horizontal travel
+                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                    collided = steppedMove;
+                }
+                if (collided.y <= 0){
+                    hitWall2 = true;
+                }
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker) {
+            // 2. Check for dangerous blocks inside target box
+            boolean cancel = false;
+            double width = player.getBbWidth();
+            double height = player.getBbHeight();
+            AABB targetBox = new AABB(
+                    predicted.x - width / 2.0, predicted.y, predicted.z - width / 2.0,
+                    predicted.x + width / 2.0, predicted.y + height, predicted.z + width / 2.0
+            );
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)player).roundabout$getGravityDirection());
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    cancel = true;
+                    break;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    cancel = true;
+                    break;
+                }
+            }
+            if (cancel){
+                return player.position();
+            }
+        }
+
+        return predicted;
+    }
+    public static Vec3 predictPosition(Mob mob, int ticks) {
+        Path path = mob.getNavigation().getPath();
+
+        if (path == null) {
+            return predictIdle(mob,ticks);
+        }
+
+        double remaining = mob.getSpeed() * ticks;
+        Vec3 current = mob.position();
+
+        int index = path.getNextNodeIndex();
+
+        while (index < path.getNodeCount()) {
+            Node node = path.getNode(index);
+
+            Vec3 next = new Vec3(
+                    node.x + 0.5,
+                    node.y,
+                    node.z + 0.5
+            );
+
+            double segment = current.distanceTo(next);
+
+            if (remaining <= segment) {
+                return current.lerp(next, remaining / segment);
+            }
+
+            remaining -= segment;
+            current = next;
+            index++;
+        }
+
+        if (current.distanceTo(mob.position()) < 0.01 && !MainUtil.isBossMob(mob)
+        && !(mob instanceof FlyingMob)){
+            return predictIdle(mob,ticks);
+        }
+
+        return current;
+    }
+
+    public void debugPlayer(){
+        if (self instanceof Player pl) {
+            int id = self.getId();
+            float xRot = self.getXRot();
+            float yRot = self.getYRot();
+            Vec3 predicted = self.position();
+
+            hitWall2 = false;
+            predicted = predictPlayer(pl, 40);
+            if (hitWall2){
+                yRot = Mth.wrapDegrees(yRot + 180.0F);
+            }
+            epitaph.put(self.getId(), new TimeSkipSnapshot(
+                    id,
+                    predicted,
+                    xRot,
+                    yRot
+            ));
+            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+        }
+    }
+
+    //This variable makes a player turn around when they hit a wall to sell a believable reaction
+    public boolean hitWall2 = false;
+
+    public void basicSkip(boolean skipSelf){
+        AABB area = self.getBoundingBox().inflate(getSkipRange());
+
+        for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            if (!skipSelf && living.getId() == self.getId()){
+                continue;
+            } else if (living instanceof StandEntity){
+                continue;
+            }
+            StandEntity stand = getStandEntity(self);
+            int id = living.getId();
+            if (!(stand != null && stand.getId() == id)){
+                if (!(living instanceof StandEntity) &&
+                        !(living instanceof Player pk && pk.isCreative()
+                                && pk.getId() != self.getId())
+                ) {
+                    Vec3 predicted = living.position();
+                    float xRot = living.getXRot();
+                    float yRot = living.getYRot();
+                    if (!living.isSleeping()){
+                        if (living instanceof Mob mob) {
+                            if (!mob.isLeashed()) {
+                                predicted = predictPosition(mob, 100);
+                            }
+                        } else if (living instanceof Player player) {
+                            // Fallback for players, armor stands, etc.
+                            hitWall2 = false;
+                            predicted = predictPlayer(player, 40);
+                            if (player.getId() == self.getId()) {
+                                if (predicted.distanceTo(self.getPosition(1)) < 0.1){
+                                    continue;
+                                }
+                            }
+                            if (hitWall2 && player.getId() != self.getId()) {
+                                yRot = Mth.wrapDegrees(yRot + 180.0F);
+                            }
+                        }
+                    }
+
+
+                    skip_dump.put(living.getId(), new TimeSkipSnapshot(
+                            id,
+                            predicted,
+                            xRot,
+                            yRot
+                    ));
+                }
+            }
+
+        }
+
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        scatterPackets();
+        if (skip_dump.isEmpty()){
+            return;
+        }
+        for (TimeSkipSnapshot snapshot : skip_dump.values()) {
+            skipSingle(snapshot);
+        }
+        skip_dump.clear();
+
+    }
+
+    public void skipSingle(TimeSkipSnapshot snapshot){
+
+        if (snapshot.getEntityId() == -1) {
+            return;
+        }
+        Level level = self.level();
+
+        Entity entity = level.getEntity(snapshot.getEntityId());
+
+        if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (entity instanceof StandEntity) {
+            return;
+        }
+
+        double width = entity.getBbWidth();
+        double height = entity.getBbHeight();
+
+        // Construct bounding box at the target position
+        AABB targetBox = new AABB(
+                snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
+                snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
+        );
+        targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
+
+        if (!level.noCollision(entity, targetBox)) {
+            return;
+        }
+
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker && entity instanceof Player) {
+            // 2. Check for dangerous blocks inside target box
+            boolean cancel = false;
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    cancel = true;
+                    break;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    cancel = true;
+                    break;
+                }
+            }
+            if (cancel){
+                return;
+            }
+        }
+
+        packetNearby(new Vector3f((float) snapshot.position.x,
+                        (float) snapshot.position.y,
+                        (float) snapshot.position.z),
+                entity.getId());
+
+        entity.teleportTo(
+                snapshot.position.x,
+                snapshot.position.y,
+                snapshot.position.z
+        );
+        entity.setYRot(snapshot.yRot);
+        entity.setYHeadRot(snapshot.yRot);
+        entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
+                snapshot.position.y,
+                snapshot.position.z,
+                Set.of(
+                        RelativeMovement.X,
+                        RelativeMovement.Y,
+                        RelativeMovement.Z),
+                snapshot.yRot,entity.getXRot());
+        if (entity instanceof Mob mb){
+            mb.getNavigation().stop();
+            ((IMob)mb).roundabout$setConfusionTicks(7);
+        }
+    }
+
+    public void timeSkip(boolean skipSelf) {
+        if (!(self instanceof ServerPlayer pl)) {
+            return;
+        }
+
+        if (epitaph.isEmpty()) {
+            basicSkip(skipSelf);
+            return;
+        }
+
+        for (TimeSkipSnapshot snapshot : epitaph.values()) {
+            if (!skipSelf && snapshot.getEntityId() == self.getId()){
+                continue;
+            }
+            skipSingle(snapshot);
+        }
+
+        S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
+        scatterPackets();
+        epitaph.clear();
+        S2CPacketUtil.clearEpitaph(pl);
+    }
+
+    public void scatterPackets(){
+        packetNearby2();
+    }
+    public int getSkipRange(){
+        return 50;
+    }
+    public final void packetNearby2() {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 75)) {
+                    S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.TIME_SKIP);
+                }
+            }
+        }
+    }
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
+    }
+    public void epitaph() {
+        if (self instanceof ServerPlayer pl) {
+            if (epitaph.isEmpty()) {
+                //debugPlayer();
+                AABB area = self.getBoundingBox().inflate(getSkipRange());
+
+                for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+                    StandEntity stand = getStandEntity(self);
+                    int id = living.getId();
+                    if (!(stand != null && stand.getId() == id)){
+                        if (!(living instanceof StandEntity) &&
+                                !(living instanceof Player pk && pk.isCreative()
+                                        && pk.getId() != self.getId())
+                        ) {
+                            Vec3 predicted = living.position();
+                            float xRot = living.getXRot();
+                            float yRot = living.getYRot();
+                            if (!living.isSleeping()){
+                                if (living instanceof Mob mob) {
+                                    if (!mob.isLeashed()) {
+                                        predicted = predictPosition(mob, 100);
+                                    }
+                                } else if (living instanceof Player player) {
+                                    // Fallback for players, armor stands, etc.
+                                    hitWall2 = false;
+                                    predicted = predictPlayer(player, 40);
+                                    if (hitWall2) {
+                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                    }
+                                }
+                            }
+
+
+                            epitaph.put(living.getId(), new TimeSkipSnapshot(
+                                    id,
+                                    predicted,
+                                    xRot,
+                                    yRot
+                            ));
+                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+                        }
+                    }
+
+                }
+                epitaph.put(-1, new TimeSkipSnapshot(
+                        -1,
+                        Vec3.ZERO,
+                        0,
+                        0
+                ));
+                S2CPacketUtil.addEpitaph(pl, -1,  Vec3.ZERO, 0, 0);
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
+            } else {
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+                epitaph.clear();
+                S2CPacketUtil.clearEpitaph(pl);
+            }
+
+            //Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
+        }
     }
 
     @Override
@@ -126,17 +718,37 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.beta");
         }if (skinId == KingCrimsonEntity.CONCEPT){
             return Component.translatable(  "skins.roundabout.king_crimson.concept");
-        }if (skinId == KingCrimsonEntity.RED){
-            return Component.translatable(  "skins.roundabout.king_crimson.red");
+        }if (skinId == KingCrimsonEntity.PART_5_SKIN){
+            return Component.translatable(  "skins.roundabout.king_crimson.base");
         }if (skinId == KingCrimsonEntity.BLUE){
             return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }if (skinId == KingCrimsonEntity.VISION){
             return Component.translatable(  "skins.roundabout.king_crimson.vision");
         }
-        return Component.translatable(  "skins.roundabout.king_crimson.base");
+        return Component.translatable(  "skins.roundabout.king_crimson.red");
+    }
+    @Override
+    public boolean cancelSprintJump(){
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK
+                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+            return true;
+        }
+        return super.cancelSprintJump();
+    }
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
+            return true;
+        }
+        return super.canInterruptPower(sauce,interrupter);
     }
 
-    @Override
+        @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(KingCrimsonEntity.RED);
@@ -175,19 +787,75 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_NORMAL-> {
+                epitaphClient();
+            }
             case SKILL_1_CROUCH -> {
                 impaleClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                timeSkipClient();
+            }
+            case SKILL_2_GUARD -> {
+                timeSkipSelfClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
         }
     }
+
+    @Override
+    public boolean isAppropriateToGrab(){
+        if (!hasBlock()) {
+            return true;
+        }
+        return false;
+    }
+    public void timeSkipSelfClient() {
+        if (hasBlock()){
+            return;
+        }
+        if (isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.EXTRA);
+        }
+    }
+    public void timeSkipClient() {
+        if (hasBlock()){
+            itemGrabClient();
+            return;
+        }
+
+        boolean isMoving = (Math.abs(self.getDeltaMovement().x) > 0.01 ||
+                Math.abs(self.getDeltaMovement().z) > 0.01 ||
+                !self.onGround());
+        if (isMoving && !isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.EXTRA);
+        } else {
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
+    }
+
+
+    public void epitaphClient(){
+
+        if (hasBlock())
+            return;
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
+
     public void tryToDashClient(){
+        if (hasBlock())
+            return;
         if (!doVault()) {
             dash();
         }
     }
+
 
     public int getImpaleLevel(){
         return 1;
@@ -196,6 +864,9 @@ public class PowersKingCrimson extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
+
+        if (hasBlock())
+            return;
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -216,10 +887,37 @@ public class PowersKingCrimson extends NewPunchingStand {
         } else {
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
         }
+
+        if (!isHoldingSneak()){
+            if (hasBlock()){
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+
+            } else if (isUsingEpitaph()){
+                if (isGuarding()){
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2_SNEAK, 0);
+                } else {
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2_SNEAK, 0);
+                }
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2_SNEAK, 0);
+            }
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+        }
+
         if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            if (!isHoldingSneak()){
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            }
+        }
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
+        } else {
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
         }
     }
 
@@ -384,6 +1082,14 @@ public class PowersKingCrimson extends NewPunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
+        } else if (move == PowerIndex.POWER_1){
+            this.epitaph();
+        } else if (move == PowerIndex.POWER_2){
+            this.timeSkip(false);
+            return true;
+        } else if (move == PowerIndex.EXTRA){
+            this.timeSkip(true);
+            return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
@@ -542,6 +1248,19 @@ public class PowersKingCrimson extends NewPunchingStand {
             return 1;
         }
         return 1.2F;
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (hasBlock()){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.TWTHROW;
     }
 
     public float getFinalAttackKnockback(){

@@ -10,6 +10,7 @@ public class ServerToClientPackets {
     public static class S2CPackets implements IMessageEvent {
         public enum MESSAGES {
             Rewind("rewind"),
+            FullBlip("full_blip"),
             Interpolate("unskip_interpolation"),
             Chrono("chrono_vision_player"),
             MANDOM_PENALTY("mandom_penalty"),
@@ -53,7 +54,11 @@ public class ServerToClientPackets {
             GunRecoil("gun_recoil"),
             SyncPossessor("sync_possessor"),
             ShatterIce("shatter_ice"),
-            SyncAllies("sync_allies");
+            SyncAllies("sync_allies"),
+            SyncMoldRange("sync_mold_range"),
+            SyncMoldDuration("sync_mold_duration"),
+            AddEpitaph("add_epitaph"),
+            ClearEpitaph("clear_epitaph");
 
             public final String value;
 

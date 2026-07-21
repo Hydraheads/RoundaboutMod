@@ -336,6 +336,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "flesh_pile").toString())
             );
+    public static final RegistryObject<EntityType<PurpleHazeEntity>> PURPLE_HAZE =
+            ENTITY_TYPES.register("purple_haze", () ->
+                    EntityType.Builder.of(PurpleHazeEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "purple_haze").toString())
+            );
     public static final RegistryObject<EntityType<SoftAndWetEntity>> SOFT_AND_WET =
             ENTITY_TYPES.register("soft_and_wet", () ->
                     EntityType.Builder.of(SoftAndWetEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -408,7 +414,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta").toString())
             );
-
+    public static final RegistryObject<EntityType<PlanetWavesCosmicEntity>> PLANET_WAVES_COSMIC =
+            ENTITY_TYPES.register("planet_waves_cosmic", () ->
+                    EntityType.Builder.of(PlanetWavesCosmicEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic").toString())
+            );
     public static final RegistryObject<EntityType<PWMeteorEntity>> PW_METEOR =
             ENTITY_TYPES.register("pw_meteor", () ->
                     EntityType.Builder.<PWMeteorEntity>of(PWMeteorEntity::new, MobCategory.MISC).sized(0.9F, 0.9F).
@@ -425,14 +436,14 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
             ENTITY_TYPES.register("manhattan_transfer", () ->
                     EntityType.Builder.of(ManhattanTransferEntity::new, MobCategory.MISC).sized(0.70F, 0.60f).
-                            clientTrackingRange(20).
+                            clientTrackingRange(32).
                             build(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer").toString())
             );
 
     public static final RegistryObject<EntityType<PollinationTransferEntity>> POLLINATION_TRANSFER =
             ENTITY_TYPES.register("pollination_transfer", () ->
                     EntityType.Builder.of(PollinationTransferEntity::new, MobCategory.MISC).sized(0.70F, 0.60f).
-                            clientTrackingRange(14).
+                            clientTrackingRange(32).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer").toString())
             );
     public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
@@ -618,7 +629,8 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<UltravioletProjectile>> ULTRAVIOLET_PROJECTILE =
             ENTITY_TYPES.register("uv", () ->
-                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC).sized(1F, 1F).
+                    EntityType.Builder.<UltravioletProjectile>of(UltravioletProjectile::new, MobCategory.MISC)
+                            .sized(1.4F, 1.4F).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "uv").toString())
             );
@@ -661,7 +673,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<IronBallEntity>> IRON_BALL =
             ENTITY_TYPES.register("iron_ball", () ->
-                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                    EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).
                             clientTrackingRange(6).
                             build(new ResourceLocation(Roundabout.MOD_ID, "iron_ball").toString())
             );

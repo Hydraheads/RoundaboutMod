@@ -249,6 +249,10 @@ public class BlockGrabPreset extends NewPunchingStand {
             }
         }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+
+            if (freezeAttackInput > -1){
+                freezeAttackInput--;
+            }
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
@@ -346,6 +350,11 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
+
+                    if (this.self.level().isClientSide() && self instanceof Player pl){
+                        pl.resetAttackStrengthTicker();
+                    }
+
                     if (!this.getSelf().level().isClientSide && hardBlocker < 1) {
                         hardBlocker = 3;
 

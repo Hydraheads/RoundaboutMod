@@ -421,6 +421,8 @@ public class StandIcons {
                 "textures/gui/icons/planet_waves/forced_disintegration.png");
     public static final ResourceLocation PLANET_WAVES_GRAB= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/grab.png");
+    public static final ResourceLocation PLANET_WAVES_COSMIC_ICON= new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/planet_waves/cosmic_icon.png");
 
     public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/impale.png");
@@ -428,6 +430,16 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/stand_ledge_grab.png");
+    public static final ResourceLocation TIME_ERASE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_erase.png");
+    public static final ResourceLocation TIME_SKIP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip.png");
+    public static final ResourceLocation TIME_SKIP_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_2.png");
+    public static final ResourceLocation TIME_SKIP_3 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_skip_3.png");
+    public static final ResourceLocation KING_CRIMSON_ITEM_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/grab_item.png");
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
@@ -684,6 +696,12 @@ public class StandIcons {
     public static final ResourceLocation RATT_BLOB = Roundabout.location("textures/item/flesh_chunk.png");
     public static final ResourceLocation RATT_BUCKET = Roundabout.location("textures/item/flesh_bucket.png");
     public static final ResourceLocation RATT_LEAP = Roundabout.location("textures/gui/icons/ratt/ratt_leap.png");
+
+    public static final ResourceLocation PODS_STOCKS = Roundabout.location("textures/gui/icons/purple_haze/pods_stock.png");
+    public static final ResourceLocation STAND_LEAP_PURPLE_HAZE = Roundabout.location("textures/gui/icons/purple_haze/stand_leap.png");
+    public static final ResourceLocation STAND_LEAP_REBOUND_PURPLE_HAZE = Roundabout.location("textures/gui/icons/purple_haze/stand_leap_rebound.png");
+    public static final ResourceLocation PURPLE_HAZE_LEDGE_GRAB = Roundabout.location("textures/gui/icons/purple_haze/stand_ledge_grab.png");
+    public static final ResourceLocation PURPLE_HAZE_FALL_CATCH = Roundabout.location("textures/gui/icons/purple_haze/fall_brace.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

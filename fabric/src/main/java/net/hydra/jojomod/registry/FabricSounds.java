@@ -20,6 +20,8 @@ public class FabricSounds {
         addSound(ModSounds.STAND_ARROW_USE_ID, ModSounds.STAND_ARROW_USE_EVENT);
         addSound(ModSounds.SIGN_HIT_ID, ModSounds.SIGN_HIT_EVENT);
         addSound(ModSounds.BONE_CHOMP_ID, ModSounds.BONE_CHOMP_EVENT);
+        addSound(ModSounds.SKIP_TIME_1_ID, ModSounds.SKIP_TIME_1_EVENT);
+        addSound(ModSounds.SKIP_TIME_2_ID, ModSounds.SKIP_TIME_2_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);
@@ -522,6 +524,8 @@ public class FabricSounds {
         addSound(ModSounds.GREEN_DAY_MOLD_SPREAD_ID,ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT);
         addSound(ModSounds.GREEN_DAY_STITCH_ID,ModSounds.GREEN_DAY_STITCH_EVENT);
         addSound(ModSounds.SUMMON_KING_CRIMSON_ID,ModSounds.SUMMON_KING_CRIMSON_EVENT);
+        addSound(ModSounds.EPITAPH_ACTIVATE_ID,ModSounds.EPITAPH_ACTIVATE_EVENT);
+        addSound(ModSounds.EPITAPH_FADE_ID,ModSounds.EPITAPH_FADE_EVENT);
         addSound(ModSounds.KING_CRIMSON_IMPALE_ID,ModSounds.KING_CRIMSON_IMPALE_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_ID,ModSounds.KING_CRIMSON_PUNCH_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_2_ID,ModSounds.KING_CRIMSON_PUNCH_2_EVENT);

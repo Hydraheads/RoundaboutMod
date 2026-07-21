@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -57,6 +59,8 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class SeperatedArmEntity extends StandEntity {
 
@@ -68,8 +72,10 @@ public class SeperatedArmEntity extends StandEntity {
     public Vec3 LaunchAngle = null;
     public int SpinTicks = 0;
     public BlockPos MiningPos = new BlockPos(0,-60,0);
+    public String userUUID;
 
     public void setSpinTicks(int val){SpinTicks = val;};
+
 
 
     public static final byte
@@ -206,54 +212,50 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void tickeffects() {
-        if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage()-1){
-            Can_activate = false;
-            Can_activate_special = false;
-        }
-        this.setFadeOut((byte)1);
-        boolean client = this.level().isClientSide();
-        LivingEntity user = this.getUser();
-        if (!client) {
-           if(user != null) {
-               if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                   if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                       spawnAtLocation(this.getMainHandItem());
-                       this.discard();
-                   }
-               }
-                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
-                    if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
-                        spawnAtLocation(this.getMainHandItem());
-                        this.discard();
+        if (User != null) {
+            if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage() - 1) {
+                Can_activate = false;
+                Can_activate_special = false;
+            }
+            this.setFadeOut((byte) 1);
+            boolean client = this.level().isClientSide();
+            LivingEntity user = this.getUser();
+            if (tickCount < 10) {
+                userUUID = user.getStringUUID();
+                Roundabout.LOGGER.info(userUUID);
+            }
+            if (!client) {
+
+                if (user == null) {
+                    removearm();
+                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                    removearm();
+                } else if (user != null) {
+
+                    if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            removearm();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                            removearm();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            removearm();
+                        }
                     }
                 }
-                else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
-                    if (!( (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
-                        spawnAtLocation(this.getMainHandItem());
-                        this.discard();
-                    }
-                }
-            }
-            if(user == null){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }
-            else{
-                if(!onGround()){
-                    flyingTicks +=1;
-                }else{
+                if (!onGround()) {
+                    flyingTicks += 1;
+                } else {
                     flyingTicks = 0;
                 }
-                if( Can_activate_special || (Can_activate )) {
+                if (Can_activate_special || (Can_activate)) {
                     ItemStack item = (this.getMainHandItem());
-                    if ((MainUtil.cheapDistanceTo(this.getX(),this.getY(),this.getZ(),MiningPos.getX(),MiningPos.getY(),MiningPos.getZ()) < 2)) {
+                    if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
 
                         BlockState block = (this.level().getBlockState(MiningPos));
-
-
 
 
                         boolean RightTier = false;
@@ -280,37 +282,35 @@ public class SeperatedArmEntity extends StandEntity {
                         ServerLevel level = (ServerLevel) this.level();
 
                         BlockPos targetpos = MiningPos;
-                        
+
                         if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
                             if (pickaxeable) {
-                                level.destroyBlock(targetpos, true,this);
+                                level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
 
-                                if(Can_activate) {
+                                if (Can_activate) {
                                     this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
                                 }
                                 Can_activate = false;
                             }
 
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                        } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
                             if (shovelable) {
                                 level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
 
-                                if(Can_activate) {
+                                if (Can_activate) {
                                     this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
                                 }
                                 Can_activate = false;
                             }
 
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                        } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
                             if (axeable) {
-                                level.destroyBlock(targetpos, true,this);
+                                level.destroyBlock(targetpos, true, this);
 
                                 this.setDeltaMovement(0, 0, 0);
-                                if(Can_activate) {
+                                if (Can_activate) {
                                     this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
                                 }
                                 Can_activate = false;
@@ -324,43 +324,54 @@ public class SeperatedArmEntity extends StandEntity {
                 attractMobs();
                 pickUpItems();
                 doSpin();
-            }
 
-            if(FireworkLaunchTicks > 0){
-                FireworkLaunchTicks --;
-                this.setDeltaMovement(LaunchAngle);
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
-                        this.getX(),
-                        this.getY() + 0.15 ,
-                        this.getZ(),
-                        1,0,0,0,0);
+                if (FireworkLaunchTicks > 0) {
+                    FireworkLaunchTicks--;
+                    this.setDeltaMovement(LaunchAngle);
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
 
-            }
+                }
 
-            for(int i = 0; i < 2; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
-                double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
-                        this.getX()+randX,
-                        this.getY()+randY + 0.15 ,
-                        this.getZ() + randZ,
-                        1,0,0,0,0);
+                for (int i = 0; i < 2; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                            this.getX() + randX,
+                            this.getY() + randY + 0.15,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                }
+                if (Can_activate && !onGround()) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
+                }
             }
-            if(Can_activate && !onGround()) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                        this.getX(),
-                        this.getY() + 0.15,
-                        this.getZ(),
-                        1, 0, 0, 0, 0);
-            }
-
         }
 
-        super.tick();
+            super.tick();
+
     }
 
     public boolean hasUsedItem = false;
+
+    public void removearm(){
+        if((level().getPlayerByUUID(UUID.fromString(userUUID)) != null)
+                && (level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
+        &&(level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().getFreeSlot() > -1)){
+                level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().add(getMainHandItem());
+        }else{
+            spawnAtLocation(this.getMainHandItem());
+        }
+        discard();
+    }
 
     public void doSpin(){
         if(SpinTicks > 0){

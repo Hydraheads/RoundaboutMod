@@ -334,7 +334,7 @@ public class RoundaboutGeneralProjectile extends AbstractHurtingProjectile imple
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition,direction);
         }
         this.setPos(player.getX()+addToPosition.x, player.getY()+addToPosition.y, player.getZ()+addToPosition.z);
-        this.shootFromRotationDeltaAgnostic(player, player.getXRot(), player.getYRot(), 1.0F, 0f, 0);
+        this.shootFromRotationDeltaAgnostic(player, player.getXRot(), player.getYRot(), 1.4F, 0f, 0);
         this.setYRot(player.getYRot());
         this.setXRot(player.getXRot());
     }
