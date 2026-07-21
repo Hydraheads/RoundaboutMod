@@ -181,5 +181,13 @@ public class GratefulDeadModel<T extends GratefulDeadEntity> extends StandModel<
         this.animate(pEntity.openHands, GratefulDeadAnimations.OPEN_HANDS, pAgeInTicks, 1F);
         this.animate(pEntity.closeHands, GratefulDeadAnimations.CLOSE_HANDS, pAgeInTicks, 1F);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
+        this.animate(pEntity.walkN, GratefulDeadAnimations.WALK_N, pAgeInTicks, 1F);
+        this.animate(pEntity.walkS, GratefulDeadAnimations.WALK_S, pAgeInTicks, 1F);
+        this.animate(pEntity.walkE, GratefulDeadAnimations.WALK_E, pAgeInTicks, 1F);
+        this.animate(pEntity.walkW, GratefulDeadAnimations.WALK_W, pAgeInTicks, 1F);
+        this.animate(pEntity.walkNE, GratefulDeadAnimations.WALK_NE, pAgeInTicks, 1F);
+        this.animate(pEntity.walkNW, GratefulDeadAnimations.WALK_NW, pAgeInTicks, 1F);
+        this.animate(pEntity.walkSE, GratefulDeadAnimations.WALK_SE, pAgeInTicks, 1F);
+        this.animate(pEntity.walkSW, GratefulDeadAnimations.WALK_SW, pAgeInTicks, 1F);
     }
 }

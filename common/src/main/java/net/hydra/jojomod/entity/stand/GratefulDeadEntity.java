@@ -31,6 +31,14 @@ public class GratefulDeadEntity extends FollowingStandEntity{
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState openHands = new AnimationState();
     public final AnimationState closeHands = new AnimationState();
+    public final AnimationState walkN = new AnimationState();
+    public final AnimationState walkS = new AnimationState();
+    public final AnimationState walkE = new AnimationState();
+    public final AnimationState walkW = new AnimationState();
+    public final AnimationState walkNE = new AnimationState();
+    public final AnimationState walkNW = new AnimationState();
+    public final AnimationState walkSE = new AnimationState();
+    public final AnimationState walkSW = new AnimationState();
 
     @Override
     public void setupAnimationStates() {
