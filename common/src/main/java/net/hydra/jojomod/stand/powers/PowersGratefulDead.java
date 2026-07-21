@@ -105,7 +105,11 @@ public class PowersGratefulDead extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.age_disguise",
-                "instruction.roundabout.age_disguise", StandIcons.AGE_DISGUISE_2,4,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.AGE_DISGUISE_2,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+80, 0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.GRATEFUL_DEAD_LEDGE_GRAB, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+99, 0, "ability.roundabout.age_colliding",
+                "instruction.roundabout.passive", StandIcons.AGE_COLLIDING, 3, level, bypas));
         return $$1;
     }
 

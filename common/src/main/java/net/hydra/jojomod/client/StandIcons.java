@@ -717,6 +717,10 @@ public class StandIcons {
             "textures/gui/icons/grateful_dead/age_disguise_1.png");
     public static final ResourceLocation AGE_DISGUISE_2 = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/grateful_dead/age_disguise_2.png");
+    public static final ResourceLocation AGE_COLLIDING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/grateful_dead/age_colliding.png");
+    public static final ResourceLocation GRATEFUL_DEAD_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/grateful_dead/stand_ledge_grab.png");
 
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
