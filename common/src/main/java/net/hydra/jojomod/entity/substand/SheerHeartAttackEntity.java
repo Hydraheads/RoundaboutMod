@@ -273,7 +273,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (throwStatus == THROWED) {
 					if (this.onGround() || this.onClimbable()) {
 						throwStatus = HAS_BEEN;
-					}else if (this.flyngTicks > 6){
+					}else if (this.flyngTicks > 2){
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
