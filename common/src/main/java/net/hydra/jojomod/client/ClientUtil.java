@@ -846,6 +846,9 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
             checkthisdat = data;
             checkthis = 1;
+        } else if (context == PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY){
+            checkthisdat = data;
+            checkthis = 2;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
