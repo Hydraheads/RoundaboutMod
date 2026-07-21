@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.Poses;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -53,6 +55,15 @@ public class PowersBlackSabbath extends NewDashPreset {
         super(self);
     }
 
+    public BlackSabbathEntity BSE = null;
+    private byte currentBlackStatus = BS_NONE;
+
+    private static final byte
+            ENTITY_BLACK_SABBATH = 53,
+            BLACK_SABBATH = 54,
+        BS_NONE = 0,
+        BS_ACTIVE = 1;
+
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled(){
@@ -64,9 +75,14 @@ public class PowersBlackSabbath extends NewDashPreset {
         return new PowersBlackSabbath(entity);
     }
 
-    public boolean dangerYappingOn(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+    public void syncBlackStatus(byte status) {
+        this.currentBlackStatus = status;
+        this.updatePowerInt(PowersBlackSabbath.BLACK_SABBATH, status);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.BLACK_SABBATH, status);
+        }
     }
+
     public boolean canSummonStandAsEntity(){
         return false;
     }
@@ -88,8 +104,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
                 if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
-                    openPolpoInventory();
-                    this.setCooldown(PowerIndex.SKILL_1, 10);
+
                 }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
@@ -109,6 +124,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
+            case PowerIndex.POWER_1 -> {
+        //        return summonBlack();
+            }
             case PowerIndex.POWER_4 -> {
                 if(this.getSelf().getHealth() > 1) {
                     return biteFingers(this.self);
@@ -124,6 +142,32 @@ public class PowersBlackSabbath extends NewDashPreset {
             this.tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
         }
+    }
+
+    private boolean summonBlack(){
+        if (!this.getSelf().level().isClientSide()) {
+            if (BSE == null || BSE.isRemoved()) {
+                BlackSabbathEntity sha = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+                if (sha != null) {
+                    sha.setUser(this.self);
+                    sha.setXRot(this.self.getXRot());
+                    sha.setYRot(this.self.getYRot());
+                    if(this.self instanceof Player PL) {
+                        displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+                    }
+                    this.self.level().addFreshEntity(sha);
+
+                    BSE = sha;
+
+                    this.syncBlackStatus(BS_ACTIVE);
+
+                    S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersBlackSabbath.ENTITY_BLACK_SABBATH, this.BSE.getId());
+
+                }
+
+            }
+        }
+        return true;
     }
 
 
