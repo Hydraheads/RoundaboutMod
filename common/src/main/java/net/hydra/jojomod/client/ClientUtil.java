@@ -272,7 +272,7 @@ public class ClientUtil {
 
         if (timeSkipTicker > -1){
             timeSkipTicker++;
-            if (timeSkipTicker > 8){
+            if (timeSkipTicker > 9){
                 timeSkipTicker = -1;
             }
         }
