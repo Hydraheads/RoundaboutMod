@@ -1333,7 +1333,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     		return this.sendOrReturnSHA(false);
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.sendOrReturnSHA(true);
-    	} else if (move == DETONATE_NOISE) {
+    	} else if (move == DETONATE) {
     		return detonate();
     	} else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerKickWindup();
@@ -2464,7 +2464,7 @@ public class PowersKillerQueen extends NewPunchingStand {
            }else {
                return ModSounds.KILLER_QUEEN_SUMMON_EVENT;
            }
-       }else if (soundChoice == PowersKillerQueen.DETONATE) {
+       }else if (soundChoice == DETONATE_NOISE) {
     	   return ModSounds.KILLER_QUEEN_DETONATE_EVENT;
        }else if (soundChoice == IMPALE_NOISE) {
            return ModSounds.IMPALE_CHARGE_EVENT;
@@ -2887,7 +2887,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	return true;
     }
-    
+    @Override
+    public void onHitGuard(float amt, DamageSource sauce){
+        super.onHitGuard(amt, sauce);
+    }
+
     
     // animations:
     public boolean setPowerKick() {
