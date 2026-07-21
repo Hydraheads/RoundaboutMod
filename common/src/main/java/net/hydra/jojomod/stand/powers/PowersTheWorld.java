@@ -927,12 +927,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         } else if (!getAssaultEarlyTime()) {
                             MainUtil.makeBleed($$5, 0, 200, this.self);
                         }
-                    } else if (((LivingEntity) $$5).isBlocking()) {
-                        if (!getAssaultEarlyTime()) {
-                            MainUtil.knockShieldPlusStand($$5,40);
-                        } else {
-                            MainUtil.knockShieldPlusStand($$5,30);
-                        }
                     }
 
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
@@ -978,9 +972,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (attackTimeDuring > 25){
             mult = 1.5F;
         } else if (attackTimeDuring >= 20){
-            mult = 1.3F;
+            mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
-            mult = 0.87F;
+            mult = 0.83F;
         }
 
         if (isReduced){
