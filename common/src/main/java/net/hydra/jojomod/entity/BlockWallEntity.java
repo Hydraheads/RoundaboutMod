@@ -3,8 +3,11 @@ package net.hydra.jojomod.entity;
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
@@ -147,9 +150,37 @@ public class BlockWallEntity extends Entity {
         discard();
     }
 
+    public boolean isWhiteAlbumWall = false;
 
     @Override
     public boolean hurt(DamageSource $$0, float damage) {
+        if ($$0.getEntity() != null){
+            if (!level().isClientSide() && isWhiteAlbumWall && $$0.getEntity() instanceof LivingEntity LE &&
+                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa
+            && $$0.is(ModDamageTypes.STAND)){
+                Vec3 current = position();
+                Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
+                Vec3 delta = target.subtract(current);
+                double distance = delta.length();
+                if (distance <= distanceToClearWhileTicked()) {
+                    ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(LE, LE.level(),
+                            Blocks.PACKED_ICE.asItem().getDefaultInstance().copy(),
+                            false);
+
+                    thrownBlockOrItem.heat = -10;
+                    thrownBlockOrItem.standDamageMob = pwa.getIceDamageMob();
+                    thrownBlockOrItem.standDamagePlayer = pwa.getIceDamagePlayer();
+                    thrownBlockOrItem.shootFromRotation(LE, LE.getXRot(),
+                            LE.getYRot(), -8.0F, 0.8F, 0.1F);
+                    thrownBlockOrItem.setPos(position().add(0,0.5F,0));
+                    thrownBlockOrItem.setStyle(ThrownObjectEntity.STAND_DAMAGE);
+                    LE.level().addFreshEntity(thrownBlockOrItem);
+                    this.discard();
+                }
+                return true;
+            }
+        }
+
         if (this.isInvulnerableTo($$0)) {
             return false;
         } else {
@@ -257,6 +288,7 @@ public class BlockWallEntity extends Entity {
         $$0.put("BlockState", NbtUtils.writeBlockState(this.blockState));
         $$0.putInt("Time", this.time);
         $$0.putInt("DeathTimer", this.timing);
+        $$0.putBoolean("WhiteAlbum", this.isWhiteAlbumWall);
         $$0.putBoolean("DropItem", this.dropItem);
         $$0.putBoolean("HurtEntities", this.hurtEntities);
         $$0.putBoolean("CanGrief", this.canGrief);
@@ -276,6 +308,7 @@ public class BlockWallEntity extends Entity {
         this.blockState = NbtUtils.readBlockState(this.level().holderLookup(Registries.BLOCK), $$0.getCompound("BlockState"));
         this.time = $$0.getInt("Time");
         this.timing = $$0.getInt("DeathTimer");
+        this.isWhiteAlbumWall = $$0.getBoolean("WhiteAlbum");
         this.canGrief = $$0.getBoolean("CanGrief");
         if ($$0.contains("HurtEntities", 99)) {
             this.hurtEntities = $$0.getBoolean("HurtEntities");

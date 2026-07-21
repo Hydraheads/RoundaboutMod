@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -1058,6 +1060,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         wall.setDataFinalPos(newVec.add(0, 2, 0));
                         wall.timing = 200;
                         wall.tsmove = true;
+                        wall.isWhiteAlbumWall = true;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
                         self.level().addFreshEntity(wall);
@@ -1787,6 +1790,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 }
             }
         }
+    }
+
+    public float getIceDamageMob(){
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
+    }
+    public float getIceDamagePlayer(){
+        return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
     }
 
     @Override
