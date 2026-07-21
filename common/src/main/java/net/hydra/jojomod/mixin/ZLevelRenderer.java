@@ -106,7 +106,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         if (ClientUtil.isUsingEpitaph() && entity != null){
             Player pl = ClientUtil.getPlayer();
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
-                    instanceof PowersKingCrimson pkc){
+                    instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
                 if (skip != null && !entity.isPassenger()){
                     float progress = Mth.clamp(
@@ -398,9 +398,75 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 0,shift = At.Shift.BEFORE))
     private void roundabout$renderLevelLead(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                         Camera $$4, GameRenderer $$5, LightTexture $$6,
-                                        Matrix4f $$7, CallbackInfo ci) {
+                                        Matrix4f matrix, CallbackInfo ci) {
 
         Player player = Minecraft.getInstance().player;
+
+        if (player != null){
+            if (ClientUtil.isUsingEpitaph()){
+                if (((StandUser)player).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc && pkc.isGuarding()){
+                    TimeSkipSnapshot skip = pkc.epitaph.get(player.getId());
+                    if (skip != null && !player.isPassenger()){
+                        float progress = Mth.clamp(
+                                (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
+                                0.0F,
+                                1.0F
+                        );
+                        double $$7 = skip.position.x;
+                        double $$8 = skip.position.y;
+                        double $$9 = skip.position.z;
+                        float renderYaw = skip.yRot;
+                        if (progress < 1){
+                            double x = Mth.lerp(partialTick, player.xOld, player.getX());
+                            double y = Mth.lerp(partialTick, player.yOld, player.getY());
+                            double z = Mth.lerp(partialTick, player.zOld, player.getZ());
+
+                            $$7 = Mth.lerp(progress, x, $$7);
+                            $$8 = Mth.lerp(progress, y, $$8);
+                            $$9 = Mth.lerp(progress, z, $$9);
+                            renderYaw = Mth.rotLerp(progress, player.yRotO, skip.yRot);
+                        }
+
+
+
+                            float oldBody = player.yBodyRot;
+                            float oldBodyO = player.yBodyRotO;
+                            float oldHead = player.yHeadRot;
+                            float oldHeadO = player.yHeadRotO;
+                            float oldYaw = player.getYRot();
+                            float oldYawO = player.yRotO;
+                            float headOffset = Mth.wrapDegrees(player.yHeadRot - player.yBodyRot);
+                            float headOffsetO = Mth.wrapDegrees(player.yHeadRotO - player.yBodyRotO);
+
+                        player.yBodyRot = renderYaw;
+                        player.yBodyRotO = renderYaw;
+                        player.yHeadRot = renderYaw + headOffset;
+                        player.yHeadRotO = renderYaw + headOffsetO;
+
+                        player.setYRot(renderYaw);
+                        player.yRotO = renderYaw;
+                        Vec3 cameraPos = $$4.getPosition();
+
+                        MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
+                        this.entityRenderDispatcher.render(player, $$7 - cameraPos.x,
+                                $$8 - cameraPos.y,$$9 - cameraPos.z, renderYaw, partialTick,
+                                $$0,$$20, this.entityRenderDispatcher.getPackedLightCoords(player,
+                                        partialTick));
+
+                        player.yBodyRot = oldBody;
+                        player.yBodyRotO = oldBodyO;
+                        player.yHeadRot = oldHead;
+                        player.yHeadRotO = oldHeadO;
+                        player.setYRot(oldYaw);
+                        player.yRotO = oldYawO;
+
+                    }
+                    ((IEntityAndData)player).roundabout$setExclusiveLayers(false);
+                }
+            }
+        }
+
         if (player != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             Vec3 $$9 = $$4.getPosition();
             double $$10 = $$9.x();

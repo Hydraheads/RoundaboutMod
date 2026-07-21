@@ -191,7 +191,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             oldPos = third;
         }
-        if (player.position().distanceTo(oldPos) < 0.1){
+        if (player.position().distanceTo(oldPos) < 0.1 && player.getId() != self.getId()){
             return predictIdle(player,ticks);
         }
         Vec3 baseVelocity = player.position()
@@ -381,10 +381,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     //This variable makes a player turn around when they hit a wall to sell a believable reaction
     public boolean hitWall2 = false;
 
-    public void basicSkip(){
+    public void basicSkip(boolean skipSelf){
         AABB area = self.getBoundingBox().inflate(getSkipRange());
 
         for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            if (!skipSelf && living.getId() == self.getId()){
+                continue;
+            }
             StandEntity stand = getStandEntity(self);
             int id = living.getId();
             if (!(stand != null && stand.getId() == id)){
@@ -404,6 +407,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             // Fallback for players, armor stands, etc.
                             hitWall2 = false;
                             predicted = predictPlayer(player, 40);
+                            if (player.getId() == self.getId()) {
+                                if (predicted.distanceTo(self.getPosition(1)) < 0.1){
+                                    continue;
+                                }
+                            }
                             if (hitWall2 && player.getId() != self.getId()) {
                                 yRot = Mth.wrapDegrees(yRot + 180.0F);
                             }
@@ -421,16 +429,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
 
         }
+
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        scatterPackets();
         if (skip_dump.isEmpty()){
             return;
         }
         for (TimeSkipSnapshot snapshot : skip_dump.values()) {
             skipSingle(snapshot);
         }
-
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
-        scatterPackets();
         skip_dump.clear();
+
     }
 
     public void skipSingle(TimeSkipSnapshot snapshot){
@@ -514,17 +523,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
             ((IMob)mb).roundabout$setConfusionTicks(7);
         }
     }
-    public void timeSkip() {
+
+    public void timeSkip(boolean skipSelf) {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
 
         if (epitaph.isEmpty()) {
-            basicSkip();
+            basicSkip(skipSelf);
             return;
         }
 
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
+            if (!skipSelf && snapshot.getEntityId() == self.getId()){
+                continue;
+            }
             skipSingle(snapshot);
         }
 
@@ -586,7 +599,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
                     StandEntity stand = getStandEntity(self);
                     int id = living.getId();
-                    if (!(stand != null && stand.getId() == id) && !(self.getId() == id)){
+                    if (!(stand != null && stand.getId() == id)){
                         if (!(living instanceof StandEntity) &&
                                 !(living instanceof Player pk && pk.isCreative()
                                         && pk.getId() != self.getId())
@@ -773,6 +786,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_2_NORMAL -> {
                 timeSkipClient();
             }
+            case SKILL_2_GUARD -> {
+                timeSkipSelfClient();
+            }
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
             }
@@ -789,12 +805,28 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         return false;
     }
+    public void timeSkipSelfClient() {
+        if (hasBlock()){
+            return;
+        }
+        if (isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA);
+        }
+    }
     public void timeSkipClient() {
         if (hasBlock()){
             itemGrabClient();
             return;
         }
-        tryPowerPacket(PowerIndex.POWER_2);
+
+        boolean isMoving = (Math.abs(self.getDeltaMovement().x) > 0.01 ||
+                Math.abs(self.getDeltaMovement().z) > 0.01 ||
+                !self.onGround());
+        if (isMoving && !isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA);
+        } else {
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
     }
 
 
@@ -847,19 +879,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (!isHoldingSneak()){
             if (hasBlock()){
-                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
 
             } else if (isUsingEpitaph()){
                 if (isGuarding()){
-                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2, 0);
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2_SNEAK, 0);
                 } else {
-                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2, 0);
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2_SNEAK, 0);
                 }
             } else {
-                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2, 0);
+                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2_SNEAK, 0);
             }
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2_SNEAK,getImpaleLevel());
+            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
         }
 
         if (canVault()){
@@ -1042,7 +1074,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } else if (move == PowerIndex.POWER_1){
             this.epitaph();
         } else if (move == PowerIndex.POWER_2){
-            this.timeSkip();
+            this.timeSkip(false);
+            return true;
+        } else if (move == PowerIndex.POWER_2_SNEAK_EXTRA){
+            this.timeSkip(true);
             return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
