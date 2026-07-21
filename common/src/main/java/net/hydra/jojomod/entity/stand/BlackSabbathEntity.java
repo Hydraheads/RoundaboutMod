@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Unique;
 
-public class BlackSabbathEntity extends StandEntity {
+public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen{
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -52,6 +52,25 @@ public class BlackSabbathEntity extends StandEntity {
     }
 
     @Override
+    public boolean forceVisualRotation(){
+        return true;
+    }
+
+    @Override
+    public boolean lockPos(){
+        return false;
+    }
+    @Override
+    public boolean hasNoPhysics(){
+        return false;
+    }
+
+    @Override
+    public boolean standHasGravity() {
+        return true;
+    }
+
+    @Override
     public void tick(){
         super.tick();
     }
@@ -61,4 +80,10 @@ public class BlackSabbathEntity extends StandEntity {
             super.defineSynchedData();
     }
 
+    @Override
+    public void openCustomInventoryScreen(Player var1) {
+        if (!this.level().isClientSide) {
+
+        }
+    }
 }

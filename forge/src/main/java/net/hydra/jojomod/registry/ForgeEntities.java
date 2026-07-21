@@ -448,7 +448,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
             ENTITY_TYPES.register("black_sabbath", () ->
-                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
             );

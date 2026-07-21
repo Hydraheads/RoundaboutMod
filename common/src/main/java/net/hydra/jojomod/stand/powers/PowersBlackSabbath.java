@@ -335,11 +335,11 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale() {
-        return 40;
+        return 35;
     }
     @Override
     public int getDisplayPowerInventoryYOffset() {
-        return -10;
+        return 0;
     }
 
     @Override

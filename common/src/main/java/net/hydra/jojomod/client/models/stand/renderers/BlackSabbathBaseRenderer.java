@@ -67,11 +67,10 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     @Override
     public void render(BlackSabbathEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 1;
-        matrixStack.translate(0,0.3F,0);
-        if (mobEntity.isBaby()) {
-            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
+        if(mobEntity.isBaby()){
+            matrixStack.scale(0.60f * factor, 0.60f * factor, 0.60f * factor);
         } else {
-            matrixStack.scale(0.68f * factor, 0.68f * factor, 0.68f * factor);
+            matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
