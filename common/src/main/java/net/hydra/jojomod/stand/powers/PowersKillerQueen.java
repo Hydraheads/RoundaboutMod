@@ -1921,7 +1921,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         for (Entity ent : $$3) {
             float dist = ent.distanceTo(stand);
-            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof LivingEntity LE) {
+            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof LivingEntity LE
+                && !MainUtil.isBossMob(LE) && !(LE instanceof StandEntity)) {
                 distRecord = dist;
                 target = LE;
             }
