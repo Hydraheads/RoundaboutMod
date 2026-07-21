@@ -60,6 +60,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super(self);
     }
     public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
+    public final Map<Integer, TimeSkipSnapshot> skip_dump = new HashMap<>();
 
     @Override
     /**Override to add disable config*/
@@ -379,92 +380,147 @@ public class PowersKingCrimson extends BlockGrabPreset {
     //This variable makes a player turn around when they hit a wall to sell a believable reaction
     public boolean hitWall2 = false;
 
+    public void basicSkip(){
+        AABB area = self.getBoundingBox().inflate(getSkipRange());
+
+        for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            StandEntity stand = getStandEntity(self);
+            int id = living.getId();
+            if (!(stand != null && stand.getId() == id)){
+                if (!(living instanceof StandEntity) &&
+                        !(living instanceof Player pk && pk.isCreative()
+                                && pk.getId() != self.getId())
+                ) {
+                    Vec3 predicted = living.position();
+                    float xRot = living.getXRot();
+                    float yRot = living.getYRot();
+                    if (!living.isSleeping()){
+                        if (living instanceof Mob mob) {
+                            if (!mob.isLeashed()) {
+                                predicted = predictPosition(mob, 100);
+                            }
+                        } else if (living instanceof Player player) {
+                            // Fallback for players, armor stands, etc.
+                            hitWall2 = false;
+                            predicted = predictPlayer(player, 40);
+                            if (hitWall2 && player.getId() != self.getId()) {
+                                yRot = Mth.wrapDegrees(yRot + 180.0F);
+                            }
+                        }
+                    }
+
+
+                    skip_dump.put(living.getId(), new TimeSkipSnapshot(
+                            id,
+                            predicted,
+                            xRot,
+                            yRot
+                    ));
+                }
+            }
+
+        }
+        if (skip_dump.isEmpty()){
+            return;
+        }
+        for (TimeSkipSnapshot snapshot : skip_dump.values()) {
+            skipSingle(snapshot);
+        }
+
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        scatterPackets();
+        skip_dump.clear();
+    }
+
+    public void skipSingle(TimeSkipSnapshot snapshot){
+
+        if (snapshot.getEntityId() == -1) {
+            return;
+        }
+        Level level = self.level();
+
+        Entity entity = level.getEntity(snapshot.getEntityId());
+
+        if (entity == null || !entity.isAlive()) {
+            return;
+        }
+
+        double width = entity.getBbWidth();
+        double height = entity.getBbHeight();
+
+        // Construct bounding box at the target position
+        AABB targetBox = new AABB(
+                snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
+                snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
+        );
+        targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
+
+        if (!level.noCollision(entity, targetBox)) {
+            return;
+        }
+
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker && entity instanceof Player) {
+            // 2. Check for dangerous blocks inside target box
+            boolean cancel = false;
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    cancel = true;
+                    break;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    cancel = true;
+                    break;
+                }
+            }
+            if (cancel){
+                return;
+            }
+        }
+
+        packetNearby(new Vector3f((float) snapshot.position.x,
+                        (float) snapshot.position.y,
+                        (float) snapshot.position.z),
+                entity.getId());
+
+        entity.teleportTo(
+                snapshot.position.x,
+                snapshot.position.y,
+                snapshot.position.z
+        );
+        entity.setYRot(snapshot.yRot);
+        entity.setYHeadRot(snapshot.yRot);
+        entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
+                snapshot.position.y,
+                snapshot.position.z,
+                Set.of(
+                        RelativeMovement.X,
+                        RelativeMovement.Y,
+                        RelativeMovement.Z),
+                snapshot.yRot,entity.getXRot());
+    }
     public void timeSkip() {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
 
         if (epitaph.isEmpty()) {
+            basicSkip();
             return;
         }
 
-        Level level = self.level();
-
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
-
-            if (snapshot.getEntityId() == -1) {
-                continue;
-            }
-
-            Entity entity = level.getEntity(snapshot.getEntityId());
-
-            if (entity == null || !entity.isAlive()) {
-                continue;
-            }
-
-            double width = entity.getBbWidth();
-            double height = entity.getBbHeight();
-
-            // Construct bounding box at the target position
-            AABB targetBox = new AABB(
-                    snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
-                    snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
-            );
-            targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
-
-            if (!level.noCollision(entity, targetBox)) {
-                continue;
-            }
-
-            boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
-
-            if (deviousStratBlocker && entity instanceof Player) {
-                // 2. Check for dangerous blocks inside target box
-                boolean cancel = false;
-                for (BlockPos pos : BlockPos.betweenClosed(
-                        Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
-                        Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
-
-                    BlockState state = level.getBlockState(pos);
-                    Block block = state.getBlock();
-
-                    // List of bad blocks to avoid
-                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
-                        cancel = true;
-                        break;
-                    }
-
-                    // Optional: also avoid fire or cactus
-                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
-                        cancel = true;
-                        break;
-                    }
-                }
-                if (cancel){
-                    continue;
-                }
-            }
-
-            packetNearby(new Vector3f((float) snapshot.position.x,
-                            (float) snapshot.position.y,
-                            (float) snapshot.position.z),
-                    entity.getId());
-
-            entity.teleportTo(
-                    snapshot.position.x,
-                    snapshot.position.y,
-                    snapshot.position.z
-            );
-            entity.setYRot(snapshot.yRot);
-            entity.setYHeadRot(snapshot.yRot);
-            entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
-                    snapshot.position.y,
-                    snapshot.position.z,
-                    Set.of(
-                            RelativeMovement.X,
-                            RelativeMovement.Y,
-                            RelativeMovement.Z),
-                    snapshot.yRot,entity.getXRot());
+            skipSingle(snapshot);
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
@@ -541,7 +597,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 } else if (living instanceof Player player) {
                                     // Fallback for players, armor stands, etc.
                                     hitWall2 = false;
-                                    predictPlayer(player, 40);
+                                    predicted = predictPlayer(player, 40);
                                     if (hitWall2) {
                                         yRot = Mth.wrapDegrees(yRot + 180.0F);
                                     }
