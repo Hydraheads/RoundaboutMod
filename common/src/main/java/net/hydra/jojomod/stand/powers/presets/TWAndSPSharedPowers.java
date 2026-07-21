@@ -1,15 +1,13 @@
 package net.hydra.jojomod.stand.powers.presets;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -19,7 +17,6 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.GlaiveItem;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -31,14 +28,15 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -144,6 +142,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
                         } else {
                             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
@@ -166,7 +165,12 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             dash();
         }
     }
-
+    public float getRushDistance(){
+        if (forwardBarrage){
+            return 15;
+        }
+        return getReach();
+    }
     public float getFloatOutRange(){
         return 7F;
     }
@@ -286,7 +290,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
                 if ($$5 instanceof ItemEntity IE && stand.getSensing().hasLineOfSight($$5)){
-                    if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)){
+                    if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)){
                         stand.canAcquireHeldItem = true;
                         stand.setHeldItem(IE.getItem().copyWithCount(1));
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
@@ -331,6 +335,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (!consumeClickInput) {
+            if (impaleTicks > 0){
+                return;
+            }
             if (holdDownClick) {
                 if (keyIsDown) {
 
@@ -344,7 +351,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
             } else {
                 if (keyIsDown) {
-                    Minecraft mc = Minecraft.getInstance();
                     if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
@@ -369,10 +375,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     /**Begin Charging Time Stop, also detects activation via release**/
     public void doTSClient(){
+
+        if (hasBlock() || hasEntity())
+            return;
+        boolean exTS = canExecuteMoveWithLevel(getTSLevel());
+        boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+        if (!exTS && !exImpTS)
+            return;
+
         if (!this.onCooldown(PowerIndex.SKILL_4) || (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop)) {
             if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) || !this.isAttackInept(this.getActivePower()))) {
-                boolean exTS = canExecuteMoveWithLevel(getTSLevel());
-                boolean exImpTS = canExecuteMoveWithLevel(getImpulseTSLevel());
+
                 boolean sendPacket = false;
                 if (this.isStoppingTime()) {
                     KeyInputs.roundaboutClickCount = 2;
@@ -381,7 +394,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     sendPacket = true;
                 } else {
-                    if (isHoldingSneak() || hasBlock() || hasEntity() || (!exTS &&
+                    if (isHoldingSneak() || (!exTS &&
                             exImpTS)) {
                         if (exImpTS) {
                             this.setChargedTSTicks(ClientNetworking.getAppropriateConfig().timeStopSettings.impulseTimeStopLength);
@@ -442,6 +455,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
+                impaleTicks = 15;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
             }
         } else {
@@ -452,73 +466,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     }
 
-    public float getImpalePunchStrength(Entity entity){
-        return 0;
-    }
-    public float getImpaleKnockback(){
-        return 1.3F;
-    }
-
-    public void impaleImpact(Entity entity){
-        if (activePower == PowerIndex.POWER_1_SNEAK){
-        this.setAttackTimeDuring(-20);
-        if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
-            entity = null;
-        }
-        if (entity != null) {
-            hitParticlesCenter(entity);
-
-            float pow;
-            float knockbackStrength;
-            pow = getImpalePunchStrength(entity);
-            knockbackStrength = getImpaleKnockback();
-            if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
-                if (entity instanceof LivingEntity LE) {
-                    addEXP(5, LE);
-                    if (MainUtil.getMobBleed(entity)) {
-                        if ((((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
-                            MainUtil.makeBleed(entity, 0, 200, this.getSelf());
-                        } else {
-                            MainUtil.makeBleed(entity, 2, 200, this.getSelf());
-                        }
-                            MainUtil.makeMobBleed(entity);
-                    }
-                }
-                takeDeterminedKnockback(this.self, entity, knockbackStrength);
-            } else {
-                knockShield2(entity, 100);
-            }
-        }
-
-        if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
-        }
-        this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
-        SoundEvent SE;
-        float pitch = 1F;
-            if (entity != null) {
-                playImpaleConnectSoundExtra();
-                SE = getImpaleSound();
-                pitch = 1.2F;
-            } else {
-                SE = ModSounds.PUNCH_2_SOUND_EVENT;
-            }
-
-        if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
-        }
-        }
-    }
 
 
-    public void playImpaleConnectSoundExtra(){
 
-    }
-
-    public SoundEvent getImpaleSound(){
-        return ModSounds.IMPALE_HIT_EVENT;
-
-    }
 
     public SoundEvent getFinalAttackSound(){
         return null;
@@ -675,11 +625,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
 
 
+    public void applyLeapCooldowns(){
+
+    }
     @Override
     public boolean setPowerSneakMovement(int lastMove) {
 
-        if (!onCooldown(PowerIndex.SKILL_4)) { // leaping puts timestop on a cooldown
-            this.setCooldown(PowerIndex.SKILL_4, ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown);
+        // leaping puts timestop on a cooldown
+        applyLeapCooldowns();
+        int leapCd = ConfigManager.getConfig().timeStopSettings.timestopLeapCooldown;
+        if (leapCd != 0) {
+            this.setCooldown(PowerIndex.SKILL_4, leapCd);
         }
 
         this.setAttackTimeDuring(-1);
@@ -722,10 +678,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void tickPower(){
         super.tickPower();
+
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
 
             if (isBarrageAttacking() && !this.self.level().isClientSide()){
-                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches){
+                if (ClientNetworking.getAppropriateConfig().griefSettings.SuperBlockDestructionBarragePunches && !forwardBarrage){
 
                     Vec3 vec3d = this.self.getEyePosition(0);
                     Vec3 vec3d2 = this.self.getViewVector(0);
@@ -740,9 +697,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 this.forwardBarrage = false;
             }
 
-            if (freezeAttackInput > -1){
-                freezeAttackInput--;
-            }
 
             if (spacedJumpTime > -1){
                 spacedJumpTime--;
@@ -774,6 +728,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return;
         if (clientForwardBarrage())
             return;
+        if (!canImpale()){
+            return;
+        }
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -895,8 +852,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     tryPowerPacket(PowerIndex.NONE);
                 }
-            } else if (this.attackTimeDuring >= maxSuperHitTime && !(this.getSelf() instanceof Player)){
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,maxSuperHitTime);
+            } else if (this.attackTimeDuring >= getMaxSuperHitTime() && !(this.getSelf() instanceof Player)){
+                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
             }
         }
     }
@@ -1006,7 +963,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
                 boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
+                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
                             && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
@@ -1160,12 +1117,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     private int leapEndTicks = -1;
 
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
 
         if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
             return true;
         } else if (this.getActivePower() == PowerIndex.SPECIAL) {
-            int cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            int cdr;
+            if (interrupter instanceof Player){
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownv2;
+            } else {
+                cdr = ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopInterruptedCooldownMobs;
+            }
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4, cdr);
             }
@@ -1179,7 +1141,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
     @Override
@@ -1232,7 +1194,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (this.canChangePower(move, forced) && this.getActivePower() != PowerIndex.POWER_2
-                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)  && !hasBlock()) {
+                && (this.getActivePower() != PowerIndex.POWER_2_SNEAK || this.getAttackTimeDuring() < 0)  && !hasBlock() && !hasEntity()) {
             if (move == PowerIndex.SPECIAL_CHARGED) {
                 if (this.getSelf().level().isClientSide() ||
                         !((TimeStop) this.getSelf().level()).isTimeStoppingEntity(this.getSelf())) {
@@ -1322,7 +1284,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.poseStand(OffsetIndex.ATTACK);
         return true;
     }
-    public static final float impaleRange = 3.5F;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1346,7 +1307,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
-            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / maxSuperHitTime) * 15));
+            int ClashTime = Math.min(15,Math.round(((float) attackTimeDuring / getMaxSuperHitTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
         } else {
@@ -1380,6 +1341,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         float tsTimeRemaining = (float) (ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopMinimumCooldown+((this.getMaxChargeTSTime())*5*(ClientNetworking.getAppropriateConfig().timeStopSettings.additionalCooldownPerSecondsUsed *0.01)));
         tsTimeRemaining+=ClientNetworking.getAppropriateConfig().timeStopSettings.timeStopBonusActionsCooldown;
 
@@ -1394,7 +1356,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setCooldown(PowerIndex.SKILL_4, sendTSCooldown);
             this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public static final byte KICK_BARRAGE_NOISE = 106;
@@ -1442,19 +1403,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         return 1/((float) this.getKickBarrageWindup() /20);
     }
 
-    public boolean impale(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1_SNEAK);
-            playSoundsIfNearby(IMPALE_NOISE, 27, false);
-            this.animateStand(StandEntity.IMPALE);
-            this.poseStand(OffsetIndex.GUARD);
-
-            return true;
-        }
-        return false;
-    }
 
     /**If a client is behind a server on TS charging somehow, and the server finishes charging, this packet rounds
      * things out*/
@@ -1805,26 +1753,28 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.clashDone = false;
         return true;
     }
-    public static int maxSuperHitTime = 25;
+    public int getMaxSuperHitTime(){
+        return 25+(getMeltLevel()*2);
+    }
     public boolean setPowerSuperHit() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.SNEAK_ATTACK);
         this.poseStand(OffsetIndex.ATTACK);
-        chargedFinal = Math.min(this.chargedFinal,maxSuperHitTime);
+        chargedFinal = Math.min(this.chargedFinal,getMaxSuperHitTime());
         animateFinalAttackHit();
         //playBarrageCrySound();
         return true;
     }
 
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal /(float)maxSuperHitTime)*3);
+        return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
     }
     public float getFinalPunchStrength(Entity entity){
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
         } else {
-            return (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
+            return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3;
         }
     }
     public int getFinalAttackKnockShieldTime(){
@@ -1851,13 +1801,13 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             dspStuff(entity);
             if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
                 if (entity instanceof LivingEntity LE) {
-                    if (chargedFinal >= maxSuperHitTime) {
+                    if (chargedFinal >= getMaxSuperHitTime()) {
                         addEXP(5, LE);
                     }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
             } else {
-                if (chargedFinal >= maxSuperHitTime) {
+                if (chargedFinal >= getMaxSuperHitTime()) {
                     knockShield2(entity, getFinalAttackKnockShieldTime());
                 }
             }
@@ -1939,6 +1889,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+
         return this.isDazed(this.getSelf()) || (activeP != PowerIndex.SKILL_4 && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()))
                 || ((this.getActivePower() == PowerIndex.POWER_2_SNEAK && this.getAttackTimeDuring() >= 0)) || hasBlock() || hasEntity());
     }
@@ -1983,7 +1934,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public boolean setPowerGuard() {
         if (this.getIsTsCharging()) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         return super.setPowerGuard();
     }
@@ -1991,7 +1942,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon && this.getIsTsCharging() ) {
-            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownv2);
+            this.setCooldown(PowerIndex.SKILL_4,ConfigManager.getConfig().timeStopSettings.timeStopInterruptedCooldownMobs);
         }
         super.onStandSummon(desummon);
     }

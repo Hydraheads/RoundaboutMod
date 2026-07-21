@@ -1,15 +1,10 @@
 package net.hydra.jojomod.networking;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
-import net.hydra.jojomod.advancement.criteria.ModCriteria;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.index.Corpses;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -19,28 +14,27 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.impl.IMessageEvent;
-import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -86,6 +80,8 @@ public class ClientToServerPackets {
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
             HairColor("hair_color"),
+            NailColor("nail_color"),
+            WarHammer("war_hammer"),
             FinishSucking("finish_sucking"),
             CancelSucking("cancel_sucking"),
             HandshakeCooldowns("handshake_cooldowns"),
@@ -283,6 +279,29 @@ public class ClientToServerPackets {
                     });
                 }
 
+                /**War Hammer Packet*/
+                if (message.equals(MESSAGES.WarHammer.value)) {
+                    server.execute(() -> {
+                        Vector3f a = (Vector3f) vargs[0];
+                        BlockPos b = (BlockPos) vargs[1];
+                        int c = (int) vargs[2];
+                        ItemStack stack = sender.getMainHandItem();
+                        if (stack != null && stack.getItem() instanceof WarhammerItem wi){
+                            if (!sender.isCreative()) {
+                                stack.hurtAndBreak(1, sender, ($$1x) ->
+                                        $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                            }
+                            sender.level().playSound(null, b, ModSounds.HAMMER_CLINK_EVENT, SoundSource.PLAYERS,
+                                    1F, (float) (0.99F+Math.random()*0.02F));
+                            sender.fallDistance = 0;
+                            if (c < 0) {
+                                MainUtil.blockBreakParticles(sender.level(),
+                                        sender.level().getBlockState(b).getBlock(),
+                                        new Vec3(a.x, a.y, a.z), 100);
+                            }
+                        }
+                    });
+                }
 
                 /**Generic int to server packet*/
                 if (message.equals(MESSAGES.IntToServer.value)) {
@@ -473,6 +492,13 @@ public class ClientToServerPackets {
                     float blue = (float)vargs[2];
                     MainUtil.updateHairColor(sender,red,green,blue);
                 }
+                /**Change Nail Color*/
+                if (message.equals(MESSAGES.NailColor.value)) {
+                    float red = (float)vargs[0];
+                    float green = (float)vargs[1];
+                    float blue = (float)vargs[2];
+                    MainUtil.updateNailColor(sender,red,green,blue);
+                }
                 /**Update Piloting Stand*/
                 if (message.equals(MESSAGES.UpdatePilot.value)) {
                     float x = (float)vargs[0];
@@ -581,7 +607,7 @@ public class ClientToServerPackets {
 
                 /**Release right click to stop guarding*/
                 if (message.equals(MESSAGES.GuardCancel.value)) {
-                    if (((StandUser) sender).roundabout$isGuarding() || ((StandUser) sender).roundabout$isBarraging()
+                    if (((StandUser) sender).roundabout$isGuardInput() || ((StandUser) sender).roundabout$isBarraging()
                             || (((IPowersPlayer)sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp &&
                             pgp.isBarraging())
                             || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
@@ -613,18 +639,6 @@ public class ClientToServerPackets {
                     InteractionHand hand = sender.getUsedItemHand();
                     if (itemStack.getItem() instanceof FirearmItem) {
                         ((FirearmItem) itemStack.getItem()).fireBullet(level, sender, hand);
-                    }
-                }
-
-                /**Request a d4c dimension hop*/
-                if (message.equals(MESSAGES.DimensionHopD4C.value)) {
-                    if (((StandUser) sender).roundabout$getStand() instanceof D4CEntity) {
-                        DynamicWorld world = PowersD4C.queuedWorldTransports.remove(sender.getId());
-                        if (world != null && world.getLevel() != null) {
-                            sender.teleportTo(world.getLevel(), sender.getX(), sender.getY(), sender.getZ(), sender.getYRot(), sender.getXRot());
-                            ((StandUser) sender).roundabout$summonStand(world.getLevel(), true, false);
-                            //ModCriteria.DIMENSION_HOP_TRIGGER.trigger(sender);
-                        }
                     }
                 }
             }

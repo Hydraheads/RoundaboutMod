@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.item.BowlerHatItem;
+import net.hydra.jojomod.item.UltravioletBlasterItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -18,9 +19,11 @@ public class BowlerHatItemInHandLayerMixin {
 
     @Inject(method = "renderArmWithItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lnet/minecraft/world/entity/HumanoidArm;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
 
-    private void hideBowlerHatItem(LivingEntity $$0, ItemStack $$1, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6, CallbackInfo ci) {
+    private void hideBowlerHatItem(LivingEntity $$0, ItemStack stack, ItemDisplayContext $$2, HumanoidArm $$3, PoseStack $$4, MultiBufferSource $$5, int $$6, CallbackInfo ci) {
 
-        if (!$$1.isEmpty() && $$1.getItem() instanceof BowlerHatItem) {
+        if (!stack.isEmpty() &&
+                (stack.getItem() instanceof BowlerHatItem || stack.getItem() instanceof UltravioletBlasterItem)
+        ) {
             ci.cancel();
         }
     }

@@ -417,7 +417,11 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
             }
             theatricPop();
         } else if (this.getPlunderType() == PlunderTypes.FRICTION.id) {
-            lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStealingDurationInTicks;
+            if (this.getEntityStolen() > 0 && this.level().getEntity(this.getEntityStolen()) instanceof Player PL){
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.playerFrictionStealingDurationInTicks;
+            } else {
+                lifeSpan = ClientNetworking.getAppropriateConfig().softAndWetSettings.frictionStealingDurationInTicks;
+            }
             theatricPop();
         }
     }
@@ -653,7 +657,9 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 this.setHeldItem(new ItemStack(MainUtil.SHEEP_DYE.get(S.getColor()), 1 + this.random.nextInt(3)));
                 this.startReturning();
                 return;
-
+            } else if ($$0.getEntity() instanceof GentlyWeepsEntity gwe && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == 4) {
+                gwe.setBled(true);
+                super.onHitEntity($$0);
             } else if ($$0.getEntity() instanceof Cow && this.getPlunderType() == PlunderTypes.MOISTURE.id && this.getLiquidStolen() == -1) {
                 this.setLiquidStolen(7);
                 this.setFloating();
@@ -1163,7 +1169,7 @@ public class SoftAndWetPlunderBubbleEntity extends SoftAndWetBubbleEntity {
                 for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                     Entity $$5 = $$3.get($$4);
                     if ($$5 instanceof ItemEntity IE) {
-                        if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock)) {
+                        if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)) {
                             this.setHeldItem(IE.getItem().copyWithCount(1));
                             startReturning();
 

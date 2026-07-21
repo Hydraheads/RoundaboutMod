@@ -54,7 +54,6 @@ public class WorthyVillagerMakeLove {
                         ItemStack stack = ModItems.getPoolForMob(villager).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
                             ((StandUser) villager).roundabout$setStandDisc(stack);
-                            SD.generateStandPowers(villager);
                             ((StandUser)villager).roundabout$getStandPowers().rollSkin();
                         }
                     } else {

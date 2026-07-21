@@ -46,6 +46,10 @@ public class ForgeEffects{
                     new Effect(MobEffectCategory.HARMFUL, 10329495)
                             .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.7, AttributeModifier.Operation.ADDITION)
             );
+    public static final RegistryObject<MobEffect> STAND_MELTING =
+            POTION_EFFECTS.register("stand_melting", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 10329495)
+            );
     public static final RegistryObject<MobEffect> GRAVITY_FLIP =
             POTION_EFFECTS.register("gravity_flip", () ->
                     new Effect(MobEffectCategory.HARMFUL, 4906114));
@@ -55,6 +59,9 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> VAMPIRE_BLOOD =
             POTION_EFFECTS.register("vampire_blood", () ->
                     new Effect(MobEffectCategory.HARMFUL, 8662571));
+    public static final RegistryObject<MobEffect> SINGE =
+            POTION_EFFECTS.register("singe", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 15428404));
     public static final RegistryObject<MobEffect> UNBALANCED =
             POTION_EFFECTS.register("unbalanced", () ->
                     new Effect(MobEffectCategory.HARMFUL, 2738639));

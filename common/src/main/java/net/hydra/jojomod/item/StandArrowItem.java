@@ -7,7 +7,6 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -65,17 +64,17 @@ public class StandArrowItem extends RoundaboutArrowItem {
             CompoundTag tag = $$3.isEmpty() ? null : $$3.getTagElement("StandDisc");
             CompoundTag tag2 = tag != null ? tag.getCompound("DiscItem") : null;
             if (tag2 != null) {
-                if ($$1.isCrouching() && !ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                if ($$1.isCrouching() && !ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv7.isEmpty()) {
                     int reroll = ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
-                        if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
-                             if (!$$1.isCreative()) {
-                             $$1.giveExperienceLevels(-reroll);
-                             }
-                             rollStand($$0, $$1, $$3,true);
-                             return InteractionResultHolder.consume($$3);
+                        if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv7.isEmpty()) {
+                            if (!$$1.isCreative()) {
+                                $$1.giveExperienceLevels(-reroll);
+                            }
+                            rollStand($$0, $$1, $$3, true);
+                            return InteractionResultHolder.consume($$3);
                         } else {
-                            if ($$0.isClientSide()){
+                            if ($$0.isClientSide()) {
                                 ClientUtil.openStandSwitchUI($$3);
                             }
                         }
@@ -90,8 +89,14 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     }
                     return InteractionResultHolder.consume($$3);
                 }
+            } else if(((StandUser) $$1).roundabout$getStandPowers().canUseStandArrow()) {
+                $$1.startUsingItem($$2);
+                if ($$0.isClientSide()) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND);
+                }
+                return InteractionResultHolder.consume($$3);
             } else {
-                if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv5.isEmpty()) {
+                if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv7.isEmpty()) {
                     if (!$$0.isClientSide) {
                         rollStand($$0, $$1, $$3, true);
                         return InteractionResultHolder.consume($$3);
@@ -123,8 +128,10 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 return;
             }
 
-            if (stack.getItem() instanceof StandDiscItem SD){
-                player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+            if (!ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults) {
+                if (stack.getItem() instanceof StandDiscItem SD) {
+                    player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+                }
             }
         }
     }
@@ -211,8 +218,15 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 int itemTime = 5;
                 if ($$5 >= itemTime) {
                     if ($$2 instanceof Player PE) {
+
                         if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
-                            PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                            if (((StandUser) $$2).roundabout$getStandPowers().canUseStandArrow()) {
+                                 if (((StandUser) $$2).roundabout$getStandPowers().onStandArrowUse()) {
+                                     $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
+                                 }
+                            }else {
+                                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                            }
                         } else {
                             int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                             CompoundTag tag = $$0.isEmpty() ? null : $$0.getTagElement("StandDisc");
@@ -307,7 +321,6 @@ public class StandArrowItem extends RoundaboutArrowItem {
             ((StandUser) target).roundabout$setStand(null);
             ((StandUser) target).roundabout$setActive(false);
             ((StandUser) target).roundabout$setStandDisc(discStack.copy());
-            de.generateStandPowers(target);
             ((StandUser) target).roundabout$getStandPowers().rollSkin();
             ((StandUser) target).roundabout$summonStand(target.level(),true,false);
             return true;
@@ -328,9 +341,15 @@ public class StandArrowItem extends RoundaboutArrowItem {
                             Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                     );
                 } else if (itemstack.getItem() instanceof StandDiscItem de) {
-                    $$2.add(
-                            de.getDisplayName2().withStyle(ChatFormatting.AQUA)
-                    );
+                    if (ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults){
+                        $$2.add(
+                                Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                        );
+                    } else {
+                        $$2.add(
+                                de.getDisplayName2().withStyle(ChatFormatting.AQUA)
+                        );
+                    }
                     //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
                     $$2.add(
                             Component.empty()

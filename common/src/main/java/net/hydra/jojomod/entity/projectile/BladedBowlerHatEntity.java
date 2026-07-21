@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -289,6 +290,8 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         }
     }
 
+    public boolean isHattanHatProj = false;
+
         public boolean skyHit = false;
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
@@ -350,6 +353,10 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             } else {
                 this.playSound(ModSounds.HARPOON_HIT_EVENT, $$8, 1.0F);
             }
+
+            if(isHattanHatProj){
+                doBonusHattanDamageHat($$1);
+            }
         }
 
         public float addSkyAndBounceDamage(Entity target, float damage){
@@ -375,8 +382,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                 float healthAfter = livingEntity.getHealth();
 
                 if (didHurt && healthAfter < healthBefore) {
-                    ((StandUser) target).roundabout$setBleedLevel(1);
-                    livingEntity.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                    MainUtil.makeBleed(target,0,400,getOwner());
                 }
             }
 
@@ -436,5 +442,14 @@ public class BladedBowlerHatEntity extends AbstractArrow {
         @Override
         public boolean shouldRender(double $$0, double $$1, double $$2) {
             return true;
+        }
+
+        public void doBonusHattanDamageHat(Entity hit){
+            DamageSource damageSource;
+            Entity entity2 = this.getOwner();
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
+            float amount = MainUtil.isBossMob(hit) || hit instanceof Player ? 1 : 2;
+            hit.hurt(damageSource, amount);
+            if(hit.hurt(damageSource, amount)){}
         }
 }

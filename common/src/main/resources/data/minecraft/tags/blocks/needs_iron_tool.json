@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "roundabout:meteor_block",
-    "roundabout:ancient_meteor"
+    "roundabout:ancient_meteor",
+    "roundabout:aja_ore",
+    "roundabout:deepslate_aja_ore"
   ]
 }

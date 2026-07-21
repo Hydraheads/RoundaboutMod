@@ -1,19 +1,27 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -21,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -36,6 +45,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
     public SoftAndWetExplosiveBubbleEntity(EntityType<? extends SoftAndWetExplosiveBubbleEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
+    private static final EntityDataAccessor<Boolean> READY = SynchedEntityData.defineId(SoftAndWetExplosiveBubbleEntity.class, EntityDataSerializers.BOOLEAN);
 
     public SoftAndWetExplosiveBubbleEntity(LivingEntity $$1, Level $$2) {
         super(ModEntities.EXPLOSIVE_BUBBLE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
@@ -46,7 +56,16 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
     public int getDistanceUntilPopping() {
         return ClientNetworking.getAppropriateConfig().softAndWetSettings.maxExplosiveBubbleTravelDistanceBeforePopping;
     }
-
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(READY, false);
+    }
+    public boolean getReady() {
+        return this.getEntityData().get(READY);
+    }
+    public void setReady(boolean activ) {
+        this.getEntityData().set(READY, activ);
+    }
     public void tick() {
         if (!this.level().isClientSide()) {
             lifeSpan--;
@@ -57,6 +76,14 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
         }
         super.tick();
         if (!this.level().isClientSide()) {
+            if (!getReady() && tickCount > 5){
+                if (!isRemoved()) {
+                    setReady(true);
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                            this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
+                            0, 0, 0, 0, 0.015);
+                }
+            }
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_TRAIL,
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);
@@ -82,10 +109,22 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
     }
 
 
-    public void popBubble() {
-        if (!this.level().isClientSide()) {
+    public void playPopSound(){
+        if (getReady()){
             this.level().playSound(null, this.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_POP_EVENT,
                     SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+            ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    0, 0, 0, 0, 0.7);
+        } else {
+            this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                    SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+        }
+    }
+
+    public void popBubble() {
+        if (!this.level().isClientSide()) {
+            playPopSound();
             ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
                     this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                     1, 0, 0, 0, 0.015);
@@ -155,6 +194,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
         }
     }
 
+    public boolean spinMode = false;
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -167,16 +207,29 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
             if (!(ent instanceof SoftAndWetBubbleEntity)) {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
-                        float str = PW.getExplosiveBubbleStrength(ent);
-                        float kb = 1.05F;
+                        float str = 0;
+                        if (getReady()){
+                            str = PW.getExplosiveBubbleStrength(ent);
+                        } else {
+                            str = PW.getPointBlankBubbleStrength(ent);
+                        }
+                        float kb = 0.97F;
                         if (getMadeWithBarrage()){
                             kb = 0.1F;
+                        } else if (!getReady()){
+                            kb = 0.4F;
                         }
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
                                 str)) {
                             if (ent instanceof LivingEntity LIVE) {
                                 LE.setLastHurtMob(LIVE);
                                 PW.addEXP(1);
+                                if (getReady() && LE instanceof Player pl && !spinMode
+                                && !(LIVE instanceof FogCloneEntity) && !(LIVE instanceof FallenMob)){
+                                    S2CPacketUtil.sendSimpleByteToClientPacket(pl,
+                                            PacketDataIndex.S2C_SOFT);
+
+                                }
                             }
                             //You don't need to hurt them to launch them
                         }

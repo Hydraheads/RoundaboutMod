@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -19,9 +20,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -136,8 +139,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     public void applyEffect(LivingEntity target) {
         if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
             if (MainUtil.getMobBleed(target)) {
-                ((StandUser) target).roundabout$setBleedLevel(1);
-                target.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                MainUtil.makeBleed(target,0,400,getOwner());
             }
         }
     }
@@ -157,7 +159,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         };
     }
 
-
+    public boolean isHattan = false;
+    public float manhattanDamage = 0.0F;
 
     @Override
     public void onHitEntity(EntityHitResult result) {
@@ -205,13 +208,14 @@ public class RoundaboutBulletEntity extends AbstractArrow {
             }
 
             float damage = getBulletDamage();
+            float damageManhattan = this.manhattanDamage;
 
             if (getAmmoType() == SNIPER) {
-                    float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
-                    damage = damage * multiplier;
+                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                damage = damage * multiplier;
 
                 if (MainUtil.isBossMob(livingEntity)) {
-                    damage = Math.min(damage,ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage/3F);
+                    damage = Math.min(damage, ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage / 3F);
                 }
             }
 
@@ -219,32 +223,64 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 damage += 1.0F;
             }
             if (livingEntity instanceof Player) {
-                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers *0.01));
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                damage *= 0.85F;
+
+                if (getAmmoType() == TOMMY_GUN) {
+                    damage *= 0.57F;
+                }
             } else {
-                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs *0.01));;
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
+                ;
             }
+            if (!isHattan) {
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
-            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                }
 
-            if (didDamage) {
-                applyEffect(livingEntity);
+                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
+            } else {
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damageManhattan);
+
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                }
+
+                if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
+
+                if (livingEntity.isAlive()) {
+                    doPostHurtXtraDamage(livingEntity);
+                }
             }
-
-            if (didDamage && getAmmoType() == SNUBNOSE && outsideOfTimeStop == 0) {
-                livingEntity.invulnerableTime = 10;
-                livingEntity.hurtTime = 10;
-            }
+        }else if (entity instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                return;
+        } else {
+            entity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), 1);
         }
 
         Entity $$2 = this.getOwner();
-        DamageSource damageSource = ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, $$2);
-
         if ($$2 instanceof LivingEntity livingOwner) {
             livingOwner.setLastHurtMob(entity);
         }
 
         this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         this.discard();
+    }
+
+    ResourceKey<DamageType> getDamageType(){
+        if (getAmmoType() == SNIPER) {
+            return ModDamageTypes.SNIPER_BULLET;
+        }
+        return ModDamageTypes.BULLET;
     }
 
     protected void onHitBlock2(BlockHitResult $$0) {
@@ -263,6 +299,22 @@ public class RoundaboutBulletEntity extends AbstractArrow {
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+    }
+
+    protected void doPostHurtXtraDamage(LivingEntity target) {
+        /*Bonus stand damage for Manhattan Transfer*/
+        float mult = this.getAmmoType() == TOMMY_GUN ? 0.1F : 1F;
+        float amount = 0;
+        float finalDamage = 0;
+        if(target instanceof Player || MainUtil.isBossMob(target)){
+            amount = (1 + manhattanDamage / 8)*0.7F;
+            if (this.getAmmoType() == SNIPER){amount+=0.5F;}
+        } else {
+            amount = 1 + manhattanDamage / 5;
+        }
+        finalDamage = amount <= 4 ? amount : 4;
+
+        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage * mult);
     }
 
     @Override

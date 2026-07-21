@@ -499,8 +499,9 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             this.setGameTime(this.levelData.getGameTime() + 1L);
             if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
                 this.setDayTime(((IDayInterpolationClientLevelData)this.levelData).roundabout$getRoundaboutDayTimeMinecraft() + 1L);
-                ci.cancel();
             }
+            ci.cancel();
+            return;
         }
 
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){

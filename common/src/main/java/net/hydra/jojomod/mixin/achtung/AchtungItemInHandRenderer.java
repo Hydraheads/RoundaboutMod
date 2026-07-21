@@ -43,7 +43,7 @@ public class AchtungItemInHandRenderer {
 
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
-            if (entityAndData.roundabout$getTrueInvisibility() > -1){
+            if (entityAndData.roundabout$getTrueInvisibility() > -1 || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
                 throwFadeToTheEther = throwFadeToTheEther*0.1F;
                 /**
                 StandPowers powers = user.roundabout$getStandPowers();

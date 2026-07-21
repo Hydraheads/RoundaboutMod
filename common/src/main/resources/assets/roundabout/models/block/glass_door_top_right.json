@@ -4,5 +4,5 @@
     "bottom": "roundabout:block/glass_door_bottom",
     "top": "roundabout:block/glass_door_top"
   },
-  "render_type": "translucent"
+  "render_type": "cutout"
 }

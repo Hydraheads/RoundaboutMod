@@ -19,9 +19,14 @@ public class FateEntityMixin {
     /**vampires cannot drown*/
     @Inject(method = "isInvulnerableTo(Lnet/minecraft/world/damagesource/DamageSource;)Z", at = @At(value = "HEAD"), cancellable = true)
     public void rdbt$isInvulnerableTo(DamageSource $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (((Entity)(Object)this) instanceof LivingEntity LE &&  FateTypes.hasBloodHunger(LE)){
-            if ($$0.is(DamageTypes.DROWN) || $$0.is(DamageTypes.FREEZE) || $$0.is(DamageTypes.STARVE))
-                cir.setReturnValue(true);
+        if (((Entity)(Object)this) instanceof LivingEntity LE){
+            if (FateTypes.isVampire(LE)){
+                if ($$0.is(DamageTypes.DROWN) || $$0.is(DamageTypes.FREEZE) || $$0.is(DamageTypes.STARVE))
+                    cir.setReturnValue(true);
+            } else if (FateTypes.isZombie(LE)){
+                if ($$0.is(DamageTypes.DROWN))
+                    cir.setReturnValue(true);
+            }
         }
     }
 }

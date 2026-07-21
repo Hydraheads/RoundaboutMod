@@ -77,6 +77,11 @@ public class TimeStopParticleEngine {
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     private void doNotDeltaTickParticlesWhenTimeIsStopped(PoseStack $$0, MultiBufferSource.BufferSource $$1, LightTexture $$2, Camera $$3, float $$4, CallbackInfo ci) {
 
+        if (ClientUtil.isUsingEpitaph()){
+            ci.cancel();
+            return;
+        }
+
         if (!((TimeStop) level).getTimeStoppingEntities().isEmpty()) {
             $$2.turnOnLightLayer();
             RenderSystem.enableDepthTest();

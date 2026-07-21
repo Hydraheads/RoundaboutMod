@@ -8,7 +8,6 @@ import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,22 +33,36 @@ public class ModItems {
     public static Item STAND_DISC_MAGICIANS_RED;
     public static Item STAND_DISC_D4C;
     public static Item MAX_STAND_DISC_D4C;
+
+    public static Item STAND_DISC_KING_CRIMSON;
+    public static Item MAX_STAND_DISC_KING_CRIMSON;
+
     public static Item STAND_DISC_RATT;
     public static Item MAX_STAND_DISC_RATT;
     public static Item STAND_DISC_ANUBIS;
     public static Item MAX_STAND_DISC_ANUBIS;
+    public static Item STAND_DISC_PURPLE_HAZE;
+    public static Item MAX_STAND_DISC_PURPLE_HAZE;
     public static Item STAND_DISC_WALKING_HEART;
     public static Item MAX_STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_GREEN_DAY;
     public static Item MAX_STAND_DISC_GREEN_DAY;
+    public static Item STAND_DISC_OASIS;
+    public static Item MAX_STAND_DISC_OASIS;
     public static Item STAND_DISC_SOFT_AND_WET;
     public static Item MAX_STAND_DISC_SOFT_AND_WET;
+    public static Item STAND_DISC_WHITE_ALBUM;
+    public static Item MAX_STAND_DISC_WHITE_ALBUM;
     public static Item STAND_DISC_TUSK;
     public static Item MAX_STAND_DISC_TUSK;
     public static Item STAND_DISC_KILLER_QUEEN;
     public static Item MAX_STAND_DISC_KILLER_QUEEN;
+    public static Item STAND_DISC_PLANET_WAVES;
+    public static Item MAX_STAND_DISC_PLANET_WAVES;
     public static Item STAND_DISC_CINDERELLA;
+    public static Item STAND_DISC_CALIFORNIA_KING_BED;
     public static Item STAND_DISC_MANHATTAN_TRANSFER;
+    public static Item STAND_DISC_BLACK_SABBATH;
     public static Item STAND_DISC_HEY_YA;
     public static Item STAND_DISC_MANDOM;
     public static Item STAND_DISC_SURVIVOR;
@@ -71,7 +84,6 @@ public class ModItems {
     public static Item STREET_SIGN_STOP_BLOCK_ITEM;
     public static Item STREET_SIGN_YIELD_BLOCK_ITEM;
     public static Item STREET_SIGN_DANGER_BLOCK_ITEM;
-    public static Item LIGHT_BULB;
     public static Item LOCACACA_PIT;
     public static Item LOCACACA;
     public static Item LOCACACA_BRANCH;
@@ -80,11 +92,13 @@ public class ModItems {
     public static Item METEORITE;
     public static Item METEORITE_INGOT;
     public static Item TERRIER_SPAWN_EGG;
+    public static Item ZOMBIE_MINION_SPAWN_EGG;
     public static Item AESTHETICIAN_SPAWN_EGG;
     public static Item ZOMBIE_AESTHETICIAN_SPAWN_EGG;
     public static Item ANUBIS_GUARDIAN_SPAWN_EGG;
     public static Item ROAD_ROLLER;
 
+    public static Item IRON_BALL_CROSSBOW;
 
     public static Item CAT_REMAINS;
     public static Item OCELOT_REMAINS;
@@ -98,6 +112,8 @@ public class ModItems {
     public static Item LLAMA_REMAINS;
     public static Item SILVERFISH_REMAINS;
 
+    public static Item AJA;
+
     public static Item KNIFE;
     public static Item KNIFE_BUNDLE;
 
@@ -105,6 +121,8 @@ public class ModItems {
     public static Item MATCH_BUNDLE;
 
     public static Item HAIRSPRAY;
+
+    public static Item FANCY_LIGHTER;
 
     public static Item GASOLINE_CAN;
     public static Item GASOLINE_BUCKET;
@@ -126,9 +144,32 @@ public class ModItems {
     public static Item GOLDEN_GLAIVE;
     public static Item DIAMOND_GLAIVE;
     public static Item NETHERITE_GLAIVE;
+
+    public static Item WOODEN_WAR_HAMMER;
+    public static Item STONE_WAR_HAMMER;
+    public static Item IRON_WAR_HAMMER;
+    public static Item GOLDEN_WAR_HAMMER;
+    public static Item DIAMOND_WAR_HAMMER;
+    public static Item NETHERITE_WAR_HAMMER;
+
     public static Item MUSIC_DISC_TORTURE_DANCE;
     public static Item MUSIC_DISC_HALLELUJAH;
     public static Item LUCKY_LIPSTICK;
+
+    public static Item MEMORY_PAWN;
+    public static Item MEMORY_BISHOP;
+    public static Item MEMORY_KNIGHT;
+    public static Item MEMORY_ROOK;
+    public static Item MEMORY_KING;
+    public static Item MEMORY_QUEEN;
+    public static Item MEMORY_PAWN_WHITE;
+    public static Item MEMORY_BISHOP_WHITE;
+    public static Item MEMORY_KNIGHT_WHITE;
+    public static Item MEMORY_ROOK_WHITE;
+    public static Item MEMORY_KING_WHITE;
+    public static Item MEMORY_QUEEN_WHITE;
+    public static Item EXP_BISHOP;
+
     public static Item BLANK_MASK;
     public static Item RAT_MASK;
     public static Item MODIFICATION_MASK;
@@ -149,6 +190,10 @@ public class ModItems {
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
+    public static Item GHIACCIO_MASK;
+    public static Item JOHNNY_MASK;
+    public static Item JOHNGALLIA_MASK;
+    public static Item LUCY_MASK;
     public static Item AESTHETICIAN_MASK_1;
     public static Item AESTHETICIAN_MASK_2;
     public static Item AESTHETICIAN_MASK_3;
@@ -161,9 +206,14 @@ public class ModItems {
     public static Item HATO_MASK;
     public static Item SHIZUKA_MASK;
     public static Item CHAKA_MASK;
+    public static Item DAIYA_MASK;
+    public static Item DAIYA_2_MASK;
     public static Item INTERDIMENSIONAL_KEY;
 
     public static Item ANUBIS_ITEM;
+
+    public static Item STRAY_CAT_ANIME;
+    public static Item STRAY_CAT_MANGA;
 
     public static Item SNUBNOSE_REVOLVER;
     public static Item SNUBNOSE_AMMO;
@@ -180,6 +230,7 @@ public class ModItems {
     public static Item PAINTING_MONA_LISA;
     public static Item PAINTING_BIRTH_OF_VENUS;
 
+    public static Item ULTRAVIOLET_BLASTER;
     public static Item FLESH_BUCKET;
     public static Item CHERRIES;
 
@@ -205,41 +256,53 @@ public class ModItems {
         return VISAGE_STORE_ENTRIES;
     }
     public static void initializeVisageStore(){
-        addToVisageStore(LUCKY_LIPSTICK,0,
+        int page = 0;
+        addToVisageStore(LUCKY_LIPSTICK,page,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostLipstick,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostLipstick);
-        addToVisageStore(BLANK_MASK,0,
+        addToVisageStore(BLANK_MASK,page,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostGlassVisage,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostGlassVisage);
-        addToVisageStore(MODIFICATION_MASK,0,
+        addToVisageStore(MODIFICATION_MASK,page,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostModificationVisage,
                 ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostModificationVisage);
         int characterCostExp = ClientNetworking.getAppropriateConfig().cinderellaSettings.levelCostCharacterVisage;
         int characterCostEmerald = ClientNetworking.getAppropriateConfig().cinderellaSettings.emeraldCostCharacterVisage;
         //37 67 -34
-        addToVisageStore(SPEEDWAGON_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(DIO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(STRAIZO_VAMPIRE_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOTARO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(AVDOL_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(KAKYOIN_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(DIO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(ENYA_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(CHAKA_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOTARO_4_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(AYA_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(MISTA_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOTARO_6_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(GUCCIO_MASK,1, characterCostExp, characterCostEmerald);
-        addToVisageStore(DIEGO_MASK,2, characterCostExp, characterCostEmerald);
-        addToVisageStore(POCOLOCO_MASK,2, characterCostExp, characterCostEmerald);
-        addToVisageStore(RINGO_MASK,2, characterCostExp, characterCostEmerald);
-        addToVisageStore(VALENTINE_MASK,2, characterCostExp, characterCostEmerald);
-        addToVisageStore(JOSUKE_PART_EIGHT_MASK,2, characterCostExp, characterCostEmerald);
-        addToVisageStore(HATO_MASK,2, characterCostExp, characterCostEmerald);
+        page++;
+        addToVisageStore(SPEEDWAGON_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(STRAIZO_VAMPIRE_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(AVDOL_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(KAKYOIN_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(ENYA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_4_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(AYA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(MISTA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(GHIACCIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOTARO_6_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOHNGALLIA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
+
+
+        page++;
+        addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIEGO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DAIYA_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DAIYA_2_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(HATO_MASK,page, characterCostExp, characterCostEmerald);
         if (ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
-            addToVisageStore(SHIZUKA_MASK,3, characterCostExp, characterCostEmerald);
+            page++;
+            addToVisageStore(SHIZUKA_MASK,page, characterCostExp, characterCostEmerald);
         }
         ComposterBlock.COMPOSTABLES.put(LOCACACA_PIT, 0.3f);
         ComposterBlock.COMPOSTABLES.put(NEW_LOCACACA, 0.65f);

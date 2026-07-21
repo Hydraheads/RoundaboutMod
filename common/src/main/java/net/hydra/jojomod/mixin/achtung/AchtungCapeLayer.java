@@ -3,9 +3,13 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -17,6 +21,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -43,12 +48,27 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
                 }
             }
         }
+        ItemStack visage;
+        IPlayerEntity pl = ((IPlayerEntity) $$3);
+        visage = pl.roundabout$getMaskSlot();
+        if (visage != null && !visage.isEmpty()) {
+            if (visage.getItem() instanceof MaskItem MI) {
+                VisageData vd = MI.visageData.generateVisageData($$3);
+                if (vd.isCharacterVisage()) {
+                    ci.cancel();
+                }
+            }
+        }
     }
 
     /**Fade out cape*/
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V", at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+
+        if ($$3 != null) {
+            ClientUtil.setThrowFadeToTheEther(ClientUtil.getThrowFadePercent($$3, $$4));
+        }
         if (ClientUtil.getThrowFadeToTheEther() != 1) {
             if ($$3.isCapeLoaded() && !$$3.isInvisible() && $$3.isModelPartShown(PlayerModelPart.CAPE)
                 && $$3.getCloakTextureLocation() != null && !ClientUtil.checkIfClientCanSeeMobsForWindVision()

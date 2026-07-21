@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "roundabout:block/memory_bishop",
+      "y": 0
+    },
+    "facing=north": {
+      "model": "roundabout:block/memory_bishop",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "roundabout:block/memory_bishop",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "roundabout:block/memory_bishop",
+      "y": 180
+    }
+  }
+}

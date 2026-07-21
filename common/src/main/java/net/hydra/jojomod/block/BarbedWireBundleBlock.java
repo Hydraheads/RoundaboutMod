@@ -52,7 +52,8 @@ public class BarbedWireBundleBlock extends Block {
             VoxelShape vs = MAIN_SHAPE;
                 if (!entity.isInvulnerable() && entity.isAlive()){
                     Vec3 dm = entity.getDeltaMovement();
-                    float power = 3 + 15*((float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z)));
+                    float power = 3 + 9*((float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z)));
+                    power = Math.min(power,10F);
                     if (power > 0) {
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
@@ -87,6 +88,10 @@ public class BarbedWireBundleBlock extends Block {
     @SuppressWarnings("deprecation")
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockState blockstate = $$1.getBlockState($$2.below());
+        if (blockstate.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
         BlockPos $$3 = $$2.below();
         return $$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP);
     }

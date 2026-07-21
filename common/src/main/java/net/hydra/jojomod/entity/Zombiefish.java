@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.core.BlockPos;
@@ -61,7 +62,7 @@ public class Zombiefish extends PathfinderMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.ATTACK_DAMAGE, 2.0);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.4).add(Attributes.ATTACK_DAMAGE, 2.0);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class Zombiefish extends PathfinderMob {
 
     @Override
     public MobType getMobType() {
-        return MobType.ARTHROPOD;
+        return MobType.UNDEAD;
     }
 
     @Override
@@ -199,6 +200,7 @@ public class Zombiefish extends PathfinderMob {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
+        super.readAdditionalSaveData($$0);
         UUID $$2;
         if ($$0.hasUUID("Controller")) {
             $$2 = $$0.getUUID("Controller");
@@ -255,6 +257,22 @@ public class Zombiefish extends PathfinderMob {
                         autoTarget = null;
                     }
                     if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()){
+                        autoTarget2 = null;
+                    }
+                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
+                        autoTarget = null;
+                    }
+                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
+                        autoTarget2 = null;
+                    }
+                    if (autoTarget instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                            && controller2 != null
+                            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                        autoTarget = null;
+                    }
+                    if (autoTarget2 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                            && controller2 != null
+                            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
                         autoTarget2 = null;
                     }
                     boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;

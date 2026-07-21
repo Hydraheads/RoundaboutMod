@@ -121,13 +121,8 @@ public class JusticeEntity extends FollowingStandEntity {
             if (perc < 0) {
                 if (this.getUser() != null) {
                     StandUser user = ((StandUser) this.getUser());
-                    user.roundabout$setMaxSealedTicks(400);
-                    user.roundabout$setSealedTicks(400);
+                    user.roundabout$setSealedTicks(400,400);
                     user.roundabout$setDrowning(true);
-                    if (!this.level().isClientSide() && user instanceof Player PE) {
-                        S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                                PacketDataIndex.S2C_INT_SEAL, 400);
-                    }
                     user.roundabout$setActive(false);
                 }
                 this.discard();

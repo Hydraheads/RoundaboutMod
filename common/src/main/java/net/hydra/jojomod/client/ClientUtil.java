@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -13,11 +14,12 @@ import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -26,7 +28,6 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -52,7 +53,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -61,7 +61,6 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -69,48 +68,36 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
-import net.zetalasis.client.shader.D4CShaderFX;
-import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.packet.api.IClientNetworking;
-import net.zetalasis.world.DynamicWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
-import java.nio.file.Path;
 import java.util.*;
 
-import static net.hydra.jojomod.util.MainUtil.getUserData;
-import static oshi.util.UserGroupInfo.getUser;
 
 
 public class ClientUtil {
@@ -121,6 +108,7 @@ public class ClientUtil {
     public static int checkthisdat = 0;
     public static int renderBloodTicks = 0;
     public static boolean skipInterpolation = false;
+    public int carryingTime = 0;
 
     /**Fallback in case the client exits the range and can't be fed the packet anymore.
      * Not a perfect solution but it should help.*/
@@ -134,7 +122,7 @@ public class ClientUtil {
         $$0.zRot = 0.0F;
         $$1.yRot = -(0.1F - $$5 * 0.6F);
         $$0.yRot = 0.1F - $$5 * 0.6F;
-        float $$7 = (float) -Math.PI / ($$2 ? 1.5F : 2.25F);
+        float $$7 = (float) -Math.PI / (2.25F);
         $$1.xRot = $$7;
         $$0.xRot = $$7;
         $$1.xRot += $$5 * 1.2F - $$6 * 0.4F;
@@ -159,6 +147,8 @@ public class ClientUtil {
     }
 
 
+    public static boolean isBlocked = false;
+
     public static double getCameradDistance(Entity ent){
         return Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceTo(ent.position());
     }
@@ -174,6 +164,9 @@ public class ClientUtil {
     }
 
     public static boolean hasChangedArms(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isArmsFrozen(ent)){
             return true;
         }
@@ -187,6 +180,9 @@ public class ClientUtil {
     }
 
     public static boolean hasChangedLegs(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isLegsFrozen(ent)){
             return true;
         }
@@ -199,6 +195,9 @@ public class ClientUtil {
         return StandIcons.ICICLE_LAYER;
     }
     public static boolean hasChangedHead(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isBodyFrozen(ent)){
             return true;
         }
@@ -211,6 +210,9 @@ public class ClientUtil {
         return StandIcons.ICICLE_LAYER;
     }
     public static boolean hasChangedBody(Entity ent){
+        if (cancelWithSuitStand(ent)){
+            return false;
+        }
         if (HeatUtil.isBodyFrozen(ent)){
             return true;
         }
@@ -256,15 +258,24 @@ public class ClientUtil {
         }
         return false;
     }
+
     public static int getFrozenLevel(){
         return frozenLevel;
     }
     public static int clientTicker;
+    public static int timeSkipTicker = -1;
     public static int getClientTicker(){
         return clientTicker;
     }
     public static void tickClientUtilStuff(){
         clientTicker++;
+
+        if (timeSkipTicker > -1){
+            timeSkipTicker++;
+            if (timeSkipTicker > 9){
+                timeSkipTicker = -1;
+            }
+        }
 
         if (heldSwap > 0){
             heldSwap--;
@@ -282,6 +293,23 @@ public class ClientUtil {
         if (ClientUtil.popSounds != null){
             ClientUtil.popSounds.popSounds();
             ClientUtil.popSounds = null;
+        }
+
+
+        Player pl = getPlayer();
+        if (pl != null){
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int cont = ipe.roundabout$getControlling();
+            if (cont > 0){
+                Entity zentity = pl.level().getEntity(cont);
+                if (zentity == null ||
+                        !zentity.level().dimension().equals(pl.level().dimension())
+                || zentity.isRemoved() || !zentity.isAlive()){
+                    ipe.roundabout$setIsControlling(0);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
         }
 
         if (roadRollerPickingRRE != null) {
@@ -368,6 +396,19 @@ public class ClientUtil {
     public static void handleRoadRollerAmbientSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
+    public static void handleSkatingSounds(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
+    }
+    public static void handleTwisterSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
+    }
+    public static void handleWeepsSound(Entity entity) {
+        Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
+                SoundSource.PLAYERS, 1, 1, entity,
+                entity.level().random.nextLong()));
+    }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
@@ -440,7 +481,13 @@ public class ClientUtil {
         instance.execute(() -> {
             if (player != null) {
                 /**Mandom's time rewind flashes on people and makes their screen interpolate*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.FullBlip.value)) {
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
@@ -454,13 +501,11 @@ public class ClientUtil {
                         skipInterpolation = true;
                         skipInterpolationFixAccidentTicks = 14;
                     }
-                }
-                /**Generalized packet for resuming interpolation on all mobs*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Interpolate.value)) {
+                    /**Generalized packet for resuming interpolation on all mobs*/
                     skipInterpolation = false;
-                }
-                /**Mandom Clock Particle*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Chrono.value)) {
+                    /**Mandom Clock Particle*/
                     int id = (int)vargs[0];
                     double x = (double)vargs[1];
                     double y = (double)vargs[2];
@@ -482,18 +527,16 @@ public class ClientUtil {
                                         0
                                 );
                     }
-                }
-                /**The penalty for killing or placing blocks to distort time and raise cooldown*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANDOM_PENALTY.value)) {
+                    /**The penalty for killing or placing blocks to distort time and raise cooldown*/
                     int altared = (int)vargs[0];
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (powers instanceof PowersMandom PM){
                         PM.setTimeHasBeenAltered(altared);
                     }
-                }
-                /**Invis Psuedo Tracked Data*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value)) {
+                    /**Invis Psuedo Tracked Data*/
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
@@ -501,101 +544,80 @@ public class ClientUtil {
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
                     }
-                }
-                /**Invis Psuedo Tracked Data*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
+                    /**Invis Psuedo Tracked Data*/
                     int entityID = (int)vargs[0];
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
                     }
-                }
-                /**Daze Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
+                    /**Daze Packet*/
                     byte dazeTime = (byte)vargs[0];
                     ClientUtil.updateDazePacket(dazeTime);
-                }
-
-                /**Guard Sync Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value)) {
+                    /**Guard Sync Packet*/
                     float guardPoints = (float)vargs[0];
                     boolean guardBroken = (boolean)vargs[1];
                     ((StandUser) player).roundabout$setGuardPoints(guardPoints);
                     ((StandUser)player).roundabout$setGuardBroken(guardBroken);
-                }
-
-                /**Barrage Clash S2C Packet*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
+                    /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];
                     float progress = (float)vargs[1];
                     ClientUtil.clashUpdatePacket(clashOpID, progress);
-                }
-
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendConfig.value)) {
+                    /**Read in Sent config*/
                     String config = (String)vargs[0];
                     ClientNetworking.initialize(config);
-                }
-
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.PlaySound.value)) {
+                    /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         ((StandUserClient)User).roundabout$clientQueSound(soundID);
                     }
-                }
-                /**Read in Sent config*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
+                    /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         ((StandUserClient)User).roundabout$clientQueSoundCanceling(soundID);
                     }
-                }
-
-                /**TS Teleport blip*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
+                    /**TS Teleport blip*/
                     int data = (int) vargs[0];
                     byte activePower = (byte) vargs[1];
                     Vector3f vec = (Vector3f) vargs[2];
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
-                }
-
-                /**Syncs cooldowns for skills*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
+                    /**Syncs cooldowns for skills*/
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     ClientUtil.skillCDSyncPacket(power, cooldown);
-                }
-                /**Syncs cooldowns for skills, includes a maximum to update with*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldownMax.value)) {
+                    /**Syncs cooldowns for skills, includes a maximum to update with*/
                     byte power = (byte) vargs[0];
                     int cooldown = (int) vargs[1];
                     int maxCooldown = (int) vargs[2];
                     ClientUtil.skillMaxCDSyncPacket(power, cooldown, maxCooldown);
-                }
-                /**Syncs the active power the stand is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePower.value)) {
+                    /**Syncs the active power the stand is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePower(player,power);
-                }
-                /**Syncs the active power the fate is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerFate.value)) {
+                    /**Syncs the active power the fate is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePowerFate(player,power);
-                }
-                /**Syncs the active power the powers is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncActivePowerPowers.value)) {
+                    /**Syncs the active power the powers is using*/
                     byte power = (byte) vargs[0];
                     MainUtil.syncActivePowerPowers(player,power);
-                }
-
-                /**Syncs the power inventory settings*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPowerInventory.value)) {
+                    /**Syncs the power inventory settings*/
                     int anchorPlace = (int) vargs[0];
                     float distanceOut = (float) vargs[1];
                     float idleOpacity = (float) vargs[2];
@@ -604,43 +626,32 @@ public class ClientUtil {
                     int anchorPlaceAttack = (int) vargs[5];
                     ClientUtil.handlePowerInventoryOptionsPacketS2C(player,anchorPlace,distanceOut,idleOpacity,combatOpacity,
                             enemyOpacity,anchorPlaceAttack);
-                }
-
-                /**Syncs the active power the stand is using*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntPowerData.value)) {
+                    /**Syncs the active power the stand is using*/
                     byte activePower = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
-                }
-
-                /**Generic int that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
+                    /**Generic int that is sent to the client*/
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     ClientUtil.handleIntPacketS2C(player,data,context);
-                }
-                /**Generic double int that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.DoubleIntToClient.value)) {
+                    /**Generic double int that is sent to the client*/
                     byte context = (byte) vargs[0];
                     int data = (int) vargs[1];
                     int data2 = (int) vargs[2];
                     ClientUtil.handleDoubleIntPacketS2C(player,data,data2,context);
-                }
-                /**Generic byte that is sent to the client*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SimpleByteToClient.value)) {
+                    /**Generic byte that is sent to the client*/
                     byte context = (byte) vargs[0];
                     ClientUtil.handleSimpleBytePacketS2C(context);
-                }
-
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ByteBundleToClient.value)) {
                     byte context = (byte) vargs[0];
                     byte firstByte = (byte) vargs[1];
                     byte secondByte = (byte) vargs[2];
                     ClientUtil.handleBundlePacketS2C(context,firstByte,secondByte);
-                }
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddTSEntity.value)) {
                     int entityID = (int) vargs[0];
                     double x = (double) vargs[1];
                     double y = (double) vargs[2];
@@ -649,12 +660,10 @@ public class ClientUtil {
                     int duration = (int) vargs[5];
                     int maxDuration = (int) vargs[6];
                     ClientUtil.handleTimeStoppingEntityPacket(entityID,x,y,z,range,duration,maxDuration);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemoveTSEntity.value)) {
                     int entityID = (int) vargs[0];
                     ClientUtil.processTSRemovePacket(entityID);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddPCEntity.value)) {
                     int entityID = (int) vargs[0];
                     double x = (double) vargs[1];
                     double y = (double) vargs[2];
@@ -662,59 +671,36 @@ public class ClientUtil {
                     double range = (double) vargs[4];
                     byte ctext = (byte) vargs[5];
                     ClientUtil.handlePermaCastingEntityPacket(entityID,x,y,z,range,ctext);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RemovePCEntity.value)) {
                     int entityID = (int) vargs[0];
                     ClientUtil.handlePermaCastingRemovePacket(entityID);
-                }
-
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ResumeTileEntityTS.value)) {
                     int x = (int) vargs[0];
                     int y = (int) vargs[1];
                     int z = (int) vargs[2];
                     ClientUtil.handleEntityResumeTsPacket(new Vec3i(x,y,z));
-                }
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendNewDynamicWorld.value)) {
-                    String name = (String) vargs[0];
-                    ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
-                    dimensionSynch(LEVEL_KEY);
-                }
-
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.EjectPRunning.value)) {
-                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-                    {
-                        d4c.ejectParallelRunning();
-                    }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.HeelExtend.value)) {
                     int entityID = (int) vargs[0];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent instanceof LivingEntity LE &&
                             ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
                         PW.setHeelExtension(3);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
                     MainUtil.clearCooldowns(player);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AffirmAllCooldowns.value)) {
                     ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
                     int sigmaTime = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setVoidTime(sigmaTime);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
                     int sigmaTime = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformTimer(sigmaTime);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
                     int sigmaDirection = (int) vargs[0];
                     if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformDirection(sigmaDirection);
@@ -722,8 +708,7 @@ public class ClientUtil {
                 }
                 if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.VampireMessage.value)) {
                     playSound(ModSounds.VAMPIRE_MESSAGE_EVENT,player,2,1);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.vampireLevel = (int) vargs[0];
                     vdata.bloodExp = (int) vargs[1];
@@ -749,8 +734,7 @@ public class ClientUtil {
                     vdata.jumpLevel = (byte) vargs[17];
                     vdata.ripperEyesLevel = (byte) vargs[18];
                     vdata.freezeLevel = (byte) vargs[19];
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData2.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.vampireLevel = (int) vargs[0];
                     vdata.bloodExp = (int) vargs[1];
@@ -761,38 +745,61 @@ public class ClientUtil {
                     vdata.timeSinceMonster = (int) vargs[6];
                     vdata.timeSinceNpc = (int) vargs[7];
                     renderBloodTicks = 60;
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateVampireData3.value)) {
                     VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
                     vdata.timeSinceAnimal = (int) vargs[0];
                     vdata.timeSinceMonster = (int) vargs[1];
                     vdata.timeSinceNpc = (int) vargs[2];
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ZombieFish.value)) {
                     ((IPlayerEntity)player).rdbt$setZombieFish((int) vargs[0]);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.GunRecoil.value)) {
                     String sigmaString = (String) vargs[0];
                     ClientUtil.applyClientRecoil(player, sigmaString);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
                     Player possessed = (Player) player.level().getEntity((int)vargs[0]);
                     LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
                     ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
                     Entity target = player.level().getEntity(i);
                     if (target instanceof LivingEntity LE) {
                         ((StandUser)LE).rdbt$setHideDeath(true);
                     }
-                }
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
                     String data = (String) vargs[0];
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
                     }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value)) {
+                    int i = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    float xrot = (float) vargs[4];
+                    float yrot = (float) vargs[5];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value)) {
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.clear();
+                    }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                    float data = (float) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.range = data;
+
+
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
+                    int data = (int) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.lifetime = data;
+
+
                 }
+
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -839,6 +846,9 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
             checkthisdat = data;
             checkthis = 1;
+        } else if (context == PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY){
+            checkthisdat = data;
+            checkthis = 2;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
@@ -849,10 +859,13 @@ public class ClientUtil {
         } else if (context== PacketDataIndex.S2C_INT_ATD){
             ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
         } else if (context == PacketDataIndex.S2C_INT_SEAL){
-            if (data > 0){
-                ((StandUser) player).roundabout$setMaxSealedTicks(data);
-                ((StandUser) player).roundabout$setSealedTicks(data);
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getMaxSealedTicks() < data){
+                user.roundabout$setMaxSealedTicks(data);
             }
+            user.roundabout$setSealedTicks(data);
+        } else if (context == PacketDataIndex.S2C_INT_MAX_SEAL){
+            ((StandUser) player).roundabout$setMaxSealedTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
             Entity target = player.level().getEntity(data);
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
@@ -884,6 +897,29 @@ public class ClientUtil {
             if (((IPowersPlayer)player).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
                 vgp.ripperEyesLeft = data;
             }
+        } else if (context == PacketDataIndex.S2C_INT_RESET_ACCELERATION) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
+                pwa.acceleration =data;
+            }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_ADD) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.addToClientList(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_CKB_REMOVE) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.removeFromClientList(data);
+            }
+        } else if (context == PacketDataIndex.S2C_INT_LEADED) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+                ckb.leadedInt = data;
+            }
+        } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
+            IPlayerEntity ipe = ((IPlayerEntity) player);
+            ipe.rdbt$setLevelDecreaseTicks(data);
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -933,18 +969,53 @@ public class ClientUtil {
         return false;
     }
 
-    public static boolean checkIfClientCanSeeMobsForWindVision() {
-
+    public static float getGameTimeStart(){
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.isPiloting()) {
-                    return true;
+        if (player != null){
+            return player.tickCount - GameTimeStart;
+        }
+        return 0;
+    }
+    public static float GameTimeStart = 0;
+    public static boolean isUsingEpitaph(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
+
+            if (PKC.isUsingEpitaph()){
+                return true;
+            } else {
+                GameTimeStart = player.tickCount;
+                return false;
+            }
+        }
+        if (player != null){
+            GameTimeStart = player.tickCount;
         }
         return false;
     }
-    public static boolean checkIfClientCanSeeMobsForWindVisionFromPlayerPov() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && PMT.visionModeClient && PMT.isActive()) {
+    public static boolean canRenderEpitaphScreen() {
+        if (isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
+            if (ConfigManager.getClientConfig().generalSettings.epitaphScreenEffect) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean canEpitaphRenderShader() {
+        if (isUsingEpitaph() && ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
             return true;
+        }
+        return false;
+    }
+    public static boolean checkIfClientCanSeeMobsForWindVision() {
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && (PMT.isPiloting() || PMT.visionModeClient)) {
+            if(PMT.isActive()) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }
@@ -1036,6 +1107,13 @@ public class ClientUtil {
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
+
+        if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
+            double dist = getCameradDistance(ent);
+            float metAlpha = PowersMetallica.getMetallicaInvisibilityAlpha(le, dist, delta);
+            throwFade = throwFade * metAlpha;
+        }
+
         if (ent instanceof Player pl){
             GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
             int interp = gp.fadeOutInterpolation;
@@ -1132,20 +1210,6 @@ public class ClientUtil {
             if (MainUtil.isZapper(player,entity)){
                 //15974080
                 return 11559774;
-            }
-
-            if (standComp.roundabout$getStand() instanceof D4CEntity)
-            {
-                if (entity instanceof D4CCloneEntity clone && clone.player != null && clone.player.equals(player) && player.isCrouching())
-                {
-                    if (clone.isSelected())
-                    {
-                        return 16701501;
-                    }
-                    else {
-                        return 16777215;
-                    }
-                }
             }
         }
 
@@ -1248,10 +1312,10 @@ public class ClientUtil {
     }
 
     public static boolean isPlayer(Entity PE){
-        if (PE != null){
+        if (PE instanceof Player){
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                return PE.is(player);
+                return PE.is(player) || PE.getUUID() == player.getUUID();
             }
         }
         return false;
@@ -1279,8 +1343,10 @@ public class ClientUtil {
     public static void openHairspryUI(){
         Minecraft.getInstance().setScreen(new HairColorChangeScreen());
     }
+    public static void openBombConfigScreen() {Minecraft.getInstance().setScreen(new BombConfigScreen());}
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
+    public static void openNailScreen(){Minecraft.getInstance().setScreen(new NailColorChangeScreen());}
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
@@ -1346,6 +1412,7 @@ public class ClientUtil {
                 if (SE != null) {
                     ((StandUser) SE).roundabout$setBlip(vec);
                 }
+                ((StandUser) target).roundabout$tryBlip();
             }
         }
     }
@@ -1485,55 +1552,7 @@ public class ClientUtil {
 
         return true;
     }
-    public static void dimensionSynch(ResourceKey<Level> LEVEL_KEY){
-        Roundabout.LOGGER.info("Got packet for dimension {}", LEVEL_KEY.toString());
-        if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-            if (ClientUtil.packetLocPlayCheck()) {
-                ClientUtil.dimensionSynchForge(LEVEL_KEY);
-            }
-        } else {
-            ClientUtil.dimensionSynchFabric(Minecraft.getInstance(),LEVEL_KEY);
-        }
-    }
-    public static void dimensionSynchForge(ResourceKey<Level> LEVEL_KEY){
-        if (ClientUtil.packetLocPlayCheck()) {
-            LocalPlayer localPlayer = Minecraft.getInstance().player;
-            if (localPlayer != null) {
-                localPlayer.connection.levels().add(LEVEL_KEY);
-                C2SPacketUtil.d4cDimensionHopRegistryPacket();
-            } else {
-                packetLocPlayCheck();
-            }
-        }
-    }
-    public static void dimensionSynchFabric(Minecraft client, ResourceKey<Level> LEVEL_KEY) {
-        LocalPlayer player = client.player;
-        player.connection.levels().add(LEVEL_KEY);
 
-        ModMessageEvents.sendToServer(
-                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
-                );
-    }
-
-    public static void d4cEjectParralelRunningForge(){
-        Minecraft client = Minecraft.getInstance();
-
-        if (client.player != null)
-        {
-            if (((StandUser)client.player).roundabout$getStandPowers() instanceof PowersD4C d4c)
-            {
-                d4c.ejectParallelRunning();
-            }
-        }
-    }
-
-
-    public static D4CShaderFX fx;
-
-    static {
-        fx = new D4CShaderFX();
-        RenderCallbackRegistry.register(fx);
-    }
     public static float getFrameTime() {
         Minecraft mc = Minecraft.getInstance();
         return mc.getFrameTime();
@@ -1564,6 +1583,19 @@ public class ClientUtil {
             MainUtil.syncCooldownsForAttacks(attackTime, attackTimeMax, attackTimeDuring,
                     activePower, activePowerPhase, player);
         }
+    }
+
+    public static boolean cancelWithSuitStand(Entity entity){
+
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) entity.level()).CanTimeStopEntity(entity)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(entity, delta);
+        if (whiteAmt > 0){
+            return true;
+        }
+        return false;
     }
 
     public static void skillCDSyncPacket(byte power, int cooldown){
@@ -1661,7 +1693,6 @@ public class ClientUtil {
     public void pauseGame(boolean $$0) {
     }
 
-
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
     public static void handleBundlePacketS2C(LocalPlayer player, byte context, byte byte1, byte byte2){
         if (context == PacketDataIndex.S2C_BUNDLE_POWER_INV){
@@ -1692,14 +1723,6 @@ public class ClientUtil {
     public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
         if (context == 1) {
             ((StandUser) player).roundabout$setGasolineTime(context);
-        } else if (context == PacketDataIndex.S2C_SIMPLE_FREEZE_STAND) {
-                int switchTicks = ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength;
-                if (switchTicks > 0){
-                    if (((StandUser) player).roundabout$getSealedTicks() < switchTicks) {
-                        ((StandUser) player).roundabout$setMaxSealedTicks(switchTicks);
-                        ((StandUser) player).roundabout$setSealedTicks(switchTicks);
-                    }
-                }
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
             ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
             ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
@@ -1709,6 +1732,21 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_RESPAWN){
             Minecraft.getInstance().player.respawn();
+        } else if (context == PacketDataIndex.TIME_SKIP){
+            timeSkipTicker = 0;
+        } else if (context == PacketDataIndex.S2C_SOFT){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
+            }
+        } else if (context == PacketDataIndex.CLEAR_LEADED){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersMagiciansRed PW) {
+                PW.leaded = null;
+            }
+        } else if (context == PacketDataIndex.STALL){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+                    PowersWhiteAlbum PW) {
+                PW.stallTicks = 10;
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1957,36 +1995,73 @@ public class ClientUtil {
                 if (slimBoolean) {
                     ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 } else {
-                    //ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                     ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
                 stack.popPose();
+            } else if (standUser.roundabout$getStandPowers() instanceof  Powers20thCenturyBoy PCB && PCB.invincibleState) {
+                stack.pushPose();
+                FirstPersonArmsModel.player = play;
+                FirstPersonArmsSlimModel.player = play;
+                if (slimBoolean) {
+                    ModStrayModels.FirstPersonArmsSlimModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                } else {
+                    ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount * $$4, stack, source, light);
+                }
+                stack.popPose();
             }
-
 
 
         }
 
     }
 
-    @Unique
+    protected static Vec3 getLeashOffset2(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*0.8F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    protected static Vec3 getLeashOffset3(Entity ent) {
+        return new Vec3((double)0.0F, (double)ent.getEyeHeight()*1.1F, (double)(ent.getBbWidth() * 0.4F));
+    }
+    public static Vec3 getRopeHoldPosition2(Entity ent, float $$0) {
+        return ent.getEyePosition($$0).subtract(ent.getPosition($$0)).scale(0.78F).add(ent.getPosition($$0));
+    }
+
+    // Red Bind rendering
     public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
+        int getBindType = 0;
+        if (victim != null){
+            getBindType = ((StandUser)victim).rdbt$getBoundType(binder);
+        }
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
+
         Vec3 vec3 = binder.getRopeHoldPosition(delta);
-        if (binder instanceof LivingEntity lv){
-            StandUser su = ((StandUser)lv);
-            StandEntity stand = su.roundabout$getStand();
-            if (stand != null){
-                vec3 = stand.getRopeHoldPosition(delta);
+        if (isMr){
+            if (binder instanceof LivingEntity lv){
+                StandUser su = ((StandUser)lv);
+                StandEntity stand = su.roundabout$getStand();
+                if (stand != null){
+                    vec3 = stand.getRopeHoldPosition(delta);
+                }
             }
+        } else if (isCKB){
+            vec3 = getRopeHoldPosition2(binder,delta);
         }
         double d0 = (double)(Mth.lerp(delta, victim.yBodyRotO, victim.yBodyRot) * ((float)Math.PI / 180F)) + (Math.PI / 2D);
-        Vec3 vec31 = victim.getLeashOffset(delta);
+        Vec3 vec31;
+        if (isCKB){
+            vec31 = getLeashOffset2(victim);
+        } else  {
+            vec31 = victim.getLeashOffset(delta);
+        }
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
-        double d3 = Mth.lerp((double)delta, victim.xo, victim.getX()) + d1;
-        double d4 = Mth.lerp((double)delta, victim.yo, victim.getY()) + vec31.y; //+3
-        double d5 = Mth.lerp((double)delta, victim.zo, victim.getZ()) + d2;
+        double victimX = victim.getX();
+        double victimY = victim.getY();
+        double victimZ = victim.getZ();
+        double d3 = Mth.lerp((double)delta, victim.xo, victimX) + d1;
+        double d4 = Mth.lerp((double)delta, victim.yo, victimY) + vec31.y; //+3
+        double d5 = Mth.lerp((double)delta, victim.zo, victimZ) + d2;
         poseStack.translate(d1, vec31.y, d2);
         float f = (float)(vec3.x - d3);
         float f1 = (float)(vec3.y - d4);
@@ -2012,11 +2087,13 @@ public class ClientUtil {
         int l = victim.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for(int i1 = 0; i1 <= 24; ++i1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, i1, false,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.025F, f5, f6, i1, false,focus, getBindType);
         }
 
         for(int j1 = 24; j1 >= 0; --j1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true,focus);
+            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+                    0.0F, f5, f6, j1, true,focus,getBindType);
         }
 
         poseStack.popPose();
@@ -2025,18 +2102,26 @@ public class ClientUtil {
         return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
-    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus) {
+    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus,
+                                                int getBindType) {
+        boolean isMr = getBindType == 2;
+        boolean isCKB = getBindType == 1;
         float f = (float)p_174321_ / 24.0F;
         int i = (int)Mth.lerp(f, (float)p_174313_, (float)p_174314_);
         int j = (int)Mth.lerp(f, (float)p_174315_, (float)p_174316_);
         int k = LightTexture.pack(i, j);
         int tc = binder.tickCount % 9;
-        float f1 = 0.7F + (float)(Math.random()*0.3);
-        if (tc > 5) {
-            f1*=0.92F;
-        }
-        if (tc > 2) {
-            f1*=0.84F;
+        float f1 = 1f;
+        if (isMr) {
+            f1 = 0.7F + (float) (Math.random() * 0.3);
+            if (tc > 5) {
+                f1 *= 0.92F;
+            }
+            if (tc > 2) {
+                f1 *= 0.84F;
+            }
+        } else if (isCKB) {
+            f1 = 0.9F + (float) (Math.random() * 0.1f);
         }
         Vec3 color = roundabout$getBindColor(binder);
         float f2 = (float) (color.x() * f1);
@@ -2046,8 +2131,15 @@ public class ClientUtil {
         float f6 = p_174311_ > 0.0F ? p_174311_ * f * f : p_174311_ - p_174311_ * (1.0F - f) * (1.0F - f);
         float f7 = p_174312_ * f;
         float width = 0.05F;
-        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
-        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, 1.0F).uv2(k).endVertex();
+        float alpha = 1;
+        if (isCKB){
+            alpha = 0.3F;
+            width = 0.003F;
+        }
+        RenderSystem.enableBlend();
+        p_174308_.vertex(p_254405_, f5 - p_174319_ - width, f6 + p_174318_ + width - focus, f7 + p_174320_ + width).color(f2, f3, f4, alpha).uv2(k).endVertex();
+        RenderSystem.enableBlend();
+        p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, alpha).uv2(k).endVertex();
     }
 
     public static Vec3 roundabout$getBindColor(Entity binder) {
@@ -2064,18 +2156,10 @@ public class ClientUtil {
             } else if (sft == StandFireType.CREAM.id){
                 return new Vec3(0.949F,0.945F,0.718F);
             }
+        } else if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersCalifornia){
+            return new Vec3(0.992F,0.843F,1F);
         }
         return new Vec3(0.969F,0.569F,0.102F);
-    }
-
-
-
-
-    public static void sendPositionalDataToServer(Minecraft client) {
-
-        ModMessageEvents.sendToServer(
-                DynamicWorld.DynamicWorldNetMessages.MESSAGES.ADD_WORLD.value
-        );
     }
 
     public static void handleBowlerHatFlySound(Entity entity) {
@@ -2111,12 +2195,33 @@ public class ClientUtil {
     }
 
     public static boolean forceEntityRendering(Entity entity){
-        if (entity instanceof Player pl){
-            if (((StandUser)pl).roundabout$hasStandOut()){
-                return true;
+        if (entity != null){
+            if (entity instanceof Player pl) {
+                if (((IPlayerEntity) pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    return true;
+                }
             }
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
-                return true;
+            if (entity instanceof LivingEntity LE) {
+                StandUser su = ((StandUser) LE);
+                if (su.roundabout$hasStandOut()) {
+                    return true;
+                } else if (su.roundabout$getBoundTo() != null) {
+                    return true;
+                }
+            }
+            if (isUsingEpitaph()) {
+                Player pl = getPlayer();
+                if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc) {
+                    Entity root = entity.getRootVehicle();
+                    if (pkc.epitaph.containsKey(entity.getId()) ||
+                            (root != null && pkc.epitaph.containsKey(root.getId()))){
+                        return true;
+                    }
+                }
+                if (entity instanceof StandEntity){
+                    return true;
+                }
             }
         }
         return false;
@@ -2138,9 +2243,11 @@ public class ClientUtil {
                     sizey2 = 0;
                 }
 
-                //if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
-                //    $$24 = height + (rand - 1);
-                //}
+                if (FateTypes.isZombie(player)) {
+                    if (player.getFoodData().getSaturationLevel() <= 0.0F && tickCount % (foodlevel * 3 + 1) == 0) {
+                        $$24 = height + (rand - 1);
+                    }
+                }
 
                 int $$27 = width - $$23 * 8 - 9;
                 graphics.blit(StandIcons.JOJO_ICONS_2, $$27, $$24, $$26, 18, 9, 9);
@@ -2153,5 +2260,12 @@ public class ClientUtil {
                 }
             }
         }
+    }
+
+    public static boolean hasAttributeSwapped(Minecraft m) {
+        if (m.player != null) {
+            return ((IInputEvents) m).getSwitchTick() == m.player.tickCount;
+        }
+        return false;
     }
 }

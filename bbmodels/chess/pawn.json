@@ -1,0 +1,71 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "roundabout:block/white_pawn",
+		"particle": "roundabout:block/black_pawn"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 6],
+			"to": [10, 1, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 7]},
+			"faces": {
+				"north": {"uv": [10, 4, 14, 5], "texture": "#0"},
+				"east": {"uv": [10, 5, 14, 6], "texture": "#0"},
+				"south": {"uv": [10, 6, 14, 7], "texture": "#0"},
+				"west": {"uv": [10, 7, 14, 8], "texture": "#0"},
+				"up": {"uv": [4, 4, 0, 0], "texture": "#0"},
+				"down": {"uv": [4, 4, 0, 8], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, 3, 7],
+			"to": [9, 5, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 3, 7]},
+			"faces": {
+				"north": {"uv": [0, 11, 2, 13], "texture": "#0"},
+				"east": {"uv": [6, 11, 8, 13], "texture": "#0"},
+				"south": {"uv": [8, 11, 10, 13], "texture": "#0"},
+				"west": {"uv": [10, 11, 12, 13], "texture": "#0"},
+				"up": {"uv": [4, 14, 2, 12], "texture": "#0"},
+				"down": {"uv": [6, 12, 4, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6.5, 1, 6.5],
+			"to": [9.5, 3, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.5, 2, 6.5]},
+			"faces": {
+				"north": {"uv": [6, 9, 9, 11], "texture": "#0"},
+				"east": {"uv": [9, 9, 12, 11], "texture": "#0"},
+				"south": {"uv": [10, 0, 13, 2], "texture": "#0"},
+				"west": {"uv": [10, 2, 13, 4], "texture": "#0"},
+				"up": {"uv": [7, 3, 4, 0], "texture": "#0"},
+				"down": {"uv": [7, 3, 4, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6.5, 5, 6.5],
+			"to": [9.5, 8, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.5, 6, 6.5]},
+			"faces": {
+				"north": {"uv": [4, 6, 7, 9], "texture": "#0"},
+				"east": {"uv": [7, 0, 10, 3], "texture": "#0"},
+				"south": {"uv": [7, 3, 10, 6], "texture": "#0"},
+				"west": {"uv": [7, 6, 10, 9], "texture": "#0"},
+				"up": {"uv": [3, 11, 0, 8], "texture": "#0"},
+				"down": {"uv": [6, 9, 3, 12], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "pawn",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

@@ -3,7 +3,9 @@ package net.hydra.jojomod.client.models.worn_stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,12 +15,16 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import org.joml.Quaternionf;
 
 
 public class TuskNailModel extends PsuedoHierarchicalModel {
@@ -60,20 +66,62 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float alpha,int i) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,int i,boolean animated) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount+i*3);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT,partialTicks+i*3,1.0F);
+            if (user.roundabout$getStandPowers() instanceof  PowersTusk PT) {
+                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
+                this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT, animated ? (partialTicks + i * 3) : 0, 1.0F);
 
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            //The number at the end is inversely proportional so 2 is half speed
-            float scale = 0.05F;
-            r = r*(1-scale) +  (float)Math.sin(partialTicks+i) * scale;
-            g = g*(1-scale) +  (float)Math.sin(partialTicks+i*2) * scale;
-            b = b*(1-scale) +  (float)Math.sin(partialTicks+i*3) * scale;
-            root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
+                VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
+                //The number at the end is inversely proportional so 2 is half speed
+                float scale = 0.05F;
+                float r = PT.getNailColor().x;
+                float g = PT.getNailColor().y;
+                float b = PT.getNailColor().z;
+
+
+                r *= (1 - scale) + (float) Math.sin(partialTicks + i) * scale;
+                g *= (1 - scale) + (float) Math.sin(partialTicks + i * 2) * scale;
+                b *= (1 - scale) + (float) Math.sin(partialTicks + i * 3) * scale;
+                root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+            }
+        }
+    }
+
+    public void tuskNail(LivingEntity livingEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int time, int nailCount) {
+        StandUser SU = (StandUser) livingEntity;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
+                poseStack.pushPose();
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
+                poseStack.popPose();
+            } else {
+                this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
+            }
+        }
+    }
+
+    public void firstPersonTuskNail(LivingEntity livingEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int time, int nailCount) {
+        StandUser SU = (StandUser) livingEntity;
+        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
+                boolean isLeftHand = (livingEntity.getMainArm() == HumanoidArm.LEFT && nailCount <= 5) || (livingEntity.getMainArm() == HumanoidArm.RIGHT && nailCount > 5);
+
+                poseStack.pushPose();
+                poseStack.scale(0.5F,0.5F,0.5F);
+                if (isLeftHand) {
+                    poseStack.translate(0.3,0.1,0); // RIGHT BACKWARD, LEFT FORWARD, U/D, L/R
+                } else {
+                    poseStack.translate(-0.02,0.1,0); // RIGHT BACKWARD, LEFT FORWARD, U/D, L/R
+                }
+                poseStack.rotateAround(new Quaternionf(0, 1, 0, nailCount > 5 ? -1 : 1), 0, 0, 0);
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
+                poseStack.popPose();
+            } else {
+                this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
+            }
         }
     }
 

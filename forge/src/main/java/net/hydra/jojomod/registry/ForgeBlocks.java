@@ -36,11 +36,112 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> ANCIENT_METEOR = BLOCKS.register("ancient_meteor",
             () -> ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
+    public static final RegistryObject<Block> AJA_ORE = BLOCKS.register("aja_ore",
+            () -> ModBlocks.AJA_ORE_PROPERTIES
+    );
+    public static final RegistryObject<Block> DEEPSLATE_AJA_ORE = BLOCKS.register("deepslate_aja_ore",
+            () -> ModBlocks.DEEPSLATE_AJA_ORE_PROPERTIES
+    );
+    public static final RegistryObject<Block> AJA_BLOCK = BLOCKS.register("aja_block",
+            () -> AJA_BLOCK_PROPERTIES
+    );
+
+
+
+    public static final RegistryObject<Block> CHESS_PIECE = BLOCKS.register("chess_piece",
+            () -> ModBlocks.getChessBlock()
+    );
+
+    public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
+            () -> FROZEN_DIRT_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_STONE = BLOCKS.register("frozen_stone",
+            () -> FROZEN_STONE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_COBBLESTONE = BLOCKS.register("frozen_cobblestone",
+            () -> FROZEN_COBBLESTONE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_DIORITE = BLOCKS.register("frozen_diorite",
+            () -> FROZEN_DIORITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_ANDESITE = BLOCKS.register("frozen_andesite",
+            () -> FROZEN_ANDESITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_GRANITE = BLOCKS.register("frozen_granite",
+            () -> FROZEN_GRANITE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_DEEPSLATE = BLOCKS.register("frozen_deepslate",
+            () -> FROZEN_DEEPSLATE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_COBBLED_DEEPSLATE =
+            BLOCKS.register("frozen_cobbled_deepslate",
+            () -> FROZEN_COBBLED_DEEPSLATE_PROPERTIES
+    );
+    public static final RegistryObject<Block> FROZEN_STONE_BRICKS =
+            BLOCKS.register("frozen_stone_bricks",
+                    () -> FROZEN_STONE_BRICKS_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_SAND =
+            BLOCKS.register("frozen_sand",
+                    () -> FROZEN_SAND_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_SANDSTONE =
+            BLOCKS.register("frozen_sandstone",
+                    () -> FROZEN_SANDSTONE_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_RED_SAND =
+            BLOCKS.register("frozen_red_sand",
+                    () -> FROZEN_RED_SAND_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_RED_SANDSTONE =
+            BLOCKS.register("frozen_red_sandstone",
+                    () -> FROZEN_RED_SANDSTONE_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_GRAVEL =
+            BLOCKS.register("frozen_gravel",
+                    () -> FROZEN_GRAVEL_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_OBSIDIAN =
+            BLOCKS.register("frozen_obsidian",
+                    () -> FROZEN_OBSIDIAN_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_NETHERRACK =
+            BLOCKS.register("frozen_netherrack",
+                    () -> FROZEN_NETHERRACK_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_NETHER_BRICKS =
+            BLOCKS.register("frozen_nether_bricks",
+                    () -> FROZEN_NETHER_BRICKS_PROPERTIES
+            );
+    public static final RegistryObject<Block> FROZEN_END_STONE =
+            BLOCKS.register("frozen_end_stone",
+                    () -> FROZEN_END_STONE_PROPERTIES
+            );
+    public static final RegistryObject<Block> COLD_AIR =
+            BLOCKS.register("cold_air",
+                    () -> COLD_AIR_PROPERTIES
+            );
+    public static final RegistryObject<Block> FREEZING_AIR =
+            BLOCKS.register("freezing_air",
+                    () -> FREEZING_AIR_PROPERTIES
+            );
     public static final RegistryObject<Block> METEOR_BLOCK = BLOCKS.register("meteor_block",
             () -> ModBlocks.METEOR_BLOCK_PROPERTIES
             );
     public static final RegistryObject<Block> SHINY_QUARTZ = BLOCKS.register("shiny_quartz",
             () -> SHINY_QUARTZ_PROPERTIES
+    );
+    public static final RegistryObject<Block> WHITE_ALBUM_ICE = BLOCKS.register("white_album_ice",
+            () -> WHITE_ALBUM_ICE_BLOCK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WHITE_ALBUM_ICE_WALL = BLOCKS.register("white_album_ice_wall",
+            () -> WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES
+    );
+    public static final RegistryObject<Block> WHITE_ALBUM_ICE_SLAB = BLOCKS.register("white_album_coating",
+            () -> WHITE_ALBUM_COATING_PROPERTIES
+    );
+    public static final RegistryObject<Block> STICKY_ICE_BLOCK = BLOCKS.register("sticky_ice",
+            () -> STICKY_ICE_PROPERTIES
     );
     public static final RegistryObject<Block> SHINY_QUARTZ_TILES = BLOCKS.register("shiny_quartz_tiles",
             () -> SHINY_QUARTZ_TILES_PROPERTIES
@@ -57,6 +158,12 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> COFFIN_BLOCK = BLOCKS.register("coffin_block",
             () -> COFFIN_BLOCK_PROPERTIES
     );
+    public static final RegistryObject<Block> KING_BED_BLOCK = BLOCKS.register("king_bed_block",
+            () -> KING_BED_BLOCK_PROPERTIES
+    );
+    /*public static final RegistryObject<Block> CHESSBOARD_BLOCK = BLOCKS.register("chessboard_block",
+            () -> CHESSBOARD_BLOCK_PROPERTIES
+    );*/
     public static final RegistryObject<Block> REGAL_WALL = BLOCKS.register("regal_wall",
             () -> ModBlocks.REGAL_WALL_PROPERTIES
     );
@@ -201,6 +308,10 @@ public class ForgeBlocks {
             () -> ModBlocks.GASOLINE_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> BLOOD_SPLATTER = BLOCKS.register("blood_splatter",
             () -> ModBlocks.BLOOD_SPLATTER_PROPERTIES);
+    public static final RegistryObject<Block> ACID_PUDDLE = BLOCKS.register("acid_puddle",
+            () -> ModBlocks.ACID_PUDDLE_PROPERTIES);
+    public static final RegistryObject<Block> POISON_TRAIL_MUSHROOM = BLOCKS.register("poison_trail_mushroom",
+            () -> ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES);
     public static final RegistryObject<Block> BLUE_BLOOD_SPLATTER = BLOCKS.register("blue_blood_splatter",
             () -> ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES);
     public static final RegistryObject<Block> ENDER_BLOOD_SPLATTER = BLOCKS.register("ender_blood_splatter",
@@ -255,8 +366,6 @@ public class ForgeBlocks {
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
-    public static final RegistryObject<Block> D4C_LIGHT_BLOCK = BLOCKS.register("d4c_light_block",
-            () -> ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
@@ -269,6 +378,8 @@ public class ForgeBlocks {
             () -> ModBlocks.DREAD_FIRE_PROPERTIES);
     public static final RegistryObject<Block> CREAM_FIRE = BLOCKS.register("colored_fire_cream",
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
+    public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
+            () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
     public static final RegistryObject<BlockEntityType<MirrorBlockEntity>> MIRROR_BLOCK_ENTITY = BLOCK_ENTITIES.register("mirror",
             () -> BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "mirror")));
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
@@ -283,8 +394,19 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
     public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",
             () -> BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "coffin_block")));
-    public static final RegistryObject<BlockEntityType<D4CLightBlockEntity>> D4C_LIGHT_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_light_block",
-            () -> BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_light_block")));
+    public static final RegistryObject<BlockEntityType<ChessPieceBlockEntity>> CHESS_PIECE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("chess_piece",
+                    () -> BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE.get()).
+                            build(Util.fetchChoiceType(References.BLOCK_ENTITY, "chess_piece")));
+
+
+
+    public static final RegistryObject<BlockEntityType<KingBedBlockEntity>> KING_BED_BLOCK_ENTITY = BLOCK_ENTITIES.register("king_bed_block",
+            () -> BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "king_bed_block")));
+    public static final RegistryObject<BlockEntityType<FancyLighterBlockEntity>> FANCY_LIGHTER_BLOCK_ENTITY = BLOCK_ENTITIES.register("fancy_lighter_block",
+            () -> BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fancy_lighter_block")));
+    //public static final RegistryObject<BlockEntityType<ChessBoardBlockEntity>> CHESSBOARD_BLOCK_ENTITY = BLOCK_ENTITIES.register("chessboard_block",
+    //        () -> BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "chessboard_block")));
 
     static boolean genned = false;
 

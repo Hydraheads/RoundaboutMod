@@ -19,6 +19,8 @@ public class RPostShaderRegistry {
     public static IPostChainAccessor D4C_DIMENSION_TRANSITION = null;
     public static IPostChainAccessor D4C_ALT_DIMENSION = null;
     public static IPostChainAccessor TIMESTOP = register("timestop");
+    public static IPostChainAccessor WIND_VISION = null;
+    public static IPostChainAccessor EPITAPH = null;
 
     /** Super Secret Shaders */
     public static IPostChainAccessor DESATURATE = null;
@@ -31,6 +33,9 @@ public class RPostShaderRegistry {
 
         D4C_DIMENSION_TRANSITION = register("d4cdimtransition");
         D4C_ALT_DIMENSION = register("d4caltdim");
+
+        WIND_VISION = register("windvision");
+        EPITAPH = register("epitaph");
 
         /** Super Secret Shaders */
         DESATURATE = register("desaturate");

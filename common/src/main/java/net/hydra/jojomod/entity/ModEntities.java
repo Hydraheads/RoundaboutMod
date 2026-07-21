@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -37,6 +38,7 @@ public class ModEntities {
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
+    public static EntityType<KingCrimsonEntity> KING_CRIMSON;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
@@ -45,7 +47,7 @@ public class ModEntities {
     public static EntityType<ReddEntity> REDD;
     public static EntityType<ChairRattEntity> CHAIR_RATT;
     public static EntityType<FleshPileEntity> FLESH_PILE;
-    public static EntityType<D4CEntity> D4C;
+    public static EntityType<PurpleHazeEntity> PURPLE_HAZE;
     public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
@@ -60,10 +62,16 @@ public class ModEntities {
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_DEBUT;
     public static EntityType<SoftAndWetEntity> SOFT_AND_WET_KILLER_QUEEN;
     public static EntityType<KillerQueenEntity> KILLER_QUEEN;
-    public static EntityType<BlockBombEntity> BLOCK_BOMB;
+    private static EntityType<BlockBombEntity> BLOCK_BOMB;
+    public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
     public static EntityType<CinderellaEntity> CINDERELLA;
+    public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
+    public static EntityType<PlanetWavesEntity> PLANET_WAVES;
+    public static EntityType<PlanetWavesSpartaEntity> PLANET_WAVES_SPARTA;
+    public static EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
+    public static EntityType<BlackSabbathEntity> BLACK_SABBATH;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -85,6 +93,7 @@ public class ModEntities {
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
     public static EntityType<EmperorBulletEntity> EMPEROR_BULLET;
+    public static EntityType<PoisonLlamaSpit> POISON_LLAMA_SPIT;
     public static EntityType<RattDartEntity> RATT_DART;
     public static EntityType<KnifeEntity> THROWN_KNIFE;
     public static EntityType<MetallicaKnifeEntity> METALLICA_KNIFE;
@@ -95,7 +104,13 @@ public class ModEntities {
     public static EntityType<StandFireballEntity> STAND_FIREBALL;
     public static EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE;
     public static EntityType<RipperEyesProjectile> RIPPER_EYES_PROJECTILE;
+    public static EntityType<UltravioletProjectile> ULTRAVIOLET_PROJECTILE;
+    public static EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE;
+    public static EntityType<PWMeteorEntity> PW_METEOR;
+    public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
 
+    public static EntityType<IceTwisterEntity> COLD_TWISTER;
+    public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
     public static EntityType<GasolineCanEntity> GASOLINE_CAN;
     public static EntityType<RoadRollerEntity> ROAD_ROLLER_ENTITY;
 
@@ -103,6 +118,7 @@ public class ModEntities {
     public static EntityType<BloodSplatterEntity> BLOOD_SPLATTER;
 
     public static EntityType<StandArrowEntity> STAND_ARROW;
+    public static EntityType<IronBallEntity> IRON_BALL;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
     public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
@@ -117,6 +133,7 @@ public class ModEntities {
     public static EntityType<TuskNailEntity> TUSK_NAIL;
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
     public static EntityType<MoldSporesEntity> MOLD_SPORES;
+    public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
@@ -147,7 +164,6 @@ public class ModEntities {
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;
     public static EntityType<FogCloneEntity> FOG_CLONE;
-    public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
@@ -155,7 +171,10 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
+    public static EntityType<BlockWallEntity> BLOCK_WALL;
+    public static EntityType<StepRuleEntity> STEP_RULE;
 
+    public static EntityType<StrayCatEntity> STRAY_CAT;
 
     public static final ResourceLocation HARPOON_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/thrown_harpoon.png");
     public static final ResourceLocation SNUBNOSE_IN_HAND_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/item/snubnose_revolver.png");
@@ -186,5 +205,13 @@ public class ModEntities {
                 EntityType.Builder.of(factory, MobCategory.MISC).
                         sized(size.x(), size.y()).clientTrackingRange(14).build(location.toString())
         );
+    }
+
+    public static EntityType<BlockBombEntity> getBlockBomb() {
+        return BLOCK_BOMB;
+    }
+
+    public static void setBlockBomb(EntityType<BlockBombEntity> blockBomb) {
+        BLOCK_BOMB = blockBomb;
     }
 }

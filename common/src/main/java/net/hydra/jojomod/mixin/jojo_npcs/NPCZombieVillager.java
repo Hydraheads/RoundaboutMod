@@ -41,6 +41,7 @@ public abstract class NPCZombieVillager extends Zombie implements VillagerDataHo
                 ZombieAesthetician $$7 = ModEntities.ZOMBIE_AESTHETICIAN.create(this.level());
                 if ($$7 != null) {
                     $$7.setPos(this.getPosition(1));
+                    $$7.rollStand();
                     this.level().addFreshEntity($$7);
                     this.discard();
                     roundabout$ceaseSound = true;

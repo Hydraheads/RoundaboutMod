@@ -20,6 +20,7 @@ public class FabricParticles {
     public static final SimpleParticleType POINTER_SOFT = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType ENDER_BLOOD = FabricParticleTypes.simple();
+    public static final SimpleParticleType SMALL_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType AIR_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType HEARTBEAT = FabricParticleTypes.simple();
     public static final SimpleParticleType STAR = FabricParticleTypes.simple();
@@ -27,8 +28,10 @@ public class FabricParticles {
     public static final SimpleParticleType ENERGY_DISTORTION = FabricParticleTypes.simple();
     public static final SimpleParticleType PURPLE_STAR = FabricParticleTypes.simple();
     public static final SimpleParticleType BLUE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType UV_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType RED_SPARKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType ICE_SPARKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType MUD_RIPPLE = FabricParticleTypes.simple();
     public static final SimpleParticleType VAMPIRE_AURA = FabricParticleTypes.simple();
     public static final SimpleParticleType MENACING = FabricParticleTypes.simple();
     public static final SimpleParticleType VACUUM = FabricParticleTypes.simple();
@@ -47,6 +50,8 @@ public class FabricParticles {
     public static final SimpleParticleType GREEN_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType ORANGE_CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType TIME_EMBER = FabricParticleTypes.simple();
+    public static final SimpleParticleType MAGIC_HEART = FabricParticleTypes.simple();
+    public static final SimpleParticleType QUESTION = FabricParticleTypes.simple();
     public static final SimpleParticleType CLOCK = FabricParticleTypes.simple();
     public static final SimpleParticleType CINDERELLA_GLOW = FabricParticleTypes.simple();
     public static final SimpleParticleType PINK_SMOKE = FabricParticleTypes.simple();
@@ -57,6 +62,7 @@ public class FabricParticles {
     public static final SimpleParticleType FRICTIONLESS = FabricParticleTypes.simple();
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
     public static final SimpleParticleType BABY_CRACKLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType COLD_CRACKLE = FabricParticleTypes.simple();
     public static final SimpleParticleType MAGIC_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType ROAD_ROLLER_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType ROAD_ROLLER_SMOKE = FabricParticleTypes.simple();
@@ -66,12 +72,18 @@ public class FabricParticles {
     public static final SimpleParticleType STITCH = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD_DUST = FabricParticleTypes.simple();
     public static final SimpleParticleType OCCULT = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_PINK = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_GREEN = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_YELLOW = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_BOMB = FabricParticleTypes.simple();
+    public static final SimpleParticleType AIRBUBBLE_CYAN = FabricParticleTypes.simple();
     public static final SimpleParticleType HYPNO_SWIRL = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_VORTEX = FabricParticleTypes.simple();
     public static final SimpleParticleType MOLD = FabricParticleTypes.simple();
     public static final SimpleParticleType RAGING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType KILLER_QUEEN_EXPLOSION = FabricParticleTypes.simple();
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -101,11 +113,14 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("energy_distortion"), ENERGY_DISTORTION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_star"), PURPLE_STAR);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_sparkle"), BLUE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("uv_sparkle"), UV_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("red_sparkle"), RED_SPARKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ice_sparkle"), ICE_SPARKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mud_ripple"), MUD_RIPPLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vampire_aura"), VAMPIRE_AURA);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blue_blood"), BLUE_BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ender_blood"), ENDER_BLOOD);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("small_explosion"), SMALL_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("air_crackle"), AIR_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("heartbeat"), HEARTBEAT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menacing"), MENACING);
@@ -131,6 +146,11 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("stitch"), STITCH);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold_dust"), MOLD_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("occult"), OCCULT);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_pink"), AIRBUBBLE_PINK);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_cyan"), AIRBUBBLE_CYAN);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_bomb"), AIRBUBBLE_BOMB);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_yellow"), AIRBUBBLE_YELLOW);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("airbubble_green"), AIRBUBBLE_GREEN);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("mold"), MOLD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("raging_light"), RAGING_LIGHT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("alluring_light"), ALLURING_LIGHT);
@@ -143,10 +163,14 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("green_clock"), GREEN_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("orange_clock"), ORANGE_CLOCK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("time_ember"), TIME_EMBER);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_heart"), MAGIC_HEART);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("question"), QUESTION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("baby_crackle"), BABY_CRACKLE);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cold_crackle"), COLD_CRACKLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
-
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("killer_queen_explosion"), KILLER_QUEEN_EXPLOSION);
+        
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
@@ -168,6 +192,7 @@ public class FabricParticles {
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
+        ModParticles.SMALL_EXPLOSION = SMALL_EXPLOSION;
         ModParticles.HIT_IMPACT = HIT_IMPACT;
         ModParticles.AIR_CRACKLE = AIR_CRACKLE;
         ModParticles.HEARTBEAT = HEARTBEAT;
@@ -182,6 +207,7 @@ public class FabricParticles {
         ModParticles.ENERGY_DISTORTION = ENERGY_DISTORTION;
         ModParticles.PURPLE_STAR = PURPLE_STAR;
         ModParticles.BLUE_SPARKLE = BLUE_SPARKLE;
+        ModParticles.UV_SPARKLE = UV_SPARKLE;
         ModParticles.RED_SPARKLE = RED_SPARKLE;
         ModParticles.ICE_SPARKLE = ICE_SPARKLE;
         ModParticles.VAMPIRE_AURA = VAMPIRE_AURA;
@@ -194,6 +220,8 @@ public class FabricParticles {
         ModParticles.GREEN_CLOCK = GREEN_CLOCK;
         ModParticles.ORANGE_CLOCK = ORANGE_CLOCK;
         ModParticles.TIME_EMBER = TIME_EMBER;
+        ModParticles.MAGIC_HEART = MAGIC_HEART;
+        ModParticles.QUESTION = QUESTION;
         ModParticles.POINTER = POINTER;
         ModParticles.ZAP = ZAP;
         ModParticles.POINTER_SOFT = POINTER_SOFT;
@@ -212,17 +240,24 @@ public class FabricParticles {
         ModParticles.FRICTIONLESS = FRICTIONLESS;
         ModParticles.EXCLAMATION = EXCLAMATION;
         ModParticles.BABY_CRACKLE = BABY_CRACKLE;
+        ModParticles.COLD_CRACKLE = COLD_CRACKLE;
         ModParticles.MAGIC_DUST = MAGIC_DUST;
         ModParticles.BRIEF_MAGIC_DUST = BRIEF_MAGIC_DUST;
         ModParticles.STITCH = STITCH;
         ModParticles.MOLD_DUST = MOLD_DUST;
         ModParticles.OCCULT = OCCULT;
+        ModParticles.AIRBUBBLE_PINK = AIRBUBBLE_PINK;
+        ModParticles.AIRBUBBLE_GREEN = AIRBUBBLE_GREEN;
+        ModParticles.AIRBUBBLE_CYAN = AIRBUBBLE_CYAN;
+        ModParticles.AIRBUBBLE_YELLOW = AIRBUBBLE_YELLOW;
+        ModParticles.AIRBUBBLE_BOMB = AIRBUBBLE_BOMB;
         ModParticles.HYPNO_SWIRL = HYPNO_SWIRL;
         ModParticles.TUSK_VORTEX = TUSK_VORTEX;
         ModParticles.MOLD = MOLD;
         ModParticles.RAGING_LIGHT = RAGING_LIGHT;
         ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
         ModParticles.TUSK_HOLE = TUSK_HOLE;
+        ModParticles.KILLER_QUEEN_EXPLOSION = KILLER_QUEEN_EXPLOSION;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

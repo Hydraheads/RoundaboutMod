@@ -26,6 +26,9 @@ public class FabricEffects extends MobEffect{
             register("melting", new FabricEffects(MobEffectCategory.HARMFUL, 10329495)
                             .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.7, AttributeModifier.Operation.ADDITION)
             );
+    public static final MobEffect STAND_MELTING =
+            register("stand_melting", new FabricEffects(MobEffectCategory.HARMFUL, 10329495)
+            );
     public static final MobEffect GRAVITY_FLIP =
             register("gravity_flip", new FabricEffects(MobEffectCategory.NEUTRAL, 4906114));
     public static final MobEffect WARDING =
@@ -34,6 +37,8 @@ public class FabricEffects extends MobEffect{
             register("switch", new FabricEffects(MobEffectCategory.HARMFUL, 9974431));
     public static final MobEffect VAMPIRE_BLOOD =
             register("vampire_blood", new FabricEffects(MobEffectCategory.HARMFUL, 8662571));
+    public static final MobEffect SINGE =
+            register("singe", new FabricEffects(MobEffectCategory.HARMFUL, 15428404));
     public static final MobEffect UNBALANCED =
             register("unbalanced", new FabricEffects(MobEffectCategory.HARMFUL, 2738639));
     public static final MobEffect MOLD =
@@ -56,8 +61,10 @@ public class FabricEffects extends MobEffect{
         ModEffects.CAPTURING_LOVE = CAPTURING_LOVE;
         ModEffects.FACELESS = FACELESS;
         ModEffects.MELTING = MELTING;
+        ModEffects.STAND_MELTING = STAND_MELTING;
         ModEffects.GRAVITY_FLIP = GRAVITY_FLIP;
         ModEffects.WARDING = WARDING;
+        ModEffects.SINGE = SINGE;
         ModEffects.SWITCH = SWITCH;
         ModEffects.VAMPIRE_BLOOD = VAMPIRE_BLOOD;
         ModEffects.UNBALANCED = UNBALANCED;

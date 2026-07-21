@@ -66,7 +66,7 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
                 0, 0, 0, 0, 0.8);
 
         if (getOwner() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
-            vgp.addToCombo();
+            vgp.addToCombo(entity);
         }
         alreadyHitEntities.add(entity);
     }

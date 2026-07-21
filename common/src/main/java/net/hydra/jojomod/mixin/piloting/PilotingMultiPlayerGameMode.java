@@ -1,8 +1,12 @@
 package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -12,6 +16,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
@@ -30,40 +36,73 @@ public abstract class PilotingMultiPlayerGameMode {
     /**Piloting stand logic changes item use logic to be at a new location*/
 
     @Inject(method = "performUseItemOn", at = @At("HEAD"), cancellable = true)
-    public void roundabout$performUseItemOn(LocalPlayer $$0, InteractionHand $$1, BlockHitResult $$2, CallbackInfoReturnable<InteractionResult> cir) {
-        if ($$0 != null && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersJustice PJ && PJ.isPiloting() && this.minecraft != null){
+    public void roundabout$performUseItemOn(LocalPlayer player, InteractionHand hand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        if (powers != null && powers.isPiloting() && this.minecraft != null){
 
-            BlockPos $$3 = $$2.getBlockPos();
-            ItemStack $$4 = $$0.getItemInHand($$1);
-            if (this.localPlayerMode == GameType.SPECTATOR) {
-                cir.setReturnValue(InteractionResult.SUCCESS);
-            } else {
-                boolean $$5 = !$$0.getMainHandItem().isEmpty() || !$$0.getOffhandItem().isEmpty();
-                boolean $$6 = $$0.isSecondaryUseActive() && $$5;
-                if (!$$6) {
-                    BlockState $$7 = this.minecraft.level.getBlockState($$3);
-                    if (!this.connection.isFeatureEnabled($$7.getBlock().requiredFeatures())) {
-                        cir.setReturnValue(InteractionResult.FAIL);
-                    }
-
-                    cir.setReturnValue(InteractionResult.PASS);
-                }
-
-                if (!$$4.isEmpty() && !$$0.getCooldowns().isOnCooldown($$4.getItem())) {
-                    UseOnContext $$9 = new UseOnContext($$0, $$1, $$2);
-                    InteractionResult $$11;
-                    if (this.localPlayerMode.isCreative()) {
-                        int $$10 = $$4.getCount();
-                        $$11 = $$4.useOn($$9);
-                        $$4.setCount($$10);
-                    } else {
-                        $$11 = $$4.useOn($$9);
-                    }
-
-                    cir.setReturnValue($$11);
+            BlockPos hitresult = blockHitResult.getBlockPos();
+            ItemStack itemStack = player.getItemInHand(hand);
+            if (powers.canPilotPlaceBlock(itemStack)) {
+                if (this.localPlayerMode == GameType.SPECTATOR) {
+                    cir.setReturnValue(InteractionResult.SUCCESS);
                 } else {
-                    cir.setReturnValue(InteractionResult.PASS);
+                    boolean $$5 = !player.getMainHandItem().isEmpty() || !player.getOffhandItem().isEmpty();
+                    boolean $$6 = player.isSecondaryUseActive() && $$5;
+                    if (!$$6) {
+                        BlockState blockState = this.minecraft.level.getBlockState(hitresult);
+                        if (!this.connection.isFeatureEnabled(blockState.getBlock().requiredFeatures())) {
+                            cir.setReturnValue(InteractionResult.FAIL);
+                        }
+
+                        cir.setReturnValue(InteractionResult.PASS);
+                    }
+
+                    if (!itemStack.isEmpty() && !player.getCooldowns().isOnCooldown(itemStack.getItem())) {
+                        UseOnContext context = new UseOnContext(player, hand, blockHitResult);
+                        InteractionResult interactionResult;
+                        if (this.localPlayerMode.isCreative()) {
+                            int $$10 = itemStack.getCount();
+                            interactionResult = itemStack.useOn(context);
+                            itemStack.setCount($$10);
+                        } else {
+                            interactionResult = itemStack.useOn(context);
+                        }
+
+                        cir.setReturnValue(interactionResult);
+                    } else {
+                        cir.setReturnValue(InteractionResult.PASS);
+                    }
                 }
+                return;
+            }
+        }
+    }
+
+
+    //Get mainhand get offhand fixtry
+    @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
+    public void roundabout$useItemOn(LocalPlayer player, InteractionHand hand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        EquipmentSlot es;
+        es = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+        ItemStack stack = player.getItemInHand(hand);
+        if (!MainUtil.xHandCancelItem(es, player, stack).equals(stack)){
+            if (!MainUtil.absolveBlockStateForCombatMode(blockHitResult,player)){
+                cir.setReturnValue(InteractionResult.PASS);
+            }
+        }
+    }
+
+    //Get mainhand get offhand fixtry
+    @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)
+    public void roundabout$useItem(Player player, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+        StandUser standComp = ((StandUser) player);
+        if (standComp.roundabout$getEffectiveCombatMode()){
+            ItemStack stack = player.getItemInHand($$1);
+            if (PowerTypes.hasStandActivelyEquipped(player) && !standComp.roundabout$getStandPowers().canCombatModeUse(stack)){
+                    cir.setReturnValue(InteractionResult.PASS);
+            } else if (PowerTypes.hasPowerActivelyEquipped(player) &&
+                    !((IPowersPlayer)player).rdbt$getPowers().canCombatModeUse(stack)){
+                cir.setReturnValue(InteractionResult.PASS);
             }
         }
     }

@@ -15,12 +15,16 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
@@ -36,6 +40,8 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -147,9 +153,63 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
+
+                boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+                int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                boolean hideExtraPartsWithSuit = false;
+                float heyFull = 0;
+                byte skin = user.roundabout$getStandSkin();
+                if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
+                    if (user.roundabout$getLastStandSkin() != skin){
+                        user.roundabout$setLastStandSkin(skin);
+                        whiteAlbumTicks = 0;
+                        user.roundabout$setWhiteAlbumVanishTicks(0);
+                    }
+
+                    float partialTicks2 = partialTicks % 1;
+                    if (hasWhiteAlbumOut){
+                        heyFull = whiteAlbumTicks+partialTicks2;
+                        heyFull = Math.min(heyFull/10,1f);
+                    } else {
+                        heyFull = whiteAlbumTicks-partialTicks2;
+                        heyFull = Math.max(heyFull/10,0);
+                    }
+
+                    if (heyFull > 0){
+                        hideExtraPartsWithSuit = true;
+                    }
+                }
+
+                boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                int oasisTicks = user.roundabout$getOasisVanishTicks();
+                float fadeAmt = 0;
+                byte oasisSkin = user.roundabout$getStandSkin();
+                if (hasOasisOut || oasisTicks > 0){
+                    if (user.roundabout$getLastStandSkin() != oasisSkin){
+                        user.roundabout$setLastStandSkin(oasisSkin);
+                        oasisTicks = 0;
+                        user.roundabout$setOasisVanishTicks(0);
+                    }
+
+                    float partialTicks2 = partialTicks % 1;
+                    if (hasOasisOut){
+                        fadeAmt = oasisTicks+partialTicks2;
+                        fadeAmt = Math.min(fadeAmt/10,1f);
+                    } else {
+                        fadeAmt = oasisTicks-partialTicks2;
+                        fadeAmt = Math.max(fadeAmt/10,0);
+                    }
+
+                    if (fadeAmt > 0){
+                        hideExtraPartsWithSuit = true;
+                    }
+                }
+
+
+                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();
-
                 if (visage != null && !visage.isEmpty()) {
                     boolean isBodyFrozen = HeatUtil.isBodyFrozen(entity);
                     if (visage.getItem() instanceof MaskItem MI) {
@@ -159,35 +219,56 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderNormalBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSmallBreast()) {
+                        if (vd.rendersSmallBreast() && !hideExtraPartsWithSuit) {
                             renderSmallBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersPonytail() && !isBodyFrozen) {
+                        if (vd.rendersPonytail() && !isBodyFrozen
+                        && !hideExtraPartsWithSuit) {
                             renderPonytail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBigHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen) {
+                        if (vd.rendersBigHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
                             renderBigHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen) {
+                        if (vd.rendersLucyHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
+                            renderLucyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
                             renderKakyoinHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpeedwagonFoundationHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersDaiyaEars() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersJohnnyHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderJohnnyHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersSpeedwagonFoundationHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderSpeedwagonFoundationHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBasicHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersBasicHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderBasicHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
@@ -195,11 +276,19 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersDaiyaEars() && !isBodyFrozen) {
+                            if (!hideExtraPartsWithSuit) {
+                                renderDaiyaFluff(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                        r, g, b);
+                            }
+                        }
                         if (visage.is(ModItems.RAT_MASK) && !isBodyFrozen) {
-                            renderRatHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
-                                    r, g, b);
-                            renderRatTail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
-                                    r, g, b);
+                            if (!hideExtraPartsWithSuit) {
+                                renderRatHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                        r, g, b);
+                                renderRatTail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                        r, g, b);
+                            }
                             renderRatLeftLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                             renderRatRightLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -209,15 +298,17 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                         r, g, b, ((IPlayerEntityAbstractClient)PE).roundabout$getTextureLocation2(), -0.01F, 0, 0, 1f);
                             }
                         }
-                        if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersLegCloakPart() && !isBodyFrozen) {
+                        if (vd.rendersLegCloakPart() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderLegCloakPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersAvdolHairPart() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)) {
+                        if (vd.rendersAvdolHairPart() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
                             renderAvdolHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
@@ -225,10 +316,123 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderPlayerBreastPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
-                        if (vd.rendersPlayerSmallBreastPart()) {
+                        if (vd.rendersPlayerSmallBreastPart() && !hideExtraPartsWithSuit) {
                             renderSmallPlayerBreastPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
+                        if(vd.renderJohngalliaHair() && !hideExtraPartsWithSuit){
+                            renderJohngalliaHairPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                        if(vd.renderJohngalliaTie() && !hideExtraPartsWithSuit){
+                            renderJohngalliaTiePart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                    }
+                }
+
+                if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
+
+                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
+
+                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        String path2 = path;
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                            path = "ice";
+                            path2 = null;
+                        }
+                        if (pw.cracked){
+                            path = "cracked/"+path;
+                        }
+                        poseStack.pushPose();
+                        renderWhiteAlbumHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        renderWhiteAlbumBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        if (skin == PowersWhiteAlbum.YUKI && path2 != null && !pw.cracked) {
+                            renderWhiteAlbumHeadPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                    partialTicks, path+"_glowing", r, g, b, heyFull);
+                            renderWhiteAlbumBodyPart(poseStack, bufferSource, 15728880, entity, xx, yy, zz,
+                                    partialTicks, path+"_glowing", r, g, b, heyFull);
+                        }
+                        renderWhiteAlbumRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+                        renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, heyFull);
+
+                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                        } else {
+                            renderWhiteAlbumRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                            renderWhiteAlbumLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                        }
+
+                        if (entity instanceof Player player &&
+                                ((IPlayerEntity)player).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+                            renderWhiteAlbumColdBlast(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b);
+                        }
+
+                        if (pw.hasSkatesActivated()) {
+                            renderWhiteAlbumSkates(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, heyFull);
+                        }
+
+                        if (visage.getItem() instanceof MaskItem MI) {
+                            VisageData vd = MI.visageData.generateVisageData(entity);
+                            if (vd.rendersBreast() ||
+                                    vd.rendersPlayerBreastPart()) {
+                                renderWhiteAlbumChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, heyFull);
+                            }
+                        }
+                        poseStack.popPose();
+                    }
+                }
+
+                if (hasOasisOut || oasisTicks > 0){
+
+                    if (user.roundabout$getStandPowers() instanceof PowersOasis po) {
+
+                        String path = PowersOasis.getSkinString(oasisSkin);
+
+                        poseStack.pushPose();
+                        renderOasisHeadPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, fadeAmt);
+                        renderOasisBodyPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, fadeAmt);
+
+                        renderOasisRightLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, fadeAmt);
+                        renderOasisLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                partialTicks, path, r, g, b, fadeAmt);
+
+                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            renderOasisSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                            renderOasisSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                        } else {
+                            renderOasisRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                            renderOasisLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                    partialTicks, path, r, g, b, fadeAmt);
+                        }
+
+                        if (visage.getItem() instanceof MaskItem MI) {
+                            VisageData vd = MI.visageData.generateVisageData(entity);
+                            if (vd.rendersBreast() ||
+                                    vd.rendersPlayerBreastPart()) {
+                                renderOasisChestPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
+                                        partialTicks, path, r, g, b, fadeAmt);
+                            }
+                        }
+                        poseStack.popPose();
                     }
                 }
 
@@ -291,11 +495,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 b = isHurt ? 0.6F : 1.0F;
 
                 if (ClientUtil.hasChangedArms(entity)) {
+
                     if (getParentModel() instanceof PlayerModel<?> pm) {
-                        pm.rightArm.visible = true;
-                        pm.rightSleeve.visible = true;
-                        pm.leftArm.visible = true;
-                        pm.leftSleeve.visible = true;
+                        if(!((StandUser)entity).rdbt$hasRightHandGone()) {
+                            pm.rightArm.visible = true;
+                            pm.rightSleeve.visible = true;
+                        }
+                        if(!((StandUser)entity).rdbt$hasLeftHandGone()) {
+                            pm.leftArm.visible = true;
+                            pm.leftSleeve.visible = true;
+                        }
                         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(entity)));
                         ClientUtil.pushPoseAndCooperate(poseStack, 46);
                         pm.rightArm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, r,
@@ -460,6 +669,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,33);
     }
+    public void renderWhiteAlbumColdBlast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                  float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,33);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumCold.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,33);
+    }
     public void renderBodySpike(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                   float r, float g, float b) {
         ClientUtil.pushPoseAndCooperate(poseStack,33);
@@ -510,6 +727,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
+    public void renderDaiyaEars(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.DaiyaEarsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderJohnnyHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.JohnnyHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
     public void renderRipperEyes(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                float r, float g, float b) {
 
@@ -539,6 +774,182 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
+    public void renderWhiteAlbumBodyPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                          float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumBody.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSkates(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                             float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSkate.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSkate.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumRightLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumRightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumLeftLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                             float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumLeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSlimLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSlimLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumSlimRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                                float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumSlimRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumChestPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumChest.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderWhiteAlbumHeadPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                              float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.WhiteAlbumHead.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisBodyPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack, 36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.OasisBody.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack, 36);
+    }
+    public void renderOasisRightLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                             float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.OasisRightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisLeftLegPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.OasisLeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                            float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisSlimLeftArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                                float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().leftArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisSlimLeftArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                             float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisSlimRightArmPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                                 float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().rightArm.translateAndRotate(poseStack);
+        ModStrayModels.OasisSlimRightArm.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisChestPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                          float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.OasisChest.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderOasisHeadPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                         float r, float g, float b, float alpha) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.OasisHead.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, alpha, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
     public void renderBasicHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
 
@@ -554,6 +965,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,38);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.SpikeyHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,38);
+    }
+    public void renderLucyHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,38);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.LucyHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,38);
     }
@@ -592,6 +1012,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.AvdolHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,39);
+    }
+    public void renderDaiyaFluff(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.DaiyaFluffPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
     }
     public void renderJosukeDecals(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                  float r, float g, float b) {
@@ -702,5 +1131,21 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,44);
+    }
+    public void renderJohngalliaHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,46);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.JohngalliaHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "johngallia");
+        ClientUtil.popPoseAndCooperate(poseStack,46);
+    }
+    public void  renderJohngalliaTiePart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,47);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, "johngallia");
+        ClientUtil.popPoseAndCooperate(poseStack,47);
     }
 }

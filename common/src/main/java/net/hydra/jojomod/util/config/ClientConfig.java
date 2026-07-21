@@ -104,6 +104,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
     public ClientConfig.TimeStopSettings timeStopSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.KillerQueenSettings killerQueenSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -114,6 +116,12 @@ public class ClientConfig implements Cloneable {
     public static class GeneralSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean onlyStandUsersCanSeeStands;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean advancedEpitaphShader;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphScreenEffect;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float timeSkipOpacity;
     }
     public static class ConfigSettings {
 
@@ -185,8 +193,8 @@ public class ClientConfig implements Cloneable {
         public Boolean vampireVisionMode;
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean  windVisionMode;
+        @IntOption(group = "inherit", value = 2, min = 0, max = 3)
+        public Integer KillerQueenCurrentBombConfig;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -205,6 +213,10 @@ public class ClientConfig implements Cloneable {
         public Boolean advancedTimeStopShader;
         @BooleanOption(group = "inherit", value = true)
         public Boolean simpleTimeStopShader;
+    }
+    public static class KillerQueenSettings {
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean bombOverlayHideOnF1;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

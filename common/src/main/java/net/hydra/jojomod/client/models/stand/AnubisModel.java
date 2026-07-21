@@ -112,6 +112,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     public static ResourceLocation[] soul = {new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul.png"),
                                             new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_2.png"),
                                             new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_3.png")};
+    public static ResourceLocation boneblade = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/boneblade.png");
 
     public static ResourceLocation emissive_chainblade_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_1.png");
     public static ResourceLocation emissive_chainblade_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_2.png");
@@ -122,26 +123,27 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         switch (skin)
         {
             case 0 -> {return item;}
-            case 1 -> {return anime;}
-            case 2 -> {return evil;}
-            case 3 -> {return wooden;}
-            case 4 -> {return stone;}
-            case 5 -> {return aquamarine;}
-            case 6 -> {return timekeeper;}
-            case 7 -> {return diamond;}
-            case 8 -> {return ancient;}
-            case 9 -> {return grass;}
-            case 10 -> {return gray_wagon;}
-            case 11 -> {return chorus;}
-            case 12 -> {return raging;}
-            case 13 -> {return alluring;}
-            case 14 -> {return khopesh;}
-            case 19 -> {return bloodstained;}
-            case 20 -> {return brilliance;}
-            case 21 -> {return context.tickCount % 6 < 3 && PowerTypes.isUsingStand(context) ? chainblade_1 : chainblade_2;}
-            case 22 -> {return chef;}
-            case 23 -> {return serpent;}
-            case 24 -> {return soul[context.tickCount/3 % 3 ];}
+            case PowersAnubis.ANIME -> {return anime;}
+            case PowersAnubis.EVIL -> {return evil;}
+            case PowersAnubis.WOODEN -> {return wooden;}
+            case PowersAnubis.STONE -> {return stone;}
+            case PowersAnubis.AQUAMARINE -> {return aquamarine;}
+            case PowersAnubis.TIMEKEEPER -> {return timekeeper;}
+            case PowersAnubis.DIAMOND -> {return diamond;}
+            case PowersAnubis.ANCIENT -> {return ancient;}
+            case PowersAnubis.GRASS -> {return grass;}
+            case PowersAnubis.GRAY_WAGON -> {return gray_wagon;}
+            case PowersAnubis.CHORUS -> {return chorus;}
+            case PowersAnubis.RAGING -> {return raging;}
+            case PowersAnubis.ALLURING -> {return alluring;}
+            case PowersAnubis.KHOPESPH -> {return khopesh;}
+            case PowersAnubis.BLOODSTAINED -> {return bloodstained;}
+            case PowersAnubis.BRILLIANCE -> {return brilliance;}
+            case PowersAnubis.CHAINBLADE -> {return context.tickCount % 6 < 3 && PowerTypes.isUsingStand(context) ? chainblade_1 : chainblade_2;}
+            case PowersAnubis.CHEF -> {return chef;}
+            case PowersAnubis.SERPENT -> {return serpent;}
+            case PowersAnubis.SOULBORN -> {return soul[context.tickCount/3 % 3 ];}
+            case PowersAnubis.BONE_BLADE -> {return boneblade;}
 
             case 15 -> {return cleaver;}
             case 16 -> {return illusory;}
@@ -160,7 +162,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         } else if (skin == 16) {
             return illusory;
         }
-        return anime;
+        return null;
     }
 
 
@@ -187,7 +189,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             StandUser SU = (StandUser) context;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(context)) {
+            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
                 if (skin == PowersAnubis.CHAINBLADE || skin == PowersAnubis.BRILLIANCE || skin == PowersAnubis.ILLUSORY ) {
                     VertexConsumer Consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getEmissive(context, skin)));
                     root().render(poseStack, Consumer, 15728880, OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);

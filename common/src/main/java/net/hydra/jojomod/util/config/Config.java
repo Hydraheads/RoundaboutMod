@@ -68,6 +68,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GeneralStandSettings generalStandSettings;
     @NestedOption(group = "modded")
+    public KillerQueenSettings killerQueenSettings;
+    @NestedOption(group = "modded")
     public SoftAndWetSettings softAndWetSettings;
     @NestedOption(group = "modded")
     public MagiciansRedSettings magiciansRedSettings;
@@ -76,7 +78,11 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CinderellaSettings cinderellaSettings;
     @NestedOption(group = "modded")
+    public PlanetWavesSettings PlanetWavesSettings;
+    @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
+    @NestedOption(group = "modded")
+    public BlackSabbathSettings blackSabbathSettings;
     @NestedOption(group = "modded")
     public HeyYaSettings heyYaSettings;
     @NestedOption(group = "modded")
@@ -88,11 +94,15 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CenturyBoySettings centuryBoySettings;
     @NestedOption(group = "modded")
+    public CaliforniaKingBedSettings californiaKingBedSettings;
+    @NestedOption(group = "modded")
     public WalkingHeartSettings walkingHeartSettings;
     @NestedOption(group = "modded")
-    public RattSettings rattSettings;
+    public OasisSettings oasisSettings;
     @NestedOption(group = "modded")
-    public CreamSettings creamSettings;
+    public WhiteAlbumSettings whiteAlbumSettings;
+    @NestedOption(group = "modded")
+    public RattSettings rattSettings;
     @NestedOption(group = "modded")
     public AnubisSettings anubisSettings;
     @NestedOption(group = "modded")
@@ -109,6 +119,10 @@ public class Config implements Cloneable {
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
         public Boolean mountingHorsesInCreativeTamesThem;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean fixModLoaderCreatedBugs;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean bufferServerDistance;
     }
 
     public static class GeneralStandUserMobSettings {
@@ -143,6 +157,10 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean canAwakenOtherPlayersWithArrows;
         @BooleanOption(group = "inherit", value = false)
+        public Boolean standArrowsHideResults;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean nerfedGasolineSpread;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean classicGasoline;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canThrowVisagesOntoOtherPlayers;
@@ -166,7 +184,7 @@ public class Config implements Cloneable {
         public Float coltDamage;
         @FloatOption(group = "inherit", value = 4.5F, min = 0, max = 72000)
         public Float snubnoseDamage;
-        @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000)
+        @FloatOption(group = "inherit", value = 2.0F, min = 0, max = 72000)
         public Float tommyGunDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer maxKnivesInOneHit;
@@ -208,18 +226,22 @@ public class Config implements Cloneable {
         public Integer brokenArrowCost;
         @BooleanOption(group = "inherit",value = true)
         public Boolean brokenArrowsHaveStands;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
+        public Float maskTradeChance;
+        @IntOption(group = "inherit", value = 32, min = 0, max = 64)
+        public Integer maskTradeCost;
+
     }
 
     public static class BrushingLootSettings {
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
         public Float anubisChance;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100)
+        public Float anubisChanceDry;
+        @FloatOption(group = "inherit", value = 0F, min = 0, max = 100)
+        public Float beetleArrowChanceNotDry;
         @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
-        public Float standArrowChance;
-        @FloatOption(group = "inherit", value = 1F, min = 0, max = 100)
-        public Float beetleArrowChance;
-        @FloatOption(group = "inherit", value = 2F, min = 0, max = 100)
-        public Float dryLootMultiplier;
-
+        public Float beetleArrowChanceDry;
     }
 
 
@@ -230,7 +252,8 @@ public class Config implements Cloneable {
         public Boolean wallPassingHitboxes;
         @BooleanOption(group = "inherit", value = false)
         public Boolean wallPassingHitboxesOnBosses;
-
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWallWalking;
         @BooleanOption(group = "inherit", value = false)
         public Boolean disableBleedingAndBloodSplatters;
         @BooleanOption(group = "inherit", value = false)
@@ -241,24 +264,70 @@ public class Config implements Cloneable {
         public Boolean hexTwoSealsPotions;
     }
     public static class VampireSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableStoneMask;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableBloodVampirizing;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableZombification;
         @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesPotionEffectForNightVision;
         @BooleanOption(group = "inherit", value = true)
         public Boolean vampireLeveling;
+        @IntOption(group = "inherit", value = 13, min = 0, max = 72000)
+        public Integer vampireGuardPoints;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean mobsDropParts;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sunDamageUnderwaterReach;
         @IntOption(group = "inherit", value = 150, min = 1, max = 72000)
         public Integer expPerVampLevelUp;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 150, min = 1, max = 72000)
         public Integer expTypeCapPerDay;
+        @IntOption(group = "inherit", value = 24000, min = 1, max = 99999)
+        public Integer expInterval;
         @FloatOption(group = "inherit", value = 0.75F, min = 0, max = 1F)
         public Float drownSpeedModifier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer vampireAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer  vampireAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
         public Integer powerGuardDelayTicks;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierVampire;
         @FloatOption(group = "inherit", value = 0.4F, min = 0, max = 100F)
         public Float sunDamagePercentPerDamageTick;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canSurviveInRain;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean vampireUsesInternalSaturation;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer diveAttackCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer spikeAttackCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        public Integer hairGrabCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer clutchCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer auraBlastCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer deflectionCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer ripperEyesInterruptCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer flowerHealCooldown;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer ripperEyesPartialCooldown;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer ripperEyesMaxCooldown;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer bloodRegenCooldown;
+        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        public Integer bloodSpeedCooldown;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean antiCheapShot;
     }
     public static class StandLevelingSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -335,15 +404,17 @@ public class Config implements Cloneable {
         public Integer impaleAttackCooldown;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer objectThrowCooldown;
-        @IntOption(group = "inherit", value = 25, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer objectPocketCooldown;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
         public Integer mobThrowCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobThrowInterruptCooldown;
-        @IntOption(group = "inherit", value = 28, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer mobThrowRecoilTicks;
-        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
+        public Integer mobNonPlayerThrowRecoilTicks;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer mobThrowAttackCooldown;
         @BooleanOption(group = "inherit", value = true)
         public Boolean creativeModeRefreshesCooldowns;
@@ -374,7 +445,51 @@ public class Config implements Cloneable {
         public Boolean bypassAllNametagHidesInCreativeMode;
     }
 
-
+    public static class KillerQueenSettings {
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean enableKillerQueen;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer killerQueenAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer killerQueenAttackMultOnMobs;
+    	@BooleanOption(group = "inherit", value = false)
+        public Boolean enableBitesTheDustDayMode;
+    	@BooleanOption(group = "inherit", value = true)
+        public Boolean blocksDestruction;
+    	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
+        public Float explosionDetonateMaxDamage;
+        @FloatOption(group = "inherit", value = 7.0F, min = 0, max = 200F)
+        public Float SheerHeartAttackMaxDamage;
+        @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
+        public Float StrayCatAirBubblesDamage;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer blockPlantCooldown;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer bubbleShootCooldown;
+        @IntOption(group = "inherit", value = 220, min = 0, max = 72000)
+        public Integer mobPlantCooldown;
+    	@IntOption(group = "inherit", value = 8, min = 0, max = 72000)
+        public Integer explosionActivationCooldown;
+    	@IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer kickMinimumCooldown;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer sheerHeartAttackCooldown;
+        @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
+        public Integer sheerHeartAttackMaxExplosions;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer mobPlantDesintegrationDamage;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer mobPlantWindup;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean mobPlantHitkillPlayers;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean mobPlantHitkillMobs;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer maxAirBubbleTravelDistanceBeforePopping;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer airBubbleGuardIncrease;
+    }
+    
     public static class SoftAndWetSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableSoftAndWet;
@@ -402,8 +517,12 @@ public class Config implements Cloneable {
         public Boolean moisturePoppingPlacesLiquidsInAir;
         @BooleanOption(group = "inherit", value = false)
         public Boolean frictionStopsJumping;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean directFrictionStopsJumping;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer frictionStealingDurationInTicks;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer playerFrictionStealingDurationInTicks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseFriction;
         @BooleanOption(group = "inherit", value = true)
@@ -416,6 +535,8 @@ public class Config implements Cloneable {
         public Integer sightStealingDurationOnPlayersInTicks;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer primaryPlunderBubbleLifespanInTicks;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer itemBubbleLifespanInTicks;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
         public Float sizeOfMobBubbleMobsStolen;
         @FloatOption(group = "inherit", value = 1.0F, min = 0, max = 1000F)
@@ -430,8 +551,10 @@ public class Config implements Cloneable {
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer heatTickDownPauseLength;
-        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
         public Integer explosiveSpinMeterGainedPerShot;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
+        public Integer explosiveSpinMeterGainedPerHit;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer explosiveSpinMeterTickDownRate;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -450,10 +573,16 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
+        @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
+        public Integer woundPlugCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
-        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer itemBubbleShotCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer itemBubblePopCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer itemBubblePopShotCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer basicBubbleShotCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
@@ -505,7 +634,7 @@ public class Config implements Cloneable {
         public Integer ankhSuccessCooldown;
         @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer ankhConcealedCooldown;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer ankhHiddenCooldown;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer ankhFailCooldown;
@@ -538,12 +667,18 @@ public class Config implements Cloneable {
         public Integer greenDayStitchHeal;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer gDStitchcooldown;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 7, min = 0, max = 72000)
         public Integer moldDefaultRange;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 75, min = 0, max = 72000)
         public Integer moldGrowthRate;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer moldMaxSize;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer moldSpreadCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer moldDMGPlayersMultiplier;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer moldDMGMobsMultiplier;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer armThrowCooldown;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
@@ -617,6 +752,26 @@ public class Config implements Cloneable {
         public Boolean enableJojoveinVisagesInShop;
 
     }
+    public static class PlanetWavesSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enablePlanetWaves;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer meteorshowerCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer bigmeteorCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer bigmeteorDistance;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer meteorshowerDistance;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer standtargetingCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer usertargetingCooldown;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer meteorTrackingPower;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean PWCanonMovesOnly;
+    }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableHeyYa;
@@ -636,7 +791,7 @@ public class Config implements Cloneable {
         public Integer detectedOreLightDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer oreDetectionRadius;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
         public Integer oreDetectionMaximum;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oreDetectionCooldown;
@@ -702,6 +857,11 @@ public class Config implements Cloneable {
         public Boolean canUseSurvivorOnBossesInSurvival;
     }
 
+    public static class OasisSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableOasis;
+    }
+
     public static class ManhattanTransferSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableManhattanTransfer;
@@ -709,8 +869,21 @@ public class Config implements Cloneable {
         public Integer manhattanTransferMaxRange;
         @IntOption(group = "inherit", value = 4, min = 1, max = 5)
         public Integer getAutoSpeed;
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer manhattanDashCooldown;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canOtherMobsLoadManhattanTransfer;
+        @FloatOption(group = "inherit", value = 16F, min = 0F, max = 72000F)
+        public Float manhattanAutoShootingRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean windVisionUsesNightVision;
     }
-
+    public static class BlackSabbathSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableBlackSabbath;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer fingerBiteCooldown;
+    }
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCenturyBoy;
@@ -724,21 +897,90 @@ public class Config implements Cloneable {
         public Boolean CBCanMoveCamera;
         @BooleanOption(group = "inherit", value = false)
         public Boolean oldKnockbackStance;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean buffedGroundStance;
     }
 
+    public static class CaliforniaKingBedSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableCKB;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer doNotHurtMeBaseCD;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer doNotHurtMeRewindCD;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer postPunishDelay;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer chessMultOnPlayers;
+    }
+
+    public static class WhiteAlbumSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableWhiteAlbum;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer whiteAlbumGuardPoints;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0F, max = 100F)
+        public Float mobGuardDamageMultiplierv2;
+        @FloatOption(group = "inherit", value = 0.5F, min = 0F, max = 100F)
+        public Float playerGuardDamageMultiplierv2;
+        @FloatOption(group = "inherit", value = 0.7F, min = 0F, max = 100F)
+        public Float playerGuardDamageMultiplierMobs;
+        @FloatOption(group = "inherit", value = 0.07F, min = 0F, max = 100F)
+        public Float sunArmorDamage;
+        @FloatOption(group = "inherit", value = 0.0115F, min = 0F, max = 100F)
+        public Float whiteAlbumAccelerationAmountv3;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer whiteAlbumMaxAcceleration;
+        @IntOption(group = "inherit", value = 4, min = 0, max = 50)
+        public Integer blockFreezeRadius;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean freezesSurfaceWater;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean freezesGrassv2;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean freezesSnow;
+        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        public Float miningSpeedBuffWhite;
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
+        public Float bonusPlayerDMGWhitev2;
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
+        public Float bonusMobDMGWhite;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierWhiteAlbum;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierWhiteAlbum;
+        @IntOption(group = "inherit", value = 800, min = 0, max = 72000)
+        public Integer gentlyWeepsCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer twisterCooldownv2;
+        @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
+        public Integer freezeBlocksCooldown;
+        @IntOption(group = "inherit", value = 110, min = 0, max = 72000)
+        public Integer iceWallCooldown;
+        @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
+        public Integer twisterLifespan;
+        @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
+        public Integer gentlyWeepsLifespanv2;
+    }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWalkingHeart;
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableWallWalking;
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableCornerCutting;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer walkingHeartAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer walkingHeartAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 24, min = 0, max = 72000)
         public Integer walkingHeartCooldownPerHit;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer walkingHeartCooldownBase;
         @IntOption(group = "inherit", value = 5, min = -1, max = 72000)
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
@@ -748,7 +990,7 @@ public class Config implements Cloneable {
     public static class RattSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableRatt;
-        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 25, min = 0, max = 100)
         public Integer rattSafetyTicks;
         @FloatOption(group = "inherit", value = 1F, min = 0F, max = 100F)
         public Float rattAttackBonusOnMobs;
@@ -789,6 +1031,8 @@ public class Config implements Cloneable {
         public Boolean revealLocationWhenFinishedEating;
         @IntOption(group = "inherit", value = 139, min = 0, max = 72000)
         public Integer invisiBurstCooldown;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer invisiBurstCooldownMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstCooldownUsesServerLatency;
         @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
@@ -802,26 +1046,6 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean invisiBurstAlertsMobs;
     }
-
-
-
-    public static class CreamSettings {
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean enableCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamAttackMultOnMobs;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer creamAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
-        public Integer creamGuardPoints;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer miningSpeedMultiplierCream;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
-        public Integer getMiningTierCream;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer creamVoidTime;
-    }
-
 
 
     public static class AnubisSettings {
@@ -844,12 +1068,14 @@ public class Config implements Cloneable {
         public Boolean enableEmperor;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer emperorShootingModePower;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
         public Integer heatGainedPerShot;
-        @IntOption(group = "inherit", value = 3, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer heatTickDownRate;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer bulletShootSpeedMultiplier;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer emperorBulletRange;
     }
 
     public static class TheWorldSettings {
@@ -867,7 +1093,7 @@ public class Config implements Cloneable {
         public Integer getMiningTierTheWorld;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oxygenTankAdditionalTicks;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer assaultCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer assaultInterruptCooldown;
@@ -892,7 +1118,9 @@ public class Config implements Cloneable {
         public Integer guardianCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerCooldown;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer starFingerLeapCooldown;
+        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
         public Integer blitzAttackCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
@@ -922,8 +1150,10 @@ public class Config implements Cloneable {
         public Integer additionalCooldownPerSecondsUsed;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer timeStopBonusActionsCooldown;
-        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 170, min = 0, max = 72000)
         public Integer timeStopInterruptedCooldownv2;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer timeStopInterruptedCooldownMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean timeStopIsAlwaysInterruptable;
         @BooleanOption(group = "inherit", value = false)

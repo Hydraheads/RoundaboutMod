@@ -22,7 +22,9 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -123,6 +126,8 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void rdbt$forceDeltaMovement(Vec3 $$0) {
         this.deltaMovement = $$0;
+        this.hurtMarked = true;
+        this.hasImpulse = true;
     }
 
 
@@ -217,6 +222,18 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
 
+    /** Heavens Door and bites the dust related*/
+    @Unique
+    public SavedSecond roundabout$birthSpawnSecond;
+    @Unique
+    public int roundabout$birthSpawnTime = 0;
+
+    @Unique
+    public void roundabout$setBirthSpawnInfo() {
+        /// probably would be better to be just the spawn location rather the entire data of the spawn
+        //this.roundabout$birthSpawnSecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
+        this.roundabout$birthSpawnTime = (int) (((Entity) (Object) this).level().getDayTime() % 24000.0f);
+    }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -261,13 +278,6 @@ public abstract class EntityAndData implements IEntityAndData {
         return null;
     }
 
-    @Unique
-    public SavedSecond roundabout$getFirstSavedSecond() {
-        if (!roundabout$secondQue.isEmpty()) {
-            return roundabout$secondQue.getFirst();
-        }
-        return null;
-    }
 
     @Unique
     public void roundabout$resetSecondQueue(){
@@ -476,6 +486,10 @@ public abstract class EntityAndData implements IEntityAndData {
         if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0) ||
                 ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
             ci.cancel();
+        } else if (((Entity)(Object)this) instanceof LivingEntity LE &&
+                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                && PW.hasSkatesActivated()){
+            ci.cancel();
         }
     }
 
@@ -538,11 +552,8 @@ public abstract class EntityAndData implements IEntityAndData {
                     }
                     if(stand instanceof ManhattanTransferEntity ME){
                         if(!ME.getHeldItemManhattan().isEmpty()){
-                            double $$3 = stand.getEyeY() - 0.3F;
-                            ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), ME.getHeldItemManhattan().copy());
-                            $$4.setPickUpDelay(40);
-                            $$4.setThrower(stand.getUUID());
-                            this.level().addFreshEntity($$4);
+                            ME.shootHattan();
+                            ME.hasItem = false;
                             ME.setHeldItemManhattan(ItemStack.EMPTY);
                         }
                     }
@@ -631,6 +642,18 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (thisEnt instanceof LivingEntity lv){
+            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+                ci.cancel();
+                return;
+            }
+        } if (entity instanceof LivingEntity lv){
+            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+                ci.cancel();
+                return;
+            }
+        }
         if (entity instanceof LivingEntity le && ((StandUser) le).roundabout$getStandPowers().cancelCollision(((Entity)(Object)this))) {
             ci.cancel();
         }
@@ -725,6 +748,12 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow private float maxUpStep;
 
+    @Shadow
+    public boolean hurtMarked;
+
+    @Shadow
+    public boolean hasImpulse;
+
     @Override
     @Unique
     public void roundabout$universalTick(){
@@ -793,11 +822,13 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             Vec3 vecx = new Vec3(roundabout$qknockback.x, roundabout$qknockback.y, roundabout$qknockback.z);
             if (!vecx.equals(Vec3.ZERO)) {
-                MainUtil.takeUnresistableKnockbackWithYBias(((Entity) (Object) this), roundabout$qknockbackparams.x,
+                MainUtil.takeUnresistableKnockbackWithYBias2(((Entity) (Object) this), roundabout$qknockbackparams.x,
                         vecx.x,
                         vecx.y,
                         vecx.z,
-                        (float) roundabout$qknockbackparams.y);
+                        (float) roundabout$qknockbackparams.y,
+                        (float) roundabout$qknockbackparams.z
+                        );
                 roundabout$setQVec(Vec3.ZERO);
             }
         }
@@ -834,6 +865,10 @@ public abstract class EntityAndData implements IEntityAndData {
         rdbt$doWindVisionDetection();
     }
 
+    private double previousYposManhattan = 0.0;
+    private double previousXposManhattan = 0.0;
+    private double previousZposManhattan = 0.0;
+
     @Unique
     @Override
     public void rdbt$doWindVisionDetection() {
@@ -844,28 +879,27 @@ public abstract class EntityAndData implements IEntityAndData {
             }
             if ((((Entity) (Object) this) instanceof Mob ME) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
                 IEntityAndData entityAndData = ((IEntityAndData) this);
-                SavedSecond lastSecond = entityAndData.roundabout$getLastSavedSecond();
-                SavedSecond firstSecond = entityAndData.roundabout$getFirstSavedSecond();
-                if (firstSecond != null && lastSecond != null) {
-
-                    boolean posCompare = lastSecond.position.x != firstSecond.position.x || lastSecond.position.z != firstSecond.position.z;
-                    boolean posCompareY = lastSecond.position.y != firstSecond.position.y;
-
-                    if(((Entity) (Object) this).isInWater()){
-                        entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    }
+                boolean down = previousYposManhattan > this.getY();
+                boolean up = previousYposManhattan < this.getY();
+                boolean movementX = previousXposManhattan != this.getX();
+                boolean movementZ = previousZposManhattan != this.getZ();
+                    if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
                     else {
-                        if (posCompare) {
+                       if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
                             entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else if (posCompareY) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(75);
                         } else {
-                        }
+                           if (down || up) {
+                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                           }
+                           else if (movementX || movementZ) {
+                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
+                           }
+                       }
                     }
-                }
             }
         }
+        previousYposManhattan = this.getY();
+        previousXposManhattan = this.getX();
+        previousZposManhattan = this.getZ();
     }
 }

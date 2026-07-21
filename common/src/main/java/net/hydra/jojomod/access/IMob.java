@@ -12,6 +12,10 @@ public interface IMob {
     boolean roundabout$isVampire();
     void roundabout$setVampire(boolean $$0);
     byte roundabout$getFate();
+    void roundabout$setConfusionTicks(int set);
+    int roundabout$getConfusionTicks();
+    void rdbt$setStolen(boolean steal);
+    boolean rdbt$getStolen();
     void roundabout$setFate(byte fate);
     void roundabout$deeplyRemoveTargets();
     void roundabout$deeplyEnforceTarget(Entity ent);

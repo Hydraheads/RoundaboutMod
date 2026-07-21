@@ -1,66 +1,63 @@
 package net.hydra.jojomod.entity.zombie_minion;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.MinionAttackGoal;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.goals.*;
+import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.item.BodyRemainsItem;
 import net.hydra.jojomod.item.HeadRemainsItem;
-import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.UUID;
 
 public class BaseMinion extends PathfinderMob {
@@ -69,6 +66,8 @@ public class BaseMinion extends PathfinderMob {
     public boolean homeSet = false;
     public int clientDigProg = 0;
     public static final int digProgTick = 10;
+
+    public boolean convertedByZombie = false;
 
     public Vec3 homePosition = Vec3.ZERO;
 
@@ -103,22 +102,23 @@ public class BaseMinion extends PathfinderMob {
     }
     public void addBehaviourGoals() {
         this.goalSelector.addGoal(1, new AvoidPanicGoal<LivingEntity>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));;
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
+        this.goalSelector.addGoal(2, new RestrictSunGoal(this));
+        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::canGetMadAt));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, this::canGetMadAt));
 
         if (!(this instanceof AxolotlMinion)) {
-            this.goalSelector.addGoal(2, new FloatGoal(this));
-            this.goalSelector.addGoal(2, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+            this.goalSelector.addGoal(3, new FloatGoal(this));
+            this.goalSelector.addGoal(3, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
         }
-        this.goalSelector.addGoal(6, new LeapAtTargetBearHeadGoal(this, 0.4F));
-        this.goalSelector.addGoal(7, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(7, new LeapAtTargetBearHeadGoal(this, 0.4F));
+        this.goalSelector.addGoal(8, new MinionAttackGoal(this, 1.0, false));
         if (!(this instanceof ParrotMinion)) {
-            this.goalSelector.addGoal(9, new MinionStrollGoal(this, 1.0));
+            this.goalSelector.addGoal(10, new MinionStrollGoal(this, 1.0));
         }
-        this.goalSelector.addGoal(8, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(9, new MinionFollowCommanderGoal(this, 1.2, 10.0F, 1.5F, false));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Mob.class, 8.0F));
    }
     @Override
     public boolean canBreatheUnderwater(){
@@ -147,7 +147,17 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public boolean canAttack(LivingEntity $$0) {
+        if (($$0 instanceof WitherBoss))
+            return false;
         if (shouldPanic() || this.getTargetTactic() == Tactics.PEACEFUL.id){
+            return false;
+        }
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
+            return false;
+        }
+        if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+            && controller2 != null
+            && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return false;
         }
         return super.canAttack($$0);
@@ -197,77 +207,106 @@ public class BaseMinion extends PathfinderMob {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand $$1) {
         EquipmentSlot slot = $$1 == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-        if (player.isCreative() || player.getId() == getController()){
-            ItemStack stack = player.getItemBySlot(slot);
-            if (stack !=null && !stack.isEmpty()) {
-                if (stack.getItem() instanceof HeadRemainsItem) {
-                    if (!level().isClientSide()) {
-                        dropHead(player);
-                        setHeadItem(stack.copyWithCount(1));
-                        if (!player.getAbilities().instabuild) {
-                            stack.shrink(1);
+        if (player.isCreative() || (player.getId() == getController() && !convertedByZombie)){
+            if (player.isCreative() || ((IFatePlayer)player).rdbt$getFatePowers() instanceof VampireFate vp
+                            && vp.getVampireData().graftingLevel > 0) {
+                ItemStack stack = player.getItemBySlot(slot);
+                if (stack != null && !stack.isEmpty()) {
+                    if (stack.getItem() instanceof HeadRemainsItem) {
+                        if (!level().isClientSide()) {
+                            dropHead(player);
+                            setHeadItem(stack.copyWithCount(1));
+                            if (!player.getAbilities().instabuild) {
+                                stack.shrink(1);
+                            }
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
                         }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
-                    }
-                    return InteractionResult.CONSUME;
-                } else if (stack.getItem() instanceof BodyRemainsItem) {
-                    if (!level().isClientSide()) {
-                        dropBody(player);
-                        setBodyItem(stack.copyWithCount(1));
-                        if (getMainHandItem() != null && !getMainHandItem().isEmpty()){
-                            ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getMainHandItem());
-                            level().addFreshEntity(itemEntity);
-                            setItemSlot(EquipmentSlot.MAINHAND,ItemStack.EMPTY);
-                        }
-                        if (stack.is(ModItems.AXOLOTL_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.DOG_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.CHICKEN_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.OCELOT_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        } else if (stack.is(ModItems.PARROT_REMAINS)){
-                            BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
-                            if (bm != null){convertToMega(bm);}
-                        }
-                        if (!player.getAbilities().instabuild) {
-                            stack.shrink(1);
-                        }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
+                        return InteractionResult.CONSUME;
+                    } else if (stack.getItem() instanceof BodyRemainsItem) {
+                        if (!level().isClientSide()) {
+                            dropBody(player);
+                            setBodyItem(stack.copyWithCount(1));
+                            if (getMainHandItem() != null && !getMainHandItem().isEmpty()) {
+                                ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getMainHandItem());
+                                level().addFreshEntity(itemEntity);
+                                setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                            }
+                            if (stack.is(ModItems.AXOLOTL_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.AXOLOTL_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.DOG_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.DOG_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.CHICKEN_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.CHICKEN_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.OCELOT_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.OCELOT_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            } else if (stack.is(ModItems.PARROT_REMAINS)) {
+                                BaseMinion bm = convertTo(ModEntities.PARROT_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            }
+                            if (!player.getAbilities().instabuild) {
+                                stack.shrink(1);
+                            }
+                            this.level().playSound(null, this.blockPosition(), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 1F, 1);
 
-                    }
-                    return InteractionResult.CONSUME;
-                } else if (stack.getItem() instanceof ShearsItem) {
-                    if (!level().isClientSide()) {
-                        ItemStack stackk = getBodyItem().copy();
-                        ItemStack stackk2 = getHeadItem().copy();
-                        dropHead(player);
-                        dropBody(player);
-                        if (!stackk.isEmpty()){
-                            BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
-                            if (bm != null){convertToMega(bm);}
                         }
-                        if (!stackk.isEmpty() || !stackk2.isEmpty()) {
-                            this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
-                            stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                        return InteractionResult.CONSUME;
+                    } else if (stack.getItem() instanceof ShearsItem) {
+                        if (!level().isClientSide()) {
+                            ItemStack stackk = getBodyItem().copy();
+                            ItemStack stackk2 = getHeadItem().copy();
+                            dropHead(player);
+                            dropBody(player);
+                            if (!stackk.isEmpty()) {
+                                BaseMinion bm = convertTo(ModEntities.VILLAGER_MINION, false);
+                                if (bm != null) {
+                                    convertToMega(bm);
+                                }
+                            }
+                            if (!stackk.isEmpty() || !stackk2.isEmpty()) {
+                                this.level().playSound(null, this.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1F, 1);
+                                stack.hurtAndBreak(1, player, ($$1x) -> $$1x.broadcastBreakEvent($$1));
+                            }
                         }
-                    }
 
-                    return InteractionResult.CONSUME;
+                        return InteractionResult.CONSUME;
+                    }
                 }
             }
+
         }
-        if (!player.isCrouching()){
-            if (getController() == player.getId()){
-                if (player.level().isClientSide()){
-                    ClientUtil.setZombieMinionScreen(getId());
+
+        if ((getController() <= 0 && controller2 == null) || convertedByZombie) {
+            if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
+                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
+                setController(sp);
+                convertedByZombie = false;
+                this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
+            }
+            return InteractionResult.CONSUME;
+        }
+
+        if (!player.isCrouching() && !convertedByZombie){
+            if (getController() == player.getId()) {
+                if (FateTypes.isVampire(player)){
+                    if (player.level().isClientSide()) {
+                        ClientUtil.setZombieMinionScreen(getId());
+                    }
+                    return InteractionResult.CONSUME;
                 }
-                return InteractionResult.CONSUME;
             }
         }
         return super.mobInteract(player,$$1);
@@ -277,13 +316,14 @@ public class BaseMinion extends PathfinderMob {
             villagerMinion.setController(this.level().getEntity(getController()));
             villagerMinion.setMovementTactic(getMovementTactic());
             villagerMinion.setTargetTactic(getTargetTactic());
+            villagerMinion.homeSet = homeSet;
             villagerMinion.setHomePosition(getHomePosition());
             villagerMinion.setHeadItem(getHeadItem());
             villagerMinion.setBodyItem(getBodyItem());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 40)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31).add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.ATTACK_DAMAGE, 5).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
@@ -318,7 +358,7 @@ public class BaseMinion extends PathfinderMob {
                     SoundSource.PLAYERS,
                     1.0F,
                     0.9F);
-            digCooldown = 140;
+            digCooldown = 80;
             if (getMovementTactic() == Tactics.FOLLOW.id){
                 setMovementTactic(Tactics.STAY_PUT.id);
             }
@@ -359,12 +399,15 @@ public class BaseMinion extends PathfinderMob {
     public boolean doHurtTarget(Entity $$0) {
         boolean yeah = super.doHurtTarget($$0);
         if (yeah){
-            if (!level().isClientSide() && !getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
-                getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            if (!level().isClientSide()){
+                if (!getMainHandItem().isEmpty() && getMainHandItem().getCount() > 0) {
+                    getMainHandItem().hurtAndBreak(2, this, $$1x -> $$1x.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                }
             }
         }
         return yeah;
     }
+
 
     @Override
     protected Entity.MovementEmission getMovementEmission() {
@@ -477,14 +520,27 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()) || ($$0 instanceof WitherBoss)) {
+            return;
+        } else if ($$0 instanceof BaseMinion bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Zombiefish bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof FallenMob bm && controller2 != null
+                && bm.controller != null && bm.controller.getUUID().equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setTarget($$0);
         }
     }
     public void setLastHurtByPlayer(@Nullable Player $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtByPlayer($$0);
@@ -492,7 +548,20 @@ public class BaseMinion extends PathfinderMob {
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if (($$0 != null && controller != null && controller.is($$0)) || ($$0 instanceof WitherBoss)){
+            return;
+        } else if ($$0 instanceof BaseMinion bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Zombiefish bm && controller2 != null
+                && bm.controller2 != null && bm.controller2.equals(controller2)) {
+            return;
+        } else if ($$0 instanceof FallenMob bm && controller2 != null
+                && bm.controller != null && bm.controller.getUUID().equals(controller2)) {
+            return;
+        } else if ($$0 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                && controller2 != null
+                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)) {
             return;
         } else {
             super.setLastHurtByMob($$0);
@@ -539,6 +608,7 @@ public class BaseMinion extends PathfinderMob {
 
 
     public void setHeadItem(ItemStack prog){
+        discardBoth();
         this.entityData.set(HEAD_ITEM, prog);
     }
     public ItemStack getHeadItem() {
@@ -579,12 +649,15 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        if (this.controller != null) {
+        if (this.controller2 != null){
+            $$0.putUUID("Controller", this.controller2);
+        } else if (this.controller != null) {
             $$0.putUUID("Controller", this.controller.getUUID());
         }
         $$0.putByte("moveTactic",getMovementTactic());
         $$0.putByte("targetTactic",getTargetTactic());
         $$0.putBoolean("HomeSet",homeSet);
+        $$0.putBoolean("convertedByZombie",convertedByZombie);
         $$0.putDouble("HomeX",getHomePosition().x);
         $$0.putDouble("HomeY",getHomePosition().y);
         $$0.putDouble("HomeZ",getHomePosition().z);
@@ -602,6 +675,7 @@ public class BaseMinion extends PathfinderMob {
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
+        super.readAdditionalSaveData($$0);
         UUID $$2;
         if ($$0.hasUUID("Controller")) {
             $$2 = $$0.getUUID("Controller");
@@ -623,10 +697,11 @@ public class BaseMinion extends PathfinderMob {
                 setBodyItem(itemstack);
             }
         }
+        homeSet = $$0.getBoolean("HomeSet");
+        convertedByZombie = $$0.getBoolean("convertedByZombie");
         setHomePosition(new Vec3($$0.getDouble("HomeX"),$$0.getDouble("HomeY"),$$0.getDouble("HomeZ")));
         this.setTargetTactic($$0.getByte("targetTactic"));
         this.setMovementTactic($$0.getByte("moveTactic"));
-        homeSet = $$0.getBoolean("homeSet");
     }
 
     Zombiefish z1 = null;
@@ -649,10 +724,25 @@ public class BaseMinion extends PathfinderMob {
             z2.discard();
         }
     }
-    public Zombiefish zfish(){
+    private void spit(LivingEntity $$0) {
+        PoisonLlamaSpit $$1 = new PoisonLlamaSpit(this.level(), this);
+        double $$2 = $$0.getX() - this.getX();
+        double $$3 = $$0.getY(0.3333333333333333) - $$1.getY();
+        double $$4 = $$0.getZ() - this.getZ();
+        double $$5 = Math.sqrt($$2 * $$2 + $$4 * $$4) * (double)0.2F;
+        $$1.shoot($$2, $$3 + $$5, $$4, 0.45F, 10.0F);
+        if (!this.isSilent()) {
+            this.level().playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LLAMA_SPIT, this.getSoundSource(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+        }
 
-        return null;
+        this.level().addFreshEntity($$1);
     }
+    public void performRangedAttack(LivingEntity $$0, float $$1) {
+        this.spit($$0);
+    }
+
+    int generousToRareUnreproducableIssue = 20;
+
     @Override
     public void tick(){
         if (!this.level().isClientSide()) {
@@ -664,6 +754,7 @@ public class BaseMinion extends PathfinderMob {
             }
             if (getHeadItem() != null && getHeadItem().is(ModItems.SILVERFISH_REMAINS)){
                 if (getTarget() != null && getTarget().isAlive()){
+                    generousToRareUnreproducableIssue =20;
                     if ((z1 == null || z1.isRemoved() || !z1.isAlive()) && cd1 <= 0){
                         z1 = ModEntities.ZOMBIEFISH.create(level());
                         if (z1 != null){
@@ -686,7 +777,11 @@ public class BaseMinion extends PathfinderMob {
                         }
                     }
                 } else {
-                    discardBoth();
+                    if (generousToRareUnreproducableIssue > 0){
+                        generousToRareUnreproducableIssue--;
+                    } else {
+                        discardBoth();
+                    }
                 }
             } else {
                 discardBoth();
@@ -698,7 +793,7 @@ public class BaseMinion extends PathfinderMob {
             if (digCooldown > 0){
                 digCooldown--;
             }
-            if (controller != null){
+            if (controller != null && !controller.isRemoved() && controller.isAlive()){
                 controller = this.level().getEntity(getController());
             } else {
                 if (controller2 != null){
@@ -706,125 +801,175 @@ public class BaseMinion extends PathfinderMob {
                 }
             }
 
-            if (this.getTarget() != null && (!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
+            if (this.getTarget() != null && (((!this.getTarget().isAlive() || this.getTarget().isRemoved() ||
                     (controller != null && controller.is(getTarget()))
-                    )
+                    )) || (getTargetTactic() == Tactics.PEACEFUL.id) ||
+
+            (this.getTarget() instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                    && controller2 != null
+                    && ((StandUser)fm).rdbt$getFleshBud().equals(controller2))
+            )
             ){
                 this.setTarget(null);
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
+                //Perform a lobotomy because mobs can't follow their aggro rules
                 ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
             }
 
             if (controller == null || controller.isRemoved() || !controller.isAlive()){
                 this.setController(null);
             } else {
-                if (controller.getId() != this.getController()){
-                    this.setController(controller.getId());
-                }
-                if (controller instanceof LivingEntity LE) {
-                    autoTarget = LE.getLastHurtByMob();
-                    autoTarget2 = LE.getLastHurtMob();
-                    if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget = null;
+                if (controller instanceof LivingEntity LE && FateTypes.isVampire(LE)) {
+                    if (controller.getId() != this.getController()) {
+                        this.setController(controller.getId());
                     }
-                    if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
-                        autoTarget = null;
-                    if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()){
-                        autoTarget2 = null;
-                    }
-                    if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
-                        autoTarget2 = null;
-                    if (autoTarget == null && autoTarget2 == null){
-                        if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
-                                && !getLastHurtByMob().isRemoved()){
-                            setTarget(autoTarget);
+                    if (!(getTargetTactic() == Tactics.PEACEFUL.id) && LE.distanceTo(this) < 30) {
+                        autoTarget = LE.getLastHurtByMob();
+                        autoTarget2 = LE.getLastHurtMob();
+                        if (autoTarget instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget = null;
                         }
-                    }
-                    boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
-                    boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
+                        if (autoTarget instanceof Zombiefish fm && fm.getController() == this.getController()) {
+                            autoTarget = null;
+                        }
+                        if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget2 instanceof Zombiefish fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && controller2 != null
+                                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                            autoTarget = null;
+                        }
+                        if (autoTarget2 instanceof Mob fm && ((StandUser)fm).rdbt$getFleshBud() != null
+                                && controller2 != null
+                                && ((StandUser)fm).rdbt$getFleshBud().equals(controller2)){
+                            autoTarget2 = null;
+                        }
 
-                    if (check1 && check2) {
-                        if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
-                                !(autoTarget2 instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget2.is(controller))) {
-                                if (autoTarget2 instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget2);
-                                setTarget(autoTarget2);
-                            }
-                        } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
-                                !(autoTarget instanceof Player PE && PE.isCreative())) {
-                            if (!(controller != null && autoTarget.is(controller))) {
-                                if (autoTarget instanceof Player PL) {
-                                    setLastHurtByPlayer(PL);
-                                }
-                                setLastHurtByMob(autoTarget);
+                        if (autoTarget != null && (autoTarget.isRemoved() || !autoTarget.isAlive()))
+                            autoTarget = null;
+                        if (autoTarget2 instanceof BaseMinion fm && fm.getController() == this.getController()) {
+                            autoTarget2 = null;
+                        }
+                        if (autoTarget2 != null && (autoTarget2.isRemoved() || !autoTarget2.isAlive()))
+                            autoTarget2 = null;
+                        if (autoTarget == null && autoTarget2 == null) {
+                            if (getLastHurtByMob() != null && getLastHurtByMob().isAlive()
+                                    && !getLastHurtByMob().isRemoved()) {
                                 setTarget(autoTarget);
+                            }
+                        }
+                        boolean check1 = (this.getTarget() != autoTarget) || autoTarget == null;
+                        boolean check2 = (this.getTarget() != autoTarget2) || autoTarget2 == null;
+
+                        if (check1 && check2) {
+                            if (autoTarget2 != null && (LE.tickCount - LE.getLastHurtMobTimestamp()) < 200 &&
+                                    !(autoTarget2 instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget2.is(controller))) {
+                                    if (autoTarget2 instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget2);
+                                    setTarget(autoTarget2);
+                                }
+                            } else if (autoTarget != null && (LE.tickCount - LE.getLastHurtByMobTimestamp()) < 200 &&
+                                    !(autoTarget instanceof Player PE && PE.isCreative())) {
+                                if (!(controller != null && autoTarget.is(controller))) {
+                                    if (autoTarget instanceof Player PL) {
+                                        setLastHurtByPlayer(PL);
+                                    }
+                                    setLastHurtByMob(autoTarget);
+                                    setTarget(autoTarget);
+                                }
                             }
                         }
                     }
                 }
             }
 
-
-            if (getHeadItem() != null && getHeadItem().is(ModItems.GOAT_REMAINS)) {
-                LivingEntity targ = getTarget();
-                if (headChargeAmt > 0)
-                    headChargeAmt--;
-                if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
-                    headChargeAmt = 200;
-                    headChargeAmt2 = 15;
-                    Vec3 $$0 = this.getDeltaMovement();
-                    Vec3 $$1 = new Vec3((targ.getX() - this.getX())*-1, (double)0.0F, (targ.getZ() - this.getZ())*-1);
-                    $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
-                    this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
-
-                    this.setDeltaMovement($$1.x, (double)0.4F, $$1.z);
-                }
-                if (headChargeAmt2 > 0){
-                    headChargeAmt2--;
-
-                    if (headChargeAmt2 == 0){
-                        if (targ != null) {
-                            headChargeAmt3 = 14;
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.85);
-                            speedVec = new Vec3($$1.x, $$1.y, $$1.z);
-                            setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
-                            this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
-                                    SoundSource.NEUTRAL, 1F, 1);
-                        }
-                    }
-                } if (headChargeAmt3 > 0){
-                    headChargeAmt3--;
-                    if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)){
-                        if (targ != null) {
-                            Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
-                            $$1 = $$1.normalize().scale(0.95);
-                            setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
+            if (getHeadItem() != null) {
+                if (getHeadItem().is(ModItems.MOOSHROOM_REMAINS)) {
+                    // Poison Trail Mushroom Trail
+                    if (mushroomSpawnTime <= 0){
+                        mushroomSpawnTime = 10;
+                        if (canPlaceShroom(getOnPos().above())) {
+                            this.level().setBlockAndUpdate(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM.defaultBlockState());
+                            this.level().scheduleTick(getOnPos().above(), ModBlocks.POISON_TRAIL_MUSHROOM, 200);
                         }
                     } else {
-                        setDeltaMovement(speedVec.x,getDeltaMovement().y,speedVec.z);
+                        mushroomSpawnTime--;
                     }
-                    if (!this.level().isClientSide()) {
-                        Vec3 pos = getPosition(1);
-                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                                        level().getBlockState(getOnPos())),
-                                pos.x, pos.y, pos.z,
-                                4, 0.2, 0, 0.2, 0.5);
-                        pos = getEyePosition(1);
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
-                                pos.x, pos.y, pos.z,
-                                1, 0.2, 0.2, 0.2, 0.02);
+                } else if (getHeadItem().is(ModItems.LLAMA_REMAINS)) {
+                    if (spitChargeAmt > 0){
+                        spitChargeAmt--;
                     }
+                    LivingEntity targ = getTarget();
+                    if (spitChargeAmt == 0 && targ != null && targ.isAlive()){
+                        spit(targ);
+                        spitChargeAmt = 60;
+                    }
+                } else if (getHeadItem().is(ModItems.GOAT_REMAINS)) {
+                    LivingEntity targ = getTarget();
+                    if (headChargeAmt > 0)
+                        headChargeAmt--;
+                    if (targ != null && canAttack(targ) && headChargeAmt <= 0) {
+                        headChargeAmt = 200;
+                        headChargeAmt2 = 15;
+                        Vec3 $$0 = this.getDeltaMovement();
+                        Vec3 $$1 = new Vec3((targ.getX() - this.getX()) * -1, (double) 0.0F, (targ.getZ() - this.getZ()) * -1);
+                        $$1 = $$1.normalize().scale(0.75).add($$0.scale(0.2));
+                        this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_CHARGE_EVENT, SoundSource.NEUTRAL, 1F, 1);
+
+                        this.setDeltaMovement($$1.x, (double) 0.4F, $$1.z);
+                    }
+                    if (headChargeAmt2 > 0) {
+                        headChargeAmt2--;
+
+                        if (headChargeAmt2 == 0) {
+                            if (targ != null) {
+                                headChargeAmt3 = 14;
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (double) 0.0F, (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.85);
+                                speedVec = new Vec3($$1.x, $$1.y, $$1.z);
+                                setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
+                                this.level().playSound(null, this.blockPosition(), ModSounds.GOAT_DASH_EVENT,
+                                        SoundSource.NEUTRAL, 1F, 1);
+                            }
+                        }
+                    }
+                    if (headChargeAmt3 > 0) {
+                        headChargeAmt3--;
+                        if (getBodyItem() != null && getBodyItem().is(ModItems.PARROT_REMAINS)) {
+                            if (targ != null) {
+                                Vec3 $$1 = new Vec3((targ.getX() - this.getX()), (targ.getY() - this.getY()), (targ.getZ() - this.getZ()));
+                                $$1 = $$1.normalize().scale(0.95);
+                                setDeltaMovement(speedVec.x, $$1.y, speedVec.z);
+                            }
+                        } else {
+                            setDeltaMovement(speedVec.x, getDeltaMovement().y, speedVec.z);
+                        }
+                        if (!this.level().isClientSide()) {
+                            Vec3 pos = getPosition(1);
+                            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                                            level().getBlockState(getOnPos())),
+                                    pos.x, pos.y, pos.z,
+                                    4, 0.2, 0, 0.2, 0.5);
+                            pos = getEyePosition(1);
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.STAR,
+                                    pos.x, pos.y, pos.z,
+                                    1, 0.2, 0.2, 0.2, 0.02);
+                        }
+                    }
+                } else {
+                    headChargeAmt = 0;
+                    headChargeAmt2 = 0;
+                    headChargeAmt3 = 0;
                 }
-            } else {
-                headChargeAmt = 0;
-                headChargeAmt2 = 0;
-                headChargeAmt3 = 0;
             }
 
 
@@ -843,10 +988,24 @@ public class BaseMinion extends PathfinderMob {
     public boolean isCharging(){
         return headChargeAmt3 > 0;
     }
+    public boolean canPlaceShroom(BlockPos pos){
+        BlockPos blk =  new BlockPos(pos.getX(), pos.getY(), pos.getZ());
+
+        if (this.level().isEmptyBlock(blk)) {
+            BlockPos $$8 = blk.below();
+            if (this.level().getBlockState($$8).isFaceSturdy(this.level(), $$8, Direction.UP)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     int headChargeAmt = 0;
     int headChargeAmt2 = 0;
     int headChargeAmt3 = 0;
+    int spitChargeAmt = 0;
+    int mushroomSpawnTime = 0;
     public Vec3 speedVec = Vec3.ZERO;
 
     @Override
@@ -881,6 +1040,20 @@ public class BaseMinion extends PathfinderMob {
 
     @Override
     public boolean killedEntity(ServerLevel $$0, LivingEntity $$1) {
+        if (MainUtil.getMobBleed($$1)){
+            if (!($$1 instanceof AbstractIllager || $$1 instanceof AbstractVillager)) {
+                if ($$1 instanceof Monster){
+                    heal(4);
+                } else {
+                    heal(10);
+                }
+                this.level().playSound(null, this.blockPosition(), ModSounds.BONE_CHOMP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95F + Math.random() * 0.1F));
+
+                $$0.sendParticles(ModParticles.BLOOD_MIST,
+                        $$1.getX(), $$1.getY() + this.getBbHeight() * 0.5, $$1.getZ(),
+                        3, 0.3, 0.3, 0.3, 0.025);
+            }
+        }
         if (controller != null)
             return controller.killedEntity($$0,$$1);
         return true;

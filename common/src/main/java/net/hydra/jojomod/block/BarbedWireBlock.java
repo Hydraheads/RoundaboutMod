@@ -60,7 +60,6 @@ public class BarbedWireBlock extends RotatedPillarBlock
             return AABB;
         } else {
             return getTrueShape(blockState);
-
         }
     }
 
@@ -77,8 +76,9 @@ public class BarbedWireBlock extends RotatedPillarBlock
                     Vec3 dm = entity.getDeltaMovement();
                     float power = (float) (Math.abs(dm.x) + Math.abs(dm.y) + Math.abs(dm.z));
                     if (power > 0) {
-                        power*= 15;
+                        power*= 9;
                         power*= this.wirePower;
+                        power = Math.min(power,10F);
                         /**Velocity for players is clientside so it requires additional packet*/
                         if (!level.isClientSide && !(entity instanceof Player) && !(entity.getControllingPassenger() != null && entity.getControllingPassenger() instanceof Player)) {
                             if (!(entity instanceof LivingEntity LE && MainUtil.isBossMob(LE))) {

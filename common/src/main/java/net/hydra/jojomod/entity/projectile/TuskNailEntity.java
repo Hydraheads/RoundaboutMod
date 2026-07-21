@@ -1,20 +1,16 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEnderMan;
-import net.hydra.jojomod.block.FogBlock;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,15 +19,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -50,7 +43,6 @@ import java.util.List;
 
 public class TuskNailEntity extends AbstractArrow {
 
-    public AnimationState animationState = new AnimationState();
 
     @Override
     public void shootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
@@ -118,8 +110,12 @@ public class TuskNailEntity extends AbstractArrow {
         if (this.life > 200) {
             this.discard();
         }
-        if (!this.level().isClientSide()) {
-            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(40/255F,214/255F,1F),1F),
+        if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+
+            float r = PT.getNailColor().x;
+            float g = PT.getNailColor().y;
+            float b = PT.getNailColor().z;
+            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);
 
@@ -143,9 +139,11 @@ public class TuskNailEntity extends AbstractArrow {
                 }
             }
             if (isInWater() && (this.getAct() == 2 || this.getAct() == 3)) {
-                TuskHoleEntity THE = this.createHole();
-                THE.vortexify();
-                this.discard();
+                TuskHoleEntity THE = this.createHole(null);
+                if (THE != null) {
+                    THE.vortexify();
+                    this.discard();
+                }
             }
         }
     }
@@ -163,15 +161,15 @@ public class TuskNailEntity extends AbstractArrow {
             BlockState bs = this.level().getBlockState($$0.getBlockPos());
             if (this.getAct() == 2 || this.getAct() == 3) {
                 if (!this.isInWater()) {
-                    createHole();
+                    createHole($$0);
                 }
             }
             this.discard();
         }
     }
 
-    private TuskHoleEntity createHole() {return createHole(this.getPosition(0));}
-    private TuskHoleEntity createHole(Vec3 pos) {
+    private TuskHoleEntity createHole(BlockHitResult bhr) {return createHole(bhr, this.getPosition(0));}
+    private TuskHoleEntity createHole(BlockHitResult bhr, Vec3 pos) {
         if (this.getOwner() instanceof LivingEntity LE) {
             TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.level(), LE);
             tuskHoleEntity.setPos(pos);
@@ -209,8 +207,8 @@ public class TuskNailEntity extends AbstractArrow {
                             float knockbackStrength = this.getAct() == 1 ? 0.1F : 0.3F;
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 
-                            if (this.getAct() > 1 && this.getAct() < 4) {
-                                TuskHoleEntity tuskHole = createHole(ent.getPosition(0));
+                            if (this.getAct() == 2) {
+                                TuskHoleEntity tuskHole = createHole(null,ent.getPosition(0));
                                 if (tuskHole != null && this.getAct() == 2) {
                                     if ( (this.getOwner() instanceof Player P && (P.getLastHurtMob() == null || P.getLastHurtMob() == ent)) || !(this.getOwner() instanceof Player)  ) {
                                         tuskHole.doHurtTarget(ent);

@@ -155,6 +155,8 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
     @Override
     public boolean canCollideWith(Entity other) {
+        if (other instanceof RoadRollerEntity)
+            return false;
         if ((this.getVehicle() instanceof StandEntity stand) || getExploded()) {
             return false;
         }
@@ -814,6 +816,9 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
 
     @Override
     public void push(Entity $$0) {
+        if ($$0 instanceof RoadRollerEntity){
+            return;
+        }
         if (this.getVehicle() instanceof StandEntity stand) {
             return;
         }

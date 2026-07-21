@@ -25,7 +25,7 @@ public class DogMinion extends BaseMinion{
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.MAX_HEALTH, 40)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.33).add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.ATTACK_DAMAGE, 8).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }
@@ -93,7 +93,7 @@ public class DogMinion extends BaseMinion{
     private float shakeAnim;
     private float shakeAnimO;
     public float getTailAngle() {
-        return (0.55F - (this.getMaxHealth() - this.getHealth()) * 0.02F) * (float)Math.PI;
+        return 1;
 
     }
     public boolean isInSittingPose() {

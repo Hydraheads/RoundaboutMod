@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersCream;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.Input;
@@ -28,44 +29,14 @@ public abstract class KeysKeyboardInput extends Input {
     @Inject(method = "tick(ZF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$tick(boolean $$0, float $$1, CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
-        if (player != null){
+        if (player != null) {
 
             StandUser user = ((StandUser) player);
-            if (user.roundabout$isPossessed()) {
-                this.up = false;
-                this.down = false;
-                this.left = false;
-                this.right = false;
-                this.forwardImpulse = 0;
-                this.leftImpulse = 0;
-                this.jumping = false;
-                this.shiftKeyDown = false;
-                ci.cancel();
-            }
 
-            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState) {
-                this.up = false;
-                this.down = false;
-                this.left = false;
-                this.right = false;
-                this.forwardImpulse = 0;
-                this.leftImpulse = 0;
-                this.jumping = false;
-                this.shiftKeyDown = false;
-                ci.cancel();
-            }
-
-            if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0) {
-                this.up = false;
-                this.down = false;
-                this.left = false;
-                this.right = false;
-                this.forwardImpulse = 0;
-                this.leftImpulse = 0;
-                this.jumping = false;
-                this.shiftKeyDown = false;
-                ci.cancel();
-            }
+            boolean noKeys = user.roundabout$isPossessed()
+                    || (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState)
+                    || (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.getTransformTimer() > 0)
+                    || (user.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.FLATTEN);
 
             if (user.roundabout$getStandPowers().isPiloting()){
                 if (roundabout$keyPilot == null){
@@ -75,15 +46,7 @@ public abstract class KeysKeyboardInput extends Input {
                 Entity ent = user.roundabout$getStandPowers().getPilotingStand();
                 if (ent != null){
                     roundabout$keyPilot.tick($$0, $$1);
-                    this.up = false;
-                    this.down = false;
-                    this.left = false;
-                    this.right = false;
-                    this.forwardImpulse = 0;
-                    this.leftImpulse = 0;
-                    this.jumping = false;
-                    this.shiftKeyDown = false;
-                    ci.cancel();
+                    noKeys = true;
                 }
             } else if (player.isPassenger() && player.getVehicle() instanceof FallenPhantom phantom) {
                 if (roundabout$keyRider == null){
@@ -92,6 +55,19 @@ public abstract class KeysKeyboardInput extends Input {
                 roundabout$keyRider.tick($$0,$$1);
 
             }
+
+            if (noKeys) {
+                this.up = false;
+                this.down = false;
+                this.left = false;
+                this.right = false;
+                this.forwardImpulse = 0;
+                this.leftImpulse = 0;
+                this.jumping = false;
+                this.shiftKeyDown = false;
+                ci.cancel();
+            }
+
         }
     }
 

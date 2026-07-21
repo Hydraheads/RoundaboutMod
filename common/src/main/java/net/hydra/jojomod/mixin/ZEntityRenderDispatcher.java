@@ -9,12 +9,12 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -106,6 +106,14 @@ public abstract class ZEntityRenderDispatcher {
     private static <E extends Entity>  void roundabout$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {
         if ($$2 instanceof NoHitboxRendering || ClientUtil.getThrowFadePercent($$2,$$3) <= 0){
             ci.cancel();
+            return;
+        }
+        if ($$2 instanceof Player P) {
+            if (((StandUser)P).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (PT.getActivePower() == PowersTusk.FLATTEN) {
+                    ci.cancel();
+                }
+            }
         }
     }
 
@@ -244,6 +252,10 @@ public abstract class ZEntityRenderDispatcher {
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if (!((IEntityAndData)$$2).roundabout$getShadow()){
             ((IEntityAndData)$$2).roundabout$setShadow(true);
+            ci.cancel();
+            return;
+        }
+        if (ClientUtil.isUsingEpitaph()){
             ci.cancel();
             return;
         }

@@ -1,10 +1,8 @@
 package net.hydra.jojomod.client.models.stand;
 
-import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
-import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -186,7 +184,7 @@ public class WalkingHeartModel<T extends WalkingHeartEntity> extends StandModel<
     }
 
 
-    StandPowers Power = new PowersD4C(null);
+    StandPowers Power = new PowersWalkingHeart(null);
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

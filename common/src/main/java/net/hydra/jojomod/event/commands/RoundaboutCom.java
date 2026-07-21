@@ -6,16 +6,9 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.hydra.jojomod.RoundaboutCommands;
-import net.minecraft.world.entity.Entity;
-import net.zetalasis.world.DynamicWorld;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.network.chat.HoverEvent;
 
 public class RoundaboutCom {
 
@@ -32,6 +25,46 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets"),IntegerArgumentType.getInteger(context,"level")))
                         )
                 ));
+        dispatcher.register(Commands.literal("roundaboutLevelUpStand")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLevelupStand((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                                .executes(context -> RoundaboutCommands.roundaboutSetLevelupStand((CommandSourceStack)context.getSource(),
+                                        EntityArgument.getEntities(context, "targets")))
+                        )
+                );
+        dispatcher.register(Commands.literal("roundaboutLevelDownStand")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLeveldownStand((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutSetLeveldownStand((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
+        dispatcher.register(Commands.literal("roundaboutLevelUpFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLevelupFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutSetLevelupFate((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
+        dispatcher.register(Commands.literal("roundaboutLevelDownFate")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.roundaboutSetLeveldownFate((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.roundaboutSetLeveldownFate((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
         dispatcher.register(Commands.literal("roundaboutSetStand")
                 .requires(source
                         -> source.hasPermission(2))

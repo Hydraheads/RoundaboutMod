@@ -53,7 +53,20 @@ public abstract class ForgePlayer extends LivingEntity {
     /**Block Breaking Speed Decreases when your hand is stone*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-            byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
+        if (PowerTypes.hasStandActive(this) &&
+                (powers.canUseMiningStand()) || powers.isMiningRegardless()|| PowerTypes.isBrawling(this)) {
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
+            return;
+        }
+        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()
+                || PowerTypes.isBrawling(this)){
+            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction2($$0,gp));
+            return;
+        }
+
+        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
         float f = this.inventory.getDestroySpeed($$0);
         boolean overwrite = false;
             if (curse > -1) {
@@ -78,14 +91,14 @@ public abstract class ForgePlayer extends LivingEntity {
         }
 
 
-        boolean standActive = PowerTypes.hasStandActive(this);
-        if (standActive && PowerTypes.hasStandActivelyEquipped(this)){
+        boolean active = ((StandUser) this).roundabout$getActive();
+        if (active && PowerTypes.hasStandActivelyEquipped(this)){
             float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
                     if (bpow != 1){
                         f*= bpow;
                         overwrite = true;
                     }
-        } else if (standActive){
+        } else if (active){
             float bpow = ((IPowersPlayer)this).rdbt$getPowers().getBonusPassiveMiningSpeed();
             if (bpow != 1){
                 f*= bpow;
@@ -93,8 +106,8 @@ public abstract class ForgePlayer extends LivingEntity {
             }
         }
 
-        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        if (!(PowerTypes.hasStandActive(this) && ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+        if (!(PowerTypes.hasStandActive(this) &&
+                ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
             float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
             if (bpow != 1) {
                 f *= bpow;
@@ -156,17 +169,7 @@ public abstract class ForgePlayer extends LivingEntity {
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
-        GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
-        if (PowerTypes.hasStandActive(this) && ((StandUser) this).roundabout$getStandPowers().canUseMiningStand()) {
 
-            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction($$0,powers));
-            return;
-        }
-        if (PowerTypes.isUsingPower(this) && ((IPowersPlayer)this).rdbt$getPowers().isMining()){
-            cir.setReturnValue(((IPlayerEntity)this).rdbt$mutualMiningSpeedFunction2($$0,gp));
-            return;
-        }
     }
 
     @Shadow

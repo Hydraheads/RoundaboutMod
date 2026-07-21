@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.HeyYaLayer;
 import net.hydra.jojomod.client.models.layers.MandomLayer;
 import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
+import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer2;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
@@ -27,6 +28,7 @@ public abstract class LayerHumanoidMobRendererMixin<T extends Mob, M extends Hum
         this.addLayer(new CenturyBoyLayer<>($$0, this));
         this.addLayer(new RattShoulderLayer<>($$0, this));
         this.addLayer(new AnubisLayer<>($$0, this));
+        this.addLayer(new VisagePartLayer2<>($$0, this));
     }
 
     /**Shadows, ignore

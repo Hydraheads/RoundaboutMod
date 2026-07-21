@@ -3,16 +3,19 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ITargetGoal;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -44,12 +47,14 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
@@ -57,6 +62,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -159,6 +167,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public boolean roundabout$isNaturalStandUser = false;
     @Unique
     public boolean roundabout$isBred = false;
+    @Unique
+    public int roundabout$confusionTicks = 0;
 
     @Override
     @Unique
@@ -192,6 +202,32 @@ public abstract class ZMob extends LivingEntity implements IMob {
         return roundabout$hypnotizedBy;
     }
 
+
+
+    @Unique
+    public boolean rdbt$stolen = false;
+    @Override
+    @Unique
+    public void rdbt$setStolen(boolean steal){
+        rdbt$stolen = steal;
+    }
+    @Override
+    @Unique
+    public boolean rdbt$getStolen(){
+        return rdbt$stolen;
+    }
+
+    @Override
+    @Unique
+    public void roundabout$setConfusionTicks(int set) {
+        roundabout$confusionTicks = set;
+    }
+    @Override
+    @Unique
+    public int roundabout$getConfusionTicks() {
+        return roundabout$confusionTicks;
+    }
+
     //Injects universal behaviors that all mobs can share
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At(value = "RETURN"))
     private void roundabout$initRegisterCustomGoals(EntityType type, Level level, CallbackInfo ci) {
@@ -219,6 +255,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             if ($$0.getEntity() != null) {
                 if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
                         !(((Mob)(Object)this) instanceof Animal) &&
+                        !(((Mob)(Object)this) instanceof WaterAnimal) &&
                         !(((Mob)(Object)this) instanceof AbstractVillager)) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
@@ -274,6 +311,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         $$0.putBoolean("roundabout.isBred", roundabout$getIsBred());
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
+        compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
         $$0.put("roundabout",compoundtag);
         return $$0;
     }
@@ -285,6 +323,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
         this.roundabout$setIsBred($$0.getBoolean("roundabout.isBred"));
         CompoundTag compoundtag = $$0.getCompound("roundabout");
             roundabout$setVampire(compoundtag.getBoolean("vampire"));
+        if (compoundtag.contains("stolenMemory")) {
+            rdbt$stolen = compoundtag.getBoolean("stolenMemory");
+        }
     }
 
     @Shadow
@@ -348,6 +389,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
+        //((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnInfo();
+
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
             this.roundabout$setWorthy(true);
@@ -356,7 +399,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
             ItemStack stack = ModItems.getPoolForMob(this).get(index).getDefaultInstance();
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                 ((StandUser)this).roundabout$setStandDisc(stack);
-                SD.generateStandPowers(((LivingEntity) (Object) this));
                 ((StandUser)this).roundabout$getStandPowers().rollSkin();
             }
         } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
@@ -389,7 +431,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
-    private double roundabout$speedModifier = 1F;
+    private double roundabout$speedModifier = 1.25F;
     @Unique
     private boolean roundabout$followingTargetEvenIfNotSeen;
     @Unique
@@ -478,6 +520,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     protected double roundabout$getFollowDistance() {
         /**Soft and Wet Plunder sight*/
+        if (roundabout$getConfusionTicks() > 0){
+            return 0;
+        }
         if (((StandUser)this).roundabout$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
             return (this.getAttributeValue(Attributes.FOLLOW_RANGE)*0.07);
         }
@@ -489,10 +534,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Unique
     public boolean roundabout$canContinueToUse() {
-            LivingEntity $$0 = this.getTarget();
-        if ($$0 == null && ((this.tickCount - this.getLastHurtByMobTimestamp()) < 10)) {
-            $$0 = this.getLastHurtByMob();
+        if (((Mob)(Object)this) instanceof AbstractHorse ah && !ah.getPassengers().isEmpty()) {
+            ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+            return false;
         }
+            LivingEntity $$0 = this.getTarget();
+            if ($$0 == null && ((this.tickCount - this.getLastHurtByMobTimestamp()) < 10)) {
+                $$0 = this.getLastHurtByMob();
+            }
             if ($$0 == null) {
                 return false;
             } else if (!this.canAttack($$0)) {
@@ -525,7 +574,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     public void roundabout$targetVillageEnemies(){
         LivingEntity potentialTarget = null;
-        AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
+        AABB $$0 = this.getBoundingBox().inflate(15.0, 8.0, 15.0);
         List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
         float mindist = -1;
 
@@ -576,9 +625,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
+
+        if (this.goalSelector != null) {
+            this.goalSelector.getAvailableGoals().stream()
+                    .map(WrappedGoal::getGoal)
+                    .forEach(this::roundabout$removeGoalTarget);
+        }
             if (this.targetSelector != null) {
-                Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
-                wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+                this.targetSelector.getAvailableGoals().stream()
+                        .map(WrappedGoal::getGoal)
+                        .forEach(this::roundabout$removeGoalTarget);
 
 
                 Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
@@ -691,6 +747,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
             ((ITargetGoal) tg).roundabout$removeTarget();
+        } else if (goal instanceof PanicGoal tg) {
+            tg.stop();
         }
     }
     @Unique
@@ -869,7 +927,10 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
                     bm.goHome();
                 } else {
-                    this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() * ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick);
+                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
+                            ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
+                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                    }
                 }
             }
         }
@@ -881,8 +942,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if ($$0 != null) {
             /**Flesh buds prevent aggro on the planter*/
             UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
-            if (fleshPlanter != null && ($$0.getUUID().equals(fleshPlanter) ||
-                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)))){
+            if (fleshPlanter != null && (
+                    $$0.getUUID().equals(fleshPlanter) ||
+                    (((StandUser)$$0).rdbt$getFleshBud() != null && ((StandUser)$$0).rdbt$getFleshBud().equals(fleshPlanter)) ||
+                            ($$0 instanceof BaseMinion bm && bm.controller2 != null && bm.controller2.equals(fleshPlanter)) ||
+                            ($$0 instanceof Zombiefish zm && zm.controller2 != null && zm.controller2.equals(fleshPlanter))
+
+            )
+            ){
                 ci.cancel();
                 return;
             }
@@ -924,6 +991,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void roundabout$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
+            if (roundabout$confusionTicks > 0){
+                roundabout$confusionTicks--;
+            }
             if (getHealth() < getMaxHealth()){
                 if (roundabout$isVampire()){
                     if (tickCount % 82 == 0){

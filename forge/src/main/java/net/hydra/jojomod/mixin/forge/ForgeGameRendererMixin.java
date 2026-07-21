@@ -1,9 +1,12 @@
 package net.hydra.jojomod.mixin.forge;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,7 +43,10 @@ public abstract class ForgeGameRendererMixin {
                 if (animation == null) {
                     return;
                 }
-                long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta * 50);
+                if(focusedEntity instanceof LivingEntity LV && ((StandUser)LV).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
+                    return;
+                }
+                long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);
                 Quaternionf currentGravityRotation = animation.getCurrentGravityRotation(gravityDirection, timeMs);
 
 

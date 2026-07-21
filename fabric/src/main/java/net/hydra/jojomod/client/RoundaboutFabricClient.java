@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.item.FancyLighterItem;
+import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
 import net.hydra.jojomod.registry.FabricItems;
@@ -30,6 +32,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.DREAD_FIRE,
                 ModBlocks.CREAM_FIRE,
                 ModBlocks.BLOOD_SPLATTER,
+                ModBlocks.ACID_PUDDLE,
                 ModBlocks.STREET_SIGN_DIO,
                 ModBlocks.STREET_SIGN_RIGHT,
                 ModBlocks.STREET_SIGN_STOP,
@@ -45,16 +48,24 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK,
                 ModBlocks.BLOODY_STONE_MASK_BLOCK,
                 ModBlocks.COFFIN_BLOCK,
+                //ModBlocks.CHESSBOARD_BLOCK,
                 ModBlocks.CULTIVATED_CHERRY_SAPLING,
                 ModBlocks.CULTIVATED_OAK_SAPLING,
                 ModBlocks.CULTIVATED_LOCACACA,
                 ModBlocks.FOG_TRAP,
+                ModBlocks.POISON_TRAIL_MUSHROOM,
+                ModBlocks.GLASS_DOOR,
                 ModBlocks.MELON_PARFAIT);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.GLASS_DOOR);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
+                ModBlocks.COLD_AIR, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
+                ModBlocks.WHITE_ALBUM_ICE_SLAB);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
+        ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+        ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+        ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
     }
 }

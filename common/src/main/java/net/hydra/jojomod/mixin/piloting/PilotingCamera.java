@@ -2,13 +2,11 @@ package net.hydra.jojomod.mixin.piloting;
 
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -22,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Camera.class)
 public abstract class PilotingCamera implements ICamera {
@@ -47,12 +46,12 @@ public abstract class PilotingCamera implements ICamera {
 
     @Unique
     public float roundabout$getViewXRot(Entity ent, float $$0) {
-        return $$0 == 1.0F ? ent.getXRot() : MainUtil.controlledLerpAngleDegrees(ClientUtil.getFrameTime(),ent.xRotO,ent.getXRot(),1);
+        return $$0 == 1.0F ? ent.getXRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.xRotO,ent.getXRot(),1);
     }
-
+    
     @Unique
     public float roundabout$getViewYRot(Entity ent, float $$0) {
-        return $$0 == 1.0F ? ent.getYRot() : MainUtil.controlledLerpAngleDegrees(ClientUtil.getFrameTime(),ent.yRotO,ent.getYRot(),1);
+        return $$0 == 1.0F ? ent.getYRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.yRotO,ent.getYRot(),1);
     }
     @Unique
     public void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {
@@ -61,8 +60,7 @@ public abstract class PilotingCamera implements ICamera {
             Direction gravityDirection = GravityAPI.getGravityDirection(roundabout$povSwitch);
             RotationAnimation animation = GravityAPI.getRotationAnimation(roundabout$povSwitch);
             if (animation != null) {
-                float partialTick = Minecraft.getInstance().getFrameTime();
-                long timeMs = entity.level().getGameTime() * 50 + (long) (partialTick * 50);
+                long timeMs = entity.level().getGameTime() * 50 + (long) (f%1 * 50);
                 animation.update(timeMs);
                 if (!(gravityDirection == Direction.DOWN && !animation.isInAnimation())) {
                     this.initialized = true;
@@ -133,11 +131,16 @@ public abstract class PilotingCamera implements ICamera {
             this.move(0.0, 0.3, 0.0);
         }
     }
-
-    @Unique
+    @Inject(method = "isDetached", at = @At(value = "HEAD"), cancellable = true)
+    private void roundabout$isDetached(CallbackInfoReturnable<Boolean> cir) {
+        if (roundabout$povSwitch != null){
+            cir.setReturnValue(true);
+        }
+    }
+        @Unique
     public boolean roundabout$cleared = false;
     @Inject(method = "setup", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
+    private void roundabout$setup2(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
         if (!roundabout$cleared) {
             if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity) && !entity.isPassenger()) {
                     f = ((IEntityAndData) entity).roundabout$getPreTSTick();

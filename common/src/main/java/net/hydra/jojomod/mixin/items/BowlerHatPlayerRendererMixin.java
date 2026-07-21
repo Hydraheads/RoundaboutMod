@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.item.BowlerHatItem;
+import net.hydra.jojomod.item.UltravioletBlasterItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -29,9 +30,6 @@ import static org.apache.logging.log4j.ThreadContext.isEmpty;
 @Mixin(PlayerRenderer.class)
 public class BowlerHatPlayerRendererMixin {
     /**Reward a winner of a raid with the executioner axe template*/
-    @Unique
-    public boolean roundabout$hasRewarded = false;
-
     @Shadow
     protected void renderHand(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, ModelPart modelPart, ModelPart modelPart2) {
 
@@ -41,7 +39,9 @@ public class BowlerHatPlayerRendererMixin {
     private static void bowlerHatPlayerHandRenderer(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!stack.isEmpty() && stack.getItem() instanceof BowlerHatItem) {
+        if (!stack.isEmpty() &&
+                (stack.getItem() instanceof BowlerHatItem || stack.getItem() instanceof UltravioletBlasterItem)
+        ) {
             cir.setReturnValue(HumanoidModel.ArmPose.EMPTY);
         }
     }

@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.stand_users;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGossipContainerAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
@@ -65,12 +66,19 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
             EntityDataSerializers.BYTE);
 
     @Unique
+    @Override
     public int roundabout$getAnubisTicks() {
         return this.getEntityData().get(ROUNDABOUT$ANUBIS_TICKS);
     }
     @Unique
+    @Override
     public void roundabout$setAnubisTicks(int i) {
         this.getEntityData().set(ROUNDABOUT$ANUBIS_TICKS,i);
+    }
+    @Unique
+    @Override
+    public void roundabout$clearGossips() {
+        ((IGossipContainerAccess)this.gossips).rdbt$clearGossips();
     }
     @Unique
     public byte roundabout$getAnubisType() {

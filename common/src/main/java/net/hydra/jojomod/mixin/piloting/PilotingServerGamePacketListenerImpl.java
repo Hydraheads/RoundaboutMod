@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -43,13 +44,13 @@ public abstract class PilotingServerGamePacketListenerImpl {
         if (this.player != null) {
             StandUser standComp = ((StandUser) player);
             StandPowers powers = standComp.roundabout$getStandPowers();
-            StandEntity piloting = powers.getPilotingStand();
-            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers instanceof PowersJustice
+            LivingEntity piloting = powers.getPilotingStand();
+            if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 InteractionHand $$2 = $$0.getHand();
                 ItemStack $$3 = this.player.getItemInHand($$2);
-                if ($$3.getItem() instanceof FogBlockItem) {
-                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange + 15);
+                if (powers.canPilotPlaceBlock($$3)) {
+                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
                     roundabout$handleUseItemOn($$0);
                 }
                 ci.cancel();

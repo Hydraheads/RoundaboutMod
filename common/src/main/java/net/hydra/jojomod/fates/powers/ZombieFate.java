@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -404,7 +405,12 @@ public class ZombieFate extends VampiricFate {
         if (isDisguised()){
             return super.getJumpHeightAddon();
         }
-        return super.getJumpHeightAddon()+getAddon();
+
+        float addon = getAddon();
+        if (self.hasEffect(ModEffects.SINGE)){
+            addon = Math.min(addon,1.3f);
+        }
+        return super.getJumpHeightAddon()+addon;
     }
     @Override
     public float getJumpHeightAddonMax(){
@@ -615,10 +621,10 @@ public class ZombieFate extends VampiricFate {
     }
 
     @Override
-    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+    public boolean renderAttackHud2(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
-        super.renderAttackHud(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
+        return super.renderAttackHud2(context,playerEntity,scaledWidth,scaledHeight,ticks,vehicleHeartCount,flashAlpha,otherFlashAlpha);
     }
 
     @Override

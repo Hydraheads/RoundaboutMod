@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.RoundaboutDoor;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -33,6 +35,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -44,12 +47,10 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.AirBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.WebBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -58,6 +59,8 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class SeperatedArmEntity extends StandEntity {
 
@@ -68,8 +71,11 @@ public class SeperatedArmEntity extends StandEntity {
     public int FireworkLaunchTicks = 0;
     public Vec3 LaunchAngle = null;
     public int SpinTicks = 0;
+    public BlockPos MiningPos = new BlockPos(0,-60,0);
+    public String userUUID;
 
     public void setSpinTicks(int val){SpinTicks = val;};
+
 
 
     public static final byte
@@ -87,6 +93,8 @@ public class SeperatedArmEntity extends StandEntity {
 
         }
     }
+
+
 
     public SeperatedArmEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -117,6 +125,7 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+        MiningPos =  (BlockPos.containing(jumpT0Pos));
     }
 
     public void jump2(Vec3 jumpT0Pos){
@@ -144,7 +153,10 @@ public class SeperatedArmEntity extends StandEntity {
         LaunchAngle = this.getDeltaMovement();
         Can_activate = true;
         flyingTicks=0;
+        MiningPos = (BlockPos.containing(jumpT0Pos));
+
     }
+
 
     public BlockPos IsArmContactingBlock(){
         
@@ -200,28 +212,50 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void tickeffects() {
-        this.setFadeOut((byte)1);
-        boolean client = this.level().isClientSide();
-        LivingEntity user = this.getUser();
-        if (!client) {
-            if(user == null){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
-            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())){
-                spawnAtLocation(this.getMainHandItem());
-                this.discard();
+        if (User != null) {
+            if (getMainHandItem().getDamageValue() == getMainHandItem().getMaxDamage() - 1) {
+                Can_activate = false;
+                Can_activate_special = false;
             }
-            else{
-                if(!onGround()){
-                    flyingTicks +=1;
-                }else{
+            this.setFadeOut((byte) 1);
+            boolean client = this.level().isClientSide();
+            LivingEntity user = this.getUser();
+            if (tickCount < 10) {
+                userUUID = user.getStringUUID();
+                Roundabout.LOGGER.info(userUUID);
+            }
+            if (!client) {
+
+                if (user == null) {
+                    removearm();
+                } else if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) || (!user.isAlive())) {
+                    removearm();
+                } else if (user != null) {
+
+                    if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null) && (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)) || (((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            removearm();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Main_arm.equals(this)))) {
+                            removearm();
+                        }
+                    } else if ((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity != null)) {
+                        if (!((((PowersGreenDay) ((StandUser) user).roundabout$getStandPowers()).Off_hand_entity.equals(this)))) {
+                            removearm();
+                        }
+                    }
+                }
+                if (!onGround()) {
+                    flyingTicks += 1;
+                } else {
                     flyingTicks = 0;
                 }
-                if(Can_activate_special || (Can_activate  && flyingTicks > 2)) {
+                if (Can_activate_special || (Can_activate)) {
                     ItemStack item = (this.getMainHandItem());
-                    if (!(this.IsArmContactingBlock() == null) && Can_activate) {
-                        BlockState block = (this.level().getBlockState(this.IsArmContactingBlock()));
+                    if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
 
+                        BlockState block = (this.level().getBlockState(MiningPos));
 
 
                         boolean RightTier = false;
@@ -238,36 +272,47 @@ public class SeperatedArmEntity extends StandEntity {
                             );
                         }
 
+                        RightTier = true;
+
                         boolean pickaxeable = block.is(BlockTags.MINEABLE_WITH_PICKAXE) && RightTier;
                         boolean axeable = block.is(BlockTags.MINEABLE_WITH_AXE) && RightTier;
                         boolean shovelable = block.is(BlockTags.MINEABLE_WITH_SHOVEL) && RightTier;
 
-                        BlockState state = this.level().getBlockState(IsArmContactingBlock());
+                        BlockState state = this.level().getBlockState(MiningPos);
                         ServerLevel level = (ServerLevel) this.level();
 
-                        BlockPos targetpos = IsArmContactingBlock();
-                        
+                        BlockPos targetpos = MiningPos;
+
                         if (this.getMainHandItem().getItem() instanceof PickaxeItem) {
                             if (pickaxeable) {
-                                level.destroyBlock(targetpos, true,this);
+                                level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if (Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
+                        } else if (this.getMainHandItem().getItem() instanceof ShovelItem) {
                             if (shovelable) {
                                 level.destroyBlock(targetpos, true, this);
                                 this.setDeltaMovement(0, 0, 0);
+
+                                if (Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
-                        }
-                        else if (this.getMainHandItem().getItem() instanceof AxeItem) {
+                        } else if (this.getMainHandItem().getItem() instanceof AxeItem) {
                             if (axeable) {
-                                level.destroyBlock(targetpos, true,this);
+                                level.destroyBlock(targetpos, true, this);
 
                                 this.setDeltaMovement(0, 0, 0);
+                                if (Can_activate) {
+                                    this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                                }
                                 Can_activate = false;
                             }
 
@@ -279,46 +324,65 @@ public class SeperatedArmEntity extends StandEntity {
                 attractMobs();
                 pickUpItems();
                 doSpin();
-            }
 
-            if(FireworkLaunchTicks > 0){
-                FireworkLaunchTicks --;
-                this.setDeltaMovement(LaunchAngle);
-                ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
-                        this.getX(),
-                        this.getY() + 0.15 ,
-                        this.getZ(),
-                        1,0,0,0,0);
+                if (FireworkLaunchTicks > 0) {
+                    FireworkLaunchTicks--;
+                    this.setDeltaMovement(LaunchAngle);
+                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FIREWORK,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
 
-            }
+                }
 
-            for(int i = 0; i < 2; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
-                double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
-                        this.getX()+randX,
-                        this.getY()+randY + 0.15 ,
-                        this.getZ() + randZ,
-                        1,0,0,0,0);
+                for (int i = 0; i < 2; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                            this.getX() + randX,
+                            this.getY() + randY + 0.15,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                }
+                if (Can_activate && !onGround()) {
+                    ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                            this.getX(),
+                            this.getY() + 0.15,
+                            this.getZ(),
+                            1, 0, 0, 0, 0);
+                }
             }
-            if(Can_activate && !onGround()) {
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                        this.getX(),
-                        this.getY() + 0.15,
-                        this.getZ(),
-                        1, 0, 0, 0, 0);
-            }
-
         }
 
-        super.tick();
+            super.tick();
+
     }
 
     public boolean hasUsedItem = false;
 
+    public void removearm(){
+        if((level().getPlayerByUUID(UUID.fromString(userUUID)) != null)
+                && (level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
+        &&(level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().getFreeSlot() > -1)){
+                level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().add(getMainHandItem());
+        }else{
+            spawnAtLocation(this.getMainHandItem());
+        }
+        discard();
+    }
+
     public void doSpin(){
         if(SpinTicks > 0){
+            if(IsArmContactingBlock() != null) {
+                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof LeverBlock) {
+                    ((LeverBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).pull(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                }
+                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof ButtonBlock) {
+                    ((ButtonBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).press(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                }
+            }
             for(int i = 0; i < 1; i = i + 1) {
                 double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                 double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
@@ -421,8 +485,8 @@ public class SeperatedArmEntity extends StandEntity {
                                 this.setItemInHand(InteractionHand.MAIN_HAND,IE.getItem());
                                 IE.discard();
                             }else{
-                                itemStack.setCount(itemStack.getCount() + IE.getItem().getCount());
-                                IE.discard();
+                                itemStack.setCount(itemStack.getCount() + 1);
+                                IE.getItem().setCount(IE.getItem().getCount() - 1);
                             }
                         }
 
@@ -438,113 +502,131 @@ public class SeperatedArmEntity extends StandEntity {
     public void doAttack() {
         LivingEntity user = this.getUser();
         Item item = (this.getMainHandItem().getItem());
-        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),1,1,1);
-        if(SpinTicks >0){
-            damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),2,2,2);
+        List<Entity> damages = List.of();
+        if(Can_activate_special || Can_activate) {
+             damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 1, 1, 1.5);
+            if (SpinTicks > 0) {
+                damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), 2, 2, 2.5);
+            }
         }
 
 
-        for(int j = 0;j<damages.size();j++){
+        for(int j = 0;j<damages.size();j++) {
+
+
 
             Entity entity = damages.get(j);
-            ((StandUser)user).roundabout$getStandPowers().addEXP(1);
 
-            if(!((entity.equals(this) ||entity.equals((Object)user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
-                if (flyingTicks > 2 && SpinTicks >0) {
-                    BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
-                    if ((level().getBlockState(new BlockPos(pos)).isAir())) {
-                        this.level().addParticle(ParticleTypes.FLASH,this.getX(),this.getY(),this.getZ(),0,0,0);
-                        entity.addDeltaMovement(new Vec3(0, 0.2, 0));
-                    }
-                }
 
-                if(item instanceof KnifeItem){
-                    Can_activate = false;
-                    this.setDeltaMovement(0,0,0);
-                    float $$2;
-                    Entity $$1 = entity;
 
-                    if (entity instanceof Player) {
-                        $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
-                    } else {
-                        $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
-                    }
-                    if ($$1 instanceof LivingEntity $$3) {
-                        int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
-                        $$2 = (float) ($$2 * (1-(f*0.03)));
-
-                    }
-                    if(SpinTicks > 1){
-                        $$2 = $$2 / 6;
-                    }
-
-                    Entity $$4 = this.getUser();
-                    DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
-                    SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
-                    Vec3 DM = $$1.getDeltaMovement();
-                    if ($$1.hurt($$5, $$2)) {
-
-                        if ($$4 instanceof LivingEntity LE) {
-                            LE.setLastHurtMob($$1);
+                if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
+                    if (!(SpinTicks > 0)) {
+                        if(user != null) {
+                            ((StandUser) user).roundabout$getStandPowers().addEXP(1);
                         }
-                        if (MainUtil.getMobBleed($$1)){
-                            ((StandUser)$$1).roundabout$setBleedLevel(0);
-                            ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                    }
+                    if (flyingTicks > 2 && SpinTicks > 0) {
+                        BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
+                        if ((level().getBlockState(new BlockPos(pos)).isAir())) {
+                            this.level().addParticle(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+                            entity.addDeltaMovement(new Vec3(0, 0.2, 0));
                         }
-                        if ($$1.getType() == EntityType.ENDERMAN) {
-                            return;
+                    }
+
+                    if(SpinTicks == 0) {
+                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                    }
+
+                    if (item instanceof KnifeItem) {
+                        Can_activate = false;
+                        this.setDeltaMovement(0, 0, 0);
+                        float $$2;
+                        Entity $$1 = entity;
+
+                        if (entity instanceof Player) {
+                            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers * 0.01));
+                        } else {
+                            $$2 = (float) (4.0F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs * 0.01));
+                            ;
+                        }
+                        if ($$1 instanceof LivingEntity $$3) {
+                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, $$3);
+                            $$2 = (float) ($$2 * (1 - (f * 0.03)));
+
+                        }
+                        if (SpinTicks > 1) {
+                            $$2 = $$2 / 6;
                         }
 
-                        if ($$1 instanceof LivingEntity $$7) {
-                            $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4,0.4,0.4));
-                            if ($$4 instanceof LivingEntity) {
-                                EnchantmentHelper.doPostHurtEffects($$7, $$4);
-                                EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                        Entity $$4 = this.getUser();
+                        DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.KNIFE, $$4);
+                        SoundEvent $$6 = ModSounds.KNIFE_IMPACT_EVENT;
+                        Vec3 DM = $$1.getDeltaMovement();
+                        if ($$1.hurt($$5, $$2)) {
+
+                            if ($$4 instanceof LivingEntity LE) {
+                                LE.setLastHurtMob($$1);
+                            }
+                            if (MainUtil.getMobBleed($$1)) {
+                                MainUtil.makeBleed($$1, 0, 400, getUser());
+                            }
+                            if ($$1.getType() == EntityType.ENDERMAN) {
+                                return;
                             }
 
+                            if ($$1 instanceof LivingEntity $$7) {
+                                $$1.setDeltaMovement($$1.getDeltaMovement().multiply(0.4, 0.4, 0.4));
+                                if ($$4 instanceof LivingEntity) {
+                                    EnchantmentHelper.doPostHurtEffects($$7, $$4);
+                                    EnchantmentHelper.doPostDamageEffects((LivingEntity) $$4, $$7);
+                                }
+
+                            }
+                            this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
+                            this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
                         }
-                        this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
-                        this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
-                    }
-                    Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                            location.y, location.z,
-                            16,
-                            0.45, 0.45, 0.45,
-                            0.1);
-
-                }else if(this.getMainHandItem().getItem() instanceof ShieldItem){
-                    Can_activate = true;
-                    if(entity instanceof Projectile && !(entity instanceof GoBeyondEntity)){
-                        entity.discard();
-
-                        Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                        Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
                                 location.y, location.z,
-                                1,
-                                0, 0, 0,
+                                16,
+                                0.45, 0.45, 0.45,
                                 0.1);
 
+                    } else if (this.getMainHandItem().getItem() instanceof ShieldItem) {
+                        Can_activate = true;
+                        if (entity instanceof Projectile && !(entity instanceof GoBeyondEntity)) {
+                            entity.discard();
 
-                    }
-                }
+                            Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                            ((ServerLevel) this.level()).sendParticles(ModParticles.PUNCH_MISS, location.x,
+                                    location.y, location.z,
+                                    1,
+                                    0, 0, 0,
+                                    0.1);
 
-                else {
-                    Can_activate = false;
-                    this.setDeltaMovement(0, 0, 0);
-                    Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
-                            location.y, location.z,
-                            16,
-                            0.45, 0.45, 0.45,
-                            0.1);
-                    if (entity instanceof Player) {
-                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+
+                        }
                     } else {
-                        entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                        if(entity instanceof LivingEntity) {
+                            if (!((StandUser) entity).roundabout$isGuarding() || ((LivingEntity) entity).isBlocking()) {
+                                Can_activate = false;
+                                this.setDeltaMovement(0, 0, 0);
+                                Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
+                                ((ServerLevel) this.level()).sendParticles(ParticleTypes.CRIT, location.x,
+                                        location.y, location.z,
+                                        16,
+                                        0.45, 0.45, 0.45,
+                                        0.1);
+                                if (entity instanceof Player) {
+                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1.75f);
+                                } else {
+                                    entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
+                                }
+                            }
+                        }
                     }
                 }
-            }
+
         }
     }
 
@@ -577,7 +659,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     @Override
     public boolean canCollideWith(Entity $$0) {
-        return true;
+        return false;
     }
 
     @Override
@@ -608,5 +690,10 @@ public class SeperatedArmEntity extends StandEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         return false;
+    }
+
+    @Override
+    public boolean isOnPortalCooldown() {
+        return true;
     }
 }

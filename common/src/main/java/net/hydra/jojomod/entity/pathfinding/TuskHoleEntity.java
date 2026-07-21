@@ -3,7 +3,6 @@ package net.hydra.jojomod.entity.pathfinding;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,13 +17,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,23 +40,28 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     }
 
 
+    private int timeInHole = 0;
+    public int getTimeInHole() {
+        return timeInHole;
+    }
     private static final EntityDataAccessor<Boolean> VORTEX = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Direction> CLINGING = SynchedEntityData.defineId(TuskHoleEntity.class, EntityDataSerializers.DIRECTION);
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(VORTEX)) {
             this.entityData.define(VORTEX, false);
+            this.entityData.define(CLINGING, Direction.DOWN);
         }
     }
 
     int lifespan = 150;
     public boolean isVortex() {return entityData.get(VORTEX);}
 
+    public boolean isClinging() {return entityData.get(CLINGING) != Direction.DOWN;}
+    public void setClinging(Direction d) {entityData.set(CLINGING,d);}
+
     private LivingEntity nearest;
-    public TuskHoleEntity(EntityType<? extends GroundPathfindingStandAttackEntity> $$0, Level $$1, LivingEntity user) {
-        super($$0, $$1);
-        this.setUser(user);
-    }
     public TuskHoleEntity(Level $$1, LivingEntity user) {
         super(ModEntities.TUSK_HOLE, $$1);
         this.setUser(user);
@@ -67,14 +69,15 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
 
     @Override
+    protected float getStandingEyeHeight(Pose $$0, EntityDimensions $$1) {
+        return 0.6F;
+    }
+
+    @Override
     protected void addBehaviourGoals() {
         this.goalSelector.addGoal(1,new TuskHoleAttackGoal(this,1.0F,false));
     }
 
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return false;
-    }
 
     @Override
     public boolean doHurtTarget(Entity target) {
@@ -110,14 +113,14 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public void onEnd() {
         if (this.isVortex()) {
             Vec3 pos = this.getPosition(0);
-            List<Entity> targets = MainUtil.genHitbox(this.level(), pos.x - 1, pos.y - 1, pos.z - 1, pos.x + 1, pos.y + 1, pos.z + 1);
+            List<Entity> targets = MainUtil.genHitbox(this.level(), pos.x, pos.y, pos.z, 1, 1, 1);
             targets.removeIf(entity -> !entity.isAttackable() || entity.isInvulnerable() || entity.equals(this.getUser()));
 
             for (Entity target : targets) {
                 if (target.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.STAND), 2)) {
                     if (target instanceof LivingEntity LE) {
                         LE.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 2, 20));
-                        LE.addEffect(new MobEffectInstance(ModEffects.BLEED, 20));
+                        MainUtil.makeBleed(LE,0,20,getUser());
                     }
                 }
             }
@@ -130,6 +133,20 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
 
+        if (this.level().isClientSide()) {
+            if (isPiloted()) {
+                this.timeInHole += 1;
+            } else {
+                this.timeInHole = 0;
+            }
+        }
+
+        if (this.isClinging()) {
+            if (!this.horizontalCollision) {
+                this.setClinging(Direction.DOWN);
+            }
+            this.setDeltaMovement(Vec3.ZERO);
+        }
 
         if (this.getUser() != null) { // doubles lifespan during act 3
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -180,23 +197,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 }
             } else {
                 Vec3 pos = this.getPosition(0);
-            /*    for (int i=0;i<10;i++) {
-                    Vec3 rPos = pos.offsetRandom(this.random,3);
-                    Vec3 vel = rPos.subtract(pos).normalize();
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.BUBBLE, rPos.x,
-                            rPos.y + 0.02, rPos.z,
-                            0, // ignore
-                            vel.x, // x,y,z
-                            vel.y,
-                            vel.z,
-                            0.1); // idk
-                } */
+
 
                 if (this.tickCount % 2 == 0) {
                     float radius = 7.5F;
                     List<Entity> targets = MainUtil.genHitbox(this.level(),
-                            pos.x - radius, pos.y - radius, pos.z - radius,
-                            pos.x + radius, pos.y + radius, pos.z + radius);
+                            pos.x, pos.y, pos.z,
+                            radius, radius, radius);
                     targets.removeIf(target -> {
                         if (target instanceof Player P && P.getAbilities().flying) {return true;}
                         if (target.equals(this) || target.equals(this.getUser())) {return true;}
@@ -236,9 +243,37 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     @Override
     protected void goDownInWater() {}
     @Override
-    protected boolean updateInWaterStateAndDoFluidPushing() {return this.isInWater();}
-    @Override
     public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
+
+    private boolean isPiloted() {
+        if (this.getUser() instanceof Player P) {
+            StandUser SU = (StandUser) this.getUser();
+            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.isPiloting() && PT.getPilotingStand().equals(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canPickUpLoot() {
+        if (isPiloted() && this.getUser() instanceof Player P) {
+            return P.getInventory().getFreeSlot() != -1;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack $$0) {
+        return true;
+    }
+
+    @Override
+    protected void pickUpItem(ItemEntity $$0) {
+       if (isPiloted() && this.getUser() instanceof Player P) {
+           P.getInventory().add($$0.getItem());
+       }
+    }
 }
 
 class TuskHoleAttackGoal extends MeleeAttackGoal {

@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IBoatItemAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMinecartItemAccess;
+import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -18,12 +19,15 @@ import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.FancyLighterItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.RoadRollerItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.core.BlockPos;
@@ -43,6 +47,7 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
@@ -119,6 +124,9 @@ public class BlockGrabPreset extends NewPunchingStand {
                 && !(this.getSelf() instanceof Player && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
         && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
             canPlace = true;
+        }
+        if(acq && standEntity.getHeldItem().is(ModItems.FANCY_LIGHTER)){
+            canPlace = false;
         }
         return canPlace;
     }
@@ -241,6 +249,10 @@ public class BlockGrabPreset extends NewPunchingStand {
             }
         }
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
+
+            if (freezeAttackInput > -1){
+                freezeAttackInput--;
+            }
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (!this.getSelf().level().isClientSide) {
                 if (getStandUserSelf().roundabout$getTSJump() && !ClientNetworking.getAppropriateConfig().timeStopSettings.enableCarryingWhileHovering){
@@ -338,8 +350,13 @@ public class BlockGrabPreset extends NewPunchingStand {
                     }
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
+
+                    if (this.self.level().isClientSide() && self instanceof Player pl){
+                        pl.resetAttackStrengthTicker();
+                    }
+
                     if (!this.getSelf().level().isClientSide && hardBlocker < 1) {
-                        hardBlocker = 10;
+                        hardBlocker = 3;
 
                         if (!onCooldown(PowerIndex.SKILL_2)) {
                             if (getAttackTimeDuring() > 0) {
@@ -417,7 +434,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                                     -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                             ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.75 + (ybias / 4)),
                                                     ybias,
-                                                    0F));
+                                                    0.85));
                                         } else {
                                             MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.75 + (ybias / 4)),
                                                     Mth.sin(((degrees * ((float) Math.PI / 180)))),
@@ -457,13 +474,13 @@ public class BlockGrabPreset extends NewPunchingStand {
                                     }
                                     this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
-                                    if ((ent instanceof Player || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
+                                    if ((ent instanceof Player || ent instanceof Illusioner || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
                                         ((IEntityAndData) ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
                                                 Mth.sin(degreesY * ((float) Math.PI / 180)),
                                                 -Mth.cos((degrees * ((float) Math.PI / 180)))));
                                         ((IEntityAndData) ent).roundabout$setQVecParams(new Vec3(strength * (0.5 + (ybias / 2)),
                                                 ybias,
-                                                0F));
+                                                0.85F));
 
                                     } else {
                                         MainUtil.takeUnresistableKnockbackWithYBias(ent, strength * (0.5 + (ybias / 2)),
@@ -485,10 +502,22 @@ public class BlockGrabPreset extends NewPunchingStand {
                             }
                         }
                     } else {
-                        this.setAttackTime(0);
-                        this.setActivePowerPhase(getActivePowerPhaseMax());
                         setActivePower(PowerIndex.NONE);
-                        this.setAttackTimeMax(ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks);
+                        if (standEntity.getFirstPassenger() instanceof Player || standEntity.getFirstPassenger() instanceof Illusioner){
+                            int recoilTicks = ClientNetworking.getAppropriateConfig().generalStandSettings.mobThrowRecoilTicks;
+                            if (recoilTicks > 0 && (activePowerPhase < getActivePowerPhaseMax() || attackTime < recoilTicks)){
+                                this.setAttackTime(0);
+                                this.setActivePowerPhase(getActivePowerPhaseMax());
+                                this.setAttackTimeMax( recoilTicks);
+                            }
+                        } else {
+                            int recoilTicks = ClientNetworking.getAppropriateConfig().generalStandSettings.mobNonPlayerThrowRecoilTicks;
+                            if (recoilTicks > 0 && (activePowerPhase < getActivePowerPhaseMax() || attackTime < recoilTicks)){
+                                this.setAttackTime(0);
+                                this.setActivePowerPhase(getActivePowerPhaseMax());
+                                this.setAttackTimeMax(recoilTicks);
+                            }
+                        }
                     }
                     return false;
                 }
@@ -546,7 +575,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         return false;
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
         if (standEntity != null) {
             if (!standEntity.getHeldItem().isEmpty()) {
@@ -562,7 +591,18 @@ public class BlockGrabPreset extends NewPunchingStand {
                 return true;
             }
         }
-        return super.canInterruptPower();
+        return super.canInterruptPower(sauce,interrupter);
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (hasBlock()) {
+            this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().generalStandSettings.objectPocketCooldown);
+            if (!self.level().isClientSide()) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
+            }
+        }
+        super.onStandSummon(desummon);
     }
     public float inputSpeedModifiers(float basis){
             StandUser standUser = ((StandUser) this.getSelf());
@@ -895,7 +935,7 @@ public class BlockGrabPreset extends NewPunchingStand {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 Entity entity = this.getSelf().level().getEntity(this.grabEntity);
-                if (entity != null && this.canGrab(entity) && entity.distanceTo(self) < 3.5 && entity.invulnerableTime <= 10) {
+                if (entity != null && this.canGrab(entity) && entity.distanceTo(self) < 3.6 && entity.invulnerableTime <= 10) {
                     if (entity instanceof RoadRollerEntity RRE && RRE.getExploded()) {
                         this.setPowerNone();
                         return false;
@@ -935,6 +975,7 @@ public class BlockGrabPreset extends NewPunchingStand {
         if (entity.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB)
                 && !(entity instanceof LivingEntity ent && MainUtil.isBossMob(ent))
                 && !(entity instanceof Player pl && pl.isCreative())
+                && !(entity instanceof Player ple && ple.isSleeping())
                 && !(entity instanceof MinecartCommandBlock)
                 && !(entity instanceof MinecartSpawner)
                 && ((entity != null && ((IEntityAndData)entity).rdbt$returnPickup()))
@@ -1048,7 +1089,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         !(MainUtil.isItemGrabBlacklisted(stack)) &&
                         !(stack.getItem() instanceof BlockItem
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
-                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock))) {
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
                     /**Boat throw*/
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {

@@ -1,8 +1,13 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -29,6 +34,7 @@ public class ModBlocks {
     public static final BooleanProperty IGNITED = BooleanProperty.create("ignited");
     public static final BooleanProperty DECAY = BooleanProperty.create("decay");
     public static final BooleanProperty IN_FOG = BooleanProperty.create("in_fog");
+    public static final BooleanProperty LIT = BooleanProperty.create("lit");
     public static final IntegerProperty COLOR = IntegerProperty.create("color", 0, 12);
     public static final IntegerProperty FLESH_LAYER = IntegerProperty.create("layers", 1, 4);
     public static final IntegerProperty EATING_STAGE = IntegerProperty.create("stage",1,3);
@@ -81,7 +87,26 @@ public class ModBlocks {
     public static Block BLOOD_SPLATTER;
     public static Block BLUE_BLOOD_SPLATTER;
     public static Block ENDER_BLOOD_SPLATTER;
+    public static Block ACID_PUDDLE;
+    public static Block POISON_TRAIL_MUSHROOM;
+
     public static Block WIRE_TRAP;
+
+    public static Block CHESS_PIECE;
+
+    public static Block WHITE_PAWN;
+    public static Block WHITE_ROOK;
+    public static Block WHITE_BISHOP;
+    public static Block WHITE_KING;
+    public static Block WHITE_QUEEN;
+    public static Block WHITE_KNIGHT;
+
+    public static Block AJA_ORE;
+    public static Block DEEPSLATE_AJA_ORE;
+    public static Block AJA_BLOCK;
+
+    public static Block COLD_AIR;
+    public static Block FREEZING_AIR;
 
     public static Block BARBED_WIRE;
     public static Block BARBED_WIRE_BUNDLE;
@@ -99,6 +124,7 @@ public class ModBlocks {
     public static Block CEILING_LIGHT;
     public static Block MIRROR;
     public static Block STEREO;
+    public static Block FANCY_LIGHTER_BLOCK;
 
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
@@ -122,12 +148,40 @@ public class ModBlocks {
     public static Block FOG_DIRT_COATING;
     public static Block FOG_TRAP;
 
+
+    public static Block FROZEN_DIRT;
+    public static Block FROZEN_STONE;
+    public static Block FROZEN_COBBLESTONE;
+    public static Block FROZEN_DEEPSLATE;
+    public static Block FROZEN_COBBLED_DEEPSLATE;
+    public static Block FROZEN_SAND;
+    public static Block FROZEN_SANDSTONE;
+    public static Block FROZEN_GRAVEL;
+    public static Block FROZEN_END_STONE;
+    public static Block FROZEN_NETHERRACK;
+    public static Block FROZEN_NETHER_BRICKS;
+    public static Block FROZEN_OBSIDIAN;
+    public static Block FROZEN_STONE_BRICKS;
+
+    public static Block FROZEN_DIORITE;
+    public static Block FROZEN_ANDESITE;
+    public static Block FROZEN_GRANITE;
+    public static Block FROZEN_RED_SAND;
+    public static Block FROZEN_RED_SANDSTONE;
+
     public static Block SHINY_QUARTZ;
     public static Block SHINY_QUARTZ_TILES;
+
+    public static Block WHITE_ALBUM_ICE_BLOCK;
+    public static Block WHITE_ALBUM_ICE_WALL_BLOCK;
+    public static Block WHITE_ALBUM_ICE_SLAB;
+    public static Block STICKY_ICE;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
     public static Block COFFIN_BLOCK;
+    public static Block KING_BED_BLOCK;
+    //public static Block CHESSBOARD_BLOCK;
 
     public static Block D4C_LIGHT_BLOCK;
 
@@ -135,13 +189,55 @@ public class ModBlocks {
 
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
+    public static BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
+    public static BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY;
+    public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
-    public static BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
+    //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
+
+    public static Block WHITE_ALBUM_ICE_BLOCK_PROPERTIES =
+            new WhiteAlbumIceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F).
+                    randomTicks().strength(0.5F).sound(SoundType.GLASS).noOcclusion());
+    public static Block WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES =
+            new WhiteAlbumIceWallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F).
+                    randomTicks().strength(0.5F).sound(SoundType.GLASS).noOcclusion());
+    public static Block WHITE_ALBUM_COATING_PROPERTIES =
+            new WhiteAlbumCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
+                    .lightLevel((L) -> {
+                        return 1;
+                    }).
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static Block STICKY_ICE_PROPERTIES =
+            new StickyIceCoatingBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
+                    .lightLevel((L) -> {
+                        return 1;
+                    }).
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
+                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+
+
+    public static Block COLD_AIR_PROPERTIES =
+            new ColdAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
+    public static Block FREEZING_AIR_PROPERTIES =
+            new FreezingAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+                    .strength(0F, 0F)
+                    .sound(SoundType.EMPTY)
+                    .noCollission()
+                    .replaceable());
+
     public static Block ANCIENT_METEOR_PROPERTIES = new AncientMeteorBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -235,6 +331,10 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.HARP)
                     .strength(0.8F).sound(SoundType.WOOL).ignitedByLava()
     );
+
+    public static Block POISON_TRAIL_MUSHROOM_PROPERTIES = new PoisonTrailMushroomBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_RED).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).
+            pushReaction(PushReaction.DESTROY));
     public static Block WOOL_SLAB_BROWN_PROPERTIES = new SlabBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOL)
@@ -459,12 +559,22 @@ public class ModBlocks {
                     .sound(SoundType.SLIME_BLOCK)
                     .replaceable()
                     .pushReaction(PushReaction.DESTROY)
-                    .ignitedByLava()
-                    .speedFactor(0.6F)
+                    .ignitedByLava().
+                    friction(0.96F)
+                    .speedFactor(0.3F)
     );
     public static BloodBlock BLOOD_SPLATTER_PROPERTIES = new BloodBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.SNARE)
+                    .strength(0.01F, 0.5F)
+                    .sound(SoundType.EMPTY)
+                    .replaceable()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static AcidBlock ACID_PUDDLE_PROPERTIES = new AcidBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GREEN)
                     .instrument(NoteBlockInstrument.SNARE)
                     .strength(0.01F, 0.5F)
                     .sound(SoundType.EMPTY)
@@ -514,6 +624,7 @@ public class ModBlocks {
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .strength(1.5F, 1.0F)
                     .sound(SoundType.METAL)
+                    .pushReaction(PushReaction.DESTROY)
                     .forceSolidOn().noCollission().requiresCorrectToolForDrops()
     );
     public static GoddessStatueBlock GODDESS_STATUE_BLOCK_PROPERTIES = new GoddessStatueBlock(
@@ -587,6 +698,32 @@ public class ModBlocks {
         );
     }
 
+
+
+    public static ChessPieceBlock getChessBlock() {
+
+        SoundType stype = new SoundType(
+                1.0F,
+                1.0F,
+                ModSounds.CHESS_BREAK_EVENT,
+                SoundEvents.WOOD_STEP,
+                ModSounds.CHESS_PLACE_EVENT,
+                SoundEvents.WOOD_HIT,
+                SoundEvents.WOOD_FALL
+        );
+        return new ChessPieceBlock(
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.NONE)
+                        .strength(0F, 0F)
+                        .sound(stype)
+                        .lightLevel((p_152607_) -> {
+                            return 1;
+                        })
+                        .pushReaction(PushReaction.DESTROY)
+                        .noCollission()
+        );
+    }
+
     public static FogBlock getFogCoatingBlock() {
         return new FogCoatBlock(
                 BlockBehaviour.Properties.of()
@@ -637,10 +774,6 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
-    public static D4CLightBlock D4C_LIGHT_BLOCK_PROPERTIES = new D4CLightBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
-                return 1;
-            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).replaceable().noCollission().instabreak().lightLevel((p_152607_) -> {
                 return 15;
@@ -682,12 +815,29 @@ public class ModBlocks {
             DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.35F).sound(SoundType.STONE).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
                 return 1;
             }));
+    public static KingBedBlock KING_BED_BLOCK_PROPERTIES = new KingBedBlock(
+            DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(-1.0F, 3600000.0F).noLootTable()
+            .sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).lightLevel((L) -> {
+        return 1;
+    }));
+
+    private static Boolean never(BlockState $$0, BlockGetter $$1, BlockPos $$2, EntityType<?> $$3) {
+        return false;
+    }
+    public static FancyLighterBlock FANCY_LIGHTER_PROPRETIES = new FancyLighterBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).strength(0.01F, 0.01F).sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).lightLevel(litBlockEmission(10)).noOcclusion().noCollission());
+    /*public static ChessBoardBlock CHESSBOARD_BLOCK_PROPERTIES = new ChessBoardBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.35F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).lightLevel((L) -> {
+                return 1;
+            }));*/
 
     public static Block WALL_LANTERN_PROPERTIES = new LanternWallBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
+                    .noCollission()
+                    .instabreak()
                     .instrument(NoteBlockInstrument.HARP)
-                    .strength(2.0F).sound(SoundType.WOOD).ignitedByLava()
+                    .pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)
                     .lightLevel(state -> 14)
                     .noOcclusion()
     );
@@ -699,6 +849,88 @@ public class ModBlocks {
                     .noOcclusion()
                     .pushReaction(PushReaction.BLOCK)
     );
+
+    public static Block AJA_ORE_PROPERTIES = new AjaOreBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+                    instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
+                    requiresCorrectToolForDrops().strength(3.0F, 3.0F));
+    public static Block DEEPSLATE_AJA_ORE_PROPERTIES = new AjaOreBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+                    instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
+                    requiresCorrectToolForDrops().strength(4.5F, 3.0F).
+            sound(SoundType.DEEPSLATE));
+
+    public static Block AJA_BLOCK_PROPERTIES = new AjaBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).noOcclusion().instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
+    requiresCorrectToolForDrops().strength(3.5F, 6.0F));
+
+
+    public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
+            strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
+            ,() -> Blocks.DIRT);
+    public static Block FROZEN_STONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F)
+            ,() -> Blocks.STONE);
+    public static Block FROZEN_COBBLESTONE_PROPERTIES =  new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F)
+            ,() -> Blocks.COBBLESTONE);
+    public static Block FROZEN_DEEPSLATE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F)
+            ,() -> Blocks.DEEPSLATE);
+    public static Block FROZEN_COBBLED_DEEPSLATE_PROPERTIES =  new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.0F, 6.0F)
+            .sound(SoundType.GLASS).strength(1.16F, 6.0F).sound(SoundType.GLASS).friction(0.98F)
+            ,() -> Blocks.COBBLED_DEEPSLATE);
+
+    public static Block FROZEN_DIORITE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F),() -> Blocks.DIORITE);
+    public static Block FROZEN_ANDESITE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F),() -> Blocks.ANDESITE);
+    public static Block FROZEN_GRANITE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.5F, 6.0F)
+            .sound(SoundType.GLASS).friction(0.98F),() -> Blocks.GRANITE);
+
+
+    public static Block FROZEN_SAND_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.SNARE).strength(0.166f).sound(SoundType.GLASS).
+            friction(0.98F),() -> Blocks.SAND);
+    public static Block FROZEN_RED_SAND_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.SNARE).strength(0.166f).sound(SoundType.GLASS).
+            friction(0.98F),() -> Blocks.RED_SAND);
+    public static Block FROZEN_SANDSTONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().sound(SoundType.GLASS).
+            strength(0.26F).friction(0.98F),() -> Blocks.SANDSTONE);
+    public static Block FROZEN_RED_SANDSTONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().sound(SoundType.GLASS).
+            strength(0.26F).friction(0.98F),() -> Blocks.RED_SANDSTONE);
+    public static Block FROZEN_GRAVEL_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+            instrument(NoteBlockInstrument.SNARE).strength(0.2f).sound(SoundType.GLASS).friction(0.98F),
+            () -> Blocks.GRAVEL);
+    public static Block FROZEN_END_STONE_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(1.0f, 9.0f).sound(SoundType.GLASS).friction(0.98F),
+            () -> Blocks.END_STONE);
+    public static Block FROZEN_NETHERRACK_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(0.166f).sound(SoundType.GLASS).friction(0.98F),
+            () -> Blocks.NETHERRACK);
+    public static Block FROZEN_NETHER_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(0.66F, 6.0f).sound(SoundType.GLASS).
+            friction(0.98F),
+            () -> Blocks.NETHER_BRICKS);
+    public static Block FROZEN_OBSIDIAN_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(16.6F, 1200.0f).sound(SoundType.GLASS).friction(0.988F),
+            () -> Blocks.OBSIDIAN);
+    public static Block FROZEN_STONE_BRICKS_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).
+            instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().
+            strength(0.5f, 6.0f).sound(SoundType.GLASS).friction(0.98F),
+            () -> Blocks.STONE_BRICKS);
 
     public static CultivationPotBlock cultivationPot(Block $$0, FeatureFlag... $$1) {
         BlockBehaviour.Properties $$2 = BlockBehaviour.Properties.of().instabreak().noOcclusion().pushReaction(PushReaction.DESTROY);

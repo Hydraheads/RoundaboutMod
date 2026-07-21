@@ -5,6 +5,8 @@ import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.HeadedModel;
@@ -30,6 +32,21 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
      * for blockbench crafted animations, just manual context sensitive animations*/
 
 
+    @Inject(method = "poseRightArm", at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$poseRightArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            this.rightArm.yRot = 0.0F;
+            ci.cancel();
+        }
+    }
+    @Inject(method = "poseLeftArm", at = @At(value = "HEAD"),cancellable = true)
+    public void roundabout$poseLeftArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            this.leftArm.yRot = 0.0F;
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
     public void roundabout$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
         if ($$0 instanceof Player && ((IPlayerEntity)$$0).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {
@@ -46,21 +63,21 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
     /**Animation for dodge skill*/
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0),cancellable = true)
-    public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
-       if ($$0 instanceof Player) {
+    public void roundabout$SetupAnim2(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci){
+       if (entity instanceof Player player) {
 
-           IPlayerEntity ipe = ((IPlayerEntity) $$0);
+           IPlayerEntity ipe = ((IPlayerEntity) player);
            if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
-               byte pos = ((IPlayerEntity) $$0).roundabout$GetPos();
+               byte pos = ipe.roundabout$GetPos();
                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
                    //this.body.xRot = -20.0F;
-                   int dodgeTime = ((IPlayerEntity) $$0).roundabout$getDodgeTime();
+                   int dodgeTime = ipe.roundabout$getDodgeTime();
                    float fl;
                    if (dodgeTime > -1) {
                        if (dodgeTime > 5) {
-                           fl = ((11 - ((float) dodgeTime + 1 + $$2 - 1.0F)) / 20.0F * 1.6F);
+                           fl = ((11 - ((float) dodgeTime + 1 + limbSwingAmount - 1.0F)) / 20.0F * 1.6F);
                        } else {
-                           fl = ((float) dodgeTime + 1 + $$2 - 1.0F) / 20.0F * 1.6F;
+                           fl = ((float) dodgeTime + 1 + limbSwingAmount - 1.0F) / 20.0F * 1.6F;
                        }
                        if (fl != 0) {
                            fl = Mth.sqrt(fl);
@@ -79,29 +96,87 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
                        this.leftArm.xRot = -fl;
                        this.rightArm.xRot = fl;
                        this.head.xRot += (float) (-fl * 0.3);
-                       this.setupAttackAnimation($$0, $$3);
+                       this.setupAttackAnimation(entity, ageInTicks);
 
 
-                       boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                       if ($$0.isUsingItem()) {
-                           boolean $$10 = $$0.getUsedItemHand() == InteractionHand.MAIN_HAND;
+                       boolean $$9 = entity.getMainArm() == HumanoidArm.RIGHT;
+                       if (entity.isUsingItem()) {
+                           boolean $$10 = entity.getUsedItemHand() == InteractionHand.MAIN_HAND;
                            if ($$10 == $$9) {
-                               this.poseRightArm($$0);
+                               this.poseRightArm(entity);
                            } else {
-                               this.poseLeftArm($$0);
+                               this.poseLeftArm(entity);
                            }
                        } else {
                            boolean $$11 = $$9 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
                            if ($$9 != $$11) {
-                               this.poseLeftArm($$0);
-                               this.poseRightArm($$0);
+                               this.poseLeftArm(entity);
+                               this.poseRightArm(entity);
                            } else {
-                               this.poseRightArm($$0);
-                               this.poseLeftArm($$0);
+                               this.poseRightArm(entity);
+                               this.poseLeftArm(entity);
                            }
                        }
-
                    }
+               }
+           }
+
+
+
+           if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated() &&
+                   (player.isSprinting() || PW.getPlayerPos() == PlayerPosIndex.SKATE_GENERAL) && !player.isFallFlying() && !player.isCrouching()){
+
+               Byte pos = ((IPlayerEntity)player).roundabout$GetPos();
+               if (pos != PlayerPosIndex.SKATE_TWIRL && pos != PlayerPosIndex.SKATE_JUMP) {
+
+                   //float accelerationMod = ((float)PW.acceleration) /
+                   //        ((float)PowersWhiteAlbum.getMaxAccelerationTicks());
+
+
+                   float armCycle = limbSwing * 0.35F;
+                   // Slight forward lean
+                   this.body.xRot = 0.25F;
+
+                   float skateCycle = limbSwing * 0.35F;
+
+                   float rightPush = Math.max(0F, Mth.sin(skateCycle));
+                   float leftPush = Math.max(0F, Mth.sin(skateCycle + (float) Math.PI));
+
+// Base crouch
+
+// One leg pushes backward while the other recovers
+                   float cycle = Mth.sin(limbSwing * 0.35F);
+                   this.rightLeg.xRot = -1 * (-0.25F - cycle * 0.5F * limbSwingAmount);
+                   this.leftLeg.xRot = -1 * (-0.25F + cycle * 0.5F * limbSwingAmount);
+                   this.rightLeg.xRot += rightPush * 1.1F * limbSwingAmount;
+                   this.leftLeg.xRot += leftPush * 1.1F * limbSwingAmount;
+
+                   this.rightLeg.z += 3.0F;
+                   this.leftLeg.z += 3.0F;
+
+// Small outward angle
+                   this.rightLeg.zRot = 0.05F + rightPush * 0.15F * limbSwingAmount;
+                   this.leftLeg.zRot = -0.05F - leftPush * 0.15F * limbSwingAmount;
+
+// Very subtle yaw
+                   this.rightLeg.yRot = -rightPush * 0.1F * limbSwingAmount;
+                   this.leftLeg.yRot = leftPush * 0.1F * limbSwingAmount;
+
+
+                   // Smaller arm motion
+
+                   this.rightArm.xRot =
+                           -0.2F
+                                   + (-0.25F - cycle * 0.5F * limbSwingAmount);
+
+                   this.leftArm.xRot =
+                           -0.2F
+                                   + (-0.25F + cycle * 0.5F * limbSwingAmount);
+
+                   float sway = Mth.sin(skateCycle);
+                   this.body.zRot = sway * 0.08F;
+                   this.rightLeg.x += -sway * 1.1F;
+                   this.leftLeg.x += -sway * 1.1F;
                }
            }
        }

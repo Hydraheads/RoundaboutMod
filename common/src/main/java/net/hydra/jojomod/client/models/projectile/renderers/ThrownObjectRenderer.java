@@ -8,6 +8,7 @@ import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -48,11 +49,16 @@ public class ThrownObjectRenderer<T extends Entity>
         return this.fullBright ? 15 : super.getBlockLightLevel(entity, blockPos);
     }
 
+
+
     @Override
     public void render(T entity, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
         ItemStack item = ((ItemSupplier)entity).getItem();
-        if (((Entity)entity).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)entity) < 12.25) {
-            return;
+
+        if ( ((Entity)entity).tickCount < 2 && this.entityRenderDispatcher.camera.getEntity().distanceToSqr((Entity)entity) < 12.25) {
+            if (!(entity instanceof ThrownObjectEntity te && te.getStyle() == ThrownObjectEntity.STAND_DAMAGE)){
+                return;
+            }
         }
         poseStack.pushPose();
 
@@ -76,7 +82,8 @@ public class ThrownObjectRenderer<T extends Entity>
         } else {
 
             if (MainUtil.isThrownBlockItem(item.getItem()) &&
-                    entity instanceof ThrownObjectEntity TOE && (TOE.getStyle() == ThrownObjectEntity.SPTHROW || TOE.getStyle() == ThrownObjectEntity.TWTHROW)){
+                    entity instanceof ThrownObjectEntity TOE && (TOE.getStyle() == ThrownObjectEntity.SPTHROW || TOE.getStyle() == ThrownObjectEntity.TWTHROW
+                    || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE)){
                 poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
             } else {
                 poseStack.scale(this.scale, this.scale, this.scale);

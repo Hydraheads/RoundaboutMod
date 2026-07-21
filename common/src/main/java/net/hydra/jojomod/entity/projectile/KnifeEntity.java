@@ -1,14 +1,18 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -18,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -138,6 +143,8 @@ public class KnifeEntity extends AbstractArrow {
         ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
     }
 
+    public boolean isHattanKnife = false;
+
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
@@ -147,12 +154,49 @@ public class KnifeEntity extends AbstractArrow {
                 return;
             } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                 return;
+            } else if(LE instanceof ManhattanTransferEntity ME){
+                if(!ME.hasItem){
+                    ItemStack ii = this.getPickupItem();
+                    if (!ii.isEmpty()) {
+                        if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                            if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            } else {
+                                PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1F, (this.random.nextFloat() * 0.2F + 0.7F));
+                            }
+                        }
+                        ME.hasItemTwo = false;
+                        ME.hasItem = true;
+                        ME.success = true;
+                        ME.canAcquireHeldItem = true;
+                        ME.fireTicksPrj = this.getRemainingFireTicks();
+                        ME.changeMovementState();
+                        ME.setHeldItemManhattan(ii.copyAndClear());
+                        this.discard();
+                    }
+                } else {
+                    ItemStack ii = this.getPickupItem();
+                    if (!ii.isEmpty()) {
+                        ME.canAcquireHeldItem = true;
+                        ME.hasItemTwo = true;
+                        ME.setHeldItemManhattanFull(ii.copyAndClear());
+                        this.discard();
+                    }
+                }
+               // return;
             }
+        } else if ($$1 instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(this,gwe);
+            return;
         }
         float $$2;
 
         if ($$1 instanceof Player) {
-            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+
+            if(isHattanKnife){
+                this.doBonusKnifeDamageHattan($$1);
+            }
         } else {
             $$2 = (float) (3.5F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
         }
@@ -175,8 +219,7 @@ public class KnifeEntity extends AbstractArrow {
                 LE.setLastHurtMob($$1);
             }
                 if (MainUtil.getMobBleed($$1)){
-                    ((StandUser)$$1).roundabout$setBleedLevel(0);
-                    ((LivingEntity)$$1).addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                    MainUtil.makeBleed($$1,0,400,getOwner());
                 }
             if ($$1.getType() == EntityType.ENDERMAN) {
                 return;
@@ -191,10 +234,24 @@ public class KnifeEntity extends AbstractArrow {
 
                 this.doPostHurtEffects($$7);
             }
+            if ($$1 instanceof BlockWallEntity){
+                $$6 = SoundEvents.ARROW_HIT;
+            }
             this.playSound($$6, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
             this.discard();
         }
 
+    }
+
+    protected void doBonusKnifeDamageHattan(Entity hitent){
+        Roundabout.LOGGER.info("aaaaaa");
+        Entity entityShooter = this.getOwner();
+        DamageSource source = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entityShooter);
+        Float amount = (float) 0.75;
+        hitent.hurt(source, amount);
+        if(hitent.hurt(source, amount)){
+
+        }
     }
 
     public KnifeEntity(EntityType<? extends KnifeEntity> type, Level level, LivingEntity shooter) {

@@ -2,14 +2,12 @@ package net.hydra.jojomod.powers;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
@@ -17,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,6 +40,10 @@ public class GeneralPowers extends AbilityScapeBasis {
             S2CPacketUtil.sendActivePowerPowersPacket(SP,activePower);
         }
     }
+
+    /**Runs this code while pressing R to activate powers*/
+    public void onStandSummon(boolean desummon){
+    }
     /**The text name of the power*/
     public Component getPowerName(){
         return Component.empty();
@@ -48,9 +51,7 @@ public class GeneralPowers extends AbilityScapeBasis {
     public Component getPowerTagName(){
         return Component.empty();
     }
-    public boolean isBrawling(){
-        return false;
-    }
+
 
     /**Adjust this function to enable the below minin functions, and intercept your mining when not holding
      * a mining tool*/
@@ -192,30 +193,27 @@ public class GeneralPowers extends AbilityScapeBasis {
         tickFaded();
         if (!self.level().isClientSide()) {
             byte activePower = getActivePower();
-            if (activePower != PowerIndex.GUARD && getPlayerPos2() == PlayerPosIndex.GUARD) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (activePower != PowerIndex.BARRAGE_CHARGE && getPlayerPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (activePower != PowerIndex.BARRAGE && getPlayerPos2() == PlayerPosIndex.BARRAGE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (activePower != PowerIndex.SNEAK_ATTACK && getPlayerPos2() == PlayerPosIndex.SWEEP_KICK) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (activePower != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (activePower != VampireGeneralPowers.POWER_SPIKE && getPlayerPos2() == PlayerPosIndex.HAIR_SPIKE_2) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH || activePower == VampireGeneralPowers.ICE_CLUTCH)
-                    && getPlayerPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH_2 || activePower == VampireGeneralPowers.ICE_CLUTCH_2)
-                    && getPlayerPos2() == PlayerPosIndex.CLUTCH_DASH) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (!(activePower == VampireGeneralPowers.RIPPER_EYES_ACTIVATED)
-                    && getPlayerPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
-                setPlayerPos2(PlayerPosIndex.NONE);
-            } else if (!(activePower == VampireGeneralPowers.CAMO)
-                    && (getPlayerPos2() == PlayerPosIndex.VANISH_PERSIST || getPlayerPos2() == PlayerPosIndex.VANISH_START)) {
-                setPlayerPos2(PlayerPosIndex.NONE);
+            byte pos = getPlayerPos2();
+            if (pos > 0) {
+                if (activePower != PowerIndex.SNEAK_ATTACK && pos == PlayerPosIndex.SWEEP_KICK) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (activePower != VampireGeneralPowers.POWER_SPIKE && pos == PlayerPosIndex.HAIR_SPIKE) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (activePower != VampireGeneralPowers.POWER_SPIKE && pos == PlayerPosIndex.HAIR_SPIKE_2) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH || activePower == VampireGeneralPowers.ICE_CLUTCH)
+                        && pos == PlayerPosIndex.CLUTCH_WINDUP) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (!(activePower == VampireGeneralPowers.BLOOD_CLUTCH_2 || activePower == VampireGeneralPowers.ICE_CLUTCH_2)
+                        && pos == PlayerPosIndex.CLUTCH_DASH) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (!(activePower == VampireGeneralPowers.RIPPER_EYES_ACTIVATED)
+                        && pos == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                } else if (!(activePower == VampireGeneralPowers.CAMO)
+                        && (pos == PlayerPosIndex.VANISH_PERSIST || pos == PlayerPosIndex.VANISH_START)) {
+                    setPlayerPos2(PlayerPosIndex.NONE);
+                }
             }
 
             if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -269,6 +267,8 @@ public class GeneralPowers extends AbilityScapeBasis {
         }
     }
 
+    public void playSummonSound() {
+    }
     /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
      * Currently it supports abstract arrows but this can be expanded*/
     public boolean dealWithProjectile(Entity ent, HitResult res){

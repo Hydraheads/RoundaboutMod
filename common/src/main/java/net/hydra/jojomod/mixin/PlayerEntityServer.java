@@ -97,6 +97,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 roundabout$invincibleTicks--;
             }
             ((IPlayerEntity) this).roundabout$getMaskInventory().update();
+            ((IPlayerEntity) this).roundabout$getBlckSabbathPlayerInventory().update();
         }
     }
 
@@ -132,6 +133,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         }
         IPlayerEntity ipe = ((IPlayerEntity)this);
         ipe.roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
+        ipe.roundabout$setBlckSabbathPlayerInventory(((IPlayerEntity)$$0).roundabout$getBlckSabbathPlayerInventory());
         if (!this.level().isClientSide) {
             ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
             ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());

@@ -1,24 +1,25 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
-import net.hydra.jojomod.stand.powers.PowersTusk;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -31,6 +32,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -143,7 +145,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
 
             byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
-            if (posByte == PlayerPosIndex.GUARD) {
+            byte posByte2 = ((IPlayerEntity) $$0).roundabout$GetPoseEmote();
+            if (posByte == PlayerPosIndex.GUARD || posByte2 == 35) {
                 this.rightArm.yRot = 0.1F;
                 this.leftArm.yRot = -0.1F;
 
@@ -160,6 +163,95 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.xRot = -0.4F;
                 offsetCorrect = false;
                 change = true;
+            } else if (posByte == PlayerPosIndex.CHARGE_SHOT) {
+                this.rightArm.yRot = 0.22F;
+                this.leftArm.yRot = -0.22F;
+
+                this.rightArm.zRot = -0.5F;
+                this.leftArm.zRot = 0.5F;
+
+                //yrot = arm spinny, zrot = arm go up and down
+
+                this.rightArm.xRot = -1F;
+                this.leftArm.xRot = -1F;
+                offsetCorrect = false;
+                change = true;
+
+            } else if (posByte == PlayerPosIndex.OASIS_KICK) {
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                StandPowers gp = ((StandUser)$$0).roundabout$getStandPowers();
+                int amt = Mth.clamp(gp.attackTimeDuring,0,10);
+                if ($$9){
+                    this.rightLeg.copyFrom(one);
+                    this.rightPants.copyFrom(one);
+                    ps.pushPose();
+                    ps.translate(0.05,0,-0.1);
+
+                    ps.mulPose(Axis.XP.rotationDegrees(90-(36*amt)-(ClientUtil.getFrameTime()*36)));
+
+                    RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightLeg.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                    tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+
+
+                    byte bt = ((StandUser) $$0).roundabout$getLocacacaCurse();
+                    int muscle = ((StandUser) $$0).roundabout$getZappedToID();
+                    if (bt == LocacacaCurseIndex.RIGHT_LEG) {
+                        VertexConsumer consumerX = mb.getBuffer
+                                (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_LEG));
+                        rightPants.xScale += 0.04f;
+                        rightPants.zScale += 0.04f;
+                        rightPants.render(
+                                ps,
+                                consumerX,
+                                packedLight,
+                                OverlayTexture.NO_OVERLAY
+                        );
+                        rightPants.xScale -= 0.04f;
+                        rightPants.zScale -= 0.04f;
+                    } else {
+                        if (muscle > -1) {
+                            float scale = 1.055F;
+                            float alpha = 0.6F;
+                            float oscillation = Math.abs((($$0.tickCount % 10) + (ClientUtil.getDelta() % 1)) - 5) * 0.04F;
+                            alpha += oscillation;
+                            if ($$0.getMainArm() == HumanoidArm.RIGHT) {
+
+                                rightPants.xScale += 0.04f;
+                                rightPants.zScale += 0.04f;
+                                VertexConsumer consumerX;
+                                if (roundabout$getSlim()) {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                                } else {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                                }
+                                rightPants.render(
+                                        ps,
+                                        consumerX,
+                                        packedLight,
+                                        OverlayTexture.NO_OVERLAY,
+                                        1, 1, 1, alpha
+                                );
+                                rightPants.xScale -= 0.04f;
+                                rightPants.zScale -= 0.04f;
+
+                            }
+                        }
+                    }
+                    ps.popPose();
+                }
+                return true;
+
+
             } else if (posByte == PlayerPosIndex.SWEEP_KICK){
                 boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                 GeneralPowers gp = ((IPowersPlayer)$$0).rdbt$getPowers();
@@ -181,6 +273,54 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
                     }
                     rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+
+
+                    byte bt = ((StandUser) $$0).roundabout$getLocacacaCurse();
+                    int muscle = ((StandUser) $$0).roundabout$getZappedToID();
+                    if (bt == LocacacaCurseIndex.RIGHT_LEG) {
+                        VertexConsumer consumerX = mb.getBuffer
+                                (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_LEG));
+                        rightPants.xScale += 0.04f;
+                        rightPants.zScale += 0.04f;
+                        rightPants.render(
+                                ps,
+                                consumerX,
+                                packedLight,
+                                OverlayTexture.NO_OVERLAY
+                        );
+                        rightPants.xScale -= 0.04f;
+                        rightPants.zScale -= 0.04f;
+                    } else {
+                        if (muscle > -1) {
+                            float scale = 1.055F;
+                            float alpha = 0.6F;
+                            float oscillation = Math.abs((($$0.tickCount % 10) + (ClientUtil.getDelta() % 1)) - 5) * 0.04F;
+                            alpha += oscillation;
+                            if ($$0.getMainArm() == HumanoidArm.RIGHT) {
+
+                                rightPants.xScale += 0.04f;
+                                rightPants.zScale += 0.04f;
+                                VertexConsumer consumerX;
+                                if (roundabout$getSlim()) {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                                } else {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                                }
+                                rightPants.render(
+                                        ps,
+                                        consumerX,
+                                        packedLight,
+                                        OverlayTexture.NO_OVERLAY,
+                                        1, 1, 1, alpha
+                                );
+                                rightPants.xScale -= 0.04f;
+                                rightPants.zScale -= 0.04f;
+
+                            }
+                        }
+                    }
                     ps.popPose();
                 }
                 return true;
@@ -289,6 +429,24 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
 
                 }
+                if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
+                    AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU, false);
+                    if (anim != null){
+                        if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+                            ipe.roundabout$SetPoseEmote(Poses.NONE.id);
+                        }
+                        this.leftArm.resetPose();
+                        this.rightArm.resetPose();
+                        this.leftLeg.resetPose();
+                        this.rightLeg.resetPose();
+                        this.body.resetPose();
+                        this.cloak.resetPose();
+                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+                    } else {
+                        SU.roundabout$getWornStandAnimation().stop();
+                    }
+                }
 
 
             }
@@ -342,15 +500,46 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.9F;
                         this.leftArm.xRot = -1.4F + curve;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT) {
+                        if ($$0.isCrouching()) {
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -0.65F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -0.55F + curve;
+                        } else if (((IPlayerEntity) $$0).roundabout$GetPos() == PlayerPosIndex.SKATE_GENERAL){
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -0.8F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -0.7F + curve;
+                        } else {
+                            float curve = -0.5F;
+                            this.rightArm.yRot = -0.45F;
+                            this.rightArm.xRot = -1.1F + curve;
+                            this.leftArm.yRot = 0.45F;
+                            this.leftArm.xRot = -1.0F + curve;
+                        }
                     } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = 0.4F;
                         this.rightArm.xRot = -0F + curve;
                         this.leftArm.yRot = -0.4F;
                         this.leftArm.xRot = -0F + curve;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.OASIS_KICK) {
                         this.rightLeg.yRot = -0.1F + this.head.yRot;
                         this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                        this.rightLeg.xRot -= 0.2f;
+
+
+                        this.leftLeg.yRot = 0;
+                        this.leftLeg.xRot = 0;
+                        this.leftLeg.zRot = 0;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                        this.rightLeg.yRot = -0.1F + this.head.yRot;
+                        this.rightLeg.xRot = (float) (-Math.toRadians(110)) + this.head.xRot;
 
                         this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
                         this.rightLeg.xRot -= 0.2f;
@@ -455,14 +644,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI instanceof ModificationMaskItem MD){
-                        int faceSize = visage.getOrCreateTagElement("modifications").getInt("head");
-                        float yeah = (float) (0.73F + (faceSize*0.002));
-                        head.xScale *=yeah;
-                        head.yScale *= yeah;
-                        head.zScale *= yeah;
-                        hat.xScale *= yeah;
-                        hat.yScale *= yeah;
-                        hat.zScale *= yeah;
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag != null && tag.contains("head")) {
+                            int faceSize = tag.getInt("head");
+                            float yeah = (float) (0.73F + (faceSize * 0.002));
+                            head.xScale *= yeah;
+                            head.yScale *= yeah;
+                            head.zScale *= yeah;
+                            hat.xScale *= yeah;
+                            hat.yScale *= yeah;
+                            hat.zScale *= yeah;
+                        }
                     } else {
                         Vector3f scale = MI.visageData.scaleHead();
                         head.xScale *= scale.x;

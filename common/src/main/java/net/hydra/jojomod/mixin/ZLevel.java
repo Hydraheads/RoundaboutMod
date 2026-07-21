@@ -291,6 +291,23 @@ public class ZLevel implements ILevelAccess {
         return false;
     }
 
+    @Unique
+    public boolean roundabout$isFrictionPlunderedEntity2(Entity entity){
+        roundabout$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+        };
+        if (!bubbleIteration.isEmpty()) {
+            for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
+                if (!value.getFinished() && value.getPlunderType() == PlunderTypes.FRICTION.id) {
+                    if (!value.isRemoved() && value.isAlive() && entity !=null && value.getEntityStolen() == entity.getId()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     @Inject(method = "playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
         if(this.roundabout$isSoundPlundered($$1)){
@@ -318,21 +335,4 @@ public class ZLevel implements ILevelAccess {
         }
     }
 
-    @Inject(method = "getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;", at = @At("RETURN"), cancellable = true)
-    private void roundabout$getEntities(Entity entity, AABB area, Predicate<? super Entity> predicate, CallbackInfoReturnable<List<Entity>> cir)
-    {
-        List<Entity> entities = cir.getReturnValue();
-
-        Iterator<Entity> iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            Entity e = iterator.next();
-            if (e instanceof LivingEntity LE) {
-                if (((StandUser) LE).roundabout$isParallelRunning()) {
-                    iterator.remove();
-                }
-            }
-        }
-
-        cir.setReturnValue(entities);
-    }
 }

@@ -7,8 +7,10 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -16,6 +18,7 @@ import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.visages.mobs.DiegoNPC;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.DiegoVisage;
@@ -43,6 +46,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Rabbit;
@@ -254,6 +258,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 1){
+            if (!canImpale()){
+                return true;
+            }
+        }
         if (this.getActivePower() == PowerIndex.POWER_1 && this.getAttackTimeDuring() >= 0 && slot != 2 && slot != 1){
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_1_BONUS && this.getAttackTimeDuring() >= 0 && slot != 1){
@@ -364,10 +373,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.THE_NETHER);
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
-                $$1.add(TheWorldEntity.BETA);
                 $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
+                $$1.add(TheWorldEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }
@@ -534,6 +543,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public boolean assault(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
+            build = 0;
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1);
             playSoundsIfNearby(ASSAULT_NOISE, 27, false);
@@ -598,6 +608,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         super.levelUp();
     }
 
+    int build = 0;
+    int freezeticks = 0;
 
     @Override
     public void tickPowerEnd(){
@@ -606,19 +618,42 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS) {
                 if (!this.getSelf().level().isClientSide()) {
+
+                    if (!(this.getActivePower() == PowerIndex.POWER_1_BONUS)){
+                        if (build == 80){
+                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
+                                    SoundSource.PLAYERS, 0.95F, 1.3F);
+                            build++;
+
+                            StandEntity stand = getStandEntity(this.self);
+                            if (Objects.nonNull(stand)) {
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                        0, 0, 0, 0, 0.4);
+                            }
+                        } else if (attackTimeDuring > 80){
+                            StandEntity stand = getStandEntity(this.self);
+                            if (Objects.nonNull(stand)) {
+                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                        stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                        0, 0, 0, 0, 0.4);
+                            }
+                        }
+                    }
+
                     if (this.attackTimeDuring == 108) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    } else if (this.attackTimeDuring >= 0) {
+                    } else if (attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
                             AABB BB1 = stand.getBoundingBox();
                             Vec3 vec3d = this.getSelf().getEyePosition(0);
                             Vec3 vec3d2 = this.getSelf().getViewVector(0);
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
-                            double mag = 0.05F;
+                            double mag = 0.1F;
 
-                            if (this.attackTimeDuring > 10) {
-                                mag += Math.pow(attackTimeDuring-10, 1.4) / 1000;
+                            if (attackTimeDuring > 10) {
+                                mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
                             }
                             BlockHitResult blockHit = this.getSelf().level().clip(
                                     new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
@@ -650,6 +685,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 stand.setPos(yes);
                             }
 
+
+                            if (post > 1) {
+                                if (freezeticks > 0){
+                                    freezeticks--;
+                                } else {
+                                    build++;
+                                }
+                            } else {
+                                freezeticks = 5;
+                            }
+
                             if (this.getActivePower() == PowerIndex.POWER_1_BONUS) {
                                 if (post <= 2){
                                     ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(PowerIndex.POWER_2,
@@ -659,16 +705,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
 
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
-                                    stand.position().distanceTo(this.getSelf().position()) > 10){
+                                    stand.position().distanceTo(this.getSelf().position()) > 12){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
                             AABB BB2 = stand.getBoundingBox();
-                            if (this.attackTimeDuring > 11) {
                                 if (this.getActivePower() != PowerIndex.POWER_1_BONUS){
                                     tryAssaultHit(stand, BB1, BB2);
                                 }
-                            }
                         }
                     }
                 }
@@ -712,20 +756,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public float getFinalAttackKnockback(){
-        return (((float)this.chargedFinal/(float)maxSuperHitTime)*2.0F);
+        return (((float)this.chargedFinal/(float)getMaxSuperHitTime())*2.0F);
     }
     @Override
     public float getFinalPunchStrength(Entity entity){
         float ret;
         float punchD = this.getPunchStrength(entity)*2+this.getHeavyPunchStrength(entity);
         if (this.getReducedDamage(entity)){
-            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD);
-            if (this.chargedFinal >= maxSuperHitTime){
+            ret = (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD);
+            if (this.chargedFinal >= getMaxSuperHitTime()){
                 ret +=0.5F;
             }
         } else {
-            ret = (((float)this.chargedFinal/(float)maxSuperHitTime)*punchD)+3;
-            if (this.chargedFinal >= maxSuperHitTime){
+            ret = (((float)this.chargedFinal/(float)getMaxSuperHitTime())*punchD)+3;
+            if (this.chargedFinal >= getMaxSuperHitTime()){
                 ret +=2;
             }
         }
@@ -762,7 +806,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.55F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -770,7 +814,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
@@ -850,27 +894,38 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         AABB $$2 = bb1.minmax(bb2);
         List<Entity> $$3 = stand.level().getEntities(stand, $$2);
         if (!$$3.isEmpty()) {
+            boolean atd =this.attackTimeDuring > 11;
             for (int $$4 = 0; $$4 < $$3.size(); $$4++) {
                 Entity $$5 = $$3.get($$4);
-                if ($$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
+                if (((atd && $$5 instanceof LivingEntity LE && !$$5.is(this.getSelf()) && $$5.showVehicleHealth() &&
                         !$$5.isInvulnerable() && $$5.isAlive() && !(this.self.isPassenger() &&
-                        this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)){
+                        this.self.getVehicle().getUUID() == $$5.getUUID()) && stand.getSensing().hasLineOfSight($$5)
+                        &&
+                        !($$5 instanceof FollowingStandEntity SE && (OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FOLLOW_STYLE ||
+                                OffsetIndex.OffsetStyle(SE.getOffsetType()) == OffsetIndex.FIXED_STYLE))
+                ) || ($$5 instanceof BlockWallEntity))
 
-                    hitParticlesCenter(LE);
+                        && ($$5.distanceTo(stand) < 3)
+                ){
 
+
+                    hitParticlesCenter($$5);
+
+                    if (build >= 80){
+                        MainUtil.knockShieldPlusStand($$5,40);
+                    }
 
                     if (this.StandDamageEntityAttack($$5,getAssaultStrength($$5), 0.4F, this.self)){
-                        addEXP(3,LE);
-                        if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 90, null);
-                        } else {
-                            MainUtil.makeBleed($$5, 0, 50, null);
+                        if ($$5 instanceof LivingEntity LE){
+                            addEXP(3,LE);
                         }
-                    } else if (((LivingEntity) $$5).isBlocking()) {
-                        if (!getAssaultEarlyTime()) {
-                            MainUtil.knockShieldPlusStand($$5,40);
-                        } else {
-                            MainUtil.knockShieldPlusStand($$5,30);
+                        if (build >= 80) {
+                            MainUtil.makeBleed($$5, 0, 400, this.self);
+                            MainUtil.makeMobBleed($$5);
+                        } else if (build > 50) {
+                            MainUtil.makeBleed($$5, 0, 300, this.self);
+                        } else if (!getAssaultEarlyTime()) {
+                            MainUtil.makeBleed($$5, 0, 200, this.self);
                         }
                     }
 
@@ -900,14 +955,26 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     public float getAssaultStrength(Entity entity){
         float mult = 1;
         boolean isReduced = this.getReducedDamage(entity);
-        if (getAttackTimeDuring() > 95){
+        if (build >= 80){
+            mult = 3.5F;
+        } else if (attackTimeDuring > 90){
+            mult =2.6F;
+        } else if (attackTimeDuring > 80){
+            mult =2.4F;
+        } else if (attackTimeDuring > 70){
+            mult =2.2F;
+        } else if (attackTimeDuring > 60){
             mult = 2.0F;
-        } else if (getAttackTimeDuring() > 70){
+        } else if (attackTimeDuring > 45){
+            mult = 1.8F;
+        } else if (attackTimeDuring > 30){
+            mult = 1.6F;
+        } else if (attackTimeDuring > 25){
             mult = 1.5F;
-        } else if (getAttackTimeDuring() > 45){
-            mult = 1.25F;
+        } else if (attackTimeDuring >= 20){
+            mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
-            mult = 0.75F;
+            mult = 0.83F;
         }
 
         if (isReduced){
@@ -990,6 +1057,8 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (clientForwardBarrage())
             return;
         if (hasBlock() || hasEntity())
+            return;
+        if (!canImpale())
             return;
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (!this.isGuarding()) {
@@ -1101,7 +1170,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return Component.translatable(  "skins.roundabout.the_world.base");
     }
     @Override
-    public boolean canInterruptPower(){
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
         if (this.getActivePower() == PowerIndex.POWER_1 || this.getActivePower() == PowerIndex.POWER_1_BONUS){
             int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultInterruptCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1110,7 +1179,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             this.setCooldown(PowerIndex.SKILL_1, cdr);
             return true;
         } else {
-            return super.canInterruptPower();
+            return super.canInterruptPower(sauce,interrupter);
         }
     }
 
@@ -1179,21 +1248,13 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if (this.attackTimeDuring <= -1) {
-            if (this.getSelf().fallDistance > 4 && !(this.getSelf() instanceof FlyingMob) && !this.getSelf().isNoGravity()
-                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
-                /**Fall Brace AI*/
-                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
-                if (this.getSelf() instanceof Mob MB){
-                    ((IMob)MB).roundabout$setRetractTicks(140);
-                }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
-                return;
-            }
+        if (tickGenericFallBraceAI()){
+            return;
         }
         boolean check = attackTarget != null && attackTarget.isAlive() && !this.isDazed(this.getSelf());
         double dist = 0;
         if (check) {
+            boolean upAiNow = upAi(attackTarget);
             if (ClientNetworking.getAppropriateConfig().timeStopSettings.mobsTeleportInsteadOfStoppingTime) {
                 dist = attackTarget.distanceTo(this.getSelf());
                     TPTYPE tptype = TPTYPE.GROUND;
@@ -1266,12 +1327,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (postTPStall == 0) {
             if (!(this.getSelf() instanceof Creeper)) {
                 if (check) {
+                    boolean upAiNow = upAi(attackTarget);
                     if ((this.getActivePower() != PowerIndex.NONE)
                             || dist <= 5) {
                         rotateMobHead(attackTarget);
                     }
 
+
                     if (this.attackTimeDuring == -1 || (this.attackTimeDuring < -1 && this.activePower == PowerIndex.ATTACK)) {
+
+                        if (self instanceof Blaze bl){
+                            if (!onCooldown(PowerIndex.SKILL_1)) {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            }
+                            return;
+                        }
+
                         Entity targetEntity = getTargetEntity(this.self, -1);
                         if (targetEntity != null && targetEntity.is(attackTarget)) {
                             double RNG = Math.random();
@@ -1284,7 +1355,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                 }
                             } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                                 if ((RNG < 0.85 && (this.getSelf() instanceof Hoglin || this.getSelf() instanceof Ravager))
-                                || (this.self instanceof JotaroNPC && RNG < 0.47)) {
+                                || ((this.self instanceof DIONPC || upAiNow) && RNG < 0.47)) {
                                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                     wentForCharge = false;
                                 } else {
@@ -1297,14 +1368,16 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                                     }
                                 }
                             }
-                        } else if ((this.getSelf().getHealth() > 20 || this.getSelf() instanceof Piglin
+                        } else if ((this.getSelf() instanceof Piglin
                                 || this.getSelf() instanceof DIONPC || this.getSelf() instanceof DiegoNPC
+                                || upAiNow
                                 || this.getSelf() instanceof AbstractVillager) && dist <= 8 && dist >= 5) {
                             if (!onCooldown(PowerIndex.SKILL_1)) {
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                             }
                         } else if ((this.getSelf() instanceof Spider || this.getSelf() instanceof Slime
                                 || this.getSelf() instanceof DIONPC || this.getSelf() instanceof DiegoNPC
+                                || upAiNow
                                 || this.getSelf() instanceof Rabbit || this.getSelf() instanceof AbstractVillager
                                 || this.getSelf() instanceof Piglin || this.getSelf() instanceof Vindicator) &&
                                 this.getSelf().onGround() && dist <= 19 && dist >= 5) {

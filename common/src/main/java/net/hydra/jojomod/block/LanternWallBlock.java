@@ -25,9 +25,7 @@ public class LanternWallBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     protected static final VoxelShape SHAPE = Shapes.or(
-            Block.box(7.0, 3.0, 15.0, 9.0, 9.0, 16.0),
-            Block.box(7.5, 4.375, 13.01, 8.5, 9.625, 14.01),
-            Block.box(6.45, 9.65, 12.0, 9.45, 12.65, 15.0)
+            Block.box(5.5, 3.0, 11, 10.5, 14, 16.0)
     );
 
     private static final VoxelShape SOUTH_SHAPE = SHAPE;

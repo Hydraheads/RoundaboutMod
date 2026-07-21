@@ -166,6 +166,7 @@ public class HarpoonEntity extends AbstractArrow {
 
 
         public boolean skyHit = false;
+    public boolean isMahattan = false;
         @Override
         protected void onHitEntity(EntityHitResult $$0) {
             Entity $$1 = $$0.getEntity();
@@ -186,9 +187,9 @@ public class HarpoonEntity extends AbstractArrow {
             /**Harpoon Buff*/
             if (isThrown){
                 if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
-                    $$2*=2F;
+                    $$2*=1.3F;
                 } else {
-                    $$2*=1.5F;
+                    $$2*=1.3F;
                 }
             }
 
@@ -205,6 +206,9 @@ public class HarpoonEntity extends AbstractArrow {
 
                     this.doPostHurtEffects($$7);
                 }
+                if(isMahattan){
+                    doBonusHattanDamage($$1);
+                }
             }
             ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
@@ -214,6 +218,15 @@ public class HarpoonEntity extends AbstractArrow {
             } else {
                 this.playSound(ModSounds.HARPOON_HIT_EVENT, $$8, 1.0F);
             }
+        }
+
+        protected void doBonusHattanDamage(Entity hit){
+            DamageSource damageSource;
+            Entity entity2 = this.getOwner();
+            damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
+            float amount = MainUtil.isBossMob(hit) || hit instanceof Player ? 1 : 2;
+            hit.hurt(damageSource, amount);
+            if(hit.hurt(damageSource, amount)){}
         }
 
         public float addSkyDamage(Entity target, float damage){
@@ -237,7 +250,7 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 4;
+                damage += 3;
                 skyHit = true;
             }
 

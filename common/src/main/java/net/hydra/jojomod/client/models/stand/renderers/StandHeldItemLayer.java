@@ -56,10 +56,12 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             float shiftY = 1;
             float shiftX = 3F;
             if (MainUtil.isThrownBlockItem((itemStack.getItem()))){
-                if (((StandEntity)livingEntity).getUser() != null) {
-                    shiftZ = 0 - Math.max(0,Math.min(((StandUser)((StandEntity) livingEntity).getUser()).roundabout$getAttackTimeDuring(),10F))*1.4F;
-                    shiftY = -0.5F;
-                    shiftX = 4;
+                if(!(livingEntity instanceof SeperatedArmEntity)) {
+                    if (((StandEntity) livingEntity).getUser() != null) {
+                        shiftZ = 0 - Math.max(0, Math.min(((StandUser) ((StandEntity) livingEntity).getUser()).roundabout$getAttackTimeDuring(), 10F)) * 1.4F;
+                        shiftY = -0.5F;
+                        shiftX = 4;
+                    }
                 }
             } else if (livingEntity instanceof StarPlatinumEntity SP){
                 shiftZ = -1F;

@@ -3,6 +3,9 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -33,16 +36,19 @@ public class AchtungEntityRenderDispatcher {
         ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
 
         //The thin ice rendering
+
         int frozenLevel = 0;
-        if (HeatUtil.isArmsFrozen(entity) && entity instanceof LivingEntity LE){
-            boolean isHurt = LE.hurtTime > 0;
-            if (!ClientUtil.isHiddenIceEntity(entity) && !isHurt) {
-                frozenLevel = 1;
-                if (HeatUtil.isLegsFrozen(entity)) {
-                    frozenLevel = 2;
-                }
-                if (HeatUtil.isBodyFrozen(entity)) {
-                    frozenLevel = 3;
+        if (!ClientUtil.cancelWithSuitStand(entity)){
+            if (HeatUtil.isArmsFrozen(entity) && entity instanceof LivingEntity LE){
+                boolean isHurt = LE.hurtTime > 0;
+                if (!ClientUtil.isHiddenIceEntity(entity) && !isHurt) {
+                    frozenLevel = 1;
+                    if (HeatUtil.isLegsFrozen(entity)) {
+                        frozenLevel = 2;
+                    }
+                    if (HeatUtil.isBodyFrozen(entity)) {
+                        frozenLevel = 3;
+                    }
                 }
             }
         }

@@ -6,13 +6,16 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -83,6 +86,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
+    public void disableThrow(){
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+    }
 
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
@@ -127,7 +133,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             SPTHROW = 1,
             TWTHROW = 2,
             SOFTTHROW = 3,
-            SPINTHROW = 4;
+            SPINTHROW = 4,
+            STAND_DAMAGE = 5;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -535,6 +542,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     }
 
+    public int heat = 0;
+    public float standDamageMob = 0;
+    public float standDamagePlayer = 0;
     public void dropItem(BlockPos pos){
         ItemEntity $$4 = new ItemEntity(this.level(), pos.getX() + 0.5F,
                 pos.getY() + 0.25F, pos.getZ() + 0.5F,
@@ -546,6 +556,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
 
     public float getDamage(Entity ent){
+        if (getStyle() == STAND_DAMAGE){
+            if (ent instanceof Player){
+                return standDamagePlayer;
+            } if (ent instanceof Mob){
+                return standDamageMob;
+            }
+        }
         float damage = 1;
         if (this.getItem().getItem() instanceof BlockItem){
             float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
@@ -659,6 +676,14 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        if ($$0.getEntity().level().isClientSide()){
+            return;
+        }
+        if (getStyle() == STAND_DAMAGE){
+            if ($$0.getEntity() instanceof BlockWallEntity bwe && bwe.isWhiteAlbumWall){
+                return;
+            }
+        }
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
@@ -669,6 +694,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             }
         } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
             return;
+        } else if ($$1 instanceof GentlyWeepsEntity gwe){
+            GentlyWeepsEntity.dealWithProjectile(this,gwe);
+            return;
         }
 
         Entity $$4 = this.getOwner();
@@ -676,6 +704,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         DamageSource $$5 = ModDamageTypes.of($$1.level(), ModDamageTypes.THROWN_OBJECT, $$4);
 
         Vec3 DM = $$1.getDeltaMovement();
+
+        ItemStack ist = this.getItem();
 
         boolean fire = false;
         boolean onFire = $$1.isOnFire();
@@ -695,8 +725,27 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 fire = true;
             }
         }
-
-        if (this.getItem().getItem() instanceof NameTagItem) {
+        if (getStyle() == STAND_DAMAGE && this.getOwner() != null &&
+                DamageHandler.StandDamageEntity($$1,this.getDamage($$1),this.getOwner())) {
+            if ($$1.getType() == EntityType.ENDERMAN) {
+                return;
+            }
+            if (this.getItem().getItem() instanceof BlockItem){
+                Vec3 pos = getPosition(1);
+                Block blkk = (((BlockItem) this.getItem().getItem()).getBlock());
+                this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                blockBreakParticles(blkk,
+                        new Vec3(pos.x+0.5,
+                                pos.y+0.5,
+                                pos.z+0.5));
+            }
+            if ($$1 instanceof LivingEntity LE && this.getOwner() != null) {
+                LE.setLastHurtMob(this.getOwner());
+                if (heat != 0){
+                    HeatUtil.addHeat(LE,heat);
+                }
+            }
+        } else if (this.getItem().getItem() instanceof NameTagItem) {
             if ($$1 instanceof LivingEntity && !this.useNametag(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
@@ -704,7 +753,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE) &&
             SD.standPowers.isWorthinessType(LE)){
                 ((StandUser) LE).roundabout$setStandDisc(this.getItem());
-                SD.generateStandPowers(LE);
                 ((StandUser) LE).roundabout$summonStand($$1.level(),true,true);
             } else {
                 this.dropItem($$1.getOnPos());
@@ -734,6 +782,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 return;
             }
 
+            if ($$1 instanceof LivingEntity LE && this.getOwner() != null) {
+                LE.setLastHurtMob(this.getOwner());
+            }
             if (!this.getItem().isEmpty()) {
 
                 if ($$1 instanceof LivingEntity L){
@@ -789,13 +840,24 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         $$7.knockback(0.15f, this.getX() - $$7.getX(), this.getZ() - $$7.getZ());
                     }
                 }
-
-                if (this.getItem().isDamageableItem()){
-                    if (!this.getItem().hurt(1,this.level().getRandom(),null)){
+                if (!(ist.getTag() != null && ist.getTag().getBoolean("Unbreakable"))) {
+                    if (this.getItem().isDamageableItem()) {
+                        if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                            this.dropItem($$1.getOnPos());
+                        }
+                    } else if (this.getItem().getItem() instanceof TieredItem) {
+                        this.dropItem($$1.getOnPos());
+                    } else if (this.getItem().getItem() instanceof BlockItem) {
+                        if(MainUtil.isIndestructibleThrownItem(this.getItem())) {
+                            this.dropItem($$1.getOnPos());
+                        } else {
+                            blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()), $$0.getEntity().getPosition(0F).add(0, $$0.getEntity().getEyeHeight(), 0));
+                        }
+                    } else if(MainUtil.isIndestructibleThrownItem(this.getItem())) {
                         this.dropItem($$1.getOnPos());
                     }
-                } else if (this.getItem().getItem() instanceof BlockItem){
-                    blockBreakParticles((((BlockItem) this.getItem().getItem()).getBlock()),$$0.getEntity().getPosition(0F).add(0,$$0.getEntity().getEyeHeight(),0));
+                } else {
+                    this.dropItem($$1.getOnPos());
                 }
             }
         } else {

@@ -6,6 +6,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ExperimentalFixD4CForge",
+    "FixForgeBreakingWardenShieldBreak",
     "ForgeCoffinSleepAtDayMixin",
     "ForgeEatingMixin",
     "ForgeLootTableMixin",
@@ -15,7 +16,6 @@
   ],
   "client": [
     "AnubisForgeToggleKeyMapping",
-    "DimensionResourceKeyD4CForge",
     "ForgeClientPacketListener",
     "ForgeFireBlock",
     "ForgeForgeGui",

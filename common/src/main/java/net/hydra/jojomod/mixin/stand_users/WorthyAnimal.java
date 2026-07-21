@@ -58,7 +58,6 @@ public abstract class WorthyAnimal extends AgeableMob {
                         ItemStack stack = ModItems.getPoolForMob($$2).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
                             ((StandUser)$$2).roundabout$setStandDisc(stack);
-                            SD.generateStandPowers($$2);
                             ((StandUser)$$2).roundabout$getStandPowers().rollSkin();
                         }
                     } else {

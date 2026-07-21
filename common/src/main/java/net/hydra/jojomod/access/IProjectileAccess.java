@@ -16,4 +16,7 @@ public interface IProjectileAccess {
     void roundabout$CheckInsideBlocks();
     boolean roundabout$getIsDeflected();
     void roundabout$setIsDeflected(boolean defl);
+
+    boolean roundabout$getManhattanProjectile();
+    void roundabout$setManhattanProjectile(boolean manhattanProjectile);
 }

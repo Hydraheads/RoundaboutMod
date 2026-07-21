@@ -6,9 +6,13 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.stand.powers.PowersOasis;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -49,6 +53,25 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
                 return;
             }
         }
+
+        if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        ){
+            ci.cancel();
+            return;
+        }
+        if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        ){
+            ci.cancel();
+            return;
+        }
+        if (((StandUser)$$3).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive($$3) && ((StandUser) $$3).roundabout$getIdlePos() != 1 &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        ){
+            ci.cancel();
+            return;
+        }
         if ($$3 != null && ClientUtil.hideArmor($$3) && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)){
             ci.cancel();
             return;
@@ -59,7 +82,7 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
     private void hidespecifcpieces(PoseStack $$0, MultiBufferSource $$1, T $$2, EquipmentSlot $$3, int $$4, A $$5, CallbackInfo ci) {
         if (((StandUser) $$2).roundabout$getStandPowers() instanceof PowersGreenDay pgd) {
             boolean lowerhalf = $$3.getName().equals("legs") || $$3.getName().equals("feet");
-            if (pgd.legGoneTicks > 0 && lowerhalf) {
+            if (pgd.legGoneTicks>0 && lowerhalf) {
                 ci.cancel();
             }
         }

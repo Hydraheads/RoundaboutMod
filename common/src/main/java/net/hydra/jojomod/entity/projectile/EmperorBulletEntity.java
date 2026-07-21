@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.mojang.authlib.yggdrasil.response.User;
 import net.hydra.jojomod.access.IEnderMan;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -51,8 +52,10 @@ public class EmperorBulletEntity extends AbstractArrow {
     public EmperorBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
         super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
     }
-
+    private double baseSpeed;
     public LivingEntity standUser;
+    private Vec3 startPos;
+    private boolean initialized = false;
 
     private float getBulletDamage() {
         LivingEntity owner = (LivingEntity) this.getOwner();
@@ -76,20 +79,36 @@ public class EmperorBulletEntity extends AbstractArrow {
     public void tick() {
         super.tick();
 
-        if (this.tickCount > 200) {
+        if (!initialized) {
+            startPos = this.position();
+            baseSpeed = this.getDeltaMovement().length();
+            initialized = true;
+        }
+
+        double distance = this.position().distanceTo(startPos);
+        double maxRange = ClientNetworking.getAppropriateConfig().emperorSettings.emperorBulletRange;
+
+        if (distance >= maxRange) {
             this.discard();
             return;
         }
 
         this.setNoGravity(true);
 
-        this.setDeltaMovement(this.getDeltaMovement().scale(0.995));
+        double t = distance / maxRange;
+        double slowFactor = 2.0 - (t * t);
+        slowFactor = Math.max(0.05, slowFactor);
+
+        this.setDeltaMovement(this.getDeltaMovement().scale(slowFactor));
 
         if (!level().isClientSide && !this.inGround) {
             boolean isFlying = getDeltaMovement().lengthSqr() > 1;
 
             if (isFlying) {
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.2F, 0.2F, 0.2F), 1f), this.getX(), this.getY(), this.getZ(), 0, 0, 0, 0, 0);
+                ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                        this.getX(), this.getY(), this.getZ(),
+                        0, 0, 0, 0, 0.0F);
+
             }
         }
     }
@@ -127,9 +146,21 @@ public class EmperorBulletEntity extends AbstractArrow {
 
             float damage = getBulletDamage();
 
+            double eyeY = livingEntity.getEyeY();
+            double hitY = result.getLocation().y;
 
-            boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()), damage);
+            double diff = Math.abs(hitY - eyeY);
 
+            boolean headshot = diff < 0.3;
+
+            if (headshot) {
+                damage *= 1.5F;
+            }
+
+            boolean didDamage = livingEntity.hurt(
+                    ModDamageTypes.of(level(), ModDamageTypes.BULLET, this, this.getOwner()),
+                    damage
+            );
             if (didDamage) {
                 applyEffect(livingEntity);
             }
@@ -144,15 +175,14 @@ public class EmperorBulletEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(entity);
         }
 
-        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.EMPEROR_IMPACT_EVENT, this.getSoundSource(), 1.0F, 1.0F);
         this.discard();
     }
 
     public void applyEffect(LivingEntity target) {
         if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
             if (MainUtil.getMobBleed(target)) {
-                ((StandUser) target).roundabout$setBleedLevel(1);
-                target.addEffect(new MobEffectInstance(ModEffects.BLEED, 400, 0), this);
+                MainUtil.makeBleed(target,0,400,getOwner());
             }
         }
     }

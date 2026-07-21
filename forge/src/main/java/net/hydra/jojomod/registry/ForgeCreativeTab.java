@@ -59,7 +59,7 @@ public class ForgeCreativeTab {
     public static final RegistryObject<CreativeModeTab> WIP_GROUP = TABS.register("jojo_wip_features",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemgroup.jojo_wip_features")).hideTitle()
-                    .icon(ForgeItems.LIGHT_BULB.get()::getDefaultInstance)
+                    .icon(ForgeItems.AJA.get()::getDefaultInstance)
                     .displayItems((displayParams, output) ->
                             WIP_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
                     .withSearchBar()

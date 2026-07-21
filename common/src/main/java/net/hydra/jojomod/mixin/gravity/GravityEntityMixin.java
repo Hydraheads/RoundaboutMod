@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -70,6 +71,12 @@ import java.util.Objects;
 @Mixin(value = Entity.class, priority = 100)
 public abstract class GravityEntityMixin implements IGravityEntity {
     // NEW FEATURES
+
+    @Shadow
+    public abstract boolean isInWater();
+
+    @Shadow
+    public abstract boolean isInWall();
 
     @Shadow public abstract boolean isInLava();
 
@@ -345,6 +352,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
 
+        //Roundabout.LOGGER.info("1");
         if (level().isClientSide()) {
             RotationAnimation ani = ((IClientEntity)this).roundabout$getGravityAnimation();
             Validate.notNull(ani, "gravity animation is null");
@@ -526,7 +534,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                     ) {
                         dr = PW.getHeelDirection();
                     } else if (rdbt$this() instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof
-                            VampiricFate VP && VP.getWallWalkDirection() != VP.getIntendedDirection()) {
+                            VampiricFate VP && VP.isPlantedInWall()) {
                         dr = VP.getWallWalkDirection();
                     } else if (rdbt$this() instanceof LivingEntity LE && LE.hasEffect(ModEffects.GRAVITY_FLIP)) {
                         MobEffectInstance mi = LE.getEffect(ModEffects.GRAVITY_FLIP);
@@ -1100,6 +1108,19 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         }
     }
 
+
+    @Inject(
+            method = "isPushedByFluid",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()){
+            cir.setReturnValue(false);
+        }
+    }
+
         @Inject(
             method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z",
             at = @At("HEAD"),
@@ -1107,9 +1128,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     )
     private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1, CallbackInfoReturnable<Boolean> cir) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
-            if (isInLava())
                 return;
-            return;
         }
 
         boolean counterPushing = false;

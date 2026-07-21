@@ -28,10 +28,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
@@ -464,8 +461,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
     }
 
+    public boolean isSpecial = false;
+
+
     public static void blastEntity(Entity gotten, Entity proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
-                                   boolean fireStorm){
+                                   boolean fireStorm, float multi){
         if (!(user instanceof Player) && !(user instanceof Monster)){
             if (!(gotten instanceof Monster)){
                 if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
@@ -473,13 +473,21 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 }
             }
         }
+        if (gotten instanceof TamableAnimal TA){
+            if (user instanceof TamableAnimal TT && TT.getOwner() != null
+                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+                return;
+            }
+        }
         float dmg = 1;
         float strength = 0.85F;
+        strength*=multi;
         if (direct) {
             dmg = PMR.getHurricaneDirectDamage(gotten, size,fireStorm);
-            strength *= 2;
+            strength *= 2.5F;
         } else {
             dmg = PMR.getHurricaneDamage(gotten, size,fireStorm);
+            strength *= 1.5F;
         }
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.CROSSFIRE, user),
                 dmg)) {
@@ -500,7 +508,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 breakShield = (120);
 
             } else if (size >= PowersMagiciansRed.getChargingCrossfireSpecialSize()){
-                //breakShield = (int) (10+ (size*0.5));
+                breakShield = 60;
             }
             if (breakShield > 0) {
                 MainUtil.knockShieldPlusStand(LE, breakShield);
@@ -515,9 +523,19 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     }
 
     public void getEntity(Entity gotten, boolean direct,PowersMagiciansRed PMR){
-        if (gotten !=null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
+        if (gotten !=null && getUser() != null && !MainUtil.isMobOrItsMounts(gotten,getUser())) {
             int size = this.getSize();
-            blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated);
+            float special = 1;
+            if (isSpecial){
+                if (gotten instanceof Player pl && gotten.distanceTo(getUser()) < 3) {
+                    special *= 1.5f;
+                } else if (gotten instanceof Player pl && gotten.distanceTo(getUser()) < 5){
+                    special*=1.35f;
+                } else {
+                    special*=1.2f;
+                }
+            }
+            blastEntity(gotten,this,size,this.standUser,direct,PMR,fireStormCreated,special);
         }
     }
 

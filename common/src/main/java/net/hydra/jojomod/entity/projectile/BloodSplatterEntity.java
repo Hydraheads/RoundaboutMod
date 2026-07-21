@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -102,12 +103,15 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         if (!this.level().isClientSide) {
             if ($$0.getEntity() != null && ownedBy($$0.getEntity()))
                 return;
+            if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
+                gwe.setBled(true);
+            }
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
-            LE instanceof Player pl)) {
+            LE instanceof Player pl || LE instanceof BaseMinion bm)) {
                 LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
                 if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
                 || (LE instanceof Player pl && FateTypes.isHuman(pl))){

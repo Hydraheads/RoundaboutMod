@@ -3,23 +3,38 @@ package net.hydra.jojomod.event.index;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.visages.mobs.DIONPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.fates.powers.ZombieFate;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 public enum FateTypes {
@@ -103,7 +118,8 @@ public enum FateTypes {
     public static float getDamageAdd(LivingEntity entity, DamageSource source, float amt){
         if (source.getEntity() != null) {
             if (source.getEntity() instanceof Player PE) {
-                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity);
+                return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity)
+                        + ((StandUser) PE).roundabout$getStandPowers().getDamageAdd(source, amt,entity);
             }
             if (source.getEntity() instanceof Mob mb && ((IMob) mb).roundabout$isVampire()) {
                 if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
@@ -148,6 +164,15 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean needsToEat(LivingEntity entity){
+        if (entity instanceof Player PE){
+            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+        }
+        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+            return true;
+        return false;
+    }
     public static boolean hasBloodHunger(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
@@ -165,19 +190,33 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean canCurrentlyAvoidSunlight(LivingEntity entity){
+
+        if (entity != null && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+                PWA.hasStandActive(entity) && !((StandUser)entity).roundabout$getGuardBroken()) {
+            return true;
+        }
+        return false;
+
+    }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
             if (PE.isCreative()){
                 return false;
             }
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return (((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal()) &&
+                    ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick > 0;
         }
         if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
             return true;
         if (entity instanceof Zombiefish)
             return true;
         if (entity instanceof BaseMinion)
+            return true;
+        if (entity instanceof DIONPC)
+            return true;
+        if (entity instanceof FogCloneEntity fce && takesSunlightDamage(fce.player))
             return true;
         return false;
     }
@@ -249,9 +288,55 @@ public enum FateTypes {
     }
 
 
+    public static void vampireKillDropAnimal(Entity vamp, Entity animal){
+        if (ClientNetworking.getAppropriateConfig().vampireSettings.mobsDropParts) {
+            if (vamp instanceof Player PE && isVampire(PE) && animal instanceof LivingEntity AE &&
+                    ((IFatePlayer)PE).rdbt$getFatePowers() instanceof VampireFate vp
+                    ) {
+                ItemStack stack = ItemStack.EMPTY;
+                if (animal instanceof MushroomCow){
+                    stack= ModItems.MOOSHROOM_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Parrot){
+                    stack= ModItems.PARROT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Silverfish){
+                    stack= ModItems.SILVERFISH_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Cat){
+                    stack= ModItems.CAT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Wolf){
+                    stack= ModItems.DOG_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Ocelot){
+                    stack= ModItems.OCELOT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Chicken){
+                    stack= ModItems.CHICKEN_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Axolotl){
+                    stack= ModItems.AXOLOTL_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof PolarBear){
+                    stack= ModItems.POLAR_BEAR_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Goat){
+                    stack= ModItems.GOAT_REMAINS.getDefaultInstance().copy();}
+                else if (animal instanceof Llama){
+                    stack= ModItems.LLAMA_REMAINS.getDefaultInstance().copy();}
+                if (!stack.isEmpty()){
+                    ItemEntity drop = new ItemEntity(animal.level(),
+                            animal.getX(), animal.getY(), animal.getZ(),
+                            stack);
+                    animal.level().addFreshEntity(drop);
+                }
+            }
+        }
+    }
+
     public static boolean isInSunlight(LivingEntity ent) {
         //You don't take sun damage in stopped time (like the ova)
+
         if (!((TimeStop) ent.level()).inTimeStopRange(ent)) {
+
+            if (ClientNetworking.getAppropriateConfig().vampireSettings.canSurviveInRain) {
+                if (ent.level().isRaining()) {
+                    return false;
+                }
+            }
+
             Vec3 yes = ent.getEyePosition();
             Vec3 yes2 = ent.position();
 
@@ -268,11 +353,11 @@ public enum FateTypes {
             }
 
             long timeOfDay = ent.level().getDayTime() % 24000L;
-            boolean isDay = timeOfDay < 12555L || timeOfDay > 23360; // 0–12000 = day, 12000–24000 = night
+            boolean isDay = timeOfDay < 12555L || timeOfDay > 23470; // 0–12000 = day, 12000–24000 = night
             BlockPos atVec = BlockPos.containing(yes);
             BlockPos atVec2 = BlockPos.containing(yes2);
             if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
-                    ent.level().dimension().location().getPath().equals("overworld") &&
+                    MainUtil.isSunDamageWorld(ent.level().dimension().location().getPath()) &&
                     isDay
             ) {
                 return true;

@@ -10,6 +10,4 @@ public class ModMessages {
      * Both reference this file.*/
     public static final ResourceLocation RESUME_TILE_ENTITY_TS_PACKET = new ResourceLocation(Roundabout.MOD_ID,"tile_entity_resume_s2c_packet");
 
-    public static final ResourceLocation DYNAMIC_WORLD_SYNC = Roundabout.location("sync_d4c_worlds");
-    public static final ResourceLocation EJECT_PARALLEL_RUNNING = Roundabout.location("eject_prunning");
 }

@@ -11,6 +11,8 @@ import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersOasis;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -40,12 +42,20 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
         this.livingEntityRenderer = livingEntityRenderer;
     }
 
-
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
-        if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+        if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
             return;
+
+        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
+        && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+            return;
+        }
+        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit()
+                && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
+            return;
+        }
 
         transformedModel = livingEntityRenderer.getModel();
         byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();
@@ -56,9 +66,13 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
             } else if (curse == LocacacaCurseIndex.RIGHT_LEG){
                 rl = StandIcons.STONE_RIGHT_LEG;
             } else if (curse == LocacacaCurseIndex.LEFT_HAND){
-                rl = StandIcons.STONE_LEFT_ARM;
+                if(!((StandUser)var4).rdbt$hasLeftHandGone()) {
+                    rl = StandIcons.STONE_LEFT_ARM;
+                }
             } else if (curse == LocacacaCurseIndex.RIGHT_HAND){
-                rl = StandIcons.STONE_RIGHT_ARM;
+                if(!((StandUser)var4).rdbt$hasRightHandGone()) {
+                    rl = StandIcons.STONE_RIGHT_ARM;
+                }
             } else if (curse == LocacacaCurseIndex.CHEST){
                 rl = StandIcons.STONE_CHEST;
             } else if (curse == LocacacaCurseIndex.HEAD){

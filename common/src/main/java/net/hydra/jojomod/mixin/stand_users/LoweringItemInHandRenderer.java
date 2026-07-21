@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.stand_users;
 
+import net.hydra.jojomod.access.AccessLoweringRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemInHandRenderer.class)
-public class LoweringItemInHandRenderer {
+public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
     /** This makes certain items lower when your stand is out. Indicates that you can't really use tools
      * like swords or pickaxes while a stand is out.
      * The reason for that design decision is mostly to prevent sword swings overriding stand attacks
@@ -60,6 +61,28 @@ public class LoweringItemInHandRenderer {
     }
 
     @Unique
+    @Override
+    public void rdbt$assertSelf(){
+        if (this.minecraft.player != null &&
+                ( ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode()
+                        ||
+                        (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).roundabout$GetPos2()))
+                        ||
+                        ((IPlayerEntity) this.minecraft.player).roundabout$GetPoseEmote() == 35
+                )
+
+                &&
+                !this.minecraft.player.isUsingItem()) {
+            if (roundabout$ticker == 0) {
+                this.mainHandHeight = 0;
+                this.offHandHeight = 0;
+                this.oMainHandHeight = 0;
+                this.oOffHandHeight = 0;
+            }
+        }
+    }
+
+    @Unique
     public float roundabout$ticker = 0;
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$HeldItems2(CallbackInfo ci) {
@@ -67,6 +90,8 @@ public class LoweringItemInHandRenderer {
                 ( ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode()
                         ||
                         (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).roundabout$GetPos2()))
+                        ||
+                        ((IPlayerEntity) this.minecraft.player).roundabout$GetPoseEmote() == 35
                 )
 
                 &&
@@ -74,6 +99,8 @@ public class LoweringItemInHandRenderer {
             if (roundabout$ticker == 0){
                 this.mainHandHeight = 0;
                 this.offHandHeight = 0;
+                this.oMainHandHeight = 0;
+                this.oOffHandHeight = 0;
             }
             roundabout$ticker++;
             this.mainHandItem = ItemStack.EMPTY;

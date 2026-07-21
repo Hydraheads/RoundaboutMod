@@ -1,13 +1,17 @@
 package net.hydra.jojomod.mixin.blocks;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.CoffinBlock;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.SleepStatus;
+import net.minecraft.util.Mth;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -23,7 +27,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-@Mixin(ServerLevel.class)
+@Mixin(value = ServerLevel.class, priority = 99)
 public abstract class CoffinSetTimeToNightMixin extends Level {
 
     @Shadow
@@ -39,7 +43,6 @@ public abstract class CoffinSetTimeToNightMixin extends Level {
     private int coffinSleepDelayTicks = 0;
     private static final int TIMER_CAP = 100;
 
-    public SleepStatus rdbt$coffinStatus;
 
     protected CoffinSetTimeToNightMixin(WritableLevelData $$0, ResourceKey<Level> $$1, RegistryAccess $$2, Holder<DimensionType> $$3, Supplier<ProfilerFiller> $$4, boolean $$5, boolean $$6, long $$7, int $$8) {
         super($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7, $$8);
@@ -55,21 +58,21 @@ public abstract class CoffinSetTimeToNightMixin extends Level {
             coffinSleepDelayTicks = 0;
             return;
         }
-        rdbt$coffinStatus = new SleepStatus();
-        rdbt$coffinStatus.update(coffinSleepers);
+        coffinSleepers = coffinSleepers.stream().filter(Player::isSleepingLongEnough).toList();
 
-        long dayTime = level.getDayTime() % 24000L;
-        boolean isThundering = level.isThundering();
+        List<ServerPlayer> activePlayers = level.players().stream().filter(serverPlayer -> !serverPlayer.isSpectator()).toList();
+
+        int sleepPercentage = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
+        int amountRequiredToSleep = Math.max(1, Mth.ceil((float)(activePlayers.size() * sleepPercentage) / 100.0F));
 
         coffinSleepDelayTicks++;
         if (coffinSleepDelayTicks < TIMER_CAP) return;
 
-        int $$2 = this.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
-        if (dayTime < 13000L) {
-            if (this.rdbt$coffinStatus.areEnoughSleeping($$2) && this.rdbt$coffinStatus.areEnoughDeepSleeping($$2, this.players)) {
+        if (isDay() || isThundering()) {
+            if (coffinSleepers.size() >= amountRequiredToSleep) {
                 if (this.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-                    long timeToNight = 13000L - dayTime;
-                    level.setDayTime(level.getDayTime() + timeToNight);
+                    long $$3 = this.levelData.getDayTime() + 24000L;
+                    level.setDayTime($$3 - $$3 % 24000L + 13000L);
                 }
 
                 for (ServerPlayer player : coffinSleepers) {

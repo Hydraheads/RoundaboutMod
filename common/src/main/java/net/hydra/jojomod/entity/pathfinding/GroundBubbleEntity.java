@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -80,14 +81,16 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
                 }
             }
             Entity targ = this.getTarget();
-            if (targ != null && this.getTarget().distanceTo(this) < 5) {
-                if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
+            if (targ != null && this.getTarget().distanceTo(this) < 5 && $$0 != null && targ.getUUID() != $$0.getUUID()) {
+                if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
                     SoftAndWetExplosiveBubbleEntity bubble = PWW.getExplosiveBubble();
                     if (bubble != null){
+                        bubble.setReady(true);
                         bubble.setSped(PWW.getExplosiveSpeed());
-                        bubble.setPos(this.position().add(0,0.1F,0));
+                        bubble.setPos(this.position().add(0,0.6F,0));
                         bubble.setMadeWithBarrage(true);
-                        bubble.setDeltaMovement(targ.getEyePosition().subtract(bubble.position()).normalize().scale(PWW.getExplosiveSpeed()));
+                        Vec3 sition = targ.getPosition(1).add(targ.getEyePosition().subtract(targ.getPosition(1)).scale(0.5));
+                        bubble.setDeltaMovement(sition.subtract(bubble.position()).normalize().scale(PWW.getExplosiveSpeed()));
                         PWW.bubbleListInit();
                         PWW.bubbleList.add(bubble);
                         this.level().addFreshEntity(bubble);

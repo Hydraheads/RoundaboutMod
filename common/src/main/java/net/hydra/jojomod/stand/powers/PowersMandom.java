@@ -25,6 +25,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,6 +73,21 @@ public class PowersMandom extends NewDashPreset {
     public boolean rendersPlayer(){
         return true;
     }
+
+
+    public byte watchStyle = WATCHLESS;
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putByte("watchStyle",watchStyle);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("watchStyle")) {
+            watchStyle = $$0.getByte("watchStyle");
+        }
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         // code for advanced icons
@@ -111,10 +127,7 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public byte getWatchStyle(){
-        if (this.self instanceof Player PL){
-            return ((IPlayerEntity)PL).roundabout$getWatchStyle();
-        }
-        return WATCHLESS;
+        return watchStyle;
     }
     public void swapWatchStyle(){
         byte style = getWatchStyle();
@@ -122,9 +135,8 @@ public class PowersMandom extends NewDashPreset {
         if (style > ROLEX){
             style = WATCHLESS;
         }
-        if (this.self instanceof Player PL){
-            ((IPlayerEntity)PL).roundabout$setWatchStyle(style);
-        }
+        watchStyle = style;
+        saveDiscAndSync();
     }
     public boolean activatedPastVision(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -233,11 +245,12 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public void onPowerSwitch(){
-        onStandSwitchInto();
         super.onPowerSwitch();
+        onStandSwitchInto();
     }
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (!isClient() || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
                 if (this.getSelf() instanceof Player) {
@@ -250,7 +263,6 @@ public class PowersMandom extends NewDashPreset {
                         + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
             }
         }
-        super.onStandSwitchInto();
     }
 
 
@@ -343,6 +355,9 @@ public class PowersMandom extends NewDashPreset {
                     SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
+                    }
+                    if (ent instanceof LivingEntity LE && LE.isUsingItem()){
+                        LE.stopUsingItem();
                     }
 
                     if (!ent.is(this.self)){

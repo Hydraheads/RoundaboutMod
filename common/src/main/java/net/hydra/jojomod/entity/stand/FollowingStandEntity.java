@@ -146,16 +146,18 @@ public class FollowingStandEntity extends StandEntity{
     /** Math to determine the position of the stand floating away from its user.
      * Based on Jojovein donut code with great help from Urbancase.*/
     public Vec3 getStandOffsetVector(LivingEntity standUser){
-        byte ot = this.getOffsetType();
-        if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
-            return getIdleOffset(standUser);
-        } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
-            Direction direction = ((IGravityEntity)standUser).roundabout$getGravityDirection();
-            Vec3 finalized = getAttackOffset(standUser,ot);
-            if (direction != Direction.DOWN){
-                finalized = RotationUtil.vecPlayerToWorld(finalized.subtract(standUser.position()),direction).add(standUser.position());
+        if (standUser != null) {
+            byte ot = this.getOffsetType();
+            if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
+                return getIdleOffset(standUser);
+            } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
+                Direction direction = ((IGravityEntity) standUser).roundabout$getGravityDirection();
+                Vec3 finalized = getAttackOffset(standUser, ot);
+                if (direction != Direction.DOWN) {
+                    finalized = RotationUtil.vecPlayerToWorld(finalized.subtract(standUser.position()), direction).add(standUser.position());
+                }
+                return finalized;
             }
-            return finalized;
         }
         return new Vec3(this.getX(),this.getY(),this.getZ());
     }
@@ -168,7 +170,10 @@ public class FollowingStandEntity extends StandEntity{
     public Vec3 getAttackOffset(LivingEntity standUser, byte ot) {
         if (ot == OffsetIndex.BENEATH) {
             Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
-            return new Vec3(frontVectors.x, frontVectors.y-1.1, frontVectors.z);
+            return new Vec3(frontVectors.x, frontVectors.y - 1.1, frontVectors.z);
+        } else if (ot == OffsetIndex.BENEATH_2){
+            Vec3 frontVectors = FrontVectors(standUser, 180, 0F);
+            return new Vec3(frontVectors.x, frontVectors.y - 0.5, frontVectors.z);
         } else {
             float distanceFront;
             float standrotDir2 = 0;

@@ -46,7 +46,6 @@ public interface StandUser {
     void roundabout$setGlow(byte glow);
     byte roundabout$getGlow();
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
-
     void roundabout$setHeat(int e);
     int roundabout$getHeat();
 
@@ -60,6 +59,7 @@ public interface StandUser {
     Entity roundabout$getBoundTo();
     void roundabout$setBoundTo(Entity $$0);
     int roundabout$getBoundToID();
+    int rdbt$getBoundType(Entity holder);
 
 
     void rdbt$setFleshBud(UUID bud);
@@ -67,7 +67,6 @@ public interface StandUser {
 
     void roundabout$setBoundToID(int bound);
     boolean roundabout$isStringBound();
-    boolean roundabout$canBeBound(Player $$0);
     void roundabout$dropString();
     void roundabout$tickString();
 
@@ -89,6 +88,9 @@ public interface StandUser {
     void roundabout$breakGuard();
     ItemStack roundabout$getStandDisc();
     void roundabout$setStandDisc(ItemStack stack);
+    void roundabout$updateStandDisc(ItemStack stack);
+    void roundabout$setStandSkinLight(byte skin);
+    void roundabout$setIdlePosLight(byte pos);
     void roundabout$setMetallicaInvisibility(int fade);
     int roundabout$getMetallicaInvisibility();
     void roundabout$setMetalMeter(float amount);
@@ -127,10 +129,20 @@ public interface StandUser {
     void roundabout$setAnubisVanishTicks(int set);
     int roundabout$getCBVanishTicks();
     void roundabout$setCBVanishTicks(int set);
+    int roundabout$getWhiteAlbumVanishTicks();
+    void roundabout$setWhiteAlbumVanishTicks(int set);
+    int roundabout$getOasisVanishTicks();
+    void roundabout$setOasisVanishTicks(int set);
 
     int getJumpImmunityTicks();
 
+    boolean rdbt$hasLeftHandGone();
+
+    double getStaringYPos();
+
     void rdbt$doMoldDetection(Vec3 movement);
+
+    boolean rdbt$hasRightHandGone();
 
     void rdbt$doWindVisionDetection();
 
@@ -143,10 +155,14 @@ public interface StandUser {
     void roundabout$setSafeToRemoveLove(boolean safe);
 
     StandPowers roundabout$getStandPowers();
+    boolean rdbt$getExperienceTaken();
+    void rdbt$setExperienceTaken(boolean taken);
 
     void roundabout$setSealedTicks(int ticks);
-
+    void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
+    void roundabout$updateSealedTicks(int ticks);
+
     boolean roundabout$isSealed();
     int roundabout$getMaxSealedTicks();
     void roundabout$setMaxSealedTicks(int ticks);
@@ -163,6 +179,7 @@ public interface StandUser {
     void roundabout$setAttackTimeDuring(int attackTimeDuring);
     void roundabout$setInterruptCD(int interruptCD);
     boolean roundabout$isGuarding();
+    boolean roundabout$isGuardInput();
     boolean roundabout$isBarraging();
     boolean roundabout$isClashing();
     float roundabout$getGuardCooldown();
@@ -310,6 +327,8 @@ public interface StandUser {
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
 
+    void roundabout$doWindVisionDetectionOther();
+
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/
@@ -341,15 +360,13 @@ public interface StandUser {
     void rdbt$adjGravTrav();
     void roundabout$adjustGravity();
 
-    /** D4C */
-    void roundabout$setParallelRunning(boolean value);
-    boolean roundabout$isParallelRunning();
-
     boolean GoingDown();
 
     /** Green Day stuff**/
 
     void DoMoldTick();
+    void SetInMoldTicks(int e);
+    int getMoldTicks();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();

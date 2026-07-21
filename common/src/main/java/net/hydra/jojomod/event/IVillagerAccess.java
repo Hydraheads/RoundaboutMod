@@ -4,5 +4,6 @@ public interface IVillagerAccess {
 
     int roundabout$getAnubisTicks();
     void roundabout$setAnubisTicks(int i);
+    void roundabout$clearGossips();
 
 }

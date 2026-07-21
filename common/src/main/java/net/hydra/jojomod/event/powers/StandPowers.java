@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -33,6 +35,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -121,6 +126,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void tickPowerEnd(){
     }
 
+    public boolean canWalkThroughDaze(){
+        return false;
+    }
 
     /// used to make mobs look at you during tickMobAi
     public void rotateMobHead(LivingEntity attackTarget) {
@@ -148,6 +156,10 @@ public class StandPowers extends AbilityScapeBasis {
     public void visualFrameTick() {};
 
 
+    public float getDamageAdd(DamageSource source, float amt, Entity target){
+        return 0;
+    }
+
 
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
@@ -158,10 +170,19 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Runs this code while pressing R to activate powers*/
     public void onStandSummon(boolean desummon){
-
     }
     /**Runs this code while switching into stand with a disc*/
     public void onStandSwitchInto(){
+        refreshCooldowns();
+    }
+
+    public void onReleaseGuard(){
+        StandUser standComp = ((StandUser) self);
+        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
+            standComp.roundabout$setInterruptCD(3);
+        }
+        C2SPacketUtil.guardCancelPacket();
     }
 
     /**Holds one arm out with the player model, override if you are using a stand like soft and wet or emperor that
@@ -217,6 +238,7 @@ public class StandPowers extends AbilityScapeBasis {
         return this.isBarraging();
     }
 
+
     public int getJumpHeightAddon() {return 0;}
 
 
@@ -225,8 +247,35 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    /** Override it if your stand can use Stand Arrow (Mostly probably to be
+     *   Golden Experience, Silver Chariot (they have requiem variants)
+     *   and Killer Queen (Bites the Dust)
+     */
+    public boolean canUseStandArrow() { return false; }
 
+    /** called when the standArrow is used (and the method above is true),
+     * Returns false when it fails, and true when sucessfull
+     * override it to yours needs*/
+    public boolean onStandArrowUse() {
+        /** Requiem stands like Golden Experience and silver chariot should
+         * probably make something like this
+         *
+         * if (this.self instanceof Player PL) {
+         *      if (PL.experienceLevel >= 50) {
+         *          // do requiem stuff here
+         *
+         *          if (!PE.isCreative()) {
+         *              PE.giveExperienceLevels(-50);
+         *          }
+         *          return true;
+         *      }else {
+         *          return false;
+         *      }
+         * }
+         */
 
+        return false;
+    }
 
     /**This gets set to true when you begin using a forward barrage, not many stands will use this mechanic likely*/
     public boolean forwardBarrage = false;
@@ -236,17 +285,19 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public void writeToDisc(){
 
+    }
 
-
-
+    /**Returns if the stand should render the pilot distance hud*/
+    public boolean shouldRenderPilotingHud() {return true;}
     /**Returns if the stand is in control/pilot mode right now*/
     public boolean isPiloting(){
         return false;
     }
     /**Returns the stand entity that is going to be controlled, you most likely will not need to override this
      * unless you are doing a multi stand type like bad company*/
-    public StandEntity getPilotingStand(){
+    public LivingEntity getPilotingStand(){
         return getStandEntity(this.self);
     }
     /**If the passed in entity id matches that of getPilotingStand (consider passing in that function directly),
@@ -262,6 +313,9 @@ public class StandPowers extends AbilityScapeBasis {
     /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
     public void pilotInputAttack(){
     }
+    /**Controls what blocks a stand can place in pilot mode*/
+    public boolean canPilotPlaceBlock(ItemStack stack) {return false;}
+    public int getPilotPlaceRange() {return 0;}
     /**What happens when you left click while in pilot mode, exists clientside like poweractivate*/
     public boolean pilotInputInteract(){
         return false;
@@ -342,6 +396,14 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public boolean surpassesFire(){
+        return false;
+    }
+
+    /**When you take damage, intercept or run code based off of it, or potentially cancel it*/
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        return false;
+    }
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
@@ -391,6 +453,10 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean onKilledEntity(ServerLevel $$0, LivingEntity $$1){
         return false;
     }
+    /**return true to cancel the push event*/
+    public boolean onCollide(Entity entity){
+        return false;
+    }
 
     public void deflectArrowsAndBullets(Entity ent){
         if (ent instanceof Projectile PE){
@@ -398,6 +464,7 @@ public class StandPowers extends AbilityScapeBasis {
             if (!ipa.roundabout$getIsDeflected()){
                 if (PE instanceof RoundaboutBulletEntity) {
                     ((RoundaboutBulletEntity) PE).setSuperThrown(false);
+                    PE.setOwner(self);
                     PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
@@ -459,6 +526,7 @@ public class StandPowers extends AbilityScapeBasis {
     public float getBarrageDamageMob(){
         return 20;
     }
+
     public float getBarrageHitStrength(Entity entity){
         float barrageLength = this.getBarrageLength();
         float power;
@@ -571,17 +639,6 @@ public class StandPowers extends AbilityScapeBasis {
 
 
 
-    public boolean isUsingShield(LivingEntity entity) {
-        if (entity.isUsingItem()) {
-            InteractionHand hand = entity.getUsedItemHand();
-            ItemStack item = entity.getItemInHand(hand);
-            if (item.getItem() instanceof ShieldItem) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     /**If eating or using items in general shouldn't cancel certain abilties, put them as exceptions here*/
     public boolean shouldReset(byte activeP){
@@ -616,12 +673,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean setPowerBarrageCharge() {
-        return true;
-    }
-
-    public void setPowerBarrage() {
-    }
 
     public int clashStarter = 0;
 
@@ -642,6 +693,10 @@ public class StandPowers extends AbilityScapeBasis {
                 this.getSelf().getMainHandItem().getItem() instanceof ShearsItem) || (this.getActivePower() == PowerIndex.MINING
                 && !(this.getSelf().getMainHandItem().getItem() instanceof ShearsItem))
         ));
+    }
+
+    public boolean isMiningRegardless() {
+        return isBrawling() && hasStandActive(self);
     }
 
     /**How fast does the block mine blocks that require pickaxes?*/
@@ -671,7 +726,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**The amount of exp you gain from mining blocks*/
     public void gainExpFromSpecialMining(BlockState $$1, BlockPos $$2) {
         if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
-                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1) && MainUtil.isBlockExpAble($$1)) {
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
             if (Math.random() > 0.62) {
                 addEXP(1);
             }
@@ -707,14 +762,10 @@ public class StandPowers extends AbilityScapeBasis {
                     this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-            this.getStandUserSelf().roundabout$setStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+            this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
         }
     }
 
-    public int getBarrageRecoilTime(){
-        return ClientNetworking.getAppropriateConfig().
-                generalStandSettings.barrageRecoilCooldown;
-    }
 
 
 
@@ -777,6 +828,8 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.GLAIVE_CHARGE_EVENT;
         } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE) {
             return ModSounds.ANUBIS_UNSHEATHE_EVENT;
+        }else if (soundChoice == SoundIndex.MANHATTAN_RAIN) {
+            return ModSounds.MANHATTAN_DODGING_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {
@@ -1183,6 +1236,22 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean tickGenericFallBraceAI(){
+        if (this.attackTimeDuring <= -1) {
+            if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                    && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                /**Fall Brace AI*/
+                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
+                if (this.getSelf() instanceof Mob MB){
+                    ((IMob)MB).roundabout$setRetractTicks(140);
+                }
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**Sets your active power to nothing*/
     @Override
     public boolean setPowerNone(){
@@ -1197,13 +1266,29 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Call this to verify your stand is leveled enough to use a move*/
     public boolean canExecuteMoveWithLevel(int minLevel){
-        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
+        boolean decreaseLevel = false;
+        if (self instanceof Player pl && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks()
+                > 0){
+            decreaseLevel = true;
+        }
+
+        if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling
+        && !decreaseLevel) {
             return true;
         }
 
         if (this.getSelf() instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$getStandLevel() >= minLevel || hasGoldenDisc() ||
-                    pl.isCreative()){
+            int level;
+            boolean skipsCheck = hasGoldenDisc() || pl.isCreative();
+            if (!skipsCheck){
+                level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+            } else {
+                level = getMaxLevel();
+            }
+            if (decreaseLevel){
+                level = 1;
+            }
+            if (level >= minLevel){
                 return true;
             }
             return false;
@@ -1442,6 +1527,9 @@ public class StandPowers extends AbilityScapeBasis {
         //playBarrageGuardSound();
     }
 
+    public void onPoseEmoteSwitch(byte from, byte to){
+    }
+
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
     public void initiateClash(Entity entity){
         ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
@@ -1643,23 +1731,6 @@ public class StandPowers extends AbilityScapeBasis {
             ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
         }
     }
-    public void updateBarrage(){
-        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
-        } else {
-            if (this.attackTimeDuring > this.getBarrageLength()) {
-                this.attackTimeDuring = -20;
-            } else {
-                if (this.attackTimeDuring > 0) {
-                    this.setAttackTime((getBarrageRecoilTime() - 1) -
-                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
-                                    * (getBarrageRecoilTime() - 1)));
-
-                    standBarrageHit();
-                }
-            }
-        }
-    }
 
     /**Enemies randomize their clash power, up to on occasion the maximum for some forced at best ties*/
     private void RoundaboutEnemyClash(){
@@ -1767,107 +1838,6 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    /**If you override this for any reason, you should probably call the super(). Although SP and TW override
-     * this, you can probably do better*/
-    public void barrageImpact(Entity entity, int hitNumber){
-        if (this.isBarrageAttacking()) {
-            if (bonusBarrageConditions()) {
-                boolean sideHit = false;
-                if (hitNumber > 1000){
-                    if (!(ClientNetworking.getAppropriateConfig().generalStandSettings.barrageHasAreaOfEffect)){
-                        return;
-                    }
-                    hitNumber-=1000;
-                    sideHit = true;
-                }
-                boolean lastHit = (hitNumber >= this.getBarrageLength());
-                if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                        initiateClash(entity);
-                    } else {
-                        hitParticles(entity);
-
-                        float pow;
-                        float knockbackStrength = 0;
-                        /**By saving the velocity before hitting, we can let people approach barraging foes
-                         * through shields.*/
-                        Vec3 prevVelocity = entity.getDeltaMovement();
-                        if (lastHit) {
-                            pow = this.getBarrageFinisherStrength(entity);
-                            knockbackStrength = this.getBarrageFinisherKnockback();
-                        } else {
-                            pow = this.getBarrageHitStrength(entity);
-                            float mn = this.getBarrageLength() - hitNumber;
-                            if (mn == 0) {
-                                mn = 0.015F;
-                            } else {
-                                mn = ((0.015F / (mn)));
-                            }
-                            knockbackStrength = 0.014F - mn;
-                        }
-
-                        if (sideHit){
-                            pow/=4;
-                            knockbackStrength/=6;
-                        }
-
-                        if (StandRushDamageEntityAttack(entity, pow, 0.0001F, this.self)) {
-                            if (entity instanceof LivingEntity LE) {
-                                if (lastHit) {
-                                    setDazed((LivingEntity) entity, (byte) 0);
-
-                                    if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
-                                        addEXP(8,LE);
-                                        playBarrageEndNoise(0, entity);
-                                    }
-                                } else {
-                                    setDazed((LivingEntity) entity, (byte) 3);
-                                    if (!sideHit) {
-                                        playBarrageNoise(hitNumber, entity);
-                                    }
-                                }
-                            }
-                            barrageImpact2(entity, lastHit, knockbackStrength);
-                        } else {
-                            if (lastHit) {
-                                knockShield2(entity, 200);
-                                if (!sideHit) {
-                                    playBarrageBlockEndNoise(0, entity);
-                                }
-                            } else {
-                                entity.setDeltaMovement(prevVelocity);
-                                playBarrageBlockNoise();
-                            }
-                        }
-                    }
-                } else {
-                    if (!sideHit) {
-                        playBarrageMissNoise(hitNumber);
-                    }
-                }
-
-                if (lastHit) {
-                    animateStand(StandEntity.BARRAGE_FINISHER);
-                    this.attackTimeDuring = -10;
-                }
-            } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-            }
-        } else {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
-        }
-    }
-    public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
-        if (entity instanceof LivingEntity){
-            if (lastHit) {
-                takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
-            } else {
-                takeKnockbackUp(entity,knockbackStrength);
-            }
-        }
-    }
     /**This happens every time a stand barrage hits, generally you dont want to override this unless
      * your stand's barrage operates very differently*/
     public void standBarrageHit(){
@@ -1934,6 +1904,35 @@ public class StandPowers extends AbilityScapeBasis {
             if (softenTicks > 0) {
                 softenTicks-= 2;
             }
+
+            if (surpassesFire()) {
+                if (self.isOnFire()) {
+                    self.setSecondsOnFire(0);
+                } if (getStandUserSelf().roundabout$isOnStandFire()) {
+                    getStandUserSelf().roundabout$setOnStandFire((byte) 0);
+                }
+            }
+
+
+            if (self instanceof Player player){
+                IPlayerEntity ipe = ((IPlayerEntity) player);
+                byte pos = ipe.roundabout$GetPos();
+                if (pos == PlayerPosIndex.SKATE_JUMP ||
+                        pos == PlayerPosIndex.SKATE_TWIRL){
+                    if (self.onGround()) {
+                        ipe.roundabout$SetPos(PlayerPosIndex.NONE);
+                        onLandingAnimatedJump();
+                    } else {
+                        if (twirlTicks > 0){
+                            twirlTicks--;
+                        } else {
+                            if (pos == PlayerPosIndex.SKATE_TWIRL){
+                                ipe.roundabout$SetPos(PlayerPosIndex.SKATE_JUMP);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if (this.self instanceof Player PE && PE.isSpectator()) {
@@ -1981,11 +1980,17 @@ public class StandPowers extends AbilityScapeBasis {
                 }
                 this.attackTime++;
                 if (this.attackTime > this.attackTimeMax) {
+                //if (activePowerPhase != 0){
+                    //if (this.self.level().isClientSide()){
+                        //C2SPacketUtil.trySingleBytePacket(PacketDataIndex.FIX_COOLDOWN_FOR_SERVER);
+                    //}
+                    //this.setActivePowerPhase((byte) 0);
+                //}
                     this.setActivePowerPhase((byte) 0);
                 }
-                if (this.interruptCD > 0) {
-                    this.interruptCD--;
-                }
+            }
+            if (this.interruptCD > 0) {
+                this.interruptCD--;
             }
             this.tickDash();
         } else {
@@ -2009,6 +2014,9 @@ public class StandPowers extends AbilityScapeBasis {
             getStandUserSelf().roundabout$setStandAnimation(NONE);
         }
     }
+    public int twirlTicks = 0;
+    public void onLandingAnimatedJump(){}
+
     /**Iteration through skins in the power inventory*/
     public void getSkinInDirection(boolean right, boolean sealed){
         StandUser SE = ((StandUser)this.getSelf());
@@ -2092,6 +2100,11 @@ public class StandPowers extends AbilityScapeBasis {
     public int getMaxTSTime (){
         return 0;
     }
+
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        return false;
+    }
     public int getMaxChargeTSTime(){
         return 0;
     }
@@ -2165,6 +2178,39 @@ public class StandPowers extends AbilityScapeBasis {
         return Component.empty();
     }
 
+
+    public byte standSkin =0;
+    public byte idlePos =0;
+    // adds additional save data to discs. An example of what this could be used for is mandom watch styles and tusk nail colors
+    // also consider that skins are also saved onto the data, so anything that's cosmetic in that regard would work
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        $$0.putByte("Skin",standSkin);
+        $$0.putByte("Pose",idlePos);
+    }
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        StandUser user = getStandUserSelf();
+        if ($$0.contains("Skin")) {
+            byte skn = ($$0.getByte("Skin"));
+            user.roundabout$setStandSkinLight(skn);
+        } else {
+            user.roundabout$setStandSkinLight((byte) 0);
+        }
+
+        if ($$0.contains("Pose")) {
+            byte skn = ($$0.getByte("Pose"));
+            user.roundabout$setIdlePosLight(skn);
+        } else {
+            user.roundabout$setIdlePosLight((byte) 0);
+        }
+    }
+    // run this to trigger the disc saving and syncing
+    public void saveDiscAndSync(){
+        if (self.level().isClientSide())
+            return;
+        if (getStandUserSelf().roundabout$getStandDisc().isEmpty())
+            return;
+        this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+    }
 
 
     /**You don't really need this*/

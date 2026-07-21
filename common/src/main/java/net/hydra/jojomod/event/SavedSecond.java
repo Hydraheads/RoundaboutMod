@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -76,7 +77,8 @@ public class SavedSecond {
                     ((StandUser)PL).roundabout$getBubbleEncased(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
-                    PL.getFoodData().getExhaustionLevel()
+                    PL.getFoodData().getExhaustionLevel(),
+                    ((StandUser)PL).roundabout$getHeat()
             );
         } if (ent instanceof Creeper CE) {
             return new SavedSecondCreeper(
@@ -97,7 +99,8 @@ public class SavedSecond {
                     ((StandUser)CE).roundabout$getLocacacaCurse(),
                     ((StandUser)CE).roundabout$getLeapTicks(),
                     ((StandUser)CE).roundabout$getBubbleEncased(),
-                    ((ICreeper)CE).roundabout$getSwell()
+                    ((ICreeper)CE).roundabout$getSwell(),
+                    ((StandUser)CE).roundabout$getHeat()
             );
         } if (ent instanceof PrimedTnt TN) {
             return new SavedSecondTNT(
@@ -128,7 +131,8 @@ public class SavedSecond {
                     LE.getAirSupply(),
                     ((StandUser)LE).roundabout$getLocacacaCurse(),
                     ((StandUser)LE).roundabout$getLeapTicks(),
-                    ((StandUser)LE).roundabout$getBubbleEncased()
+                    ((StandUser)LE).roundabout$getBubbleEncased(),
+                    ((StandUser)LE).roundabout$getHeat()
             );
         } if (ent instanceof AbstractArrow LE) {
             return new SavedSecondAbstractArrow(

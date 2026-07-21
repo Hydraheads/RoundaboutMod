@@ -25,12 +25,6 @@ public class ZMinecraftClient implements IClientNetworking {
         if (player == null)
             return;
 
-        if (((StandUser)player).roundabout$isParallelRunning())
-        {
-            player.swing(InteractionHand.MAIN_HAND);
-            cir.setReturnValue(false);
-            cir.cancel();
-        }
     }
 
     @Override

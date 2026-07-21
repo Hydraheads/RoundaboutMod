@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
+import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -259,6 +260,17 @@ public class PowersJustice extends NewDashPreset {
         super.onStandSwitch();
     }
 
+
+    @Override
+    public boolean canPilotPlaceBlock(ItemStack stack) {
+        return stack.getItem() instanceof FogBlockItem;
+    }
+
+    @Override
+    public int getPilotPlaceRange() {
+        return ClientNetworking.getAppropriateConfig().justiceSettings.fogAndPilotRange + 15;
+    }
+
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
@@ -443,6 +455,7 @@ public class PowersJustice extends NewDashPreset {
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
@@ -451,7 +464,6 @@ public class PowersJustice extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public LivingEntity rollCorpse(){
@@ -887,7 +899,7 @@ public class PowersJustice extends NewDashPreset {
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
-        $$1.add(TheWorldEntity.PART_3_SKIN);
+        $$1.add(JusticeEntity.PART_3_SKIN);
         $$1.add(JusticeEntity.SKELETON_SKIN);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
@@ -948,7 +960,7 @@ public class PowersJustice extends NewDashPreset {
             if (icast.roundabout$isPermaCastingEntity(this.getSelf())) {
                 int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                 this.setCooldown(PowerIndex.SKILL_2, cdr);
-                StandEntity piloting = getPilotingStand();
+                LivingEntity piloting = getPilotingStand();
                 if (isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     Vec3 vec3d = piloting.getEyePosition(0);
                     Vec3 vec3d2 = piloting.getViewVector(0);
@@ -1072,6 +1084,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             } else if (effect.getDuration() == 2) {
                 vector = new Vec3(0,
                         (this.self.getY()-10 - this.self.getY()),
@@ -1079,6 +1093,8 @@ public class PowersJustice extends NewDashPreset {
                 done = true;
                 this.self.setDeltaMovement(this.self.getDeltaMovement().add(vector.x,vector.y+0.2F,vector.z
                 ));
+                this.self.hasImpulse = true;
+                this.self.hurtMarked = true;
             }
             if (done){
                 this.self.hurtMarked = true;
@@ -1173,6 +1189,8 @@ public class PowersJustice extends NewDashPreset {
                                                 if (fm.manualTarget instanceof Player PE){
                                                     fm.setLastHurtByPlayer(PE);
                                                 }
+                                                fm.removeBuildBreakGoal();
+                                                fm.getNavigation().stop();
                                                 fm.setLastHurtByMob(fm.manualTarget);
                                                 fm.setTarget(fm.manualTarget);
                                             }
@@ -1319,6 +1337,8 @@ public class PowersJustice extends NewDashPreset {
                                         fm.setPersistentAngerTarget(null);
                                         fm.setLastHurtByPlayer(null);
                                         fm.setAggressive(false);
+                                        fm.removeBuildBreakGoal();
+                                        fm.getNavigation().stop();
                                         fm.getNavigation().moveTo(fm.getNavigation().createPath(blockPos, 0), 1);
                                     }
                                 }
@@ -1417,13 +1437,10 @@ public class PowersJustice extends NewDashPreset {
     }
     @Override
     public void gainExpFromStandardMining(BlockState $$1, BlockPos $$2) {
-        if (hasStandActive(this.getSelf())) {
-            if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE)
-                    &&
-                    !($$1.getDestroySpeed(this.self.level(),$$2) < 0.1)) {
-                if (Math.random() > 0.62) {
-                    addEXP(1);
-                }
+        if (!($$1.getBlock() instanceof IceBlock) && !$$1.is(Blocks.PACKED_ICE) &&
+                !($$1.getDestroySpeed(this.self.level(),$$2) < 0.5) && MainUtil.isBlockExpAble($$1)) {
+            if (Math.random() > 0.62) {
+                addEXP(1);
             }
         }
     }
@@ -1431,7 +1448,7 @@ public class PowersJustice extends NewDashPreset {
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) || $$0.is(ModDamageTypes.CORPSE)
                 || $$0.is(ModDamageTypes.CORPSE_ARROW) || $$0.is(ModDamageTypes.CORPSE_EXPLOSION)){
-            addEXP(1);
+            addEXP(1,target);
         }
 
         return false;
@@ -1507,7 +1524,6 @@ public class PowersJustice extends NewDashPreset {
                                                 vector.y+random2,
                                                 vector.z+random3,
                                                 0.15);
-
                                         LE.setDeltaMovement(LE.getDeltaMovement().add(vector.x,vector.y*0.55+0.2F,vector.z
                                         ));
                                         LE.hurtMarked = true;

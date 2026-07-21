@@ -4,16 +4,15 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ModStrayModels;
-import net.hydra.jojomod.client.models.CoffinRenderer;
-import net.hydra.jojomod.client.models.RoadRollerStrayModel;
-import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
-import net.hydra.jojomod.client.models.WornStoneMaskModel;
+import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
 import net.hydra.jojomod.client.models.minions.renderers.*;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
+import net.hydra.jojomod.client.models.mobs.StrayCatEntityModel;
 import net.hydra.jojomod.client.models.mobs.renderers.AnubisGuardianRenderer;
+import net.hydra.jojomod.client.models.mobs.renderers.StrayCatEntityRenderer;
 import net.hydra.jojomod.client.models.mobs.renderers.ZombiefishRenderer;
 import net.hydra.jojomod.client.models.paintings.MonaLisaPaintingRenderer;
 import net.hydra.jojomod.client.models.paintings.VanGoghPaintingRenderer;
@@ -35,7 +34,6 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
-import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -56,6 +54,7 @@ public class FabricEntityClient {
 
     public static void register() {
         /*Renderers*/
+        EntityRendererRegistry.register(FabricEntities.STRAY_CAT, StrayCatEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TERRIER_DOG, TerrierEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ZOMBIEFISH, ZombiefishRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS_GUARDIAN, AnubisGuardianRenderer::new);
@@ -63,16 +62,17 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAR_PLATINUM_BASEBALL, StarPlatinumBaseballRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD_ULTIMATE, TheWorldUltimateRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.KING_CRIMSON, KingCrimsonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE, JusticeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE_PIRATE, JusticePirateRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED, MagiciansRedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MAGICIANS_RED_OVA, MagiciansRedOVARenderer::new);
-        EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CREAM, CreamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GREEN_DAY, GreenDayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RATT, RattRenderer::new);
         EntityRendererRegistry.register(FabricEntities.REDD, ReddRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CHAIR_RATT, ChairRattRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PURPLE_HAZE, PurpleHazeRenderer:: new);
         EntityRendererRegistry.register(FabricEntities.SURVIVOR, SurvivorRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET, SoftAndWetRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_KING, SoftAndWetKingRenderer::new);
@@ -82,8 +82,13 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SOFT_AND_WET_DEBUT, SoftAndWetDebutRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KILLER_QUEEN, KillerQueenRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CINDERELLA, CinderellaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.CALIFORNIA_KING_BED, CaliforniaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PLANET_WAVES, PlanetWavesRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_SPARTA, PlanetWavesSpartaRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_COSMIC, PlanetWavesCosmicRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BLACK_SABBATH, BlackSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A1, TuskAct1Renderer::new);
@@ -94,9 +99,13 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.GRATEFUL_DEAD, GratefulDeadRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BLOCK_WALL, BlockWallEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.STEP_RULE, StepRuleRenderer::new);
+
         EntityRendererRegistry.register(FabricEntities.BLADED_BOWLER_HAT, BladedBowlerHatRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ROUNDABOUT_BULLET_ENTITY, RoundaboutBulletEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RATT_DART, RattDartRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.POISON_LLAMA_SPIT, PoisonLlamaSpitRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_MATCH, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GASOLINE_SPLATTER, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLOOD_SPLATTER, BloodSplatterRenderer::new);
@@ -106,9 +115,16 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.CROSSFIRE_HURRICANE, CrossfireHurricaneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LIFE_TRACKER, LifeTrackerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_FIREBALL, StandFireballRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PW_METEOR, PWMeteorRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PW_BIG_METEOR, PWBigMeteorRenderer::new);
         EntityRendererRegistry.register(FabricEntities.EVIL_AURA_PROJECTILE, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RIPPER_EYES_PROJECTILE, RipperEyesRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.ULTRAVIOLET_PROJECTILE, UVBeamRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.COLD_BLAST_PROJECTILE, ColdBlastRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.COLD_TWISTER, IceTwisterRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.GENTLY_WEEPS, GentlyWeepsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CONCEALED_FLAME_OBJECT, ConcealedFlameObjectRenderer::new);
@@ -125,6 +141,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ITEM_LAUNCHING_BUBBLE_ENTITY, SoftAndWetBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GO_BEYOND, NoRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENCASEMENT_BUBBLE, EncasementBubbleRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.STRAY_CAT_AIRBUBBLE, StrayCatAirBubbleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, VisageBasisRenderer::new);
@@ -146,7 +163,6 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FOG_CLONE, FogCloneRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.D4C_CLONE, D4CCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_ZOMBIE, FallenZombieRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SKELETON, FallenSkeletonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SPIDER, FallenSpiderRenderer::new);
@@ -168,7 +184,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SEPERATED_ARM_SLIM, SeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
-
+        EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
+        
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
         /*Models*/
@@ -182,7 +199,17 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PARROT_MINION_LAYER, ParrotMinionModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.OCELOT_MINION_LAYER, OcelotMinionModel::createBodyLayer);
 
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PAWN_LAYER, ChessPieceRenderer::createPawnLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_LAYER, ChessPieceRenderer::createKingLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.QUEEN_LAYER, ChessPieceRenderer::createQueenLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIGHT_LAYER, ChessPieceRenderer::createKnightLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROOK_LAYER, ChessPieceRenderer::createRookLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BISHOP_LAYER, ChessPieceRenderer::createBishopLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.EXP_BISHOP_LAYER, ChessPieceRenderer::createExpBishopLayer);
+
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAR_PLATINUM_LAYER, StarPlatinumModel::getTexturedModelData);
@@ -192,7 +219,6 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MAGICIANS_RED_LAYER, MagiciansRedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MAGICIANS_RED_OVA_LAYER, MagiciansRedOVAModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JUSTICE_PIRATE_LAYER, JusticePirateModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WALKING_HEART_LAYER, WalkingHeartModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CREAM_LAYER, CreamModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GREEN_DAY_LAYER, GreenDayModel::getTexturedModelData);
@@ -200,16 +226,24 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER, PurpleHazeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_LAYER, SoftAndWetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KING_LAYER, SoftAndWetKingModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DROWNED_LAYER, SoftAndWetDrownedModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_DEBUT_LAYER, SoftAndWetDebutModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KILLER_QUEEN_LAYER, KillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB, BlockBombModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEP_RULE, StepRuleModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_COSMIC_LAYER, PlanetWavesCosmicModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLACK_SABBATH_LAYER, BlackSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
@@ -233,7 +267,13 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_LAYER, LeftSeperatedArmModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.LEFT_SEPERATED_ARM_SLIM_LAYER, LeftSeperatedArmSlimModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PW_METEOR_LAYER, PWMeteorModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PW_BIG_METEOR_LAYER, PWBigMeteorModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ICE_TWISTER_LAYER, IceTwisterModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GENTLY_WEEPS_LAYER, GentlyWeepsModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.GASOLINE_LAYER, GasolineCanModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ZOMBIE_AESTHETICIAN_LAYER, ZombieAestheticianModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STEVE_LAYER, PlayerSteveModel::getTexturedModelData);
@@ -243,12 +283,16 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MR_SPIN_LAYER, MagiciansRedSpinEffectLayer::createLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COFFIN_LEFT_LAYER, CoffinRenderer::createDoubleBodyLeftLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COFFIN_RIGHT_LAYER, CoffinRenderer::createDoubleBodyRightLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HAND_BLOCK_LAYER, HandRenderer::createHandLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER, HandRenderer::createHandSlimLayer);
+        //EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.CHESSBOARD_LAYER, ChessBoardRenderer::createBodyLayer);
         BlockEntityRenderers.register(ModBlocks.STAND_FIRE_BLOCK_ENTITY, StandFireRenderer::new);
         BlockEntityRenderers.register(ModBlocks.MIRROR_BLOCK_ENTITY, MirrorBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.COFFIN_BLOCK_ENTITY, CoffinRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.CHESS_PIECE_BLOCK_ENTITY, ChessPieceRenderer::new);
+        //BlockEntityRenderers.register(ModBlocks.CHESSBOARD_BLOCK_ENTITY, ChessBoardRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
-        BlockEntityRenderers.register(ModBlocks.D4C_LIGHT_BLOCK_ENTITY, D4CLightBlockEntityRenderer::new);
 
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
@@ -256,9 +300,11 @@ public class FabricEntityClient {
         ModStrayModels.EMPEROR_SHOOTING_ARM = new EmperorShootingArmModel();
         ModStrayModels.TUSK_DRILL = new TuskDrillModel();
         ModStrayModels.TUSK_NAIL = new TuskNailModel();
+        ModStrayModels.TUSK_DRILL_NAIL = new TuskDrillNailModel();
         ModStrayModels.HEY_YA = new HeyYaModel();
         ModStrayModels.CENTURY_BOY = new CenturyBoyModel();
         ModStrayModels.BOWLER_HAT = new BowlerHatModel();
+        ModStrayModels.UV_BLASTER = new UVBlasterModel();
         ModStrayModels.WORN_STONE_MASK = new WornStoneMaskModel<>();
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.MANDOM = new MandomModel();
@@ -280,10 +326,15 @@ public class FabricEntityClient {
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
+        ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
+        ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
+        ModStrayModels.JohngalliaHairPart = new JohngalliaHairPart();
         ModStrayModels.ripperEyesPart = new RipperEyesPart();
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
+        ModStrayModels.LucyHairPart = new LucyHairPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
@@ -303,6 +354,7 @@ public class FabricEntityClient {
         ModStrayModels.RightLeg = new RightLegPart();
         ModStrayModels.LeftLeg = new LeftLegPart();
         ModStrayModels.RightHeel = new RightHeelPart();
+        ModStrayModels.JohngalliaTiePart = new JohngalliaTiePart();
 
         ModStrayModels.GoatHeadPart = new GoatHeadPart();
         ModStrayModels.CatHeadPart = new CatHeadPart();
@@ -311,6 +363,28 @@ public class FabricEntityClient {
         ModStrayModels.PolarBearHeadPart = new PolarBearHeadPart();
         ModStrayModels.MooshroomHeadPart = new MooshroomHeadPart();
         ModStrayModels.SilverfishHeadPart = new SilverfishHeadPart();
+
+        ModStrayModels.WhiteAlbumCold = new WhiteAlbumColdPart();
+        ModStrayModels.WhiteAlbumHead = new WhiteAlbumHeadPart();
+        ModStrayModels.WhiteAlbumChest = new WhiteAlbumChestPart();
+        ModStrayModels.WhiteAlbumBody = new WhiteAlbumBodyPart();
+        ModStrayModels.WhiteAlbumLeftLeg = new WhiteAlbumLeftLegPart();
+        ModStrayModels.WhiteAlbumRightLeg = new WhiteAlbumRightLegPart();
+        ModStrayModels.WhiteAlbumSkate = new WhiteAlbumSkatePart();
+        ModStrayModels.WhiteAlbumRightArm = new WhiteAlbumRightArmPart();
+        ModStrayModels.WhiteAlbumSlimRightArm = new WhiteAlbumSlimRightArmPart();
+        ModStrayModels.WhiteAlbumLeftArm = new WhiteAlbumLeftArmPart();
+        ModStrayModels.WhiteAlbumSlimLeftArm = new WhiteAlbumSlimLeftArmPart();
+
+        ModStrayModels.OasisHead = new OasisHeadPart();
+        ModStrayModels.OasisChest = new OasisChestPart();
+        ModStrayModels.OasisBody = new OasisBodyPart();
+        ModStrayModels.OasisLeftLeg = new OasisLeftLegPart();
+        ModStrayModels.OasisRightLeg = new OasisRightLegPart();
+        ModStrayModels.OasisRightArm = new OasisRightArmPart();
+        ModStrayModels.OasisSlimRightArm = new OasisSlimRightArmPart();
+        ModStrayModels.OasisLeftArm = new OasisLeftArmPart();
+        ModStrayModels.OasisSlimLeftArm = new OasisSlimLeftArmPart();
 
         ModStrayModels.VampireHairOne = new VampireHairOnePart();
         ModStrayModels.VampireHairTwo = new VampireHairTwoPart();

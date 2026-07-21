@@ -21,6 +21,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
@@ -205,21 +206,21 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof JackalRifleItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasSniperAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
                     player.getCooldowns().addCooldown(this, 20);
+                    player.stopUsingItem();
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SNIPER_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasSniperAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasSniperAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -227,7 +228,6 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 
@@ -243,7 +243,8 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
 
             if (justTookDamage) {
                 DamageSource last = player.getLastDamageSource();
-                if (last != null && last.getEntity() instanceof Entity) {
+                if (last != null && last.getEntity() instanceof Entity
+                        && !(last.getDirectEntity() instanceof Projectile)) {
                     cancelReload(stack, player);
                     return;
                 }

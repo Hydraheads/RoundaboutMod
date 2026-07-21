@@ -1,0 +1,135 @@
+package net.hydra.jojomod.block;
+
+import net.hydra.jojomod.sound.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.RecordItem;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import javax.annotation.Nullable;
+
+/**The specs of the Stereo are almost identical to MC jukebox code, out of need to function the same way*/
+public class ChessPieceBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    protected static final VoxelShape SHAPEA = Block.box(4.0, 0.1, 4.0, 12.0, 11.0, 12.0);
+    protected ChessPieceBlock(Properties $$0) {
+        super($$0);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState state) {
+        return true; // Ensures custom occlusion shape is used (if applicable)
+    }
+
+    @Override
+    public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
+        // Do nothing
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
+        return Shapes.empty();
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
+        return false;
+    }
+    @Override
+    public BlockEntity newBlockEntity(BlockPos $$0, BlockState $$1) {
+        return new ChessPieceBlockEntity($$0, $$1);
+    }
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext $$0) {
+            return this.defaultBlockState()
+                    .setValue(FACING, $$0.getHorizontalDirection());
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) instanceof ChessPieceBlockEntity $$5) {
+            ItemStack stack = $$5.getStoredStack();
+            if (stack != null){
+                return stack;
+            }
+        }
+        return super.getCloneItemStack(level,pos,state);
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
+        return SHAPEA;
+    }
+
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
+        $$0.add(FACING);
+        super.createBlockStateDefinition($$0);
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockState rotate(BlockState $$0, Rotation $$1) {
+        return $$0.setValue(FACING, $$1.rotate($$0.getValue(FACING)));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockState mirror(BlockState $$0, Mirror $$1) {
+        return $$0.rotate($$1.getRotation($$0.getValue(FACING)));
+    }
+
+
+    @Override
+    public void onRemove(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
+        if (!$$0.is($$3.getBlock())) {
+            if ($$1.getBlockEntity($$2) instanceof ChessPieceBlockEntity $$5) {
+                $$5.popOutRecord();
+            }
+
+            super.onRemove($$0, $$1, $$2, $$3, $$4);
+        }
+    }
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {
+        BlockState blockstate = $$1.getBlockState($$2.below());
+        if (blockstate.is(ModBlocks.INVISIBLOCK)){
+            return true;
+        }
+        BlockPos $$3 = $$2.below();
+        return $$1.getBlockState($$3).isFaceSturdy($$1, $$3, Direction.UP);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public BlockState updateShape(BlockState $$0, Direction $$1, BlockState $$2, LevelAccessor $$3, BlockPos $$4, BlockPos $$5) {
+        return !$$0.canSurvive($$3, $$4) ? Blocks.AIR.defaultBlockState() : super.updateShape($$0, $$1, $$2, $$3, $$4, $$5);
+    }
+}

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends StandModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "manhattan_transfer"), "main");
+    private final ModelPart head;
     private final ModelPart stand2;
     private final ModelPart core;
     private final ModelPart mangacores;
@@ -70,6 +71,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         this.core = stand.getChild("stand2").getChild("core");
 
         this.mangacores = stand.getChild("stand2").getChild("core").getChild("mangacores");
+
+        this.head = stand.getChild("stand2").getChild("core").getChild("head");
 
         this.key_string1 = stand.getChild("stand2").getChild("key_string1");
         this.key = stand.getChild("stand2").getChild("key_string1").getChild("key");
@@ -125,6 +128,8 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
         PartDefinition upper_core_r1 = mangacores.addOrReplaceChild("upper_core_r1", CubeListBuilder.create().texOffs(25, 3).mirror().addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 
         PartDefinition upper_core_r2 = mangacores.addOrReplaceChild("upper_core_r2", CubeListBuilder.create().texOffs(25, 3).addBox(-1.5F, -4.5F, 1.6F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+
+        PartDefinition head = core.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 11).addBox(0.0F, -1.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -0.75F, 0.5F));
 
         PartDefinition key_string1 = stand2.addOrReplaceChild("key_string1", CubeListBuilder.create().texOffs(61, 7).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 2.5F, -1.5F));
 
@@ -233,6 +238,23 @@ public class ManhattanTransferModel<T extends ManhattanTransferEntity> extends S
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
         this.animate(pEntity.rain_dodging_manhattan, ManhattanTransferAnimations.Rain_Dodge, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan, ManhattanTransferAnimations.Slow_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_incipit, ManhattanTransferAnimations.Forward_North_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_loop, ManhattanTransferAnimations.Forward_North_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_incipit, ManhattanTransferAnimations.Forward_South_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_loop, ManhattanTransferAnimations.Forward_South_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_stop, ManhattanTransferAnimations.Forward_South_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_stop, ManhattanTransferAnimations.Forward_North_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_incipit, ManhattanTransferAnimations.Lateral_West_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_loop, ManhattanTransferAnimations.Lateral_West_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_stop, ManhattanTransferAnimations.Lateral_West_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_incipit, ManhattanTransferAnimations.Lateral_East_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_loop, ManhattanTransferAnimations.Lateral_East_Loop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_stop, ManhattanTransferAnimations.Lateral_East_Stop_Manhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_back, ManhattanTransferAnimations.Slow_Hattan_Back, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_left, ManhattanTransferAnimations.Slow_Hattan_Left, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_right, ManhattanTransferAnimations.Slow_Hattan_Right, pAgeInTicks, 1f);
+        this.animate(pEntity.manhattan_is_loaded, ManhattanTransferAnimations.Manhattan_Loaded, pAgeInTicks, 1f);
     }
 
 

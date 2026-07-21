@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersRatt;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -19,6 +20,9 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -47,10 +51,12 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     public @Nullable ItemStack roundabout$RenderOffHand;
     @Unique
     public boolean dominant$Hand;
+    @Unique
+    public Entity stored$Ent;
 
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
-
+        stored$Ent = entity;
         IEntityAndData entityAndData = ((IEntityAndData) entity);
         StandUserClient userClient = ((StandUserClient) entity);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
@@ -109,6 +115,24 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 0)
     public ItemStack roundabout$Render2(ItemStack it){
+        if (stored$Ent instanceof Player) {
+            EquipmentSlot es;
+            if (!dominant$Hand) {
+                es = EquipmentSlot.MAINHAND;
+                ItemStack newStack = MainUtil.xHandCancelItem(es, stored$Ent, it);
+                if (!newStack.equals(it)){
+                    return newStack;
+                }
+            } else {
+                es = EquipmentSlot.OFFHAND;
+                ItemStack newStack = MainUtil.xHandCancelItem(es, stored$Ent, it);
+                if (!newStack.equals(it)){
+                    return newStack;
+                }
+            }
+        }
+
+
         if (roundabout$ModifyEntity) {
             if (!dominant$Hand) {
                 if (roundabout$RenderMainHand != null) {
@@ -125,6 +149,24 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 1)
     public ItemStack roundabout$Render3(ItemStack it){
+
+        if (stored$Ent instanceof Player) {
+            EquipmentSlot es;
+            if (dominant$Hand) {
+                es = EquipmentSlot.MAINHAND;
+                ItemStack newStack = MainUtil.xHandCancelItem(es, stored$Ent, it);
+                if (!newStack.equals(it)){
+                    return newStack;
+                }
+            } else {
+                es = EquipmentSlot.OFFHAND;
+                ItemStack newStack = MainUtil.xHandCancelItem(es, stored$Ent, it);
+                if (!newStack.equals(it)){
+                    return newStack;
+                }
+            }
+        }
+
         if (roundabout$ModifyEntity) {
             if (dominant$Hand) {
                 if (roundabout$RenderMainHand != null) {

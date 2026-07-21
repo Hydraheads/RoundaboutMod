@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.zetalasis.networking.packet.impl.ModNetworking;
 import net.zetalasis.networking.packet.impl.packet.MessageC2S;
 import net.zetalasis.networking.packet.impl.packet.MessageS2C;
-import net.zetalasis.world.DynamicWorld;
 
 import java.util.HashSet;
 
@@ -20,7 +19,6 @@ public class ModMessageEvents {
 
     public static void bootstrap()
     {
-        register(new DynamicWorld.DynamicWorldNetMessages());
         register(new ClientToServerPackets.StandPowerPackets());
         register(new ServerToClientPackets.S2CPackets());
     }

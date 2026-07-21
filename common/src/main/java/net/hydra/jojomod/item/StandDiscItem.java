@@ -1,23 +1,17 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.ModGamerules;
-import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -42,27 +36,54 @@ public class StandDiscItem extends Item {
         ((StandUser)entity).roundabout$setRejectionStandPowers(standPowers.generateStandPowers(entity));
     }
 
+
+    public void convertStuff(ItemStack stack, Player player){
+        if (stack.getItem() instanceof StandDiscItem SI) {
+            ((StandUser) player).roundabout$setStand(null);
+            ((StandUser) player).roundabout$setActive(false);
+            ((StandUser) player).roundabout$setStandDisc(stack.copy());
+            ((StandUser) player).roundabout$getStandPowers().onStandSwitchInto();
+        }
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
-        ItemStack $$3 = $$1.getItemInHand($$2);
+        ItemStack $$3;
+        if ($$2.equals(InteractionHand.MAIN_HAND)){
+            $$3 = $$1.getItemBySlot(EquipmentSlot.MAINHAND);
+        } else {
+            $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
+        }
         if (!$$0.isClientSide) {
-            ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc();
-            if (!currentDisc.isEmpty()) {
-                addItem($$1, MainUtil.saveToDiscData($$1,currentDisc.copy()));
-                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
-                if (!$$1.isCreative()){
-                    S2CPacketUtil.sendSimpleByteToClientPacket(
-                            ((ServerPlayer)$$1), PacketDataIndex.S2C_SIMPLE_FREEZE_STAND);
+            if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
+                ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
+                if (!currentDisc.isEmpty()) {
+                    ItemStack convDisc = MainUtil.saveToDiscData($$1, currentDisc.copy());
+                    ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
+                    convertStuff($$3, $$1);
+                    $$1.getCooldowns().addCooldown(this, 22);
+                    $$1.getCooldowns().addCooldown(convDisc.getItem(), 22);
+                    if ($$2.equals(InteractionHand.MAIN_HAND)){
+                        $$1.setItemSlot(
+                                EquipmentSlot.MAINHAND,
+                                convDisc
+                        );
+                    } else {
+                        $$1.setItemSlot(
+                                EquipmentSlot.OFFHAND,
+                                convDisc
+                        );
+                    }
+
+                    if (!$$1.isCreative()) {
+                        ((StandUser)$$1).roundabout$setSealedTicks(
+                                ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
+                    }
+                } else {
+                    convertStuff($$3, $$1);
+                    $$3.shrink(1);
                 }
             }
-            if ($$3.getItem() instanceof StandDiscItem SI) {
-                ((StandUser) $$1).roundabout$setStand(null);
-                ((StandUser) $$1).roundabout$setActive(false);
-                ((StandUser) $$1).roundabout$setStandDisc($$3.copy());
-                SI.generateStandPowers($$1);
-                ((StandUser) $$1).roundabout$getStandPowers().onStandSwitchInto();
-            }
-            $$3.shrink(1);
         } else {
             if ($$1 !=  null){
                 ((StandUser)$$1).roundabout$setInteractedWithDisc(true);
@@ -99,6 +120,7 @@ public class StandDiscItem extends Item {
         if(this.standPowers.isWip()){
             $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
             $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip_3").withStyle(ChatFormatting.RED));
             $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDevStatus()));
@@ -116,22 +138,4 @@ public class StandDiscItem extends Item {
         return Component.translatable(sd.getDescriptionId() + ".desc");
     }
 
-
-    public void addItem(Player player, ItemStack stack){
-            ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
-                    player.getEyePosition().y, player.getEyePosition().z,
-                    stack);
-            $$4.setPickUpDelay(0);
-            $$4.setThrower(player.getUUID());
-            player.level().addFreshEntity($$4);
-    }
-    public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
-        boolean bl = false;
-        for (ItemStack itemStack2 : inventory.items) {
-            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
-            bl = true;
-            break;
-        }
-        return bl;
-    }
 }

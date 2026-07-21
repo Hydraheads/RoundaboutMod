@@ -8,6 +8,7 @@ public class ModParticles {
     public static SimpleParticleType BLOOD;
     public static SimpleParticleType BLUE_BLOOD;
     public static SimpleParticleType ENDER_BLOOD;
+    public static SimpleParticleType SMALL_EXPLOSION;
 
     public static SimpleParticleType MELTING;
 
@@ -19,6 +20,7 @@ public class ModParticles {
     public static SimpleParticleType HEART_ATTACK_MINI;
     public static SimpleParticleType ENERGY_DISTORTION;
     public static SimpleParticleType PURPLE_STAR;
+    public static SimpleParticleType UV_SPARKLE;
     public static SimpleParticleType BLUE_SPARKLE;
     public static SimpleParticleType RED_SPARKLE;
     public static SimpleParticleType ICE_SPARKLE;
@@ -39,6 +41,8 @@ public class ModParticles {
     public static SimpleParticleType GREEN_CLOCK;
     public static SimpleParticleType ORANGE_CLOCK;
     public static SimpleParticleType TIME_EMBER;
+    public static SimpleParticleType MAGIC_HEART;
+    public static SimpleParticleType QUESTION;
     public static SimpleParticleType ZAP;
     public static SimpleParticleType POINTER;
     public static SimpleParticleType POINTER_SOFT;
@@ -57,9 +61,15 @@ public class ModParticles {
     public static SimpleParticleType FRICTIONLESS;
     public static SimpleParticleType EXCLAMATION;
     public static SimpleParticleType BABY_CRACKLE;
+    public static SimpleParticleType COLD_CRACKLE;
     public static SimpleParticleType MAGIC_DUST;
     public static SimpleParticleType BRIEF_MAGIC_DUST;
     public static SimpleParticleType STITCH;
+    public static SimpleParticleType AIRBUBBLE_PINK;
+    public static SimpleParticleType AIRBUBBLE_GREEN;
+    public static SimpleParticleType AIRBUBBLE_YELLOW;
+    public static SimpleParticleType AIRBUBBLE_CYAN;
+    public static SimpleParticleType AIRBUBBLE_BOMB;
 
     public static SimpleParticleType OCCULT;
 
@@ -68,6 +78,7 @@ public class ModParticles {
     public static SimpleParticleType RAGING_LIGHT; // anubis particles
     public static SimpleParticleType ALLURING_LIGHT;
 
+    public static SimpleParticleType MUD_RIPPLE;
     public static SimpleParticleType HYPNO_SWIRL;
 
     public static SimpleParticleType TUSK_VORTEX;
@@ -90,5 +101,5 @@ public class ModParticles {
     public static SimpleParticleType METALLICA_SCISSORS;
 
     public static SimpleParticleType TUSK_HOLE;
-
+    public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
 }

@@ -6,12 +6,14 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.client.models.visages.parts.WhiteAlbumColdPart;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.IronBallCrossbowItem;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -28,6 +30,7 @@ import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -39,8 +42,10 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.Score;
@@ -91,8 +96,66 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
     public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
 
+        if (AnubisLayer.shouldRender(player) != null){
+            return;
+        }
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.RIGHT_HAND) {
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        float oasisAmt = PowersOasis.getOasisAmt(player, delta);
+        if (whiteAmt > 0) {
+            boolean isHurt = player.hurtTime > 0;
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersWhiteAlbum.getSkinString(skin);
+            if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                path = "ice";
+            }
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                    && PW.cracked) {
+                path = "cracked/" + path;
+            }
+            ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+            model.rightArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.WhiteAlbumSlimRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            } else {
+                ModStrayModels.WhiteAlbumRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+        } else if (oasisAmt > 0) {
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersOasis.getSkinString(skin);
+
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+
+            model.rightArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.OasisSlimRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            } else {
+                ModStrayModels.OasisRightArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+
+        } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
             this.model.rightSleeve.zScale += 0.04F;
             this.model.rightSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
@@ -101,16 +164,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         } else {
 
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1F;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) player);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;
             if (muscle > -1) {
                 float scale = 1.055F;
                 float alpha = 0.6F;
-                float delta = ClientUtil.getDelta();
                 if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
                     delta = 0;
                 }
@@ -133,7 +195,60 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
     public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
         byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
-        if (curse == LocacacaCurseIndex.LEFT_HAND) {
+        float delta = ClientUtil.getDelta();
+        if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+            delta = 0;
+        }
+        float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+        float oasisAmt = PowersOasis.getOasisAmt(player, delta);
+        if (whiteAmt > 0) {
+            boolean isHurt = player.hurtTime > 0;
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersWhiteAlbum.getSkinString(skin);
+            if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                path = "ice";
+            }
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                    && PW.cracked){
+                path = "cracked/"+path;
+            }
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+            model.leftArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.WhiteAlbumSlimLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            } else {
+                ModStrayModels.WhiteAlbumLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, whiteAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+
+        } else if (oasisAmt > 0) {
+            float r = 1;
+            float g = 1;
+            float b = 1;
+            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            String path = PowersOasis.getSkinString(skin);
+
+            ClientUtil.pushPoseAndCooperate(poseStack,8);
+            model.leftArm.translateAndRotate(poseStack);
+            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+                ModStrayModels.OasisSlimLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            } else {
+                ModStrayModels.OasisLeftArm.render(
+                        player, delta, poseStack, bufferSource, packedLight,
+                        r, g, b, oasisAmt, path);
+            }
+            ClientUtil.popPoseAndCooperate(poseStack,8);
+
+        } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
             this.model.leftSleeve.zScale += 0.04F;
             this.model.leftSleeve.render(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM)), packedLight, OverlayTexture.NO_OVERLAY);
@@ -141,19 +256,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             this.model.leftSleeve.zScale -= 0.04F;
         } else {
             boolean isHurt = player.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) player);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;
             if (muscle > -1) {
                 float scale = 1.055F;
                 float alpha = 0.6F;
-                float delta = ClientUtil.getDelta();
-                if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
-                    delta = 0;
-                }
                 float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
                 alpha += oscillation;
                 if (player.getMainArm() == HumanoidArm.LEFT) {
@@ -261,6 +372,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
 
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if (!$$2.isEmpty()) {
+
+            if (!($$0.getUsedItemHand() == $$1 && $$0.getUseItemRemainingTicks() > 0)) {
+                if (!$$0.swinging && $$2.is(ModItems.IRON_BALL_CROSSBOW) && IronBallCrossbowItem.isCharged($$2)) {
+                    ci.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
+                }
+            }
+        }
+
     }
 
 
@@ -285,6 +406,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
             arm = $$3.getMainArm();
         }
+       if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+           arm = $$3.getMainArm();
+       }
 
         if (arm == HumanoidArm.RIGHT) {
             this.getModel().rightArm.visible = false;
@@ -423,6 +547,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
         StandUser standUser = (StandUser) acl;
         if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
+        if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){shouldRenderArms = false;}
         if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
 
         if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){
@@ -528,9 +653,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.inCombatMode()) {
 
             boolean isHurt = acl.hurtTime > 0;
-            float r = isHurt ? 1.0F : 1.0F;
-            float g = isHurt ? 0.6F : 1.0F;
-            float b = isHurt ? 0.6F : 1.0F;
+            float r = 1;
+            float g = 1;
+            float b = 1;
             StandUser user = ((StandUser) acl);
             int muscle = user.roundabout$getZappedToID();
             //muscle = 100;
@@ -582,6 +707,17 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
                     0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
             );
+
+            if (((StandUser)acl).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa &&
+                    ((IPlayerEntity)acl).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+
+                ClientUtil.pushPoseAndCooperate(stack,33);
+                $$4.translateAndRotate(stack);
+                stack.translate(0.11F,0.07F,0.1F);
+                ModStrayModels.WhiteAlbumCold.render(acl, acl.tickCount+ ClientUtil.getFrameTime() %1, stack, buffer, getPackedLightCoords(acl,1F),
+                        1,1,1, 1, "test");
+                ClientUtil.popPoseAndCooperate(stack,33);
+            }
         }
 
     }
@@ -1378,9 +1514,14 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 if (MI instanceof ModificationMaskItem MD){
-                   int height = visage.getOrCreateTagElement("modifications").getInt("height");
-                    int width = visage.getOrCreateTagElement("modifications").getInt("width");
-                    $$1.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
+                    if (visage.getTag() != null) {
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag.contains("height") || tag.contains("width")) {
+                            int height = visage.getOrCreateTagElement("modifications").getInt("height");
+                            int width = visage.getOrCreateTagElement("modifications").getInt("width");
+                            $$1.scale(0.798F + (((float) width) * 0.001F), 0.7F + (((float) height) * 0.001F), 0.798F + (((float) width) * 0.001F));
+                        }
+                    }
                 } else {
                     Vector3f scale = MI.visageData.scale();
                     $$1.scale(scale.x, scale.y, scale.z);

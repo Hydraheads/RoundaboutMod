@@ -4,9 +4,13 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.models.AccessCreeperModel;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelPart;
@@ -35,7 +39,12 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
     private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
+        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
+            return;
 
+        if (ClientUtil.cancelWithSuitStand(entity)){
+            return;
+        }
         boolean armsFrozen = (HeatUtil.isArmsFrozen(entity));
         if (armsFrozen){
             boolean bodyFrozen = (HeatUtil.isBodyFrozen(entity));

@@ -9,68 +9,114 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.mixin.EntityAndData;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.SmallFireball;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-
-import static net.hydra.jojomod.client.ClientUtil.playSound;
+import static net.hydra.jojomod.event.index.SoundIndex.MANHATTAN_RAIN;
 
 public class PowersManhattanTransfer extends NewDashPreset {
+
+    //TODO: Fix shooting mode being shared between mobs
+    //TODO: 500 other stupid bugfixes (pain) :/
+
     public PowersManhattanTransfer(LivingEntity self) {
         super(self);
     }
     public static final byte
-            STAND_BLOCKED = 78,
+            MANHATTAN_DODGE = 82,
+            DEFLECT_PROJECTILE = 83,
 
+         UNLOADED_HATTAN =84,
+         LOADED_HATTAN =85,
+         LOAD_CHECK = 86;
 
-            MANHATTAN_VISION = 82,
-            MANHATTAN_DODGE = 83,
-            DEFLECT_PROJECTILE = 84;
+    private byte currentHattanStatus = UNLOADED_HATTAN;
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower) {
+            case PowersManhattanTransfer.LOAD_CHECK-> {
+                this.currentHattanStatus = (byte)data;
+                if (data == LOADED_HATTAN) {
+                    //this.setPowerNone();
+                }
+            }
+
+        }
+        super.updatePowerInt(activePower,data);
+    }
+
+    public void syncHattanStatus(byte status) {
+        this.currentHattanStatus = status;
+        this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
+        if(this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersManhattanTransfer.LOAD_CHECK, status);
+        }
+    }
+
+    public boolean isLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = LOADED_HATTAN;
+
+            this.syncHattanStatus(LOADED_HATTAN);
+        }
+        return  true;
+    }
+
+    public boolean isNotLoaded(){
+        if(!this.isClient()) {
+            this.currentHattanStatus = UNLOADED_HATTAN;
+            this.syncHattanStatus(UNLOADED_HATTAN);
+        }
+        return  true;
+    }
 
     public boolean isStandEnabled() {
         return ClientNetworking.getAppropriateConfig().manhattanTransferSettings.enableManhattanTransfer;
@@ -79,6 +125,15 @@ public class PowersManhattanTransfer extends NewDashPreset {
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersManhattanTransfer(entity);
     }
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if(desummon){
+            if(this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME){
+                ME.isDesummoning = true;
+            }
+        }
+        super.onStandSummon(desummon);
+    }
    @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
@@ -86,36 +141,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
             }
             return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
-    }
-    @Override
-    public void renderIcons(GuiGraphics context, int x, int y) {
-        // code for advanced icons
-        ClientUtil.fx.roundabout$onGUI(context);
-        if (switchShootingMode()) {
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.SKILL_1);
-        }
-        else
-            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.SKILL_1);
-
-        if (isPiloting())
-            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
-        else
-            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
-
-        if (visionModeClient) {
-            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
-        }
-        else
-            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
-
-        if(isPiloting()){
-            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.GLOBAL_DASH);
-        }
-        else{
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        }
-
-        super.renderIcons(context, x, y);
     }
     public Component getPosName(byte posID){
         return Component.empty();
@@ -136,17 +161,21 @@ public class PowersManhattanTransfer extends NewDashPreset {
         /**Making dash usable on both key presses*/
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH-> {
-                switchShooting();
+                    switchShooting();
             }
                 case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                toggleControlModeClient();
+                    if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
+                        toggleControlModeClient();
+                    }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 if(!isPiloting()) {
                     dash();
                 }
                 else{
-                    manhattanDodge();
+                    if (this.currentHattanStatus != LOADED_HATTAN){
+                        manhattanDodge();
+                    }
                 }
             }
             case SKILL_4_NORMAL, SKILL_4_CROUCH -> {
@@ -167,9 +196,19 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return super.setPowerOther(move, lastMove);
     }
 
+    @Override
+    /**The stand is named on the disc so we just use that*/
+    public Component getStandName(){
+        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
+            return Component.translatable(SDI.getDescriptionId() + ".desc.short");
+        }
+        return Component.empty();
+    }
+
     public void switchShooting(){
-        this.tryPower(PowerIndex.POWER_1, true);
-        tryPowerPacket(PowerIndex.POWER_1);
+            this.tryPower(PowerIndex.POWER_1, true);
+            tryPowerPacket(PowerIndex.POWER_1);
     }
 
     public boolean switchShootingOther(){
@@ -180,25 +219,31 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if(slot == 3 && this.currentHattanStatus == LOADED_HATTAN && isPiloting()){
+            return  true;
+        }
+        return super.isAttackIneptVisually(activeP, slot);
+    }
+
+    @Override
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
-
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
-              /*  this.setCooldown(PowersManhattanTransfer.MANHATTAN_DODGE,ClientNetworking.getAppropriateConfig().rattSettings.rattLeapCooldown);
-                //Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
-                if (this.getStandEntity(this.getSelf()) != null) {
-                    Vec3 dir = this.getStandEntity(this.getSelf()).getViewVector(1);
-                    dir = dir.scale(3);
-                    Vec3 vec3 = new Vec3(dir.x, dir.y, dir.z);
-                    this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
-                    //entity.setDeltaMovement(entity.getForward());
-                }*/
-              //  this.getStandEntity(this.getSelf()).level().playSound(null,this.getSelf().blockPosition(),ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+                    this.setXtraSpdTick(10);
+                    this.getStandEntity(this.getSelf()).level().playSound(null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 0.8F, 2F);
+
+                    if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+                        if (!ME.level().isClientSide()) {
+                            ((ServerLevel) ME.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                    ME.getX(), ME.getY(), ME.getZ(),
+                                    0, 0, 0, 0, 0);
+                        }
+                    }
             }
             case PowersManhattanTransfer.DEFLECT_PROJECTILE -> {
-              Roundabout.LOGGER.info("PEW!");
-
                 if(this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof  ManhattanTransferEntity ME){
+                    ME.shootHattan();
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                     ME.hasItem = false;
                 }
@@ -208,25 +253,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
 
     public void manhattanDodge() {
-        if (!onCooldown(PowersManhattanTransfer.MANHATTAN_DODGE) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,4)) {
+        if (!onCooldown(PowerIndex.SKILL_3) && !isAttackIneptVisually(PowersManhattanTransfer.MANHATTAN_DODGE,3)) {
             tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
             tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
             if (isClient()) {
-                this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 200F, 1.0F);
+                this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 100F, 1.2F);
             }
+            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
         }
     }
-
     public void switchVisionClient(){
-        this.tryPower(PowerIndex.POWER_4, true);
-        tryPowerPacket(PowerIndex.POWER_4);
-        if (isClient() && visionModeClient) {
-            this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 200F, 1.0F);
+        if (!onCooldown(PowerIndex.SKILL_4) && !isAttackIneptVisually(PowerIndex.SKILL_4,3)) {
+            this.tryPower(PowerIndex.POWER_4, true);
+            tryPowerPacket(PowerIndex.POWER_4);
+            if (isClient() && visionModeClient) {
+                this.self.playSound(ModSounds.MANHATTAN_VISION_EVENT, 150F, 0.9F);
+            }
+            this.setCooldown(PowerIndex.SKILL_4, 15);
         }
     }
-
+    @Override
+    public void updateIntMove(int in) {
+        super.updateIntMove(in);
+    }
     public boolean visionModeClient = false;
-
     public void switchVision(){
         if (isClient() && this.self instanceof Player PE) {
 
@@ -243,59 +293,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
     @Override
     public void pilotInputAttack(){
         LivingEntity ent = getPilotingStand();
-        if (ent != null && !switchShootingMode()) {
+        if (ent != null) {
             tryPower(PowersManhattanTransfer.DEFLECT_PROJECTILE, true);
             tryPowerPacket(PowersManhattanTransfer.DEFLECT_PROJECTILE);
-            Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-            IEntityAndData entityAndData = ((IEntityAndData) TE);
-            //If Target is detected
-            if (TE != null && entityAndData.roundabout$getTrueInvisibilityManhattan() > 1 && !(TE instanceof StandEntity && !TE.isAttackable())) {
-                Vec3 vec3d = ent.getEyePosition(0);
-                Vec3 vec3d2 = ent.getViewVector(0);
-                Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
-                BlockHitResult blockHit = ent.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, ent));
-                if ((blockHit.distanceTo(ent) - 1) < ent.distanceToSqr(TE)) {
-                }
-            }
-        }
-    }
 
-    @Override
-    public boolean highlightsEntity(Entity ent,Player player){
-        IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if(visionModeClient) {
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) && !player.hasLineOfSight(ent)) {
-                    return true;
-                }
-            }
         }
-        if(isPiloting()){
-            if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
-                if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
-                    return true;
-                }
-            }
-        }
-        if (ent instanceof ManhattanTransferEntity ME) {
-            if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    @Override
-    public int highlightsEntityColor(Entity ent, Player player){
-        if (ent instanceof ManhattanTransferEntity ME) {
-            if (this.getSelf() == ME.getUser()) {
-                if (this.isHoldingSneak() && !isPiloting()) {
-                    return 12379556;
-                }
-            }
-        }
-        return 12379456;
     }
     public boolean switchShootingMode(){
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
@@ -322,10 +324,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                 ipe.roundabout$setIsControlling(0);
             }
+            this.setSomeTicks(5);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         } else {
-            this.tryPower(PowerIndex.POWER_2, true);
-            tryPowerPacket(PowerIndex.POWER_2);
             StandEntity entity = this.getStandEntity(this.self);
             int L = 0;
             if (entity != null) {
@@ -333,6 +334,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             }
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, L);
         }
+        this.setCooldown(PowerIndex.SKILL_2, 15);
     }
     @Override
     public boolean isPiloting() {
@@ -346,59 +348,109 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
         return false;
     }
-    public void sealStand(boolean forced) {
-        int sealTime = 0;
-        StandUser user = ((StandUser) this.self);
-        if (this.self instanceof Player PE && PE.isCreative() && sealTime > 0) {
-            sealTime = 0;
-        }
-        if (this.self.level().isClientSide()) {
-            user.roundabout$setMaxSealedTicks(sealTime);
-            user.roundabout$setSealedTicks(sealTime);
-        }
-        if (!this.self.level().isClientSide() && user instanceof Player PE) {
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) PE),
-                    PacketDataIndex.S2C_INT_SEAL, sealTime);
-        }
-        user.roundabout$setActive(false);
-    }
     public boolean isActive() {
         return this.getStandEntity(this.getSelf()) != null;
     }
+
+    public int XtraSpdTick = 0;
+
+    public void setXtraSpdTick(int speedy){XtraSpdTick = speedy;}
+
+    private double extraSpeedEmergencyHattan(){
+        if(XtraSpdTick > 7){
+            return  3.5F;
+        }else if(XtraSpdTick > 4){
+            return  3F;
+        }
+        else if(XtraSpdTick > 1){
+            return  2.5F;
+        } else{
+            return  1F;
+        }
+    }
+
+    public int visionTicks = -1;
+
     @Override
     public void tickPower() {
         super.tickPower();
-        if (this.getStandEntity(this.getSelf()) != null) {
-            Vec3 vec3 = new Vec3(walkingSpeed, 0, walkingSpeed);
-            if (!isPiloting()) {
-                if(this.getStandEntity(this.getSelf()).isInWaterOrRain()){
-                    this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.010 * configSpeed()));
+        if (XtraSpdTick > 1) {
+            XtraSpdTick--;
+        }
+        if(this.isClient()){
+            if(this.isPiloting()) {
+                if(this.someTicks > 0){
+                    someTicks--;
                 }
-                else{
-                this.getStandEntity(this.getSelf()).setDeltaMovement(this.getStandEntity(this.getSelf()).getForward().scale(0.022 * configSpeed()));
-            }}
-            if (isActive()) {
-                DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
-                DimensionType T = this.getSelf().level().dimensionType();
+            } else {
+                this.setSomeTicks(5);
+            }
+        }
 
-                if (this.getSelf().distanceTo(this.getStandEntity(this.getSelf())) > this.getMaxPilotRange() ) {
-                    sealStand(true);
+        if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+            if (ME.isInRain()) {
+                if (ME.DodgeRainTicks >= 1) {
+                    ME.DodgeRainTicks--;
+                } else {
+                    ME.setDodgeRainTicks(440);
+                    ((StandUser) ME).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.MANHATTAN_RAIN, 100, false);
+                }
+            } else {
+                ME.setDodgeRainTicks(0);
+                ((StandUser) ME).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 100, false);
+            }
+
+            if (!hasStandActive(this.getSelf())) {
+                ME.hasItem = false;
+                ME.hasItemTwo = false;
+            } else {
+                ME.isDesummoning = false;
+            }
+
+            if (this.isClient() || !this.isClient()) {
+                if (!isPiloting()) {
+                    if (this.currentHattanStatus == UNLOADED_HATTAN) {
+                        if(!ME.isInWater() && !ME.isInLava()) {
+                            if (ME.isInRain()) {
+                                ME.setDeltaMovement(ME.getHattanDirection().scale(0.010 * configSpeed() * extraSpeedEmergencyHattan()));
+                            } else {
+                                ME.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan()));
+                            }
+                        } else {
+                            ME.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan()));
+
+                        }
+                    } else {
+                        this.getStandEntity(this.getSelf()).setDeltaMovement(Vec3.ZERO);
+                    }
+                }
+            }
+
+            if(ME.isInLava() || ME.isInWater()){
+                ME.tickInWater--;
+            } else {
+                ME.tickInWater = 100;
+            }
+
+            if(ME.tickInWater < 1){
+                ((StandUser)this.self).roundabout$setActive(false);
+            }
+
+            if(this.isClient()){
+                if (this.isPiloting()){
+                    ME.isHattanPilotMode = true;
+                } else {
+                    ME.isHattanPilotMode = false;
                 }
             }
         }
-        if (this.self instanceof Player PL) {
 
-            if (this.getStandEntity(this.getSelf()) != null) {
-                if (this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                    setPowerNone();
-                }
-            }
+        /*yoinked justice code to fix MT miscalculating distances :)*/
+        if (this.self instanceof Player PL){
             int getPilotInt = ((IPlayerEntity) PL).roundabout$getControlling();
             Entity getPilotEntity = this.self.level().getEntity(getPilotInt);
             if (this.self.level().isClientSide() && isPacketPlayer()) {
-
                 if (getPilotEntity instanceof LivingEntity le) {
-
                     if (le.isRemoved() || !le.isAlive() ||
                             MainUtil.cheapDistanceTo2(le.getX(), le.getZ(), PL.getX(), PL.getZ())
                                     > getMaxPilotRange()) {
@@ -415,7 +467,11 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 } else {
                     ClientUtil.setCameraEntity(null);
                 }
-
+            }
+        }
+        if(this.getStandEntity(this.getSelf()) != null && this.getSelf() != null) {
+            if (MainUtil.cheapDistanceTo2(this.getStandEntity(self).getX(), this.getStandEntity(self).getZ(), this.self.getX(), this.self.getZ()) > getMaxPilotRange()) {
+                ((StandUser)this.self).roundabout$setActive(false);
             }
         }
         /*forceDespawnSet*/
@@ -424,13 +480,72 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 setPowerNone();
             }
         }
-        StandEntity SE = this.getStandEntity(this.getSelf());
+        if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+            if (ME.getHattanTarget() != 0 && !switchShootingMode()){
+                if(securityTicks < 1 && this.targetHattan != null && ME.hasLineOfSight(this.targetHattan)) {
+                        ME.shootHattan();
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                        ME.hasItem = false;
+                } else {
+                    securityTicks--;
+                }
+            } else if (ME.getHattanTarget() == 0){
+                setSecurityTicks(2);
+            }
+            StandEntity SE = this.getStandEntity(this.getSelf());
+        }
+
+        if (visionTicks > -1){
+            visionTicks--;
+        }
+        if (isPiloting() || visionModeClient){
+            if (visionTicks < 10) {
+                visionTicks++;
+            }
+        } else {
+            if (visionTicks > -1) {
+                visionTicks--;
+            }
+        }
+
+        if(this.self != null && this.self.isUsingItem() && isPiloting()){
+            this.self.stopUsingItem();
+        }
+
+        if (ClientNetworking.getAppropriateConfig().manhattanTransferSettings.windVisionUsesNightVision) {
+            if ((isPiloting() || visionModeClient) && isActive()) {
+                if (!this.getSelf().hasEffect(MobEffects.NIGHT_VISION)) {
+                    this.getSelf().addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, -1, 20, false, false), null);
+                }
+            } else {
+                MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+                if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                    this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+                }
+            }
+        } else {
+            MobEffectInstance ME = this.getSelf().getEffect(MobEffects.NIGHT_VISION);
+            if (ME != null && ME.isInfiniteDuration() && ME.getAmplifier() == 20) {
+                this.getSelf().removeEffect(MobEffects.NIGHT_VISION);
+            }
+        }
+
+        super.tickPower();
     }
+
+    int securityTicks = 0;
+    void setSecurityTicks(int st){securityTicks = st;}
+
+    int someTicks = 5;
+    void setSomeTicks(int ticks){someTicks = ticks;}
+
     public void synchToCamera(){
         if (isPiloting()) {
             LivingEntity ent = getPilotingStand();
             if (ent != null) {
-                ClientUtil.synchToCamera(ent);
+                if(someTicks < 1){
+                    ClientUtil.synchToCamera(ent);
+                }
             }
         }
     }
@@ -460,6 +575,18 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 UFO_TRANSFER_SKIN
         );
     }
+    public double dodgeBuff(){
+        Options options = Minecraft.getInstance().options;
+        if(this.isClient()) {
+            if (!isPiloting() || isPiloting() && !(options.keyDown.isDown() || options.keyUp.isDown() || options.keyRight.isDown() || options.keyLeft.isDown())) {
+                if(this.XtraSpdTick > 1) {
+                    return 1.5;
+                }
+            }
+        }
+        return 1;
+    }
+
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         int $$1 = 0;
@@ -468,69 +595,166 @@ public class PowersManhattanTransfer extends NewDashPreset {
         if (entity instanceof ManhattanTransferEntity ME) {
             LivingEntity ent = getPilotingStand();
             IEntityAndData entityAndData = ((IEntityAndData) ent);
-            entity.xxa = kpi.leftImpulse;
-            entity.zza = kpi.forwardImpulse;
-            Vec3 delta = entity.getDeltaMovement();
-            if (kpi.shiftKeyDown) {
-                $$13--;
-            }
-            if (kpi.jumping) {
-                $$13++;
-            }
-            if (ent != null) {
-                Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
-                if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                        if (ME.isInRain()) {
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.04 * configSpeed()));
-                            } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.5F, delta.z / 1.4);
+            if(this.isClient() && this.currentHattanStatus == UNLOADED_HATTAN){
+                entity.xxa = kpi.leftImpulse;
+                entity.zza = kpi.forwardImpulse;
+                Vec3 delta = entity.getDeltaMovement();
+                if (kpi.shiftKeyDown) {
+                    $$13--;
+                }
+                if (kpi.jumping) {
+                    $$13++;
+                }
+                if (ent != null) {
+                    if(!ME.isInWater() && !ME.isInLava()) {
+                        Entity TE = MainUtil.getTargetEntity(ent, 300, 10);
+                        if (TE != null && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
+                            if (ME.isInRain()) {
+                                ME.autoMoveBoost = 1.25F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * 1.5 * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.05 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.4, $$13 * flyingSpeed * 2.7F * extraSpeedEmergencyHattan(), delta.z / 1.4);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.4, 0, delta.z / 1.4);
+                                    }
+                                }
+                            } else {
+                                ME.autoMoveBoost = 1F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.07 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
+                                } else {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F * extraSpeedEmergencyHattan(), delta.z / 1.1);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                    }
                                 }
                             }
                         } else {
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.06 * configSpeed()));
-                            } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.1, $$13 * flyingSpeed * 3F, delta.z / 1.1);
+                            if (!ME.isInRain()) {
+                                ME.autoMoveBoost = 1F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.022 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
                                 } else {
-                                    entity.setDeltaMovement(delta.x / 1.1, 0, delta.z / 1.1);
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.5F * extraSpeedEmergencyHattan(), delta.z / 1.6);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
+                                    }
+                                }
+                            } else {
+                                ME.autoMoveBoost = 0.75F;
+                                if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
+                                    } else {
+                                        entity.setDeltaMovement(ME.getHattanDirection().scale(0.015 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
+                                    }
+                                } else {
+                                    if ($$13 != 0) {
+                                        entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2.2F * extraSpeedEmergencyHattan(), delta.z / 2.2);
+                                    } else {
+                                        entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
+                                    }
                                 }
                             }
                         }
-                }
-                else {
-                        if (!ME.isInRain()) {
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.022 * configSpeed()));
+                    } else {
+                        ME.autoMoveBoost = 0.75F;
+                        if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
+                            if ($$13 != 0) {
+                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan() * 1.5F * dodgeBuff()));
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 1.6, $$13 * flyingSpeed * 2.7F, delta.z / 1.6);
-                                } else {
-                                    entity.setDeltaMovement(delta.x / 1.6, 0, delta.z / 1.6);
-                                }
+                                entity.setDeltaMovement(ME.getHattanDirection().scale(0.0025 * configSpeed() * extraSpeedEmergencyHattan() * dodgeBuff()));
                             }
                         } else {
-                            if (kpi.leftImpulse == 0 && kpi.forwardImpulse == 0) {
-                                entity.setDeltaMovement(entity.getForward());
-                                entity.setDeltaMovement(entity.getForward().scale(0.012 * configSpeed()));
+                            if ($$13 != 0) {
+                                entity.setDeltaMovement(delta.x * 0.025, $$13 * flyingSpeed * 0.5F * extraSpeedEmergencyHattan(), delta.z * 0.025);
                             } else {
-                                if ($$13 != 0) {
-                                    entity.setDeltaMovement(delta.x / 2.2, $$13 * flyingSpeed * 2F, delta.z / 2.2);
-                                } else {
-                                    entity.setDeltaMovement(delta.x / 2.2, 0, delta.z / 2.2);
-                                }
+                                entity.setDeltaMovement(delta.x * 0.025, 0, delta.z * 0.025);
                             }
                         }
                     }
+                }
+            }else {
+                entity.setDeltaMovement(Vec3.ZERO);
+                entity.xxa = 0;
+                entity.zza = 0;
             }
         }
+    }
+
+    @Override
+    public boolean highlightsEntity(Entity ent,Player player){
+        IEntityAndData entityAndData = ((IEntityAndData) ent);
+        if(!(ent instanceof  ManhattanTransferEntity)) {
+            if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME && !ME.isInWater() && !ME.isInLava()) {
+                if (visionModeClient) {
+                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) && ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent) || this.getSelf().hasLineOfSight(ent)) {
+                            return true;
+                        }
+                    }
+                }
+                if (isPiloting()) {
+                    if (this.getStandEntity(this.getSelf()) != null && ent != null && !(ent instanceof RoadRollerEntity) & ent instanceof LivingEntity && entityAndData.roundabout$getTrueInvisibilityManhattan() > 0) {
+                        if (this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                            return true;
+                        }
+                    }
+                }
+                if (!this.switchShootingMode()) {
+                    if (targetHattan != null && ent == targetHattan) {
+                        if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        if (ent instanceof ManhattanTransferEntity MZ) {
+            if (this.getSelf() == MZ.getUser()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public LivingEntity targetHattan = null;
+
+    @Override
+    public int highlightsEntityColor(Entity ent, Player player){
+        if (ent instanceof ManhattanTransferEntity ME) {
+            if (this.getSelf() == ME.getUser()) {
+                if (this.isHoldingSneak() && !isPiloting()) {
+                    return 65425;
+                }
+            }
+        }
+        if(!this.switchShootingMode()) {
+            if (targetHattan != null && ent == targetHattan) {
+                if (this.isActive() && this.getStandEntity(this.getSelf()).hasLineOfSight(ent)) {
+                    return 10747842;
+                }
+            }
+        }
+        return 5111688;
     }
 
     @Override
@@ -576,54 +800,132 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice){
-        switch (soundChoice)
-        {
-            case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.MANHATTAN_SUMMON_EVENT;
-            }
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.MANHATTAN_SUMMON_EVENT;
+        } else if (soundChoice == MANHATTAN_RAIN) {
+            return ModSounds.MANHATTAN_DODGING_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manual_shooting",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.manhattan_premise",
+                "instruction.roundabout.passive", StandIcons.MT_PREMISE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.manual_shooting",
                 "instruction.roundabout.press_skill", StandIcons.MANUAL_SHOOTING_OFF, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.control_mode",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.control_mode",
                 "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON, 2, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wind_vision",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_vision",
                 "instruction.roundabout.press_skill", StandIcons.WIND_VISION_ON, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.wind_reading",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.wind_reading",
                 "instruction.roundabout.passive_manhattan",  StandIcons.WIND_READING, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.bonus_damage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.bonus_damage",
                 "instruction.roundabout.passive",  StandIcons.MANHATTAN_DAMAGE_BOOST, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.manhattan_dodge",
+                "instruction.roundabout.press_skill",  StandIcons.MANHATTAN_DODGE, 3, level, bypass));
         return $$1;
+    }
+    @Override
+    public void renderIcons(GuiGraphics context, int x, int y) {
+        // code for advanced icons
+        if (!switchShootingMode()) {
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_ON, PowerIndex.NO_CD);
+        }
+        else
+            setSkillIcon(context, x, y, 1, StandIcons.MANUAL_SHOOTING_OFF, PowerIndex.NO_CD);
+
+        if (isPiloting())
+            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_OFF, PowerIndex.SKILL_2);
+        else
+            setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.SKILL_2);
+
+        if (visionModeClient) {
+            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_ON, PowerIndex.SKILL_4);
+        }
+        else
+            setSkillIcon(context, x, y, 4, StandIcons.WIND_VISION_OFF, PowerIndex.SKILL_4);
+
+        if(isPiloting()){
+            setSkillIcon(context, x, y, 3, StandIcons.MANHATTAN_DODGE, PowerIndex.SKILL_3);
+        }
+        else{
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
+
+        super.renderIcons(context, x, y);
     }
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.STAND) || $$0.is(ModDamageTypes.STAND_RUSH) || $$0.is(ModDamageTypes.PENETRATING_STAND)) {
-            if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
-                if (this.getSelf() instanceof Player P) {
-                    if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+            if($$0.getEntity() != null) {
+                if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
+                    if (this.getSelf() instanceof Player P) {
+                        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                        }
                     }
                 }
             }
         }
     }
-    @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "14Kacper").withStyle(ChatFormatting.BLUE);
-    }
-    //COMMAND TO QUICKLY PUT MANHATTAN TRANSFER INTO ALL MOBS: /roundaboutSetStand @e manhattan_transfer 1 "from 1 to 8" 0 false
 
+    private int mobShootArrow = 80;
+    private int ticksOnFireBlaze = this.self instanceof Blaze || this.self instanceof  Ghast ? 100 : 0;
+    private int outTicks = 5;
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if(this.getStandEntity(this.self) != null) {
+            if(attackTarget != null) {
+                if ((MainUtil.cheapDistanceTo(this.self.getX(), this.self.getY(), this.self.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16 && MainUtil.cheapDistanceTo(attackTarget.getX(), attackTarget.getY(), attackTarget.getZ(), this.getStandEntity(this.self).getX(), this.getStandEntity(this.self).getY(), this.getStandEntity(this.self).getZ()) > 16)) {
+                    ((StandUser) this.self).roundabout$setActive(false);
+                } else {
+                    if (mobShootArrow > 1) {
+                        mobShootArrow--;
+                    } else {
+                        if (outTicks > 1) {
+                            if (targetHattan != null && this.getStandEntity(this.getSelf()).hasLineOfSight(targetHattan)) {
+                                outTicks--;
+                            }
+                        } else {
+                            if (targetHattan != null) {
+                                if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+                                    if (ME.hasLineOfSight(this.targetHattan)) {
+                                        if (this.getSelf() instanceof SnowGolem) {
+                                            Snowball $$7 = new Snowball(ME.getUser().level(), ME.getUser());
+                                            $$7.setOwner(this.getSelf());
+                                            $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            $$7.setItem($$7.getItem());
+                                            $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                                            ME.level().addFreshEntity($$7);
+                                            ME.hattanDeflected = $$7;
+                                        } else {
+                                            Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
+                                            $$11.setOwner(this.getSelf());
+                                            $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
+                                            $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                            ME.level().addFreshEntity($$11);
+                                            ME.hattanDeflected = $$11;
+                                            $$11.setRemainingFireTicks(ticksOnFireBlaze);
+                                            powerUpMobArrow($$11);
+                                        }
+                                        ME.powerUpProjectile();
+                                        ME.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
+                                    }
+                                }
+                                mobShootArrow = 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void powerUpMobArrow(AbstractArrow arrow){
+        ((IAbstractArrowAccess) arrow).roundabout$SetIsManhattan(true);
+        ((IAbstractArrowAccess) arrow).roundabout$isMobAiArrow(true);
+    }
 }

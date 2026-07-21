@@ -69,6 +69,9 @@ public class VisageData {
     public boolean rendersBigHair(){
         return false;
     }
+    public boolean rendersLucyHair(){
+        return false;
+    }
     public boolean rendersKakyoinHair(){
         return false;
     }
@@ -93,6 +96,15 @@ public class VisageData {
     public boolean rendersDiegoHat(){
         return false;
     }
+    public boolean rendersDaiyaEars(){
+        return false;
+    }
+    public boolean rendersDaiyaFluff(){
+        return false;
+    }
+    public boolean rendersJohnnyHat(){
+        return false;
+    }
     public boolean rendersSpeedwagonFoundationHat(){
         return false;
     }
@@ -105,6 +117,8 @@ public class VisageData {
     public boolean rendersPlayerBreast(){
         return false;
     }
+    public boolean renderJohngalliaHair(){return false;}
+    public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){
         return false;
     }

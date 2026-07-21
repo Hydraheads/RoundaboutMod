@@ -1,18 +1,27 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.entity.projectile.IronBallEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,7 +29,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,6 +61,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Byte> FADE_OUT = SynchedEntityData.defineId(StandEntity.class,
             EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Integer> MELT_LEVEL = SynchedEntityData.defineId(StandEntity.class,
+            EntityDataSerializers.INT);
 
 
 
@@ -101,6 +114,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     @Override
     public boolean isAffectedByPotions() {
+        return false;
+    }
+
+    /**Prevents stands from getting effects at all*/
+    @Override
+    public boolean canBeAffected(MobEffectInstance $$0){
         return false;
     }
 
@@ -308,6 +327,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         return this.entityData.get(FADE_OUT);
     }
 
+
+
+    public final void setMeltLevel(int FadeOut) {
+        this.entityData.set(MELT_LEVEL, FadeOut);
+    } //sets leaning direction
+    public int getMeltLevel() {
+        return this.entityData.get(MELT_LEVEL);
+    }
+
     public final void setFadePercent(Integer FadeOut) {
         this.entityData.set(FADE_PERCENT, FadeOut);
     } //sets leaning direction
@@ -463,6 +491,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             this.entityData.define(IDLE_ANIMATION, (byte) 0);
             this.entityData.define(HELD_ITEM, ItemStack.EMPTY);
             this.entityData.define(SKIN, (byte) 0);
+            this.entityData.define(MELT_LEVEL, 0);
         }
     }
 
@@ -624,6 +653,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
             if (this.level().isClientSide()){
                 setupAnimationStates();
+            } else {
+                if (getUser() != null && getUser().hasEffect(ModEffects.STAND_MELTING)){
+                    MobEffectInstance mei = getUser().getEffect(ModEffects.STAND_MELTING);
+                    if (mei != null){
+                        setMeltLevel(mei.getAmplifier()+1);
+                    }
+                } else {
+                    setMeltLevel(0);
+                }
             }
 
             if ((this.isAlive() && !this.dead || forceVisible) && !forceDespawnSet){
@@ -645,7 +683,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                             if (!this.level().isClientSide() && (((StandUser)this.getUser()).roundabout$getStandDisc().isEmpty() ||
                             ((StandUser)this.getUser()).roundabout$getStandDisc().is(ModItems.STAND_DISC))){
                                 this.discard();
-                                return;
                             }
                         } else {
                             handleTickDownIfDupe(thisStand);
@@ -720,14 +757,18 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     }
                 }
                 else if(this instanceof ManhattanTransferEntity ME){
-                    if(!ME.getHeldItemManhattan().isEmpty()){
-                        double $$3 = this.getEyeY() - 0.3F;
-                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan());
-                        $$4.setPickUpDelay(40);
-                        $$4.setThrower(this.getUUID());
-                        this.level().addFreshEntity($$4);
-                        ((ManhattanTransferEntity) this).setHeldItemManhattan(ItemStack.EMPTY);
+                    if (ME.getUser() != null && ME.getUserData(ME.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                        if (ME.hasItem) {
+                            if(ME.distanceTo(ME.getUser()) > 16) {
+                                for (int i = 1; i < 2; i++) {
+                                    ME.getUser().level().playSound(null, ME.getUser().blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, (ME.random.nextFloat() * 0.2F + 0.7F));
+                                }
+                            }
+                        }
                     }
+                    ME.shootHattan();
+                    ME.hasItem = false;
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
                 }
             }
         }
@@ -762,12 +803,21 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             }
             else if(this instanceof ManhattanTransferEntity ME){
                 if(!ME.getHeldItemManhattan().isEmpty()){
-                    double $$3 = this.getEyeY() - 0.3F;
-                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
-                    $$4.setPickUpDelay(40);
-                    $$4.setThrower(this.getUUID());
-                    this.level().addFreshEntity($$4);
-                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    if (this.canAcquireHeldItem) {
+                        double $$3 = this.getEyeY() - 0.3F;
+                        ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                        $$4.setPickUpDelay(40);
+                        $$4.setThrower(this.getUUID());
+                        this.level().addFreshEntity($$4);
+                        ME.setHeldItemManhattan(ItemStack.EMPTY);
+                    } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)){
+                        double $$3 = this.getEyeY() - 0.3F;
+                        IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                        $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                        $$7.setPos(ME.position());
+                        $$7.setOwner(ME.getUser());
+                        ME.level().addFreshEntity($$7);
+                    }
                 }
             }
         }
@@ -790,12 +840,21 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
         else if(this instanceof ManhattanTransferEntity ME){
             if(!ME.getHeldItemManhattan().isEmpty()){
-                double $$3 = this.getEyeY() - 0.3F;
-                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
-                $$4.setPickUpDelay(40);
-                $$4.setThrower(this.getUUID());
-                this.level().addFreshEntity($$4);
-                ME.setHeldItemManhattan(ItemStack.EMPTY);
+                if(this.canAcquireHeldItem) {
+                    double $$3 = this.getEyeY() - 0.3F;
+                    ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), ME.getHeldItemManhattan().copy());
+                    $$4.setPickUpDelay(40);
+                    $$4.setThrower(this.getUUID());
+                    this.level().addFreshEntity($$4);
+                    ME.setHeldItemManhattan(ItemStack.EMPTY);
+                } else if (ME.getHeldItemManhattan().is(Items.IRON_INGOT)){
+                    double $$3 = this.getEyeY() - 0.3F;
+                    IronBallEntity $$7 = new IronBallEntity(ME.level(), ME, ME.getHeldItemManhattan());
+                    $$7.setPos(ME.position());
+                    $$7.shootFromRotation(ME, ME.getXRot(), ME.getYRot(), -3.0F, 0.025F, 0.0F);
+                    $$7.setOwner(ME.getUser());
+                    ME.level().addFreshEntity($$7);
+                }
             }
         }
         super.remove($$0);

@@ -13,6 +13,7 @@ import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.zetalasis.hjson.JsonValue;
 
 import java.io.IOException;
@@ -52,6 +53,8 @@ public abstract class ConfigManager {
         loadLocalConfig();
         loadServerConfig();
         loadAdvancedConfig();
+        ConfigManager.loadBlacklists();
+        ConfigManager.loadThrownItemDestructionBlacklist();
         loaded = true;
     }
 
@@ -59,6 +62,74 @@ public abstract class ConfigManager {
         return clientConfigPath;
     }
 
+    public static void loadBlacklists2()
+    {
+        if (getAdvancedConfig().freezableBlocksListWA != null)
+        {
+            MainUtil.FREEZABLE_BLOCKS.clear();
+            for (String entry : getAdvancedConfig().freezableBlocksListWA) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId =
+                            new ResourceLocation(split[0], split[1]);
+
+                    ResourceLocation targetId =
+                            new ResourceLocation(split[2], split[3]);
+
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+
+
+                    MainUtil.FREEZABLE_BLOCKS.put(sourceBlock, targetBlock);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse freezable block entry '{}'", entry, e);
+                }
+            }
+        }
+        if (getAdvancedConfig().freezableBlocksFlintAndSteel != null)
+        {
+            MainUtil.FREEZABLE_BLOCK_ITEMS.clear();
+            for (String entry : getAdvancedConfig().freezableBlocksFlintAndSteel) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 4) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: {}", entry);
+                        continue;
+                    }
+
+                    ResourceLocation sourceId =
+                            new ResourceLocation(split[0], split[1]);
+
+                    ResourceLocation targetId =
+                            new ResourceLocation(split[2], split[3]);
+
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+
+
+                    MainUtil.FREEZABLE_BLOCK_ITEMS.put(sourceBlock, targetBlock);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse freezable block entry '{}'", entry, e);
+                }
+            }
+        }
+    }
+    public static void loadThrownItemDestructionBlacklist()
+    {
+      if(getAdvancedConfig().unbreakableThrownItems != null){
+          MainUtil.unbreakableThrownItems.clear();
+          MainUtil.unbreakableThrownItems.addAll(getAdvancedConfig().unbreakableThrownItems);
+      }
+    }
     public static void loadBlacklists()
     {
         if (getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2 != null)
@@ -66,11 +137,7 @@ public abstract class ConfigManager {
             MainUtil.walkableBlocks.clear();
             MainUtil.walkableBlocks.addAll(getAdvancedConfig().walkingHeartWalkOnBlockBlacklist2);
         }
-        if (getAdvancedConfig().noExpBreakBlocks != null)
-        {
-            MainUtil.expLessBlocks.clear();
-            MainUtil.expLessBlocks.addAll(getAdvancedConfig().noExpBreakBlocks);
-        }
+
         if (getAdvancedConfig().standBlockGrabBlacklist != null)
         {
             MainUtil.standBlockGrabBlacklist.clear();
@@ -80,6 +147,11 @@ public abstract class ConfigManager {
         {
             MainUtil.standDestructionBlacklist.clear();
             MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
+        }
+        if (getAdvancedConfig().standBlockExplosionBlacklist != null)
+        {
+            MainUtil.standBlockExplosionBlacklist.clear();
+            MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
         }
         if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
         {
@@ -95,6 +167,11 @@ public abstract class ConfigManager {
         {
             MainUtil.hypnotismMobBlackList.clear();
             MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
+        }
+        if (getAdvancedConfig().fleshBudMobBlacklist != null)
+        {
+            MainUtil.fleshBudMobBlacklist.clear();
+            MainUtil.fleshBudMobBlacklist.addAll(getAdvancedConfig().fleshBudMobBlacklist);
         }
         if (getAdvancedConfig().addedMobsWithRedBlood != null)
         {
@@ -116,14 +193,24 @@ public abstract class ConfigManager {
             MainUtil.removeBloodFromThese.clear();
             MainUtil.removeBloodFromThese.addAll(getAdvancedConfig().removeBloodFromThese);
         }
-        if (getAdvancedConfig().removeFreezableMobs != null)
+        if (getAdvancedConfig().removeFreezableMobsv2 != null)
         {
             MainUtil.unfreezableMobs.clear();
-            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobs);
+            MainUtil.unfreezableMobs.addAll(getAdvancedConfig().removeFreezableMobsv2);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV4 != null)
+        if (getAdvancedConfig().powerfulMobs != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV4);
+            MainUtil.powerfulMobs.clear();
+            MainUtil.powerfulMobs.addAll(getAdvancedConfig().powerfulMobs);
+        }
+        if (getAdvancedConfig().vampireSunDamageWorlds != null)
+        {
+            MainUtil.vampireSunDamageWorlds.clear();
+            MainUtil.vampireSunDamageWorlds.addAll(getAdvancedConfig().vampireSunDamageWorlds);
+        }
+        if (getAdvancedConfig().foodThatGivesBloodListV6 != null)
+        {
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV6);
         }
         if (getAdvancedConfig().foodThatHasEffectsForVampiresV1 != null)
         {
@@ -134,11 +221,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv4 != null)
+        if (getAdvancedConfig().standArrowPoolv5 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv4)
+            for (String disc : getAdvancedConfig().standArrowPoolv5)
             {
                 String[] split = disc.split(":");
 
@@ -159,11 +246,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv5 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv8 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv5)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv8)
             {
                 String[] split = disc.split(":");
 
@@ -215,11 +302,11 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().standArrowSecondaryPoolv5 != null)
+        if (getAdvancedConfig().standArrowSecondaryPoolv7 != null)
         {
             ModItems.STAND_ARROW_SECONDARY_STAND_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv5)
+            for (String disc : getAdvancedConfig().standArrowSecondaryPoolv7)
             {
                 String[] split = disc.split(":");
 
@@ -473,16 +560,14 @@ public abstract class ConfigManager {
     }
     private static void saveClient(ClientConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }
     }
     private static void saveAdvanced(AdvancedConfig config, Path path) {
         try {
-            String parsed = String.join(System.lineSeparator(), ConfigParser.parse(config));
-            Files.write(path, parsed.getBytes());
+            Files.write(path, GSON.toJson(config).getBytes());
         } catch (IOException e) {
             Roundabout.LOGGER.error("Failed to save config", e);
         }

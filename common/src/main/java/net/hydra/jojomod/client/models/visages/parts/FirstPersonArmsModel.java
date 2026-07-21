@@ -14,13 +14,17 @@ import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ColtRevolverItem;
 import net.hydra.jojomod.item.SnubnoseRevolverItem;
 import net.hydra.jojomod.item.TommyGunItem;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersMandom;
 import net.hydra.jojomod.stand.powers.PowersTusk;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HumanoidModel;
@@ -125,6 +129,9 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
             boolean mainHandRight = true;
             if (LE instanceof Player player) {
+                if (AnubisLayer.shouldRender(player) != null){
+                    return;
+                }
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
@@ -180,12 +187,23 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         renderRight = player.getMainArm() == HumanoidArm.RIGHT;
                     }
 
-
                     AnimationDefinition anim = PT.getFirstPersonAnimation();
                     if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
                         standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
                     }
                     this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+                }
+
+                if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
+                    if (PCB.invincibleState){
+
+                        AnimationDefinition anim = PCB.getAnimation(standUser, true);
+                        if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
+                            standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount);
+                        }
+                        this.animate(standUser.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
+
+                    }
                 }
 
                 Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
@@ -279,7 +297,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 StandUser user = ((StandUser) player);
 
                 if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player)) {
-                    /*if (PT.renderDrill()) {
+                    if (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();
                             this.transform.translateAndRotate(poseStack);
@@ -291,8 +309,7 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                                     player, partialTicks,
                                     poseStack,
                                     bufferSource,
-                                    light,
-                                    r, g, b, 1
+                                    1
                             );
                             poseStack.popPose();
                         }
@@ -308,12 +325,12 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                                     player, partialTicks,
                                     poseStack,
                                     bufferSource,
-                                    light,
-                                    r, g, b, 1
+                                    1
                             );
                             poseStack.popPose();
                         }
-                    } */
+                    }
+                    boolean rh = player.getMainArm() == HumanoidArm.RIGHT;
                     if (renderLeft) {
                         poseStack.pushPose();
                         this.transform.translateAndRotate(poseStack);
@@ -323,16 +340,14 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,90),0,0,0);
                         for(int i=4;i>=1;i--) {
                             if (PT.getLeftHandNails() >= 5-i) {
-                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                        r, g, b, 1, i);
+                                ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, i,rh ? 10-i : 5-i);
                             }
                             poseStack.translate(0,0,-0.075);
                         }
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
                         poseStack.translate(0,0.05,-0.1); // BACKWARD LEFT
                         if (PT.getLeftHandNails() >= 5) {
-                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                    r, g, b, 1, 5);
+                            ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light,5,rh ? 10 : 5);
                         }
 
                         poseStack.popPose();
@@ -346,16 +361,14 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
                         for(int i=4;i>=1;i--) {
                             if (PT.getRightHandNails() >= 5-i) {
-                                ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                        r, g, b, 1, i);
+                                ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, i, rh ? 5-i : 10-i);
                             }
                             poseStack.translate(0,0,-0.075);
                         }
                         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
                         poseStack.translate(0,0.05,-0.1); // FORWARD, RIGHT, UP
                         if (PT.getRightHandNails() >= 5) {
-                            ModStrayModels.TUSK_NAIL.render(player, partialTicks, poseStack, bufferSource, light,
-                                    r, g, b, 1, 5);
+                            ModStrayModels.TUSK_NAIL.firstPersonTuskNail(player, partialTicks, poseStack, bufferSource, light, 5,rh ? 5 : 10);
                         }
 
                         poseStack.popPose();
@@ -363,7 +376,47 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 }
 
                 if (rightSleeve != null) {
-                    if (bt == LocacacaCurseIndex.RIGHT_HAND) {
+                    float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    float oasisAmt = PowersOasis.getOasisAmt(context, partialTicks);
+                    if (whiteAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                            path = "ice";
+                        }
+                        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                                && PW.cracked) {
+                            path = "cracked/" + path;
+                        }
+                        ModStrayModels.WhiteAlbumRightArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, whiteAmt, path);
+                        poseStack.popPose();
+
+                    } else if (oasisAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.rform.translateAndRotate(poseStack);
+                        this.right_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersOasis.getSkinString(skin);
+
+                        ModStrayModels.OasisRightArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, oasisAmt, path);
+                        poseStack.popPose();
+
+                    } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
                         poseStack.pushPose();
 
                         this.transform.translateAndRotate(poseStack);
@@ -456,7 +509,46 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                     }
                 }
                 if (leftSleeve != null) {
-                    if (bt == LocacacaCurseIndex.LEFT_HAND) {
+                    float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(context, partialTicks);
+                    float oasisAmt = PowersOasis.getOasisAmt(context, partialTicks);
+                    if (whiteAmt > 0){
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersWhiteAlbum.getSkinString(skin);
+                        if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                            path = "ice";
+                        }if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                                && PW.cracked){
+                            path = "cracked/"+path;
+                        }
+                        ModStrayModels.WhiteAlbumLeftArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, whiteAmt, path);
+                        poseStack.popPose();
+
+                    } else if (oasisAmt > 0) {
+
+                        poseStack.pushPose();
+
+                        this.transform.translateAndRotate(poseStack);
+                        this.lform.translateAndRotate(poseStack);
+                        this.left_arm.translateAndRotate(poseStack);
+
+                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        String path = PowersOasis.getSkinString(skin);
+
+                        ModStrayModels.OasisLeftArm.render(
+                                context, partialTicks, poseStack, bufferSource, light,
+                                r, g, b, oasisAmt, path);
+                        poseStack.popPose();
+
+                    } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
                         poseStack.pushPose();
 
                         this.transform.translateAndRotate(poseStack);

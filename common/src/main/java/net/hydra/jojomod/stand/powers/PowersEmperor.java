@@ -8,15 +8,18 @@ import net.hydra.jojomod.entity.projectile.EmperorBulletEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -39,7 +42,8 @@ public class PowersEmperor extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().emperorSettings.enableEmperor;
     }
 
-    private boolean controlMode = true;
+    private boolean controlMode;
+    private boolean autoMode;
 
     public boolean isControlMode() {
         return controlMode;
@@ -47,7 +51,6 @@ public class PowersEmperor extends NewDashPreset {
 
     public boolean holdDownClick = false;
     public boolean consumeClickInput = false;
-    public float speedMultiplier = 1.0f;
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
@@ -114,9 +117,28 @@ public class PowersEmperor extends NewDashPreset {
     public void tickPower() {
         super.tickPower();
 
-        if (shootTicks > 0) {
-            shootTicks -= getLowerTicks();
-            shootTicks = Math.max(0, shootTicks);
+        if (this.self instanceof Player PE && PE.isCreative()) {
+            setShootTicks(0);
+        } else {
+            if (getShootTicks() > 0) {
+                setShootTicks(getShootTicks() - getLowerTicks());
+            }
+        }
+
+        if (self.level().isClientSide) {
+
+            Minecraft mc = Minecraft.getInstance();
+
+            holdingRightClick =
+                    mc.options.keyUse.isDown() &&
+                            ((StandUser) self).roundabout$getActive() &&
+                            ((StandUser) self).roundabout$getStandPowers() instanceof PowersEmperor;
+
+            if (holdingRightClick) {
+                self.setDeltaMovement(
+                        self.getDeltaMovement().multiply(0.4D, 1.0D, 0.65D)
+                );
+            }
         }
 
         if (controlMode) {
@@ -167,9 +189,18 @@ public class PowersEmperor extends NewDashPreset {
             controlModeToggle();
             return true;
         } else if (move == PowerIndex.POWER_2_SNEAK) {
-            return this.autoModeActive();
+            autoModeToggle();
+            return true;
         } else if (move == PowerIndex.POWER_4_EXTRA) {
             return this.shootEmperorBullet();
+        }
+        else if (move == PowerIndex.POWER_4) {
+            bulletSpeedUp();
+            return true;
+        }
+        else if (move == PowerIndex.POWER_4_SNEAK) {
+            bulletSpeedDown();
+            return true;
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -180,13 +211,22 @@ public class PowersEmperor extends NewDashPreset {
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         PowersEmperor PA = new PowersEmperor(entity);
-        ((StandUser)entity).roundabout$setStandSkin((byte) 1);
-        return PA;}
 
-    private boolean autoMode = true;
+        PA.controlMode = true;
+        PA.autoMode = false;
 
-    public boolean autoModeActive(){
-        return autoMode;
+        standSkin = 1;
+        return PA;
+    }
+
+    private static final int POWER_INT_AUTO = 0;
+    private static final int POWER_INT_CONTROL = 1;
+    private static final int POWER_INT_SPEED = 2;
+
+    private int speedLevel = 2;
+
+    public int getSpeedLevel() {
+        return speedLevel;
     }
 
     private boolean tripleShot;
@@ -196,6 +236,26 @@ public class PowersEmperor extends NewDashPreset {
             su.roundabout$setUniqueStandModeToggle(!su.roundabout$getUniqueStandModeToggle());
         }
     }
+
+    public void updatePowerInt(int id, int value) {
+        super.updatePowerInt((byte) id, value);
+
+        switch (id) {
+
+            case POWER_INT_AUTO -> {
+                autoMode = value == 1;
+            }
+
+            case POWER_INT_CONTROL -> {
+                controlMode = value == 1;
+            }
+
+            case POWER_INT_SPEED -> {
+                speedLevel = value;
+            }
+        }
+    }
+
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -207,9 +267,9 @@ public class PowersEmperor extends NewDashPreset {
         }
 
         if (isHoldingSneak()) {
-            if (autoModeActive()) {
+            if (autoMode) {
                 setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_AUTO_MODE_ON, PowerIndex.SKILL_2_SNEAK);
-            } else if (!autoModeActive()) {
+            } else {
                 setSkillIcon(context, x, y, 2, StandIcons.EMPEROR_AUTO_MODE_OFF, PowerIndex.SKILL_2_SNEAK);
             }
         } else {
@@ -227,6 +287,12 @@ public class PowersEmperor extends NewDashPreset {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_UP, PowerIndex.SKILL_4);
         }
+    }
+
+    private boolean holdingRightClick;
+    
+    public boolean emperorZoomActive() {
+        return holdingRightClick;
     }
 
     public boolean isWip() {
@@ -270,10 +336,13 @@ public class PowersEmperor extends NewDashPreset {
             }
 
             case SKILL_2_NORMAL -> {
-                controlModeToggle();
+                this.tryPower(PowerIndex.POWER_2, true);
+                tryPowerPacket(PowerIndex.POWER_2);
             }
+
             case SKILL_2_CROUCH -> {
-                autoModeToggle();
+                this.tryPower(PowerIndex.POWER_2_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_2_SNEAK);
             }
 
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
@@ -292,22 +361,22 @@ public class PowersEmperor extends NewDashPreset {
 
     private void controlModeToggle() {
         controlMode = !controlMode;
-        if (!self.level().isClientSide) {
-        }
     }
 
     private void bulletSpeedUp() {
-        speedMultiplier = Mth.clamp(speedMultiplier + 0.15f, 0.2f, 3.0f);
+        speedLevel = Mth.clamp(speedLevel + 1, 0, 5);
+        updatePowerInt(POWER_INT_SPEED, speedLevel);
+        tryPowerPacket(PowerIndex.POWER_4);
     }
 
     private void bulletSpeedDown() {
-        speedMultiplier = Mth.clamp(speedMultiplier - 1.0f, 3.0f, 5.0f);
+        speedLevel = Mth.clamp(speedLevel - 1, 0, 5);
+        updatePowerInt(POWER_INT_SPEED, speedLevel);
+        tryPowerPacket(PowerIndex.POWER_4_SNEAK);
     }
 
     private void autoModeToggle() {
         autoMode = !autoMode;
-        if (!self.level().isClientSide) {
-        }
     }
 
     public boolean tripleShotActive() {
@@ -362,10 +431,13 @@ public class PowersEmperor extends NewDashPreset {
         return false;
     }
 
+    public boolean canShoot() {
+        return canShootBullet(getUseTicks());
+    }
+
     public boolean confirmShot(int useTicks){
-        if (canShootBullet(useTicks)){
-            //int pauseGrowthTicks = pauseTicks();
-            setShootTicks((shootTicks+useTicks));
+        if (canShootBullet(getUseTicks())){
+            setShootTicks((shootTicks+getUseTicks()));
             return true;
         }
         return false;
@@ -377,16 +449,41 @@ public class PowersEmperor extends NewDashPreset {
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigMobs(3F)));
         }
     }
-
-    public int shootTicks = 1000;
+    public int shootTicks = 0;
     public int getShootTicks(){return shootTicks;}
     public void setShootTicks(int shootTicks){this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());}
-    public int getMaxShootTicks(){return 1000;}
+    public int getMaxShootTicks(){return 5000;}
     public int getLowerTicks(){return ClientNetworking.getAppropriateConfig().emperorSettings.heatTickDownRate;}
 
-    public float getBulletSpeed(){
-        return (float) (0.8F*(ClientNetworking.getAppropriateConfig().
-                emperorSettings.bulletShootSpeedMultiplier*0.01));
+    private float getSpeedMultiplier() {
+        return switch (speedLevel) {
+
+            case 0 -> 0.1F;
+            case 1 -> 0.5F;
+            case 2 -> 1.0F;
+            case 3 -> 1.5F;
+            case 4 -> 2.2F;
+            case 5 -> 3.0F;
+
+            default -> 1.0F;
+        };
+    }
+
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.EMPEROR_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
+
+    public float getBulletSpeed() {
+        return 0.8F;
     }
 
     public boolean shootEmperorBullet() {
@@ -401,7 +498,7 @@ public class PowersEmperor extends NewDashPreset {
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
 
-        float speed = getBulletSpeed() * speedMultiplier;
+        float speed = getBulletSpeed() * getSpeedMultiplier();
 
         this.bulletListInit();
 
@@ -411,7 +508,7 @@ public class PowersEmperor extends NewDashPreset {
 
                 EmperorBulletEntity bullet = getEmperorBullet();
 
-                float spread = i * 6.0f;
+                float spread = i * 20.0f;
 
                 bullet.shootFromRotation(
                         (Player) this.self,
@@ -423,7 +520,7 @@ public class PowersEmperor extends NewDashPreset {
                 );
 
                 bullet.setNoGravity(true);
-                bullet.setBaseDamage(getEmperorBulletStrength(this.self) * speedMultiplier);
+                bullet.setBaseDamage(getEmperorBulletStrength(this.self) * getSpeedMultiplier());
 
                 this.bulletList.add(bullet);
                 bullet.setOwner(this.self);
@@ -447,8 +544,7 @@ public class PowersEmperor extends NewDashPreset {
             );
 
             bullet.setNoGravity(true);
-            bullet.setBaseDamage(getEmperorBulletStrength(this.self) * speedMultiplier);
-
+            bullet.setBaseDamage(getEmperorBulletStrength(this.self) * getSpeedMultiplier());
             this.bulletList.add(bullet);
             this.getSelf().level().addFreshEntity(bullet);
         }
@@ -456,7 +552,7 @@ public class PowersEmperor extends NewDashPreset {
         this.self.level().playSound(
                 null,
                 this.self.blockPosition(),
-                ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT,
+                ModSounds.EMPEROR_SHOOT_EVENT,
                 SoundSource.PLAYERS,
                 2F,
                 (float) (0.98 + (Math.random() * 0.04))

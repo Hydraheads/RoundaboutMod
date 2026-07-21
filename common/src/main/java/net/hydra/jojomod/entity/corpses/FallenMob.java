@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.goals.CorpseTargetGoal;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.item.BodyBagItem;
@@ -29,6 +30,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -41,6 +44,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
@@ -126,15 +131,22 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     @Override
+    public void makeStuckInBlock(BlockState $$0, Vec3 $$1) {
+        if (!$$0.is(Blocks.COBWEB)) {
+            super.makeStuckInBlock($$0, $$1);
+        }
+    }
+
+    @Override
     public void setTarget(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setTarget($$0);
         }
     }
     public void setLastHurtByPlayer(@Nullable Player $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtByPlayer($$0);
@@ -142,7 +154,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     public void setLastHurtByMob(@Nullable LivingEntity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtMob($$0);
@@ -150,7 +162,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     public void setLastHurtMob(Entity $$0) {
-        if ($$0 != null && controller != null && controller.is($$0)){
+        if ($$0 != null && controller != null && controller.getUUID() == $$0.getUUID()){
             return;
         } else {
             super.setLastHurtMob($$0);
@@ -205,10 +217,44 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
         this.goalSelector.addGoal(1, thisBuildBreakGoal);
     }
     public void removeBuildBreakGoal(){
-        this.goalSelector.removeGoal(thisBuildBreakGoal);
-        thisBuildBreakGoal = null;
+        if (thisBuildBreakGoal != null) {
+            this.goalSelector.removeGoal(thisBuildBreakGoal);
+            thisBuildBreakGoal = null;
+        }
     }
 
+    @Override
+    protected boolean isAffectedByFluids() {
+        if (!isInWater() && !this.jumping){
+            return false;
+        }
+        return super.isAffectedByFluids();
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return 0.93F;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource sauce) {
+        if (sauce.is(DamageTypes.SWEET_BERRY_BUSH) || sauce.is(DamageTypes.LAVA)
+                || sauce.is(ModDamageTypes.GASOLINE_EXPLOSION))
+            return true;
+        return super.isInvulnerableTo(sauce);
+    }
+
+    @Override
+    public void lavaHurt() {
+        if (!this.fireImmune()) {
+            this.setSecondsOnFire(15);
+        }
+    }
     public void setPhasesFull(boolean bool){
         ticksThroughPhases = 10;
         this.entityData.set(PHASES_FULL, bool);
@@ -410,6 +456,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public boolean canAttack(LivingEntity $$0){
         if (this.getTargetTactic() == Tactics.PEACEFUL.id || !this.getActivated()){
+            return false;
+        }
+        if ($$0 != null && controller != null && controller.is($$0)){
             return false;
         }
         return super.canAttack($$0);

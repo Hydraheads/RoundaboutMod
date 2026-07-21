@@ -1,14 +1,17 @@
 package net.hydra.jojomod.registry;
 
 import com.mojang.datafixers.types.Type;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.item.*;
+import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -25,13 +28,69 @@ import static net.hydra.jojomod.block.ModBlocks.*;
 public class FabricBlocks {
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
-    public static final Block IMPACT_MOUND = registerBlock("impact_mound", IMPACT_MOUND_PROPERTIES
+    public static final Block IMPACT_MOUND = registerBlock("impact_mound", ModBlocks.IMPACT_MOUND_PROPERTIES
     );
     public static final Block METEOR_BLOCK = registerBlock("meteor_block", ModBlocks.METEOR_BLOCK_PROPERTIES
     );
-    public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", SHINY_QUARTZ_PROPERTIES
+    public static final Block CHESS_PIECE = registerBlockItemless("chess_piece", ModBlocks.getChessBlock()
     );
-    public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", SHINY_QUARTZ_TILES_PROPERTIES
+    public static final Block AJA_ORE = registerBlock("aja_ore", ModBlocks.AJA_ORE_PROPERTIES
+    );
+    public static final Block DEEPSLATE_AJA_ORE = registerBlock("deepslate_aja_ore", ModBlocks.DEEPSLATE_AJA_ORE_PROPERTIES
+    );
+    public static final Block AJA_BLOCK = registerBlock("aja_block", AJA_BLOCK_PROPERTIES
+    );
+    public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
+    );
+    public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
+    );
+    public static final Block FROZEN_STONE = registerBlock("frozen_stone", FROZEN_STONE_PROPERTIES
+    );
+    public static final Block FROZEN_DEEPSLATE = registerBlock("frozen_deepslate", FROZEN_DEEPSLATE_PROPERTIES
+    );
+    public static final Block FROZEN_COBBLED_DEEPSLATE = registerBlock("frozen_cobbled_deepslate", FROZEN_COBBLED_DEEPSLATE_PROPERTIES
+    );
+    public static final Block FROZEN_DIORITE = registerBlock("frozen_diorite", FROZEN_DIORITE_PROPERTIES
+    );
+    public static final Block FROZEN_ANDESITE = registerBlock("frozen_andesite", FROZEN_ANDESITE_PROPERTIES
+    );
+    public static final Block FROZEN_GRANITE = registerBlock("frozen_granite", FROZEN_GRANITE_PROPERTIES
+    );
+    public static final Block FROZEN_SAND = registerBlock("frozen_sand", FROZEN_SAND_PROPERTIES
+    );
+    public static final Block FROZEN_SANDSTONE = registerBlock("frozen_sandstone", FROZEN_SANDSTONE_PROPERTIES
+    );
+    public static final Block FROZEN_RED_SAND = registerBlock("frozen_red_sand", FROZEN_RED_SAND_PROPERTIES
+    );
+    public static final Block FROZEN_RED_SANDSTONE = registerBlock("frozen_red_sandstone", FROZEN_RED_SANDSTONE_PROPERTIES
+    );
+    public static final Block FROZEN_GRAVEL = registerBlock("frozen_gravel", FROZEN_GRAVEL_PROPERTIES
+    );
+    public static final Block FROZEN_END_STONE = registerBlock("frozen_end_stone", FROZEN_END_STONE_PROPERTIES
+    );
+    public static final Block FROZEN_NETHERRACK = registerBlock("frozen_netherrack", FROZEN_NETHERRACK_PROPERTIES
+    );
+    public static final Block FROZEN_NETHER_BRICKS = registerBlock("frozen_nether_bricks", FROZEN_NETHER_BRICKS_PROPERTIES
+    );
+    public static final Block FROZEN_OBSIDIAN = registerBlock("frozen_obsidian", FROZEN_OBSIDIAN_PROPERTIES
+    );
+    public static final Block FROZEN_STONE_BRICKS = registerBlock("frozen_stone_bricks", FROZEN_STONE_BRICKS_PROPERTIES
+    );
+    public static final Block COLD_AIR = registerBlockItemless("cold_air", COLD_AIR_PROPERTIES
+    );
+    public static final Block FREEZING_AIR = registerBlockItemless("freezing_air", FREEZING_AIR_PROPERTIES
+    );
+    public static final Block SHINY_QUARTZ = registerBlock("shiny_quartz", ModBlocks.SHINY_QUARTZ_PROPERTIES
+    );
+    public static final Block WHITE_ALBUM_ICE_BLOCK = registerBlockItemless("white_album_ice", WHITE_ALBUM_ICE_BLOCK_PROPERTIES
+    );
+    public static final Block WHITE_ALBUM_ICE_WALL_BLOCK = registerBlockItemless("white_album_ice_wall", WHITE_ALBUM_ICE_WALL_BLOCK_PROPERTIES
+    );
+    public static final Block WHITE_ALBUM_ICE_SLAB = registerBlockItemless("white_album_coating", WHITE_ALBUM_COATING_PROPERTIES
+    );
+    public static final Block STICKY_ICE_BLOCK = registerBlockItemless("sticky_ice", STICKY_ICE_PROPERTIES
+    );
+    public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", ModBlocks.SHINY_QUARTZ_TILES_PROPERTIES
     );
     public static final Block REGAL_FLOOR = registerBlock("regal_floor", ModBlocks.REGAL_FLOOR_PROPERTIES
     );
@@ -119,6 +178,10 @@ public class FabricBlocks {
     );
     public static final Block BLOOD_SPLATTER = registerBlockItemless("blood_splatter", ModBlocks.BLOOD_SPLATTER_PROPERTIES
     );
+    public static final Block ACID_PUDDLE = registerBlockItemless("acid_puddle", ModBlocks.ACID_PUDDLE_PROPERTIES
+    );
+    public static final Block POISON_TRAIL_MUSHROOM = registerBlockItemless("poison_trail_mushroom", ModBlocks.POISON_TRAIL_MUSHROOM_PROPERTIES
+    );
     public static final Block BLUE_BLOOD_SPLATTER = registerBlockItemless("blue_blood_splatter", ModBlocks.BLUE_BLOOD_SPLATTER_PROPERTIES
     );
     public static final Block ENDER_BLOOD_SPLATTER = registerBlockItemless("ender_blood_splatter", ModBlocks.ENDER_BLOOD_SPLATTER_PROPERTIES
@@ -150,7 +213,6 @@ public class FabricBlocks {
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
-    public static final Block D4C_LIGHT_BLOCK = registerBlockItemless("d4c_light_block",ModBlocks.D4C_LIGHT_BLOCK_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
@@ -176,6 +238,9 @@ public class FabricBlocks {
     public static final Block EQUIPPABLE_STONE_MASK = registerStoneMask("stone_mask", ModBlocks.EQUIPPABLE_STONE_MASK_PROPERTIES);
     public static final Block BLOODY_STONE_MASK = registerStoneMaskBloody("bloody_stone_mask", BLOODY_STONE_MASK_PROPERTIES);
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
+    public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
+    public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
+    //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
@@ -192,8 +257,17 @@ public class FabricBlocks {
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
             registerBE("coffin_block",BlockEntityType.Builder.of(CoffinBlockEntity::new, COFFIN_BLOCK) );
-    public static final BlockEntityType<D4CLightBlockEntity> D4C_LIGHT_BLOCK_ENTITY =
-            registerBE("d4c_light_block",BlockEntityType.Builder.of(D4CLightBlockEntity::new, D4C_LIGHT_BLOCK));
+
+    public static final BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY =
+            registerBE("chess_piece",BlockEntityType.Builder.of(ChessPieceBlockEntity::new, CHESS_PIECE) );
+
+
+    public static final BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY =
+            registerBE("king_bed_block",BlockEntityType.Builder.of(KingBedBlockEntity::new, KING_BED_BLOCK) );
+    public static final BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY =
+            registerBE("fancy_lighter_block",BlockEntityType.Builder.of(FancyLighterBlockEntity::new, FANCY_LIGHTER_BLOCK) );
+    /*public static final BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY =
+            registerBE("chessboard_block",BlockEntityType.Builder.of(ChessBoardBlockEntity::new, CHESSBOARD_BLOCK) );*/
 
 
     private static <T extends BlockEntity> BlockEntityType<T> registerBE(String $$0, BlockEntityType.Builder<T> $$1) {
@@ -253,11 +327,46 @@ public class FabricBlocks {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
 
+    private static Block registerFancyLighter(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+    /*private static Block registerChessBoardBlock(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }*/
+
     public static void register(){
         ModBlocks.ANCIENT_METEOR = ANCIENT_METEOR;
         ModBlocks.IMPACT_MOUND = IMPACT_MOUND;
         ModBlocks.METEOR_BLOCK = METEOR_BLOCK;
+
+        ModBlocks.AJA_ORE = AJA_ORE;
+        ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
+        ModBlocks.AJA_BLOCK = AJA_BLOCK;
+        ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
+        ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
+        ModBlocks.FROZEN_STONE = FROZEN_STONE;
+        ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
+        ModBlocks.FROZEN_COBBLED_DEEPSLATE = FROZEN_COBBLED_DEEPSLATE;
+        ModBlocks.FROZEN_GRANITE = FROZEN_GRANITE;
+        ModBlocks.FROZEN_DIORITE = FROZEN_DIORITE;
+        ModBlocks.FROZEN_ANDESITE = FROZEN_ANDESITE;
+        ModBlocks.FROZEN_SAND = FROZEN_SAND;
+        ModBlocks.FROZEN_SANDSTONE = FROZEN_SANDSTONE;
+        ModBlocks.FROZEN_RED_SAND = FROZEN_RED_SAND;
+        ModBlocks.FROZEN_RED_SANDSTONE = FROZEN_RED_SANDSTONE;
+        ModBlocks.FROZEN_GRAVEL = FROZEN_GRAVEL;
+        ModBlocks.FROZEN_END_STONE = FROZEN_END_STONE;
+        ModBlocks.FROZEN_NETHERRACK = FROZEN_NETHERRACK;
+        ModBlocks.FROZEN_NETHER_BRICKS = FROZEN_NETHER_BRICKS;
+        ModBlocks.FROZEN_OBSIDIAN = FROZEN_OBSIDIAN;
+        ModBlocks.FROZEN_STONE_BRICKS = FROZEN_STONE_BRICKS;
+        ModBlocks.COLD_AIR = COLD_AIR;
+        ModBlocks.FREEZING_AIR = FREEZING_AIR;
         ModBlocks.SHINY_QUARTZ = SHINY_QUARTZ;
+        ModBlocks.WHITE_ALBUM_ICE_BLOCK = WHITE_ALBUM_ICE_BLOCK;
+        ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;
+        ModBlocks.WHITE_ALBUM_ICE_SLAB = WHITE_ALBUM_ICE_SLAB;
+        ModBlocks.STICKY_ICE = STICKY_ICE_BLOCK;
         ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;
         ModBlocks.REGAL_WALL = REGAL_WALL;
@@ -302,6 +411,8 @@ public class FabricBlocks {
         ModBlocks.NEW_LOCACACA_BLOCK = NEW_LOCACACA_BLOCK;
         ModBlocks.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
         ModBlocks.BLOOD_SPLATTER = BLOOD_SPLATTER;
+        ModBlocks.ACID_PUDDLE = ACID_PUDDLE;
+        ModBlocks.POISON_TRAIL_MUSHROOM = POISON_TRAIL_MUSHROOM;
         ModBlocks.BLUE_BLOOD_SPLATTER = BLUE_BLOOD_SPLATTER;
         ModBlocks.ENDER_BLOOD_SPLATTER = ENDER_BLOOD_SPLATTER;
         ModBlocks.BARBED_WIRE = BARBED_WIRE;
@@ -343,16 +454,24 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
+
+
+        ModBlocks.CHESS_PIECE = CHESS_PIECE;
+        ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
+
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = FOGTRAP_BLOCKENTITY;
         ModBlocks.COFFIN_BLOCK_ENTITY = COFFIN_BLOCK_ENTITY;
-        ModBlocks.D4C_LIGHT_BLOCK_ENTITY = D4C_LIGHT_BLOCK_ENTITY;
-        ModBlocks.D4C_LIGHT_BLOCK = D4C_LIGHT_BLOCK;
+        ModBlocks.KING_BED_BLOCK_ENTITY = KING_BED_BLOCK_ENTITY;
         ModBlocks.FOG_DIRT = FOG_DIRT;
         ModBlocks.FOG_DIRT_COATING = FOG_DIRT_COATING;
         ModBlocks.FOG_TRAP = FOG_TRAP;
         ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK = EQUIPPABLE_STONE_MASK;
         ModBlocks.BLOODY_STONE_MASK_BLOCK = BLOODY_STONE_MASK;
         ModBlocks.COFFIN_BLOCK = COFFIN_BLOCK;
+        ModBlocks.KING_BED_BLOCK = KING_BED_BLOCK;
+        ModBlocks.FANCY_LIGHTER_BLOCK = FANCY_LIGHTER_BLOCK;
+        ModBlocks.FANCY_LIGHTER_BLOCK_ENTITY = FANCY_LIGHTER_BLOCK_ENTITY;
+        //ModBlocks.CHESSBOARD_BLOCK = CHESSBOARD_BLOCK;
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.item;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
@@ -207,21 +209,21 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         if (!(itemStack.getItem() instanceof TommyGunItem)) {
             return InteractionResultHolder.fail(itemStack);
         }
-        if (!(player.getUseItem() == itemStack)) {
-            if ((player.isCrouching() && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (player.isCrouching() && player.isCreative())) {
+            if ((isCrouchingOrSomething(player,itemStack) && hasTommyAmmo(player) && getAmmo(itemStack) != maxAmmo) || (isCrouchingOrSomething(player,itemStack) && player.isCreative())) {
                 if (!isReloading(itemStack)) {
                     setReloading(itemStack, true);
+                    player.stopUsingItem();
                     player.getCooldowns().addCooldown(this, 70);
                     ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.TOMMY_RELOAD, 10, false);
                 }
 
                 return InteractionResultHolder.consume(itemStack);
             } else {
-                if (player.isCrouching() && getAmmo(itemStack) == maxAmmo) {
+                if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) == maxAmmo) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
                     }
-                } else if (player.isCrouching() && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
+                } else if (isCrouchingOrSomething(player,itemStack) && getAmmo(itemStack) != maxAmmo && !hasTommyAmmo(player)) {
                     if (player instanceof ServerPlayer SP) {
                         SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
                     }
@@ -229,7 +231,6 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
                     player.startUsingItem(hand);
                 }
             }
-        }
         return InteractionResultHolder.consume(itemStack);
     }
 
@@ -245,7 +246,8 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
 
             if (justTookDamage) {
                 DamageSource last = player.getLastDamageSource();
-                if (last != null && last.getEntity() instanceof Entity) {
+                if (last != null && last.getEntity() instanceof Entity
+                && !(last.getDirectEntity() instanceof Projectile)) {
                     cancelReload(stack, player);
                     return;
                 }

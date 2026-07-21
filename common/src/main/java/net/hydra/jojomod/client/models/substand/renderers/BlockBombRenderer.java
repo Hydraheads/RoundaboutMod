@@ -3,6 +3,8 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -10,12 +12,14 @@ import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.BlockBombModel;
 import net.hydra.jojomod.client.models.substand.LeftSeperatedArmSlimModel;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
-import net.hydra.jojomod.entity.substand.LeftSeperatedArmSlimEntity;
-import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.util.config.ClientConfig;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
@@ -29,8 +33,8 @@ import org.lwjgl.opengl.GL11;
 
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
 	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbomb.png");
-
-
+	
+	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
         super(context, new BlockBombModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB)), 0f);
     }
@@ -40,13 +44,26 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
         return PART_4_KILLER_QUEEN;
     }
     
-    public void render(BlockBombEntity blockBombEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
-    	if (ClientUtil.canSeeStands(ClientPlayer)) {
+        boolean hidesOnF1 = ConfigManager.getClientConfig().killerQueenSettings.bombOverlayHideOnF1;
+
+        //matrixStack.scale(0.95f, 0.95f, 0.95f);
+        
+    	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-        		
-        		super.render(blockBombEntity, f, g, matrixStack, vertexConsumerProvider, i);	
+                matrixStack.pushPose();
+
+                VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
+
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
+                matrixStack.translate(0,-1.5,0);
+
+                model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                        0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / 12) + (partialTicks * 0.05F), 1f));
+                matrixStack.popPose();
+                //super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);
         	}
         }
     }
@@ -57,16 +74,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     }
     
    @Override
-    protected int getSkyLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {
-	   //BlockPos.MutableBlockPos mutPos = pos.mutable();
-	   /* 
-	   int upwards = super.getSkyLightLevel(blockBombEntity, pos.above());
-	   int east = super.getSkyLightLevel(blockBombEntity, pos.east());
-	   int west = super.getSkyLightLevel(blockBombEntity, pos.west());
-	   int north = super.getSkyLightLevel(blockBombEntity, pos.north());
-	   int south = super.getSkyLightLevel(blockBombEntity, pos.south());
-	   */   
+    protected int getSkyLightLevel(BlockBombEntity blockBombEntity, BlockPos pos) {  
 	   return 15;
    }
-    
 }

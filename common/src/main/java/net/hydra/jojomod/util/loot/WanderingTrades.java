@@ -1,5 +1,6 @@
 package net.hydra.jojomod.util.loot;
 
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.world.item.ItemStack;
@@ -13,27 +14,30 @@ import java.util.List;
 public class WanderingTrades {
 
     public static List<Pair<Float, MerchantOffer>> TRADES = new ArrayList<>();
-    public static MerchantOffer BEETLE_ARROW_TRADE;
     public static MerchantOffer BROKEN_ARROW_TRADE;
-    public static MerchantOffer ANUBIS_TRADE;
 
     public static void updateTrades(Config cf) {
             TRADES = new ArrayList<>();
-            BEETLE_ARROW_TRADE = new MerchantOffer(
-                    new ItemStack(Items.EMERALD,cf.wanderingTraderSettings.beetleArrowCost),
-                    new ItemStack(ModItems.STAND_ARROW)
-                    ,1,1,1);
+        MerchantOffer BEETLE_ARROW_TRADE = new MerchantOffer(
+                new ItemStack(Items.EMERALD, cf.wanderingTraderSettings.beetleArrowCost),
+                new ItemStack(ModItems.STAND_ARROW)
+                , 1, 1, 1);
             BROKEN_ARROW_TRADE = new MerchantOffer(
                     new ItemStack(Items.EMERALD,cf.wanderingTraderSettings.brokenArrowCost),
                     new ItemStack(ModItems.STAND_BEETLE_ARROW)
                     ,1,1,1);
-            ANUBIS_TRADE = new MerchantOffer(
-                new ItemStack(Items.EMERALD,cf.wanderingTraderSettings.anubisTradeCost),
+        MerchantOffer ANUBIS_TRADE = new MerchantOffer(
+                new ItemStack(Items.EMERALD, cf.wanderingTraderSettings.anubisTradeCost),
                 new ItemStack(ModItems.ANUBIS_ITEM)
-                ,1,1,1);
+                , 1, 1, 1);
+        MerchantOffer MASK_TRADE = new MerchantOffer(
+                new ItemStack(Items.EMERALD, cf.wanderingTraderSettings.maskTradeCost),
+                new ItemStack(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK)
+                , 1, 1, 1);
 
             TRADES.add(new Pair<>(cf.wanderingTraderSettings.beetleArrowTradeChance, BEETLE_ARROW_TRADE) );
             TRADES.add(new Pair<>(cf.wanderingTraderSettings.brokenArrowTradeChance, BROKEN_ARROW_TRADE) );
             TRADES.add(new Pair<>(cf.wanderingTraderSettings.anubisTradeChance, ANUBIS_TRADE) );
+        TRADES.add(new Pair<>(cf.wanderingTraderSettings.maskTradeChance, MASK_TRADE) );
     }
 }

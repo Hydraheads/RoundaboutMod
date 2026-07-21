@@ -1,30 +1,24 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
-import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.minecraft.client.player.LocalPlayer;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
-import net.hydra.jojomod.client.models.layers.PreRenderEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
@@ -109,7 +103,76 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             entityAndData.roundabout$setExclusiveLayers(true);
         }
 
+        if (ClientUtil.isUsingEpitaph() && entity != null){
+            Player pl = ClientUtil.getPlayer();
+            if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
+                    instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
+                TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
+                if (skip != null && !entity.isPassenger()){
+                    float progress = Mth.clamp(
+                            (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
+                            0.0F,
+                            1.0F
+                    );
+                    double $$7 = skip.position.x;
+                    double $$8 = skip.position.y;
+                    double $$9 = skip.position.z;
+                    float renderYaw = skip.yRot;
+                    if (progress < 1){
+                        double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
+                        double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
+                        double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
+
+                        $$7 = Mth.lerp(progress, x, $$7);
+                        $$8 = Mth.lerp(progress, y, $$8);
+                        $$9 = Mth.lerp(progress, z, $$9);
+                        renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+                    }
+
+
+
+                    if (entity instanceof  LivingEntity LE) {
+                        float oldBody = LE.yBodyRot;
+                        float oldBodyO = LE.yBodyRotO;
+                        float oldHead = LE.yHeadRot;
+                        float oldHeadO = LE.yHeadRotO;
+                        float oldYaw = entity.getYRot();
+                        float oldYawO = entity.yRotO;
+                        float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
+                        float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
+
+                        LE.yBodyRot = renderYaw;
+                        LE.yBodyRotO = renderYaw;
+                        LE.yHeadRot = renderYaw + headOffset;
+                        LE.yHeadRotO = renderYaw + headOffsetO;
+
+                        entity.setYRot(renderYaw);
+                        entity.yRotO = renderYaw;
+
+                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+
+                        LE.yBodyRot = oldBody;
+                        LE.yBodyRotO = oldBodyO;
+                        LE.yHeadRot = oldHead;
+                        LE.yHeadRotO = oldHeadO;
+                        entity.setYRot(oldYaw);
+                        entity.yRotO = oldYawO;
+                    } else {
+
+                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                    }
+
+                }
+                ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
+                if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
+                        SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         if (!roundabout$recurse) {
+
             if (entity.level().isClientSide()) {
                 if (entity instanceof CinderellaVisageDisplayEntity pre) {
                     ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
@@ -144,7 +207,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             StandUser sus = ((StandUser) player);
             StandPowers powers = sus.roundabout$getStandPowers();
             if (powers.isPiloting()) {
-                StandEntity piloting = powers.getPilotingStand();
+                LivingEntity piloting = powers.getPilotingStand();
                 if (piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
                     if (this.minecraft.level != null) {
@@ -332,13 +395,78 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
-            at = @At(value = "TAIL"))
-    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 0,shift = At.Shift.BEFORE))
+    private void roundabout$renderLevelLead(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                         Camera $$4, GameRenderer $$5, LightTexture $$6,
-                                        Matrix4f $$7, CallbackInfo ci) {
-        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
+                                        Matrix4f matrix, CallbackInfo ci) {
 
         Player player = Minecraft.getInstance().player;
+
+        if (player != null){
+            if (ClientUtil.isUsingEpitaph()){
+                if (((StandUser)player).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc && pkc.isGuarding()){
+                    TimeSkipSnapshot skip = pkc.epitaph.get(player.getId());
+                    if (skip != null && !player.isPassenger()){
+                        float progress = Mth.clamp(
+                                (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
+                                0.0F,
+                                1.0F
+                        );
+                        double $$7 = skip.position.x;
+                        double $$8 = skip.position.y;
+                        double $$9 = skip.position.z;
+                        float renderYaw = skip.yRot;
+                        if (progress < 1){
+                            double x = Mth.lerp(partialTick, player.xOld, player.getX());
+                            double y = Mth.lerp(partialTick, player.yOld, player.getY());
+                            double z = Mth.lerp(partialTick, player.zOld, player.getZ());
+
+                            $$7 = Mth.lerp(progress, x, $$7);
+                            $$8 = Mth.lerp(progress, y, $$8);
+                            $$9 = Mth.lerp(progress, z, $$9);
+                            renderYaw = Mth.rotLerp(progress, player.yRotO, skip.yRot);
+                        }
+
+
+
+                            float oldBody = player.yBodyRot;
+                            float oldBodyO = player.yBodyRotO;
+                            float oldHead = player.yHeadRot;
+                            float oldHeadO = player.yHeadRotO;
+                            float oldYaw = player.getYRot();
+                            float oldYawO = player.yRotO;
+                            float headOffset = Mth.wrapDegrees(player.yHeadRot - player.yBodyRot);
+                            float headOffsetO = Mth.wrapDegrees(player.yHeadRotO - player.yBodyRotO);
+
+                        player.yBodyRot = renderYaw;
+                        player.yBodyRotO = renderYaw;
+                        player.yHeadRot = renderYaw + headOffset;
+                        player.yHeadRotO = renderYaw + headOffsetO;
+
+                        player.setYRot(renderYaw);
+                        player.yRotO = renderYaw;
+                        Vec3 cameraPos = $$4.getPosition();
+
+                        MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
+                        this.entityRenderDispatcher.render(player, $$7 - cameraPos.x,
+                                $$8 - cameraPos.y,$$9 - cameraPos.z, renderYaw, partialTick,
+                                $$0,$$20, this.entityRenderDispatcher.getPackedLightCoords(player,
+                                        partialTick));
+
+                        player.yBodyRot = oldBody;
+                        player.yBodyRotO = oldBodyO;
+                        player.yHeadRot = oldHead;
+                        player.yHeadRotO = oldHeadO;
+                        player.setYRot(oldYaw);
+                        player.yRotO = oldYawO;
+
+                    }
+                    ((IEntityAndData)player).roundabout$setExclusiveLayers(false);
+                }
+            }
+        }
+
         if (player != null && Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             Vec3 $$9 = $$4.getPosition();
             double $$10 = $$9.x();
@@ -348,6 +476,15 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             //ClientUtil.renderFirstPersonModelParts($$4.getEntity(), $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20, rdbt$getPackedLightCoords(player,partialTick));
             this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
+    }
+
+    @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
+            at = @At(value = "TAIL"))
+    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+                                        Camera $$4, GameRenderer $$5, LightTexture $$6,
+                                        Matrix4f $$7, CallbackInfo ci) {
+        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
+
     }
     public final int rdbt$getPackedLightCoords(LivingEntity $$0, float $$1) {
         BlockPos $$2 = BlockPos.containing($$0.getLightProbePosition($$1));
@@ -370,19 +507,13 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
 
     }
-    /**This is also where red bind and other string-like moves will be rendered*/
+    /**This is also where  red bind and other string-like moves will be rendered*/
 
     @Inject(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at=@At("HEAD"), cancellable = true)
     private void roundabout$addParticle(ParticleOptions $$0, boolean $$1, boolean $$2, double $$3, double $$4, double $$5, double $$6, double $$7, double $$8, CallbackInfoReturnable<Particle> cir)
     {
         if (Minecraft.getInstance().player == null)
             return;
-
-        if (((StandUser)Minecraft.getInstance().player).roundabout$isParallelRunning())
-        {
-            cir.setReturnValue(null);
-            cir.cancel();
-        }
     }
 
     @Inject(method = "renderChunkLayer", at = @At("HEAD"))

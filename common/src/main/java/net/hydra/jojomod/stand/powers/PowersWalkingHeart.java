@@ -14,6 +14,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -79,10 +80,13 @@ public class PowersWalkingHeart extends NewDashPreset {
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWalkingHeart;
     }
     public boolean canWallWalkConfig(){
-        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.enableWallWalking;
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
     public int walkingCDPerHit(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownPerHit;
+    }
+    public int walkingCDBase(){
+        return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartCooldownBase;
     }
     public int walkingMaxHits(){
         return ClientNetworking.getAppropriateConfig().walkingHeartSettings.walkingHeartMaxHits;
@@ -108,19 +112,25 @@ public class PowersWalkingHeart extends NewDashPreset {
     @Override
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         if ((hasStandActive(this.getSelf()) && $$0.is(DamageTypes.PLAYER_ATTACK)) && hasExtendedHeelsForWalking()){
-            addEXP(1);
+            addEXP(2);
         }
 
         return false;
+    }
+
+
+    @Override
+    public boolean forceCrit(){
+        return hasExtendedHeelsForWalking() || super.forceCrit();
     }
 
     @Override
     public int getExpForLevelUp(int currentLevel){
         int amt;
         if (currentLevel == 1) {
-            amt = 200;
+            amt = 150;
         } else if (currentLevel == 2){
-            amt = 400;
+            amt = 300;
         } else {
             amt = 800;
         }
@@ -287,7 +297,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public int getHeelUnattachCooldown(){
-        return hitsSinceAttached*walkingCDPerHit();
+        if (hitsSinceAttached > 0){
+            return hitsSinceAttached*walkingCDPerHit() + walkingCDBase();
+        }
+        return 0;
     }
     public void hitHeelExtendedState(){
         if (hasExtendedHeelsForWalking()) {
@@ -302,7 +315,9 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
     public void onActuallyHurt(DamageSource $$0, float $$1){
         if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
-            hitHeelExtendedState();
+            if (!$$0.is(ModDamageTypes.KNIFE) && !$$0.is(ModDamageTypes.BULLET)) {
+                hitHeelExtendedState();
+            }
         }
     }
 
@@ -511,8 +526,10 @@ public class PowersWalkingHeart extends NewDashPreset {
     public float inputSpeedModifiers(float basis){
         if (inCombatMode()) {
             return 0;
-        } else if (hasExtendedHeelsForWalking() && (canCutCorners() || slowHeelTicks > 0)){
-            return basis*0.8F;
+        } else if (hasExtendedHeelsForWalking()){
+            if (canCutCorners() || slowHeelTicks > 0) {
+                basis *= 0.8F;
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -685,7 +702,7 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public float getSpikeDamage(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod((float) ((float) 1.8F* (ClientNetworking.getAppropriateConfig().
+            return levelupDamageMod((float) ((float) 1.6F* (ClientNetworking.getAppropriateConfig().
                     walkingHeartSettings.walkingHeartAttackMultOnPlayers*0.01)));
         } else {
             return levelupDamageMod((float) ((float) 3* (ClientNetworking.getAppropriateConfig().
@@ -713,6 +730,8 @@ public class PowersWalkingHeart extends NewDashPreset {
             if (target instanceof AbstractVillager){
                 return false;
             }
+        } else if (target.distanceTo(attacker) > 8){
+            return false;
         }
         if (DamageHandler.HeelSpikeStandDamageEntity(target,pow, attacker)){
             if (attacker instanceof LivingEntity LE){
@@ -782,7 +801,7 @@ public class PowersWalkingHeart extends NewDashPreset {
     }
 
     public void useSpikeAttackF(boolean rightClick){
-        this.setCooldown(PowerIndex.SKILL_4, 3);
+        this.setCooldown(PowerIndex.SKILL_1, 3);
         this.setAttackTimeDuring(-10);
         this.setActivePower(PowerIndex.POWER_4_EXTRA);
         MainUtil.playPop(self);
@@ -1264,7 +1283,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                 if (keyIsDown) {
                     if (inCombatMode()){
                         if (!holdDownClick){
-                            if (!this.onCooldown(PowerIndex.SKILL_4) && ((getActivePower() == PowerIndex.NONE)
+                            if (!this.onCooldown(PowerIndex.SKILL_1) && ((getActivePower() == PowerIndex.NONE)
                                     || getActivePower() == PowerIndex.POWER_4_EXTRA)) {
                                 if (confirmShot(getUseTicks())) {
                                     if (this.self instanceof Player PE){
@@ -1436,4 +1455,9 @@ public class PowersWalkingHeart extends NewDashPreset {
         }
     }
 
+    @Override
+    public void refreshCooldowns() {
+        super.refreshCooldowns();
+        this.setShootTicks(0);
+    }
 }

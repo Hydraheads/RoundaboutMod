@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -45,13 +46,16 @@ public abstract class GravityMeleeAttackGoalMixin {
                         (gravityDirection == Direction.EAST && this.mob.getX() > $$0.getX())
         )
             return;
-        ci.cancel();
 
-        double $$2 = this.getAttackReachSqr($$0);
-        if (Math.sqrt($$1) <= (Math.sqrt($$2)+2) && this.ticksUntilNextAttack <= 0) {
-            this.resetAttackCooldown();
-            this.mob.swing(InteractionHand.MAIN_HAND);
-            this.mob.doHurtTarget($$0);
+        if (MainUtil.canActuallyHitInvolved2(this.mob,$$0)) {
+            ci.cancel();
+
+            double $$2 = this.getAttackReachSqr($$0);
+            if (Math.sqrt($$1) <= (Math.sqrt($$2) + 2) && this.ticksUntilNextAttack <= 0) {
+                this.resetAttackCooldown();
+                this.mob.swing(InteractionHand.MAIN_HAND);
+                this.mob.doHurtTarget($$0);
+            }
         }
     }
 }

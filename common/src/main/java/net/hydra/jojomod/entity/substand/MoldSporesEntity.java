@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,62 +40,90 @@ import java.util.Objects;
 public class MoldSporesEntity extends StandEntity {
     public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
     public int lifetime = 600;
+    public int lifetime_add = 150;
     public MoldSporesEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
     @Override
     public void tick() {
-        if (lifetime <1){
-            this.discard();
-        }else{
-            lifetime--;
+
+        List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range ,range );
+        for(int j = 0;j<damages.size();j++) {
+
+            if (Objects.nonNull(this.getUser())) {
+                Entity entity = damages.get(j);
+                if(entity instanceof LivingEntity){
+
+                ((StandUser) entity).SetInMoldTicks(3);
+                }
+
+            }
         }
         this.setFadeOut((byte) 1);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser)user;
-        if (!client) {
-            tickeffect();
-            if (user == null) {
-                spawnAtLocation(this.getMainHandItem());
+        if(StandUU != null) {
+            if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
                 this.discard();
             }
-            if(StandUU != null) {
-                if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
+        }
+        lifetime--;
+        if (lifetime <1) {
+            this.discard();
+
+        }
+
+        if (user == null) {
+            this.discard();
+        }else{
+            if(user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
+                if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
                     this.discard();
                 }
-            }else{
+            }if(!getUser().isAlive()){
                 this.discard();
             }
+;      }
             if (this.getDeltaMovement().y > 0.2){
                 this.setDeltaMovement(this.getDeltaMovement().add(0,-00.06,0));
             }else {
                 this.setDeltaMovement(0, -0.2, 0);
             }
-            if (!onGround()) {
-                range += 0.09 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100);
-                //this.setDeltaMovement(0,-0.4,0);
+            if(!client) {
+                if (!onGround()) {
+                    range += (float) (0.09 * ((double) ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100));
+                    //this.setDeltaMovement(0,-0.4,0);
+                }
+                if (range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize) {
+                    range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
+                }
             }
-                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                        this.getX(),
-                        this.getY(),
-                        this.getZ(),
-                        (((int) range ^ 3) * 1) + 1, range, range, range, 0.005);
+        if (!client) {
+            tickeffect();
+            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    (int)(((int) range ^ 3) * 0.5) + 1, range/2, range/2, range/2, 0.005);
 
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    (int) (((int) range ^ 3) * 0.25) +1, range, range, range, 0.005);
+                    (int) (((int) range ^ 3) * 0.125) + 1, range/2, range/2, range/2, 0.005);
+            S2CPacketUtil.sync_mold_duration(lifetime,this.getId());
+            S2CPacketUtil.sync_mold_range(range,this.getId());
+        }
 
 
-
+                super.tick();
             }
-            super.tick();
 
 
-    }
+
+
 
     public void tickeffect(){
         List<Entity> damages = MainUtil.genHitbox(this.level(),this.getX(),this.getY(),this.getZ(),range,range,range);
@@ -101,21 +131,26 @@ public class MoldSporesEntity extends StandEntity {
             if (Objects.nonNull(this.getUser())) {
                 Entity entity = damages.get(j);
 
+
+
+
+
                 //boolean down = previousYpos > entity.getY() + 0.1;
 
                 boolean isStand = (entity instanceof StandEntity);
-                boolean playerBalanceDetection = ((entity.getY() < this.getUser().getY() && this.getUser() instanceof Player) || (!(entity instanceof Player)));
+                boolean isBoss = (MainUtil.isBossMob(entity));
+
                 if (entity instanceof LivingEntity) {
 
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
                             && !isStand
+                            && !isBoss
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
-                            && !entity.equals(User)
-                            && playerBalanceDetection) {
-                        if (!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) {
+                            && !entity.equals(User)){
+                        if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !( User instanceof Player)) {
 
                             double width = entity.getBbWidth() / 2;
                             double height = entity.getBbHeight() / 2;
@@ -132,12 +167,22 @@ public class MoldSporesEntity extends StandEntity {
                             //     lifetime += 200;
                             //     range += 4;
                             //}
-                            if (entity instanceof Player) {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 4);
+                            if (MainUtil.getReducedDamage(entity)) {
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (4 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6F)));
                             } else {
-                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), 7);
+                                entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (8 * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGMobsMultiplier / 100F) * ((((StandUser)entity).getStaringYPos() - entity.getY())*0.6F)));
                             }
-                            ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                            if(!entity.isAlive()){
+                                range += 4;
+                                if(lifetime_add > 0) {
+                                    lifetime += lifetime_add;
+                                    lifetime_add -= 10;
+                                }
+                                entity.discard();
+                            }
+                            if(Math.random()<0.2) {
+                                ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                            }
                         }
                     }
                 }

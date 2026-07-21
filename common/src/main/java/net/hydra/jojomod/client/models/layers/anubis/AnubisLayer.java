@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.layers.anubis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -41,10 +42,12 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static HumanoidArm shouldRender(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
         if (entity.isUsingItem() && !(entity.getUseItem().getItem() instanceof AnubisItem) )  {return null;}
-        if (entity.getMainHandItem().getItem() instanceof AnubisItem
+
+        if ((entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode())
                 || user.roundabout$isPossessed()
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
                 || user.roundabout$getAnubisVanishTicks() > 0 ) {
+
             return entity.getMainArm();
         }
         return null;
@@ -63,6 +66,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
+
         if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
         if (((IEntityAndData) entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
@@ -71,7 +75,6 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
             StandUser SU = (StandUser) entity;
             if (AnubisLayer.shouldRender(entity) != null) {
-
                 ClientUtil.pushPoseAndCooperate(poseStack,25);
 
 

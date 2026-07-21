@@ -4,13 +4,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.visages.BarrageArmAnimation;
+import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersOasis;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -27,9 +33,11 @@ import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+
 
 public class BarrageArmsPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -42,6 +50,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
     private final ModelPart LeftArmBAM;
     private final ModelPart LeftArmBAM4;
     private final ModelPart LeftArmBAM3;
+
+    public RenderType storedRenderType = null;
 
     public BarrageArmsPart() {
         super(RenderType::entityTranslucent);
@@ -132,7 +142,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation()));
+        storedRenderType = RenderType.entityCutoutNoCull(getTextureLocation());
+        VertexConsumer consumer = bufferSource.getBuffer(storedRenderType);
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     PartPose pp = PartPose.ZERO;
@@ -145,7 +156,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation()));
+            storedRenderType = RenderType.entityTranslucent(getTextureLocation());
+            VertexConsumer consumer = bufferSource.getBuffer(storedRenderType);
             //The number at the end is inversely proportional so 2 is half speed
             //root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alph);
 
@@ -196,7 +208,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                     Mob shapeShift = ((IPlayerRenderer) PR).roundabout$getShapeShift(player);
                     if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
                             ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
-                        consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
+                        storedRenderType = RenderType.entityTranslucent(hr.getTextureLocation(shapeShift));
+                        consumer = bufferSource.getBuffer(storedRenderType);
                         if (hr.getModel() instanceof HumanoidModel<?> hm) {
                             rightArm = hm.rightArm;
                             leftArm = hm.leftArm;
@@ -208,6 +221,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                         if (ClientUtil.hasChangedArms(acp)){
                             tl = RenderType.entityTranslucent(ClientUtil.getChangedArmTexture(acp));
                         }
+                        storedRenderType = tl;
                         consumer = bufferSource.getBuffer(tl);
 
                     }
@@ -246,6 +260,9 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+
+                        renderRightLocaArm(bufferSource, rightSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -277,6 +294,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+                        renderRightLocaArm(bufferSource, rightSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -308,6 +327,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+                        renderRightLocaArm(bufferSource, rightSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -348,6 +369,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+                        renderLeftLocaArm(bufferSource, leftSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -378,6 +401,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+                        renderLeftLocaArm(bufferSource, leftSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -409,6 +434,8 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                                 OverlayTexture.NO_OVERLAY,
                                 r, g, b, barrageAlpha
                         );
+                        renderLeftLocaArm(bufferSource, leftSleeve, poseStack, light, r, g, b, bt, muscle,
+                                barrageAlpha, player, partialTicks, plm);
                     }
                     poseStack.popPose();
 
@@ -440,5 +467,210 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
         }
     }
 
+    public void renderRightLocaArm(MultiBufferSource bSource, ModelPart rsleeve, PoseStack poseStack,
+                                   int light, float r, float g, float b, byte bt, int muscle, float barrageAlpha,
+                                   Player player, float partialTicks, PlayerModel plm){
+        if (barrageAlpha > 0) {
+            float delta = ClientUtil.getDelta();
+            if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                delta = 0;
+            }
+            float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            float oasisAmt = PowersOasis.getOasisAmt(player, delta);
+            if (whiteAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersWhiteAlbum.getSkinString(skin);
+                if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                    path = "ice";
+                }
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.WhiteAlbumSlimRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(whiteAmt, barrageAlpha), path);
+                } else {
+                    ModStrayModels.WhiteAlbumRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(whiteAmt, barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (oasisAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersOasis.getSkinString(skin);
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.OasisSlimRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                } else {
+                    ModStrayModels.OasisRightArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (bt == LocacacaCurseIndex.RIGHT_HAND) {
+                poseStack.pushPose();
+                VertexConsumer consumerX = bSource.getBuffer
+                        (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_ARM));
+                rsleeve.xScale += 0.04f;
+                rsleeve.zScale += 0.04f;
+                rsleeve.render(
+                        poseStack,
+                        consumerX,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        r, g, b, 1f
+                );
+                rsleeve.xScale -= 0.04f;
+                rsleeve.zScale -= 0.04f;
+                bSource.getBuffer
+                        (storedRenderType);
+                poseStack.popPose();
+            } else {
+                if (muscle > -1) {
+                    float scale = 1.055F;
+                    float alpha = 0.6F;
+                    float oscillation = Math.abs(((player.tickCount % 10) + (partialTicks % 1)) - 5) * 0.04F;
+                    alpha += oscillation;
+                    if (player.getMainArm() == HumanoidArm.RIGHT) {
+
+                        poseStack.pushPose();
+                        rsleeve.xScale += 0.04f;
+                        rsleeve.zScale += 0.04f;
+                        VertexConsumer consumerX;
+                        if (((IPlayerModel) plm).roundabout$getSlim()) {
+                            consumerX = bSource.getBuffer
+                                    (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                        } else {
+                            consumerX = bSource.getBuffer
+                                    (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                        }
+                        rsleeve.render(
+                                poseStack,
+                                consumerX,
+                                light,
+                                OverlayTexture.NO_OVERLAY,
+                                r, g, b, alpha
+                        );
+                        rsleeve.xScale -= 0.04f;
+                        rsleeve.zScale -= 0.04f;
+                        poseStack.popPose();
+
+                        bSource.getBuffer
+                                (storedRenderType);
+                    }
+                }
+            }
+        }
+    }
+
+    public void renderLeftLocaArm(MultiBufferSource bSource, ModelPart rsleeve, PoseStack poseStack,
+                                   int light, float r, float g, float b, byte bt, int muscle, float barrageAlpha,
+                                   Player player, float partialTicks, PlayerModel plm){
+
+        if (barrageAlpha > 0) {
+            float delta = ClientUtil.getDelta();
+            if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
+                delta = 0;
+            }
+            float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
+            float oasisAmt = PowersOasis.getOasisAmt(player, delta);
+            if (whiteAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersWhiteAlbum.getSkinString(skin);
+                if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
+                    path = "ice";
+                }
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.WhiteAlbumSlimLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
+                } else {
+                    ModStrayModels.WhiteAlbumLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(whiteAmt,barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (oasisAmt > 0) {
+                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                String path = PowersOasis.getSkinString(skin);
+                ClientUtil.pushPoseAndCooperate(poseStack, 8);
+
+                rsleeve.translateAndRotate(poseStack);
+                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                    ModStrayModels.OasisSlimLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                } else {
+                    ModStrayModels.OasisLeftArm.render(
+                            player, delta, poseStack, bSource, light,
+                            r, g, b, Math.min(oasisAmt, barrageAlpha), path);
+                }
+                ClientUtil.popPoseAndCooperate(poseStack, 8);
+
+            } else if (bt == LocacacaCurseIndex.LEFT_HAND) {
+                poseStack.pushPose();
+                VertexConsumer consumerX = bSource.getBuffer
+                        (RenderType.entityTranslucent(StandIcons.STONE_LEFT_ARM));
+                rsleeve.xScale += 0.04f;
+                rsleeve.zScale += 0.04f;
+                rsleeve.render(
+                        poseStack,
+                        consumerX,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        r, g, b, 1f
+                );
+                rsleeve.xScale -= 0.04f;
+                rsleeve.zScale -= 0.04f;
+                poseStack.popPose();
+                bSource.getBuffer
+                        (storedRenderType);
+            } else {
+                if (muscle > -1) {
+                    float scale = 1.055F;
+                    float alpha = 0.6F;
+                    float oscillation = Math.abs(((player.tickCount % 10) + (partialTicks % 1)) - 5) * 0.04F;
+                    alpha += oscillation;
+                    if (player.getMainArm() == HumanoidArm.LEFT) {
+
+                        poseStack.pushPose();
+                        rsleeve.xScale += 0.04f;
+                        rsleeve.zScale += 0.04f;
+                        VertexConsumer consumerX;
+                        if (((IPlayerModel) plm).roundabout$getSlim()) {
+                            consumerX = bSource.getBuffer
+                                    (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                        } else {
+                            consumerX = bSource.getBuffer
+                                    (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                        }
+                        rsleeve.render(
+                                poseStack,
+                                consumerX,
+                                light,
+                                OverlayTexture.NO_OVERLAY,
+                                r, g, b, alpha
+                        );
+                        rsleeve.xScale -= 0.04f;
+                        rsleeve.zScale -= 0.04f;
+                        poseStack.popPose();
+                        bSource.getBuffer
+                                (storedRenderType);
+                    }
+                }
+            }
+        }
+    }
 }
 

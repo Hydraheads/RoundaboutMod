@@ -69,10 +69,51 @@ public enum PowerTypes {
         }
     }
 
+    public static boolean canKeepGuardPos(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.GUARD;
+            }  else if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.GUARD;
+            }
+        }
+        return false;
+    }
+    public static boolean canKeepBarrageChargePos(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.BARRAGE_CHARGE;
+            }  else if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.BARRAGE_CHARGE;
+            }
+        }
+        return false;
+    }
+    public static boolean canKeepBarragePos(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingPower(ent)){
+                return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.BARRAGE;
+            }  else if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.BARRAGE;
+            }
+        }
+        return false;
+    }
+    public static boolean canChargeShotPos(Entity ent){
+        if (ent instanceof Player pl){
+            if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.EXTRA;
+            }
+        }
+        return false;
+    }
+
     public static boolean isBrawling(Entity ent){
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling();
+            }  else if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().isBrawling();
             }
         }
         return false;
@@ -90,7 +131,12 @@ public enum PowerTypes {
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling() &&
-                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE;
+                        (((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE ||
+                        ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
+            } if (isUsingStand(ent)){
+                return ((StandUser)pl).roundabout$getStandPowers().isBrawling() &&
+                        (((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE ||
+                                ((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
             }
         }
         return false;

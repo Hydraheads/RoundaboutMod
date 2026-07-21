@@ -1,6 +1,7 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.client.models.RoadRollerStrayModel;
+import net.hydra.jojomod.client.models.UVBlasterModel;
 import net.hydra.jojomod.client.models.WornBloodyStoneMaskModel;
 import net.hydra.jojomod.client.models.WornStoneMaskModel;
 import net.hydra.jojomod.client.models.minions.head_parts.*;
@@ -17,6 +18,7 @@ public class ModStrayModels {
     public static EmperorShootingArmModel EMPEROR_SHOOTING_ARM;
     public static TuskDrillModel TUSK_DRILL;
     public static TuskNailModel TUSK_NAIL;
+    public static TuskDrillNailModel TUSK_DRILL_NAIL;
     public static FirstPersonArmsModel FirstPersonArmsModel;
     public static FirstPersonArmsSlimModel FirstPersonArmsSlimModel;
     public static FirstPersonSnubnoseModel FirstPersonSnubnoseModel;
@@ -26,6 +28,7 @@ public class ModStrayModels {
     public static HeyYaModel HEY_YA;
     public static CenturyBoyModel CENTURY_BOY;
     public static BowlerHatModel BOWLER_HAT;
+    public static UVBlasterModel UV_BLASTER;
     public static WornStoneMaskModel WORN_STONE_MASK;
     public static WornBloodyStoneMaskModel WORN_BLOODY_STONE_MASK;
     public static RattShoulderModel RATT_SHOULDER;
@@ -44,11 +47,16 @@ public class ModStrayModels {
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
+    public static JohnnyHatPart JohnnyHatPart;
+    public static DaiyaEarsPart DaiyaEarsPart;
+    public static DaiyaFluffPart DaiyaFluffPart;
     public static RipperEyesPart ripperEyesPart;
     public static SpeedwagonFoundationHatPart SpeedwagonFoundationHatPart;
     public static BasicHatPart BasicHatPart;
     public static SpikeyHairPart SpikeyHairPart;
+    public static LucyHairPart LucyHairPart;
     public static AvdolHairPart AvdolHairPart;
+    public static JohngalliaHairPart JohngalliaHairPart;
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
     public static RatHatPart ratHatPart;
@@ -69,6 +77,7 @@ public class ModStrayModels {
     public static LeftLegPart LeftLeg;
     public static LeftHeelPart LeftHeel;
     public static RightHeelPart RightHeel;
+    public static JohngalliaTiePart JohngalliaTiePart;
 
 
     public static CatHeadPart CatHeadPart;
@@ -82,6 +91,29 @@ public class ModStrayModels {
     public static VampireHairOnePart VampireHairOne;
     public static VampireHairTwoPart VampireHairTwo;
     public static VampireHairFleshBudLayer VampireHairFlesh;
+
+    public static WhiteAlbumColdPart WhiteAlbumCold;
+    public static WhiteAlbumHeadPart WhiteAlbumHead;
+    public static WhiteAlbumChestPart WhiteAlbumChest;
+    public static WhiteAlbumBodyPart WhiteAlbumBody;
+    public static WhiteAlbumLeftLegPart WhiteAlbumLeftLeg;
+    public static WhiteAlbumRightLegPart WhiteAlbumRightLeg;
+    public static WhiteAlbumSkatePart WhiteAlbumSkate;
+
+    public static WhiteAlbumLeftArmPart WhiteAlbumLeftArm;
+    public static WhiteAlbumRightArmPart WhiteAlbumRightArm;
+    public static WhiteAlbumSlimLeftArmPart WhiteAlbumSlimLeftArm;
+    public static WhiteAlbumSlimRightArmPart WhiteAlbumSlimRightArm;
+
+    public static OasisHeadPart OasisHead;
+    public static OasisChestPart OasisChest;
+    public static OasisBodyPart OasisBody;
+    public static OasisLeftLegPart OasisLeftLeg;
+    public static OasisRightLegPart OasisRightLeg;
+    public static OasisLeftArmPart OasisLeftArm;
+    public static OasisRightArmPart OasisRightArm;
+    public static OasisSlimLeftArmPart OasisSlimLeftArm;
+    public static OasisSlimRightArmPart OasisSlimRightArm;
 
     public static MoldSpineModel MoldSpine;
     public static MoldRightArm MoldRightArm;
