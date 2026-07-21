@@ -359,7 +359,7 @@ public class PowersMandom extends NewDashPreset {
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
                         LE.stopUsingItem();
                     }
-                    if (ent instanceof Mob mb){
+                    if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
                         mb.getNavigation().stop();
                         ((IMob)mb).roundabout$setConfusionTicks(7);
                     }

@@ -529,7 +529,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         RelativeMovement.Y,
                         RelativeMovement.Z),
                 snapshot.yRot,entity.getXRot());
-        if (entity instanceof Mob mb){
+        if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
             mb.getNavigation().stop();
             ((IMob)mb).roundabout$setConfusionTicks(7);
         }
