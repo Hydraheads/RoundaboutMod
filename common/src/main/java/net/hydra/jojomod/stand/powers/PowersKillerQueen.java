@@ -2427,13 +2427,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
 
-        /*if (unskipInterp > -1){
-            unskipInterp--;
-            if (unskipInterp <= -1){
-                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
-                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
-            }
-        }*/
+        EnderEyeItem
 
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
