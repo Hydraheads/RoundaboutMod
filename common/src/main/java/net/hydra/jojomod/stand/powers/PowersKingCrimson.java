@@ -37,6 +37,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -126,6 +128,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
+        if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
+            return predicted;
+        }
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
@@ -217,7 +222,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             Vec3 velocity = baseVelocity;
 
             BlockPos ft = BlockPos.containing(predicted);
-            if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))) {
+            if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
+            && !player.getAbilities().flying) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
                 velocity.multiply(1,0,1);
@@ -395,13 +401,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         AABB area = self.getBoundingBox().inflate(getSkipRange());
 
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
-            if (entity instanceof Projectile proj){
+            if (entity instanceof Projectile proj) {
                 skip_dump.put(proj.getId(), new TimeSkipSnapshot(
                         proj.getId(),
-                        predictProjectile(proj,100),
+                        predictProjectile(proj, 100),
                         proj.getXRot(),
                         proj.getYRot()
                 ));
+            } else if (entity instanceof PrimedTnt pt){
+                pt.setFuse(1);
             } if (entity instanceof LivingEntity living) {
 
                 if (!skipSelf && living.getId() == self.getId()) {
@@ -481,6 +489,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
         if (entity instanceof LivingEntity LE) {
+            if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
+                creeper.setSwellDir(30);
+            }
             double width = entity.getBbWidth();
             double height = entity.getBbHeight();
             // Construct bounding box at the target position
@@ -616,6 +627,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         proj.getXRot(),
                         proj.getYRot()
                 ));
+            } else if (entity instanceof PrimedTnt pt){
+                pt.setFuse(1);
             }
         }
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
