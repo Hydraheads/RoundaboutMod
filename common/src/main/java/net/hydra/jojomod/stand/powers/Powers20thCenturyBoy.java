@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -16,11 +15,11 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -29,9 +28,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -39,8 +36,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AirItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -163,7 +158,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         PUMPKIN = 19,
         EVIL_PUMPKIN = 20,
         GHOST = 21,
-        WANDERING = 22;
+        WANDERING = 22,
+
+        // dont mind me
+        CLIENT_SYNC = 100;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -267,17 +265,21 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public void switchMode(){
         if (mode == 1){
-            mode += 1;
+            mode = 2;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
         } else if (mode == 2) {
-            mode +=1;
+            mode = 3;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
         } else if (mode == 3) {
-            mode += 1;
+            mode = 4;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
         } else{
             mode = 1;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
+        }
+
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),Powers20thCenturyBoy.CLIENT_SYNC, mode);
         }
     }
 
@@ -556,9 +558,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
-            invincibleState = false;
+            if (invincibleState){
+                this.setCooldown(PowerIndex.SKILL_2, 80);
+                invincibleState = false;
+                wardenMunches = 0;
+            }
             staticMode = 0;
-            wardenMunches = 0;
         }
     }
 
@@ -608,8 +613,19 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             wardenMunches++;
         }else {
             this.self.level().playSound(warden, warden.getOnPos(), SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 15F, 1F);
-            this.self.hurt(this.self.level().damageSources().genericKill(), 5);
+            this.self.hurt(this.self.level().damageSources().genericKill(), 7);
         }
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower){
+            case Powers20thCenturyBoy.CLIENT_SYNC -> {
+                this.mode = data;
+            }
+        }
+        super.updatePowerInt(activePower,data);
+
     }
 
     /** animation thingy **/
