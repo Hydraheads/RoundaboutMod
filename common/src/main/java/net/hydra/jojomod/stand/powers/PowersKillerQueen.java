@@ -79,6 +79,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
+import org.joml.Vector3f;
 
 import java.util.*;
 
@@ -88,7 +89,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
     @Override public boolean isWip(){return true;}
     @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
-    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.YELLOW);}
+    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.BLUE);}
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
@@ -146,6 +147,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	private byte currentBombStatus = BOMB_NONE;
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
+
+    public int unskipInterp = -1;
 
     public HashMap<Integer, SavedSecond> combatSavedBTD = new HashMap<>();
 
@@ -1986,13 +1989,21 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (!combatSavedBTD.isEmpty()) {
             int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
+            unskipInterp = 1;
 
             for (int id : this.combatSavedBTD.keySet()) {
                 Entity ent = this.self.level().getEntity(id);
                 if (ent != null && MainUtil.canRewindInTime(ent, this.self)) {
                     SavedSecond second = combatSavedBTD.get(id);
 
-                    if (second != null) { second.loadTime(ent); }
+                    if (second != null) {
+                        packetNearby(new Vector3f(
+                                (float) second.position.x,
+                                (float) second.position.y,
+                                (float) second.position.z
+                                ), ent.getId());
+                        second.loadTime(ent);
+                    }
 
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
                         LE.stopUsingItem();
@@ -2016,7 +2027,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectWhoBitedTheDust(Entity target) {
         Vec3 pos = target.position();
-        float range = 20.0f;
+        float range = 8.0f;
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
                 pos.x(), pos.y(), pos.z(), range, range, range);
@@ -2368,11 +2379,38 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
+    }
+
     @Override
     public void tickPower(){
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
-        
+
+        /*if (unskipInterp > -1){
+            unskipInterp--;
+            if (unskipInterp <= -1){
+                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
+            }
+        }*/
+
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
