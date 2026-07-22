@@ -137,7 +137,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
         }
-        float sped = Math.max(0.1F,liv.getSpeed());
+        float sped = liv.getSpeed();
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
                 .scale(sped * speed);
