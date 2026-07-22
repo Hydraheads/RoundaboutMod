@@ -19,6 +19,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
@@ -246,13 +247,17 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
     public int getMeltLevel(){
+        int mult = 0;
         if (self.hasEffect(ModEffects.STAND_MELTING)) {
             MobEffectInstance melt = self.getEffect(ModEffects.STAND_MELTING);
             if (melt != null) {
-                return melt.getAmplifier() + 1;
+                mult = melt.getAmplifier() + 1;
             }
         }
-        return 0;
+        if (HeatUtil.isArmsFrozen(self)){
+            mult+=2;
+        }
+        return mult;
     }
 
     @Override
