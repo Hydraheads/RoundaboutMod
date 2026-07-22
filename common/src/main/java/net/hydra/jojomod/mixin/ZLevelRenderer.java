@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
@@ -108,7 +109,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
                     instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                if (skip != null && !entity.isPassenger()){
+                if (skip != null && !entity.isPassenger() &&
+                        !(entity.getControllingPassenger() instanceof Player)){
                     float progress = Mth.clamp(
                             (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
                             0.0F,
@@ -166,8 +168,23 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
                 if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
                         SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
-                    ci.cancel();
-                    return;
+                    if (!(entity.getPassengers() != null &&  entity.hasPassenger(ClientUtil.getPlayer()))) {
+                        if (ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles) {
+                            ClientUtil.setThrowFadeToTheEther(0.2F);
+                            ClientUtil.forceFade = true;
+                            ClientUtil.forceFade2 = 0.2F;
+                            double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
+                            double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
+                            double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
+                            float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+                            this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                            ClientUtil.forceFade = false;
+                            ClientUtil.forceFade2 = 1F;
+                        }
+
+                        ci.cancel();
+                        return;
+                    }
                 }
             }
         }

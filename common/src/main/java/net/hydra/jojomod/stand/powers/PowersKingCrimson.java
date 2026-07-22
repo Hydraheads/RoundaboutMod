@@ -37,6 +37,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.npc.WanderingTrader;
@@ -184,13 +186,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
-    public Vec3 predictPlayer(Player player, int ticks) {
+    public Vec3 predictPlayer(LivingEntity player, int ticks) {
         Level level = player.level();
 
         Vec3 predicted = player.position();
         AABB box = player.getBoundingBox();
 
-        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+        Deque<Vec3> history = null;
+        if (player instanceof Player ye){
+            history = ((IPlayerEntity) ye).rdbt$getMovementHistory();
+        } else if (player.getControllingPassenger() instanceof Player ye){
+            history = ((IPlayerEntity) ye).rdbt$getMovementHistory();
+        }
 
         Vec3 oldPos = player.position();
 
@@ -223,7 +230,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             BlockPos ft = BlockPos.containing(predicted);
             if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
-            && !player.getAbilities().flying) {
+            && !(player instanceof Player pl2 && pl2.getAbilities().flying)) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
                 velocity.multiply(1,0,1);
@@ -332,7 +339,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
-    public static Vec3 predictPosition(Mob mob, int ticks) {
+    public Vec3 predictPosition(Mob mob, int ticks) {
         Path path = mob.getNavigation().getPath();
 
         if (path == null) {
@@ -411,7 +418,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             } if (entity instanceof LivingEntity living) {
-
+                if (living.getControllingPassenger() instanceof Player){
+                    continue;
+                }
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
                 } else if (living instanceof StandEntity) {
@@ -486,7 +495,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity instanceof StandEntity) {
             return;
         }
-
+        if (entity.isPassenger()){
+            return;
+        }
+        if (entity.getControllingPassenger() instanceof Player){
+            return;
+        }
 
         if (entity instanceof LivingEntity LE) {
             if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
@@ -558,6 +572,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
             mb.getNavigation().stop();
             ((IMob)mb).roundabout$setConfusionTicks(7);
+        }
+        if (!entity.getPassengers().isEmpty()) {
+            for (Entity passenger : entity.getPassengers()) {
+                entity.positionRider(passenger);
+            }
         }
     }
 

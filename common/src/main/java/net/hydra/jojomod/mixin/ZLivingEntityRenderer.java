@@ -77,7 +77,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (PowersMetallica.hasAnyFadeActive(entity)) {
+        if (PowersMetallica.hasAnyFadeActive(entity) || ClientUtil.getThrowFadePercent(entity,ClientUtil.getDelta()) != 0) {
             ResourceLocation texture = this.getTextureLocation(entity);
             cir.setReturnValue(RenderType.entityTranslucent(texture));
         }

@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IParticleAccess;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.AccessParticle;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -77,7 +78,7 @@ public class TimeStopParticleEngine {
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     private void doNotDeltaTickParticlesWhenTimeIsStopped(PoseStack $$0, MultiBufferSource.BufferSource $$1, LightTexture $$2, Camera $$3, float $$4, CallbackInfo ci) {
 
-        if (ClientUtil.isUsingEpitaph()){
+        if (ClientUtil.isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles){
             ci.cancel();
             return;
         }

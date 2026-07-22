@@ -4066,6 +4066,9 @@
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
 
+  "config.roundabout.epitaphSeePresentEntitiesAndParticles.name": "Epitaph Shows Present",
+  "config.roundabout.epitaphSeePresentEntitiesAndParticles.desc": "If turned on, renders particles and a phantom image of present locations of mobs during epitaph. The intention is to be distracted, though.",
+
 
   "config.roundabout.alternateShaderEntry.name": "Alternate Shader Entry",
   "config.roundabout.alternateShaderEntry.desc": "If the time stop shader does not work in your modpack, try turning this on/off, in case other mods break the other entry point. Note this with this enabled, ground lines sweep through entities, otherwise they go underneath them.",

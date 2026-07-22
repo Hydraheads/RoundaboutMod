@@ -1099,8 +1099,13 @@ public class ClientUtil {
     public static boolean getHideInvis(){
         return hideInvis;
     }
+    public static boolean forceFade = false;
+    public static float forceFade2 = 1f;
 
     public static float getThrowFadePercent(Entity ent, float delta){
+        if (forceFade){
+            return forceFade2;
+        }
         float throwFade = 1f;
         delta = delta % 1;
         IEntityAndData entityAndData = ((IEntityAndData) ent);
@@ -1177,9 +1182,16 @@ public class ClientUtil {
         throwFadeToTheEther = ether;
     }
     public static float getThrowFadeToTheEther(){
+        if (forceFade){
+            return forceFade2;
+        }
         return throwFadeToTheEther;
     }
     public static int getThrowFadeToTheEtherInt(){
+
+        if (forceFade){
+            return Mth.floor(forceFade2*255);
+        }
         return Mth.floor(throwFadeToTheEther*255);
     }
     //How visible the next rendered model part will be
@@ -1405,6 +1417,10 @@ public class ClientUtil {
         if (context == 2) {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
+            if ((target.getPassengers() != null && !target.getPassengers().isEmpty() &&
+                    target.getControllingPassenger() instanceof Player)){
+                return;
+            }
             if (target instanceof LivingEntity LE) {
                 ((StandUser) target).roundabout$setBlip(vec);
 
