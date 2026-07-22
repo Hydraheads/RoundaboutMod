@@ -1997,12 +1997,21 @@ public class PowersKillerQueen extends NewPunchingStand {
                     SavedSecond second = combatSavedBTD.get(id);
 
                     if (second != null) {
+
                         packetNearby(new Vector3f(
                                 (float) second.position.x,
                                 (float) second.position.y,
                                 (float) second.position.z
-                                ), ent.getId());
+                                ), id);
+
                         second.loadTime(ent);
+
+                        packetNearby(new Vector3f(
+                                (float) second.position.x,
+                                (float) second.position.y,
+                                (float) second.position.z
+                        ), id);
+
                     }
 
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
