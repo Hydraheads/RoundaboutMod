@@ -1941,7 +1941,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         for (Entity ent : $$3) {
             float dist = ent.distanceTo(stand);
-            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof LivingEntity LE
+            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof Mob LE
                 && !MainUtil.isBossMob(LE) && !(LE instanceof StandEntity)) {
                 distRecord = dist;
                 target = LE;
@@ -2426,8 +2426,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void tickPower(){
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
-
-        EnderEyeItem
 
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
