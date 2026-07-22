@@ -685,19 +685,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 		double rand = Math.random();
 
 		if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
-			if (this.getTargetType() != NONE && (rand >= 0.82 || (skin == KillerQueenEntity.CRACKED && rand >= 0.5))) {
+			if (this.getTargetType() != NONE && (rand >= 0.82 || (skin == KillerQueenEntity.CRACKED))) {
 				return ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT;
 			}
 
 			return ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT;
-		}else {
-			if (this.getTargetType() != NONE && rand >= 0.3) {
-				if (rand >= 0.5) {
-					return ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT;
-				}
+		} else if (skin == KillerQueenEntity.MINESWEEPER) {
+			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT; }
 
-				return ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT;
-			}
+			return ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_EVENT;
+		}else {
+			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_KOCCHI_EVENT; }
 
 			return ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT;
 		}

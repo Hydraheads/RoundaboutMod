@@ -697,13 +697,16 @@ public class ModSounds {
     public static final String KILLER_QUEEN_SHA_CRACKED_DEDE = "sha_cracked_dede";
     public static final ResourceLocation KILLER_QUEEN_SHA_CRACKED_DEDE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_CRACKED_DEDE);
     public static SoundEvent KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_CRACKED_DEDE_ID);
+    public static final String KILLER_QUEEN_SHA_ALT_DEDE = "sha_alt_dede";
+    public static final ResourceLocation KILLER_QUEEN_SHA_ALT_DEDE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_ALT_DEDE);
+    public static SoundEvent KILLER_QUEEN_SHA_ALT_DEDE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_ALT_DEDE_ID);
 
-    public static final String KILLER_QUEEN_SHA_KOCCHI_1 = "sha_kocchi_1";
-    public static final ResourceLocation KILLER_QUEEN_SHA_KOCCHI_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_KOCCHI_1);
-    public static SoundEvent KILLER_QUEEN_SHA_KOCCHI_1_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_KOCCHI_1_ID);
-    public static final String KILLER_QUEEN_SHA_KOCCHI_2 = "sha_kocchi_2";
-    public static final ResourceLocation KILLER_QUEEN_SHA_KOCCHI_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_KOCCHI_2);
-    public static SoundEvent KILLER_QUEEN_SHA_KOCCHI_2_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_KOCCHI_2_ID);
+    public static final String KILLER_QUEEN_SHA_KOCCHI = "sha_kocchi";
+    public static final ResourceLocation KILLER_QUEEN_SHA_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_KOCCHI);
+    public static SoundEvent KILLER_QUEEN_SHA_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_KOCCHI_ID);
+    public static final String KILLER_QUEEN_SHA_ALT_KOCCHI = "sha_alt_kocchi";
+    public static final ResourceLocation KILLER_QUEEN_SHA_ALT_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_ALT_KOCCHI);
+    public static SoundEvent KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_ALT_KOCCHI_ID);
     public static final String KILLER_QUEEN_BARRAGE = "killer_queen_barrage";
     public static final ResourceLocation KILLER_QUEEN_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BARRAGE);
     public static SoundEvent KILLER_QUEEN_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BARRAGE_ID);

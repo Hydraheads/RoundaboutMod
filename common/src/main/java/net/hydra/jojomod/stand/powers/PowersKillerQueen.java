@@ -728,6 +728,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
+    public boolean canVault(){
+        return super.canVault() && !inBitesTheDustMode();
+    }
+    @Override
+    public boolean canFallBrace(){
+        return super.canFallBrace() && !inBitesTheDustMode();
+    }
+
+    @Override
     public boolean canGuard(){
     	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == PowerIndex.POWER_3
                 || this.detonateTimer > -1 || inBitesTheDustMode()) {
@@ -1360,11 +1369,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             return this.setPowerKickWindup();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerKick();
-        } else if (move == PowerIndex.EXTRA){
+        } else if (move == PowerIndex.EXTRA && !inBitesTheDustMode()){
             return this.fallBraceInit();
-        } else if (move == PowerIndex.FALL_BRACE_FINISH){
+        } else if (move == PowerIndex.FALL_BRACE_FINISH && !inBitesTheDustMode()){
             return this.fallBrace();
-        } else if (move == PowerIndex.VAULT){
+        } else if (move == PowerIndex.VAULT && !inBitesTheDustMode()){
             return this.vault();
         } else if (move == STRAY_CAT_ADD){
             return this.addStrayCatto();
@@ -1585,7 +1594,15 @@ public class PowersKillerQueen extends NewPunchingStand {
             dash();
         }
     }
-    
+
+    @Override
+    public boolean doVault(){
+        if (inBitesTheDustMode()) {
+            return false;
+        }
+        return super.doVault();
+    }
+
     public void tryToSendOrReturnSHA(boolean shaThrow) {
         if (!this.onCooldown(SHA_COOLDOWN) && canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (shaThrow) {
@@ -2003,9 +2020,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 (float) second.position.y,
                                 (float) second.position.z
                                 ), id);
-
                         second.loadTime(ent);
-
                         packetNearby(new Vector3f(
                                 (float) second.position.x,
                                 (float) second.position.y,
@@ -2047,7 +2062,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (LE.hasLineOfSight(target)) {
                     bitedTheDustInit();
                     //bitedTheDust.put(LE.getId(), (int)(LE.level().getDayTime() % 24000));
-                    bitedTheDust.put(LE.getId(), this.btdTicks);
+                    bitedTheDust.putIfAbsent(LE.getId(), this.btdTicks);
                 }
             }
         }
