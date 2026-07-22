@@ -281,12 +281,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
 
 								if (MainUtil.getReducedDamage(LE)) {
-									if (user instanceof Player && (StandUser)((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigPlayers(0.25f));
 									}
 									LE.hurt(dmg, 0.25f);
 								}else {
-									if (user instanceof Player && (StandUser)((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(KQ.multiplyPowerByStandConfigMobs(0.35f));
 									}
 									LE.hurt(dmg, 0.35f);
