@@ -1417,7 +1417,7 @@ public class ClientUtil {
         if (context == 2) {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
-            if ((target.getPassengers() != null && !target.getPassengers().isEmpty() &&
+            if (target != null && (target.getPassengers() != null && !target.getPassengers().isEmpty() &&
                     target.getControllingPassenger() instanceof Player)){
                 return;
             }
