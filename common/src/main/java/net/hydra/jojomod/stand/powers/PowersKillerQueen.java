@@ -147,6 +147,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
 
+    public int unskipInterp = -1;
+
     public HashMap<Integer, SavedSecond> combatSavedBTD = new HashMap<>();
 
     public void combatSavedBTDinit() {
@@ -1986,6 +1988,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (!combatSavedBTD.isEmpty()) {
             int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
+            unskipInterp = 1;
 
             for (int id : this.combatSavedBTD.keySet()) {
                 Entity ent = this.self.level().getEntity(id);
@@ -2016,7 +2019,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectWhoBitedTheDust(Entity target) {
         Vec3 pos = target.position();
-        float range = 20.0f;
+        float range = 8.0f;
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
                 pos.x(), pos.y(), pos.z(), range, range, range);
@@ -2372,7 +2375,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void tickPower(){
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
-        
+
+        if (unskipInterp > -1){
+            unskipInterp--;
+            if (unskipInterp <= -1){
+                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
+                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
+            }
+        }
+
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
