@@ -58,7 +58,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 discard();
             }
 
-            AABB wallBox = this.getBoundingBox().inflate(0.4);
+            AABB wallBox = this.getBoundingBox().inflate(0.1);
 
             for (LivingEntity mob : level().getEntitiesOfClass(
                     LivingEntity.class,
