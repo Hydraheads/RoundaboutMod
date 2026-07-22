@@ -53,11 +53,7 @@ public class GratefulDeadRenderer extends StandRenderer<GratefulDeadEntity>{
         if (!entity.hasUser()) {
             return base;
         }
-        if (((StandUser)entity.getUser()).roundabout$isParallelRunning()){
-            return base/2;
-        }
-        else{
-            return base;
-        }
+
+        return base;
     }
 }

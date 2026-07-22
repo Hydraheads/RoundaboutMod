@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,12 +57,28 @@ public class PowersGratefulDead extends NewPunchingStand {
         }
     }
 
+    @Override
+    public void powerActivate(PowerContext context) {
+        /**Making dash usable on both key presses*/
+        switch (context)
+        {
+            case SKILL_3_NORMAL -> {
+                tryToDashClient();
+            }
+
+        }
+    }
+
+    public void tryToDashClient(){
+        if (!doVault()){
+            dash();
+        }
+    }
+
     //GUI things
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        ClientUtil.fx.roundabout$onGUI(context);
-
         if(!isMiasmaActive()){
             setSkillIcon(context, x, y ,1, StandIcons.MIASMA_ACTIVE, PowerIndex.SKILL_1);
         }else{
@@ -74,7 +91,11 @@ public class PowersGratefulDead extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.AGE_PUNCH, PowerIndex.SKILL_2);
         }
 
-        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if(canVault()){
+            setSkillIcon(context, x, y, 3, StandIcons.GRATEFUL_DEAD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+        }else{
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        }
 
         if(!isDisguised()){
             setSkillIcon(context, x, y, 4, StandIcons.AGE_DISGUISE_1, PowerIndex.SKILL_4);
