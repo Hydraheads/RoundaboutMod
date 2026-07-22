@@ -539,6 +539,12 @@
       "roundabout:sha_alt_kocchi"
     ]
   },
+  "bites_the_dust_noise": {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:bites_the_dust_noise"
+    ]
+  },
   "sha_alt_dede": {
     "subtitle": "sounds.roundabout.sha_alt_dede",
     "sounds": [
