@@ -533,10 +533,10 @@
       "roundabout:sha_kocchi_1"
     ]
   },
-  "sha_alt_kocchi_2": {
-    "subtitle": "sounds.roundabout.sha_alt_kocchi_2",
+  "sha_alt_kocchi": {
+    "subtitle": "sounds.roundabout.sha_alt_kocchi",
     "sounds": [
-      "roundabout:sha_alt_kocchi_2"
+      "roundabout:sha_alt_kocchi"
     ]
   },
   "sha_alt_dede": {

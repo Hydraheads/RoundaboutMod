@@ -700,7 +700,9 @@ public class ModSounds {
     public static final String KILLER_QUEEN_SHA_ALT_DEDE = "sha_alt_dede";
     public static final ResourceLocation KILLER_QUEEN_SHA_ALT_DEDE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_ALT_DEDE);
     public static SoundEvent KILLER_QUEEN_SHA_ALT_DEDE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_ALT_DEDE_ID);
-
+    public static final String KILLER_QUEEN_BTD_NOISE = "bites_the_dust_noise";
+    public static final ResourceLocation KILLER_QUEEN_BTD_NOISE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BTD_NOISE);
+    public static SoundEvent KILLER_QUEEN_BTD_NOISE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BTD_NOISE_ID);
     public static final String KILLER_QUEEN_SHA_KOCCHI = "sha_kocchi";
     public static final ResourceLocation KILLER_QUEEN_SHA_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_KOCCHI);
     public static SoundEvent KILLER_QUEEN_SHA_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_KOCCHI_ID);

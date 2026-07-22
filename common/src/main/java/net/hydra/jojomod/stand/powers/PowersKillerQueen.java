@@ -2564,7 +2564,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
                         stand.setFadePercent(30);
 
-                        stand.setPos(KQE.getBitesTheDustOffset((LivingEntity)plantedBTD));
+                        Vec3 pos = KQE.getBitesTheDustOffset((LivingEntity)plantedBTD);
+
+                        stand.absMoveTo(pos.x, pos.y, pos.z);
 
                         stand.setYRot(plantedBTD.getYHeadRot() % 360);
                         stand.setXRot(plantedBTD.getXRot());
@@ -2692,6 +2694,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KILLER_QUEEN_SHIBABA_EVENT;
        }else if (soundChoice == AIRBUBBLE) {
            return ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT;
+       }else if (soundChoice == BTD_NOISE) {
+           return ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
