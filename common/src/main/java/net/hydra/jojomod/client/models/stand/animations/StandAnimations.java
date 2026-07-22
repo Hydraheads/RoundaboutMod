@@ -1447,7 +1447,7 @@ public class StandAnimations {
                             new Keyframe(0.3433333f, KeyframeAnimations.degreeVec(10.94f, 0.83f, -7.96f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
 
-    public static final AnimationDefinition COMBO1 = AnimationDefinition.Builder.withLength(0.375F)
+    public static final AnimationDefinition COMBO1 = AnimationDefinition.Builder.withLength(0.4583F)
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.2083F, KeyframeAnimations.degreeVec(0.0F, 27.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1582,7 +1582,7 @@ public class StandAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition COMBO2 = AnimationDefinition.Builder.withLength(0.375F)
+    public static final AnimationDefinition COMBO2 = AnimationDefinition.Builder.withLength(0.5F)
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -37.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.2083F, KeyframeAnimations.degreeVec(0.0F, -47.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1595,7 +1595,7 @@ public class StandAnimations {
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-13.3457F, 29.0F, -13.8469F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.2083F, KeyframeAnimations.degreeVec(24.773F, 22.4262F, 7.1762F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.2083F, KeyframeAnimations.degreeVec(-2.3904F, 48.6718F, 0.2083F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.375F, KeyframeAnimations.degreeVec(7.3274F, 8.9753F, -11.0625F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -1673,7 +1673,7 @@ public class StandAnimations {
             ))
             .build();
 
-    public static final AnimationDefinition COMBO3 = AnimationDefinition.Builder.withLength(0.375F)
+    public static final AnimationDefinition COMBO3 = AnimationDefinition.Builder.withLength(0.5F)
             .addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -2.5F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(6.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -1687,7 +1687,7 @@ public class StandAnimations {
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(7.3274F, 8.9753F, -11.0625F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.1667F, KeyframeAnimations.degreeVec(19.3728F, 41.7532F, 3.4592F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.1667F, KeyframeAnimations.degreeVec(4.1831F, -1.9054F, -5.1228F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.375F, KeyframeAnimations.degreeVec(-5.5388F, -1.8773F, 7.1304F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("head2", new AnimationChannel(AnimationChannel.Targets.POSITION,
