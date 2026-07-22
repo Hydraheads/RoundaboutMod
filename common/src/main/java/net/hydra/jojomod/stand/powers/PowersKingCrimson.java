@@ -2,9 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -41,8 +39,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -50,6 +52,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -390,52 +394,61 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void basicSkip(boolean skipSelf){
         AABB area = self.getBoundingBox().inflate(getSkipRange());
 
-        for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
-            if (!skipSelf && living.getId() == self.getId()){
-                continue;
-            } else if (living instanceof StandEntity){
-                continue;
-            }
-            StandEntity stand = getStandEntity(self);
-            int id = living.getId();
-            if (!(stand != null && stand.getId() == id)){
-                if (!(living instanceof StandEntity) &&
-                        !(living instanceof Player pk && pk.isCreative()
-                                && pk.getId() != self.getId())
-                ) {
-                    Vec3 predicted = living.position();
-                    float xRot = living.getXRot();
-                    float yRot = living.getYRot();
-                    if (!living.isSleeping()){
-                        if (living instanceof Mob mob) {
-                            if (!mob.isLeashed()) {
-                                predicted = predictPosition(mob, 100);
-                            }
-                        } else if (living instanceof Player player) {
-                            // Fallback for players, armor stands, etc.
-                            hitWall2 = false;
-                            predicted = predictPlayer(player, 40);
-                            if (player.getId() == self.getId()) {
-                                if (predicted.distanceTo(self.getPosition(1)) < 0.1){
-                                    continue;
+        for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            if (entity instanceof Projectile proj){
+                skip_dump.put(proj.getId(), new TimeSkipSnapshot(
+                        proj.getId(),
+                        predictProjectile(proj,100),
+                        proj.getXRot(),
+                        proj.getYRot()
+                ));
+            } if (entity instanceof LivingEntity living) {
+
+                if (!skipSelf && living.getId() == self.getId()) {
+                    continue;
+                } else if (living instanceof StandEntity) {
+                    continue;
+                }
+                StandEntity stand = getStandEntity(self);
+                int id = living.getId();
+                if (!(stand != null && stand.getId() == id)) {
+                    if (!(living instanceof StandEntity) &&
+                            !(living instanceof Player pk && pk.isCreative()
+                                    && pk.getId() != self.getId())
+                    ) {
+                        Vec3 predicted = living.position();
+                        float xRot = living.getXRot();
+                        float yRot = living.getYRot();
+                        if (!living.isSleeping()) {
+                            if (living instanceof Mob mob) {
+                                if (!mob.isLeashed()) {
+                                    predicted = predictPosition(mob, 100);
+                                }
+                            } else if (living instanceof Player player) {
+                                // Fallback for players, armor stands, etc.
+                                hitWall2 = false;
+                                predicted = predictPlayer(player, 40);
+                                if (player.getId() == self.getId()) {
+                                    if (predicted.distanceTo(self.getPosition(1)) < 0.1) {
+                                        continue;
+                                    }
+                                }
+                                if (hitWall2 && player.getId() != self.getId()) {
+                                    yRot = Mth.wrapDegrees(yRot + 180.0F);
                                 }
                             }
-                            if (hitWall2 && player.getId() != self.getId()) {
-                                yRot = Mth.wrapDegrees(yRot + 180.0F);
-                            }
                         }
+
+
+                        skip_dump.put(living.getId(), new TimeSkipSnapshot(
+                                id,
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
                     }
-
-
-                    skip_dump.put(living.getId(), new TimeSkipSnapshot(
-                            id,
-                            predicted,
-                            xRot,
-                            yRot
-                    ));
                 }
             }
-
         }
 
         playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
@@ -466,46 +479,48 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
 
-        double width = entity.getBbWidth();
-        double height = entity.getBbHeight();
 
-        // Construct bounding box at the target position
-        AABB targetBox = new AABB(
-                snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
-                snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
-        );
-        targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)entity).roundabout$getGravityDirection());
+        if (entity instanceof LivingEntity LE) {
+            double width = entity.getBbWidth();
+            double height = entity.getBbHeight();
+            // Construct bounding box at the target position
+            AABB targetBox = new AABB(
+                    snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
+                    snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
+            );
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
 
-        if (!level.noCollision(entity, targetBox)) {
-            return;
-        }
-
-        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
-
-        if (deviousStratBlocker && entity instanceof Player) {
-            // 2. Check for dangerous blocks inside target box
-            boolean cancel = false;
-            for (BlockPos pos : BlockPos.betweenClosed(
-                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
-                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
-
-                BlockState state = level.getBlockState(pos);
-                Block block = state.getBlock();
-
-                // List of bad blocks to avoid
-                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
-                    cancel = true;
-                    break;
-                }
-
-                // Optional: also avoid fire or cactus
-                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
-                    cancel = true;
-                    break;
-                }
-            }
-            if (cancel){
+            if (!level.noCollision(entity, targetBox)) {
                 return;
+            }
+
+            boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+            if (deviousStratBlocker && entity instanceof Player) {
+                // 2. Check for dangerous blocks inside target box
+                boolean cancel = false;
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                        Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                    BlockState state = level.getBlockState(pos);
+                    Block block = state.getBlock();
+
+                    // List of bad blocks to avoid
+                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                        cancel = true;
+                        break;
+                    }
+
+                    // Optional: also avoid fire or cactus
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                        cancel = true;
+                        break;
+                    }
+                }
+                if (cancel) {
+                    return;
+                }
             }
         }
 
@@ -535,6 +550,53 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+
+
+    public static Vec3 predictProjectile(Projectile projectile, int ticks) {
+        Level level = projectile.level();
+
+        Vec3 pos = projectile.position();
+        Vec3 velocity = projectile.getDeltaMovement();
+
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 nextPos = pos.add(velocity);
+
+            // Ignore entities, collide only with blocks.
+            BlockHitResult hit = level.clip(new ClipContext(
+                    pos,
+                    nextPos,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    projectile
+            ));
+
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                return pos;
+                //return hit.getLocation();
+            }
+
+            pos = nextPos;
+
+            // Vanilla-style drag
+            velocity = velocity.scale(0.99);
+
+            // Vanilla gravity
+            if (!projectile.isNoGravity()) {
+                if (!(projectile instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())){
+                    float gravity = -0.05F;
+                    if (projectile instanceof ThrowableProjectile aa){
+                        gravity =  -1*((AccessThrowableProjectile)aa).rdbt$getGravity();
+                    }
+
+                    velocity = velocity.add(0.0, gravity, 0.0);
+                }
+            }
+        }
+
+        return pos;
+    }
+
     public void timeSkip(boolean skipSelf) {
         if (!(self instanceof ServerPlayer pl)) {
             return;
@@ -545,12 +607,24 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
 
+        AABB area = self.getBoundingBox().inflate(getSkipRange());
+        for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            if (entity instanceof Projectile proj){
+                epitaph.put(proj.getId(), new TimeSkipSnapshot(
+                        proj.getId(),
+                        predictProjectile(proj,100),
+                        proj.getXRot(),
+                        proj.getYRot()
+                ));
+            }
+        }
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
             if (!skipSelf && snapshot.getEntityId() == self.getId()){
                 continue;
             }
             skipSingle(snapshot);
         }
+
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
         playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);

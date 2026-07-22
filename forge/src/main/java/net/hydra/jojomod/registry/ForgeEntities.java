@@ -509,7 +509,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
-                            clientTrackingRange(10).
+                            clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "knife").toString())
             );
     public static final RegistryObject<EntityType<BlockWallEntity>> BLOCK_WALL =
@@ -558,19 +558,19 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<HarpoonEntity>> THROWN_HARPOON =
             ENTITY_TYPES.register("harpoon", () ->
                     EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
-                            clientTrackingRange(10).
+                            clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "harpoon").toString())
             );
     public static final RegistryObject<EntityType<BladedBowlerHatEntity>> BLADED_BOWLER_HAT =
             ENTITY_TYPES.register("bowler_hat", () ->
                     EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
-                            clientTrackingRange(10).
+                            clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat").toString())
             );
     public static final RegistryObject<EntityType<RoundaboutBulletEntity>> ROUNDABOUT_BULLET_ENTITY =
             ENTITY_TYPES.register("roundabout_bullet_entity", () ->
                     EntityType.Builder.<RoundaboutBulletEntity>of(RoundaboutBulletEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).
-                            clientTrackingRange(10).
+                            clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity").toString())
             );
     public static final RegistryObject<EntityType<EmperorBulletEntity>> EMPEROR_BULLET_ENTITY =

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.access.AccessThrowableProjectile;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -14,13 +15,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrowableProjectile.class)
-public abstract class GravityThrowableProjectileMixin extends Entity {
+public abstract class GravityThrowableProjectileMixin extends Entity implements AccessThrowableProjectile {
 
     public GravityThrowableProjectileMixin(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -29,6 +31,11 @@ public abstract class GravityThrowableProjectileMixin extends Entity {
     @Shadow
     protected abstract float getGravity();
 
+    @Unique
+    @Override
+    public float rdbt$getGravity(){
+        return getGravity();
+    }
     /*@Override
     public Direction gravitychanger$getAppliedGravityDirection() {
         return GravityChangerAPI.getGravityDirection((ThrownEntity)(Object)this);

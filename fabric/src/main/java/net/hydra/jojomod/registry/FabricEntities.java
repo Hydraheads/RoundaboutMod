@@ -566,28 +566,28 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "harpoon"),
                         EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":harpoon")
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":harpoon")
                 );
         public static final EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"),
                         EntityType.Builder.<BladedBowlerHatEntity>of(BladedBowlerHatEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":bladed_bowler_hat")
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":bladed_bowler_hat")
                 );
         public static final EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"),
                         EntityType.Builder.<RoundaboutBulletEntity>of(RoundaboutBulletEntity::new, MobCategory.MISC).
-                                sized(0.25f, 0.25f).clientTrackingRange(10).build(Roundabout.MOD_ID+":roundabout_bullet_entity")
+                                sized(0.25f, 0.25f).clientTrackingRange(16).build(Roundabout.MOD_ID+":roundabout_bullet_entity")
                 );
         public static final EntityType<KnifeEntity> THROWN_KNIFE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         new ResourceLocation(Roundabout.MOD_ID, "knife"),
                         EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(10).build(Roundabout.MOD_ID+":knife")
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":knife")
                 );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
