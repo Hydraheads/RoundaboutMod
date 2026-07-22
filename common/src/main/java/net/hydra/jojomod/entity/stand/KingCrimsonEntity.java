@@ -31,6 +31,8 @@ public class KingCrimsonEntity extends FollowingStandEntity {
 
 
     public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState finalPunch2 = new AnimationState();
+    public final AnimationState finalPunch3 = new AnimationState();
     public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
     public final AnimationState impale = new AnimationState();
@@ -43,6 +45,8 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public final AnimationState itemRetractAnimation = new AnimationState();
 
     public static final byte
+            FINAL_1 = 82,
+            FINAL_2 = 83,
             IMPALE_2 = 84;
     @Override
     public void setupAnimationStates() {
@@ -105,6 +109,16 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.finalPunch.startIfStopped(this.tickCount);
             } else {
                 this.finalPunch.stop();
+            }
+            if (this.getAnimation() == FINAL_1) {
+                this.finalPunch2.startIfStopped(this.tickCount);
+            } else {
+                this.finalPunch2.stop();
+            }
+            if (this.getAnimation() == FINAL_2) {
+                this.finalPunch3.startIfStopped(this.tickCount);
+            } else {
+                this.finalPunch3.stop();
             }
         }
     }

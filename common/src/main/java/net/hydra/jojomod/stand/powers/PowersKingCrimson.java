@@ -1193,6 +1193,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void animateFinalAttackHit(){
+        float charged = getChargedPercent();
+        if (charged >= 1F){
+            animateStand(KingCrimsonEntity.FINAL_2);
+            return;
+        } else if (charged >= 0.5F){
+            animateStand(KingCrimsonEntity.FINAL_1);
+            return;
+        }
         animateStand((byte) 86);
     }
 
