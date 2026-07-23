@@ -266,11 +266,19 @@ public class ClientUtil {
     }
     public static int clientTicker;
     public static int timeSkipTicker = -1;
+    public static int bitesTheDustTicker = -1;
     public static int getClientTicker(){
         return clientTicker;
     }
     public static void tickClientUtilStuff(){
         clientTicker++;
+
+        if (bitesTheDustTicker > -1){
+            bitesTheDustTicker++;
+            if (bitesTheDustTicker > 8){
+                bitesTheDustTicker = -1;
+            }
+        }
 
         if (timeSkipTicker > -1){
             timeSkipTicker++;
@@ -1798,6 +1806,8 @@ public class ClientUtil {
             Minecraft.getInstance().player.respawn();
         } else if (context == PacketDataIndex.TIME_SKIP){
             timeSkipTicker = 0;
+        } else if (context == PacketDataIndex.BITES_THE_DUST){
+            bitesTheDustTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
