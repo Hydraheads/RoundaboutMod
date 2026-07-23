@@ -273,7 +273,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (throwStatus == THROWED) {
 					if (this.onGround() || this.onClimbable()) {
 						throwStatus = HAS_BEEN;
-					}else if (this.flyngTicks > 2){
+					}else if (this.flyngTicks > 4){
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
@@ -683,21 +683,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 		byte skin = ((StandUser)user).roundabout$getStandSkin();
 
 		double rand = Math.random();
+		if (skin == KillerQueenEntity.MINESWEEPER) {
+			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT; }
 
-		if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
-			if (this.getTargetType() != NONE && (rand >= 0.82 || (skin == KillerQueenEntity.CRACKED && rand >= 0.5))) {
+			return ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_EVENT;
+		} else if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
+			if (this.getTargetType() != NONE && (rand >= 0.82 || (skin == KillerQueenEntity.CRACKED))) {
 				return ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT;
 			}
 
 			return ModSounds.KILLER_QUEEN_SHA_CRACKED_DEDE_EVENT;
 		}else {
-			if (this.getTargetType() != NONE && rand >= 0.3) {
-				if (rand >= 0.5) {
-					return ModSounds.KILLER_QUEEN_SHA_KOCCHI_1_EVENT;
-				}
-
-				return ModSounds.KILLER_QUEEN_SHA_KOCCHI_2_EVENT;
-			}
+			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_KOCCHI_EVENT; }
 
 			return ModSounds.KILLER_QUEEN_SHA_DEDEDEDE_EVENT;
 		}

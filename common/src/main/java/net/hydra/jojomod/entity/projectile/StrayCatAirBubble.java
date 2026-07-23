@@ -180,6 +180,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
+            if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved()) {
+                popBubble();
+                return;
+            }
+
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
                 SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
@@ -198,8 +203,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 this.lifeSpan--;
             }
 
-            if (this.lifeSpan <= 0 || this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
-                    this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
+            if ((this.lifeSpan <= 0 || this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops())){
+                if (((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && isKillerQueenBubble) {
+                    KQ.bubbleFailed();
+                }
                 popBubble();
                 return;
             }
@@ -458,6 +465,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
             this.level().playSound(null, this.blockPosition(), SE,
                     SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
+
+            this.soundEffectCooldown = soundEffectCooldownMax + this.random.nextInt(40, 50);
         }
 
         this.setDeltaMovement(vector);

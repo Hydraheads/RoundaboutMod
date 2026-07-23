@@ -576,8 +576,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (canVault() ) {
                 setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_VAULT, PowerIndex.GLOBAL_DASH);
-            } else if (canFallBrace()) {
-                setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_FALL_BRACE, PowerIndex.NONE);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
@@ -725,6 +723,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean interceptGuard(){
         return this.currentBombStatus != BITES_THE_DUST;
+    }
+
+    @Override
+    public boolean canVault(){
+        return super.canVault() && !inBitesTheDustMode();
     }
 
     @Override
@@ -1360,11 +1363,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return this.setPowerKickWindup();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerKick();
-        } else if (move == PowerIndex.EXTRA){
-            return this.fallBraceInit();
-        } else if (move == PowerIndex.FALL_BRACE_FINISH){
-            return this.fallBrace();
-        } else if (move == PowerIndex.VAULT){
+        } else if (move == PowerIndex.VAULT && !inBitesTheDustMode()){
             return this.vault();
         } else if (move == STRAY_CAT_ADD){
             return this.addStrayCatto();
@@ -1581,11 +1580,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     // Clients Move sender/try:
     
     public void tryToDashClient(){
-        if (vaultOrFallBraceFails()){
+        if (!doVault()){
             dash();
         }
     }
-    
+
+    @Override
+    public boolean doVault(){
+        if (inBitesTheDustMode()) {
+            return false;
+        }
+        return super.doVault();
+    }
+
     public void tryToSendOrReturnSHA(boolean shaThrow) {
         if (!this.onCooldown(SHA_COOLDOWN) && canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (shaThrow) {
@@ -1924,7 +1931,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         for (Entity ent : $$3) {
             float dist = ent.distanceTo(stand);
-            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof LivingEntity LE
+            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof Mob LE
                 && !MainUtil.isBossMob(LE) && !(LE instanceof StandEntity)) {
                 distRecord = dist;
                 target = LE;
@@ -1997,12 +2004,19 @@ public class PowersKillerQueen extends NewPunchingStand {
                     SavedSecond second = combatSavedBTD.get(id);
 
                     if (second != null) {
+
                         packetNearby(new Vector3f(
                                 (float) second.position.x,
                                 (float) second.position.y,
                                 (float) second.position.z
-                                ), ent.getId());
+                                ), id);
                         second.loadTime(ent);
+                        packetNearby(new Vector3f(
+                                (float) second.position.x,
+                                (float) second.position.y,
+                                (float) second.position.z
+                        ), id);
+
                     }
 
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
@@ -2038,7 +2052,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (LE.hasLineOfSight(target)) {
                     bitedTheDustInit();
                     //bitedTheDust.put(LE.getId(), (int)(LE.level().getDayTime() % 24000));
-                    bitedTheDust.put(LE.getId(), this.btdTicks);
+                    bitedTheDust.putIfAbsent(LE.getId(), this.btdTicks);
                 }
             }
         }
@@ -2403,14 +2417,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
 
-        /*if (unskipInterp > -1){
-            unskipInterp--;
-            if (unskipInterp <= -1){
-                int rewindPacketRange = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindRange;
-                spreadRadialClientPacket(rewindPacketRange+50,false, "unskip_interpolation");
-            }
-        }*/
-
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
@@ -2548,7 +2554,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
                         stand.setFadePercent(30);
 
-                        stand.setPos(KQE.getBitesTheDustOffset((LivingEntity)plantedBTD));
+                        Vec3 pos = KQE.getBitesTheDustOffset((LivingEntity)plantedBTD);
+
+                        stand.absMoveTo(pos.x, pos.y, pos.z);
 
                         stand.setYRot(plantedBTD.getYHeadRot() % 360);
                         stand.setXRot(plantedBTD.getXRot());
@@ -2676,6 +2684,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return ModSounds.KILLER_QUEEN_SHIBABA_EVENT;
        }else if (soundChoice == AIRBUBBLE) {
            return ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT;
+       }else if (soundChoice == BTD_NOISE) {
+           return ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT;
        }
        
         return super.getSoundFromByte(soundChoice);
@@ -2763,26 +2773,24 @@ public class PowersKillerQueen extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
-                "instruction.roundabout.press_skill_shooting_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
+                "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.fall_brace",
-                "instruction.roundabout.press_skill_falling", StandIcons.KILLER_QUEEN_FALL_BRACE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.KILLER_QUEEN_VAULT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_SHA_SUMMON,3,level,bypas));
-
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_throw",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_throw",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_SHA_THROW,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118, getStrayCatLevel(), "ability.roundabout.add_stray_cat",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+80, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99, getStrayCatLevel(), "ability.roundabout.add_stray_cat",
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
                 "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
+
 
         return $$1;
     }
@@ -2795,8 +2803,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum) {
-        double distance = getStandEntity(getSelf()).distanceTo(getSelf());
-        StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0,100,0x6e44b3);
+        if (this.SHA != null && !this.SHA.isRemoved()) {
+            double distance = SHA.distanceTo(getSelf());
+            StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0, 100, 0x6e44b3);
+        }
     }
 
     @Override

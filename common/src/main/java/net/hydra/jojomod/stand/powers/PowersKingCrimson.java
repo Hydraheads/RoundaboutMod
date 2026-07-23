@@ -37,6 +37,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -59,6 +60,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -119,11 +121,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return !epitaph.isEmpty();
     }
 
+    public float getSped(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (LE.getSpeed() <= 0){
+                if (LE.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
+                    return (float) LE.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                }
+            }
+            return LE.getSpeed();
+        }
+        return 0;
+    }
 
     public static Vec3 getPredictedDirection() {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
-    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+    public Vec3 predictIdle(LivingEntity liv, int ticks) {
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
@@ -137,7 +150,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
         }
-        float sped = Math.max(0.1F,liv.getSpeed());
+        float sped = getSped(liv);
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
                 .scale(sped * speed);
@@ -216,7 +229,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 baseVelocity = player.position()
                 .subtract(oldPos)
                 .normalize()
-                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
+                .scale(getSped(player) * (2.5+(Math.random()*0.5)));
         if (baseVelocity.y > 0)
             baseVelocity = baseVelocity.multiply(1, 0, 1);
 
@@ -311,6 +324,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     predicted.x - width / 2.0, predicted.y, predicted.z - width / 2.0,
                     predicted.x + width / 2.0, predicted.y + height, predicted.z + width / 2.0
             );
+            //
             targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)player).roundabout$getGravityDirection());
 
             for (BlockPos pos : BlockPos.betweenClosed(
@@ -340,13 +354,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return predicted;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
+        if (mob.getControllingPassenger() instanceof Player pl){
+            Vec3 pred = predictPlayer(mob,100);
+            return pred;
+        }
+
+
         Path path = mob.getNavigation().getPath();
 
         if (path == null) {
             return predictIdle(mob,ticks);
         }
 
-        double remaining = mob.getSpeed() * ticks;
+        double remaining = getSped(mob) * ticks;
         Vec3 current = mob.position();
 
         int index = path.getNextNodeIndex();
@@ -418,9 +438,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             } if (entity instanceof LivingEntity living) {
-                if (living.getControllingPassenger() instanceof Player){
-                    continue;
-                }
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
                 } else if (living instanceof StandEntity) {
@@ -498,9 +515,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
-        if (entity.getControllingPassenger() instanceof Player){
-            return;
-        }
 
         if (entity instanceof LivingEntity LE) {
             if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
@@ -515,9 +529,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             );
             targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
 
-            if (!level.noCollision(entity, targetBox)) {
+        for(VoxelShape $$2 : level.getBlockCollisions(entity, targetBox)) {
+            if (!$$2.isEmpty()) {
                 return;
             }
+        }
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
@@ -572,11 +588,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
             mb.getNavigation().stop();
             ((IMob)mb).roundabout$setConfusionTicks(7);
-        }
-        if (!entity.getPassengers().isEmpty()) {
-            for (Entity passenger : entity.getPassengers()) {
-                entity.positionRider(passenger);
-            }
         }
     }
 

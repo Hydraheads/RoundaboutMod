@@ -102,6 +102,16 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
+
+            if (ClientUtil.timeSkipTicker > -1){
+                Player cli = ClientUtil.getPlayer();
+                if (cli != null && cli.is(entity) && cli.isPassenger()){
+                    Entity rv = cli.getRootVehicle();
+                    if (rv != null) {
+                        rv.positionRider(entity);
+                    }
+                }
+            }
         }
 
         if (ClientUtil.isUsingEpitaph() && entity != null){
@@ -109,8 +119,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
                     instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                if (skip != null && !entity.isPassenger() &&
-                        !(entity.getControllingPassenger() instanceof Player)){
+                if (skip != null && !entity.isPassenger()){
                     float progress = Mth.clamp(
                             (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
                             0.0F,

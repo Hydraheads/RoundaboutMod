@@ -533,10 +533,28 @@
       "roundabout:sha_kocchi_1"
     ]
   },
-  "sha_alt_kocchi_2": {
-    "subtitle": "sounds.roundabout.sha_alt_kocchi_2",
+  "sha_alt_kocchi": {
+    "subtitle": "sounds.roundabout.sha_alt_kocchi",
     "sounds": [
-      "roundabout:sha_alt_kocchi_2"
+      "roundabout:sha_alt_kocchi"
+    ]
+  },
+  "bites_the_dust_noise": {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:bites_the_dust_noise"
+    ]
+  },
+  "bites_the_dust_planted": {
+    "subtitle": "sounds.roundabout.bites_the_dust_planted",
+    "sounds": [
+      "roundabout:bites_the_dust_planted"
+    ]
+  },
+  "bites_the_dust_detonate": {
+    "subtitle": "sounds.roundabout.bites_the_dust_detonate",
+    "sounds": [
+      "roundabout:bites_the_dust_detonate"
     ]
   },
   "sha_alt_dede": {
