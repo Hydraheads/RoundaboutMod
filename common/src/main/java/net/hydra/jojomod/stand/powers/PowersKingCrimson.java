@@ -52,6 +52,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -407,9 +408,80 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
+    public Vec3 predictBoat(Boat boat, int ticks) {
+        Level level = boat.level();
+
+        Entity controller = boat.getControllingPassenger();
+        if (!(controller instanceof Player player)) {
+            return boat.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+
+        // If the rider isn't moving, don't move the boat.
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return boat.position();
+        }
+
+        Vec3 predicted = boat.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(0.4); // roughly boat speed
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
+
+            Vec3 next = predicted.add(velocity);
+
+            BlockPos center = BlockPos.containing(next);
+            BlockPos below = center.below();
+
+            // Boat must remain floating.
+            if (!level.getFluidState(below).is(FluidTags.WATER)) {
+                return previousPreviousSafe;
+            }
+
+            // Don't beach into solid blocks.
+            AABB nextBox = boat.getBoundingBox().move(next.subtract(predicted));
+
+            boolean collision = false;
+            for (VoxelShape shape : level.getBlockCollisions(boat, nextBox)) {
+                if (!shape.isEmpty()) {
+                    collision = true;
+                    break;
+                }
+            }
+
+            if (collision) {
+                return previousPreviousSafe;
+            }
+
+            predicted = next;
+        }
+
+        return predicted;
+    }
     public Vec3 predictPosition(Mob mob, int ticks) {
         if (mob.getControllingPassenger() instanceof Player pl){
-            Vec3 pred = predictPlayer(mob,100);
+            Vec3 pred = predictPlayer(mob,40);
             return pred;
         }
 
@@ -491,6 +563,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                predictBoat(bt,40);
             } if (entity instanceof LivingEntity living) {
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
@@ -814,41 +888,55 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
-                for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
-                    StandEntity stand = getStandEntity(self);
-                    int id = living.getId();
-                    if (!(stand != null && stand.getId() == id)){
-                        if (!(living instanceof StandEntity) &&
-                                !(living instanceof Player pk && pk.isCreative()
-                                        && pk.getId() != self.getId())
-                        ) {
-                            Vec3 predicted = living.position();
-                            float xRot = living.getXRot();
-                            float yRot = living.getYRot();
-                            if (!living.isSleeping()){
-                                if (living instanceof Mob mob) {
-                                    if (!mob.isLeashed()) {
-                                        predicted = predictPosition(mob, 100);
-                                    }
-                                } else if (living instanceof Player player) {
-                                    // Fallback for players, armor stands, etc.
-                                    hitWall2 = false;
-                                    predicted = predictPlayer(player, 40);
-                                    if (hitWall2) {
-                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+                    if (entity instanceof LivingEntity lv) {
+                        StandEntity stand = getStandEntity(self);
+                        int id = entity.getId();
+                        if (!(stand != null && stand.getId() == id)) {
+                            if (!(entity instanceof StandEntity) &&
+                                    !(entity instanceof Player pk && pk.isCreative()
+                                            && pk.getId() != self.getId())
+                            ) {
+                                Vec3 predicted = entity.position();
+                                float xRot = entity.getXRot();
+                                float yRot = entity.getYRot();
+                                if (!lv.isSleeping()) {
+                                    if (entity instanceof Mob mob) {
+                                        if (!mob.isLeashed()) {
+                                            predicted = predictPosition(mob, 100);
+                                        }
+                                    } else if (entity instanceof Player player) {
+                                        // Fallback for players, armor stands, etc.
+                                        hitWall2 = false;
+                                        predicted = predictPlayer(player, 40);
+                                        if (hitWall2) {
+                                            yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                        }
                                     }
                                 }
+
+
+                                epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                        id,
+                                        predicted,
+                                        xRot,
+                                        yRot
+                                ));
+                                S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
-
-
-                            epitaph.put(living.getId(), new TimeSkipSnapshot(
-                                    id,
-                                    predicted,
-                                    xRot,
-                                    yRot
-                            ));
-                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                         }
+                    } else if (entity instanceof Boat bt){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictBoat(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
                     }
 
                 }
