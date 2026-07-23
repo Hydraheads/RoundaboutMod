@@ -294,6 +294,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             $$0.is(DamageTypes.STALAGMITE) ||
                             $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
                             $$0.is(DamageTypes.LAVA) ||
+                            $$0.is(ModDamageTypes.STAND_FIRE) ||
                             $$0.is(DamageTypes.IN_FIRE)||
                             $$0.is(DamageTypes.ON_FIRE)
                     ){
@@ -748,6 +749,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
+        if (isGuardInput()){
+            return;
+        }
         switch (context)
         {
             case SKILL_1_NORMAL-> {

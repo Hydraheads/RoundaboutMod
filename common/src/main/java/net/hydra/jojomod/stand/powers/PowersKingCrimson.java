@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -33,6 +34,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,11 +44,15 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -184,8 +190,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 // Don't move there
                 break;
             }
-            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+
+            if (isSunlightDanger(liv,nextPos)){
                 return predicted;
+            }
+            AABB checkBox = box.inflate(-0.05);
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                    Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                    return predicted;
+                }
+
+
+                BlockState state = level.getBlockState(pos);
+                if (MainUtil.isDangerous(level, pos, state)) {
+                    return predicted;
+                }
             }
 
             predicted = predicted.add(collided);
@@ -203,6 +226,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Level level = player.level();
 
         Vec3 predicted = player.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
         AABB box = player.getBoundingBox();
 
         Deque<Vec3> history = null;
@@ -246,7 +272,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             && !(player instanceof Player pl2 && pl2.getAbilities().flying)) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
-                velocity.multiply(1,0,1);
+                velocity = velocity.multiply(1,0,1);
             }
 
             // ----- Normal collision -----
@@ -308,9 +334,33 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     hitWall2 = true;
                 }
             }
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
 
             predicted = predicted.add(collided);
             box = box.move(collided);
+            if (player.getId() != self.getId()) {
+                AABB checkBox = box.inflate(-0.05);
+
+                if (isSunlightDanger(player,predicted)){
+                    predicted = previousPreviousSafe;
+                    break;
+                }
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                        Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                    if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                        return previousPreviousSafe;
+                    }
+
+                    BlockState state = level.getBlockState(pos);
+                    if (MainUtil.isDangerous(level, pos, state)) {
+                        predicted = previousPreviousSafe;
+                        break;
+                    }
+                }
+            }
         }
 
         boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
@@ -335,7 +385,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 Block block = state.getBlock();
 
                 // List of bad blocks to avoid
-                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                if (block == Blocks.COBWEB || block == Blocks.LAVA ||
+                block == ModBlocks.BARBED_WIRE_BUNDLE) {
                     cancel = true;
                     break;
                 }
@@ -346,16 +397,106 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     break;
                 }
             }
+
+            if (isSunlightDanger(player,predicted)){
+                cancel = true;
+            }
             if (cancel){
                 return player.position();
             }
         }
 
         return predicted;
+    }public Vec3 predictBoat(Boat boat, int ticks) {
+        Level level = boat.level();
+
+        if (!(boat.getControllingPassenger() instanceof Player player)) {
+            return boat.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next(); // newest
+            it.next(); // previous
+            oldPos = it.next(); // third newest
+        }
+
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return boat.position();
+        }
+
+        Vec3 predicted = boat.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(0.4);
+
+        AABB box = boat.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
+
+            Vec3 collided = Entity.collideBoundingBox(
+                    boat,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // Couldn't move fully -> hit shore.
+            if (collided.horizontalDistanceSqr() + 1.0E-6 < velocity.horizontalDistanceSqr()) {
+                return previousPreviousSafe;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+
+            // Make sure the boat is still floating.
+            if (!boatHasWaterBelow(level, box)) {
+                return previousPreviousSafe;
+            }
+        }
+
+        return predicted;
+    }
+    private static boolean boatHasWaterBelow(Level level, AABB box) {
+
+        double y = box.minY - 0.1;
+
+        int minX = Mth.floor(box.minX + 0.1);
+        int maxX = Mth.floor(box.maxX - 0.1);
+
+        int minZ = Mth.floor(box.minZ + 0.1);
+        int maxZ = Mth.floor(box.maxZ - 0.1);
+
+        int water = 0;
+        int total = 0;
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                total++;
+
+                if (level.getFluidState(BlockPos.containing(x, y, z)).is(FluidTags.WATER)) {
+                    water++;
+                }
+            }
+        }
+
+        return water * 2 >= total;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
         if (mob.getControllingPassenger() instanceof Player pl){
-            Vec3 pred = predictPlayer(mob,100);
+            Vec3 pred = predictPlayer(mob,40);
             return pred;
         }
 
@@ -437,6 +578,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                Vec3 boat = predictBoat(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } if (entity instanceof LivingEntity living) {
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
@@ -497,8 +647,35 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
-    public void skipSingle(TimeSkipSnapshot snapshot){
+    public boolean isSunlightDanger(Entity entity, Vec3 pos){
+        if (isSunlightDanger2(entity.getControllingPassenger(),pos)){
+            return true;
+        }
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
 
+            }
+        }
+        return false;
+    }
+    public boolean isSunlightDanger2(Entity entity, Vec3 pos){
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public void skipSingle(TimeSkipSnapshot snapshot){
         if (snapshot.getEntityId() == -1) {
             return;
         }
@@ -537,7 +714,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
-            if (deviousStratBlocker && entity instanceof Player) {
+            if (deviousStratBlocker && (entity instanceof Player || entity.getControllingPassenger() instanceof Player)) {
                 // 2. Check for dangerous blocks inside target box
                 boolean cancel = false;
                 for (BlockPos pos : BlockPos.betweenClosed(
@@ -548,16 +725,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     Block block = state.getBlock();
 
                     // List of bad blocks to avoid
-                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    if (block == Blocks.COBWEB || block == Blocks.LAVA
+                            || block == ModBlocks.BARBED_WIRE_BUNDLE) {
                         cancel = true;
                         break;
                     }
 
                     // Optional: also avoid fire or cactus
-                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS
+                            ) {
                         cancel = true;
                         break;
                     }
+                }
+
+                if (isSunlightDanger(entity,snapshot.position)){
+                    cancel = true;
                 }
                 if (cancel) {
                     return;
@@ -586,8 +769,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         RelativeMovement.Z),
                 snapshot.yRot,entity.getXRot());
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
-            mb.getNavigation().stop();
-            ((IMob)mb).roundabout$setConfusionTicks(7);
+                mb.getNavigation().stop();
+            if (!MainUtil.blockConfusionTicks(mb)) {
+                ((IMob) mb).roundabout$setConfusionTicks(7);
+            }
         }
     }
 
@@ -657,6 +842,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         proj.getXRot(),
                         proj.getYRot()
                 ));
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                Vec3 boat = predictBoat(bt,40);
+                epitaph.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             }
@@ -724,41 +917,55 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
-                for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
-                    StandEntity stand = getStandEntity(self);
-                    int id = living.getId();
-                    if (!(stand != null && stand.getId() == id)){
-                        if (!(living instanceof StandEntity) &&
-                                !(living instanceof Player pk && pk.isCreative()
-                                        && pk.getId() != self.getId())
-                        ) {
-                            Vec3 predicted = living.position();
-                            float xRot = living.getXRot();
-                            float yRot = living.getYRot();
-                            if (!living.isSleeping()){
-                                if (living instanceof Mob mob) {
-                                    if (!mob.isLeashed()) {
-                                        predicted = predictPosition(mob, 100);
-                                    }
-                                } else if (living instanceof Player player) {
-                                    // Fallback for players, armor stands, etc.
-                                    hitWall2 = false;
-                                    predicted = predictPlayer(player, 40);
-                                    if (hitWall2) {
-                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+                    if (entity instanceof LivingEntity lv) {
+                        StandEntity stand = getStandEntity(self);
+                        int id = entity.getId();
+                        if (!(stand != null && stand.getId() == id)) {
+                            if (!(entity instanceof StandEntity) &&
+                                    !(entity instanceof Player pk && pk.isCreative()
+                                            && pk.getId() != self.getId())
+                            ) {
+                                Vec3 predicted = entity.position();
+                                float xRot = entity.getXRot();
+                                float yRot = entity.getYRot();
+                                if (!lv.isSleeping()) {
+                                    if (entity instanceof Mob mob) {
+                                        if (!mob.isLeashed()) {
+                                            predicted = predictPosition(mob, 100);
+                                        }
+                                    } else if (entity instanceof Player player) {
+                                        // Fallback for players, armor stands, etc.
+                                        hitWall2 = false;
+                                        predicted = predictPlayer(player, 40);
+                                        if (hitWall2) {
+                                            yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                        }
                                     }
                                 }
+
+
+                                epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                        id,
+                                        predicted,
+                                        xRot,
+                                        yRot
+                                ));
+                                S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
-
-
-                            epitaph.put(living.getId(), new TimeSkipSnapshot(
-                                    id,
-                                    predicted,
-                                    xRot,
-                                    yRot
-                            ));
-                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                         }
+                    } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictBoat(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
                     }
 
                 }

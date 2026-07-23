@@ -51,7 +51,7 @@ public class StickyIceCoatingBlock
                         $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
                     } else {
                         if (LE instanceof Player pl) {
-                            if ((pl.hurtTime <= 0) ||
+                            if ((pl.hurtTime <= 3) || (pl.hurtTime >= 8)  ||
                                     (((StandUser)pl).roundabout$getLogSource() == null) ||
                                     !(((StandUser)pl).roundabout$getLogSource() != null && ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND))
                             ) {

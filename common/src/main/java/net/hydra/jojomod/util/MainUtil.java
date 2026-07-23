@@ -2549,6 +2549,14 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
+
+    public static boolean blockConfusionTicks(Entity LE){
+        if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isBossMob(Entity LE){
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
             || isPowerfulMob(LE) ||

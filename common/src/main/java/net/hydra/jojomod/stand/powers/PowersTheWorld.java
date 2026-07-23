@@ -1512,7 +1512,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
+                    S2CPacketUtil.sendBlip2Packet(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
                 }
             }
         }
