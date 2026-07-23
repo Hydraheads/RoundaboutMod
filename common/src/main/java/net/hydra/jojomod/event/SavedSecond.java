@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
@@ -230,7 +231,8 @@ public class SavedSecond {
                 Block block = state.getBlock();
 
                 // List of bad blocks to avoid
-                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                if (block == Blocks.COBWEB || block == Blocks.LAVA
+                        || block == ModBlocks.BARBED_WIRE_BUNDLE) {
                     return false;
                 }
 

@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -335,7 +336,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 Block block = state.getBlock();
 
                 // List of bad blocks to avoid
-                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                if (block == Blocks.COBWEB || block == Blocks.LAVA ||
+                block == ModBlocks.BARBED_WIRE_BUNDLE) {
                     cancel = true;
                     break;
                 }
@@ -537,7 +539,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
-            if (deviousStratBlocker && entity instanceof Player) {
+            if (deviousStratBlocker && (entity instanceof Player || entity.getControllingPassenger() instanceof Player)) {
                 // 2. Check for dangerous blocks inside target box
                 boolean cancel = false;
                 for (BlockPos pos : BlockPos.betweenClosed(
@@ -548,13 +550,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     Block block = state.getBlock();
 
                     // List of bad blocks to avoid
-                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    if (block == Blocks.COBWEB || block == Blocks.LAVA
+                            || block == ModBlocks.BARBED_WIRE_BUNDLE) {
                         cancel = true;
                         break;
                     }
 
                     // Optional: also avoid fire or cactus
-                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS
+                            ) {
                         cancel = true;
                         break;
                     }
@@ -586,8 +590,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         RelativeMovement.Z),
                 snapshot.yRot,entity.getXRot());
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
-            mb.getNavigation().stop();
-            ((IMob)mb).roundabout$setConfusionTicks(7);
+                mb.getNavigation().stop();
+            if (!MainUtil.blockConfusionTicks(mb)) {
+                ((IMob) mb).roundabout$setConfusionTicks(7);
+            }
         }
     }
 
