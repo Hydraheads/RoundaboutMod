@@ -748,6 +748,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
+        if (isGuardInput()){
+            return;
+        }
         switch (context)
         {
             case SKILL_1_NORMAL-> {
