@@ -661,7 +661,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void skipSingle(TimeSkipSnapshot snapshot){
-
         if (snapshot.getEntityId() == -1) {
             return;
         }

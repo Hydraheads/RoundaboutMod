@@ -23,6 +23,7 @@ public class ServerToClientPackets {
             PlaySound("play_sound"),
             StopSound("stop_sound"),
             Blip("blip"),
+            Blip2("blip2"),
             SyncCooldown("sync_cooldown"),
             SyncCooldownMax("sync_cooldown_max"),
             SyncActivePower("sync_active_power"),

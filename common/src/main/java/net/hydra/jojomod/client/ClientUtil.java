@@ -65,6 +65,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.TooltipFlag;
@@ -593,6 +594,12 @@ public class ClientUtil {
                     byte activePower = (byte) vargs[1];
                     Vector3f vec = (Vector3f) vargs[2];
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip2.value)) {
+                    /**TS Teleport blip*/
+                    int data = (int) vargs[0];
+                    byte activePower = (byte) vargs[1];
+                    Vector3f vec = (Vector3f) vargs[2];
+                    ClientUtil.handleBlipPacket2S2C(data,activePower,vec);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
                     /**Syncs cooldowns for skills*/
                     byte power = (byte) vargs[0];
@@ -1412,6 +1419,35 @@ public class ClientUtil {
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
     public static void handleBlipPacketS2C(LocalPlayer player, int data, byte context, Vector3f vec) {
+        if (context == 2) {
+            /*This code makes the world using mobs appear to teleport by skipping interpolation*/
+            Entity target = player.level().getEntity(data);
+            if (target != null && target.getPassengers() != null && !target.getPassengers().isEmpty() &&
+                    target.getControllingPassenger() instanceof Player pl){
+                if (!(target instanceof Boat) || target.getPosition(1f).distanceTo(new Vec3(vec.x,vec.y,vec.z)) > 0.4F){
+                    target.setPos(vec.x,vec.y,vec.z);
+                    Player cli = ClientUtil.getPlayer();
+                    if (cli != null && cli.is(pl) && cli.isPassenger()){
+                        Entity rv = cli.getRootVehicle();
+                        if (rv != null) {
+                            target.positionRider(cli);
+                        }
+                    }
+                }
+                return;
+            }
+            if (target instanceof LivingEntity LE) {
+                ((StandUser) target).roundabout$setBlip(vec);
+
+                StandEntity SE = ((StandUser) target).roundabout$getStand();
+                if (SE != null) {
+                    ((StandUser) SE).roundabout$setBlip(vec);
+                }
+                ((StandUser) target).roundabout$tryBlip();
+            }
+        }
+    }
+    public static void handleBlipPacketS2C2(LocalPlayer player, int data, byte context, Vector3f vec) {
         if (hasATimeStopSeeingStandAndCanBypass())
             return;
         if (context == 2) {
@@ -1649,6 +1685,12 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
              handleBlipPacketS2C(player,data,context,vec);
+        }
+    }
+    public static void handleBlipPacket2S2C(int data, byte context, Vector3f vec){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            handleBlipPacketS2C2(player,data,context,vec);
         }
     }
     public static void handleBundlePacketS2C(byte context, byte one, byte two){
