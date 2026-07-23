@@ -104,13 +104,13 @@ public abstract class GravityServerGamePacketListenerImplMixin {
     }
 
     // Moved Quickly
-    @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 100.0),require = 0)
-    private double rdbt$imfast_VehicleMaxSpeed(double speed) {
-        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
-            return 1000D;
-        }
-        return speed;
-    }
+    //@ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 100.0),require = 0)
+    //private double rdbt$imfast_VehicleMaxSpeed(double speed) {
+    //    if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+    //        return 1000D;
+    //    }
+    //    return speed;
+    //}
 
     // Moved Wrongly
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(doubleValue = 0.0625),require = 0)
