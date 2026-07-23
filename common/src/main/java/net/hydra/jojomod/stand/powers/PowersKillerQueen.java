@@ -1958,10 +1958,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 pos.x(), pos.y(), pos.z(), range, range, range);
 
         for (Entity ent : entities) {
-            if (ent instanceof StandEntity || !ent.isAlive() || ent.isRemoved()) { continue; }
+            int id = ent.getId();
+            if (ent instanceof StandEntity || !ent.isAlive() || ent.isRemoved()
+                    || this.combatSavedBTD.keySet().contains(id)) { continue; }
             SavedSecond second = SavedSecond.saveEntitySecond(ent);
 
-            this.combatSavedBTD.put(ent.getId(), second);
+            this.combatSavedBTD.putIfAbsent(ent.getId(), second);
         }
     }
 
@@ -2004,19 +2006,20 @@ public class PowersKillerQueen extends NewPunchingStand {
                     SavedSecond second = combatSavedBTD.get(id);
 
                     if (second != null) {
-
-                        packetNearby(new Vector3f(
+                        Vector3f posPacket = new Vector3f(
+                                (float) second.position.x,
+                                (float) second.position.y,
+                                (float) second.position.z);
+                        /*packetNearby(new Vector3f(
                                 (float) second.position.x,
                                 (float) second.position.y,
                                 (float) second.position.z
-                                ), id);
+                                ), id);*/
                         second.loadTime(ent);
-                        packetNearby(new Vector3f(
-                                (float) second.position.x,
-                                (float) second.position.y,
-                                (float) second.position.z
-                        ), id);
 
+                        if (SavedSecond.canTeleportTo(ent.level(), second.position, ent)) {
+                            packetNearby(posPacket, id);
+                        }
                     }
 
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
