@@ -44,6 +44,9 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -186,6 +189,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 // Don't move there
                 break;
             }
+
+            if (isSunlightDanger(liv,nextPos)){
+                return predicted;
+            }
             AABB checkBox = box.inflate(-0.05);
 
             for (BlockPos pos : BlockPos.betweenClosed(
@@ -195,6 +202,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (level.getFluidState(pos).is(FluidTags.LAVA)) {
                     return predicted;
                 }
+
 
                 BlockState state = level.getBlockState(pos);
                 if (MainUtil.isDangerous(level, pos, state)) {
@@ -333,6 +341,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (player.getId() != self.getId()) {
                 AABB checkBox = box.inflate(-0.05);
 
+                if (isSunlightDanger(player,predicted)){
+                    predicted = previousPreviousSafe;
+                    break;
+                }
                 for (BlockPos pos : BlockPos.betweenClosed(
                         Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
                         Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
@@ -383,6 +395,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     cancel = true;
                     break;
                 }
+            }
+
+            if (isSunlightDanger(player,predicted)){
+                cancel = true;
             }
             if (cancel){
                 return player.position();
@@ -535,6 +551,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
+    public boolean isSunlightDanger(Entity entity, Vec3 pos){
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+
     public void skipSingle(TimeSkipSnapshot snapshot){
 
         if (snapshot.getEntityId() == -1) {
@@ -598,6 +627,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         cancel = true;
                         break;
                     }
+                }
+
+                if (isSunlightDanger(entity,snapshot.position)){
+                    cancel = true;
                 }
                 if (cancel) {
                     return;
