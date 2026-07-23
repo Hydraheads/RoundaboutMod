@@ -564,7 +564,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
-                predictBoat(bt,40);
+                Vec3 boat = predictBoat(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } if (entity instanceof LivingEntity living) {
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
@@ -821,6 +828,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         proj.getXRot(),
                         proj.getYRot()
                 ));
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                Vec3 boat = predictBoat(bt,40);
+                epitaph.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             }
@@ -925,7 +940,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
                         }
-                    } else if (entity instanceof Boat bt){
+                    } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
