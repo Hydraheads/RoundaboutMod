@@ -272,7 +272,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             && !(player instanceof Player pl2 && pl2.getAbilities().flying)) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
-                velocity.multiply(1,0,1);
+                velocity = velocity.multiply(1,0,1);
             }
 
             // ----- Normal collision -----
