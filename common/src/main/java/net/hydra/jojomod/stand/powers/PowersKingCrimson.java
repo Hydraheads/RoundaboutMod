@@ -34,6 +34,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -204,6 +205,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Level level = player.level();
 
         Vec3 predicted = player.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
         AABB box = player.getBoundingBox();
 
         Deque<Vec3> history = null;
@@ -309,9 +313,29 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     hitWall2 = true;
                 }
             }
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
 
             predicted = predicted.add(collided);
             box = box.move(collided);
+            if (player.getId() != self.getId()) {
+                AABB checkBox = box.inflate(-0.05);
+
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                        Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                    if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                        return previousPreviousSafe;
+                    }
+
+                    BlockState state = level.getBlockState(pos);
+                    if (MainUtil.isDangerous(level, pos, state)) {
+                        predicted = previousPreviousSafe;
+                        break;
+                    }
+                }
+            }
         }
 
         boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
