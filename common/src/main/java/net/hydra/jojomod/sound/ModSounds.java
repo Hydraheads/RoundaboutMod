@@ -703,6 +703,12 @@ public class ModSounds {
     public static final String KILLER_QUEEN_BTD_NOISE = "bites_the_dust_noise";
     public static final ResourceLocation KILLER_QUEEN_BTD_NOISE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BTD_NOISE);
     public static SoundEvent KILLER_QUEEN_BTD_NOISE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BTD_NOISE_ID);
+    public static final String KILLER_QUEEN_BTD_PLANTED = "bites_the_dust_planted";
+    public static final ResourceLocation KILLER_QUEEN_BTD_PLANTED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BTD_PLANTED);
+    public static SoundEvent KILLER_QUEEN_BTD_PLANTED_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BTD_PLANTED_ID);
+    public static final String KILLER_QUEEN_BTD_DETONATE = "bites_the_dust_detonate";
+    public static final ResourceLocation KILLER_QUEEN_BTD_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BTD_DETONATE);
+    public static SoundEvent KILLER_QUEEN_BTD_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BTD_DETONATE_ID);
     public static final String KILLER_QUEEN_SHA_KOCCHI = "sha_kocchi";
     public static final ResourceLocation KILLER_QUEEN_SHA_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_KOCCHI);
     public static SoundEvent KILLER_QUEEN_SHA_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_KOCCHI_ID);
