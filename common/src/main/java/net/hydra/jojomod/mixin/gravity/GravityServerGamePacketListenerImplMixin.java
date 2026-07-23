@@ -2,7 +2,6 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.network.chat.Component;
@@ -17,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelReader;
@@ -81,7 +79,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
     }
 
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 100.0F),require = 0)
-    private float imfast_PlayerMaxSpeed(float speed) {
+    private float rdbt$imfast_PlayerMaxSpeed(float speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
             return 1000.0F;
         }
@@ -90,16 +88,24 @@ public abstract class GravityServerGamePacketListenerImplMixin {
 
     // Moved Quickly
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(floatValue = 300.0F),require = 0)
-    private float imfast_ElytraMaxSpeed(float speed) {
+    private float rdbt$imfast_ElytraMaxSpeed(float speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
             return 400.0F;
+        }
+        return speed;
+    }
+    // Moved Quickly
+    @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 0.0625),require = 0)
+    private double rdbt$imfast_handleMoveVehicle2(double speed) {
+        if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
+            return 1000D;
         }
         return speed;
     }
 
     // Moved Quickly
     @ModifyConstant(method = "handleMoveVehicle", constant = @Constant(doubleValue = 100.0),require = 0)
-    private double imfast_VehicleMaxSpeed(double speed) {
+    private double rdbt$imfast_VehicleMaxSpeed(double speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
             return 1000D;
         }
@@ -110,7 +116,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
     @ModifyConstant(method = "handleMovePlayer", constant = @Constant(doubleValue = 0.0625),require = 0)
     private double imfast_MovedWrong(double speed) {
         if (ClientNetworking.getAppropriateConfig().vanillaMinecraftTweaks.bufferServerDistance){
-            return 1D;
+            return 1000D;
         }
         return speed;
     }
