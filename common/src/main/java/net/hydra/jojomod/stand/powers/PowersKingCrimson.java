@@ -186,8 +186,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 // Don't move there
                 break;
             }
-            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
-                return predicted;
+            AABB checkBox = box.inflate(-0.05);
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                    Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                    return predicted;
+                }
+
+                BlockState state = level.getBlockState(pos);
+                if (MainUtil.isDangerous(level, pos, state)) {
+                    return predicted;
+                }
             }
 
             predicted = predicted.add(collided);
