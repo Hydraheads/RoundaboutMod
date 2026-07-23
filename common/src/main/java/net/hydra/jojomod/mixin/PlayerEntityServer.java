@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
@@ -14,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -175,6 +178,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
             ipe.roundabout$setPower(((IPlayerEntity) $$0).roundabout$getPower());
         }
+    }
+
+    public void roundabout$openBlackSabbathInventory(BlackSabbathEntity $$0, Container $$1) {
+        if(this.containerMenu != this.inventoryMenu){
+            this.closeContainer();
+        }
+        this.nextContainerCounter();
+       // this.connection.send(new ClientboundBlackSabbathScreenOpenPacket(this.containerCounter, $$1.getContainerSize(), $$0.getId()));
+        this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), !this.level().isClientSide, this, containerCounter);
+        this.initMenu(this.containerMenu);
     }
 
 }

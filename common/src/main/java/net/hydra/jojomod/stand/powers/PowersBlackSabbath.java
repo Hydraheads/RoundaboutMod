@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -8,18 +9,17 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.Poses;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -31,6 +31,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -39,12 +40,15 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
@@ -55,14 +59,8 @@ public class PowersBlackSabbath extends NewDashPreset {
         super(self);
     }
 
-    public BlackSabbathEntity BSE = null;
-    private byte currentBlackStatus = BS_NONE;
-
     private static final byte
-            ENTITY_BLACK_SABBATH = 53,
-            BLACK_SABBATH = 54,
-        BS_NONE = 0,
-        BS_ACTIVE = 1;
+    PLACE = 55;
 
     @Override
     /**Override to add disable config*/
@@ -71,18 +69,34 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     @Override
-    public StandPowers generateStandPowers(LivingEntity entity) {
-        return new PowersBlackSabbath(entity);
-    }
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
 
-    public void syncBlackStatus(byte status) {
-        this.currentBlackStatus = status;
-        this.updatePowerInt(PowersBlackSabbath.BLACK_SABBATH, status);
-        if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.BLACK_SABBATH, status);
+        if (!isClient()) {
+            if (desummon) {
+
+                if (active) {
+                    active = false;
+                }
+
+            }
         }
     }
 
+    @Override
+    public StandPowers generateStandPowers(LivingEntity entity) {
+        return new PowersBlackSabbath(entity);
+    }
+    @Override
+    public StandEntity getNewStandEntity(){
+        byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+
+        return ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+    }
+
+    public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
+
+    @Override
     public boolean canSummonStandAsEntity(){
         return false;
     }
@@ -98,13 +112,25 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        StandEntity SE = this.getStandEntity(this.getSelf());
+        switch(move) {
+            case PowerIndex.POWER_1 -> {
+                this.active = true;
+                this.setCooldown(PowerIndex.SKILL_1,80);
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
                 if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
-
+                    blackChestClient();
                 }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
@@ -118,15 +144,23 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
     }
 
+    public void blackChestClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            this.getSelf().playSound(ModSounds.RATT_PLACE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
+            Vec3 blockHitResult = self.position();
+            if (blockHitResult != null) {
+                tryPosPower(PowerIndex.POWER_1, true, blockHitResult);
+                tryPosPowerPacket(PowerIndex.POWER_1, blockHitResult);
+            }
+        }
+    }
+
     public int cooldownFinger = ClientNetworking.getAppropriateConfig().blackSabbathSettings.fingerBiteCooldown;
 
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move)
         {
-            case PowerIndex.POWER_1 -> {
-        //        return summonBlack();
-            }
             case PowerIndex.POWER_4 -> {
                 if(this.getSelf().getHealth() > 1) {
                     return biteFingers(this.self);
@@ -144,31 +178,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
     }
 
-    private boolean summonBlack(){
-        if (!this.getSelf().level().isClientSide()) {
-            if (BSE == null || BSE.isRemoved()) {
-                BlackSabbathEntity sha = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
-                if (sha != null) {
-                    sha.setUser(this.self);
-                    sha.setXRot(this.self.getXRot());
-                    sha.setYRot(this.self.getYRot());
-                    if(this.self instanceof Player PL) {
-                        displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
-                    }
-                    this.self.level().addFreshEntity(sha);
 
-                    BSE = sha;
-
-                    this.syncBlackStatus(BS_ACTIVE);
-
-                    S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersBlackSabbath.ENTITY_BLACK_SABBATH, this.BSE.getId());
-
-                }
-
-            }
-        }
-        return true;
-    }
 
 
     private boolean biteFingers(LivingEntity ojiroSasame){
@@ -198,11 +208,19 @@ public class PowersBlackSabbath extends NewDashPreset {
         Entity $$0 = this.getSelf();
         BlockPos pos = $$0.blockPosition();
         long timeOfDay = $$0.level().getDayTime() % 24000L;
+        Vec3 yes = $$0.getEyePosition();
+        BlockPos atVec = BlockPos.containing(yes);
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
         if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 11){
             if(isDay){
-                if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11 || $$0.level().isRaining() || $$0.level().isThundering()){
+                 if ($$0.level().isRaining() || $$0.level().isThundering()){
                     return true;
+                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 11 ){
+                    return true;
+                } else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11){
+                    return true;
+                } else {
+                    return false;
                 }
             } else if (!isDay){
                 return true;
@@ -213,15 +231,6 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         return  false;
        // return $$0.level().getBrightness(LightLayer.BLOCK, pos) < 11 && ((isDay && !($$0.level().canSeeSky(BlockPos.containing($$0.getEyePosition())) && $$0.level().canSeeSky(BlockPos.containing($$0.position())) || !isDay)));
-    }
-
-    public void openPolpoInventory(){
-        if(this.self instanceof Player player){
-            if(player.level() != null) {
-                this.self.playSound(SoundEvents.ENDER_CHEST_OPEN);
-            }
-            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY);
-        }
     }
 
     public int fingerEatingTick = 0;
@@ -235,7 +244,13 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
-
+        for(int i = 0; i == 100; i++) {
+            Entity entity = EntityType.TNT.create(this.getSelf().level());
+            if(entity instanceof PrimedTnt PT){
+                PT.setFuse(100);
+            }
+            self.level().addFreshEntity(entity);
+        }
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
@@ -257,6 +272,8 @@ public class PowersBlackSabbath extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
+    public boolean active = false;
+
     @Override
     public void tickPower() {
         if(fingerEatingTick > 0){
@@ -267,7 +284,50 @@ public class PowersBlackSabbath extends NewDashPreset {
                 ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
             }
         }
+
+        if (this.getStandEntity(self) == null && this.getSelf().isAlive() && active) {
+            if (PowerTypes.hasStandActive(self)) {
+                if (!isClient()) {
+                    if (this.getSelf().position() != null) {
+                     //   placeBlackChest(this.getSelf().position());
+                    }
+                }
+            }
+
+        }
+
         super.tickPower();
+    }
+
+    public void placeBlackChest(Vec3 pos) {
+        int cooldown = 60;
+        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+        if (!isClient()) {
+            if(self instanceof Player PL) {
+                blipStand(pos, PL);
+            }
+        }
+    }
+
+    public final Vec3 getLookAngleChest(float $$0, Entity selfie) {
+        return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
+    }
+
+    public void blipStand(Vec3 pos, Player PL) {
+        StandEntity stand = getNewStandEntity();
+        Vec3 lvec = getLookAngleChest(self.getYRot(), self);
+        Position pn = self.getEyePosition().add(lvec.scale(1));
+        if (stand instanceof BlackSabbathEntity BE) {
+                BE.setMaster(this.self);
+                BE.absMoveTo(pn.x(), self.getY(), pn.z());
+                BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
+                this.getStandUserSelf().roundabout$standMount(BE);
+                BE.setShouldFloat(true);
+                BE.setDeltaMovement(Vec3.ZERO);
+                this.self.level().addFreshEntity(BE);
+                this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                BE.openCustomInventoryScreen(PL);
+        }
     }
 
     @Override
@@ -299,9 +359,12 @@ public class PowersBlackSabbath extends NewDashPreset {
 
 
     @Override
-    public void updateIntMove(int in) {
+    public void updatePowerInt(byte activePower, int data) {
 
-        super.updateIntMove(in);
+        if (activePower == PowerIndex.POWER_1) {
+            this.setCooldown(activePower,data);
+        }
+
     }
 
     @Override

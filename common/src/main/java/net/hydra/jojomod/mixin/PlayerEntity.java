@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -41,6 +42,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -52,6 +54,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -2017,6 +2020,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
             if (PR.active) {
                 PR.active = false;
+            }
+        } else if (SU.roundabout$getStandPowers() instanceof PowersBlackSabbath PB){
+            if(PB.active){
+                PB.active = false;
             }
         }
     }

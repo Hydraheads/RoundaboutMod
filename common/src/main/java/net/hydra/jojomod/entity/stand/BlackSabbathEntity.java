@@ -1,10 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -43,6 +46,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public final AnimationState coat_open = new AnimationState();
 
+    public boolean shouldFloat = false;
+    public void setShouldFloat(boolean bool){shouldFloat = bool;}
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -58,7 +64,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public boolean lockPos(){
-        return false;
+        return shouldFloat;
     }
     @Override
     public boolean hasNoPhysics(){
@@ -66,12 +72,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     @Override
+    public boolean isNoGravity() {
+        return shouldFloat;
+    }
+
+    @Override
     public boolean standHasGravity() {
-        return true;
+        return !shouldFloat;
     }
 
     @Override
     public void tick(){
+        if(shouldFloat && this.getUser() != null){
+            this.setXRot((this.getUser().getXRot() % 360) - 180);
+            this.setYRot((this.getUser().getYHeadRot() % 360) - 180);
+            this.setYBodyRot((this.getUser().getYHeadRot() % 360) - 180);
+        }
         super.tick();
     }
 
@@ -82,8 +98,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public void openCustomInventoryScreen(Player var1) {
-        if (!this.level().isClientSide) {
-
+        BlackSabbathPlayerInventory $$0 = null;
+        if(this.getUser() != null && this.getUser() instanceof Player PL) {
+            $$0 = ((IPlayerEntity)PL).roundabout$getBlckSabbathPlayerInventory();
+            if (!this.level().isClientSide) {
+                ((IPlayerEntityServer) var1).roundabout$openBlackSabbathInventory(this, $$0);
+            }
         }
     }
+
+    @Override
+    public boolean isAttackable() {return true;}
+    @Override
+    public boolean isPickable() {return true;}
+    @Override
+    public boolean skipAttackInteraction(Entity $$0) {return false;}
 }
