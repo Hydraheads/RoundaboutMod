@@ -552,6 +552,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public boolean isSunlightDanger(Entity entity, Vec3 pos){
+        if (isSunlightDanger2(entity.getControllingPassenger(),pos)){
+            return true;
+        }
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+    public boolean isSunlightDanger2(Entity entity, Vec3 pos){
         if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
                 LE instanceof Skeleton || LE instanceof Phantom)){
             if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
