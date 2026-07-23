@@ -329,6 +329,8 @@ public interface StandUser {
 
     void roundabout$doWindVisionDetectionOther();
 
+    Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1);
+
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/
