@@ -1,9 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.NoHitboxRendering;
-import net.hydra.jojomod.access.NoVibrationEntity;
-import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -32,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -331,82 +329,91 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Entity hitTarget = $$0.getEntity();
-        Entity user = this.getOwner();
+        if (!this.level().isClientSide()) {
+            Entity hitTarget = $$0.getEntity();
+            Entity user = this.getOwner();
 
-        if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
-            return;
-        }
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
-            if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
+            if (hitTarget instanceof EnderMan em) {
+                ((IEnderMan) em).roundabout$teleport();
                 return;
             }
-        }
 
-        super.onHitEntity($$0);
-
-        DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
-        float damage = getDamagePoints();
-
-        if (user != null) {
-            dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
-
-            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                damage = KQ.getAirBubbleDamage(hitTarget);
+            if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
+                return;
             }
-        }
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
+                if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
+                    return;
+                }
+            }
 
-        if (this.target != null) {
-            damage *= 0.75f;
-        }
+            super.onHitEntity($$0);
 
-        if (hitTarget.hurt(dmg,damage)) {
+            DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
+            float damage = getDamagePoints();
 
-            if (user instanceof LivingEntity LE) {
+            if (user != null) {
+                dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
 
                 if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                    if (hitTarget instanceof LivingEntity l) {
-                        KQ.addEXP(4, l);
-                    }
+                    damage = KQ.getAirBubbleDamage(hitTarget);
                 }
-
-                LE.setLastHurtMob(hitTarget);
             }
 
-            if (hitTarget.getType() == EntityType.ENDERMAN) { return; }
-
-            if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
-                LivingEntity $$7;
-                if (hitTarget instanceof LivingEntity L) {
-                    $$7 = L;
-                } else {
-                    $$7 = ((EnderDragonPart) hitTarget).parentMob;
-                }
-
-                Vec3 launchVec = this.getDeltaMovement();
-                Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
-                vec3d2 = vec3d2.add(0, 0.4F, 0);
-
-                MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
-                        vec3d2.x,
-                        vec3d2.y,
-                        vec3d2.z);
-
-                if (user instanceof LivingEntity) {
-                    EnchantmentHelper.doPostHurtEffects($$7, user);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
-                }
-                if (user instanceof LivingEntity LE && this.isPlanted) {
-                    if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                        KQ.bubbleContacted(hitTarget);
-                    }
-                }
-
-                this.doPostHurtEffects($$7);
+            if (this.target != null) {
+                damage *= 0.75f;
             }
+
+            if (hitTarget.hurt(dmg, damage)) {
+
+                if (user instanceof LivingEntity LE) {
+
+                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                        if (hitTarget instanceof LivingEntity l) {
+                            KQ.addEXP(4, l);
+                        }
+                    }
+
+                    LE.setLastHurtMob(hitTarget);
+                }
+
+                if (hitTarget.getType() == EntityType.ENDERMAN) {
+                    return;
+                }
+
+                if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
+                    LivingEntity $$7;
+                    if (hitTarget instanceof LivingEntity L) {
+                        $$7 = L;
+                    } else {
+                        $$7 = ((EnderDragonPart) hitTarget).parentMob;
+                    }
+
+                    Vec3 launchVec = this.getDeltaMovement();
+                    Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
+                    vec3d2 = vec3d2.add(0, 0.4F, 0);
+
+                    MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
+                            vec3d2.x,
+                            vec3d2.y,
+                            vec3d2.z);
+
+                    if (user instanceof LivingEntity) {
+                        EnchantmentHelper.doPostHurtEffects($$7, user);
+                        EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
+                    }
+                    if (user instanceof LivingEntity LE && this.isPlanted) {
+                        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                            KQ.bubbleContacted(hitTarget);
+                        }
+                    }
+
+                    this.doPostHurtEffects($$7);
+                }
+            }
+
+            popBubble();
         }
-
-        popBubble();
     }
 
     public void popBubble(){
