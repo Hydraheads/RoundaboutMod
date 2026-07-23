@@ -407,12 +407,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         return predicted;
-    }
-    public Vec3 predictBoat(Boat boat, int ticks) {
+    }public Vec3 predictBoat(Boat boat, int ticks) {
         Level level = boat.level();
 
-        Entity controller = boat.getControllingPassenger();
-        if (!(controller instanceof Player player)) {
+        if (!(boat.getControllingPassenger() instanceof Player player)) {
             return boat.position();
         }
 
@@ -420,17 +418,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         Vec3 oldPos = player.position();
 
-        if (history != null && history.size() >= 2) {
+        if (history != null && history.size() >= 3) {
             Iterator<Vec3> it = history.descendingIterator();
-
-            Vec3 newest = it.next();
-            Vec3 previous = it.hasNext() ? it.next() : newest;
-            Vec3 third = it.hasNext() ? it.next() : previous;
-
-            oldPos = third;
+            it.next(); // newest
+            it.next(); // previous
+            oldPos = it.next(); // third newest
         }
 
-        // If the rider isn't moving, don't move the boat.
         if (player.position().distanceTo(oldPos) < 0.1) {
             return boat.position();
         }
@@ -442,42 +436,63 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 velocity = player.position()
                 .subtract(oldPos)
                 .normalize()
-                .scale(0.4); // roughly boat speed
+                .scale(0.4);
+
+        AABB box = boat.getBoundingBox();
 
         for (int i = 0; i < ticks; i++) {
 
             previousPreviousSafe = previousSafe;
             previousSafe = predicted;
 
-            Vec3 next = predicted.add(velocity);
+            Vec3 collided = Entity.collideBoundingBox(
+                    boat,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
 
-            BlockPos center = BlockPos.containing(next);
-            BlockPos below = center.below();
-
-            // Boat must remain floating.
-            if (!level.getFluidState(below).is(FluidTags.WATER)) {
+            // Couldn't move fully -> hit shore.
+            if (collided.horizontalDistanceSqr() + 1.0E-6 < velocity.horizontalDistanceSqr()) {
                 return previousPreviousSafe;
             }
 
-            // Don't beach into solid blocks.
-            AABB nextBox = boat.getBoundingBox().move(next.subtract(predicted));
+            predicted = predicted.add(collided);
+            box = box.move(collided);
 
-            boolean collision = false;
-            for (VoxelShape shape : level.getBlockCollisions(boat, nextBox)) {
-                if (!shape.isEmpty()) {
-                    collision = true;
-                    break;
-                }
-            }
-
-            if (collision) {
+            // Make sure the boat is still floating.
+            if (!boatHasWaterBelow(level, box)) {
                 return previousPreviousSafe;
             }
-
-            predicted = next;
         }
 
         return predicted;
+    }
+    private static boolean boatHasWaterBelow(Level level, AABB box) {
+
+        double y = box.minY - 0.1;
+
+        int minX = Mth.floor(box.minX + 0.1);
+        int maxX = Mth.floor(box.maxX - 0.1);
+
+        int minZ = Mth.floor(box.minZ + 0.1);
+        int maxZ = Mth.floor(box.maxZ - 0.1);
+
+        int water = 0;
+        int total = 0;
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                total++;
+
+                if (level.getFluidState(BlockPos.containing(x, y, z)).is(FluidTags.WATER)) {
+                    water++;
+                }
+            }
+        }
+
+        return water * 2 >= total;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
         if (mob.getControllingPassenger() instanceof Player pl){

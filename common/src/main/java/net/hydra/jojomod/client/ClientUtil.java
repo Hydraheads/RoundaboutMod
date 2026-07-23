@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -1440,10 +1441,15 @@ public class ClientUtil {
                 ((StandUser) target).roundabout$setBlip(vec);
 
                 StandEntity SE = ((StandUser) target).roundabout$getStand();
-                if (SE != null) {
-                    ((StandUser) SE).roundabout$setBlip(vec);
-                }
                 ((StandUser) target).roundabout$tryBlip();
+                if (SE instanceof FollowingStandEntity fse && fse.getFollowing() != null && fse.getFollowing().is(target)) {
+                    byte OT = fse.getOffsetType();
+                    if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
+                        Vec3 spos = fse.getStandOffsetVector(LE);
+                        ((StandUser) SE).roundabout$setBlip(spos.toVector3f());
+                        ((StandUser) target).roundabout$tryBlip();
+                    }
+                }
             }
         }
     }
