@@ -670,6 +670,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_KICK = "kq_minesweeper_kick";
     public static final ResourceLocation KQ_MINESWEEPER_KICK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_KICK);
     public static SoundEvent KQ_MINESWEEPER_KICK_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_KICK_ID);
+    public static final String KQ_MINESWEEPER_AIRBUBBLE_SEND = "kq_minesweeper_bubble_send";
+    public static final ResourceLocation KQ_MINESWEEPER_AIRBUBBLE_SEND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_AIRBUBBLE_SEND);
+    public static SoundEvent KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);
@@ -755,6 +758,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_START = "kq_minesweeper_start";
     public static final ResourceLocation KQ_MINESWEEPER_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_START);
     public static SoundEvent KQ_MINESWEEPER_START_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_START_ID);
+    public static final String KQ_MINESWEEPER_BARRAGE = "kq_minesweeper_barrage";
+    public static final ResourceLocation KQ_MINESWEEPER_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_BARRAGE);
+    public static SoundEvent KQ_MINESWEEPER_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_BARRAGE_ID);
     public static final String KQ_MINESWEEPER_DETONATE = "kq_minesweeper_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_DETONATE_ID);

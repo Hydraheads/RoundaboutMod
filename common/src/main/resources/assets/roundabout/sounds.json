@@ -557,6 +557,24 @@
       "roundabout:killer_queen_shibaba"
     ]
   },
+  "kq_minesweeper_kick": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_kick",
+    "sounds": [
+      "roundabout:kq_minesweeper_kick"
+    ]
+  },
+  "kq_minesweeper_heavy_punch": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_heavy_punch",
+    "sounds": [
+      "roundabout:kq_minesweeper_heavy_punch"
+    ]
+  },
+  "kq_minesweeper_impale": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_impale",
+    "sounds": [
+      "roundabout:kq_minesweeper_impale"
+    ]
+  },
   "killer_queen_punch_1": {
     "subtitle": "sounds.roundabout.punch_sfx3",
     "sounds": [
@@ -669,12 +687,6 @@
     "subtitle": "sounds.roundabout.straycat_bubble_redirect",
     "sounds": [
       "roundabout:straycat_bubble_redirect_2"
-    ]
-  },
-  "stray_cat_shoot": {
-    "subtitle": "sounds.roundabout.stray_cat_shoot",
-    "sounds": [
-      "roundabout:stray_cat_shoot"
     ]
   },
   "summon_magician": {

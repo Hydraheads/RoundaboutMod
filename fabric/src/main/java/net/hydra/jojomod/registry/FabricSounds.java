@@ -314,7 +314,9 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
+        addSound(ModSounds.KQ_MINESWEEPER_BARRAGE_ID, ModSounds.KQ_MINESWEEPER_BARRAGE_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_KICK_ID, ModSounds.KQ_MINESWEEPER_KICK_EVENT);
+        addSound(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_ID, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH_ID, ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_IMPALE_ID, ModSounds.KQ_MINESWEEPER_IMPALE_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_PUNCH_1_ID, ModSounds.KQ_MINESWEEPER_PUNCH_1_EVENT);

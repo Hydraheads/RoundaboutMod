@@ -336,6 +336,10 @@ public class ForgeSounds {
             register(ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH, ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_KICK_EVENT =
             register(ModSounds.KQ_MINESWEEPER_KICK, ModSounds.KQ_MINESWEEPER_KICK_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BARRAGE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_BARRAGE, ModSounds.KQ_MINESWEEPER_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_IMPALE_EVENT =
             register(ModSounds.KQ_MINESWEEPER_IMPALE, ModSounds.KQ_MINESWEEPER_IMPALE_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_SHIBABA_EVENT =
