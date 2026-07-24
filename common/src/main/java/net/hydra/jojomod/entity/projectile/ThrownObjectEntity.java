@@ -845,14 +845,18 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     ItemStack stack = this.getItem();
                     Item tem = stack.getItem();
                     if (stack.isDamageableItem()
-                            && !(tem instanceof FleshBucketItem)
-                            && !(tem instanceof FishingRodItem)
-                            && !(tem instanceof LuckyLipstickItem)
-                            && !(tem instanceof MemoryChessPieceItem)
-                            && !(tem instanceof ExperienceBishopItem)
                     ) {
-                        if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                        if (!(tem instanceof FleshBucketItem)
+                                && !(tem instanceof FishingRodItem)
+                                && !(tem instanceof LuckyLipstickItem)
+                                && !(tem instanceof MemoryChessPieceItem)
+                                && !(tem instanceof ExperienceBishopItem)
+                            ){
                             this.dropItem($$1.getOnPos());
+                        } else {
+                            if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                                this.dropItem($$1.getOnPos());
+                            }
                         }
                     } else if (this.getItem().getItem() instanceof TieredItem) {
                         this.dropItem($$1.getOnPos());
