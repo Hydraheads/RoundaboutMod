@@ -608,7 +608,7 @@
   "sha_kocchi": {
     "subtitle": "sounds.roundabout.sha_kocchi_1",
     "sounds": [
-      "roundabout:sha_kocchi  "
+      "roundabout:sha_kocchi"
     ]
   },
   "sha_alt_kocchi": {
