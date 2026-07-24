@@ -401,6 +401,10 @@ public class PowersRatt extends NewDashPreset {
 
     }
 
+    @Override
+    public boolean negateHandPoseForcing(){
+        return true;
+    }
 
     @Override
     public void onStandSummon(boolean desummon) {

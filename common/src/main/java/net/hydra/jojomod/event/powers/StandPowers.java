@@ -2211,6 +2211,9 @@ public class StandPowers extends AbilityScapeBasis {
         this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
     }
 
+    public boolean negateHandPoseForcing(){
+        return false;
+    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}
