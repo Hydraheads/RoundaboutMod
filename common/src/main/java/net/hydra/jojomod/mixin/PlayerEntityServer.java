@@ -186,7 +186,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         }
         this.nextContainerCounter();
        // this.connection.send(new ClientboundBlackSabbathScreenOpenPacket(this.containerCounter, $$1.getContainerSize(), $$0.getId()));
-        this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), !this.level().isClientSide, this, containerCounter);
+       // this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), !this.level().isClientSide, this, containerCounter);
         this.initMenu(this.containerMenu);
     }
 

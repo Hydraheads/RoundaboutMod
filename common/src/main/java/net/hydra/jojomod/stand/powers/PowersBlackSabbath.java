@@ -326,7 +326,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 BE.setDeltaMovement(Vec3.ZERO);
                 this.self.level().addFreshEntity(BE);
                 this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
-              //  BE.openCustomInventoryScreen(PL);
+                BE.openCustomInventoryScreen(PL);
         }
     }
 

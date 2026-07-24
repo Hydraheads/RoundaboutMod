@@ -1262,11 +1262,11 @@ public abstract class InputEvents implements IInputEvents {
                             BlackSabbathPlayerInventory $$4 = new BlackSabbathPlayerInventory(player);
                             player.clientSideCloseContainer();
 
-                            BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                          /*  BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
                                     ClientUtil.checkthisdat);
                             player.containerMenu = bsinv;
                             Minecraft.getInstance().setScreen(new BlackSabbathPlayerInventoryScreen(bsinv, player.getInventory(), player));
-                            ClientUtil.checkthis = 0;
+                            ClientUtil.checkthis = 0;*/
                             ClientUtil.checkthisdat = 0;
                         }
                     }
