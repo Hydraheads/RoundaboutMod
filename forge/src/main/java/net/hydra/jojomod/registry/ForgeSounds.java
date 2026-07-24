@@ -325,6 +325,38 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_BARRAGE, ModSounds.KILLER_QUEEN_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SUMMON_EVENT =
             register(ModSounds.KILLER_QUEEN_SUMMON, ModSounds.KILLER_QUEEN_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_SELECT_EVENT =
+            register(ModSounds.KILLER_QUEEN_BUBBLE_SELECT, ModSounds.KILLER_QUEEN_BUBBLE_SELECT_ID);
+
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_2_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_PUNCH_2, ModSounds.KQ_MINESWEEPER_PUNCH_2_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_HEAVY_PUNCH_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH, ModSounds.KQ_MINESWEEPER_HEAVY_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_KICK_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_KICK, ModSounds.KQ_MINESWEEPER_KICK_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BARRAGE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_BARRAGE, ModSounds.KQ_MINESWEEPER_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_IMPALE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_IMPALE, ModSounds.KQ_MINESWEEPER_IMPALE_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_SHIBABA_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_SHIBABA, ModSounds.KQ_MINESWEEPER_SHIBABA_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_SHIBA_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_SHIBA, ModSounds.KQ_MINESWEEPER_SHIBA_ID);
+
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_START_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_START, ModSounds.KQ_MINESWEEPER_START_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_DETONATE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_DETONATE, ModSounds.KQ_MINESWEEPER_DETONATE_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_DETONATE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_BTD_DETONATE, ModSounds.KQ_MINESWEEPER_BTD_DETONATE_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_PLANT_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_BTD_PLANT, ModSounds.KQ_MINESWEEPER_BTD_PLANT_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_NOISE_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_BTD_NOISE, ModSounds.KQ_MINESWEEPER_BTD_NOISE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SUMMON_DARK_EVENT =
             register(ModSounds.KILLER_QUEEN_SUMMON_DARK, ModSounds.KILLER_QUEEN_SUMMON_DARK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_EVENT =
