@@ -885,6 +885,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
                     addIceEntity(twister);
                     this.getSelf().level().addFreshEntity(twister);
+                    twister.user = self;
                     twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterLifespan;
                     break;
                 }
@@ -910,6 +911,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             GentlyWeepsEntity twister = new GentlyWeepsEntity(
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
+            twister.user = self;
             level.addFreshEntity(twister);
             twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespanv2;
         }

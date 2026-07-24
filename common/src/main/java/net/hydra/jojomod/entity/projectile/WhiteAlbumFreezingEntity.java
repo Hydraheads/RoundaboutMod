@@ -17,6 +17,7 @@ public class WhiteAlbumFreezingEntity extends Entity {
     public final AnimationState twisterSpin = new AnimationState();
     public int lifeSpan = -1;
     public int renderCold = 1;
+    public Entity user;
 
     public WhiteAlbumFreezingEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);

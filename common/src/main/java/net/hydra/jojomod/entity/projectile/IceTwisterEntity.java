@@ -106,8 +106,10 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
 
                             if (canFreeze(targetPos)
                                     && iceState.canSurvive(level(), targetPos)) {
-                                level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                if (MainUtil.getIsGamemodeApproriateForGrief(user)) {
+                                    level().setBlockAndUpdate(targetPos, iceState);
+                                    level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                }
                             }
                             // placement logic
                         }
