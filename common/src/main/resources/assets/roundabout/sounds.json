@@ -449,6 +449,84 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_select": {
+    "subtitle": "sounds.roundabout.killer_queen_select",
+    "sounds": [
+      "roundabout:killer_queen_select"
+    ]
+  },
+  "kq_minesweeper_detonate": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_detonate",
+    "sounds": [
+      "roundabout:kq_minesweeper_detonate"
+    ]
+  },
+  "kq_minesweeper_explosion": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_explosion",
+    "sounds": [
+      "roundabout:kq_minesweeper_explosion"
+    ]
+  },
+  "kq_minesweeper_start": {
+      "subtitle": "sounds.roundabout.kq_minesweeper_start",
+      "sounds": [
+        "roundabout:kq_minesweeper_start"
+      ]
+    },
+  "kq_minesweeper_barrage": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_barrage",
+    "sounds": [
+      "roundabout:kq_minesweeper_barrage"
+    ]
+  },
+  "kq_minesweeper_shibaba": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_shibaba",
+    "sounds": [
+      "roundabout:kq_minesweeper_shibaba"
+    ]
+  },
+  "kq_minesweeper_shiba": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_shiba",
+    "sounds": [
+      "roundabout:kq_minesweeper_shiba"
+    ]
+  },
+  "kq_minesweeper_punch_1": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_punch_1",
+    "sounds": [
+      "roundabout:kq_minesweeper_punch_1"
+    ]
+  },
+  "kq_minesweeper_punch_2": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_punch_2",
+    "sounds": [
+      "roundabout:kq_minesweeper_punch_2"
+    ]
+  },
+  "kq_minesweeper_bubble_send": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_bubble_send",
+    "sounds": [
+      "roundabout:kq_minesweeper_bubble_send"
+    ]
+  },
+  "kq_minesweeper_btd_noise": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_noise",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_noise"
+    ]
+  },
+  "kq_minesweeper_btd_detonate": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_detonate",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_detonate"
+    ]
+  },
+  "kq_minesweeper_btd_plant": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_plant",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_plant"
+    ]
+  },
   "summon_creeper_queen": {
     "subtitle": "sounds.roundabout.summon_creeper_queen",
     "sounds": [
@@ -521,16 +599,16 @@
       "roundabout:sha_dededede"
     ]
   },
-  "sha_kocchi_2": {
-    "subtitle": "sounds.roundabout.sha_kocchi_2",
+  "sha_heavy": {
+    "subtitle": "sounds.roundabout.sha_heavy",
     "sounds": [
-      "roundabout:sha_kocchi_2"
+      "roundabout:sha_heavy"
     ]
   },
-  "sha_kocchi_1": {
+  "sha_kocchi": {
     "subtitle": "sounds.roundabout.sha_kocchi_1",
     "sounds": [
-      "roundabout:sha_kocchi_1"
+      "roundabout:sha_kocchi  "
     ]
   },
   "sha_alt_kocchi": {

@@ -691,6 +691,9 @@ public class ModSounds {
     public static final ResourceLocation KILLER_QUEEN_SHA_DEDEDEDE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_DEDEDEDE);
     public static SoundEvent KILLER_QUEEN_SHA_DEDEDEDE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_DEDEDEDE_ID);
 
+    public static final String KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI = "sha_alt_cracked";
+    public static final ResourceLocation KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI);
+    public static SoundEvent KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_ID);
     public static final String KILLER_QUEEN_SHA_CRACKED_KOCCHI = "sha_cracked_kocchi";
     public static final ResourceLocation KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SHA_CRACKED_KOCCHI);
     public static SoundEvent KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID);
@@ -728,6 +731,13 @@ public class ModSounds {
     public static final String KILLER_QUEEN_SUMMON = "summon_killer_queen";
     public static final ResourceLocation KILLER_QUEEN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_SUMMON);
     public static SoundEvent KILLER_QUEEN_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_SUMMON_ID);
+    public static final String KQ_MINESWEEPER_START = "kq_minesweeper_start";
+    public static final ResourceLocation KQ_MINESWEEPER_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_START);
+    public static SoundEvent KQ_MINESWEEPER_START_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_START_ID);
+    public static final String KQ_MINESWEEPER_DETONATE = "kq_minesweeper_detonate";
+    public static final ResourceLocation KQ_MINESWEEPER_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_DETONATE);
+    public static SoundEvent KQ_MINESWEEPER_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_DETONATE_ID);
+
 
 
     public static final String KILLER_QUEEN_DETONATE = "killer_queen_bomb_detonate";
