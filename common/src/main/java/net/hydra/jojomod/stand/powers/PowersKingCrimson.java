@@ -985,7 +985,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.clearEpitaph(pl);
             }
 
-            //Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
         }
     }
 
@@ -1496,7 +1495,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }

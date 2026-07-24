@@ -1610,9 +1610,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public void updateClashing(){
-        if (this.getStandEntity(this.self) != null) {
-            //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
-        }
+
         LivingEntity entity = this.getClashOp();
         if (entity != null && entity.isAlive() && this.self.isAlive()) {
             if (this.attackTimeDuring <= 60) {

@@ -244,7 +244,6 @@ public class KnifeEntity extends AbstractArrow {
     }
 
     protected void doBonusKnifeDamageHattan(Entity hitent){
-        Roundabout.LOGGER.info("aaaaaa");
         Entity entityShooter = this.getOwner();
         DamageSource source = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entityShooter);
         Float amount = (float) 0.75;

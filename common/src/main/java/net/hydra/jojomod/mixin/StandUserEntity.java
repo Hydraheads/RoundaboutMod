@@ -3326,7 +3326,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /** Set Direction input. This is part of stand rendering as leaning.
      * @see FollowingStandEntity#setMoveForward(Byte)  */
     public void roundabout$setDI(byte forward, byte strafe){
-        //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (roundabout$Stand instanceof FollowingStandEntity FE){
             if (!roundabout$User.isShiftKeyDown() && roundabout$User.isSprinting()){
                 forward*=2;}
@@ -5995,7 +5994,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void SetInMoldTicks(int e) {
         if(this.level().isClientSide) {
-            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
             MoldTicks = e;
         }
     }

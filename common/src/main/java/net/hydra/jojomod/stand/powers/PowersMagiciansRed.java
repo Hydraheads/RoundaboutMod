@@ -511,7 +511,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (!this.self.level().isClientSide()) {
                 value.setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             Vec3 finalOffset = new Vec3(
@@ -2466,7 +2465,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }

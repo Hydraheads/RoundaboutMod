@@ -502,7 +502,6 @@ public class NewPunchingStand extends NewDashPreset {
 
         if (this.self instanceof Player pl){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 C2SPacketUtil.standPunchPacket(getTargetEntityId(getPunchAngle()), this.activePowerPhase);
                 if (this.activePowerPhase >= this.activePowerPhaseMax){

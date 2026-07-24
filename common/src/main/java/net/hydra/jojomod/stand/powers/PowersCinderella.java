@@ -242,7 +242,6 @@ public class PowersCinderella extends NewDashPreset {
             double z1 = entityZ + finalOffset.z;
             if (!this.self.level().isClientSide()) {
                 value.setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
             value.actuallyTick();
             value.storeVec = new Vec3(x1, y1, z1);

@@ -325,19 +325,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void fixThis(){
-        //Roundabout.LOGGER.info("2");
         if (!self.level().isClientSide()) {
-            //Roundabout.LOGGER.info("3");
             if (hasSkatesActivated()) {
-                //Roundabout.LOGGER.info("4");
                 if (acceleration >= getMaxAccelerationTicks()) {
-                    //Roundabout.LOGGER.info("5");
                     setPlayerPos(PlayerPosIndex.SKATE_TWIRL);
                     twirlTicks = 20;
                 } else {
-                    //Roundabout.LOGGER.info("6");
                     if (getPlayerPos() != PlayerPosIndex.SKATE_TWIRL) {
-                        //Roundabout.LOGGER.info("7");
                         setPlayerPos(PlayerPosIndex.SKATE_JUMP);
                     }
                 }

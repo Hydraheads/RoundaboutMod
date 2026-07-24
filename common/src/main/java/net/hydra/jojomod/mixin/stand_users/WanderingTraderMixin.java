@@ -54,8 +54,6 @@ public abstract class WanderingTraderMixin
             float maxChance = WTS;
             for (Pair<Float, MerchantOffer> f : WanderingTrades.TRADES) {maxChance += f.getA();}
             pick = This.getRandom().nextFloat() * maxChance;
-          //  Roundabout.LOGGER.info("Pick: " + pick);
-         //   Roundabout.LOGGER.info("WTS: " + WTS);
 
 
             if (pick > WTS) {
@@ -105,7 +103,6 @@ public abstract class WanderingTraderMixin
                         break;
                     } else {
                         pick -= pair.getA();
-                        //Roundabout.LOGGER.info("attempt" + i + ": " + pick);
                     }
                 }
 
@@ -115,7 +112,6 @@ public abstract class WanderingTraderMixin
                         arrow.setDamageValue((int)(2+Math.random()*2));
                         offer = new MerchantOffer(offer.getBaseCostA(),arrow,1,1,1);
                     }
-                 //   Roundabout.LOGGER.info("offer:" + offer.toString());
                     offers.set(offers.size()-1,offer);
                 }
 

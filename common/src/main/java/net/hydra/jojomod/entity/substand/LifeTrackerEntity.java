@@ -87,7 +87,6 @@ public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThi
             Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), 3).getLocation();
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             xOld = junkPos.x;
@@ -105,7 +104,6 @@ public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThi
             Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), 3, render).getLocation();
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             xOld = junkPos.x;
