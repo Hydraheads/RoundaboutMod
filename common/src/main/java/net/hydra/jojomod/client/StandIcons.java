@@ -794,6 +794,8 @@ public class StandIcons {
             "textures/gui/icons/white_album/suit_combat_2.png");
     public static final ResourceLocation GENTLY_WEEPS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/gently_weeps.png");
+    public static final ResourceLocation GENTLY_WEEPS_ATTACH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/white_album/gently_weeps_attach.png");
     public static final ResourceLocation FREEZE_BLOCKS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/white_album/freeze_blocks.png");
     public static final ResourceLocation ICE_BUCKET = new ResourceLocation(Roundabout.MOD_ID,

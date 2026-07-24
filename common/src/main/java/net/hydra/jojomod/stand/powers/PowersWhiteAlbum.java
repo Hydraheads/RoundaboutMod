@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -436,6 +437,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (stallTicks > 0){
             stallTicks--;
         }
+        if (inGWRange > 0){
+            inGWRange--;
+        }
+
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated() && self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
                     vf.isPlantedInWall()){
@@ -544,6 +549,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         super.tickPower();
     }
 
+    public int inGWRange = 0;
+    public GentlyWeepsEntity gwNear = null;
     public void setAcceleration(int num){
         byte pos = getPlayerPos();
         acceleration = num;
@@ -646,7 +653,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2, getTwisterLevel());
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            if (inGWRange > 0){
+                LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS_ATTACH, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            }
         }
 
 
@@ -793,9 +804,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
             tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
         }
     }
-
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (chargeTime != -1){
+            Entity GW = self.level().getEntity(chargeTime);
+            if (GW instanceof GentlyWeepsEntity gw && !gw.getAttachedToEntity()){
+                gwNear = gw;
+            } else {
+                gwNear = null;
+            }
+        } else {
+            gwNear = null;
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
     public void gentlyWeepsClient(){
-        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
+        if (inGWRange > 0 && gwNear != null && gwNear.isAlive()){
+            tryIntPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA, gwNear.getId());
+        } else if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
                 && canExecuteMoveWithLevel(getGentlyWeepsLevel())){
             tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
@@ -892,6 +918,30 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 checkPos = checkPos.below();
             }
+        }
+    }
+
+
+    public void gentlyWeepsAttach() {
+        if (gwNear != null) {
+            gwNear.lifeSpan += ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsAttachedAddon;
+            gwNear.setAttached(self);
+
+            Level level = self.level();
+            BlockPos center = self.blockPosition();
+
+            int radius = 3;
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    center.offset(-radius, -radius, -radius),
+                    center.offset(radius, radius, radius))) {
+
+                if (level.getBlockState(pos).is(ModBlocks.COLD_AIR)) {
+                    level.removeBlock(pos, false);
+                }
+            }
+
+            level.playSound(null, center, ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -1175,6 +1225,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             case PowerIndex.POWER_2_SNEAK -> {
                 gentlyWeeps();
+            }
+            case PowerIndex.POWER_2_SNEAK_EXTRA -> {
+                gentlyWeepsAttach();
             }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);
@@ -1578,6 +1631,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.full_accel",
                 "instruction.roundabout.passive", StandIcons.FULL_ACCEL,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps_attach",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS_ATTACH,2,level,bypass));
 
         return $$1;
     }
