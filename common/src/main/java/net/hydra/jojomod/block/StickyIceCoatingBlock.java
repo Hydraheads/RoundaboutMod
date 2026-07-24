@@ -8,6 +8,7 @@ import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -53,7 +54,16 @@ public class StickyIceCoatingBlock
                         if (LE instanceof Player pl) {
                             if ((pl.hurtTime <= 3) ||
                                     (((StandUser)pl).roundabout$getLogSource() == null) ||
-                                    !(((StandUser)pl).roundabout$getLogSource() != null && ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND))
+                                    !(((StandUser)pl).roundabout$getLogSource() != null &&
+                                            (
+                                                    ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND) ||
+                                            ((StandUser)pl).roundabout$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
+                                    ((StandUser)pl).roundabout$getLogSource().is(DamageTypes.ARROW) ||
+                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.BULLET) ||
+                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.SNIPER_BULLET)||
+                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.GASOLINE_EXPLOSION)||
+                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.KNIFE)
+                                    ))
                             ) {
                                 if (!(pl.level().getBlockState(
                                         BlockPos.containing(pl.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)

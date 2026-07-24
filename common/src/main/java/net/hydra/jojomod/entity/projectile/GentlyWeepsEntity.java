@@ -1,11 +1,13 @@
 package net.hydra.jojomod.entity.projectile;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -17,6 +19,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -41,7 +44,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.UUID;
 
-public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
+public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity implements PreRenderEntity {
     public static final float height = 3f;
     public static final float width = 3f;
 
@@ -240,7 +243,11 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
         if (getAttachedToEntity()) {
             Entity ent = level().getEntity(getAttached());
             if (ent != null && ent.isAlive()){
-                setPos(ent.getPosition(0));
+                if (level().isClientSide()){
+                    setPos(ent.getPosition(0));
+                } else {
+                    setPos(ent.getPosition(0));
+                }
             }
         }
         super.tick();
@@ -292,5 +299,10 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             this.entityData.define(BLED, false);
             this.entityData.define(ATTACHED, -1);
         }
+    }
+
+    @Override
+    public boolean preRender(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        return false;
     }
 }
