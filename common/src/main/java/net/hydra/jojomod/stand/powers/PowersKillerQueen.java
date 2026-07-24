@@ -833,7 +833,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         }else if (!targetEntity.isAlive() || targetEntity instanceof StandEntity) {
             return false;
         }
-        if (targetEntity instanceof LivingEntity LE) {
+        if (targetEntity instanceof Mob || targetEntity instanceof Player) {
+            LivingEntity LE = (LivingEntity)targetEntity;
             if (LE.isDeadOrDying()) {
                 return false;
             }
@@ -1934,10 +1935,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         for (Entity ent : $$3) {
             float dist = ent.distanceTo(stand);
-            if (canBitesTheDustPlant(ent) && (dist < distRecord) && ent instanceof Mob LE
-                && !MainUtil.isBossMob(LE) && !(LE instanceof StandEntity)) {
+            if (canBitesTheDustPlant(ent) && (dist < distRecord) && (ent instanceof Mob|| ent instanceof Player)
+                && !MainUtil.isBossMob(ent) && !(ent instanceof StandEntity)) {
                 distRecord = dist;
-                target = LE;
+                target = (LivingEntity)ent;
             }
         }
 
@@ -1950,7 +1951,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.setPowerNone();
             syncActivePower();
             if (self instanceof ServerPlayer pl) {
-                //S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BTD_PLANT);
             }
 
@@ -2060,11 +2061,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 pos.x(), pos.y(), pos.z(), range, range, range);
 
         for (Entity ent : entities) {
-            if (ent instanceof LivingEntity LE && LE.isAlive() && !LE.isRemoved() && LE != target
-                    && !(LE instanceof StandEntity) && LE != this.getSelf()) {
-                if (LE.hasLineOfSight(target)) {
-                    bitedTheDustInit();
-                    bitedTheDust.putIfAbsent(LE.getId(), this.btdTicks);
+            if (ent instanceof Mob || ent instanceof Player) {
+                LivingEntity LE = (LivingEntity) ent;
+                if (LE.isAlive() && !LE.isRemoved() && LE != target && !(LE instanceof StandEntity) && LE != this.getSelf()) {
+                    if (LE.hasLineOfSight(target)) {
+                        bitedTheDustInit();
+                        bitedTheDust.putIfAbsent(LE.getId(), this.btdTicks);
+                    }
                 }
             }
         }
