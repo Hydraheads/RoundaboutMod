@@ -41,13 +41,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
@@ -804,7 +803,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (entity instanceof Projectile proj) {
                 skip_dump.put(proj.getId(), new TimeSkipSnapshot(
                         proj.getId(),
-                        predictProjectile(proj, 100),
+                        predictProjectile(proj, 40),
                         proj.getXRot(),
                         proj.getYRot()
                 ));
@@ -1100,7 +1099,27 @@ public class PowersKingCrimson extends BlockGrabPreset {
         entity.setOnGround(true);
     }
 
-    public static Vec3 predictProjectile(Projectile projectile, int ticks) {
+
+    public  void onEggHit(HitResult $$0) {
+        if (!self.level().isClientSide) {
+            if (self.getRandom().nextInt(8) == 0) {
+                int $$1 = 1;
+                if (self.getRandom().nextInt(32) == 0) {
+                    $$1 = 4;
+                }
+
+                for(int $$2 = 0; $$2 < $$1; ++$$2) {
+                    Chicken $$3 = (Chicken)EntityType.CHICKEN.create(self.level());
+                    if ($$3 != null) {
+                        $$3.setAge(-24000);
+                        $$3.moveTo($$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z, 0, 0.0F);
+                        self.level().addFreshEntity($$3);
+                    }
+                }
+            }
+        }
+    }
+    public  Vec3 predictProjectile(Projectile projectile, int ticks) {
         Level level = projectile.level();
 
         Vec3 pos = projectile.position();
@@ -1120,6 +1139,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
             ));
 
             if (hit.getType() == HitResult.Type.BLOCK) {
+                if (projectile instanceof Snowball || projectile instanceof ThrownEgg){
+                    if (projectile instanceof ThrownEgg){
+                        onEggHit(hit);
+                    }
+                    projectile.discard();
+                }
                 return pos;
                 //return hit.getLocation();
             }

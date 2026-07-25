@@ -119,16 +119,39 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
                     instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
                 TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                if (skip != null && !entity.isPassenger()){
+                TimeSkipSnapshot renderSkip = skip;
+
+                if (entity.isPassenger()) {
+                    Entity vehicle = entity.getVehicle();
+
+                    if (vehicle != null) {
+                        TimeSkipSnapshot vehicleSkip = pkc.epitaph.get(vehicle.getId());
+
+                        if (vehicleSkip != null) {
+                            // Vehicle moved by this amount
+                            Vec3 delta = vehicleSkip.position.subtract(vehicle.position());
+
+                            // Create a synthetic snapshot for the passenger
+                            renderSkip = new TimeSkipSnapshot(
+                                    entity.getId(),
+                                    entity.position().add(delta),
+                                    entity.getXRot(),
+                                    vehicleSkip.yRot
+                            );
+                        }
+                    }
+                }
+
+                if (renderSkip != null) {
                     float progress = Mth.clamp(
                             (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
                             0.0F,
                             1.0F
                     );
-                    double $$7 = skip.position.x;
-                    double $$8 = skip.position.y;
-                    double $$9 = skip.position.z;
-                    float renderYaw = skip.yRot;
+                    double $$7 = renderSkip.position.x;
+                    double $$8 = renderSkip.position.y;
+                    double $$9 = renderSkip.position.z;
+                    float renderYaw = renderSkip.yRot;
                     if (progress < 1){
                         double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
                         double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
