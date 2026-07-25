@@ -29,6 +29,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -571,7 +572,146 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
+    public Vec3 predictTNT(PrimedTnt tnt, int ticks) {
+        Level level = tnt.level();
+
+        Vec3 predicted = tnt.position();
+        Vec3 velocity = tnt.getDeltaMovement();
+
+        AABB box = tnt.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // vanilla TNT gravity
+            velocity = velocity.add(0, -0.04, 0);
+
+            // vanilla air drag
+            velocity = velocity.scale(0.98);
+
+            Vec3 movement = Entity.collideBoundingBox(
+                    tnt,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            predicted = predicted.add(movement);
+            box = box.move(movement);
+
+            // Hit ground, stop falling
+            if (movement.y != velocity.y) {
+                velocity = new Vec3(
+                        velocity.x * 0.7,
+                        0,
+                        velocity.z * 0.7
+                );
+            }
+        }
+
+        return predicted;
+    }
     public Vec3 predictMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+            if (!cart.onGround()) {
+                return predictFallingMinecart(cart, ticks);
+            }
+            return cart.position();
+        }
+
+        // Figure out initial movement direction from player history.
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next();
+            it.next();
+            oldPos = it.next();
+        }
+
+        Vec3 movement = player.position().subtract(oldPos);
+
+        Direction dir;
+        if (Math.abs(movement.x) > Math.abs(movement.z)) {
+            dir = movement.x > 0 ? Direction.EAST : Direction.WEST;
+        } else {
+            dir = movement.z > 0 ? Direction.SOUTH : Direction.NORTH;
+        }
+
+        BlockPos railPos = BlockPos.containing(cart.position());
+
+        if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+            railPos = railPos.below();
+            if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+                return cart.position();
+            }
+        }
+        double remaining = cart.getDeltaMovement().horizontalDistance() * ticks;
+
+        while (remaining >= 1.0) {
+            // move to next rail
+            remaining -= 1.0;
+
+            BlockState state = level.getBlockState(railPos);
+            RailShape shape = state.getValue(((BaseRailBlock) state.getBlock()).getShapeProperty());
+
+            // Curves
+            switch (shape) {
+                case NORTH_EAST -> {
+                    if (dir == Direction.NORTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.NORTH;
+                }
+                case NORTH_WEST -> {
+                    if (dir == Direction.NORTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.NORTH;
+                }
+                case SOUTH_EAST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.SOUTH;
+                }
+                case SOUTH_WEST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.SOUTH;
+                }
+                default -> {}
+            }
+
+            BlockPos next = railPos.relative(dir);
+
+            // descending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                next = next.below();
+            }
+
+            // ascending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                BlockPos up = railPos.relative(dir).above();
+                if (BaseRailBlock.isRail(level.getBlockState(up))) {
+                    next = up;
+                }
+            }
+
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                break;
+            }
+
+            railPos = next;
+        }
+
+        BlockState endState = level.getBlockState(railPos);
+        RailShape endShape = endState.getValue(((BaseRailBlock) endState.getBlock()).getShapeProperty());
+
+        return new Vec3(
+                railPos.getX() + 0.5,
+                railPos.getY() + railYOffset(endShape),
+                railPos.getZ() + 0.5
+        );
+    }
+    public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
         Level level = cart.level();
 
         Entity rider = cart.getFirstPassenger();
@@ -604,114 +744,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             return predicted;
         }
-
-        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
-
-        Vec3 oldPos = player.position();
-
-        if (history != null && history.size() >= 3) {
-            Iterator<Vec3> it = history.descendingIterator();
-            it.next();
-            it.next();
-            oldPos = it.next();
-        }
-
-        Vec3 movement = player.position().subtract(oldPos);
-
-        if (movement.horizontalDistanceSqr() < 0.0001) {
-            return cart.position();
-        }
-
-        Vec3 predicted = cart.position();
-        Vec3 previousSafe = predicted;
-
-        double speed = Math.min(movement.length(), 0.4);
-
-        Vec3 direction = movement.normalize();
-
-        for (int i = 0; i < ticks; i++) {
-
-            previousSafe = predicted;
-
-            BlockPos railPos = BlockPos.containing(predicted);
-
-            BlockState state = level.getBlockState(railPos);
-
-            if (!(state.getBlock() instanceof BaseRailBlock)) {
-                state = level.getBlockState(railPos.below());
-                railPos = railPos.below();
-
-                if (!(state.getBlock() instanceof BaseRailBlock)) {
-                    return previousSafe;
-                }
-            }
-
-            RailShape shape = state.getValue(((BaseRailBlock)state.getBlock()).getShapeProperty());
-
-            direction = railDirection(shape, direction);
-
-            predicted = predicted.add(direction.scale(speed));
-
-            // keep the cart centered on the rail
-            predicted = new Vec3(
-                    railPos.getX() + 0.5,
-                    railPos.getY() + railYOffset(shape),
-                    railPos.getZ() + 0.5
-            ).add(direction.scale(0.25));
-        }
-
-        return predicted;
-    }
-    private static Vec3 railDirection(RailShape shape, Vec3 current) {
-
-        return switch (shape) {
-
-            case NORTH_SOUTH ->
-                    new Vec3(0, 0, Math.signum(current.z));
-
-            case EAST_WEST ->
-                    new Vec3(Math.signum(current.x), 0, 0);
-
-            case ASCENDING_EAST ->
-                    new Vec3(1, 1, 0).normalize();
-
-            case ASCENDING_WEST ->
-                    new Vec3(-1, 1, 0).normalize();
-
-            case ASCENDING_NORTH ->
-                    new Vec3(0, 1, -1).normalize();
-
-            case ASCENDING_SOUTH ->
-                    new Vec3(0, 1, 1).normalize();
-
-            case SOUTH_EAST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,1);
-                else
-                    yield new Vec3(1,0,0);
-            }
-
-            case SOUTH_WEST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,1);
-                else
-                    yield new Vec3(-1,0,0);
-            }
-
-            case NORTH_EAST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,-1);
-                else
-                    yield new Vec3(1,0,0);
-            }
-
-            case NORTH_WEST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,-1);
-                else
-                    yield new Vec3(-1,0,0);
-            }
-        };
+        return cart.position();
     }
     private static double railYOffset(RailShape shape) {
         return switch (shape) {
@@ -840,10 +873,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             proj.getYRot()
                     ));
                 }
-            } else if (entity instanceof PrimedTnt pt){
-                pt.setFuse(1);
-            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
-                Vec3 boat = predictBoat(bt,40);
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player) {
+                Vec3 boat = predictBoat(bt, 40);
 
                 skip_dump.put(bt.getId(), new TimeSkipSnapshot(
                         bt.getId(),
@@ -851,6 +882,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         bt.getXRot(),
                         bt.getYRot()
                 ));
+            } else if (entity instanceof PrimedTnt tnt) {
+                Vec3 predicted = predictTNT(tnt, 100);
+
+                skip_dump.put(
+                        entity.getId(),
+                        new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                entity.getXRot(),
+                                entity.getYRot()
+                        )
+                );
             } else if (entity instanceof AbstractMinecart bt ){
                 Vec3 minecart = predictMinecart(bt,40);
 
@@ -1082,6 +1125,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (entity instanceof LivingEntity living && entity.getId() != snapshot.entityId) {
                 skipEffects(living);
             }
+            if (entity instanceof PrimedTnt pt){
+                pt.setFuse(1);
+            }
             packetNearby(new Vector3f((float) snapshot.position.x,
                             (float) snapshot.position.y,
                             (float) snapshot.position.z),
@@ -1223,8 +1269,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             proj.getYRot()
                     ));
                 }
-            } else if (entity instanceof PrimedTnt pt){
-                pt.setFuse(1);
             }
         }
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
@@ -1327,11 +1371,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
                         }
-                    } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                    } else if (entity instanceof Boat bt){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
-                        predicted = predictBoat(bt,40);
+                        if (bt.getControllingPassenger() instanceof Player) {
+                            predicted = predictBoat(bt, 40);
+                        }
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
@@ -1339,6 +1385,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 yRot
                         ));
                         S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof PrimedTnt tnt) {
+                        Vec3 predicted = predictTNT(tnt, 100);
+
+                        epitaph.put(
+                                entity.getId(),
+                                new TimeSkipSnapshot(
+                                        entity.getId(),
+                                        predicted,
+                                        entity.getXRot(),
+                                        entity.getYRot()
+                                )
+                        );
                     } else if (entity instanceof AbstractMinecart bt){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
