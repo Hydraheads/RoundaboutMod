@@ -43,6 +43,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
@@ -916,7 +917,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void basicSkip(boolean skipSelf){
         hitWall2 = false;
         AABB area = self.getBoundingBox().inflate(getSkipRange());
-
+        List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             hitWall2 = false;
             if (entity instanceof Projectile proj) {
@@ -938,6 +939,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         it.getXRot(),
                         it.getYRot()
                 ));
+            } else if (entity instanceof FallingBlockEntity fbe){
+                fallingBlocks.add(fbe);
             } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player) {
                 Vec3 boat = predictBoat(bt, 40);
 
@@ -1024,6 +1027,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
             skipSingle(snapshot);
         }
         skip_dump.clear();
+        if (!fallingBlocks.isEmpty()) {
+            fallingBlocks.sort(
+                    Comparator.comparingDouble(entity -> entity.position().y)
+            );
+
+
+            for (FallingBlockEntity falling : fallingBlocks) {
+                skipFallingBlock(falling, 100);
+            }
+        }
 
     }
 
@@ -1387,6 +1400,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return pos;
     }
 
+    private void skipFallingBlock(FallingBlockEntity falling, int ticks) {
+        if (falling.isRemoved())
+            return;
+
+        for (int i = 0; i < ticks; i++) {
+            if (falling.isRemoved())
+                break;
+
+            falling.tick();
+        }
+    }
+
     public void timeSkip(boolean skipSelf) {
         if (!(self instanceof ServerPlayer pl)) {
             return;
@@ -1398,10 +1423,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             basicSkip(skipSelf);
             return;
         }
+        List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof Projectile proj){
-                if (proj instanceof FireworkRocketEntity){
+                if (proj instanceof FireworkRocketEntity) {
                     proj.discard();
                 } else {
                     epitaph.put(proj.getId(), new TimeSkipSnapshot(
@@ -1419,8 +1445,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         it.getXRot(),
                         it.getYRot()
                 ));
+            } else if (entity instanceof FallingBlockEntity fbe){
+                fallingBlocks.add(fbe);
             }
         }
+
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
             if (!skipSelf && snapshot.getEntityId() == self.getId()){
                 continue;
@@ -1428,6 +1457,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
             skipSingle(snapshot);
         }
 
+        if (!fallingBlocks.isEmpty()) {
+            fallingBlocks.sort(
+                    Comparator.comparingDouble(entity -> entity.position().y)
+            );
+
+
+            for (FallingBlockEntity falling : fallingBlocks) {
+                skipFallingBlock(falling, 100);
+            }
+        }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
         playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
