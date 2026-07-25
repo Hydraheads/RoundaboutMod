@@ -154,6 +154,13 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_CREAM = registerItem("max_cream_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))); */
 
+    public static Item STAND_DISC_SILVER_CHARIOT = registerItem("silver_chariot_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null))
+    );
+    public static Item MAX_STAND_DISC_SILVER_CHARIOT = registerItem("max_silver_chariot_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null))
+    );
+
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
     );
@@ -667,7 +674,8 @@ public class FabricItems {
                         entries.accept(FANCY_LIGHTER);
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
-
+                        entries.accept(STAND_DISC_SILVER_CHARIOT);
+                        entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -764,6 +772,9 @@ public class FabricItems {
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
+        ModItems.STAND_DISC_SILVER_CHARIOT = STAND_DISC_SILVER_CHARIOT;
+        ModItems.MAX_STAND_DISC_SILVER_CHARIOT = MAX_STAND_DISC_SILVER_CHARIOT;
+        ((MaxStandDiscItem)MAX_STAND_DISC_SILVER_CHARIOT).baseDisc = ((StandDiscItem)STAND_DISC_SILVER_CHARIOT);
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;

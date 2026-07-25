@@ -750,6 +750,11 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_CREAM = addToWIPTab(ITEMS.register("max_cream_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)))); */
 
+    public static final RegistryObject<Item> STAND_DISC_SILVER_CHARIOT = ITEMS.register("silver_chariot_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null)));
+    public static final RegistryObject<Item> MAX_STAND_DISC_SILVER_CHARIOT = ITEMS.register("max_silver_chariot_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null)));
+
     //metallica (i gotta do the max_stand_disc_metallica too, i have both sprites)
     public static final RegistryObject<Item> STAND_DISC_METALLICA = addToWIPTab(ITEMS.register("metallica_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMetallica(null))));
