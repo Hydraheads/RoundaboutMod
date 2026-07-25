@@ -522,11 +522,15 @@ public class PowersRatt extends NewDashPreset {
                         if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || getShootTarget().getEffect(MobEffects.INVISIBILITY) != null) {
                             setShootTarget(null);
                         }
+                        if (!getShootTarget().isAlive()) {
+                            setShootTarget(null);
+                        }
+                    } else {
+                        if(isAuto()) {
+                            setAuto(false);
+                        }
                     }
 
-                    if(isAuto() && getShootTarget() == null) {
-                        setAuto(false);
-                    }
 
 
                 } else if (e == null) {
@@ -819,10 +823,10 @@ public class PowersRatt extends NewDashPreset {
 
                 active = false;
                 Placement = null;
-                if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                }
                 if (this.getStandEntity(this.getSelf()) != null) {
+                    if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                    }
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
                 this.setCooldown(PowersRatt.SETPLACE,40);
