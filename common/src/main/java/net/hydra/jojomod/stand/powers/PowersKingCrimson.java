@@ -58,6 +58,7 @@ import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -139,7 +140,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         return 0;
     }
-
+    private void skipDayTime(int ticks) {
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableDaySkip){
+            if (self.level() instanceof ServerLevel sl){
+                if (sl.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                    sl.setDayTime(sl.getDayTime() + ticks);
+                }
+            }
+        }
+    }
+    @Override
+    public void tickPower() {
+        skipRange = ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipRange;
+        super.tickPower();
+    }
     public static Vec3 getPredictedDirection() {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
@@ -1418,7 +1432,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
-
+        skipDayTime(100);
         skipFire(self);
         skipEffects(self);
         if (epitaph.isEmpty()) {
@@ -1480,6 +1494,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void scatterPackets(){
         packetNearby2();
     }
+    int skipRange = 50;
     public int getSkipRange(){
         return 50;
     }

@@ -2844,6 +2844,12 @@
   "config.roundabout.enableSkippingCooldowns.name": "Cooldown Skip",
   "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
 
+  "config.roundabout.timeSkipRange.name": "Time Skip Range",
+  "config.roundabout.timeSkipRange.desc": "How far entities get skipped. The effect and sounds play 25 blocks further than this as padding for people witnessing it. This could be laggy if you drastically increase the range so I would recommend avoiding that.",
+
+  "config.roundabout.enableDaySkip.name": "Day Skip",
+  "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
+
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",

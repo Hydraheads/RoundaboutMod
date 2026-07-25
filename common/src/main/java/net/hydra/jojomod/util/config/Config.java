@@ -1087,6 +1087,10 @@ public class Config implements Cloneable {
         public Boolean enableKingCrimson;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableSkippingCooldowns;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer timeSkipRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableDaySkip;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
