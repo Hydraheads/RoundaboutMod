@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -37,6 +38,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -914,6 +916,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return false;
     }
 
+    private static final int SKIP_TICKS = 100;
+
+    public static void skipEffects(LivingEntity entity) {
+        if (entity.getActiveEffects().isEmpty()) {
+            return;
+        }
+
+        List<MobEffectInstance> effects = new ArrayList<>(entity.getActiveEffects());
+
+        for (MobEffectInstance effect : effects) {
+            // Don't touch your custom effect
+            int duration = effect.getDuration();
+            if (effect.getEffect() == ModEffects.STAND_VIRUS ||
+                    duration == MobEffectInstance.INFINITE_DURATION) {
+                continue;
+            }
+
+
+        // Preserve infinite effects
+            duration -= SKIP_TICKS;
+
+            // Keep it alive for one tick so vanilla can remove it naturally
+            if (duration <= 0) {
+                duration = 1;
+            }
+
+            MobEffectInstance replacement = new MobEffectInstance(
+                    effect.getEffect(),
+                    duration,
+                    effect.getAmplifier(),
+                    effect.isAmbient(),
+                    effect.isVisible(),
+                    effect.showIcon()
+            );
+
+            entity.removeEffect(effect.getEffect());
+            entity.addEffect(replacement);
+        }
+
+        // Fire uses its own timer
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(Math.max(
+                    0,
+                    entity.getRemainingFireTicks() - SKIP_TICKS
+            ));
+        }
+    }
+
     public void skipSingle(TimeSkipSnapshot snapshot){
         if (snapshot.getEntityId() == -1) {
             return;
@@ -990,16 +1040,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
         if (entity instanceof AbstractMinecart am){
-            Roundabout.LOGGER.info("MBBB");
             MinecraftServer server = entity.level().getServer();
 
             am.setPos(snapshot.position.x,
                     snapshot.position.y,
                     snapshot.position.z);
             ((AccessMinecart)am).rodbt$cleardata();
-            Roundabout.LOGGER.info("mxyz"+ entity.getX()+" "+ entity.getZ());
-            Roundabout.LOGGER.info("Sxyz"+ snapshot.position.x+" "+ snapshot.position.z);
         } else {
+            skipFire(entity);
+            if (entity instanceof LivingEntity living && entity.getId() != snapshot.entityId) {
+                skipEffects(living);
+            }
             packetNearby(new Vector3f((float) snapshot.position.x,
                             (float) snapshot.position.y,
                             (float) snapshot.position.z),
@@ -1024,7 +1075,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
-
+    public static void skipFire(Entity entity) {
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(
+                    Math.max(1, entity.getRemainingFireTicks() - 100)
+            );
+        }
+        if (entity instanceof  LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$getRemainingFireTicks() > 0){
+                entity.setRemainingFireTicks(
+                        Math.max(1, user.roundabout$getRemainingFireTicks() - 100)
+                );
+            }
+        }
+    }
     private static void performTeleport(Entity entity, ServerLevel serverLevel, double d, double e, double f, Set<RelativeMovement> set, float g, float h) {
         float j;
         float i = Mth.wrapDegrees(g);
@@ -1085,11 +1150,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
 
+        skipFire(self);
+        skipEffects(self);
         if (epitaph.isEmpty()) {
             basicSkip(skipSelf);
             return;
         }
-
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof Projectile proj){
@@ -1180,7 +1246,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 float yRot = entity.getYRot();
                                 if (!lv.isSleeping()) {
                                     if (entity instanceof Mob mob) {
-                                        if (!mob.isLeashed()) {
+                                        if (!mob.isLeashed() && !(mob instanceof WanderingTrader)) {
                                             predicted = predictPosition(mob, 100);
                                         }
                                     } else if (entity instanceof Player player) {
