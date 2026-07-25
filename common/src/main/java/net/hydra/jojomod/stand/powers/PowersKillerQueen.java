@@ -122,15 +122,15 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHA_COOLDOWN = PowerIndex.SKILL_3,
 
     // SOUNDS ID
-        IMPALE_NOISE = -108,
-        SHIBA = -109,
-        SHIBABA = -110,
-        AIRBUBBLE = -111,
-        BTD_NOISE = -112,
-        DETONATE_NOISE = -113,
-        BTD_PLANT = -114,
+        IMPALE_NOISE = 108,
+        SHIBA = 109,
+        SHIBABA = 110,
+        AIRBUBBLE = 111,
+        BTD_NOISE = 112,
+        DETONATE_NOISE = 113,
+        BTD_PLANT = 114,
         BTD_DETONATE = SoundIndex.BITES_THE_DUST_DETONATE,
-        BUBBLE_TARGET = -115,
+        BUBBLE_TARGET = 115,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -1138,7 +1138,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 int entID = entity.getId();
                 this.bombEntityID = entID;
 
-                S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.ENTITY_BOMB, entID);
+                if (this.self instanceof Player) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.ENTITY_BOMB, entID);
+                }
             }
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown);
@@ -1382,12 +1384,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
+            /*if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
-            }
+            }*/
             if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA) {
-                this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
+                //this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
         }
 
@@ -1918,9 +1920,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 int entID = this.bombBubble.getId();
                 this.bombBubbleID = entID;
-
-                S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.BUBBLE_BOMB, entID);
-
+                if (this.self instanceof ServerPlayer) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BUBBLE_BOMB, entID);
+                }
                 syncBombStatus(BOMB_BUBBLE);
             }
         }
@@ -2237,7 +2239,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if (shaThrow) {
                             sha.setPos(this.self.getEyePosition());
                         } else {
-                            sha.setPos(getRayBlock(this.self, 0.5f).add(0, -1, 0));
+                            sha.setPos(getRayBlock(this.self, 0.3f).add(0, 0.2, 0));
                         }
                         this.self.level().addFreshEntity(sha);
 
@@ -2247,9 +2249,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                             SHA.shoot(getRayBlock(this.self, 4f));
                         }
                         this.syncShaStatus(SHA_SEND);
-
-                        S2CPacketUtil.sendIntPowerDataPacket((Player)this.getSelf(),PowersKillerQueen.ENTITY_SHA, this.SHA.getId());
-
+                        if (this.self instanceof ServerPlayer) {
+                            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.ENTITY_SHA, this.SHA.getId());
+                        }
                     }
 
                 } else {
@@ -2461,9 +2463,17 @@ public class PowersKillerQueen extends NewPunchingStand {
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
 
-            Vec3 view = this.getSelf().getViewVector(1);
+            Roundabout.LOGGER.info("RotY: " + KQE.getYRot() + " RotX: " + KQE.getXRot());
 
-            Vec3 pos = getRandPos(KQE).add(view.scale(0.6));
+            Vec3 standPos = KQE.getPosition(1);
+            Vec3 view = this.getSelf().getViewVector(1);
+            //Vec3 viewUnhandled = this.getSelf().getViewVector(1);
+            //Vec3 view = new Vec3(viewUnhandled.x, 0, viewUnhandled.z).normalize();
+            Vec3 posRand = getRandPos(KQE).add(view.scale(1.4));
+            Vec3 distanceUnhandled = posRand.subtract(standPos).normalize().scale(0.5);
+            //Vec3 distance = new Vec3(distanceUnhandled.x, 0, distanceUnhandled.z).normalize();)
+
+            Vec3 pos = standPos.add(distanceUnhandled).add(0, 0.5, 0.0);
 
             ((ServerLevel) this.self.level()).sendParticles(getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
@@ -2801,25 +2811,18 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
-        if (soundChoice == BTD_NOISE) { return BTD_NOISE; }
-        if (soundChoice == BTD_PLANT) { return BTD_PLANT; }
-        if (soundChoice == BTD_DETONATE) { return BTD_DETONATE; }
-
-        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
-            return SoundIndex.BARRAGE_SOUND_GROUP;
-        }
-        if (soundChoice == AIRBUBBLE) {
-            return AIRBUBBLE;
-        }
+        Roundabout.LOGGER.info("Byte: " + soundChoice);
+        //if (soundChoice == BTD_NOISE) { return BTD_NOISE; }
+        //if (soundChoice == BTD_PLANT) { return BTD_PLANT; }
+        //if (soundChoice == BTD_DETONATE) { return BTD_DETONATE; }
+        //if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        //if (soundChoice == AIRBUBBLE) { return AIRBUBBLE; }
 
         return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     @Override
     public float getSoundVolumeFromByte(byte soundChoice){
-        if (soundChoice == BUBBLE_TARGET) {
-            return 0.7F;
-        }
         if (soundChoice == SHIBA || soundChoice == SHIBABA) {
             return 0.74f;
         }
@@ -2829,11 +2832,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
-        if (soundChoice == BUBBLE_TARGET) {
-            return 1.0f;
-        }
 
-        return super.getSoundVolumeFromByte(soundChoice);
+        return super.getSoundPitchFromByte(soundChoice);
     }
 
     @Override

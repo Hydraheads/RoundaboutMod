@@ -464,7 +464,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         Vec3 lastDir = this.getDeltaMovement().normalize();
         Vec3 newDir = vector.normalize();
 
-        if (lastDir.distanceTo(newDir) > 0.4f) {
+        if (lastDir.distanceTo(newDir) > 0.4f && this.soundEffectCooldown <= 0) {
             SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
             if (Math.random() > 0.5) {
                 SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
