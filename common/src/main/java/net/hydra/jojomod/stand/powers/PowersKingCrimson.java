@@ -575,7 +575,33 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         Entity rider = cart.getFirstPassenger();
         if (!(rider instanceof Player player)) {
-            return cart.position();
+
+            Vec3 predicted = cart.position();
+            AABB box = cart.getBoundingBox();
+
+            Vec3 velocity = Vec3.ZERO;
+
+            for (int i = 0; i < ticks; i++) {
+                velocity = velocity.add(0, -0.08, 0); // vanilla gravity
+
+                Vec3 move = Entity.collideBoundingBox(
+                        cart,
+                        velocity,
+                        box,
+                        level,
+                        List.of()
+                );
+
+                predicted = predicted.add(move);
+                box = box.move(move);
+
+                // Hit the ground
+                if (move.y != velocity.y) {
+                    break;
+                }
+            }
+
+            return predicted;
         }
 
         Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
@@ -801,12 +827,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof Projectile proj) {
-                skip_dump.put(proj.getId(), new TimeSkipSnapshot(
-                        proj.getId(),
-                        predictProjectile(proj, 40),
-                        proj.getXRot(),
-                        proj.getYRot()
-                ));
+                if (proj instanceof FireworkRocketEntity){
+                    proj.discard();
+                } else {
+                    skip_dump.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
@@ -1181,12 +1211,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof Projectile proj){
-                epitaph.put(proj.getId(), new TimeSkipSnapshot(
-                        proj.getId(),
-                        predictProjectile(proj,40),
-                        proj.getXRot(),
-                        proj.getYRot()
-                ));
+                if (proj instanceof FireworkRocketEntity){
+                    proj.discard();
+                } else {
+                    epitaph.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             }
