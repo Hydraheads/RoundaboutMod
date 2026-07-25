@@ -1018,7 +1018,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
         scatterPackets();
         if (skip_dump.isEmpty()){
             return;
@@ -1131,6 +1131,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
         if (entity.isPassenger()){
+            return;
+        }
+        double distance = entity.position().distanceTo(snapshot.position);
+        if (distance > getSkipBonusRange()) {
             return;
         }
         if (entity instanceof ThrowableProjectile|| entity instanceof ItemEntity) {
@@ -1469,7 +1473,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
         scatterPackets();
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
@@ -1480,6 +1484,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public int getSkipRange(){
         return 50;
+    }
+    public int getSkipBonusRange(){
+        return getSkipRange()+25;
     }
     public final void packetNearby2() {
         if (!this.self.level().isClientSide) {
@@ -1493,7 +1500,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, 75)) {
+                if (blockPos.closerToCenterThan(userLocation, getSkipBonusRange())) {
                     S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.TIME_SKIP);
                 }
             }
