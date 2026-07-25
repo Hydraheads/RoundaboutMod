@@ -1296,7 +1296,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 ((StandUser) player).rdbt$completeUsingItem();
             } else if (item instanceof CrossbowItem ci){
                 ci.releaseUsing(stack,entity.level(),player,0);
-                player.stopUsingItem();
             } else {
                 // Bow, crossbow, shield, spyglass, trident, etc.
                 player.stopUsingItem();
