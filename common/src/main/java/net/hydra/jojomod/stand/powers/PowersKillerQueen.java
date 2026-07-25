@@ -1384,12 +1384,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            /*if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
+            if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
-            }*/
+            }
             if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA) {
-                //this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
+                this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
         }
 
@@ -2812,11 +2812,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public byte getSoundCancelingGroupByte(byte soundChoice) {
         Roundabout.LOGGER.info("Byte: " + soundChoice);
-        //if (soundChoice == BTD_NOISE) { return BTD_NOISE; }
-        //if (soundChoice == BTD_PLANT) { return BTD_PLANT; }
-        //if (soundChoice == BTD_DETONATE) { return BTD_DETONATE; }
-        //if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
-        //if (soundChoice == AIRBUBBLE) { return AIRBUBBLE; }
+        if (soundChoice == BTD_NOISE) { return BTD_NOISE; }
+        if (soundChoice == BTD_PLANT) { return BTD_PLANT; }
+        if (soundChoice == BTD_DETONATE) { return BTD_DETONATE; }
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        if (soundChoice == AIRBUBBLE) { return AIRBUBBLE; }
 
         return super.getSoundCancelingGroupByte(soundChoice);
     }
