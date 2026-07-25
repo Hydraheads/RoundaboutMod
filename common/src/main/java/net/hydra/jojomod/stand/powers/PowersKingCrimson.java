@@ -699,6 +699,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 break;
             }
 
+            BlockState nextState = level.getBlockState(next);
+            RailShape nextShape = nextState.getValue(
+                    ((BaseRailBlock) nextState.getBlock()).getShapeProperty()
+            );
+
+            if (nextShape == RailShape.NORTH_EAST ||
+                    nextShape == RailShape.NORTH_WEST ||
+                    nextShape == RailShape.SOUTH_EAST ||
+                    nextShape == RailShape.SOUTH_WEST) {
+
+                break;
+            }
+
             railPos = next;
         }
 
@@ -710,6 +723,48 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 railPos.getY() + railYOffset(endShape),
                 railPos.getZ() + 0.5
         );
+    }
+    private boolean isConnectedRail(Level level, BlockPos from, BlockPos to) {
+        BlockState fromState = level.getBlockState(from);
+        BlockState toState = level.getBlockState(to);
+
+        if (!BaseRailBlock.isRail(fromState) || !BaseRailBlock.isRail(toState)) {
+            return false;
+        }
+
+        RailShape fromShape = fromState.getValue(
+                ((BaseRailBlock) fromState.getBlock()).getShapeProperty()
+        );
+
+        RailShape toShape = toState.getValue(
+                ((BaseRailBlock) toState.getBlock()).getShapeProperty()
+        );
+
+        Direction travel = Direction.fromDelta(
+                to.getX() - from.getX(),
+                to.getY() - from.getY(),
+                to.getZ() - from.getZ()
+        );
+
+        if (travel == null) {
+            return false;
+        }
+
+        // The next rail must have an exit back toward the rail we came from
+        return switch (toShape) {
+            case NORTH_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case EAST_WEST -> travel == Direction.EAST || travel == Direction.WEST;
+
+            case ASCENDING_NORTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_EAST -> travel == Direction.EAST || travel == Direction.WEST;
+            case ASCENDING_WEST -> travel == Direction.EAST || travel == Direction.WEST;
+
+            case SOUTH_EAST -> travel == Direction.SOUTH || travel == Direction.EAST;
+            case SOUTH_WEST -> travel == Direction.SOUTH || travel == Direction.WEST;
+            case NORTH_EAST -> travel == Direction.NORTH || travel == Direction.EAST;
+            case NORTH_WEST -> travel == Direction.NORTH || travel == Direction.WEST;
+        };
     }
     public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
         Level level = cart.level();
