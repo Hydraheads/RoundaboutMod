@@ -9,6 +9,8 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
@@ -21,6 +23,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -32,6 +36,9 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -273,10 +280,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (throwStatus == THROWED) {
 					if (this.onGround() || this.onClimbable()) {
 						throwStatus = HAS_BEEN;
-					}else if (this.flyngTicks > 4){
+					}else {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
+							if (this.flyngTicks <= 4 && ent.getId() == user.getId()) {
+								continue;
+							}
+
 							if (ent instanceof LivingEntity LE) {
 								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
 
@@ -740,6 +751,27 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		return false;
 	}
+
+	@Override
+	protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+		ItemStack $$2 = $$0.getItemInHand($$1);
+
+		if (this.level().isClientSide) {
+			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0;
+			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
+		} else if ($$2.is(Items.TORCH) && this.getUser() == $$0) {
+			if (!$$0.getAbilities().instabuild) {
+				$$2.shrink(1);
+			}
+
+			// use torch
+
+			return InteractionResult.SUCCESS;
+		}
+
+		return super.mobInteract($$0, $$1);
+	}
+
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
 	@Override public boolean hasNoPhysics() { return false;}
