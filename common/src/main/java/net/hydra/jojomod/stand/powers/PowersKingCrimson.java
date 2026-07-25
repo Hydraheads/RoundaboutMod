@@ -260,6 +260,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             baseVelocity = baseVelocity.multiply(1, 0, 1);
 
         for (int i = 0; i < ticks; i++) {
+            hitWall2 = false;
 
             // ----- Estimate movement direction -----
 
@@ -330,7 +331,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
                     collided = steppedMove;
                 }
-                if (collided.y <= 0){
+                if (collided.y == 0){
                     hitWall2 = true;
                 }
             }
@@ -823,9 +824,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean hitWall2 = false;
 
     public void basicSkip(boolean skipSelf){
+        hitWall2 = false;
         AABB area = self.getBoundingBox().inflate(getSkipRange());
 
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            hitWall2 = false;
             if (entity instanceof Projectile proj) {
                 if (proj instanceof FireworkRocketEntity){
                     proj.discard();
@@ -880,7 +883,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 }
                             } else if (living instanceof Player player) {
                                 // Fallback for players, armor stands, etc.
-                                hitWall2 = false;
                                 predicted = predictPlayer(player, 40);
                                 if (player.getId() == self.getId()) {
                                     if (predicted.distanceTo(self.getPosition(1)) < 0.1) {
