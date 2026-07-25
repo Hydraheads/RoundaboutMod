@@ -1263,20 +1263,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                  }
              }
 
-             if (entity instanceof LivingEntity LE && !(LE instanceof Player PE && PE.isCreative())) {
-                 if (chargedFinal >= getMaxKickTime()) {
-                     StandUser SE = ((StandUser) LE);
-
-                     SE.roundabout$setStoredVelocity(
-                          this.self.getForward().normalize().scale(3.14).add(0,0.033f,0)
-                     );
-                     
-                     Vec3 storedVec = SE.roundabout$getStoredVelocity();
-                     MainUtil.takeLiteralUnresistableKnockbackWithY(LE, storedVec.x, storedVec.y, storedVec.z);
-                     
-                 }
-             }
-
          } else {
              // This is less accurate raycasting as it is server sided but it is important for particle effects
              float distMax = this.getDistanceOut(this.self, this.getReach(), false);
@@ -1389,6 +1375,13 @@ public class PowersKillerQueen extends NewPunchingStand {
         StandEntity stand = getStandEntity(this.self);
 
         if (!isClient()) {
+            if (move == PowerIndex.GUARD && this.getActivePower() == BITES_THE_DUST_CHASE
+                    || move != BITES_THE_DUST_CHASE && (this.getActivePower() == BITES_THE_DUST_CHASE && this.currentBombStatus == BOMB_NONE)) {
+                if (this.self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
+                }
+            }
+
             if ((this.getActivePower() == PowerIndex.BARRAGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE)
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
@@ -1723,7 +1716,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (ent != null) {
                 int id = ent.getId();
 
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 0.7F,(float)(1.1+Math.random()*0.2));
+                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 1.3F,(float)(1.1+Math.random()*0.2));
 
                 this.tryIntPower(PowerIndex.POWER_2_EXTRA, false, id);
                 tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, id);
@@ -2223,7 +2216,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentShaStatus == SHA_NONE) {
                 if (shaThrow) {
                     this.animateStand(KillerQueenEntity.HEAVY_STRIKE);
-                    this.self.level().playSound(null, this.self.blockPosition(), getHeavyPunchSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
+                    this.self.level().playSound(null, this.self.blockPosition(), getPunchHitSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
                 } else {
                     this.self.level().playSound(null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.animateStand(KillerQueenEntity.SHA_SEND);
@@ -2544,7 +2537,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.tickPowerEnd();
         if (!isClient() && this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getActivePower() == BITES_THE_DUST_CHASE) {
-                if (this.attackTimeDuring >= 68) {
+                if (this.attackTimeDuring >= 70) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     StandEntity stand = getStandEntity(this.self);
                     if (Objects.nonNull(stand)) {
@@ -2557,7 +2550,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         Vec3 vec3d = this.getSelf().getEyePosition(0);
                         Vec3 vec3d2 = this.getSelf().getViewVector(0);
                         Vec3 vec3d3 = vec3d.add(vec3d2.x * 20, vec3d2.y * 20, vec3d2.z * 20);
-                        double mag = 0.08F;
+                        double mag = 0.06F;
 
                         moveVec = moveVec.add(
                                 vec3d3.subtract(this.getSelf().position().add(moveVec)).normalize().scale(mag)
@@ -2826,6 +2819,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == BUBBLE_TARGET) {
             return 0.7F;
+        }
+        if (soundChoice == SHIBA || soundChoice == SHIBABA) {
+            return 0.74f;
         }
 
         return super.getSoundVolumeFromByte(soundChoice);
