@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -53,6 +54,7 @@ import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -81,7 +83,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled() {
-        return ClientNetworking.getAppropriateConfig().theWorldSettings.enableTheWorld;
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableKingCrimson;
     }
 
 
@@ -1137,7 +1139,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (distance > getSkipBonusRange()) {
             return;
         }
-        if (entity instanceof ThrowableProjectile|| entity instanceof ItemEntity) {
+        if ((entity instanceof ThrowableProjectile && !(entity instanceof GasolineCanEntity))|| entity instanceof ItemEntity) {
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
         } else if (entity instanceof Projectile pj) {
             if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
@@ -1279,6 +1281,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (hook != null) {
                 hook.discard();
                 player.fishing = null;
+            }
+            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableSkippingCooldowns) {
+                ItemCooldowns cds = player.getCooldowns();
+                if (cds != null) {
+                    ((IItemCooldowns) cds).rdbt$skipItemCooldowns(100);
+                }
             }
         }
     }

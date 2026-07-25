@@ -110,6 +110,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public KingCrimsonSettings kingCrimsonSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -1080,6 +1082,12 @@ public class Config implements Cloneable {
         public Integer emperorBulletRange;
     }
 
+    public static class KingCrimsonSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKingCrimson;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableSkippingCooldowns;
+    }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableTheWorld;

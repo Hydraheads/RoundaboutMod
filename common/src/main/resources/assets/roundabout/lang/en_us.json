@@ -2838,6 +2838,14 @@
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
   "config.roundabout.enableWhiteAlbum.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
+  "config.roundabout.enableKingCrimson.name": "Enable Stand",
+  "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+
+  "config.roundabout.enableSkippingCooldowns.name": "Cooldown Skip",
+  "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
+
+
+
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
   "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
 
@@ -3952,6 +3960,7 @@
   "config.roundabout.whiteAlbumSettings.name": "White Album",
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
+  "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 

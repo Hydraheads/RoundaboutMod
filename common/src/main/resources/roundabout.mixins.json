@@ -16,6 +16,7 @@
     "ZAbstractSkeleton",
     "ZFlyingMob",
     "ZGossipContainer",
+    "ZItemCooldowns",
     "ZLevel",
     "ZMob",
     "ZSkeletonMixin",
