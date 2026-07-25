@@ -1411,6 +1411,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             proj.getYRot()
                     ));
                 }
+            } else if (entity instanceof ItemEntity it) {
+                Vec3 predicted = predictItem(it, 100);
+                skip_dump.put(it.getId(), new TimeSkipSnapshot(
+                        it.getId(),
+                        predicted,
+                        it.getXRot(),
+                        it.getYRot()
+                ));
             }
         }
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
@@ -1553,16 +1561,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 yRot
                         ));
                         S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
-                    } else if (entity instanceof ItemEntity it) {
-                        Vec3 predicted = predictItem(it, 100);
-                        epitaph.put(it.getId(), new TimeSkipSnapshot(
-                                it.getId(),
-                                predicted,
-                                it.getXRot(),
-                                it.getYRot()
-                        ));
-                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, it.getXRot(),
-                                it.getYRot());
                     }
 
                 }
