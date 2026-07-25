@@ -723,7 +723,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         bt.getYRot()
                 ));
             } else if (entity instanceof AbstractMinecart bt ){
-                Vec3 minecart = predictMinecart(bt,100);
+                Vec3 minecart = predictMinecart(bt,40);
 
                 skip_dump.put(bt.getId(), new TimeSkipSnapshot(
                         bt.getId(),
@@ -999,7 +999,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (entity instanceof Projectile proj){
                 epitaph.put(proj.getId(), new TimeSkipSnapshot(
                         proj.getId(),
-                        predictProjectile(proj,100),
+                        predictProjectile(proj,40),
                         proj.getXRot(),
                         proj.getYRot()
                 ));
@@ -1123,7 +1123,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
-                        predicted = predictMinecart(bt,100);
+                        predicted = predictMinecart(bt,40);
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
