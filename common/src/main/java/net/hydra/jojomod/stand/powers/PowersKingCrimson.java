@@ -52,14 +52,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
@@ -152,6 +156,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
+        if (liv instanceof FlyingMob){
+            return predicted;
+        }
+
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
@@ -269,7 +277,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             BlockPos ft = BlockPos.containing(predicted);
             if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
-            && !(player instanceof Player pl2 && pl2.getAbilities().flying)) {
+            && !(player instanceof Player pl2 && pl2.getAbilities().flying) && !(player instanceof FlyingMob)) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
                 velocity = velocity.multiply(1,0,1);
@@ -469,6 +477,131 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
+    public Vec3 predictMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+            return cart.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next();
+            it.next();
+            oldPos = it.next();
+        }
+
+        Vec3 movement = player.position().subtract(oldPos);
+
+        if (movement.horizontalDistanceSqr() < 0.0001) {
+            return cart.position();
+        }
+
+        Vec3 predicted = cart.position();
+        Vec3 previousSafe = predicted;
+
+        double speed = Math.min(movement.length(), 0.4);
+
+        Vec3 direction = movement.normalize();
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousSafe = predicted;
+
+            BlockPos railPos = BlockPos.containing(predicted);
+
+            BlockState state = level.getBlockState(railPos);
+
+            if (!(state.getBlock() instanceof BaseRailBlock)) {
+                state = level.getBlockState(railPos.below());
+                railPos = railPos.below();
+
+                if (!(state.getBlock() instanceof BaseRailBlock)) {
+                    return previousSafe;
+                }
+            }
+
+            RailShape shape = state.getValue(((BaseRailBlock)state.getBlock()).getShapeProperty());
+
+            direction = railDirection(shape, direction);
+
+            predicted = predicted.add(direction.scale(speed));
+
+            // keep the cart centered on the rail
+            predicted = new Vec3(
+                    railPos.getX() + 0.5,
+                    railPos.getY() + railYOffset(shape),
+                    railPos.getZ() + 0.5
+            ).add(direction.scale(0.25));
+        }
+
+        return predicted;
+    }
+    private static Vec3 railDirection(RailShape shape, Vec3 current) {
+
+        return switch (shape) {
+
+            case NORTH_SOUTH ->
+                    new Vec3(0, 0, Math.signum(current.z));
+
+            case EAST_WEST ->
+                    new Vec3(Math.signum(current.x), 0, 0);
+
+            case ASCENDING_EAST ->
+                    new Vec3(1, 1, 0).normalize();
+
+            case ASCENDING_WEST ->
+                    new Vec3(-1, 1, 0).normalize();
+
+            case ASCENDING_NORTH ->
+                    new Vec3(0, 1, -1).normalize();
+
+            case ASCENDING_SOUTH ->
+                    new Vec3(0, 1, 1).normalize();
+
+            case SOUTH_EAST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,1);
+                else
+                    yield new Vec3(1,0,0);
+            }
+
+            case SOUTH_WEST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,1);
+                else
+                    yield new Vec3(-1,0,0);
+            }
+
+            case NORTH_EAST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,-1);
+                else
+                    yield new Vec3(1,0,0);
+            }
+
+            case NORTH_WEST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,-1);
+                else
+                    yield new Vec3(-1,0,0);
+            }
+        };
+    }
+    private static double railYOffset(RailShape shape) {
+        return switch (shape) {
+            case ASCENDING_EAST,
+                 ASCENDING_WEST,
+                 ASCENDING_NORTH,
+                 ASCENDING_SOUTH -> 0.5;
+            default -> 0.0625;
+        };
+    }
     private static boolean boatHasWaterBelow(Level level, AABB box) {
 
         double y = box.minY - 0.1;
@@ -584,6 +717,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 skip_dump.put(bt.getId(), new TimeSkipSnapshot(
                         bt.getId(),
                         boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
+            } else if (entity instanceof AbstractMinecart bt ){
+                Vec3 minecart = predictMinecart(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        minecart,
                         bt.getXRot(),
                         bt.getYRot()
                 ));
@@ -850,6 +992,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         bt.getXRot(),
                         bt.getYRot()
                 ));
+            } else if (entity instanceof AbstractMinecart bt){
+                Vec3 minecart = predictMinecart(bt,40);
+                epitaph.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        minecart,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             }
@@ -959,6 +1109,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
                         predicted = predictBoat(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof AbstractMinecart bt){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictMinecart(bt,40);
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,

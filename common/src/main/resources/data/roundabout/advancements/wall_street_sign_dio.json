@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "roundabout:dio_sign_head_shaped"
+        "recipe": "roundabout:left_sign_head_shaped"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "roundabout:dio_sign_head_shaped"
+      "roundabout:left_sign_head_shaped"
     ]
   },
   "sends_telemetry_event": false
