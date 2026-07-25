@@ -43,6 +43,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.WanderingTrader;
@@ -50,6 +51,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -1110,8 +1112,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
-        if (entity instanceof ThrowableProjectile tp) {
-            tp.setDeltaMovement(tp.getDeltaMovement().scale(0));
+        if (entity instanceof ThrowableProjectile|| entity instanceof ItemEntity) {
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
         } else if (entity instanceof Projectile pj) {
             if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
                 Vec3 motion = pj.getDeltaMovement();
