@@ -2841,7 +2841,7 @@
   "config.roundabout.enableKingCrimson.name": "Enable Stand",
   "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
-  "config.roundabout.enableSkippingCooldowns.name": "Cooldown Skip",
+  "config.roundabout.enableSkippingCooldowns.name": "Item CD Skip",
   "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
 
   "config.roundabout.timeSkipRange.name": "Time Skip Range",
