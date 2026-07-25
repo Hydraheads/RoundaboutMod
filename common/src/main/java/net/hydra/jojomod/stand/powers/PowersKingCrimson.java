@@ -1397,6 +1397,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                         entity.getYRot()
                                 )
                         );
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, entity.getXRot(),
+                                entity.getYRot());
                     } else if (entity instanceof AbstractMinecart bt){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();

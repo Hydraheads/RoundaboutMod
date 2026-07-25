@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.vertex.*;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
@@ -17,7 +18,9 @@ import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.TntBlock;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -99,6 +102,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             cancellable = true)
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
 
+        if (entity instanceof PrimedTnt){
+            Roundabout.LOGGER.info("1");
+        }
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
