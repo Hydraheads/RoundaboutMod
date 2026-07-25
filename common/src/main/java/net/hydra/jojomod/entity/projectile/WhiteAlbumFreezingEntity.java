@@ -1,7 +1,9 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
 import net.hydra.jojomod.block.StickyIceCoatingBlock;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.AnimationState;
@@ -33,31 +35,37 @@ public class WhiteAlbumFreezingEntity extends Entity {
     public boolean started = false;
 
     public boolean canFreeze(BlockPos pos) {
+
         BlockState state = level().getBlockState(pos);
+        if (MainUtil.getIsGamemodeApproriateForGrief(user) ||
+        state.isAir() || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+            if (!state.canBeReplaced())
+                return false;
 
-        if (!state.canBeReplaced())
+            if (!state.getFluidState().isEmpty())
+                return false;
+
+            if (state.getBlock() instanceof LiquidBlockContainer)
+                return false;
+
+            if (state.getBlock() instanceof FireBlock)
+                return false;
+
+            if (state.getBlock() instanceof StickyIceCoatingBlock)
+                return false;
+
+            if (state.getBlock() instanceof StandFireBlock)
+                return false;
+
+            if (state.hasProperty(BlockStateProperties.WATERLOGGED)
+                    && state.getValue(BlockStateProperties.WATERLOGGED))
+                return false;
+
+            return true;
+        } else {
+
             return false;
-
-        if (!state.getFluidState().isEmpty())
-            return false;
-
-        if (state.getBlock() instanceof LiquidBlockContainer)
-            return false;
-
-        if (state.getBlock() instanceof FireBlock)
-            return false;
-
-        if (state.getBlock() instanceof StickyIceCoatingBlock)
-            return false;
-
-        if (state.getBlock() instanceof StandFireBlock)
-            return false;
-
-        if (state.hasProperty(BlockStateProperties.WATERLOGGED)
-                && state.getValue(BlockStateProperties.WATERLOGGED))
-            return false;
-
-        return true;
+        }
     }
     @Override
     protected void defineSynchedData() {
