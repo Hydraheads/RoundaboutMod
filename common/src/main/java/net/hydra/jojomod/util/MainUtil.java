@@ -1546,10 +1546,10 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isDangerous(Level level, BlockPos pos, BlockState state){
+    public static boolean isDangerous(Level level, BlockPos pos, BlockState state, boolean isStrider){
         if (state.is(Blocks.COBWEB)
-                || state.is(Blocks.FIRE)
-                || state.is(Blocks.SOUL_FIRE)
+                || (state.is(Blocks.FIRE) && !isStrider)
+                || (state.is(Blocks.SOUL_FIRE) && !isStrider)
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
@@ -1557,7 +1557,7 @@ public class MainUtil {
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)
                 || state.is(Blocks.SWEET_BERRY_BUSH)
-                || level.getFluidState(pos).is(FluidTags.LAVA)) {
+                || (level.getFluidState(pos).is(FluidTags.LAVA)) && !isStrider) {
             return true;
 
         }

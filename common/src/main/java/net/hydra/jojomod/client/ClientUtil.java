@@ -1431,14 +1431,12 @@ public class ClientUtil {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
             if (target != null && target.getPassengers() != null && !target.getPassengers().isEmpty() &&
-                    (target.getControllingPassenger() instanceof Player
-                            //|| (target instanceof AbstractMinecart &&
-                            //target.getFirstPassenger() instanceof Player)
-                    )){
+                    target.getControllingPassenger() instanceof Player pl
+                    ){
                 if (!(target instanceof Boat) || target.getPosition(1f).distanceTo(new Vec3(vec.x,vec.y,vec.z)) > 0.4F){
                     target.setPos(vec.x,vec.y,vec.z);
                     Player cli = ClientUtil.getPlayer();
-                    if (cli != null && cli.is(target) && cli.isPassenger()){
+                    if (cli != null && cli.is(pl) && cli.isPassenger()){
                         Entity rv = cli.getRootVehicle();
                         if (rv != null) {
                             target.positionRider(cli);
