@@ -1296,7 +1296,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             // gravity
             velocity = velocity.add(0, -0.04, 0);
 
-            // movement
             Vec3 move = Entity.collideBoundingBox(
                     item,
                     velocity,
@@ -1308,24 +1307,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
             predicted = predicted.add(move);
             box = box.move(move);
 
-            // hit ground
+            // Hit ground
             if (move.y != velocity.y && velocity.y < 0) {
-                velocity = new Vec3(
-                        velocity.x * 0.98,
-                        0,
-                        velocity.z * 0.98
-                );
-
-                // if basically stopped, end prediction
-                if (velocity.horizontalDistanceSqr() < 0.0001) {
-                    return predicted;
-                }
+                // Item landed, stop completely
+                return predicted;
             }
 
-            // vanilla item drag
+            // vanilla drag while airborne
             velocity = velocity.scale(0.98);
 
-            // vanilla items don't keep falling forever
             if (predicted.y < level.getMinBuildHeight()) {
                 break;
             }
