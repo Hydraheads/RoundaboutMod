@@ -930,6 +930,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             proj.getYRot()
                     ));
                 }
+            } else if (entity instanceof ItemEntity it) {
+                Vec3 predicted = predictItem(it, 100);
+                skip_dump.put(it.getId(), new TimeSkipSnapshot(
+                        it.getId(),
+                        predicted,
+                        it.getXRot(),
+                        it.getYRot()
+                ));
             } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player) {
                 Vec3 boat = predictBoat(bt, 40);
 
@@ -1258,6 +1266,57 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public Vec3 predictItem(ItemEntity item, int ticks) {
+        Level level = item.level();
+
+        Vec3 predicted = item.position();
+        Vec3 velocity = item.getDeltaMovement();
+
+        AABB box = item.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // gravity
+            velocity = velocity.add(0, -0.04, 0);
+
+            // movement
+            Vec3 move = Entity.collideBoundingBox(
+                    item,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            predicted = predicted.add(move);
+            box = box.move(move);
+
+            // hit ground
+            if (move.y != velocity.y && velocity.y < 0) {
+                velocity = new Vec3(
+                        velocity.x * 0.98,
+                        0,
+                        velocity.z * 0.98
+                );
+
+                // if basically stopped, end prediction
+                if (velocity.horizontalDistanceSqr() < 0.0001) {
+                    return predicted;
+                }
+            }
+
+            // vanilla item drag
+            velocity = velocity.scale(0.98);
+
+            // vanilla items don't keep falling forever
+            if (predicted.y < level.getMinBuildHeight()) {
+                break;
+            }
+        }
+
+        return predicted;
+    }
+
     public  void onEggHit(HitResult $$0) {
         if (!self.level().isClientSide) {
             if (self.getRandom().nextInt(8) == 0) {
@@ -1494,6 +1553,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 yRot
                         ));
                         S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof ItemEntity it) {
+                        Vec3 predicted = predictItem(it, 100);
+                        epitaph.put(it.getId(), new TimeSkipSnapshot(
+                                it.getId(),
+                                predicted,
+                                it.getXRot(),
+                                it.getYRot()
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, it.getXRot(),
+                                it.getYRot());
                     }
 
                 }
