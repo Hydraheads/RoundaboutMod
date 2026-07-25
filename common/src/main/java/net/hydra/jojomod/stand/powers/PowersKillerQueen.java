@@ -2464,16 +2464,17 @@ public class PowersKillerQueen extends NewPunchingStand {
             StandEntity KQE = this.getStandEntity(this.self);
 
             Roundabout.LOGGER.info("RotY: " + KQE.getYRot() + " RotX: " + KQE.getXRot());
-
             Vec3 standPos = KQE.getPosition(1);
-            Vec3 view = this.getSelf().getViewVector(1);
-            //Vec3 viewUnhandled = this.getSelf().getViewVector(1);
-            //Vec3 view = new Vec3(viewUnhandled.x, 0, viewUnhandled.z).normalize();
-            Vec3 posRand = getRandPos(KQE).add(view.scale(1.4));
-            Vec3 distanceUnhandled = posRand.subtract(standPos).normalize().scale(0.5);
-            //Vec3 distance = new Vec3(distanceUnhandled.x, 0, distanceUnhandled.z).normalize();)
-
-            Vec3 pos = standPos.add(distanceUnhandled).add(0, 0.5, 0.0);
+            Vec3 unhandledBubbblePos = new Vec3(
+                    KQE.getRandom().nextFloat()*0.2-0.1,
+                    KQE.getRandom().nextFloat()*0.2-0.1 + 1,
+                    1
+            );
+            Vec3 bubblePos = unhandledBubbblePos
+                    .yRot(-KQE.getYRot() * Mth.DEG_TO_RAD)
+                    .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
+                    ;
+            Vec3 pos = standPos.add(bubblePos).add(0, 0, 0);
 
             ((ServerLevel) this.self.level()).sendParticles(getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
