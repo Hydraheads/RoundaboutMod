@@ -379,6 +379,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     @Override
+    public void rdbt$completeUsingItem() {
+        completeUsingItem();
+    }
+    @Unique
+    @Override
     public int roundabout$getIdleTime() {
         return this.roundabout$IdleTime;
     }
@@ -5615,6 +5620,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow
     public abstract ItemStack getMainHandItem();
+
+    @Shadow
+    protected abstract void completeUsingItem();
 
     public double previousYpos = getY();
 

@@ -53,9 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemCooldowns;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
@@ -1276,6 +1274,35 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+    private static void skipItemUse(Entity entity) {
+        if (entity instanceof LivingEntity player) {
+            if (!player.isUsingItem()) {
+                return;
+            }
+
+            ItemStack stack = player.getUseItem();
+
+            if (stack.isEmpty()) {
+                player.stopUsingItem();
+                return;
+            }
+
+            Item item = stack.getItem();
+
+            if (item.getFoodProperties() != null || item instanceof BowlFoodItem || item instanceof PotionItem
+                    || item instanceof MilkBucketItem || item instanceof SpyglassItem || item instanceof ChorusFruitItem) {
+                // Force the normal vanilla completion logic
+                ((StandUser) player).rdbt$completeUsingItem();
+            } else if (item instanceof CrossbowItem ci){
+                ci.releaseUsing(stack,entity.level(),player,0);
+                player.stopUsingItem();
+            } else {
+                // Bow, crossbow, shield, spyglass, trident, etc.
+                player.stopUsingItem();
+            }
+        }
+    }
     public static void skipFire(Entity entity) {
         if (entity.getRemainingFireTicks() > 0) {
             entity.setRemainingFireTicks(
@@ -1290,6 +1317,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 );
             }
         }
+        skipItemUse(entity);
         if (entity instanceof Player player) {
             FishingHook hook = player.fishing;
             if (hook != null) {

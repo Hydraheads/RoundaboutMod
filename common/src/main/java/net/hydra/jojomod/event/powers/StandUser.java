@@ -344,7 +344,7 @@ public interface StandUser {
     Vec3 roundabout$getStoredVelocity();
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
-
+    void rdbt$completeUsingItem();
 
     SoundEvent roundabout$getHurtSound(DamageSource sauce);
 
