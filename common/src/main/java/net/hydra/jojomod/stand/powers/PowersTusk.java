@@ -1125,7 +1125,6 @@ public class PowersTusk extends NewDashPreset {
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         if (entity instanceof TuskHoleEntity) {
-        //    Roundabout.LOGGER.info(kpi.leftImpulse + ", " + kpi.forwardImpulse);
             entity.xxa = kpi.leftImpulse;
             entity.zza = kpi.forwardImpulse;
         }

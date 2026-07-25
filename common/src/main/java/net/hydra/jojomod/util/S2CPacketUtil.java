@@ -173,6 +173,16 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendBlip2Packet(Player player, byte activePower, int data, Vector3f blip){
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.Blip2.value,
+                    data,
+                    activePower,
+                    blip
+            );
+        }
+    }
     public static void sendCooldownSyncPacket(Player player, byte moveOnCooldown, int cooldown){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,

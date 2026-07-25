@@ -1287,7 +1287,6 @@ public class PowersGreenDay extends NewPunchingStand {
         if (canExecuteMoveWithLevel(2)) {
             if (!this.onCooldown(PowerIndex.SKILL_EXTRA)) {
                 this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().greenDaySettings.gDStitchcooldown);
-                //Roundabout.LOGGER.info(this.getCooldown(PowerIndex.SKILL_4).toString());
                 this.tryPower(PowerIndex.POWER_4_SNEAK, true);
                 tryPowerPacket(PowerIndex.POWER_4_SNEAK);
             }

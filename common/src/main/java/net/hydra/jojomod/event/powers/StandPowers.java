@@ -830,6 +830,8 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.ANUBIS_UNSHEATHE_EVENT;
         }else if (soundChoice == SoundIndex.MANHATTAN_RAIN) {
             return ModSounds.MANHATTAN_DODGING_EVENT;
+        }else if (soundChoice == SoundIndex.BITES_THE_DUST_DETONATE) {
+            return ModSounds.KILLER_QUEEN_BTD_DETONATE_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {
@@ -1610,9 +1612,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public void updateClashing(){
-        if (this.getStandEntity(this.self) != null) {
-            //Roundabout.LOGGER.info("3 " + this.getStandEntity(this.self).getPitch() + " " + this.getStandEntity(this.self).getYaw());
-        }
+
         LivingEntity entity = this.getClashOp();
         if (entity != null && entity.isAlive() && this.self.isAlive()) {
             if (this.attackTimeDuring <= 60) {
@@ -1909,6 +1909,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (self.isOnFire()) {
                     self.setSecondsOnFire(0);
                 } if (getStandUserSelf().roundabout$isOnStandFire()) {
+                    getStandUserSelf().roundabout$setSecondsOnStandFire((byte) 0);
                     getStandUserSelf().roundabout$setOnStandFire((byte) 0);
                 }
             }
@@ -2212,6 +2213,9 @@ public class StandPowers extends AbilityScapeBasis {
         this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
     }
 
+    public boolean negateHandPoseForcing(){
+        return false;
+    }
 
     /**You don't really need this*/
     public boolean setPowerSpecial(int lastMove) {return false;}

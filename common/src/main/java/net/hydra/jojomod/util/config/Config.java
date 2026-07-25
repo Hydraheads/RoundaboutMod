@@ -967,6 +967,8 @@ public class Config implements Cloneable {
         public Integer twisterLifespan;
         @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
         public Integer gentlyWeepsLifespanv2;
+        @IntOption(group = "inherit", value = 340, min = 0, max = 72000)
+        public Integer gentlyWeepsAttachedAddon;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

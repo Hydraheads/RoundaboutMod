@@ -77,7 +77,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
-        if (PowersMetallica.hasAnyFadeActive(entity) || ClientUtil.getThrowFadePercent(entity,ClientUtil.getDelta()) != 0) {
+        if (PowersMetallica.hasAnyFadeActive(entity) || ClientUtil.getThrowFadePercent(entity,ClientUtil.getDelta()) != 1) {
             ResourceLocation texture = this.getTextureLocation(entity);
             cir.setReturnValue(RenderType.entityTranslucent(texture));
         }
@@ -190,8 +190,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
                 }
             } else if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
-               // Roundabout.LOGGER.info(Minecraft.getInstance().player.getName().getString() + " " + SU.roundabout$getStandAnimation() +  " " + $$0.getName().getString());
-                if (SU.roundabout$getStandAnimation() != PowersTusk.NONE) {
+               if (SU.roundabout$getStandAnimation() != PowersTusk.NONE) {
                     float scale = Math.min(1,PT.getAttackTime()/7.0F+$$4);
 
                     if (SU.roundabout$getStandAnimation() == PowersTusk.WARP) {

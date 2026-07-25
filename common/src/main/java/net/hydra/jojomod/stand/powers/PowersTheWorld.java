@@ -1081,7 +1081,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void tickPower(){
 
-        //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && PowerTypes.hasStandActive(self)){
@@ -1512,7 +1511,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
+                    S2CPacketUtil.sendBlip2Packet(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
                 }
             }
         }

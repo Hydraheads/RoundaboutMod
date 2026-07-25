@@ -595,7 +595,6 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     }
 
     public void die(DamageSource p_35419_) {
-        LOGGER.info("JojoNPC {} died, message: '{}'", this, p_35419_.getLocalizedDeathMessage(this).getString());
         Entity entity = p_35419_.getEntity();
         if (entity != null) {
             this.tellWitnessesThatIWasMurdered(entity);

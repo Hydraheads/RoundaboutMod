@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IHumanoidModelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.Poses;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.model.AgeableListModel;
@@ -34,16 +35,20 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
     @Inject(method = "poseRightArm", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$poseRightArm(T $$0, CallbackInfo ci){
-        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
-            this.rightArm.yRot = 0.0F;
-            ci.cancel();
+        if ($$0 instanceof Player pl && ((StandUser)$$0).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).roundabout$getStandPowers().negateHandPoseForcing())) {
+                this.rightArm.yRot = 0.0F;
+                ci.cancel();
+            }
         }
     }
     @Inject(method = "poseLeftArm", at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$poseLeftArm(T $$0, CallbackInfo ci){
         if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
-            this.leftArm.yRot = 0.0F;
-            ci.cancel();
+            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).roundabout$getStandPowers().negateHandPoseForcing())) {
+                this.leftArm.yRot = 0.0F;
+                ci.cancel();
+            }
         }
     }
 

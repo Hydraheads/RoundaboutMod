@@ -2549,6 +2549,14 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
+
+    public static boolean blockConfusionTicks(Entity LE){
+        if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isBossMob(Entity LE){
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
             || isPowerfulMob(LE) ||
@@ -2855,7 +2863,7 @@ public class MainUtil {
             int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
             S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
                     cid);
-            player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
+         //   player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
@@ -3636,7 +3644,6 @@ public class MainUtil {
 
                         if (visage.getItem() instanceof MaskItem MI) {
                             if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                                //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                                 return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                             }
                         }
@@ -3651,7 +3658,6 @@ public class MainUtil {
 
                 if (visage.getItem() instanceof MaskItem MI) {
                     if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                        //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                     }
                 }

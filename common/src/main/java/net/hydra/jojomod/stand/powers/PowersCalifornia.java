@@ -420,7 +420,9 @@ public class PowersCalifornia extends NewDashPreset {
         } else if (isDoNotLeave()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 if (targEnt != null && !self.isPassenger()){
-                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
+                    if (!(self.getVehicle() instanceof StandEntity)) {
+                        tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2, targEnt.getId());
+                    }
                 } else {
                     tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,-1);
                 }

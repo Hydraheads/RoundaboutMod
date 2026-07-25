@@ -90,6 +90,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -3325,7 +3326,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /** Set Direction input. This is part of stand rendering as leaning.
      * @see FollowingStandEntity#setMoveForward(Byte)  */
     public void roundabout$setDI(byte forward, byte strafe){
-        //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (roundabout$Stand instanceof FollowingStandEntity FE){
             if (!roundabout$User.isShiftKeyDown() && roundabout$User.isSprinting()){
                 forward*=2;}
@@ -5867,6 +5867,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         previousZposManhattan = this.getZ();
     }
 
+    public final Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1) {
+        float $$2 = $$0 * (float) (Math.PI / 180.0);
+        float $$3 = -$$1 * (float) (Math.PI / 180.0);
+        float $$4 = Mth.cos($$3);
+        float $$5 = Mth.sin($$3);
+        float $$6 = Mth.cos($$2);
+        float $$7 = Mth.sin($$2);
+        return new Vec3((double)($$5 * $$6), (double)(-$$7), (double)($$4 * $$6));
+    }
+
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
     @Unique
@@ -5984,7 +5994,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void SetInMoldTicks(int e) {
         if(this.level().isClientSide) {
-            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
             MoldTicks = e;
         }
     }

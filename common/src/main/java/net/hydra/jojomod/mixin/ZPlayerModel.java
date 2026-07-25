@@ -593,7 +593,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SU = (StandUser) P;
 
-         //   Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 

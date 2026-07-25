@@ -842,9 +842,21 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
                 if (!(ist.getTag() != null && ist.getTag().getBoolean("Unbreakable"))) {
-                    if (this.getItem().isDamageableItem()) {
-                        if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                    ItemStack stack = this.getItem();
+                    Item tem = stack.getItem();
+                    if (stack.isDamageableItem()
+                    ) {
+                        if (!(tem instanceof FleshBucketItem)
+                                && !(tem instanceof FishingRodItem)
+                                && !(tem instanceof LuckyLipstickItem)
+                                && !(tem instanceof MemoryChessPieceItem)
+                                && !(tem instanceof ExperienceBishopItem)
+                            ){
                             this.dropItem($$1.getOnPos());
+                        } else {
+                            if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                                this.dropItem($$1.getOnPos());
+                            }
                         }
                     } else if (this.getItem().getItem() instanceof TieredItem) {
                         this.dropItem($$1.getOnPos());

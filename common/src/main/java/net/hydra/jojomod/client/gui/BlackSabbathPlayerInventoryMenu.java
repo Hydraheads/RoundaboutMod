@@ -21,12 +21,11 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
    // private final Container blackSabbathContainer;
     private final ResultContainer resultSlots = new ResultContainer();
     private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 2, 2);
-    public final boolean active;
     private final Player owner;
 
-    public BlackSabbathPlayerInventoryMenu(Inventory $$0, boolean $$1, final Player $$2, int cid) {
-        super(null, cid);
-        this.active = $$1;
+    public BlackSabbathPlayerInventoryMenu(int cid, Inventory $$0, Container container, final Player $$2) {
+        super(MenuType.GENERIC_3x3, cid);
+
         this.owner = $$2;
         IPlayerEntity play = ((IPlayerEntity)this.owner);
         BlackSabbathPlayerInventory bsinv = play.roundabout$getBlckSabbathPlayerInventory();

@@ -361,7 +361,9 @@ public class PowersMandom extends NewDashPreset {
                     }
                     if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
                         mb.getNavigation().stop();
-                        ((IMob)mb).roundabout$setConfusionTicks(7);
+                        if (!MainUtil.blockConfusionTicks(mb)) {
+                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                        }
                     }
 
                     if (!ent.is(this.self)){

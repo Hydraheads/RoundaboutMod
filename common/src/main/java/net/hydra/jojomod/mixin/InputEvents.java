@@ -1110,8 +1110,6 @@ public abstract class InputEvents implements IInputEvents {
             if (player.isAlive()) {
                 ((StandUser) player).roundabout$getStandPowers().updateGuard(
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
-                //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
-
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
                 if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
@@ -1207,9 +1205,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                 }
-                //RoundaboutMod.LOGGER.info("px");
 
-                    //RoundaboutMod.LOGGER.info("px");
                     if (roundabout$sameKeyOne(KeyInputRegistry.summonKey)) {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
@@ -1262,11 +1258,11 @@ public abstract class InputEvents implements IInputEvents {
                             BlackSabbathPlayerInventory $$4 = new BlackSabbathPlayerInventory(player);
                             player.clientSideCloseContainer();
 
-                            BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                          /*  BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
                                     ClientUtil.checkthisdat);
                             player.containerMenu = bsinv;
                             Minecraft.getInstance().setScreen(new BlackSabbathPlayerInventoryScreen(bsinv, player.getInventory(), player));
-                            ClientUtil.checkthis = 0;
+                            ClientUtil.checkthis = 0;*/
                             ClientUtil.checkthisdat = 0;
                         }
                     }

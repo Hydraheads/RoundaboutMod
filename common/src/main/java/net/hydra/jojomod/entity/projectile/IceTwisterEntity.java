@@ -58,7 +58,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 discard();
             }
 
-            AABB wallBox = this.getBoundingBox().inflate(0.4);
+            AABB wallBox = this.getBoundingBox().inflate(0.1);
 
             for (LivingEntity mob : level().getEntitiesOfClass(
                     LivingEntity.class,
@@ -73,13 +73,13 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                     if (MainUtil.canFreeze(mob)) {
                         if (mob instanceof Player pl){
                             if (this.tickCount%2==0){
-                                if (HeatUtil.getHeat(pl)> -102) {
+                                if (HeatUtil.getHeat(pl)> -102 && this.tickCount > 4) {
                                     HeatUtil.addHeat(mob, -1);
                                 }
                             }
                         } else {
                             if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33) {
-                                if (HeatUtil.getHeat(mob)> -102) {
+                                if (HeatUtil.getHeat(mob)> -102 && this.tickCount > 4) {
                                     HeatUtil.addHeat(mob, -1);
                                 }
                             }
@@ -93,7 +93,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 }
             }
 
-            if (tickCount > 5) {
+            if (tickCount > 6) {
                 int range = 0;
                 if (tickCount > 9) {
                     range = 1;
@@ -106,8 +106,10 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
 
                             if (canFreeze(targetPos)
                                     && iceState.canSurvive(level(), targetPos)) {
-                                level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                if (MainUtil.getIsGamemodeApproriateForGrief(user)) {
+                                    level().setBlockAndUpdate(targetPos, iceState);
+                                    level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                }
                             }
                             // placement logic
                         }

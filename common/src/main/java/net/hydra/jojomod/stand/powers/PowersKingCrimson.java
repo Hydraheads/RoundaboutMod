@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -33,32 +34,43 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -119,11 +131,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return !epitaph.isEmpty();
     }
 
+    public float getSped(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (LE.getSpeed() <= 0){
+                if (LE.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
+                    return (float) LE.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                }
+            }
+            return LE.getSpeed();
+        }
+        return 0;
+    }
 
     public static Vec3 getPredictedDirection() {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
-    public static Vec3 predictIdle(LivingEntity liv, int ticks) {
+    public Vec3 predictIdle(LivingEntity liv, int ticks) {
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
@@ -133,11 +156,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
+        if (liv instanceof FlyingMob){
+            return predicted;
+        }
+
         float speed = (float) (Math.random()*0.9F);
         if (liv instanceof WanderingTrader){
             speed = (float) (Math.random()*0.3F);
         }
-        float sped = Math.max(0.1F,liv.getSpeed());
+        float sped = getSped(liv);
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
                 .scale(sped * speed);
@@ -171,8 +198,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 // Don't move there
                 break;
             }
-            if (MainUtil.isDangerous(liv.level(), feet,ground2)){
+
+            if (isSunlightDanger(liv,nextPos)){
                 return predicted;
+            }
+            AABB checkBox = box.inflate(-0.05);
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                    Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                    return predicted;
+                }
+
+
+                BlockState state = level.getBlockState(pos);
+                if (MainUtil.isDangerous(level, pos, state)) {
+                    return predicted;
+                }
             }
 
             predicted = predicted.add(collided);
@@ -190,6 +234,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Level level = player.level();
 
         Vec3 predicted = player.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
         AABB box = player.getBoundingBox();
 
         Deque<Vec3> history = null;
@@ -216,7 +263,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 baseVelocity = player.position()
                 .subtract(oldPos)
                 .normalize()
-                .scale(player.getSpeed() * (2.5+(Math.random()*0.5)));
+                .scale(getSped(player) * (2.5+(Math.random()*0.5)));
         if (baseVelocity.y > 0)
             baseVelocity = baseVelocity.multiply(1, 0, 1);
 
@@ -230,10 +277,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             BlockPos ft = BlockPos.containing(predicted);
             if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
-            && !(player instanceof Player pl2 && pl2.getAbilities().flying)) {
+            && !(player instanceof Player pl2 && pl2.getAbilities().flying) && !(player instanceof FlyingMob)) {
                 velocity = velocity.add(0, -1, 0);
             }  else {
-                velocity.multiply(1,0,1);
+                velocity = velocity.multiply(1,0,1);
             }
 
             // ----- Normal collision -----
@@ -295,9 +342,33 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     hitWall2 = true;
                 }
             }
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
 
             predicted = predicted.add(collided);
             box = box.move(collided);
+            if (player.getId() != self.getId()) {
+                AABB checkBox = box.inflate(-0.05);
+
+                if (isSunlightDanger(player,predicted)){
+                    predicted = previousPreviousSafe;
+                    break;
+                }
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                        Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                    if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                        return previousPreviousSafe;
+                    }
+
+                    BlockState state = level.getBlockState(pos);
+                    if (MainUtil.isDangerous(level, pos, state)) {
+                        predicted = previousPreviousSafe;
+                        break;
+                    }
+                }
+            }
         }
 
         boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
@@ -311,6 +382,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     predicted.x - width / 2.0, predicted.y, predicted.z - width / 2.0,
                     predicted.x + width / 2.0, predicted.y + height, predicted.z + width / 2.0
             );
+            //
             targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)player).roundabout$getGravityDirection());
 
             for (BlockPos pos : BlockPos.betweenClosed(
@@ -321,7 +393,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 Block block = state.getBlock();
 
                 // List of bad blocks to avoid
-                if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                if (block == Blocks.COBWEB || block == Blocks.LAVA ||
+                block == ModBlocks.BARBED_WIRE_BUNDLE) {
                     cancel = true;
                     break;
                 }
@@ -332,21 +405,242 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     break;
                 }
             }
+
+            if (isSunlightDanger(player,predicted)){
+                cancel = true;
+            }
             if (cancel){
                 return player.position();
             }
         }
 
         return predicted;
+    }public Vec3 predictBoat(Boat boat, int ticks) {
+        Level level = boat.level();
+
+        if (!(boat.getControllingPassenger() instanceof Player player)) {
+            return boat.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next(); // newest
+            it.next(); // previous
+            oldPos = it.next(); // third newest
+        }
+
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return boat.position();
+        }
+
+        Vec3 predicted = boat.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(0.4);
+
+        AABB box = boat.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
+
+            Vec3 collided = Entity.collideBoundingBox(
+                    boat,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // Couldn't move fully -> hit shore.
+            if (collided.horizontalDistanceSqr() + 1.0E-6 < velocity.horizontalDistanceSqr()) {
+                return previousPreviousSafe;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+
+            // Make sure the boat is still floating.
+            if (!boatHasWaterBelow(level, box)) {
+                return previousPreviousSafe;
+            }
+        }
+
+        return predicted;
+    }
+    public Vec3 predictMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+            return cart.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next();
+            it.next();
+            oldPos = it.next();
+        }
+
+        Vec3 movement = player.position().subtract(oldPos);
+
+        if (movement.horizontalDistanceSqr() < 0.0001) {
+            return cart.position();
+        }
+
+        Vec3 predicted = cart.position();
+        Vec3 previousSafe = predicted;
+
+        double speed = Math.min(movement.length(), 0.4);
+
+        Vec3 direction = movement.normalize();
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousSafe = predicted;
+
+            BlockPos railPos = BlockPos.containing(predicted);
+
+            BlockState state = level.getBlockState(railPos);
+
+            if (!(state.getBlock() instanceof BaseRailBlock)) {
+                state = level.getBlockState(railPos.below());
+                railPos = railPos.below();
+
+                if (!(state.getBlock() instanceof BaseRailBlock)) {
+                    return previousSafe;
+                }
+            }
+
+            RailShape shape = state.getValue(((BaseRailBlock)state.getBlock()).getShapeProperty());
+
+            direction = railDirection(shape, direction);
+
+            predicted = predicted.add(direction.scale(speed));
+
+            // keep the cart centered on the rail
+            predicted = new Vec3(
+                    railPos.getX() + 0.5,
+                    railPos.getY() + railYOffset(shape),
+                    railPos.getZ() + 0.5
+            ).add(direction.scale(0.25));
+        }
+
+        return predicted;
+    }
+    private static Vec3 railDirection(RailShape shape, Vec3 current) {
+
+        return switch (shape) {
+
+            case NORTH_SOUTH ->
+                    new Vec3(0, 0, Math.signum(current.z));
+
+            case EAST_WEST ->
+                    new Vec3(Math.signum(current.x), 0, 0);
+
+            case ASCENDING_EAST ->
+                    new Vec3(1, 1, 0).normalize();
+
+            case ASCENDING_WEST ->
+                    new Vec3(-1, 1, 0).normalize();
+
+            case ASCENDING_NORTH ->
+                    new Vec3(0, 1, -1).normalize();
+
+            case ASCENDING_SOUTH ->
+                    new Vec3(0, 1, 1).normalize();
+
+            case SOUTH_EAST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,1);
+                else
+                    yield new Vec3(1,0,0);
+            }
+
+            case SOUTH_WEST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,1);
+                else
+                    yield new Vec3(-1,0,0);
+            }
+
+            case NORTH_EAST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,-1);
+                else
+                    yield new Vec3(1,0,0);
+            }
+
+            case NORTH_WEST -> {
+                if (Math.abs(current.x) > Math.abs(current.z))
+                    yield new Vec3(0,0,-1);
+                else
+                    yield new Vec3(-1,0,0);
+            }
+        };
+    }
+    private static double railYOffset(RailShape shape) {
+        return switch (shape) {
+            case ASCENDING_EAST,
+                 ASCENDING_WEST,
+                 ASCENDING_NORTH,
+                 ASCENDING_SOUTH -> 0.5;
+            default -> 0.0625;
+        };
+    }
+    private static boolean boatHasWaterBelow(Level level, AABB box) {
+
+        double y = box.minY - 0.1;
+
+        int minX = Mth.floor(box.minX + 0.1);
+        int maxX = Mth.floor(box.maxX - 0.1);
+
+        int minZ = Mth.floor(box.minZ + 0.1);
+        int maxZ = Mth.floor(box.maxZ - 0.1);
+
+        int water = 0;
+        int total = 0;
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                total++;
+
+                if (level.getFluidState(BlockPos.containing(x, y, z)).is(FluidTags.WATER)) {
+                    water++;
+                }
+            }
+        }
+
+        return water * 2 >= total;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
+        if (mob.getControllingPassenger() instanceof Player pl){
+            Vec3 pred = predictPlayer(mob,40);
+            return pred;
+        }
+
+
         Path path = mob.getNavigation().getPath();
 
         if (path == null) {
             return predictIdle(mob,ticks);
         }
 
-        double remaining = mob.getSpeed() * ticks;
+        double remaining = getSped(mob) * ticks;
         Vec3 current = mob.position();
 
         int index = path.getNextNodeIndex();
@@ -417,10 +711,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                Vec3 boat = predictBoat(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
+            } else if (entity instanceof AbstractMinecart bt ){
+                Vec3 minecart = predictMinecart(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        minecart,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } if (entity instanceof LivingEntity living) {
-                if (living.getControllingPassenger() instanceof Player){
-                    continue;
-                }
                 if (!skipSelf && living.getId() == self.getId()) {
                     continue;
                 } else if (living instanceof StandEntity) {
@@ -480,8 +789,35 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
-    public void skipSingle(TimeSkipSnapshot snapshot){
+    public boolean isSunlightDanger(Entity entity, Vec3 pos){
+        if (isSunlightDanger2(entity.getControllingPassenger(),pos)){
+            return true;
+        }
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
 
+            }
+        }
+        return false;
+    }
+    public boolean isSunlightDanger2(Entity entity, Vec3 pos){
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public void skipSingle(TimeSkipSnapshot snapshot){
         if (snapshot.getEntityId() == -1) {
             return;
         }
@@ -498,9 +834,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
-        if (entity.getControllingPassenger() instanceof Player){
-            return;
-        }
 
         if (entity instanceof LivingEntity LE) {
             if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
@@ -515,13 +848,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
             );
             targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
 
-            if (!level.noCollision(entity, targetBox)) {
+        for(VoxelShape $$2 : level.getBlockCollisions(entity, targetBox)) {
+            if (!$$2.isEmpty()) {
                 return;
             }
+        }
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
-            if (deviousStratBlocker && entity instanceof Player) {
+            if (deviousStratBlocker && (entity instanceof Player || entity.getControllingPassenger() instanceof Player)) {
                 // 2. Check for dangerous blocks inside target box
                 boolean cancel = false;
                 for (BlockPos pos : BlockPos.betweenClosed(
@@ -532,16 +867,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     Block block = state.getBlock();
 
                     // List of bad blocks to avoid
-                    if (block == Blocks.COBWEB || block == Blocks.LAVA) {
+                    if (block == Blocks.COBWEB || block == Blocks.LAVA
+                            || block == ModBlocks.BARBED_WIRE_BUNDLE) {
                         cancel = true;
                         break;
                     }
 
                     // Optional: also avoid fire or cactus
-                    if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS
+                            ) {
                         cancel = true;
                         break;
                     }
+                }
+
+                if (isSunlightDanger(entity,snapshot.position)){
+                    cancel = true;
                 }
                 if (cancel) {
                     return;
@@ -570,12 +911,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         RelativeMovement.Z),
                 snapshot.yRot,entity.getXRot());
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
-            mb.getNavigation().stop();
-            ((IMob)mb).roundabout$setConfusionTicks(7);
-        }
-        if (!entity.getPassengers().isEmpty()) {
-            for (Entity passenger : entity.getPassengers()) {
-                entity.positionRider(passenger);
+                mb.getNavigation().stop();
+            if (!MainUtil.blockConfusionTicks(mb)) {
+                ((IMob) mb).roundabout$setConfusionTicks(7);
             }
         }
     }
@@ -646,6 +984,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         proj.getXRot(),
                         proj.getYRot()
                 ));
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                Vec3 boat = predictBoat(bt,40);
+                epitaph.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
+            } else if (entity instanceof AbstractMinecart bt){
+                Vec3 minecart = predictMinecart(bt,40);
+                epitaph.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        minecart,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
             }
@@ -713,41 +1067,67 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
-                for (LivingEntity living : self.level().getEntitiesOfClass(LivingEntity.class, area)) {
-                    StandEntity stand = getStandEntity(self);
-                    int id = living.getId();
-                    if (!(stand != null && stand.getId() == id)){
-                        if (!(living instanceof StandEntity) &&
-                                !(living instanceof Player pk && pk.isCreative()
-                                        && pk.getId() != self.getId())
-                        ) {
-                            Vec3 predicted = living.position();
-                            float xRot = living.getXRot();
-                            float yRot = living.getYRot();
-                            if (!living.isSleeping()){
-                                if (living instanceof Mob mob) {
-                                    if (!mob.isLeashed()) {
-                                        predicted = predictPosition(mob, 100);
-                                    }
-                                } else if (living instanceof Player player) {
-                                    // Fallback for players, armor stands, etc.
-                                    hitWall2 = false;
-                                    predicted = predictPlayer(player, 40);
-                                    if (hitWall2) {
-                                        yRot = Mth.wrapDegrees(yRot + 180.0F);
+                for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+                    if (entity instanceof LivingEntity lv) {
+                        StandEntity stand = getStandEntity(self);
+                        int id = entity.getId();
+                        if (!(stand != null && stand.getId() == id)) {
+                            if (!(entity instanceof StandEntity) &&
+                                    !(entity instanceof Player pk && pk.isCreative()
+                                            && pk.getId() != self.getId())
+                            ) {
+                                Vec3 predicted = entity.position();
+                                float xRot = entity.getXRot();
+                                float yRot = entity.getYRot();
+                                if (!lv.isSleeping()) {
+                                    if (entity instanceof Mob mob) {
+                                        if (!mob.isLeashed()) {
+                                            predicted = predictPosition(mob, 100);
+                                        }
+                                    } else if (entity instanceof Player player) {
+                                        // Fallback for players, armor stands, etc.
+                                        hitWall2 = false;
+                                        predicted = predictPlayer(player, 40);
+                                        if (hitWall2) {
+                                            yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                        }
                                     }
                                 }
+
+
+                                epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                        id,
+                                        predicted,
+                                        xRot,
+                                        yRot
+                                ));
+                                S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
-
-
-                            epitaph.put(living.getId(), new TimeSkipSnapshot(
-                                    id,
-                                    predicted,
-                                    xRot,
-                                    yRot
-                            ));
-                            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                         }
+                    } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictBoat(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof AbstractMinecart bt){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictMinecart(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
                     }
 
                 }
@@ -767,7 +1147,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.clearEpitaph(pl);
             }
 
-            //Roundabout.LOGGER.info("Captured {} entities", epitaph.size());
         }
     }
 
@@ -1278,7 +1657,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }

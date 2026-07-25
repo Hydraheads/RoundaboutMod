@@ -1001,7 +1001,7 @@
   "sounds.roundabout.water_encase":  "Splash",
   "sounds.roundabout.soft_and_wet_kick":  "Impact",
   "sounds.roundabout.extend_spikes":  "Spikes",
-  "sounds.roundabout.wall_latch":  "Wall Latch",
+  "sounds.roundabout.wall_latch":  "Latch",
   "sounds.roundabout.summon_walking":  "Stand summoned",
   "sounds.roundabout.heel_raise":  "Limb Raises",
   "sounds.roundabout.heel_stomp":  "Leg lowers",
@@ -1258,8 +1258,11 @@
   "sounds.roundabout.killer_queen_explosion": "Killer Queen explosion",
   "sounds.roundabout.killer_queen_bomb_detonate": "Killer Queen detonation",
   "sounds.roundabout.killer_queen_impale":  "Impaled",
+  "sounds.roundabout.bites_the_dust_detonate":  "Bites the dust Detonate",
+  "sounds.roundabout.bites_the_dust_planted":  "Bites the dust Planted",
+  "sounds.roundabout.bites_the_dust_noise":  "Bites the dust noise...",
   "sounds.roundabout.sha_kocchi_1": "Kocchi Wo Miro!",
-  "sounds.roundabout.sha_alt_kocchi_2": "[ Kocchi Wo Miro! ]",
+  "sounds.roundabout.sha_alt_kocchi": "[ Kocchi Wo Miro! ]",
   "sounds.roundabout.sha_alt_dede": "[ Idede! ]",
   "sounds.roundabout.sha_cracked_kocchi": "Kocchi Wo... Mi...",
   "sounds.roundabout.sha_cracked_dede": "Idere...",
@@ -1454,6 +1457,8 @@
 
   "ability.roundabout.gently_weeps": "Gently Weeps",
   "ability.roundabout.gently_weeps.desc": "Uses massive amounts of stand power to freeze the air surrounding you, reaching -215 degrees Celsius. Rapidly freezes anything in its radius. Unless covered in blood, deflects many types of incoming projectiles.",
+  "ability.roundabout.gently_weeps_attach": "Gently Weeps Attach",
+  "ability.roundabout.gently_weeps_attach.desc": "If you are inside of gently weeps, attaches it to you losing its cold property but in exchange letting you deflect projectiles on the go with a longer lifespan. As your stand has ice walls and gently weeps has massive cold build, this ability is very situational.",
 
   "ability.roundabout.ice_wall": "Ice Wall",
   "ability.roundabout.ice_wall.desc": "Makes a wall of ice appear from the ground. In front of you, it can block mobs and projectiles. If aimed beneath you, you can rise up along with it. Damaging the blocks with enough force breaks them. You can use this to your advantage to carve into the wall and jump on top of it.",
@@ -1475,7 +1480,7 @@
 
 
   "ability.roundabout.cold_blast": "Cold Air Blast",
-  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder.",
+  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder. Makes sticky ice where it lands.",
 
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
@@ -3043,6 +3048,9 @@
   "config.roundabout.twisterLifespan.desc": "How long does the ability stay active?",
   "config.roundabout.gentlyWeepsLifespanv2.name": "Gently Weeps Lifespan",
   "config.roundabout.gentlyWeepsLifespanv2.desc": "How long does the ability stay active?",
+
+  "config.roundabout.gentlyWeepsAttachedAddon.name": "GW Addon Time",
+  "config.roundabout.gentlyWeepsAttachedAddon.desc": "Extra lifespan added to GW if you attach it.",
 
 
   "config.roundabout.cinderellaAttackMultOnPlayers.name": "Player Damage Multiplier",
