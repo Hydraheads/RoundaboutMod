@@ -1088,17 +1088,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 );
             }
         }
-    }
-    private static void performTeleport(Entity entity, ServerLevel serverLevel, double d, double e, double f, Set<RelativeMovement> set, float g, float h) {
-        float j;
-        float i = Mth.wrapDegrees(g);
-        if (!entity.teleportTo(serverLevel, d, e, f, set, i, j = Mth.wrapDegrees(h))) {
-            return;
+        if (entity instanceof Player player) {
+            FishingHook hook = player.fishing;
+            if (hook != null) {
+                hook.discard();
+                player.fishing = null;
+            }
         }
-        entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0, 0.0, 1.0));
-        entity.setOnGround(true);
     }
-
 
     public  void onEggHit(HitResult $$0) {
         if (!self.level().isClientSide) {
