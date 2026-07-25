@@ -98,7 +98,6 @@ public class ZWorldRenderer {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
             if (((TimeStop)player.level()).inTimeStopRange(player)){
-                //Roundabout.LOGGER.info(String.valueOf(player.level().getGameTime()));
                return this.minecraft.level.getRainLevel(((IEntityAndData)player).roundabout$getPreTSTick());
             }
         }

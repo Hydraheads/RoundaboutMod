@@ -245,11 +245,12 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public void onPowerSwitch(){
-        onStandSwitchInto();
         super.onPowerSwitch();
+        onStandSwitchInto();
     }
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (!isClient() || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
                 if (this.getSelf() instanceof Player) {
@@ -262,7 +263,6 @@ public class PowersMandom extends NewDashPreset {
                         + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
             }
         }
-        super.onStandSwitchInto();
     }
 
 
@@ -358,6 +358,12 @@ public class PowersMandom extends NewDashPreset {
                     }
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
                         LE.stopUsingItem();
+                    }
+                    if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
+                        mb.getNavigation().stop();
+                        if (!MainUtil.blockConfusionTicks(mb)) {
+                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                        }
                     }
 
                     if (!ent.is(this.self)){

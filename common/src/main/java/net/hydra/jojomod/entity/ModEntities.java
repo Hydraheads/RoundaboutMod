@@ -47,6 +47,7 @@ public class ModEntities {
     public static EntityType<ReddEntity> REDD;
     public static EntityType<ChairRattEntity> CHAIR_RATT;
     public static EntityType<FleshPileEntity> FLESH_PILE;
+    public static EntityType<PurpleHazeEntity> PURPLE_HAZE;
     public static EntityType<CreamEntity> CREAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
@@ -67,6 +68,7 @@ public class ModEntities {
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
     public static EntityType<PlanetWavesSpartaEntity> PLANET_WAVES_SPARTA;
+    public static EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
     public static EntityType<BlackSabbathEntity> BLACK_SABBATH;

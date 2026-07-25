@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -89,6 +90,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
@@ -748,18 +750,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$tryBlip() {
         if (ClientUtil.skipInterpolation) {
             if (ClientUtil.isPlayerOrCamera(this)) {
-            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-            double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
-            double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
-            double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
+                if (!(this.getPassengers() != null && !this.getPassengers().isEmpty()) &&
+                        (!this.isPassenger())) {
+                    ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                    double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
+                    double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
+                    double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
 
-            this.xo = lerpx;
-            this.yo = lerpy;
-            this.zo = lerpz;
-            this.xOld = lerpx;
-            this.yOld = lerpy;
-            this.zOld = lerpz;
-            this.setPos(lerpx, lerpy, lerpz);
+                    this.xo = lerpx;
+                    this.yo = lerpy;
+                    this.zo = lerpz;
+                    this.xOld = lerpx;
+                    this.yOld = lerpy;
+                    this.zOld = lerpz;
+                    this.setPos(lerpx, lerpy, lerpz);
+                }
             }
         } if (roundabout$blip && roundabout$blipVector !=null){
             ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
@@ -2323,7 +2328,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public List<Entity> roundabout$checkAutoSpin(List<Entity> list){
         List<Entity> listE= new ArrayList<>();
         for (Entity entity : list) {
-            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin()) && !(entity.is(this.roundabout$getThrower()))) {
+            if (!(entity instanceof StandEntity se && se.ignoreTridentSpin())
+                    &&
+                    !(entity instanceof TridentsIgnoreThis)
+                    && !(this.roundabout$getThrower() != null && entity.is(this.roundabout$getThrower()))) {
                 listE.add(entity);
             }
         }
@@ -3006,6 +3014,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (standDisc.getItem() instanceof StandDiscItem SE){
                     if (!(this.roundabout$Powers != null && this.roundabout$Powers.getClass() == SE.standPowers.getClass())) {
                         SE.generateStandPowers((LivingEntity)(Object)this);
+                        if (rdbt$this() instanceof Player pl){
+                            ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                        }
                     }
                     roundabout$itemParityClient = standDisc;
 
@@ -3027,6 +3038,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!StandDisc.isEmpty() && StandDisc.getItem() instanceof StandDiscItem SD){
                 if (this.roundabout$Powers == null || !SD.standPowers.getClass().equals(this.roundabout$Powers.getClass())) {
                     SD.generateStandPowers((LivingEntity) (Object) this);
+                    if (this.level().isClientSide && rdbt$this() instanceof Player pl){
+                        ((IPlayerEntity)pl).rdbt$setCooldownQuery2();
+                    }
                     if (this.level().isClientSide()){
                         if (this.roundabout$Powers != null) {
                             CompoundTag $$4 = StandDisc.getTagElement("Memory");
@@ -3312,7 +3326,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /** Set Direction input. This is part of stand rendering as leaning.
      * @see FollowingStandEntity#setMoveForward(Byte)  */
     public void roundabout$setDI(byte forward, byte strafe){
-        //RoundaboutMod.LOGGER.info("MF:"+ forward);
         if (roundabout$Stand instanceof FollowingStandEntity FE){
             if (!roundabout$User.isShiftKeyDown() && roundabout$User.isSprinting()){
                 forward*=2;}
@@ -5854,6 +5867,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         previousZposManhattan = this.getZ();
     }
 
+    public final Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1) {
+        float $$2 = $$0 * (float) (Math.PI / 180.0);
+        float $$3 = -$$1 * (float) (Math.PI / 180.0);
+        float $$4 = Mth.cos($$3);
+        float $$5 = Mth.sin($$3);
+        float $$6 = Mth.cos($$2);
+        float $$7 = Mth.sin($$2);
+        return new Vec3((double)($$5 * $$6), (double)(-$$7), (double)($$4 * $$6));
+    }
+
     /**If you stand still enough, abilities recharge faster. But this could be overpowered for some abilties, so
      * use discretion and override this to return false on abilities where this might be op.*/
     @Unique
@@ -5971,7 +5994,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public void SetInMoldTicks(int e) {
         if(this.level().isClientSide) {
-            //Roundabout.LOGGER.info(Integer.toString(getMoldTicks()));
             MoldTicks = e;
         }
     }

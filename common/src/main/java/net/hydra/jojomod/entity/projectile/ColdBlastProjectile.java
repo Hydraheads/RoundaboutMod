@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.block.StickyIceCoatingBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -173,7 +174,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
                         )
                 ) {
                     level().setBlockAndUpdate(blockPos2, blockState);
-                    level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(level().getRandom(), 110, 130));
+                    level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_SLAB, Mth.nextInt(level().getRandom(), 150, 170));
                 }
             }
         }
@@ -184,8 +185,54 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
         if (!level().isClientSide()) {
+            int range = 1;
+            for (int y = -1; y < 3; y++) {
+                for (int x = -range; x <= range; x++) {
+                    for (int z = -range; z <= range; z++) {
+                        BlockPos targetPos = getOnPos().offset(x, y, z);
+                        BlockState iceState = ModBlocks.STICKY_ICE.defaultBlockState();
+
+                        if (canFreeze(targetPos)
+                                && iceState.canSurvive(level(), targetPos)) {
+                                level().setBlockAndUpdate(targetPos, iceState);
+                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                        }
+                        // placement logic
+                    }
+                }
+            }
             discard();
         }
+    }
+    public boolean canFreeze(BlockPos pos) {
+        BlockState state = level().getBlockState(pos);
+        if (MainUtil.getIsGamemodeApproriateForGrief(getOwner()) ||
+                state.isAir() || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+            if (!state.canBeReplaced())
+                return false;
+
+            if (!state.getFluidState().isEmpty())
+                return false;
+
+            if (state.getBlock() instanceof LiquidBlockContainer)
+                return false;
+
+            if (state.getBlock() instanceof FireBlock)
+                return false;
+
+            if (state.getBlock() instanceof StickyIceCoatingBlock)
+                return false;
+
+            if (state.getBlock() instanceof StandFireBlock)
+                return false;
+
+            if (state.hasProperty(BlockStateProperties.WATERLOGGED)
+                    && state.getValue(BlockStateProperties.WATERLOGGED))
+                return false;
+
+        return true;
+        }
+        return false;
     }
     @Override
     public boolean needsStandUser(){

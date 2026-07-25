@@ -35,6 +35,18 @@
       "roundabout:king_crimson_punch"
     ]
   },
+  "skip_time_1": {
+    "subtitle": "sounds.roundabout.skip_time_1",
+    "sounds": [
+      "roundabout:skip_time_1"
+    ]
+  },
+  "skip_time_2": {
+    "subtitle": "sounds.roundabout.skip_time_2",
+    "sounds": [
+      "roundabout:skip_time_2"
+    ]
+  },
   "king_crimson_punch_2": {
     "subtitle": "sounds.roundabout.king_crimson_punch_2",
     "sounds": [
@@ -63,6 +75,18 @@
     "subtitle": "sounds.roundabout.king_crimson_barrage_hit",
     "sounds": [
       "roundabout:king_crimson_barrage_hit"
+    ]
+  },
+  "epitaph_activate": {
+    "subtitle": "sounds.roundabout.epitaph_activate",
+    "sounds": [
+      "roundabout:epitaph_activate"
+    ]
+  },
+  "epitaph_fade": {
+    "subtitle": "sounds.roundabout.epitaph_fade",
+    "sounds": [
+      "roundabout:epitaph_fade"
     ]
   },
   "summon_california": {
@@ -425,6 +449,84 @@
         "roundabout:summon_killer_queen"
       ]
     },
+  "killer_queen_select": {
+    "subtitle": "sounds.roundabout.killer_queen_select",
+    "sounds": [
+      "roundabout:killer_queen_select"
+    ]
+  },
+  "kq_minesweeper_detonate": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_detonate",
+    "sounds": [
+      "roundabout:kq_minesweeper_detonate"
+    ]
+  },
+  "kq_minesweeper_explosion": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_explosion",
+    "sounds": [
+      "roundabout:kq_minesweeper_explosion"
+    ]
+  },
+  "kq_minesweeper_start": {
+      "subtitle": "sounds.roundabout.kq_minesweeper_start",
+      "sounds": [
+        "roundabout:kq_minesweeper_start"
+      ]
+    },
+  "kq_minesweeper_barrage": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_barrage",
+    "sounds": [
+      "roundabout:kq_minesweeper_barrage"
+    ]
+  },
+  "kq_minesweeper_shibaba": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_shibaba",
+    "sounds": [
+      "roundabout:kq_minesweeper_shibaba"
+    ]
+  },
+  "kq_minesweeper_shiba": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_shiba",
+    "sounds": [
+      "roundabout:kq_minesweeper_shiba"
+    ]
+  },
+  "kq_minesweeper_punch_1": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_punch_1",
+    "sounds": [
+      "roundabout:kq_minesweeper_punch_1"
+    ]
+  },
+  "kq_minesweeper_punch_2": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_punch_2",
+    "sounds": [
+      "roundabout:kq_minesweeper_punch_2"
+    ]
+  },
+  "kq_minesweeper_bubble_send": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_bubble_send",
+    "sounds": [
+      "roundabout:kq_minesweeper_bubble_send"
+    ]
+  },
+  "kq_minesweeper_btd_noise": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_noise",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_noise"
+    ]
+  },
+  "kq_minesweeper_btd_detonate": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_detonate",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_detonate"
+    ]
+  },
+  "kq_minesweeper_btd_plant": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_btd_plant",
+    "sounds": [
+      "roundabout:kq_minesweeper_btd_plant"
+    ]
+  },
   "summon_creeper_queen": {
     "subtitle": "sounds.roundabout.summon_creeper_queen",
     "sounds": [
@@ -453,6 +555,24 @@
     "subtitle": "sounds.roundabout.killer_queen_shibaba",
     "sounds": [
       "roundabout:killer_queen_shibaba"
+    ]
+  },
+  "kq_minesweeper_kick": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_kick",
+    "sounds": [
+      "roundabout:kq_minesweeper_kick"
+    ]
+  },
+  "kq_minesweeper_heavy_punch": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_heavy_punch",
+    "sounds": [
+      "roundabout:kq_minesweeper_heavy_punch"
+    ]
+  },
+  "kq_minesweeper_impale": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_impale",
+    "sounds": [
+      "roundabout:kq_minesweeper_impale"
     ]
   },
   "killer_queen_punch_1": {
@@ -497,22 +617,40 @@
       "roundabout:sha_dededede"
     ]
   },
-  "sha_kocchi_2": {
-    "subtitle": "sounds.roundabout.sha_kocchi_2",
+  "sha_heavy": {
+    "subtitle": "sounds.roundabout.sha_heavy",
     "sounds": [
-      "roundabout:sha_kocchi_2"
+      "roundabout:sha_heavy"
     ]
   },
-  "sha_kocchi_1": {
+  "sha_kocchi": {
     "subtitle": "sounds.roundabout.sha_kocchi_1",
     "sounds": [
-      "roundabout:sha_kocchi_1"
+      "roundabout:sha_kocchi"
     ]
   },
-  "sha_alt_kocchi_2": {
-    "subtitle": "sounds.roundabout.sha_alt_kocchi_2",
+  "sha_alt_kocchi": {
+    "subtitle": "sounds.roundabout.sha_alt_kocchi",
     "sounds": [
-      "roundabout:sha_alt_kocchi_2"
+      "roundabout:sha_alt_kocchi"
+    ]
+  },
+  "bites_the_dust_noise": {
+    "subtitle": "sounds.roundabout.bites_the_dust_noise",
+    "sounds": [
+      "roundabout:bites_the_dust_noise"
+    ]
+  },
+  "bites_the_dust_planted": {
+    "subtitle": "sounds.roundabout.bites_the_dust_planted",
+    "sounds": [
+      "roundabout:bites_the_dust_planted"
+    ]
+  },
+  "bites_the_dust_detonate": {
+    "subtitle": "sounds.roundabout.bites_the_dust_detonate",
+    "sounds": [
+      "roundabout:bites_the_dust_detonate"
     ]
   },
   "sha_alt_dede": {
@@ -549,12 +687,6 @@
     "subtitle": "sounds.roundabout.straycat_bubble_redirect",
     "sounds": [
       "roundabout:straycat_bubble_redirect_2"
-    ]
-  },
-  "stray_cat_shoot": {
-    "subtitle": "sounds.roundabout.stray_cat_shoot",
-    "sounds": [
-      "roundabout:stray_cat_shoot"
     ]
   },
   "summon_magician": {

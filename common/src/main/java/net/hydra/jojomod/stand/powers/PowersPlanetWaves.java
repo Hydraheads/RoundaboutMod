@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,6 +61,13 @@ public class PowersPlanetWaves extends NewDashPreset {
 
     @Override
     public StandEntity getNewStandEntity(){
+        if (this.getSelf() instanceof Player PE) {
+            byte skin = ((StandUser) PE).roundabout$getStandSkin();
+            System.out.println("SKIN: " + skin + " COSMIC_CONST: " + PlanetWavesEntity.COSMIC + " ENTITY_TYPE: " + ModEntities.PLANET_WAVES_COSMIC);
+            if (skin == PlanetWavesEntity.COSMIC) {
+                return ModEntities.PLANET_WAVES_COSMIC.create(this.getSelf().level());
+            }
+        }
         return ModEntities.PLANET_WAVES.create(this.getSelf().level());
     }
 
@@ -100,6 +108,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             }if (Level > 3 || bypass){
                 $$1.add(PlanetWavesEntity.SPARTA);
                 $$1.add(PlanetWavesEntity.SPARTA2);
+            }if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+                $$1.add(PlanetWavesEntity.COSMIC);
             }/* if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
                 $$1.add(MagiciansRedEntity.GREEN_ABLAZE);
@@ -136,16 +146,15 @@ public class PowersPlanetWaves extends NewDashPreset {
             case SPARTA  -> {return Component.translatable("skins.roundabout.planet_waves.sparta");}
             case SPARTA2  -> {return Component.translatable("skins.roundabout.planet_waves.sparta2");}
             case HALLOWEEN  -> {return Component.translatable("skins.roundabout.planet_waves.halloween");}
-
+            case COSMIC  -> {return Component.translatable("skins.roundabout.planet_waves.cosmic");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
     }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (this.self.getY() > 319) {
-            setSkillIcon(context, x, y, 1, StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD, PowerIndex.SKILL_1);
-        } else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
+        setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_METEOR_SHOWER, PowerIndex.SKILL_1);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak()) {
@@ -156,7 +165,9 @@ public class PowersPlanetWaves extends NewDashPreset {
                 setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
             }
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
+            if (this.self.getY() > 319) {
+                setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_COSMIC_ICON, PowerIndex.SKILL_2);
+            } else setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_2);
             if (canExecuteMoveWithLevel(StandTargetingLevel()) && !isCanonMovesOnly()) {
                 if (!instandtargeting()) {
                     setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_4);
@@ -286,27 +297,27 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         10, 0.5, 0.5, 0.5, 0.2);
-                user.roundabout$setStandSkin(PlanetWavesEntity.GREEN_SKIN); //COSMIC
+                user.roundabout$setStandSkin(PlanetWavesEntity.COSMIC); //COSMIC
                 ((ServerPlayer) PE).displayClientMessage(
                         Component.translatable("unlock_skin.roundabout.planet_waves_cosmic"), true);
                 user.roundabout$summonStand(lv, true, false);
             }
         }
-        meteorshower();
+        bigmeteor();
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_1 -> { // Meteor Shower
-                if (this.self.getY() > 319) {
-                   unlockcosmic();
-                } else {
-                    meteorshower();
-                }
+                meteorshower();
                 return true;
             }
             case PowerIndex.POWER_2 -> { // Big Meteor
-                bigmeteor();
+                if (this.self.getY() > 319) {
+                    unlockcosmic();
+                } else {
+                    bigmeteor();
+                }
                 return true;
             }
             case PowerIndex.POWER_4 -> { // Stand Targeting or Stand Retrieving
@@ -350,6 +361,47 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void attemptMeteorNotTracking(){
         if(canExecuteMoveWithLevel(MeteorTrackingLevel())) {
             meteornottracking();
+        }
+    }
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 15) {
+                Level level = this.getSelf().level();
+                Vec3 origin = this.self.position();
+
+                level.playSound(null, this.self.blockPosition(),
+                        ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+
+                for (int i = 0; i < 5; i++) {
+                    double angle = this.self.getRandom().nextDouble() * Math.PI * 2.0;
+                    double radius = 2.0 + this.self.getRandom().nextDouble() * 3.0;
+
+                    double spawnX = origin.x + Math.cos(angle) * radius;
+                    double spawnZ = origin.z + Math.sin(angle) * radius;
+                    double spawnY = origin.y + 18.0 + this.self.getRandom().nextDouble() * 6.0;
+
+                    Vec3 spawnPos = new Vec3(spawnX, spawnY, spawnZ);
+                    Vec3 targetPos = origin.add(0, this.self.getBbHeight() * 0.5, 0);
+                    Vec3 direction = targetPos.subtract(spawnPos).normalize();
+
+                    PWMeteorEntity meteor = new PWMeteorEntity(this.self, level);
+                    meteor.setUser(this.self);
+                    meteor.setOwner(this.self);
+                    meteor.setTargetPos(targetPos);
+                    meteor.setPunishesOwner(true);
+
+                    meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
+                    meteor.storeVec = spawnPos;
+                    meteor.setOldPosAndRot2();
+                    meteor.shoot(direction.x, direction.y, direction.z, 1.2F, 0.0F);
+
+                    meteor.setMeteorScale(0.5F);
+
+                    level.addFreshEntity(meteor);
+                }
+            }
         }
     }
     private void meteorshower() {
@@ -413,6 +465,9 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setTrackingUser(inmeteortracking());
 
         meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
+        if (!level.noCollision(meteor)) {
+            return;
+        }
         meteor.storeVec = spawnPos;
         meteor.setOldPosAndRot2();
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
@@ -546,16 +601,21 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setUser(this.self);
         meteor.setOwner(this.self);
 
+        boolean targetingActive = instandtargeting();
+        meteor.setCraterMultiplier(targetingActive ? 1.5F : 1.0F);
+
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
 
         level.addFreshEntity(meteor);
 
 
-        this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig()
-                .PlanetWavesSettings.bigmeteorCooldown);
+        int baseCooldown = ClientNetworking.getAppropriateConfig()
+                .PlanetWavesSettings.bigmeteorCooldown;
+        int appliedCooldown = targetingActive ? Math.round(baseCooldown * 1.5F) : baseCooldown;
+
+        this.setCooldown(PowerIndex.SKILL_2, appliedCooldown);
         if (this.getSelf() instanceof ServerPlayer sp) {
-            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2,
-                    ClientNetworking.getAppropriateConfig().PlanetWavesSettings.bigmeteorCooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2, appliedCooldown);
         }
 
         level.playSound(
@@ -634,6 +694,9 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
         if (state.isAir()) return;
         if (eyePos.distanceTo(Vec3.atCenterOf(pos)) > 30.0) return; //  límite de 30 bloques de stand targeting
+        if (inmeteortracking()) {
+            meteornottracking();
+        }
         Vec3 horizontalLook = new Vec3(lookVec.x, 0, lookVec.z);
         this.standApproachDir = (horizontalLook.lengthSqr() > 1.0E-4)
                 ? horizontalLook.normalize()
@@ -814,6 +877,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
         // ── 1a. PHASE 1 — travel to block face ───────────────────────────────
+        // Rotation here is dynamic (faces the direction of travel). That's fine —
+        // it gets fully overridden the moment we arrive, in phase 1.5 / 1b below.
         if (isTravelling && standTravelTarget != null && stand != null) {
 
             Vec3   current = stand.position();
@@ -855,8 +920,33 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-        // ── 1b. PHASE 2 — sink into block ────────────────────────────────────
+        // ── 1.5. PRE-SINK — align to the wall before moving inward ───────────
+        // This interpolates yaw from wherever travel left off to the fixed,
+        // approach-independent standTargetYawAligned. Once it hits 0 ticks
+        // remaining, we snap fully aligned and hand off to sinking.
+        if (isPreSinking && stand != null) {
+            if (preSinkTicks > 0) {
+                preSinkTicks--;
+                float progress = 1.0f - (preSinkTicks / (float) PRE_SINK_DURATION);
+                float delta = Mth.wrapDegrees(standTargetYawAligned - preSinkStartYawDeg);
+                setStandYaw(stand, preSinkStartYawDeg + delta * progress);
+            } else {
+                setStandYaw(stand, standTargetYawAligned);
+                applyBurialPitch(stand);
+                isPreSinking = false;
+                isSinking    = true;
+                syncStandMode();
+            }
+        }
+
+        // ── 1b. PHASE 2 — sink into block, fully centered/aligned ───────────
+        // Position AND rotation are held locked to the wall-aligned values every
+        // tick here, not just once at the end — this guarantees the stand enters
+        // the block dead-center on the alignment established in pre-sink, with
+        // no drift from movement math or any outside rotation nudging it.
         if (isSinking && sinkTarget != null && stand != null) {
+
+            applyBurialRotation(stand);
 
             Vec3   current = stand.position();
             Vec3   dir     = sinkTarget.subtract(current);
@@ -886,20 +976,16 @@ public class PowersPlanetWaves extends NewDashPreset {
                 );
             }
         }
-        // ── 1.5. PRE-SINK — wait for bury animation before moving ────────────
-        if (isPreSinking && stand != null) {
-            if (preSinkTicks > 0) {
-                preSinkTicks--;
-                float progress = 1.0f - (preSinkTicks / (float) PRE_SINK_DURATION);
-                float delta = Mth.wrapDegrees(standTargetYawAligned - preSinkStartYawDeg);
-                setStandYaw(stand, preSinkStartYawDeg + delta * progress);
-            } else {
-                setStandYaw(stand, standTargetYawAligned);
-                isPreSinking = false;
-                isSinking    = true;
-                syncStandMode();
-            }
+
+        // ── 2. BURIED — keep rotation locked to the wall every tick ──────────
+        // Without this, whatever per-tick facing/AI logic FollowingStandEntity
+        // runs on its own can quietly re-rotate the stand after our snap above,
+        // making the buried angle drift toward whatever direction it was
+        // approached/traveled from.
+        if (!isTravelling && !isSinking && !isPreSinking && targetingstand && stand != null) {
+            applyBurialRotation(stand);
         }
+
         // ── 2. BURIED — GRAB DETECTION ───────────────────────────────────────
         if (!isTravelling && !isSinking && targetingstand && stand != null && !isCanonMovesOnly()) {
 
@@ -1006,15 +1092,20 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
 
-// ── 4. RELEASE if stand recalled ─────────────────────────────────────
+        // ── 4. RELEASE if stand recalled ─────────────────────────────────────
         if (!targetingstand && restrainedEntity != null) {
             releaseRestrainedEntity(stand);
         }
     }
 
-    /** Shared cleanup when the grab ends. */
+
     private void releaseRestrainedEntity(StandEntity stand) {
-        if (restrainedEntity instanceof Mob mob) mob.setNoAi(false);
+        if (restrainedEntity instanceof Mob mob) {
+            mob.setNoAi(false);
+        }
+        if (restrainedEntity instanceof StandUser SU) {
+            SU.roundabout$setRestrainedTicks(0);
+        }
         restrainedEntity = null;
         grabCooldownTicks = GRAB_COOLDOWN;
         if (stand != null && targetingstand && standHitDirection != null) {
@@ -1352,14 +1443,43 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon) {
-            if (!targetingstand) {
-                StandEntity stand = this.getStandEntity(this.self);
-                releaseRestrainedEntity(stand);
-                isTravelling      = false;
-                isSinking         = false;
-                standTargetPos    = null;
-                standTravelTarget = null;
-                standHitDirection = null;
+            StandEntity stand = this.getStandEntity(this.self);
+            releaseRestrainedEntity(stand);
+
+            boolean wasTargeting = targetingstand;
+
+            // Always fully clear targeting state on desummon, even mid-target/mid-bury.
+            targetingstand     = false;
+            isTravelling       = false;
+            isSinking          = false;
+            isPreSinking       = false;
+            standTargetPos     = null;
+            standTravelTarget  = null;
+            standHitDirection  = null;
+            standApproachDir   = null;
+            buryEffectTick     = 0;
+
+            if (stand instanceof FollowingStandEntity FSE) {
+                FSE.setOffsetType(OffsetIndex.FOLLOW);
+            }
+
+            syncStandMode();
+
+            if (wasTargeting) {
+                Level level = this.self.level();
+                level.playSound(null, this.self.blockPosition(),
+                        ModSounds.PLANET_WAVES_TARGET_EVENT,
+                        SoundSource.PLAYERS, 0.5F, 1.0F);
+
+                if (!level.isClientSide()) {
+                    this.setCooldown(PowerIndex.SKILL_4,
+                            ClientNetworking.getAppropriateConfig()
+                                    .PlanetWavesSettings.usertargetingCooldown);
+                    if (this.getSelf() instanceof ServerPlayer sp) {
+                        S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_4,
+                                ClientNetworking.getAppropriateConfig().PlanetWavesSettings.usertargetingCooldown);
+                    }
+                }
             }
         } else if (targetingstand) {
             StandEntity stand = this.getStandEntity(this.self);
@@ -1498,11 +1618,12 @@ public class PowersPlanetWaves extends NewDashPreset {
             case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
             case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> StandFireType.CREAM.id;*/
+            case PlanetWavesEntity.COSMIC-> 7;
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> 6;//ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> 5; //ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN -> 4;//StandFireType.PURPLE.id;
-            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> 3;//StandFireType.BLUE.id;
-            case PlanetWavesEntity.MANGA_SKIN,PlanetWavesEntity.HALLOWEEN -> 1;//StandFireType.CREAM.id;
+            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA2 -> 3;//StandFireType.BLUE.id;
+            case PlanetWavesEntity.MANGA_SKIN,PlanetWavesEntity.HALLOWEEN,PlanetWavesEntity.SPARTA -> 1;//StandFireType.CREAM.id;
             default -> 1; //StandFireType.ORANGE.id;
         };
     }

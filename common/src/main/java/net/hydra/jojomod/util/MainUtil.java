@@ -12,6 +12,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -63,10 +64,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -96,6 +99,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -1535,6 +1540,30 @@ public class MainUtil {
     }
 
 
+    public static boolean inWater(BlockState state){
+        if (state.is(Blocks.WATER)) {
+            return true;
+        }
+        return false;
+    }
+    public static boolean isDangerous(Level level, BlockPos pos, BlockState state, boolean isStrider){
+        if (state.is(Blocks.COBWEB)
+                || (state.is(Blocks.FIRE) && !isStrider)
+                || (state.is(Blocks.SOUL_FIRE) && !isStrider)
+                || state.is(Blocks.CACTUS)
+                || state.is(ModBlocks.BARBED_WIRE)
+                || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.STAND_FIRE)
+                || state.is(ModBlocks.COLD_AIR)
+                || state.is(ModBlocks.BARBED_WIRE_BUNDLE)
+                || state.is(Blocks.SWEET_BERRY_BUSH)
+                || (level.getFluidState(pos).is(FluidTags.LAVA)) && !isStrider) {
+            return true;
+
+        }
+        return false;
+    }
+
 
     public static float getNetheriteMultiplier(Entity entity) {
         if (entity instanceof Player pl){
@@ -1846,10 +1875,12 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            value.hurt($$5,np*=0.6f);
+                            np*=0.9f;
+                            value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            value.hurt($$5,np*=0.6f);
+                            np*=0.9f;
+                            value.hurt($$5,np);
                         }
                     }
                 }
@@ -2518,6 +2549,14 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
+
+    public static boolean blockConfusionTicks(Entity LE){
+        if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isBossMob(Entity LE){
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
             || isPowerfulMob(LE) ||
@@ -2812,7 +2851,21 @@ public class MainUtil {
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY){
+            BlackSabbathPlayerInventory $$6 = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
+            PowerTypes.initializeStandPower(player);
+
+            if (player.containerMenu != player.inventoryMenu) {
+                player.containerMenu = player.inventoryMenu;
+            }
+
+            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
+            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
+            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
+                    cid);
+         //   player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
+            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
+        }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
@@ -3591,7 +3644,6 @@ public class MainUtil {
 
                         if (visage.getItem() instanceof MaskItem MI) {
                             if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                                //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                                 return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                             }
                         }
@@ -3606,7 +3658,6 @@ public class MainUtil {
 
                 if (visage.getItem() instanceof MaskItem MI) {
                     if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                        //Roundabout.LOGGER.info(MI.visageData.generateVisageData(player).getSkinPath());
                         return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                     }
                 }

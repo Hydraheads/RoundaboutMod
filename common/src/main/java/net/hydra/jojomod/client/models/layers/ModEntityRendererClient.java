@@ -45,6 +45,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation RATT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ratt"), "main");
     public static final ModelLayerLocation REDD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "redd"), "main");
     public static final ModelLayerLocation CHAIR_RATT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chair_ratt"), "main");
+    public static final ModelLayerLocation PURPLE_HAZE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "purple_haze"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_KING_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_king"), "main");
     public static final ModelLayerLocation SOFT_AND_WET_DROWNED_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_drowned"), "main");
@@ -55,6 +56,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation CALIFORNIA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "california_king_bed"), "main");
     public static final ModelLayerLocation PLANET_WAVES_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves"), "main");
     public static final ModelLayerLocation PLANET_WAVES_SPARTA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_sparta"), "main");
+    public static final ModelLayerLocation PLANET_WAVES_COSMIC_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic"), "main");
     public static final ModelLayerLocation MANHATTAN_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer"), "main");
     public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation BLACK_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"), "main");

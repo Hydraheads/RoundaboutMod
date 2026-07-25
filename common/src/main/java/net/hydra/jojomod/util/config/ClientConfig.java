@@ -120,6 +120,10 @@ public class ClientConfig implements Cloneable {
         public Boolean advancedEpitaphShader;
         @BooleanOption(group = "inherit", value = true)
         public Boolean epitaphScreenEffect;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean epitaphSeePresentEntitiesAndParticles;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float timeSkipOpacity;
     }
     public static class ConfigSettings {
 

@@ -7,9 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
-import net.hydra.jojomod.client.gui.NoCancelInputScreen;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -26,6 +24,7 @@ import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -34,6 +33,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
+import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
@@ -269,7 +269,7 @@ public abstract class InputEvents implements IInputEvents {
             }
 
             if (powers instanceof PowersOasis PO) {
-                if (PO.isBrawling()) {
+                if (PO.isBrawling() && PO.hasStandActive(PO.getSelf())) {
                     ci.setReturnValue(false);
                     return;
                 }
@@ -1110,8 +1110,6 @@ public abstract class InputEvents implements IInputEvents {
             if (player.isAlive()) {
                 ((StandUser) player).roundabout$getStandPowers().updateGuard(
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
-                //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
-
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
                 if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
@@ -1207,9 +1205,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                 }
-                //RoundaboutMod.LOGGER.info("px");
 
-                    //RoundaboutMod.LOGGER.info("px");
                     if (roundabout$sameKeyOne(KeyInputRegistry.summonKey)) {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
@@ -1255,6 +1251,18 @@ public abstract class InputEvents implements IInputEvents {
                             player.containerMenu = powa;
                             Minecraft.getInstance().setScreen(new PowerInventoryScreen(player,powa));
                             ClientUtil.checkthis = 0;
+                            ClientUtil.checkthisdat = 0;
+                        }
+
+                        if(ClientUtil.checkthis == 2){
+                            BlackSabbathPlayerInventory $$4 = new BlackSabbathPlayerInventory(player);
+                            player.clientSideCloseContainer();
+
+                          /*  BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                                    ClientUtil.checkthisdat);
+                            player.containerMenu = bsinv;
+                            Minecraft.getInstance().setScreen(new BlackSabbathPlayerInventoryScreen(bsinv, player.getInventory(), player));
+                            ClientUtil.checkthis = 0;*/
                             ClientUtil.checkthisdat = 0;
                         }
                     }

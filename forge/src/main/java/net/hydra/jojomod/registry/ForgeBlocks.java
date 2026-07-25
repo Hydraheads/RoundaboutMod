@@ -433,7 +433,6 @@ public class ForgeBlocks {
                 continue;
             }
 
-            //Roundabout.LOGGER.info("Registering block \"roundabout:fog_{}\"",i.getPath());
             boolean rightSize = false;
             try {
                 VoxelShape vshape = b.defaultBlockState().getCollisionShape(null, null);

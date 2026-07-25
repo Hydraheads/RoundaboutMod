@@ -1,12 +1,18 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.IPlayerEntity;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -15,34 +21,61 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
-import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.*;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class PowersKingCrimson extends NewPunchingStand {
+public class PowersKingCrimson extends BlockGrabPreset {
 
     public PowersKingCrimson(LivingEntity self) {
         super(self);
     }
+    public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
+    public final Map<Integer, TimeSkipSnapshot> skip_dump = new HashMap<>();
 
     @Override
     /**Override to add disable config*/
@@ -67,13 +100,1420 @@ public class PowersKingCrimson extends NewPunchingStand {
             return ModSounds.SUMMON_KING_CRIMSON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
+        } else if (soundChoice == EPITAPH_NOISE) {
+            return ModSounds.EPITAPH_ACTIVATE_EVENT;
+        } else if (soundChoice == EPITAPH_FADE_NOISE) {
+            return ModSounds.EPITAPH_FADE_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
+    public static final byte EPITAPH_NOISE = 106;
+    public static final byte EPITAPH_FADE_NOISE = 107;
+    public static final byte TIME_SKIP_1 = 108;
+    public static final byte TIME_SKIP_2 = 109;
     @Override
     public SoundEvent getImpaleSound(){
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
+    }
+
+    public boolean isUsingEpitaph(){
+        return !epitaph.isEmpty();
+    }
+
+    public float getSped(Entity entity){
+        if (entity instanceof LivingEntity LE){
+            if (LE.getSpeed() <= 0){
+                if (LE.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
+                    return (float) LE.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                }
+            }
+            return LE.getSpeed();
+        }
+        return 0;
+    }
+
+    public static Vec3 getPredictedDirection() {
+        return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
+    }
+    public Vec3 predictIdle(LivingEntity liv, int ticks) {
+        //Mobs and Players that are still still need to move when idle
+        Level level = liv.level();
+
+        Vec3 predicted = liv.position();
+        AABB box = liv.getBoundingBox();
+
+        if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
+            return predicted;
+        }
+        if (liv instanceof FlyingMob){
+            return predicted;
+        }
+        if (liv instanceof WanderingTrader){
+            return predicted;
+        }
+
+        float speed = (float) (Math.random()*0.9F);
+        float sped = getSped(liv);
+        Vec3 basevelocity = getPredictedDirection()
+                .normalize()
+                .scale(sped * speed);
+        if (basevelocity.y > 0)
+            basevelocity = basevelocity.multiply(1, 0, 1);
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 velocity = basevelocity;
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!liv.isInWater() && !MainUtil.inWater(level.getBlockState(ft))) {
+                velocity = velocity.add(0, -1, 0);
+            } else {
+                velocity.multiply(1,0,1);
+            }
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    liv,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+            Vec3 nextPos = predicted.add(collided);
+            BlockPos feet = BlockPos.containing(nextPos);
+            BlockPos below = feet.below();
+            BlockState ground = level.getBlockState(below);
+            BlockState ground2 = level.getBlockState(feet);
+
+            if (!ground.blocksMotion()) {
+                // Don't move there
+                break;
+            }
+
+            if (isSunlightDanger(liv,nextPos)){
+                return predicted;
+            }
+            AABB checkBox = box.inflate(-0.05);
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                    Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                boolean isStrider = liv instanceof Strider;
+                if (level.getFluidState(pos).is(FluidTags.LAVA) && !isStrider) {
+                    return predicted;
+                }
+
+
+                BlockState state = level.getBlockState(pos);
+                if (MainUtil.isDangerous(level, pos, state, liv instanceof Strider)) {
+                    return predicted;
+                }
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+        }
+
+        return predicted;
+    }
+
+    public void releaseTimeSkip(){
+
+    }
+
+    public Vec3 predictPlayer(LivingEntity player, int ticks) {
+        Level level = player.level();
+
+        Vec3 predicted = player.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
+        AABB box = player.getBoundingBox();
+
+        Deque<Vec3> history = null;
+        if (player instanceof Player ye){
+            history = ((IPlayerEntity) ye).rdbt$getMovementHistory();
+        } else if (player.getControllingPassenger() instanceof Player ye){
+            history = ((IPlayerEntity) ye).rdbt$getMovementHistory();
+        }
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            Vec3 newest = it.next();
+            Vec3 previous = it.hasNext() ? it.next() : newest;
+            Vec3 third = it.hasNext() ? it.next() : previous;
+
+            oldPos = third;
+        }
+        if (player.position().distanceTo(oldPos) < 0.1 && player.getId() != self.getId()){
+            return predictIdle(player,ticks);
+        }
+        Vec3 baseVelocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(getSped(player) * (2.5+(Math.random()*0.5)));
+        if (baseVelocity.y > 0)
+            baseVelocity = baseVelocity.multiply(1, 0, 1);
+
+        for (int i = 0; i < ticks; i++) {
+            hitWall2 = false;
+
+            // ----- Estimate movement direction -----
+
+
+
+            Vec3 velocity = baseVelocity;
+
+            BlockPos ft = BlockPos.containing(predicted);
+            if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
+            && !(player instanceof Player pl2 && pl2.getAbilities().flying) && !(player instanceof FlyingMob)) {
+                velocity = velocity.add(0, -1, 0);
+            }  else {
+                velocity = velocity.multiply(1,0,1);
+            }
+
+            // ----- Normal collision -----
+            Vec3 collided = Entity.collideBoundingBox(
+                    player,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // ----- Try stepping up -----
+            boolean hitWall =
+                    collided.x != velocity.x ||
+                            collided.z != velocity.z;
+
+            if (hitWall) {
+                i+=3;
+                double stepHeight = 1.0;
+
+                // Move upward first
+                Vec3 up = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, stepHeight, 0),
+                        box,
+                        level,
+                        List.of()
+                );
+
+                AABB steppedBox = box.move(up);
+
+                // Move horizontally while elevated
+                Vec3 forward = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(velocity.x, 0, velocity.z),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                steppedBox = steppedBox.move(forward);
+
+                // Move back down
+                Vec3 down = Entity.collideBoundingBox(
+                        player,
+                        new Vec3(0, -stepHeight, 0),
+                        steppedBox,
+                        level,
+                        List.of()
+                );
+
+                Vec3 steppedMove = up.add(forward).add(down);
+
+                // Prefer whichever gives more horizontal travel
+                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                    collided = steppedMove;
+                }
+                if (collided.y == 0){
+                    hitWall2 = true;
+                }
+            }
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+            if (player.getId() != self.getId()) {
+                AABB checkBox = box.inflate(-0.05);
+
+                if (isSunlightDanger(player,predicted)){
+                    predicted = previousPreviousSafe;
+                    break;
+                }
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
+                        Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
+
+                    if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                        return previousPreviousSafe;
+                    }
+
+                    BlockState state = level.getBlockState(pos);
+                    if (MainUtil.isDangerous(level, pos, state, false)) {
+                        predicted = previousPreviousSafe;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
+        boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        if (deviousStratBlocker) {
+            // 2. Check for dangerous blocks inside target box
+            boolean cancel = false;
+            double width = player.getBbWidth();
+            double height = player.getBbHeight();
+            AABB targetBox = new AABB(
+                    predicted.x - width / 2.0, predicted.y, predicted.z - width / 2.0,
+                    predicted.x + width / 2.0, predicted.y + height, predicted.z + width / 2.0
+            );
+            //
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox,((IGravityEntity)player).roundabout$getGravityDirection());
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                    Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+                Block block = state.getBlock();
+
+                // List of bad blocks to avoid
+                if (block == Blocks.COBWEB || block == Blocks.LAVA ||
+                block == ModBlocks.BARBED_WIRE_BUNDLE) {
+                    cancel = true;
+                    break;
+                }
+
+                // Optional: also avoid fire or cactus
+                if (block == Blocks.FIRE || block == Blocks.CACTUS) {
+                    cancel = true;
+                    break;
+                }
+            }
+
+            if (isSunlightDanger(player,predicted)){
+                cancel = true;
+            }
+            if (cancel){
+                return player.position();
+            }
+        }
+
+        return predicted;
+    }
+    public Vec3 predictStrider(Strider strider, int ticks) {
+        Level level = strider.level();
+
+        Entity rider = strider.getControllingPassenger();
+        if (!(rider instanceof Player player)) {
+            return strider.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            it.next();
+            Vec3 previous = it.next();
+            oldPos = previous;
+        }
+
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return strider.position();
+        }
+
+        Vec3 predicted = strider.position();
+        AABB box = strider.getBoundingBox();
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(getSped(player) * 2.5);
+
+        // Striders don't need normal gravity prediction as aggressively
+        velocity = velocity.multiply(1, 0, 1);
+
+        Vec3 previousSafe = predicted;
+
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 move = velocity;
+
+            // Only apply gravity if NOT over lava
+            BlockPos below = BlockPos.containing(
+                    predicted.x,
+                    predicted.y - 0.5,
+                    predicted.z
+            );
+
+            boolean overLava = level.getFluidState(below).is(FluidTags.LAVA);
+
+            if (!overLava) {
+                move = move.add(0, -0.08, 0);
+            }
+
+            Vec3 collided = Entity.collideBoundingBox(
+                    strider,
+                    move,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            previousSafe = predicted;
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+
+
+            // Don't let striders walk onto solid ground if desired
+            AABB check = box.inflate(-0.05);
+
+            boolean touchingInvalid = false;
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(check.minX),
+                    Mth.floor(check.minY),
+                    Mth.floor(check.minZ),
+                    Mth.floor(check.maxX),
+                    Mth.floor(check.maxY),
+                    Mth.floor(check.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+
+                // Striders like lava
+                if (state.isSolid() && !level.getFluidState(pos).is(FluidTags.LAVA)) {
+                    touchingInvalid = true;
+                    break;
+                }
+            }
+
+            if (touchingInvalid) {
+                return previousSafe;
+            }
+        }
+
+        return predicted;
+    }
+
+
+    public Vec3 predictBoat(Boat boat, int ticks) {
+        Level level = boat.level();
+
+        if (!(boat.getControllingPassenger() instanceof Player player)) {
+            return boat.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next(); // newest
+            it.next(); // previous
+            oldPos = it.next(); // third newest
+        }
+
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return boat.position();
+        }
+
+        Vec3 predicted = boat.position();
+        Vec3 previousSafe = predicted;
+        Vec3 previousPreviousSafe = predicted;
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(0.4);
+
+        AABB box = boat.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            previousPreviousSafe = previousSafe;
+            previousSafe = predicted;
+
+            Vec3 collided = Entity.collideBoundingBox(
+                    boat,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            // Couldn't move fully -> hit shore.
+            if (collided.horizontalDistanceSqr() + 1.0E-6 < velocity.horizontalDistanceSqr()) {
+                return previousPreviousSafe;
+            }
+
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+
+            // Make sure the boat is still floating.
+            if (!boatHasWaterBelow(level, box)) {
+                return previousPreviousSafe;
+            }
+        }
+
+        return predicted;
+    }
+    public Vec3 predictTNT(PrimedTnt tnt, int ticks) {
+        Level level = tnt.level();
+
+        Vec3 predicted = tnt.position();
+        Vec3 velocity = tnt.getDeltaMovement();
+
+        AABB box = tnt.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // vanilla TNT gravity
+            velocity = velocity.add(0, -0.04, 0);
+
+            // vanilla air drag
+            velocity = velocity.scale(0.98);
+
+            Vec3 movement = Entity.collideBoundingBox(
+                    tnt,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            predicted = predicted.add(movement);
+            box = box.move(movement);
+
+            // Hit ground, stop falling
+            if (movement.y != velocity.y) {
+                velocity = new Vec3(
+                        velocity.x * 0.7,
+                        0,
+                        velocity.z * 0.7
+                );
+            }
+        }
+
+        return predicted;
+    }
+    public Vec3 predictMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+            if (!cart.onGround()) {
+                return predictFallingMinecart(cart, ticks);
+            }
+            return cart.position();
+        }
+
+        // Figure out initial movement direction from player history.
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 3) {
+            Iterator<Vec3> it = history.descendingIterator();
+            it.next();
+            it.next();
+            oldPos = it.next();
+        }
+
+        Vec3 movement = player.position().subtract(oldPos);
+
+        Direction dir;
+        if (Math.abs(movement.x) > Math.abs(movement.z)) {
+            dir = movement.x > 0 ? Direction.EAST : Direction.WEST;
+        } else {
+            dir = movement.z > 0 ? Direction.SOUTH : Direction.NORTH;
+        }
+
+        BlockPos railPos = BlockPos.containing(cart.position());
+
+        if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+            railPos = railPos.below();
+            if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+                return cart.position();
+            }
+        }
+        double remaining = cart.getDeltaMovement().horizontalDistance() * ticks;
+
+        while (remaining >= 1.0) {
+            // move to next rail
+            remaining -= 1.0;
+
+            BlockState state = level.getBlockState(railPos);
+            RailShape shape = state.getValue(((BaseRailBlock) state.getBlock()).getShapeProperty());
+
+            // Curves
+            switch (shape) {
+                case NORTH_EAST -> {
+                    if (dir == Direction.NORTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.NORTH;
+                }
+                case NORTH_WEST -> {
+                    if (dir == Direction.NORTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.NORTH;
+                }
+                case SOUTH_EAST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.SOUTH;
+                }
+                case SOUTH_WEST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.SOUTH;
+                }
+                default -> {}
+            }
+
+            BlockPos next = railPos.relative(dir);
+
+            // descending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                next = next.below();
+            }
+
+            // ascending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                BlockPos up = railPos.relative(dir).above();
+                if (BaseRailBlock.isRail(level.getBlockState(up))) {
+                    next = up;
+                }
+            }
+
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                break;
+            }
+
+            BlockState nextState = level.getBlockState(next);
+            RailShape nextShape = nextState.getValue(
+                    ((BaseRailBlock) nextState.getBlock()).getShapeProperty()
+            );
+
+            if (nextShape == RailShape.NORTH_EAST ||
+                    nextShape == RailShape.NORTH_WEST ||
+                    nextShape == RailShape.SOUTH_EAST ||
+                    nextShape == RailShape.SOUTH_WEST) {
+
+                break;
+            }
+
+            railPos = next;
+        }
+
+        BlockState endState = level.getBlockState(railPos);
+        RailShape endShape = endState.getValue(((BaseRailBlock) endState.getBlock()).getShapeProperty());
+
+        return new Vec3(
+                railPos.getX() + 0.5,
+                railPos.getY() + railYOffset(endShape),
+                railPos.getZ() + 0.5
+        );
+    }
+    private boolean isConnectedRail(Level level, BlockPos from, BlockPos to) {
+        BlockState fromState = level.getBlockState(from);
+        BlockState toState = level.getBlockState(to);
+
+        if (!BaseRailBlock.isRail(fromState) || !BaseRailBlock.isRail(toState)) {
+            return false;
+        }
+
+        RailShape fromShape = fromState.getValue(
+                ((BaseRailBlock) fromState.getBlock()).getShapeProperty()
+        );
+
+        RailShape toShape = toState.getValue(
+                ((BaseRailBlock) toState.getBlock()).getShapeProperty()
+        );
+
+        Direction travel = Direction.fromDelta(
+                to.getX() - from.getX(),
+                to.getY() - from.getY(),
+                to.getZ() - from.getZ()
+        );
+
+        if (travel == null) {
+            return false;
+        }
+
+        // The next rail must have an exit back toward the rail we came from
+        return switch (toShape) {
+            case NORTH_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case EAST_WEST -> travel == Direction.EAST || travel == Direction.WEST;
+
+            case ASCENDING_NORTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_EAST -> travel == Direction.EAST || travel == Direction.WEST;
+            case ASCENDING_WEST -> travel == Direction.EAST || travel == Direction.WEST;
+
+            case SOUTH_EAST -> travel == Direction.SOUTH || travel == Direction.EAST;
+            case SOUTH_WEST -> travel == Direction.SOUTH || travel == Direction.WEST;
+            case NORTH_EAST -> travel == Direction.NORTH || travel == Direction.EAST;
+            case NORTH_WEST -> travel == Direction.NORTH || travel == Direction.WEST;
+        };
+    }
+    public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+
+            Vec3 predicted = cart.position();
+            AABB box = cart.getBoundingBox();
+
+            Vec3 velocity = Vec3.ZERO;
+
+            for (int i = 0; i < ticks; i++) {
+                velocity = velocity.add(0, -0.08, 0); // vanilla gravity
+
+                Vec3 move = Entity.collideBoundingBox(
+                        cart,
+                        velocity,
+                        box,
+                        level,
+                        List.of()
+                );
+
+                predicted = predicted.add(move);
+                box = box.move(move);
+
+                // Hit the ground
+                if (move.y != velocity.y) {
+                    break;
+                }
+            }
+
+            return predicted;
+        }
+        return cart.position();
+    }
+    private static double railYOffset(RailShape shape) {
+        return switch (shape) {
+            case ASCENDING_EAST,
+                 ASCENDING_WEST,
+                 ASCENDING_NORTH,
+                 ASCENDING_SOUTH -> 0.5;
+            default -> 0.0625;
+        };
+    }
+    private static boolean boatHasWaterBelow(Level level, AABB box) {
+
+        double y = box.minY - 0.1;
+
+        int minX = Mth.floor(box.minX + 0.1);
+        int maxX = Mth.floor(box.maxX - 0.1);
+
+        int minZ = Mth.floor(box.minZ + 0.1);
+        int maxZ = Mth.floor(box.maxZ - 0.1);
+
+        int water = 0;
+        int total = 0;
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                total++;
+
+                if (level.getFluidState(BlockPos.containing(x, y, z)).is(FluidTags.WATER)) {
+                    water++;
+                }
+            }
+        }
+
+        return water * 2 >= total;
+    }
+    public Vec3 predictPosition(Mob mob, int ticks) {
+        if (mob.getControllingPassenger() instanceof Player pl){
+            if (mob instanceof Strider str){
+                Vec3 pred = predictStrider(str,40);
+                return pred;
+            } else {
+                Vec3 pred = predictPlayer(mob,40);
+                return pred;
+            }
+        }
+
+
+        Path path = mob.getNavigation().getPath();
+
+        if (path == null) {
+            return predictIdle(mob,ticks);
+        }
+
+        double remaining = getSped(mob) * ticks;
+        Vec3 current = mob.position();
+
+        int index = path.getNextNodeIndex();
+
+        while (index < path.getNodeCount()) {
+            Node node = path.getNode(index);
+
+            Vec3 next = new Vec3(
+                    node.x + 0.5,
+                    node.y,
+                    node.z + 0.5
+            );
+
+            double segment = current.distanceTo(next);
+
+            if (remaining <= segment) {
+                return current.lerp(next, remaining / segment);
+            }
+
+            remaining -= segment;
+            current = next;
+            index++;
+        }
+
+        if (current.distanceTo(mob.position()) < 0.01 && !MainUtil.isBossMob(mob)
+        && !(mob instanceof FlyingMob)){
+            return predictIdle(mob,ticks);
+        }
+
+        return current;
+    }
+
+    public void debugPlayer(){
+        if (self instanceof Player pl) {
+            int id = self.getId();
+            float xRot = self.getXRot();
+            float yRot = self.getYRot();
+            Vec3 predicted = self.position();
+
+            hitWall2 = false;
+            predicted = predictPlayer(pl, 40);
+            if (hitWall2){
+                yRot = Mth.wrapDegrees(yRot + 180.0F);
+            }
+            epitaph.put(self.getId(), new TimeSkipSnapshot(
+                    id,
+                    predicted,
+                    xRot,
+                    yRot
+            ));
+            S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+        }
+    }
+
+    //This variable makes a player turn around when they hit a wall to sell a believable reaction
+    public boolean hitWall2 = false;
+
+    public void basicSkip(boolean skipSelf){
+        hitWall2 = false;
+        AABB area = self.getBoundingBox().inflate(getSkipRange());
+
+        for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            hitWall2 = false;
+            if (entity instanceof Projectile proj) {
+                if (proj instanceof FireworkRocketEntity){
+                    proj.discard();
+                } else {
+                    skip_dump.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player) {
+                Vec3 boat = predictBoat(bt, 40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        boat,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
+            } else if (entity instanceof PrimedTnt tnt) {
+                Vec3 predicted = predictTNT(tnt, 100);
+
+                skip_dump.put(
+                        entity.getId(),
+                        new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                entity.getXRot(),
+                                entity.getYRot()
+                        )
+                );
+            } else if (entity instanceof AbstractMinecart bt ){
+                Vec3 minecart = predictMinecart(bt,40);
+
+                skip_dump.put(bt.getId(), new TimeSkipSnapshot(
+                        bt.getId(),
+                        minecart,
+                        bt.getXRot(),
+                        bt.getYRot()
+                ));
+            } if (entity instanceof LivingEntity living) {
+                if (!skipSelf && living.getId() == self.getId()) {
+                    continue;
+                } else if (living instanceof StandEntity) {
+                    continue;
+                }
+                StandEntity stand = getStandEntity(self);
+                int id = living.getId();
+                if (!(stand != null && stand.getId() == id)) {
+                    if (!(living instanceof StandEntity) &&
+                            !(living instanceof Player pk && pk.isCreative()
+                                    && pk.getId() != self.getId())
+                    ) {
+                        Vec3 predicted = living.position();
+                        float xRot = living.getXRot();
+                        float yRot = living.getYRot();
+                        if (!living.isSleeping()) {
+                            if (living instanceof Mob mob) {
+                                if (!mob.isLeashed() && !(mob instanceof WanderingTrader)) {
+                                    predicted = predictPosition(mob, 100);
+                                }
+                            } else if (living instanceof Player player) {
+                                // Fallback for players, armor stands, etc.
+                                predicted = predictPlayer(player, 40);
+                                if (player.getId() == self.getId()) {
+                                    if (predicted.distanceTo(self.getPosition(1)) < 0.1) {
+                                        continue;
+                                    }
+                                }
+                                if (hitWall2 && player.getId() != self.getId()) {
+                                    yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                }
+                            }
+                        }
+
+
+                        skip_dump.put(living.getId(), new TimeSkipSnapshot(
+                                id,
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                    }
+                }
+            }
+        }
+
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        scatterPackets();
+        if (skip_dump.isEmpty()){
+            return;
+        }
+        for (TimeSkipSnapshot snapshot : skip_dump.values()) {
+            skipSingle(snapshot);
+        }
+        skip_dump.clear();
+
+    }
+
+    public boolean isSunlightDanger(Entity entity, Vec3 pos){
+        if (isSunlightDanger2(entity.getControllingPassenger(),pos)){
+            return true;
+        }
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+    public boolean isSunlightDanger2(Entity entity, Vec3 pos){
+        if (entity instanceof LivingEntity LE && (FateTypes.takesSunlightDamage(LE) || LE instanceof Zombie ||
+                LE instanceof Skeleton || LE instanceof Phantom)){
+            if (!FateTypes.canCurrentlyAvoidSunlight(LE)){
+                if (!FateTypes.isInSunlight(LE)) {
+                    return FateTypes.isInSunlight(LE, pos);
+                }
+
+            }
+        }
+        return false;
+    }
+
+    private static final int SKIP_TICKS = 100;
+
+    public static void skipEffects(LivingEntity entity) {
+        if (entity.getActiveEffects().isEmpty()) {
+            return;
+        }
+
+        List<MobEffectInstance> effects = new ArrayList<>(entity.getActiveEffects());
+
+        for (MobEffectInstance effect : effects) {
+            // Don't touch your custom effect
+            int duration = effect.getDuration();
+            if (effect.getEffect() == ModEffects.STAND_VIRUS ||
+                    duration == MobEffectInstance.INFINITE_DURATION) {
+                continue;
+            }
+
+
+        // Preserve infinite effects
+            duration -= SKIP_TICKS;
+
+            // Keep it alive for one tick so vanilla can remove it naturally
+            if (duration <= 0) {
+                duration = 1;
+            }
+
+            MobEffectInstance replacement = new MobEffectInstance(
+                    effect.getEffect(),
+                    duration,
+                    effect.getAmplifier(),
+                    effect.isAmbient(),
+                    effect.isVisible(),
+                    effect.showIcon()
+            );
+
+            entity.removeEffect(effect.getEffect());
+            entity.addEffect(replacement);
+        }
+
+        // Fire uses its own timer
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(Math.max(
+                    0,
+                    entity.getRemainingFireTicks() - SKIP_TICKS
+            ));
+        }
+    }
+
+    public void skipSingle(TimeSkipSnapshot snapshot){
+        if (snapshot.getEntityId() == -1) {
+            return;
+        }
+        Level level = self.level();
+
+        Entity entity = level.getEntity(snapshot.getEntityId());
+
+        if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (entity instanceof StandEntity) {
+            return;
+        }
+        if (entity.isPassenger()){
+            return;
+        }
+        if (entity instanceof ThrowableProjectile|| entity instanceof ItemEntity) {
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
+        } else if (entity instanceof Projectile pj) {
+            if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
+                Vec3 motion = pj.getDeltaMovement();
+
+                boolean aboutToHit = false;
+
+                if (!motion.equals(Vec3.ZERO)) {
+                    AABB box = pj.getBoundingBox().move(motion);
+
+                    for (VoxelShape shape : entity.level().getBlockCollisions(entity, box)) {
+                        if (!shape.isEmpty()) {
+                            aboutToHit = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!aboutToHit) {
+                    pj.setDeltaMovement(pj.getDeltaMovement().x,Math.min(0,pj.getDeltaMovement().y),
+                            pj.getDeltaMovement().z);
+                    pj.setDeltaMovement(motion.scale(0.4));
+                }
+            }
+        }
+
+        if (entity instanceof LivingEntity LE) {
+            if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
+                creeper.setSwellDir(30);
+            }
+            double width = entity.getBbWidth();
+            double height = entity.getBbHeight();
+            // Construct bounding box at the target position
+            AABB targetBox = new AABB(
+                    snapshot.position.x - width / 2.0, snapshot.position.y, snapshot.position.z - width / 2.0,
+                    snapshot.position.x + width / 2.0, snapshot.position.y + height, snapshot.position.z + width / 2.0
+            );
+            targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
+
+        for(VoxelShape $$2 : level.getBlockCollisions(entity, targetBox)) {
+            if (!$$2.isEmpty()) {
+                return;
+            }
+        }
+
+            boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
+
+        boolean isStrider = entity instanceof Strider;
+            if (deviousStratBlocker && (entity instanceof Player || entity.getControllingPassenger() instanceof Player)) {
+                // 2. Check for dangerous blocks inside target box
+                boolean cancel = false;
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(targetBox.minX), Mth.floor(targetBox.minY), Mth.floor(targetBox.minZ),
+                        Mth.floor(targetBox.maxX), Mth.floor(targetBox.maxY), Mth.floor(targetBox.maxZ))) {
+
+                    BlockState state = level.getBlockState(pos);
+                    Block block = state.getBlock();
+
+                    // List of bad blocks to avoid
+                    if (block == Blocks.COBWEB || (block == Blocks.LAVA && !isStrider)
+                            || block == ModBlocks.BARBED_WIRE_BUNDLE) {
+                        cancel = true;
+                        break;
+                    }
+
+                    // Optional: also avoid fire or cactus
+                    if (block == Blocks.FIRE || block == Blocks.CACTUS
+                            ) {
+                        cancel = true;
+                        break;
+                    }
+                }
+
+                if (isSunlightDanger(entity,snapshot.position)){
+                    cancel = true;
+                }
+                if (cancel) {
+                    return;
+                }
+            }
+        }
+
+
+        if (entity instanceof AbstractMinecart am){
+            MinecraftServer server = entity.level().getServer();
+
+            am.setPos(snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z);
+            ((AccessMinecart)am).rodbt$cleardata();
+        } else {
+            skipFire(entity);
+            if (entity instanceof LivingEntity living && entity.getId() != snapshot.entityId) {
+                skipEffects(living);
+            }
+            if (entity instanceof PrimedTnt pt){
+                pt.setFuse(1);
+            }
+            packetNearby(new Vector3f((float) snapshot.position.x,
+                            (float) snapshot.position.y,
+                            (float) snapshot.position.z),
+                    entity.getId());
+            entity.teleportTo(
+                    snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z
+            );
+            entity.setYRot(snapshot.yRot);
+            entity.setYHeadRot(snapshot.yRot);
+            entity.teleportTo(((ServerLevel) entity.level()), snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z,
+                    EnumSet.noneOf(RelativeMovement.class),
+                    snapshot.yRot, entity.getXRot());
+        }
+        if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
+                mb.getNavigation().stop();
+            if (!MainUtil.blockConfusionTicks(mb)) {
+                ((IMob) mb).roundabout$setConfusionTicks(7);
+            }
+        }
+    }
+    public static void skipFire(Entity entity) {
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(
+                    Math.max(1, entity.getRemainingFireTicks() - 100)
+            );
+        }
+        if (entity instanceof  LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$getRemainingFireTicks() > 0){
+                entity.setRemainingFireTicks(
+                        Math.max(1, user.roundabout$getRemainingFireTicks() - 100)
+                );
+            }
+        }
+        if (entity instanceof Player player) {
+            FishingHook hook = player.fishing;
+            if (hook != null) {
+                hook.discard();
+                player.fishing = null;
+            }
+        }
+    }
+
+    public  void onEggHit(HitResult $$0) {
+        if (!self.level().isClientSide) {
+            if (self.getRandom().nextInt(8) == 0) {
+                int $$1 = 1;
+                if (self.getRandom().nextInt(32) == 0) {
+                    $$1 = 4;
+                }
+
+                for(int $$2 = 0; $$2 < $$1; ++$$2) {
+                    Chicken $$3 = (Chicken)EntityType.CHICKEN.create(self.level());
+                    if ($$3 != null) {
+                        $$3.setAge(-24000);
+                        $$3.moveTo($$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z, 0, 0.0F);
+                        self.level().addFreshEntity($$3);
+                    }
+                }
+            }
+        }
+    }
+    public  Vec3 predictProjectile(Projectile projectile, int ticks) {
+        Level level = projectile.level();
+
+        Vec3 pos = projectile.position();
+        Vec3 velocity = projectile.getDeltaMovement();
+
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 nextPos = pos.add(velocity);
+
+            // Ignore entities, collide only with blocks.
+            BlockHitResult hit = level.clip(new ClipContext(
+                    pos,
+                    nextPos,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    projectile
+            ));
+
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                if (projectile instanceof Snowball || projectile instanceof ThrownEgg){
+                    if (projectile instanceof ThrownEgg){
+                        onEggHit(hit);
+                    }
+                    projectile.discard();
+                }
+                return pos;
+                //return hit.getLocation();
+            }
+
+            pos = nextPos;
+
+            // Vanilla-style drag
+            velocity = velocity.scale(0.99);
+
+            // Vanilla gravity
+            if (!projectile.isNoGravity()) {
+                if (!(projectile instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())){
+                    float gravity = -0.05F;
+                    if (projectile instanceof ThrowableProjectile aa){
+                        gravity =  -1*((AccessThrowableProjectile)aa).rdbt$getGravity();
+                    }
+
+                    velocity = velocity.add(0.0, gravity, 0.0);
+                }
+            }
+        }
+
+        return pos;
+    }
+
+    public void timeSkip(boolean skipSelf) {
+        if (!(self instanceof ServerPlayer pl)) {
+            return;
+        }
+
+        skipFire(self);
+        skipEffects(self);
+        if (epitaph.isEmpty()) {
+            basicSkip(skipSelf);
+            return;
+        }
+        AABB area = self.getBoundingBox().inflate(getSkipRange());
+        for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            if (entity instanceof Projectile proj){
+                if (proj instanceof FireworkRocketEntity){
+                    proj.discard();
+                } else {
+                    epitaph.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
+            }
+        }
+        for (TimeSkipSnapshot snapshot : epitaph.values()) {
+            if (!skipSelf && snapshot.getEntityId() == self.getId()){
+                continue;
+            }
+            skipSingle(snapshot);
+        }
+
+
+        S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
+        scatterPackets();
+        epitaph.clear();
+        S2CPacketUtil.clearEpitaph(pl);
+    }
+
+    public void scatterPackets(){
+        packetNearby2();
+    }
+    public int getSkipRange(){
+        return 50;
+    }
+    public final void packetNearby2() {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 75)) {
+                    S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.TIME_SKIP);
+                }
+            }
+        }
+    }
+    public final void packetNearby(Vector3f blip, int entId) {
+        if (!this.self.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, 100)) {
+                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, entId,blip);
+                }
+            }
+        }
+    }
+    public void epitaph() {
+        if (self instanceof ServerPlayer pl) {
+            if (epitaph.isEmpty()) {
+                //debugPlayer();
+                AABB area = self.getBoundingBox().inflate(getSkipRange());
+
+                for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+                    if (entity instanceof LivingEntity lv) {
+                        StandEntity stand = getStandEntity(self);
+                        int id = entity.getId();
+                        if (!(stand != null && stand.getId() == id)) {
+                            if (!(entity instanceof StandEntity) &&
+                                    !(entity instanceof Player pk && pk.isCreative()
+                                            && pk.getId() != self.getId())
+                            ) {
+                                Vec3 predicted = entity.position();
+                                float xRot = entity.getXRot();
+                                float yRot = entity.getYRot();
+                                if (!lv.isSleeping()) {
+                                    if (entity instanceof Mob mob) {
+                                        if (!mob.isLeashed() && !(mob instanceof WanderingTrader)) {
+                                            predicted = predictPosition(mob, 100);
+                                        }
+                                    } else if (entity instanceof Player player) {
+                                        // Fallback for players, armor stands, etc.
+                                        hitWall2 = false;
+                                        predicted = predictPlayer(player, 40);
+                                        if (hitWall2) {
+                                            yRot = Mth.wrapDegrees(yRot + 180.0F);
+                                        }
+                                    }
+                                }
+
+
+                                epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                        id,
+                                        predicted,
+                                        xRot,
+                                        yRot
+                                ));
+                                S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
+                            }
+                        }
+                    } else if (entity instanceof Boat bt){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        if (bt.getControllingPassenger() instanceof Player) {
+                            predicted = predictBoat(bt, 40);
+                        }
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof PrimedTnt tnt) {
+                        Vec3 predicted = predictTNT(tnt, 100);
+
+                        epitaph.put(
+                                entity.getId(),
+                                new TimeSkipSnapshot(
+                                        entity.getId(),
+                                        predicted,
+                                        entity.getXRot(),
+                                        entity.getYRot()
+                                )
+                        );
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, entity.getXRot(),
+                                entity.getYRot());
+                    } else if (entity instanceof AbstractMinecart bt){
+                        Vec3 predicted = entity.position();
+                        float xRot = entity.getXRot();
+                        float yRot = entity.getYRot();
+                        predicted = predictMinecart(bt,40);
+                        epitaph.put(entity.getId(), new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                xRot,
+                                yRot
+                        ));
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    }
+
+                }
+                epitaph.put(-1, new TimeSkipSnapshot(
+                        -1,
+                        Vec3.ZERO,
+                        0,
+                        0
+                ));
+                S2CPacketUtil.addEpitaph(pl, -1,  Vec3.ZERO, 0, 0);
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
+            } else {
+                S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
+                S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+                epitaph.clear();
+                S2CPacketUtil.clearEpitaph(pl);
+            }
+
+        }
     }
 
     @Override
@@ -129,14 +1569,14 @@ public class PowersKingCrimson extends NewPunchingStand {
             return Component.translatable(  "skins.roundabout.king_crimson.beta");
         }if (skinId == KingCrimsonEntity.CONCEPT){
             return Component.translatable(  "skins.roundabout.king_crimson.concept");
-        }if (skinId == KingCrimsonEntity.RED){
-            return Component.translatable(  "skins.roundabout.king_crimson.red");
+        }if (skinId == KingCrimsonEntity.PART_5_SKIN){
+            return Component.translatable(  "skins.roundabout.king_crimson.base");
         }if (skinId == KingCrimsonEntity.BLUE){
             return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }if (skinId == KingCrimsonEntity.VISION){
             return Component.translatable(  "skins.roundabout.king_crimson.vision");
         }
-        return Component.translatable(  "skins.roundabout.king_crimson.base");
+        return Component.translatable(  "skins.roundabout.king_crimson.red");
     }
     @Override
     public boolean cancelSprintJump(){
@@ -198,19 +1638,75 @@ public class PowersKingCrimson extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_NORMAL-> {
+                epitaphClient();
+            }
             case SKILL_1_CROUCH -> {
                 impaleClient();
+            }
+
+            case SKILL_2_NORMAL -> {
+                timeSkipClient();
+            }
+            case SKILL_2_GUARD -> {
+                timeSkipSelfClient();
+            }
+            case SKILL_2_CROUCH -> {
+                itemGrabClient();
             }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
         }
     }
+
+    @Override
+    public boolean isAppropriateToGrab(){
+        if (!hasBlock()) {
+            return true;
+        }
+        return false;
+    }
+    public void timeSkipSelfClient() {
+        if (hasBlock()){
+            return;
+        }
+        if (isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.EXTRA);
+        }
+    }
+    public void timeSkipClient() {
+        if (hasBlock()){
+            itemGrabClient();
+            return;
+        }
+
+        boolean isMoving = (Math.abs(self.getDeltaMovement().x) > 0.01 ||
+                Math.abs(self.getDeltaMovement().z) > 0.01 ||
+                !self.onGround());
+        if (isMoving && !isUsingEpitaph()){
+            tryPowerPacket(PowerIndex.EXTRA);
+        } else {
+            tryPowerPacket(PowerIndex.POWER_2);
+        }
+    }
+
+
+    public void epitaphClient(){
+
+        if (hasBlock())
+            return;
+        tryPowerPacket(PowerIndex.POWER_1);
+    }
+
     public void tryToDashClient(){
+        if (hasBlock())
+            return;
         if (!doVault()) {
             dash();
         }
     }
+
 
     public int getImpaleLevel(){
         return 1;
@@ -219,6 +1715,9 @@ public class PowersKingCrimson extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
+
+        if (hasBlock())
+            return;
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
@@ -239,10 +1738,37 @@ public class PowersKingCrimson extends NewPunchingStand {
         } else {
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
         }
+
+        if (!isHoldingSneak()){
+            if (hasBlock()){
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+
+            } else if (isUsingEpitaph()){
+                if (isGuarding()){
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_3, PowerIndex.SKILL_2_SNEAK, 0);
+                } else {
+                    LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP_2, PowerIndex.SKILL_2_SNEAK, 0);
+                }
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2_SNEAK, 0);
+            }
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+        }
+
         if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            if (!isHoldingSneak()){
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+            }
+        }
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
+        } else {
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
         }
     }
 
@@ -407,6 +1933,14 @@ public class PowersKingCrimson extends NewPunchingStand {
             return this.vault();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.impale();
+        } else if (move == PowerIndex.POWER_1){
+            this.epitaph();
+        } else if (move == PowerIndex.POWER_2){
+            this.timeSkip(false);
+            return true;
+        } else if (move == PowerIndex.EXTRA){
+            this.timeSkip(true);
+            return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
@@ -436,6 +1970,14 @@ public class PowersKingCrimson extends NewPunchingStand {
     }
 
     public void animateFinalAttackHit(){
+        float charged = getChargedPercent();
+        if (charged >= 1F){
+            animateStand(KingCrimsonEntity.FINAL_2);
+            return;
+        } else if (charged >= 0.5F){
+            animateStand(KingCrimsonEntity.FINAL_1);
+            return;
+        }
         animateStand((byte) 86);
     }
 
@@ -481,7 +2023,6 @@ public class PowersKingCrimson extends NewPunchingStand {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }
@@ -565,6 +2106,19 @@ public class PowersKingCrimson extends NewPunchingStand {
             return 1;
         }
         return 1.2F;
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (hasBlock()){
+            return true;
+        }
+        return super.isAttackIneptVisually(activeP,slot);
+    }
+
+    @Override
+    public byte getThrowStyleType(){
+        return ThrownObjectEntity.TWTHROW;
     }
 
     public float getFinalAttackKnockback(){

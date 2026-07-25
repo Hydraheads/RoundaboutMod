@@ -20,7 +20,8 @@ public class PlanetWavesEntity extends FollowingStandEntity {
             SYMPHONY_WAVES = 7,
             SPARTA = 8,
             SPARTA2 = 9,
-            HALLOWEEN=10;
+            HALLOWEEN=10,
+            COSMIC=11;
 
     public final AnimationState floating_pw = new AnimationState();
     public final AnimationState bury_horizontal = new AnimationState();

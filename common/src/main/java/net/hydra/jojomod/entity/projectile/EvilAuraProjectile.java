@@ -60,7 +60,7 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
 
 
         level().playSound(null,entity.blockPosition(), ModSounds.AURA_IMPACT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.96f + Math.random() * 0.08f));
-        //Roundabout.LOGGER.info("1");
+
         ((ServerLevel) level()).sendParticles(ModParticles.VAMPIRE_AURA,
                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                 0, 0, 0, 0, 0.8);

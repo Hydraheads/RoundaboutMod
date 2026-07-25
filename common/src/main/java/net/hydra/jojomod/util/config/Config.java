@@ -521,7 +521,7 @@ public class Config implements Cloneable {
         public Boolean directFrictionStopsJumping;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer frictionStealingDurationInTicks;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer playerFrictionStealingDurationInTicks;
         @BooleanOption(group = "inherit", value = true)
         public Boolean bossesCannotLoseFriction;
@@ -573,7 +573,7 @@ public class Config implements Cloneable {
         public Integer bubbleScaffoldingCooldown;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer waterShieldCooldown;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
         public Integer woundPlugCooldown;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
@@ -947,9 +947,9 @@ public class Config implements Cloneable {
         public Boolean freezesSnow;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;
-        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
         public Float bonusPlayerDMGWhitev2;
-        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        @FloatOption(group = "inherit", value = 0.20F, min = 0, max = 72000F)
         public Float bonusMobDMGWhite;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer miningSpeedMultiplierWhiteAlbum;
@@ -967,6 +967,8 @@ public class Config implements Cloneable {
         public Integer twisterLifespan;
         @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
         public Integer gentlyWeepsLifespanv2;
+        @IntOption(group = "inherit", value = 340, min = 0, max = 72000)
+        public Integer gentlyWeepsAttachedAddon;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)

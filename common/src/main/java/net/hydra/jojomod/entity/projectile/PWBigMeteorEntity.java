@@ -61,6 +61,11 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     public LivingEntity standUser;
     public UUID standUserUUID;
 
+    private float craterMultiplier = 1.0F;
+
+    public void setCraterMultiplier(float multiplier) {
+        this.craterMultiplier = multiplier;
+    }
     public int getUserID() {
         return this.getEntityData().get(USER_ID);
     }
@@ -324,7 +329,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
         BlockPos center = this.blockPosition();
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-            int explosionRadius = 4;
+            int explosionRadius = Math.round(4 * craterMultiplier);
 
 
             for (BlockPos pos : BlockPos.betweenClosed(
@@ -349,7 +354,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
 
             // fire inside crater
-            int fireRadius = 5;
+            int fireRadius = Math.round(5 * craterMultiplier);
 
             for (BlockPos pos : BlockPos.betweenClosed(
                     center.offset(-fireRadius, -fireRadius, -fireRadius),

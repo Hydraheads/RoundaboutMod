@@ -9,12 +9,12 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL20C;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,7 +58,8 @@ public abstract class ZEntityRenderDispatcher {
     @Unique
     public boolean roundabout$recurse = false;
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
+    protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7,
+                                                         int light, CallbackInfo ci) {
         if (entity instanceof LivingEntity){
             ((StandUser)entity).roundabout$tryBlip();
         }
@@ -70,6 +72,31 @@ public abstract class ZEntityRenderDispatcher {
             return;
         }
 
+        if (!roundabout$recurse){
+            if (entity instanceof GentlyWeepsEntity gw) {
+                Entity attached = gw.level().getEntity(gw.getAttached());
+
+                if (attached != null && attached.isAlive()) {
+
+                    // Smooth interpolated position of the player
+                    Vec3 pos = attached.getPosition($$5);
+
+                    Camera camera = this.camera;
+                    Vec3 camPos = camera.getPosition();
+
+                    double rx = pos.x - camPos.x;
+                    double ry = pos.y - camPos.y;
+                    double rz = pos.z - camPos.z;
+
+                    // Render at the player's exact interpolated position
+                    roundabout$recurse = true;
+                    this.render(entity, rx, ry, rz, $$4, $$5, $$6, $$7, light);
+                    roundabout$recurse = false;
+
+                    ci.cancel();
+                }
+            }
+        }
         if (entity instanceof LivingEntity LE && !roundabout$recurse){
             byte bt =  ((StandUser)LE).roundabout$getGlow();
             if (bt > 0) {
@@ -253,6 +280,10 @@ public abstract class ZEntityRenderDispatcher {
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if (!((IEntityAndData)$$2).roundabout$getShadow()){
             ((IEntityAndData)$$2).roundabout$setShadow(true);
+            ci.cancel();
+            return;
+        }
+        if (ClientUtil.isUsingEpitaph()){
             ci.cancel();
             return;
         }

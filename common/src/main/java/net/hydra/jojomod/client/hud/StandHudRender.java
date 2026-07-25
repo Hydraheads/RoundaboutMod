@@ -891,7 +891,6 @@ public class StandHudRender {
 
                 int time = PA.getMaxPlayTime()-PA.playTime-sTime;
                 int maxTime = eTime-sTime;
-            //    Roundabout.LOGGER.info("{}/{}",time,maxTime);
 
                 inc = maxTime-time;
                 max = maxTime;

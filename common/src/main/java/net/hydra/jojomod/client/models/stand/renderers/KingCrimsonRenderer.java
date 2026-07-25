@@ -72,14 +72,14 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
             return BETA;
         } else if (BT == KingCrimsonEntity.CONCEPT){
             return CONCEPT;
-        } else if (BT == KingCrimsonEntity.RED){
-            return RED;
+        } else if (BT == KingCrimsonEntity.PART_5_SKIN){
+            return PART_5_SKIN;
         } else if (BT == KingCrimsonEntity.BLUE){
             return BLUE;
         }else if (BT == KingCrimsonEntity.VISION){
             return VISION;
         }
-        return PART_5_SKIN;
+        return RED;
     }
 
     @Override

@@ -321,6 +321,8 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
                 Vec3 spawnOffset = this.position().add(offsetX, offsetY, offsetZ);
 
                 extra.absMoveTo(spawnOffset.x, spawnOffset.y, spawnOffset.z);
+                extra.storeVec = spawnOffset;
+                extra.setOldPosAndRot2();
 
                 Vec3 dir = this.getDeltaMovement().lengthSqr() > 0.0001
                         ? this.getDeltaMovement().normalize()
@@ -347,7 +349,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
             double approachDot = movementDir.dot(toUser);
             double distance = this.distanceTo(user);
 
-            if (!slowing && distance <= 7.2 && approachDot > 0.9) {
+            if (!punishesOwner && !slowing && distance <= 7.2 && approachDot > 0.9) {
                 slowing = true;
                 disintegrationSoundPlayed = false;
             }
@@ -402,7 +404,11 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     public double getRandomY(double $$0) {
         return this.getY((2.0 * this.random.nextDouble() - 1.0) * $$0);
     }
+    private boolean punishesOwner = false;
 
+    public void setPunishesOwner(boolean value) {
+        this.punishesOwner = value;
+    }
     private boolean processingExplosion = false;
     @Override
     protected void onHitBlock(BlockHitResult hit) {
@@ -529,7 +535,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         Entity target = hit.getEntity();
         LivingEntity user = this.standUser;
 
-        if (target == user) return;
+        if (target == user && !punishesOwner) return;
 
         if (user != null
                 && target instanceof LivingEntity living
@@ -631,10 +637,10 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         return trackingUser;
     }
     public void getEntity(Entity gotten, PowersPlanetWaves PPW, LivingEntity user) {
-        if (gotten != null && gotten.getId() != getUserID()) {
+        if (gotten != null && (gotten.getId() != getUserID() || punishesOwner)) {
             float dmg = PPW.getFireballDamage(gotten);
-            float strength = METEOR_HIT_KNOCKBACK; //estaba en 0,85
-            if (!(user instanceof Player) && !(user instanceof Monster)) {
+            float strength = METEOR_HIT_KNOCKBACK;
+            if (!(user instanceof Player) && !(user instanceof Monster) && !punishesOwner) {
                 if (!(gotten instanceof Monster)) {
                     if (!(user instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(gotten))) {
                         return;

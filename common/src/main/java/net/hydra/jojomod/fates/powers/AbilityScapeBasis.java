@@ -2901,7 +2901,7 @@ public class AbilityScapeBasis {
 
     public static void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
 
-        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (target instanceof LivingEntity && (knockbackStrength * (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 

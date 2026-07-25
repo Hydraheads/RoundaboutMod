@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -41,6 +42,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -52,10 +54,14 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
@@ -75,6 +81,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -143,6 +151,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private static final EntityDataAccessor<Rotations> ROUNDABOUT$HAIR_COLOR = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.ROTATIONS);
+
+    @Unique
+    public Deque<Vec3> rdbt$movementHistory = new ArrayDeque<>();
+
+    @Unique
+    @Override
+    public Deque<Vec3> rdbt$getMovementHistory(){
+        return rdbt$movementHistory;
+    }
 
     @Shadow
     @Final
@@ -259,6 +276,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     protected boolean rdbt$cooldownQuery = false;
     @Unique
     protected boolean rdbt$attemptedQuery = false;
+    @Unique
+    protected BlackSabbathPlayerInventory rdbt$blckSabbathInventory = new BlackSabbathPlayerInventory((Player) (Object) this);
+    @Unique
+    @Override
+    public BlackSabbathPlayerInventory roundabout$getBlckSabbathPlayerInventory() {
+        return this.rdbt$blckSabbathInventory;
+    }
+    @Override
+    @Unique
+    public void roundabout$setBlckSabbathPlayerInventory(BlackSabbathPlayerInventory bsi) {
+        this.rdbt$blckSabbathInventory.replaceWith(bsi);;
+    }
 
     @Unique
     private byte rdbt$respawnStrategy = 0;
@@ -288,6 +317,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Override
     public void rdbt$setCooldownQuery(boolean query){
         rdbt$cooldownQuery = query;
+    }
+    @Unique
+    @Override
+    public void rdbt$setCooldownQuery2(){
+        rdbt$cooldownQuery = false;
+        rdbt$attemptedQuery = false;
     }
 
     @Unique
@@ -1205,6 +1240,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             CompoundTag compoundtag = new CompoundTag();
             $$0.put("roundabout.VoiceMask",m2.save(compoundtag));
         }
+        $$0.put("BlackSabbathPlayerItems", this.rdbt$blckSabbathInventory.createTag());
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putInt("anchorPlace",roundabout$anchorPlace);
         compoundtag.putInt("anchorPlaceAttack",roundabout$anchorPlaceAttack);
@@ -1284,6 +1320,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD){
                 this.roundabout$maskInventory.setItem(1,itemstack);
             }
+        }
+        if ($$0.contains("BlackSabbathPlayerItems", 9)) {
+            this.rdbt$blckSabbathInventory.fromTag($$0.getList("BlackSabbathPlayerItems", 10));
         }
         CompoundTag compoundtag2 = $$0.getCompound("roundabout");
         if (compoundtag2.contains("anchorPlace")) {
@@ -1684,6 +1723,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (rdbt$levelDecreaseTicks > 0){
             rdbt$levelDecreaseTicks--;
         }
+        rdbt$movementHistory.addLast(this.position());
+        if (rdbt$movementHistory.size() > 10) {
+            rdbt$movementHistory.removeFirst();
+        }
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){
@@ -1977,6 +2020,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
             if (PR.active) {
                 PR.active = false;
+            }
+        } else if (SU.roundabout$getStandPowers() instanceof PowersBlackSabbath PB){
+            if(PB.active){
+                PB.active = false;
             }
         }
     }

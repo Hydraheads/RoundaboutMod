@@ -209,7 +209,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             MobSlot.render(guiGraphics, i, j, f);
             boolean lastState = MobSlot.isSelected;
             MobSlot.setSelected(this.currentlyHovered == MobSlot.context);
-            shouldPlaySound = lastState != MobSlot.isSelected || shouldPlaySound;
+            shouldPlaySound = ((MobSlot.isSelected && lastState != MobSlot.isSelected) || shouldPlaySound);
         }
 
         if (shouldPlaySound) {

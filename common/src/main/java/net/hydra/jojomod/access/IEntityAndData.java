@@ -63,6 +63,8 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
+    void roundabout$setBirthSpawnInfo();
+
     SavedSecond roundabout$getLastSavedSecond();
     void roundabout$addSecondToQueue();
 

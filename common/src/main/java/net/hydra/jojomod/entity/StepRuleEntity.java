@@ -147,7 +147,7 @@ public class StepRuleEntity extends Entity {
 
                         if (mob instanceof LivingEntity mbb) {
                             if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
-                                    && mob.isAlive()) {
+                                    && mob.isAlive() && !(mob instanceof TridentsIgnoreThis)) {
                                 if (mob.getBoundingBox().intersects(wallBox)) {
 
                                     if (LE instanceof TamableAnimal TT && TT.getOwner() != null){

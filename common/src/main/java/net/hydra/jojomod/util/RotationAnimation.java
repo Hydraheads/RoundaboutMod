@@ -115,7 +115,6 @@ public class RotationAnimation {
      */
     public Quaternionf getCurrentGravityRotation(Direction currentGravity, long timeMs) {
 
-        //Roundabout.LOGGER.info("tms: "+timeMs);
         if (ClientUtil.checkIfGamePaused()){
             if (ent != null){
                 float partialTick = Minecraft.getInstance().getFrameTime();

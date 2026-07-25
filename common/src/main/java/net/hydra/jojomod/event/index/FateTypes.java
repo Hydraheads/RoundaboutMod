@@ -366,4 +366,44 @@ public enum FateTypes {
         }
         return false;
     }
+    public static boolean isInSunlight(LivingEntity ent, Vec3 vec) {
+        //You don't take sun damage in stopped time (like the ova)
+
+        if (!((TimeStop) ent.level()).inTimeStopRange(ent)) {
+
+            if (ClientNetworking.getAppropriateConfig().vampireSettings.canSurviveInRain) {
+                if (ent.level().isRaining()) {
+                    return false;
+                }
+            }
+
+            Vec3 yes = vec;
+            Vec3 yes2 = vec.add(ent.getEyePosition().subtract(ent.getPosition(1F)));
+
+            /**Vampires die under the sun, even under liquids*/
+            int waterReach = ClientNetworking.getAppropriateConfig().vampireSettings.sunDamageUnderwaterReach;
+            if (waterReach > 0) {
+                for (var i = 0; i < waterReach; i++) {
+                    if (ent.level().getBlockState(BlockPos.containing(yes)).liquid()) {
+                        yes = yes.add(0, 1, 0);
+                    } else {
+                        i = 100;
+                    }
+                }
+            }
+
+            long timeOfDay = ent.level().getDayTime() % 24000L;
+            boolean isDay = timeOfDay < 12555L || timeOfDay > 23470; // 0–12000 = day, 12000–24000 = night
+            BlockPos atVec = BlockPos.containing(yes);
+            BlockPos atVec2 = BlockPos.containing(yes2);
+            if ((ent.level().canSeeSky(atVec) || ent.level().canSeeSky(atVec2)) &&
+                    MainUtil.isSunDamageWorld(ent.level().dimension().location().getPath()) &&
+                    isDay
+            ) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }

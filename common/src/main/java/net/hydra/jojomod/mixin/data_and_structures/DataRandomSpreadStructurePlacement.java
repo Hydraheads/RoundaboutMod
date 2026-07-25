@@ -79,7 +79,7 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
             if (conf != null && conf.worldgenSettings != null){
                 if (conf.worldgenSettings.cinderellaSpacing > conf.worldgenSettings.cinderellaSeparationMakeSmallerThanSpacing){
                     cir.setReturnValue(roundabout$getPotentialStructureChunk2(loong, i1, i2, conf.worldgenSettings.cinderellaSpacing, conf.worldgenSettings.cinderellaSeparationMakeSmallerThanSpacing));
-                    //Roundabout.LOGGER.info("yes this works");
+
                 }
             }
             return;

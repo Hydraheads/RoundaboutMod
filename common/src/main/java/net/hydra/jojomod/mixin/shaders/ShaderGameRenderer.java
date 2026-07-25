@@ -91,7 +91,8 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             RPostShaderRegistry.EPITAPH.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
 
             RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
-
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTimeStart",(float) ClientUtil.GameTimeStart);
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("PartialTick",tickDelta%1);
 
             RPostShaderRegistry.EPITAPH.roundabout$process(tickDelta);
         }

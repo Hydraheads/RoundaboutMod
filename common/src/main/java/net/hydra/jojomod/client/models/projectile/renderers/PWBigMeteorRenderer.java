@@ -59,8 +59,11 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
         float finalScale = 3.5f * scale;
         poseStack.scale(finalScale, finalScale, finalScale);
 
-        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
-        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.4f);
+        ResourceLocation texture = getTextureLocation(entity);
+        float alpha = (texture == PW_BIG_METEOR_COSMIC_TEXTURE) ? 1.0F : 0.4F;
+
+        VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(texture));
+        this.model.renderToBuffer(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
 
         poseStack.popPose();
 
@@ -70,11 +73,28 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
     public static final ResourceLocation PW_BIG_METEOR_TEXTURE =
             new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
+    public static final ResourceLocation PW_BIG_METEOR_COSMIC_TEXTURE =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_cosmic.png");
 
 
 
     @Override
     public ResourceLocation getTextureLocation(PWBigMeteorEntity entity) {
+        LivingEntity user = entity.getUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+            byte sft = PPW.getFireballColor();
+            if (sft == 3) {
+                //return PW_METEOR_BLUE_TEXTURE;
+            } else if (sft == 4) {
+               // return PW_METEOR_PURPLE_TEXTURE;
+            } else if (sft == 5) {
+                //return PW_METEOR_GREEN_TEXTURE;
+            } else if (sft == 6) {
+                //return PW_METEOR_WATER_TEXTURE;
+            } else if (sft == 7) {
+                return PW_BIG_METEOR_COSMIC_TEXTURE;
+            }
+        }
         return PW_BIG_METEOR_TEXTURE;
     }
 }

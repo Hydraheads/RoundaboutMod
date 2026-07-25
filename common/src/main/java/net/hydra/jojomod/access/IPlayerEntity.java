@@ -4,12 +4,16 @@ import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.powers.GeneralPowers;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.PlayerMaskSlots;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Deque;
 
 public interface IPlayerEntity {
     Inventory roundabout$GetInventory();
@@ -20,6 +24,8 @@ public interface IPlayerEntity {
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
     void roundabout$SetPos(byte Pos);
+    void rdbt$setCooldownQuery2();
+    Deque<Vec3> rdbt$getMovementHistory();
     void roundabout$SetPos2(byte Pos);
     void rdbt$setLevelDecreaseTicks(int decreaseTicks);
     int rdbt$getLevelDecreaseTicks();
@@ -124,6 +130,8 @@ public interface IPlayerEntity {
     AnimationState roundabout$getBubbleAim();
     int roundabout$getBubbleShotAimPoints();
     void roundabout$setBubbleShotAimPoints(int shotPoints);
+    BlackSabbathPlayerInventory roundabout$getBlckSabbathPlayerInventory();
+    void roundabout$setBlckSabbathPlayerInventory(BlackSabbathPlayerInventory bsi);
 
 
     AnimationState roundabout$getItemAnimationActive();

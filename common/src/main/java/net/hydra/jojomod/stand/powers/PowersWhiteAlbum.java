@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
@@ -10,12 +11,14 @@ import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
+import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -292,6 +295,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             $$0.is(DamageTypes.STALAGMITE) ||
                             $$0.is(DamageTypes.SWEET_BERRY_BUSH) ||
                             $$0.is(DamageTypes.LAVA) ||
+                            $$0.is(ModDamageTypes.STAND_FIRE) ||
                             $$0.is(DamageTypes.IN_FIRE)||
                             $$0.is(DamageTypes.ON_FIRE)
                     ){
@@ -322,19 +326,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void fixThis(){
-        //Roundabout.LOGGER.info("2");
         if (!self.level().isClientSide()) {
-            //Roundabout.LOGGER.info("3");
             if (hasSkatesActivated()) {
-                //Roundabout.LOGGER.info("4");
                 if (acceleration >= getMaxAccelerationTicks()) {
-                    //Roundabout.LOGGER.info("5");
                     setPlayerPos(PlayerPosIndex.SKATE_TWIRL);
                     twirlTicks = 20;
                 } else {
-                    //Roundabout.LOGGER.info("6");
                     if (getPlayerPos() != PlayerPosIndex.SKATE_TWIRL) {
-                        //Roundabout.LOGGER.info("7");
                         setPlayerPos(PlayerPosIndex.SKATE_JUMP);
                     }
                 }
@@ -439,6 +437,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (stallTicks > 0){
             stallTicks--;
         }
+        if (inGWRange > 0){
+            inGWRange--;
+        }
+
         if (!self.level().isClientSide()) {
             if (hasSkatesActivated() && self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
                     vf.isPlantedInWall()){
@@ -547,6 +549,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         super.tickPower();
     }
 
+    public int inGWRange = 0;
+    public GentlyWeepsEntity gwNear = null;
     public void setAcceleration(int num){
         byte pos = getPlayerPos();
         acceleration = num;
@@ -649,7 +653,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.TWISTER, PowerIndex.SKILL_2, getTwisterLevel());
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            if (inGWRange > 0){
+                LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS_ATTACH, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            } else {
+                LockedOrNot(context, x, y, 2, StandIcons.GENTLY_WEEPS, PowerIndex.SKILL_2_SNEAK,getGentlyWeepsLevel());
+            }
         }
 
 
@@ -746,6 +754,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
+        if (isGuardInput()){
+            return;
+        }
         switch (context)
         {
             case SKILL_1_NORMAL-> {
@@ -793,9 +804,24 @@ public class PowersWhiteAlbum extends NewDashPreset {
             tryBlockPosPowerPacket(PowerIndex.POWER_2,hit.getBlockPos());
         }
     }
-
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime){
+        if (chargeTime != -1){
+            Entity GW = self.level().getEntity(chargeTime);
+            if (GW instanceof GentlyWeepsEntity gw && !gw.getAttachedToEntity()){
+                gwNear = gw;
+            } else {
+                gwNear = null;
+            }
+        } else {
+            gwNear = null;
+        }
+        return super.tryIntPower(move, forced, chargeTime);
+    }
     public void gentlyWeepsClient(){
-        if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
+        if (inGWRange > 0 && gwNear != null && gwNear.isAlive()){
+            tryIntPowerPacket(PowerIndex.POWER_2_SNEAK_EXTRA, gwNear.getId());
+        } else if (!onCooldown(PowerIndex.SKILL_2_SNEAK) && !isChargingCold()
                 && canExecuteMoveWithLevel(getGentlyWeepsLevel())){
             tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
@@ -885,12 +911,37 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
                     addIceEntity(twister);
                     this.getSelf().level().addFreshEntity(twister);
+                    twister.user = self;
                     twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterLifespan;
                     break;
                 }
 
                 checkPos = checkPos.below();
             }
+        }
+    }
+
+
+    public void gentlyWeepsAttach() {
+        if (gwNear != null) {
+            gwNear.lifeSpan += ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsAttachedAddon;
+            gwNear.setAttached(self);
+
+            Level level = self.level();
+            BlockPos center = self.blockPosition();
+
+            int radius = 3;
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    center.offset(-radius, -radius, -radius),
+                    center.offset(radius, radius, radius))) {
+
+                if (level.getBlockState(pos).is(ModBlocks.COLD_AIR)) {
+                    level.removeBlock(pos, false);
+                }
+            }
+
+            level.playSound(null, center, ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -910,6 +961,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             GentlyWeepsEntity twister = new GentlyWeepsEntity(
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
+            twister.user = self;
             level.addFreshEntity(twister);
             twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespanv2;
         }
@@ -1058,6 +1110,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         wall.setDataFinalPos(newVec.add(0, 2, 0));
                         wall.timing = 200;
                         wall.tsmove = true;
+                        wall.isWhiteAlbumWall = true;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
                         self.level().addFreshEntity(wall);
@@ -1173,6 +1226,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.POWER_2_SNEAK -> {
                 gentlyWeeps();
             }
+            case PowerIndex.POWER_2_SNEAK_EXTRA -> {
+                gentlyWeepsAttach();
+            }
             case PowerIndex.POWER_3 -> {
                 iceWallServer(false);
             }
@@ -1219,7 +1275,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
                     bubble.setUser(self);
                     bubble.setOwner(self);
-                    bubble.shootThis(pl);
+                    bubble.shootThis2(pl,1.75F);
                     self.level().addFreshEntity(bubble);
                 }
             }
@@ -1463,6 +1519,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             YUKI =11;
 
 
+    public static final int coldFromBlockLaunch = -8;
     @Override
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
@@ -1574,6 +1631,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.full_accel",
                 "instruction.roundabout.passive", StandIcons.FULL_ACCEL,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps_attach",
+                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS_ATTACH,2,level,bypass));
 
         return $$1;
     }
@@ -1787,6 +1846,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 }
             }
         }
+    }
+
+    public float getIceDamageMob(){
+        return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
+    }
+    public float getIceDamagePlayer(){
+        return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
     }
 
     @Override

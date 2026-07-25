@@ -74,6 +74,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
         event.registerEntityRenderer(ForgeEntities.REDD.get(), ReddRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CHAIR_RAT.get(), ChairRattRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PURPLE_HAZE.get(), PurpleHazeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET.get(), SoftAndWetRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DROWNED.get(), SoftAndWetDrownedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SOFT_AND_WET_DEBUT.get(), SoftAndWetDebutRenderer::new);
@@ -86,6 +87,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLANET_WAVES.get(), PlanetWavesRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PLANET_WAVES_SPARTA.get(), PlanetWavesSpartaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PLANET_WAVES_COSMIC.get(), PlanetWavesCosmicRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MANHATTAN_TRANSFER.get(), ManhattanTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.POLLINATION_TRANSFER.get(), PollinationTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathRenderer::new);
@@ -247,6 +249,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_COSMIC_LAYER, PlanetWavesCosmicModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.BLACK_SABBATH_LAYER,BlackSabbathModel::getTexturedModelData);
@@ -291,6 +294,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.RATT_LAYER, RattModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.REDD_LAYER, ReddModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CHAIR_RATT_LAYER, ChairRattModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.PURPLE_HAZE_LAYER, PurpleHazeModel::getTexturedModelData);
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();
         ModStrayModels.EMPEROR_SHOOTING_ARM = new EmperorShootingArmModel();
         ModStrayModels.EMPEROR_MODEL = new EmperorModel();

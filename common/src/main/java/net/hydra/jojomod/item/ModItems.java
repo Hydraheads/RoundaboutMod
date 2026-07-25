@@ -41,6 +41,8 @@ public class ModItems {
     public static Item MAX_STAND_DISC_RATT;
     public static Item STAND_DISC_ANUBIS;
     public static Item MAX_STAND_DISC_ANUBIS;
+    public static Item STAND_DISC_PURPLE_HAZE;
+    public static Item MAX_STAND_DISC_PURPLE_HAZE;
     public static Item STAND_DISC_WALKING_HEART;
     public static Item MAX_STAND_DISC_WALKING_HEART;
     public static Item STAND_DISC_GREEN_DAY;

@@ -19,8 +19,15 @@
       "type": "float",
       "count": 1,
       "values": [0.0]
-    },{
-      "name": "GameTime",
+    },
+    {
+      "name": "GameTimeStart",
+      "type": "float",
+      "count": 1,
+      "values": [0.0]
+    },
+    {
+      "name": "PartialTick",
       "type": "float",
       "count": 1,
       "values": [0.0]

@@ -1,6 +1,5 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -16,10 +15,10 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,6 +34,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -53,6 +53,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean invincibleState = false;
     public int staticMode = 0;
     public int mode = 1;
+    private int wardenMunches = 0;
 
     /** general definition stuff **/
     @Override
@@ -108,13 +109,13 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.changing_stance",
                 "instruction.roundabout.press_skill", StandIcons.SWITCH_STANCE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.ground_stance",
-                "", StandIcons.GROUND_STANCE,2,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.GROUND_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.neutral_stance",
-                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,3,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.knockback_stance",
-                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.redstone_stance",
-                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.activate_invincibility",
                 "instruction.roundabout.press_skill", StandIcons.TOGGLE_INVINCIBILITY,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
@@ -157,7 +158,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         PUMPKIN = 19,
         EVIL_PUMPKIN = 20,
         GHOST = 21,
-        WANDERING = 22;
+        WANDERING = 22,
+
+        // dont mind me
+        CLIENT_SYNC = 100;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -261,17 +265,21 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public void switchMode(){
         if (mode == 1){
-            mode += 1;
+            mode = 2;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
         } else if (mode == 2) {
-            mode +=1;
+            mode = 3;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
         } else if (mode == 3) {
-            mode += 1;
+            mode = 4;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
         } else{
             mode = 1;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
+        }
+
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),Powers20thCenturyBoy.CLIENT_SYNC, mode);
         }
     }
 
@@ -334,6 +342,9 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /// this is soo shit dont use this for reference use WA or something
     public boolean interceptIncomingHarm(DamageSource source, float amount) {
         if (invincibleState) {
+            if (source.getEntity() instanceof Warden warden && source.is(DamageTypes.MOB_ATTACK)) {
+                getEaten(warden);
+            }
             StandUser user = getStandUserSelf();
 
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.CBHasDurability && hasStandActive(this.getSelf())) {
@@ -547,7 +558,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
-            invincibleState = false;
+            if (invincibleState){
+                this.setCooldown(PowerIndex.SKILL_2, 80);
+                invincibleState = false;
+                wardenMunches = 0;
+            }
             staticMode = 0;
         }
     }
@@ -569,10 +584,12 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
 
             if (gticks <= 0){
-                Roundabout.LOGGER.info("{}", gticks);
             if (dist <= 6 && !invincibleState) {
                 if (!this.onCooldown(PowerIndex.POWER_2)){
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
+                if (isSkel){
+                    ///  to do: make a target selector for the sacos
+                }
             } else if (dist > 6 && invincibleState) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
                 gticks += 80;
@@ -581,7 +598,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 gticks += 80;
             }
             }else {
-                Roundabout.LOGGER.info("{}", gticks);
                 gticks--;
             }
         }
@@ -590,6 +606,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public boolean disableMobAiAttack() {
         return invincibleState;
+    }
+
+    public void getEaten(Warden warden){
+        if (wardenMunches < 3){
+            wardenMunches++;
+        }else {
+            this.self.level().playSound(warden, warden.getOnPos(), SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 15F, 1F);
+            this.self.hurt(this.self.level().damageSources().genericKill(), 7);
+        }
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower){
+            case Powers20thCenturyBoy.CLIENT_SYNC -> {
+                this.mode = data;
+            }
+        }
+        super.updatePowerInt(activePower,data);
+
     }
 
     /** animation thingy **/

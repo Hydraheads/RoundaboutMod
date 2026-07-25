@@ -641,7 +641,7 @@ public class ZombieFate extends VampiricFate {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.zombie_enter",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_ENTER,4,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_ENTER,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.wall_walk_vamp",
                 "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.zombie_disguise",

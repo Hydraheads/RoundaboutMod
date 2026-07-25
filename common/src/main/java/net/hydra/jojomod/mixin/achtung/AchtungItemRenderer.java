@@ -229,7 +229,6 @@ public abstract class AchtungItemRenderer {
                 float $$34 = $$18.getFloat(16);
                 float $$35 = $$18.getFloat(20);
                 Vector4f $$36 = $$13.transform(new Vector4f($$21, $$22, $$23, 1.0F));
-                //Roundabout.LOGGER.info("HM?");
                 vc.vertex($$36.x(), $$36.y(), $$36.z(), $$27, $$28, $$29, ClientUtil.getThrowFadeToTheEther(), $$34, $$35, $$7, $$33, $$14.x(), $$14.y(), $$14.z());
             }
         }

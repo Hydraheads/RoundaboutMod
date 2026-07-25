@@ -80,7 +80,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
 
                         if (hasHeyYaOut) {
                             /* idlePos == 0 is shoulder, 1 is head */
-                            if ((user.roundabout$getStandPowers()).getStandUserSelf().roundabout$getCombatMode()) {
+                            if (user.roundabout$getCombatMode()) {
                                 if (entity.getMainArm().equals(HumanoidArm.LEFT)) {
                                     getParentModel().leftArm.translateAndRotate(poseStack);
                                 } else {

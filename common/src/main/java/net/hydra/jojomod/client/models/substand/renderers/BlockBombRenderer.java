@@ -11,7 +11,10 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.BlockBombModel;
 import net.hydra.jojomod.client.models.substand.LeftSeperatedArmSlimModel;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.BlockBombEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -25,6 +28,7 @@ import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Map;
@@ -32,8 +36,13 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
-	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbomb.png");
-	
+	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/pink.png");
+	private static final ResourceLocation MINESWEEPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/minesweeper.png");
+	private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/blue.png");
+	private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/green.png");
+	private static final ResourceLocation GOLD = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/gold.png");
+	private static final ResourceLocation NUMBRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/numbra.png");
+
 	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
         super(context, new BlockBombModel<>(context.bakeLayer(ModEntityRendererClient.KILLER_QUEEN_BLOCKBOMB)), 0f);
@@ -41,6 +50,21 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     
     @Override
     public ResourceLocation getTextureLocation(BlockBombEntity blockBombEntity) {
+        LivingEntity user = blockBombEntity.getUser();
+        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
+            byte BT = ((StandUser) user).roundabout$getStandSkin();
+
+            switch (BT) {
+                case KillerQueenEntity.GOGO, KillerQueenEntity.NOTW, KillerQueenEntity.CREEPER -> {return GREEN;}
+                case KillerQueenEntity.GUNPOWDER, KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
+                     KillerQueenEntity.ARTWORK-> {return GOLD;}
+                case KillerQueenEntity.NIGHTMARE, KillerQueenEntity.UMBRA,
+                     KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.DEADLY -> {return NUMBRA;}
+                case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA -> {return BLUE;}
+                case KillerQueenEntity.MINESWEEPER -> {return MINESWEEPER;}
+            }
+        }
+
         return PART_4_KILLER_QUEEN;
     }
     
@@ -63,7 +87,6 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
                 model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
                         0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / 12) + (partialTicks * 0.05F), 1f));
                 matrixStack.popPose();
-                //super.render(blockBombEntity, 0, partialTicks, matrixStack, vertexConsumerProvider, i);
         	}
         }
     }
