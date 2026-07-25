@@ -161,6 +161,7 @@ public class KingCrimsonModel<T extends KingCrimsonEntity> extends StandModel<T>
         this.animate(pEntity.finalPunch3, KingCrimsonAnimations.Chop_Charged, pAgeInTicks, 1.0f);
         this.animate(pEntity.impale2, StarPlatinumAnimations.Impale2, pAgeInTicks, 1.04f);
 
+        this.animate(pEntity.entityGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 3f);
         this.animate(pEntity.blockGrabAnimation, StandAnimations.GRAB_BLOCK, pAgeInTicks, 1f);
         this.animate(pEntity.blockThrowAnimation, StandAnimations.THROW_BLOCK, pAgeInTicks, 1.7f);
         this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);

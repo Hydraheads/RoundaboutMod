@@ -43,6 +43,7 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public final AnimationState itemThrowAnimation = new AnimationState();
     public final AnimationState blockRetractAnimation = new AnimationState();
     public final AnimationState itemRetractAnimation = new AnimationState();
+    public final AnimationState entityGrabAnimation = new AnimationState();
 
     public static final byte
             FINAL_1 = 82,
@@ -73,6 +74,11 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.itemGrabAnimation.startIfStopped(this.tickCount);
             } else {
                 this.itemGrabAnimation.stop();
+            }
+            if (this.getAnimation() == ENTITY_GRAB) {
+                this.entityGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.entityGrabAnimation.stop();
             }
             if (this.getAnimation() == ITEM_THROW) {
                 this.itemThrowAnimation.startIfStopped(this.tickCount);
