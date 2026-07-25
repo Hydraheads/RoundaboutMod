@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
@@ -28,8 +29,11 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -66,11 +70,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -721,7 +723,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         bt.getYRot()
                 ));
             } else if (entity instanceof AbstractMinecart bt ){
-                Vec3 minecart = predictMinecart(bt,40);
+                Vec3 minecart = predictMinecart(bt,100);
 
                 skip_dump.put(bt.getId(), new TimeSkipSnapshot(
                         bt.getId(),
@@ -890,26 +892,35 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        packetNearby(new Vector3f((float) snapshot.position.x,
-                        (float) snapshot.position.y,
-                        (float) snapshot.position.z),
-                entity.getId());
 
-        entity.teleportTo(
-                snapshot.position.x,
-                snapshot.position.y,
-                snapshot.position.z
-        );
-        entity.setYRot(snapshot.yRot);
-        entity.setYHeadRot(snapshot.yRot);
-        entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
-                snapshot.position.y,
-                snapshot.position.z,
-                Set.of(
-                        RelativeMovement.X,
-                        RelativeMovement.Y,
-                        RelativeMovement.Z),
-                snapshot.yRot,entity.getXRot());
+        if (entity instanceof AbstractMinecart am){
+            Roundabout.LOGGER.info("MBBB");
+            MinecraftServer server = entity.level().getServer();
+
+            am.setPos(snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z);
+            ((AccessMinecart)am).rodbt$cleardata();
+            Roundabout.LOGGER.info("mxyz"+ entity.getX()+" "+ entity.getZ());
+            Roundabout.LOGGER.info("Sxyz"+ snapshot.position.x+" "+ snapshot.position.z);
+        } else {
+            packetNearby(new Vector3f((float) snapshot.position.x,
+                            (float) snapshot.position.y,
+                            (float) snapshot.position.z),
+                    entity.getId());
+            entity.teleportTo(
+                    snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z
+            );
+            entity.setYRot(snapshot.yRot);
+            entity.setYHeadRot(snapshot.yRot);
+            entity.teleportTo(((ServerLevel) entity.level()), snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z,
+                    EnumSet.noneOf(RelativeMovement.class),
+                    snapshot.yRot, entity.getXRot());
+        }
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 mb.getNavigation().stop();
             if (!MainUtil.blockConfusionTicks(mb)) {
@@ -918,7 +929,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
-
+    private static void performTeleport(Entity entity, ServerLevel serverLevel, double d, double e, double f, Set<RelativeMovement> set, float g, float h) {
+        float j;
+        float i = Mth.wrapDegrees(g);
+        if (!entity.teleportTo(serverLevel, d, e, f, set, i, j = Mth.wrapDegrees(h))) {
+            return;
+        }
+        entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0, 0.0, 1.0));
+        entity.setOnGround(true);
+    }
 
     public static Vec3 predictProjectile(Projectile projectile, int ticks) {
         Level level = projectile.level();
@@ -983,22 +1002,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         predictProjectile(proj,100),
                         proj.getXRot(),
                         proj.getYRot()
-                ));
-            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
-                Vec3 boat = predictBoat(bt,40);
-                epitaph.put(bt.getId(), new TimeSkipSnapshot(
-                        bt.getId(),
-                        boat,
-                        bt.getXRot(),
-                        bt.getYRot()
-                ));
-            } else if (entity instanceof AbstractMinecart bt){
-                Vec3 minecart = predictMinecart(bt,40);
-                epitaph.put(bt.getId(), new TimeSkipSnapshot(
-                        bt.getId(),
-                        minecart,
-                        bt.getXRot(),
-                        bt.getYRot()
                 ));
             } else if (entity instanceof PrimedTnt pt){
                 pt.setFuse(1);
@@ -1120,7 +1123,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
-                        predicted = predictMinecart(bt,40);
+                        predicted = predictMinecart(bt,100);
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
