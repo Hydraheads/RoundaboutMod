@@ -329,7 +329,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		List<Entity> entities = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), viewRange , viewRange , viewRange );
 
 		for (Entity entity : entities) {
-			if (!this.hasLineOfSight(entity)) {continue;}
+			if (!this.hasLineOfSight(entity) || !(entity instanceof Mob || entity instanceof Player)) {
+				continue;
+			}
 
 			int points = getEntityWarm(entity);
             if (points <= 0) { continue; }

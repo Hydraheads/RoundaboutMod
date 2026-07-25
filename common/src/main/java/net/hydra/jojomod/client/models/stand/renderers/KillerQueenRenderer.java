@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.KillerQueenModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
@@ -97,7 +98,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
         } else {
             matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
-        super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        if (mobEntity.getPlantedBitesTheDust() == null || ClientUtil.getPlayer() == mobEntity.getUser())super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
     @Nullable
     @Override

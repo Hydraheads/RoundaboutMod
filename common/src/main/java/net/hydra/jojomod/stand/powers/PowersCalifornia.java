@@ -651,7 +651,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
-                setCooldown(PowerIndex.SKILL_EXTRA, 10);
+                setCooldown(PowerIndex.SKILL_EXTRA, 12);
 
                 Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.5),
                         (float) (spawnPos.getY() + 1),

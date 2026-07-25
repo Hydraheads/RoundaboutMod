@@ -791,7 +791,7 @@ public class Config implements Cloneable {
         public Integer detectedOreLightDuration;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer oreDetectionRadius;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 35, min = 0, max = 72000)
         public Integer oreDetectionMaximum;
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer oreDetectionCooldown;
@@ -947,8 +947,8 @@ public class Config implements Cloneable {
         public Boolean freezesSnow;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float miningSpeedBuffWhite;
-        @FloatOption(group = "inherit", value = 0.1F, min = 0, max = 72000F)
-        public Float bonusPlayerDMGWhite;
+        @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
+        public Float bonusPlayerDMGWhitev2;
         @FloatOption(group = "inherit", value = 0.15F, min = 0, max = 72000F)
         public Float bonusMobDMGWhite;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -965,8 +965,8 @@ public class Config implements Cloneable {
         public Integer iceWallCooldown;
         @IntOption(group = "inherit", value = 140, min = 0, max = 72000)
         public Integer twisterLifespan;
-        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
-        public Integer gentlyWeepsLifespan;
+        @IntOption(group = "inherit", value = 260, min = 0, max = 72000)
+        public Integer gentlyWeepsLifespanv2;
     }
     public static class WalkingHeartSettings {
         @BooleanOption(group = "inherit", value = true)
