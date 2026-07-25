@@ -382,7 +382,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (!this.isGuarding() && canGuard() && !isChargingCold()) {
+        if (!this.isGuarding() && canGuard() && !isChargingCold() && canAttack()) {
             ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.EXTRA,true);
             tryPowerPacket(PowerIndex.EXTRA);
             return true;
@@ -1146,12 +1146,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
             standComp.roundabout$setInterruptCD(3);
         }
         if (shoot){
+            this.setAttackTime(0);
+            this.setActivePowerPhase(this.getActivePowerPhaseMax());
+            this.setAttackTimeMax(gap);
             tryPowerPacket(PowerIndex.EXTRA_2);
         } else {
             C2SPacketUtil.guardCancelPacket();
         }
     }
 
+    public static int gap = 13;
 
     public boolean toggleSkates(){
         int cooldown = 25;
@@ -1264,9 +1268,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public void setPowerColdBlastShot() {
-
         if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
             if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
+                this.setAttackTime(0);
+                this.setActivePowerPhase(this.getActivePowerPhaseMax());
+                this.setAttackTimeMax(gap);
 
                 self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
                         SoundSource.NEUTRAL, 1F, (float)(1F+Math.random()*0.08f));
