@@ -1055,6 +1055,32 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
+        if (entity instanceof ThrowableProjectile tp) {
+            tp.setDeltaMovement(tp.getDeltaMovement().scale(0));
+        } else if (entity instanceof Projectile pj) {
+            if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
+                Vec3 motion = pj.getDeltaMovement();
+
+                boolean aboutToHit = false;
+
+                if (!motion.equals(Vec3.ZERO)) {
+                    AABB box = pj.getBoundingBox().move(motion);
+
+                    for (VoxelShape shape : entity.level().getBlockCollisions(entity, box)) {
+                        if (!shape.isEmpty()) {
+                            aboutToHit = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!aboutToHit) {
+                    pj.setDeltaMovement(pj.getDeltaMovement().x,Math.min(0,pj.getDeltaMovement().y),
+                            pj.getDeltaMovement().z);
+                    pj.setDeltaMovement(motion.scale(0.4));
+                }
+            }
+        }
 
         if (entity instanceof LivingEntity LE) {
             if (LE instanceof Creeper creeper && creeper.getSwelling(1) > 0){
