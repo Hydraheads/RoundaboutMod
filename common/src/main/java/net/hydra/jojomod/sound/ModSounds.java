@@ -658,6 +658,16 @@ public class ModSounds {
     public static final ResourceLocation STAND_BARRAGE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_BARRAGE_END);
     public static SoundEvent STAND_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(STAND_BARRAGE_END_ID);
 
+    public static final String STRAY_CAT_SOUND_1 = "stray_cat_sound_1";
+    public static final ResourceLocation STRAY_CAT_SOUND_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_1);
+    public static SoundEvent STRAY_CAT_SOUND_1_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_1_ID);
+    public static final String STRAY_CAT_SOUND_2 = "stray_cat_sound_2";
+    public static final ResourceLocation STRAY_CAT_SOUND_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_2);
+    public static SoundEvent STRAY_CAT_SOUND_2_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_2_ID);
+    public static final String STRAY_CAT_SOUND_3 = "stray_cat_sound_3";
+    public static final ResourceLocation STRAY_CAT_SOUND_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_3);
+    public static SoundEvent STRAY_CAT_SOUND_3_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_3_ID);
+
     public static final String KILLER_QUEEN_IMPALE = "killer_queen_impale";
     public static final ResourceLocation KILLER_QUEEN_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_IMPALE);
     public static SoundEvent KILLER_QUEEN_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_IMPALE_ID);

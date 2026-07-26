@@ -581,6 +581,24 @@
       "roundabout:killer_queen_punch_1"
     ]
   },
+  "stray_cat_sound_1": {
+    "subtitle": "sounds.roundabout.stray_cat_sound_1",
+    "sounds": [
+      "roundabout:stray_cat_sound_1"
+    ]
+  },
+  "stray_cat_sound_2": {
+    "subtitle": "sounds.roundabout.stray_cat_sound_2",
+    "sounds": [
+      "roundabout:stray_cat_sound_2"
+    ]
+  },
+  "stray_cat_sound_3": {
+    "subtitle": "sounds.roundabout.stray_cat_sound_3",
+    "sounds": [
+      "roundabout:stray_cat_sound_3"
+    ]
+  },
   "killer_queen_punch_2": {
     "subtitle": "sounds.roundabout.punch_sfx4",
     "sounds": [

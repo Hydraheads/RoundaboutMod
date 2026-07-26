@@ -5663,7 +5663,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         /// Stray Cat Spawn
         if (me instanceof Cat) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
-                BlockPos pos = me.getOnPos().below();
+                BlockPos pos = me.getOnPos();
                 BlockState stateOn = me.level().getBlockState(pos);
 
                 if (StrayCatEntity.canSurviveInBlock(stateOn)) {

@@ -294,6 +294,10 @@ public class FabricSounds {
         addSound(ModSounds.RATT_LEAP_ID, ModSounds.RATT_LEAP_EVENT);
         addSound(ModSounds.RATT_MODE_CHANGE_ID, ModSounds.RATT_MODE_CHANGE_EVENT);
 
+        addSound(ModSounds.STRAY_CAT_SOUND_1_ID, ModSounds.STRAY_CAT_SOUND_1_EVENT);
+        addSound(ModSounds.STRAY_CAT_SOUND_2_ID, ModSounds.STRAY_CAT_SOUND_2_EVENT);
+        addSound(ModSounds.STRAY_CAT_SOUND_3_ID, ModSounds.STRAY_CAT_SOUND_3_EVENT);
+
         addSound(ModSounds.ANUBIS_POSSESSION_ID, ModSounds.ANUBIS_POSSESSION_EVENT);
         addSound(ModSounds.ANUBIS_SUMMON_ID, ModSounds.ANUBIS_SUMMON_EVENT);
         addSound(ModSounds.ANUBIS_ALLURING_ID, ModSounds.ANUBIS_ALLURING_EVENT);
