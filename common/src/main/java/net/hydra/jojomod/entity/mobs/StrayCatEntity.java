@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StrayCatItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -66,7 +68,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.0F).add(Attributes.MAX_HEALTH, 18.0).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
+                0.0F).add(Attributes.MAX_HEALTH, 18.0).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
+                .add(Attributes.JUMP_STRENGTH, 0.0D);
     }
 
     @Override
@@ -458,6 +461,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             return;
         }
 
+        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.PLAYERS, 0.5F, 1/((float) shootWindupMax /58));
         setAnim(SHOOTING);
         shootWindup = shootWindupMax;
     }
