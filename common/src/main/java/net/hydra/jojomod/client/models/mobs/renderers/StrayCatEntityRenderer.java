@@ -33,6 +33,8 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
 
     private static final ResourceLocation ANIME =
             new ResourceLocation(Roundabout.MOD_ID,"textures/entity/stray_cat/entity/anime.png");
+    private static final ResourceLocation MANGA =
+            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/stray_cat/entity/manga.png");
 
     /// Bubbles Shields Render :0
     private static final ResourceLocation BIG_PINK =
@@ -47,7 +49,20 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
 
     @Override
     public ResourceLocation getTextureLocation(StrayCatEntity strayCatEntity) {
+        byte breed = strayCatEntity.getBreed();
+
+        if (breed == (byte)1) { return MANGA; }
+
         return ANIME;
+    }
+
+
+    public ResourceLocation getBubbleSkin(StrayCatEntity strayCatEntity) {
+        byte breed = strayCatEntity.getBreed();
+
+        if (breed == (byte)1) { return BIG_GREEN; }
+
+        return BIG_PINK;
     }
 
     @Override
@@ -81,7 +96,7 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
 
             // Create vertices
             Matrix4f matrix = poseStack.last().pose();
-            VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(BIG_PINK));
+            VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(getBubbleSkin(entity)));
 
             // Use a simple normal (optional, mostly lighting-related)
             vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
@@ -91,6 +106,7 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
 
             poseStack.popPose();
         }
+
         super.render(entity, $$1, partialTicks, poseStack, bufferSource, packedLight);
     }
 }

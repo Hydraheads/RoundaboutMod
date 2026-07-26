@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StrayCatItem;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -33,9 +35,11 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +68,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
-                0.0F).add(Attributes.MAX_HEALTH, 18.0);
+                0.0F).add(Attributes.MAX_HEALTH, 18.0).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
+                .add(Attributes.JUMP_STRENGTH, 0.0D);
     }
 
     @Override
@@ -131,9 +136,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         SLEEP = 2,
         BEGGING = 3;
 
-    public byte getBubbleSkin() { return 0; }
+    public byte getBubbleSkin() {
+        if (this.getBreed() == (byte)1) { return 1; }
+        return 0;
+    }
 
-    private static final int shootWindupMax = 10;
+    private static final int shootWindupMax = 26;
     private int shootWindup = shootWindupMax;
 
     public static final int bubbleShieldTimerMax = 60;
@@ -179,17 +187,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         }
 
         if (animation == SLEEP) {
-            if (this.getPotted()) {
-                sleeping.stop();
-                sleepingPotted.startIfStopped(this.tickCount);
-            }else {
-                sleepingPotted.stop();
-                sleeping.startIfStopped(this.tickCount);
-            }
-
+            sleeping.startIfStopped(this.tickCount);
         }else {
             sleeping.stop();
-            sleepingPotted.stop();
         }
 
     }
@@ -203,12 +203,18 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             setupAnimationStates();
         } else {
             this.unloadBubbles();
-             if (shootWindup > 0 ) {
-                 shootWindup--;
-             }else if (shootWindup == 0) {
-                 setAnim(IDLE);
-                 shootWindup = -1;
-             }
+            if (this.getTarget() != null) {
+                if (shootWindup > 0) {
+                    shootWindup--;
+                } else if (shootWindup == 0) {
+                    shootAirBubbleAt(this.getTarget());
+                    setAnim(IDLE);
+                    shootWindup = -1;
+                }
+            }else {
+                setAnim(IDLE);
+                shootWindup = -1;
+            }
 
             setSleeping(this.shouldSleep());
              if (this.shootWindup == -1) {
@@ -234,9 +240,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             }
 
             if (!this.getPotted()) {
-                BlockPos pos = this.getOnPos().below();
+                BlockHitResult hitResult = this.level().clip(new ClipContext(this.position().subtract(0, 0.5, 0), this.position().add(0,-0.75, 0),
+                        ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+                BlockPos pos = getOnPos();
                 BlockState stateOn = this.level().getBlockState(pos);
-                //Roundabout.LOGGER.info("Block Position Death Check: " + pos);
+
                 if (canSurviveInBlock(stateOn)) {
                     suffocatingTicks = 60;
                 } else {
@@ -253,9 +262,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public static boolean canSurviveInBlock(BlockState state) {
         if (state.is(Blocks.DIRT)
                 || state.is(Blocks.FARMLAND)
-                || state.is(Blocks.GRASS)
+                || state.is(Blocks.GRASS_BLOCK)
                 || state.is(Blocks.MYCELIUM)
-                || state.is(Blocks.ROOTED_DIRT)) {
+                || state.is(Blocks.DIRT_PATH)
+                || state.is(Blocks.COARSE_DIRT)
+                || state.is(Blocks.ROOTED_DIRT)
+        ) {
             return true;
         }
 
@@ -272,10 +284,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         return isYummy(stack);
     }
 
-    @Override
-    public void knockback(double x, double y, double z) {
-
-    }
 
     public boolean canBubbleShieldProtect(DamageSource DMG) {
         if (DMG.is(DamageTypes.FELL_OUT_OF_WORLD) ||
@@ -323,7 +331,13 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 return InteractionResult.SUCCESS;
             } else {
                 if (this.getPotted()) {
-                    ItemStack item = new ItemStack(ModItems.STRAY_CAT_ANIME);
+
+                    ItemStack item;
+                    if (this.getBreed() == (byte)1) {
+                        item = new ItemStack(ModItems.STRAY_CAT_MANGA);
+                    }else {
+                        item = new ItemStack(ModItems.STRAY_CAT_ANIME);
+                    }
                     StrayCatItem.saveStrayCatEntityInfo(item, this);
 
                     $$0.addItem(item);
@@ -375,7 +389,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     protected void registerGoals() {
         //super.registerGoals();
         this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
-        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 180, 240, 6.5F));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 180, 220, 6.5F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new StrayCatBegGoal(this, 8.0f));
@@ -446,6 +460,13 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
             return;
         }
+
+        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.PLAYERS, 0.5F, 1/((float) shootWindupMax /58));
+        setAnim(SHOOTING);
+        shootWindup = shootWindupMax;
+    }
+
+    public void shootAirBubbleAt(LivingEntity livingEntity) {
 
         StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(this.level());
         if (bubble != null) {

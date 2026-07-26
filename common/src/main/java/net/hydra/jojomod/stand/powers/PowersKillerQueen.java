@@ -785,8 +785,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
-        // for now, I am using parrot as placeholder
-        if (maybeStraycat instanceof Parrot StrayCatForSure) {
+        if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
             if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
                 return true;
             }
@@ -2065,7 +2064,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (LE.isAlive() && !LE.isRemoved() && LE != target && !(LE instanceof StandEntity) && LE != this.getSelf()) {
                     if (LE.hasLineOfSight(target)) {
                         bitedTheDustInit();
-                        bitedTheDust.putIfAbsent(LE.getId(), this.btdTicks);
+                        int id = LE.getId();
+                        if (bitedTheDust.containsKey(id)) {
+                            int oldTicks = bitedTheDust.get(id);
+                            if (oldTicks > this.btdTicks) {
+                                bitedTheDust.replace(id, this.btdTicks);
+                            }
+                        }else {
+                            bitedTheDust.put(id, this.btdTicks);
+                        }
                     }
                 }
             }
