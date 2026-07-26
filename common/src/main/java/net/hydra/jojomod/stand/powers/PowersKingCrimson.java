@@ -250,6 +250,27 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
+
+        boolean inTimeLockBlock = false;
+
+        AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                Mth.floor(checkBoxOG.minX), Mth.floor(checkBoxOG.minY), Mth.floor(checkBoxOG.minZ),
+                Mth.floor(checkBoxOG.maxX), Mth.floor(checkBoxOG.maxY), Mth.floor(checkBoxOG.maxZ))) {
+
+            BlockState state = player.level().getBlockState(pos);
+
+            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+                    || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
+                inTimeLockBlock = true;
+                break;
+            }
+        }
+
+        if (inTimeLockBlock) {
+            return player.position();
+        }
         Level level = player.level();
 
         Vec3 predicted = player.position();
