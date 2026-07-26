@@ -259,13 +259,11 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
 
     @Inject(method = "renderSky",
-            at = @At(value = "HEAD"),cancellable = true)
+            at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
         if (!ClientUtil.renderSkyBox()){
             return;
         }
-        ci.cancel();
-        $$5.run();
         if (!$$4) {
             FogType $$6 = $$3.getFluidInCamera();
             if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
@@ -276,6 +274,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
                 Tesselator tess = Tesselator.getInstance();
                 BufferBuilder bufferBuilder = tess.getBuilder();
+                RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
 
                 for (int integer = 0; integer < 6; ++integer) {
                     $$0.pushPose();
@@ -293,13 +292,17 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
                     }
-
                     if (integer == 4) {
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-180.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
+                    }
+
+                    if (integer == 5) {
                         $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
                     }
 
-                    if (integer == 5) {
+                    if (integer == 0) {
                         $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
                     }
