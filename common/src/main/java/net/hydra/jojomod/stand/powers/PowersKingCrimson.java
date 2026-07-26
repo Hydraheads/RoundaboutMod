@@ -33,6 +33,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -61,6 +62,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
@@ -76,6 +78,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public PowersKingCrimson(LivingEntity self) {
         super(self);
     }
+
     public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
     public final Map<Integer, TimeSkipSnapshot> skip_dump = new HashMap<>();
 
@@ -113,23 +116,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         return super.getSoundFromByte(soundChoice);
     }
+
     public static final byte EPITAPH_NOISE = 106;
     public static final byte EPITAPH_FADE_NOISE = 107;
     public static final byte TIME_SKIP_1 = 108;
     public static final byte TIME_SKIP_2 = 109;
+
     @Override
-    public SoundEvent getImpaleSound(){
+    public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
     }
 
-    public boolean isUsingEpitaph(){
+    public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
 
-    public float getSped(Entity entity){
-        if (entity instanceof LivingEntity LE){
-            if (LE.getSpeed() <= 0){
+    public float getSped(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            if (LE.getSpeed() <= 0) {
                 if (LE.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
                     return (float) LE.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 }
@@ -137,6 +142,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return LE.getSpeed();
         }
         return 0;
+    }
+
+    public void skipBlockEntities(int ticks) {
+        ((ILevelAccess)self.level()).rdbt$skipTime(self,ticks,getSkipRange());
     }
     private void skipDayTime(int ticks) {
         if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableDaySkip){
@@ -1459,6 +1468,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
+        skipBlockEntities(100);
         skipDayTime(100);
         skipFire(self);
         skipEffects(self);
