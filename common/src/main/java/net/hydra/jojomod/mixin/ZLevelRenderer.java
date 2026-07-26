@@ -1,11 +1,14 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
@@ -17,8 +20,10 @@ import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.material.FogType;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -87,6 +92,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Shadow public abstract boolean isChunkCompiled(BlockPos $$0);
 
     @Shadow @Nullable private ViewArea viewArea;
+
+    @Shadow
+    protected abstract boolean doesMobEffectBlockSky(Camera $$0);
 
     @Override
     @Unique
@@ -161,7 +169,11 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         $$7 = Mth.lerp(progress, x, $$7);
                         $$8 = Mth.lerp(progress, y, $$8);
                         $$9 = Mth.lerp(progress, z, $$9);
-                        renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+                        if (skip != null){
+                            renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+                        } else {
+                            renderYaw = Mth.rotLerp(progress, entity.yRotO, entity.getYRot());
+                        }
                     }
 
 
@@ -243,6 +255,68 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     private void roundabout$renderEntityEnd(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
         if ($$0 != null){
             ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
+        }
+    }
+
+    @Inject(method = "renderSky",
+            at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
+        if (!ClientUtil.renderSkyBox()){
+            return;
+        }
+        ci.cancel();
+        $$5.run();
+        if (!$$4) {
+            FogType $$6 = $$3.getFluidInCamera();
+            if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
+                RenderSystem.enableBlend();
+                RenderSystem.depthMask(false);
+                RenderSystem.setShaderFogStart(Float.MAX_VALUE);
+                RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
+                RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                Tesselator tess = Tesselator.getInstance();
+                BufferBuilder bufferBuilder = tess.getBuilder();
+
+                for (int integer = 0; integer < 6; ++integer) {
+                    $$0.pushPose();
+                    if (integer == 1) {
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+                    }
+
+                    if (integer == 2) {
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[1]);
+                    }
+
+                    if (integer == 3) {
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
+                    }
+
+                    if (integer == 4) {
+                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
+                    }
+
+                    if (integer == 5) {
+                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
+                    }
+
+                    Matrix4f stack = $$0.last().pose();
+                    bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                    bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(255, 255, 255, 255).endVertex();
+                    bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(255, 255, 255, 255).endVertex();
+                    bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(255, 255, 255, 255).endVertex();
+                    bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(255, 255, 255, 255).endVertex();
+                    BufferUploader.drawWithShader(bufferBuilder.end());
+                    $$0.popPose();
+                }
+
+                RenderSystem.depthMask(true);
+                RenderSystem.disableBlend();
+            }
         }
     }
 

@@ -163,6 +163,9 @@ public class ClientUtil {
         return rendersRipperEyes(ent);
     }
 
+    public static boolean renderSkyBox(){
+        return false;
+    }
     public static boolean hasChangedArms(Entity ent){
         if (cancelWithSuitStand(ent)){
             return false;

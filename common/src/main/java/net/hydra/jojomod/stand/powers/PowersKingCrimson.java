@@ -277,7 +277,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     public boolean isServerControlledCooldown(byte num){
-        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2_SNEAK) {
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2_SNEAK
+                || num == PowerIndex.SKILL_4) {
             return true;
         }
         return super.isServerControlledCooldown(num);
