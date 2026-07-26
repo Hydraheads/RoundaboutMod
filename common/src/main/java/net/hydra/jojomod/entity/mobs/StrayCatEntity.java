@@ -461,7 +461,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             return;
         }
 
-        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.PLAYERS, 0.5F, 1/((float) shootWindupMax /58));
+        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.PLAYERS, 0.5F, 1/((float) shootWindupMax /48));
         setAnim(SHOOTING);
         shootWindup = shootWindupMax;
     }
