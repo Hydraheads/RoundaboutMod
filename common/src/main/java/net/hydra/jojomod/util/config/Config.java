@@ -1089,8 +1089,14 @@ public class Config implements Cloneable {
         public Boolean enableSkippingCooldowns;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer timeSkipCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer epitaphCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableDaySkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphInterrupt;
         @BooleanOption(group = "inherit", value = true)
         public Boolean blocksCancelEpitaph2;
         @BooleanOption(group = "inherit", value = false)

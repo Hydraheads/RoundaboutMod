@@ -2874,6 +2874,15 @@
   "config.roundabout.doNotHurtMeRewindCD.name": "Cower Success CD",
   "config.roundabout.doNotHurtMeRewindCD.desc": "This cooldown appears when you restore health with your counter.",
 
+  "config.roundabout.timeSkipCooldown.name": "Time Skip CD",
+  "config.roundabout.timeSkipCooldown.desc": "This cooldown for time skip in ticks.",
+
+  "config.roundabout.epitaphCooldown.name": "Epitaph CD",
+  "config.roundabout.epitaphCooldown.desc": "This cooldown in ticks.",
+
+  "config.roundabout.epitaphInterrupt.name": "Epitaph Interrupt",
+  "config.roundabout.epitaphInterrupt.desc": "Should being attacked interrupt epitaph? For balancing.",
+
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
 

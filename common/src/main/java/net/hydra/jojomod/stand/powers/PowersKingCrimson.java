@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -41,6 +42,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -249,6 +251,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
+
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2_SNEAK) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
 
         boolean inTimeLockBlock = false;
@@ -1510,6 +1520,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!canUseTimeSkip()){
             return;
         }
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
+        setCooldown(PowerIndex.SKILL_2_SNEAK,
+                ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
         skipBlockEntities(100);
         skipDayTime(100);
         skipFire(self);
@@ -1619,6 +1634,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
+                if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+                    return;
+                }
                 //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
@@ -1712,6 +1730,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
                 S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
             } else {
+
+                setCooldown(PowerIndex.SKILL_1,
+                        ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphCooldown);
                 S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
                 S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
                 epitaph.clear();
@@ -1793,6 +1814,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (isUsingEpitaph() && ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphInterrupt) {
+            epitaph();
+        }
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1873,6 +1897,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return false;
     }
     public void timeSkipSelfClient() {
+
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
         if (hasBlock()){
             return;
         }
@@ -1884,6 +1912,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void timeSkipClient() {
+
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
         if (!canUseTimeSkip()){
             return;
         }
@@ -1904,7 +1936,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
     public void epitaphClient(){
-
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
+        if (this.onCooldown(PowerIndex.SKILL_1)) {
+            return;
+        }
         if (hasBlock())
             return;
         tryPowerPacket(PowerIndex.POWER_1);
@@ -2322,6 +2359,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (hasBlock()){
+            return true;
+        }
+        if (slot == 1 && !isHoldingSneak() && onCooldown(PowerIndex.SKILL_2_SNEAK)){
             return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
