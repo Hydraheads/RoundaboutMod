@@ -285,7 +285,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
-							if (this.flyngTicks <= 10 && ent.getId() == user.getId()) {
+							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
 								continue;
 							}
 
