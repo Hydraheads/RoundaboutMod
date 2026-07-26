@@ -1091,6 +1091,8 @@ public class Config implements Cloneable {
         public Integer timeSkipRange;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableDaySkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean blocksCancelEpitaph2;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)

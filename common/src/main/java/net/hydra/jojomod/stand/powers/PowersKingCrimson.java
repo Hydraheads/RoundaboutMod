@@ -459,6 +459,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
+
+    @Override
+    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
+        /**This will be a denial of epitaph + block place*/
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.blocksCancelEpitaph2) {
+            if (isUsingEpitaph()) {
+                epitaph();
+            }
+        }
+        super.onPlaceBlock($$0,$$1,$$2);
+    }
     public Vec3 predictStrider(Strider strider, int ticks) {
         Level level = strider.level();
 

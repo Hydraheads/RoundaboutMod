@@ -2850,6 +2850,10 @@
   "config.roundabout.enableDaySkip.name": "Day Skip",
   "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
 
+  "config.roundabout.blocksCancelEpitaph2.name": "Blocks Stop Epitaph",
+  "config.roundabout.blocksCancelEpitaph2.desc": "By default placing blocks stops your projection so you can't skip someone into traps or hazards.",
+
+
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
