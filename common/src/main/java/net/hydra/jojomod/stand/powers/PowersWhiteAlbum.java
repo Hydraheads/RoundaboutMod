@@ -66,6 +66,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -1867,7 +1868,21 @@ public class PowersWhiteAlbum extends NewDashPreset {
             addEXP(1,LV);
         }
         if (targ instanceof Player PL){
-            if (!HeatUtil.isLegsFrozen(PL)){
+            AABB checkBoxOG = PL.getBoundingBox().inflate(-0.05);
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(checkBoxOG.minX), Mth.floor(checkBoxOG.minY), Mth.floor(checkBoxOG.minZ),
+                    Mth.floor(checkBoxOG.maxX), Mth.floor(checkBoxOG.maxY), Mth.floor(checkBoxOG.maxZ))) {
+
+                BlockState state = PL.level().getBlockState(pos);
+
+                if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+                        || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
+                    HeatUtil.addHeat(PL, -2);
+                    return;
+                }
+            }
+            if (!HeatUtil.isArmsFrozen(PL)){
                 HeatUtil.addHeat(PL, -4);
             } else {
                 HeatUtil.addHeat(PL, -3);
