@@ -255,7 +255,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					flyngTicks++;
 				}else {
 					if (this.getDeltaMovement().length() > 0.1 && this.tickCount % 18 == 0) {
-						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.5F, 1.0f);
+						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.25F, 1.0f);
 					}
 
 					flyngTicks = 0;
@@ -278,13 +278,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (throwStatus == THROWED) {
-					if (this.onGround() || this.onClimbable()) {
+					if (this.onGround() || this.onClimbable() || this.wasTouchingWater
+							|| this.wasInPowderSnow || this.getDeltaMovement().length() < 0.8) {
 						throwStatus = HAS_BEEN;
 					}else {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
-							if (this.flyngTicks <= 4 && ent.getId() == user.getId()) {
+							if (this.flyngTicks <= 10 && ent.getId() == user.getId()) {
 								continue;
 							}
 
@@ -566,7 +567,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	 public void jump(Vec3 jumpT0Pos){
 		if (this.onGround()) {
-			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.5F, 1.0f);
+			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
 			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
@@ -713,7 +714,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	protected float getSoundVolume() {
-		return 0.8f;
+		return 0.65f;
 	}
 
 	public float getVoicePitch() {
