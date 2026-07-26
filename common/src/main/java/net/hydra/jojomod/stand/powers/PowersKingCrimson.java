@@ -1,12 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -17,7 +16,6 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -34,7 +32,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -42,7 +39,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -64,7 +60,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
@@ -158,8 +153,36 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderEpitaph(context,cameraPlayer,screenWidth,screenHeight,x,this);
+    }
+
+    public boolean replaceHudActively(){
+        return isUsingEpitaph();
+    }
+    public int getEpitphDuration(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphDuration;
+    }
+    public int getTicksIntoEpitaph(){
+        return ticksIntoEpitaph;
+    }
+    public int ticksIntoEpitaph = 0;
     @Override
     public void tickPower() {
+        if (self.level().isClientSide()){
+            if (isUsingEpitaph()){
+                ticksIntoEpitaph++;
+                if (ticksIntoEpitaph > getEpitphDuration()){
+                    tryPowerPacket(PowerIndex.POWER_1);
+                    epitaph.clear();
+                    ticksIntoEpitaph = 0;
+                }
+            } else {
+                ticksIntoEpitaph = 0;
+            }
+        }
+
         skipRange = ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipRange;
         super.tickPower();
     }

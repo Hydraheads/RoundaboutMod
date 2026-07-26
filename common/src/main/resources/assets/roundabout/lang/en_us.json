@@ -2883,6 +2883,9 @@
   "config.roundabout.epitaphInterrupt.name": "Epitaph Interrupt",
   "config.roundabout.epitaphInterrupt.desc": "Should being attacked interrupt epitaph? For balancing.",
 
+  "config.roundabout.epitaphDuration.name": "Epitaph Duration",
+  "config.roundabout.epitaphDuration.desc": "How long in ticks does epitaph last? (20 ticks = 1 second)",
+
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
 
