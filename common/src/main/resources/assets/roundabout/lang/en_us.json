@@ -2853,6 +2853,9 @@
   "config.roundabout.blocksCancelEpitaph2.name": "Blocks Stop Epitaph",
   "config.roundabout.blocksCancelEpitaph2.desc": "By default placing blocks stops your projection so you can't skip someone into traps or hazards.",
 
+  "config.roundabout.freeTimeSkip.name": "Free Time Skip",
+  "config.roundabout.freeTimeSkip.desc": "Enable to be able to skip while using items or attacks.",
+
 
 
 

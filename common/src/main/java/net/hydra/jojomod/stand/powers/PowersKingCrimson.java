@@ -460,6 +460,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return predicted;
     }
 
+    public boolean canUseTimeSkip(){
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.freeTimeSkip){
+            return true;
+        }
+        return canAttackLight() && !self.isUsingItem() && !isClashing();
+    }
+
     @Override
     public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
         /**This will be a denial of epitaph + block place*/
@@ -1500,6 +1507,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
+        if (!canUseTimeSkip()){
+            return;
+        }
         skipBlockEntities(100);
         skipDayTime(100);
         skipFire(self);
@@ -1866,11 +1876,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (hasBlock()){
             return;
         }
+        if (!canUseTimeSkip()){
+            return;
+        }
         if (isUsingEpitaph()){
             tryPowerPacket(PowerIndex.EXTRA);
         }
     }
     public void timeSkipClient() {
+        if (!canUseTimeSkip()){
+            return;
+        }
         if (hasBlock()){
             itemGrabClient();
             return;

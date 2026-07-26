@@ -1629,6 +1629,13 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+    public boolean canAttackLight(){
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean canClash(){
         return false;
