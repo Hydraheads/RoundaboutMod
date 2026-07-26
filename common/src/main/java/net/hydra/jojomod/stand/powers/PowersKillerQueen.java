@@ -305,13 +305,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5f));
         }
-    } /*@Override public float getBarrageFinisherStrength(Entity entity){
-        if (this.getReducedDamage(entity)){
-            return 3;
-        } else {
-            return 6;
-        }
-    }*/
+    }
 
     @Override
     public float multiplyPowerByStandConfigMobs(float power){
@@ -2462,7 +2456,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
-            Roundabout.LOGGER.info("RotY: " + KQE.getYRot() + " RotX: " + KQE.getXRot());
+            float factor = 0.5F + (((FollowingStandEntity)KQE).getSizePercent()/2);
+
 
             Vec3 standPos = KQE.getPosition(1);
             float Hsize = KQE.getBbHeight() / 2.0f;
@@ -2472,25 +2467,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                     .yRot(-KQE.getYRot() * Mth.DEG_TO_RAD)
                     ;
 
-            /*   /// temporary particle:
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB,
-                    (double)gizmo.x + addToPos.x, (double)gizmo.y + addToPos.y, (double)gizmo.z + addToPos.z,
-                    0, 0, 0, 0.0, 1);
-            /// temporary particle:
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIRBUBBLE_GREEN,
-                    (double)gizmo.x, (double)gizmo.y, (double)gizmo.z,
-                    0, 0, 0, 0.0, 1);
-            */
             Vec3 unhandledBubbblePos = new Vec3(
-            KQE.getRandom().nextFloat()*0.2-0.1,
-            KQE.getRandom().nextFloat()*0.2-0.1 + 1,
-            1
+                (KQE.getRandom().nextFloat()*0.4)-0.2,
+                (KQE.getRandom().nextFloat()*0.2)-0.2 + 1,
+                0.8
             );
             Vec3 bubblePos = unhandledBubbblePos
                     .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
                     .yRot(-KQE.getYRot() * Mth.DEG_TO_RAD)
-                    ;
-            Vec3 pos = gizmo.add(addToPos).add(bubblePos).add(0, 0, 0);
+                    .scale(factor);
+            Vec3 pos = gizmo.add(addToPos).add(bubblePos);
 
             ((ServerLevel) this.self.level()).sendParticles(getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
