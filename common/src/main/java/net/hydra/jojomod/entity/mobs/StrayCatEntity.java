@@ -403,21 +403,32 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     // TODO add sounds :>
     protected SoundEvent getAmbientSound() {
+        double rand = this.getRandom().nextDouble();
+
         if (this.shouldSleep()) {
+
+
             return SoundEvents.CAT_PURR;
         }
         if (this.getInterested()) {
+            if (rand < 0.8) {
+                return ModSounds.STRAY_CAT_SOUND_2_EVENT;
+            }
+
             return SoundEvents.CAT_BEG_FOR_FOOD;
         }
 
         if (this.getTarget() != null && this.getTarget().isAlive()) {
+            if (rand < 0.7) {
+                return ModSounds.STRAY_CAT_SOUND_3_EVENT;
+            }
             return SoundEvents.CAT_HISS;
         }
 
         return SoundEvents.CAT_STRAY_AMBIENT;
     }
     protected SoundEvent getHurtSound(DamageSource p_34195_) {
-        return SoundEvents.CAT_HISS;
+        return ModSounds.STRAY_CAT_SOUND_3_EVENT;
     }
     protected SoundEvent getDeathSound() {
         return SoundEvents.CAT_DEATH;
@@ -461,7 +472,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             return;
         }
 
-        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.PLAYERS, 0.5F, 1/((float) shootWindupMax /48));
+        this.level().playSound(this, this.blockPosition(), ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT, SoundSource.NEUTRAL, 0.48F, 1/((float) shootWindupMax /48));
         setAnim(SHOOTING);
         shootWindup = shootWindupMax;
     }

@@ -571,6 +571,13 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
 
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_1 =
+            register(ModSounds.STRAY_CAT_SOUND_1, ModSounds.STRAY_CAT_SOUND_1_ID);
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_2 =
+            register(ModSounds.STRAY_CAT_SOUND_2, ModSounds.STRAY_CAT_SOUND_2_ID);
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_3 =
+            register(ModSounds.STRAY_CAT_SOUND_3, ModSounds.STRAY_CAT_SOUND_3_ID);
+
     public static final RegistryObject<SoundEvent> ANUBIS_POSSESSION =
             register(ModSounds.ANUBIS_POSSESSION, ModSounds.ANUBIS_POSSESSION_ID);
     public static final RegistryObject<SoundEvent> ANUBIS_SUMMON =
