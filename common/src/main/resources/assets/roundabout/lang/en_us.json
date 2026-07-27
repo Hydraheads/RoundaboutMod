@@ -2778,6 +2778,8 @@
   "text.roundabout.century_stances.redstone_stance": "Redstone Stance",
   "text.roundabout.century_stances.ground_stance": "Ground Stance",
 
+  "text.roundabout.black_sabbath_inventory": "Invisi-Vision On",
+
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",

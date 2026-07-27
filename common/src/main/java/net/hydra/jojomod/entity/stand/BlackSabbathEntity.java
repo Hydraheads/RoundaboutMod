@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public class BlackSabbathEntity extends StandEntity implements MenuProvider {
+public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen {
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -65,7 +65,7 @@ public class BlackSabbathEntity extends StandEntity implements MenuProvider {
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
-
+            coat_open.startIfStopped(this.tickCount);
         }
     }
 
@@ -116,12 +116,8 @@ public class BlackSabbathEntity extends StandEntity implements MenuProvider {
     public boolean skipAttackInteraction(Entity $$0) {return false;}
 
     public void openCustomInventoryScreen(Player player) {
-        player.openMenu(this);
-    }
-
-    @Override
-    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
-        net.hydra.jojomod.util.BlackSabbathPlayerInventory bsinv = ((IPlayerEntity)player).roundabout$getBlckSabbathPlayerInventory();
-        return new BlackSabbathPlayerInventoryMenu(containerId, player.getInventory(), bsinv, player);
+        if (!this.level().isClientSide) {
+            ((IPlayerEntityServer)player).roundabout$openBlackSabbathInventory(this, player.getInventory());
+        }
     }
 }

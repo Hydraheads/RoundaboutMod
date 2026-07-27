@@ -29,6 +29,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -902,9 +903,6 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
             checkthisdat = data;
             checkthis = 1;
-        } else if (context == PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY){
-            checkthisdat = data;
-            checkthis = 2;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){

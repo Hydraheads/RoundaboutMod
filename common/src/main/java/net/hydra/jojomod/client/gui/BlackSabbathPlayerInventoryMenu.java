@@ -1,36 +1,29 @@
 package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.horse.AbstractChestedHorse;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 
 public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
-   // private final Container blackSabbathContainer;
     private final ResultContainer resultSlots = new ResultContainer();
     private final CraftingContainer craftSlots = new TransientCraftingContainer(this, 2, 2);
     private final Player owner;
 
-    public BlackSabbathPlayerInventoryMenu(int cid, Inventory $$0, Container container, final Player $$2) {
-        super(MenuType.GENERIC_3x3, cid);
-
+    public BlackSabbathPlayerInventoryMenu(Inventory $$0, final Player $$2, int cid) {
+        super(null, cid);
         this.owner = $$2;
         IPlayerEntity play = ((IPlayerEntity)this.owner);
         BlackSabbathPlayerInventory bsinv = play.roundabout$getBlckSabbathPlayerInventory();
 
-        this.addSlot(new Slot(bsinv, 0, 62, 36) {
+        this.addSlot(new Slot(bsinv, 0, 70, 36) {
             @Override
             public int getMaxStackSize() {
                 return super.getMaxStackSize();
@@ -46,7 +39,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
 
         for (int $$10 = 0; $$10 < 2; $$10++) {
             for (int $$9 = 0; $$9 < 4; $$9++) {
-                this.addSlot(new Slot(bsinv,1 + $$9 + $$10 * 4, 98 + $$9 * 18, 18 * ($$10 + 1) + 9) {
+                this.addSlot(new Slot(bsinv,1 + $$9 + $$10 * 4, 96 + $$9 * 18, 18 * ($$10 + 1) + 9) {
 
                     @Override
                     public boolean mayPlace(ItemStack $$0) {
@@ -80,7 +73,12 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player $$0) {
-        return true;
+        if(((StandUser)$$0).roundabout$getStand() instanceof BlackSabbathEntity be){
+            if(be != null && !be.isRemoved() && be.isAlive()){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

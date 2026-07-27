@@ -2,6 +2,8 @@ package net.hydra.jojomod;
 
 import net.hydra.jojomod.Utils.commands.ForgeCommandRegistry;
 import net.hydra.jojomod.biome_modifiers.BiomeCodec;
+import net.hydra.jojomod.client.ClientClass;
+import net.hydra.jojomod.networking.ForgeNetworkHandler;
 import net.hydra.jojomod.registry.*;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -10,6 +12,7 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -51,6 +54,7 @@ public class RoundaboutModForge {
         BiomeCodec.BIOME_MODIFIER_SERIALIZERS.register(bus);
         ForgeLootModifiers.LOOT_MODIFIERS.register(bus);
 
+        bus.addListener(this::clientSetup);
         bus.addListener(this::commonSetup);
         bus.addListener(this::loadComplete);
         MinecraftForge.EVENT_BUS.addListener(this::entityLifeCycle);
@@ -62,11 +66,16 @@ public class RoundaboutModForge {
         //ForgeItems.assignStupidForge();
     }
 
+    private void clientSetup(final FMLClientSetupEvent event) {
+        ClientClass.init();
+    }
+
     private void loadComplete(final FMLLoadCompleteEvent event) {
         MinecraftForge.EVENT_BUS.register(new ForgeCommandRegistry());
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){
+        event.enqueueWork(ForgeNetworkHandler::register);
     }
 
     @Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
