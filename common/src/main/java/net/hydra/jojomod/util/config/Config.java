@@ -454,8 +454,10 @@ public class Config implements Cloneable {
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
-    	@BooleanOption(group = "inherit", value = false)
+    	@BooleanOption(group = "inherit", value = true)
         public Boolean enableBitesTheDustDayMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
@@ -490,6 +492,16 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
+        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        public Integer bitesTheDustPlantCooldown;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer bitesTheDustCombatActivationCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer bitesTheDustCombatCooldownBonus;
+        @FloatOption(group = "inherit", value = 15.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatMobsDamage;
+        @FloatOption(group = "inherit", value = 8.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatPlayersDamage;
     }
     
     public static class SoftAndWetSettings {

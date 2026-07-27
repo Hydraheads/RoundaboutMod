@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.platform.Services;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -181,12 +182,13 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     public void roundabout$openBlackSabbathInventory(BlackSabbathEntity $$0, Container $$1) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
         if(this.containerMenu != this.inventoryMenu){
             this.closeContainer();
         }
         this.nextContainerCounter();
-       // this.connection.send(new ClientboundBlackSabbathScreenOpenPacket(this.containerCounter, $$1.getContainerSize(), $$0.getId()));
-       // this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), !this.level().isClientSide, this, containerCounter);
+        Services.PACKET_HELPER.sendBlackSabbathChestOpenPacket((ServerPlayer) (Object) this, $$1);
+        this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), this, this.containerCounter);
         this.initMenu(this.containerMenu);
     }
 

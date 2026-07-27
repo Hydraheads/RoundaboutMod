@@ -67,5 +67,6 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
+        ClientClass.init();
     }
 }

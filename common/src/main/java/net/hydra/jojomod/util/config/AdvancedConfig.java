@@ -186,6 +186,28 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:barrier"
             )
     );
+    public Set<String> sheerHeartAttackCustomBlockHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:torch:4",
+                    "minecraft:soul_torch:3",
+                    "minecraft:redstone_torch:1",
+                    "minecraft:light_block:0",
+                    "minecraft:glow_lichen:0",
+                    "minecraft:cave_vines_plant:0",
+                    "minecraft:cave_vines:0",
+                    "minecraft:nether_portal:0",
+                    "minecraft:end_portal:0"
+            )
+    );
+    public Set<String> sheerHeartAttackCustomEntityHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:blaze:90",
+                    "minecraft:magna_cube:70",
+                    "minecraft:slime:0",
+                    "minecraft:stray:-50",
+                    "roundabout:stray_cat_entity:0"
+            )
+    );
     public Set<String> standDestructionBlacklist = new HashSet<>(
             Arrays.asList(
                     "minecraft:diamond_block",

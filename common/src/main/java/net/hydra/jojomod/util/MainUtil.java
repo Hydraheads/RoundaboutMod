@@ -222,6 +222,8 @@ public class MainUtil {
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
     public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_BLOCK_HEAT = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -2851,20 +2853,6 @@ public class MainUtil {
             S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
-            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY){
-            BlackSabbathPlayerInventory $$6 = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
-            PowerTypes.initializeStandPower(player);
-
-            if (player.containerMenu != player.inventoryMenu) {
-                player.containerMenu = player.inventoryMenu;
-            }
-
-            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
-            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
-                    cid);
-         //   player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
