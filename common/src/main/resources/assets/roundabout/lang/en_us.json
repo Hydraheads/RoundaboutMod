@@ -437,6 +437,8 @@
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
   "item.roundabout.painting_venus": "Birth of Venus",
 
+  "entity.roundabout.stray_cat_bubble": "Air Bubble",
+  "entity.roundabout.stray_cat_entity": "Stray Cat",
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.cold_twister": "Cold Twister",
@@ -1254,7 +1256,7 @@
   "sounds.roundabout.killer_queen_punch": "Stand Punch",
   "sounds.roundabout.sha_moving": "Sheer Heart Attack Moving",
   "sounds.roundabout.sha_jump": "Sheer Heart Attack Jump",
-  "sounds.roundabout.killer_queen_bubble_launch": "Killer Queen Bubble Launch",
+  "sounds.roundabout.killer_queen_bubble_launch": "Air Bubble been created",
   "sounds.roundabout.killer_queen_explosion": "Killer Queen explosion",
   "sounds.roundabout.killer_queen_bomb_detonate": "Killer Queen detonation",
   "sounds.roundabout.killer_queen_impale":  "Impaled",
@@ -1273,6 +1275,9 @@
   "sounds.roundabout.straycat_bubble_sound": "Air Bubble shoot",
   "sounds.roundabout.killer_queen_heavy_punch" : "Heavy Punch",
   "sounds.roundabout.straycat_bubble_pop": "Air Bubble pop",
+  "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 

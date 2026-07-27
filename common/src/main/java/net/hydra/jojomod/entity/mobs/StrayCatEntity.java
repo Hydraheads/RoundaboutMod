@@ -407,7 +407,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
         if (this.shouldSleep()) {
 
-
             return SoundEvents.CAT_PURR;
         }
         if (this.getInterested()) {
