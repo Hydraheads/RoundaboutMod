@@ -258,6 +258,14 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
     }
 
+    @Inject(method = "renderClouds",
+            at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
+        if (!ClientUtil.renderSkyBox()) {
+            return;
+        }
+        ci.cancel();
+    }
     @Inject(method = "renderSky",
             at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
@@ -278,6 +286,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
                 for (int integer = 0; integer < 6; ++integer) {
                     $$0.pushPose();
+                    $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
+                    $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
                     if (integer == 0) {
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
