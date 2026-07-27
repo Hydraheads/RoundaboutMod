@@ -398,7 +398,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     protected void registerGoals() {
         //super.registerGoals();
         this.goalSelector.addGoal(1, new StrayCatSleepGoal(this));
-        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 180, 220, 6.5F));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 0D, 190, 220, 6.5F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new StrayCatBegGoal(this, 8.0f));
@@ -455,7 +455,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         long dayTime = this.level().getDayTime() % 24000;
 
 
-        if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos)) {
+        if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos) || !this.level().canSeeSky(this.blockPosition())) {
             return true;
         }
         return false;
