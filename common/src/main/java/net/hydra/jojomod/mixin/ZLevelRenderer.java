@@ -278,33 +278,33 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
                 for (int integer = 0; integer < 6; ++integer) {
                     $$0.pushPose();
-                    if (integer == 1) {
+                    if (integer == 0) {
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
                     }
 
-                    if (integer == 2) {
+                    if (integer == 1) {
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[1]);
                     }
 
-                    if (integer == 3) {
+                    if (integer == 2) {
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
                     }
-                    if (integer == 4) {
-                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-180.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
-                    }
-
-                    if (integer == 5) {
-                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                    if (integer == 3) {
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
                     }
 
-                    if (integer == 0) {
-                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                    if (integer == 4) {
+                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
                         RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
+                    }
+
+                    if (integer == 5) {
+                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[5]);
                     }
 
                     Matrix4f stack = $$0.last().pose();

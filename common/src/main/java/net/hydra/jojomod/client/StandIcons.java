@@ -18,12 +18,12 @@ public class StandIcons {
     public static final ResourceLocation TIME_ERASE_SKY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/environment/time_erase_sky.png");
     public static final ResourceLocation[] SKYBOX = new ResourceLocation[]{
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_0.png"),
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_1.png"),
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_2.png"),
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_3.png"),
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_4.png"),
-            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_5.png")
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_e.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_b.png")
     };
 
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
