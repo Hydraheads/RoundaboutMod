@@ -261,7 +261,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
-        if (!ClientUtil.renderSkyBox()) {
+        if (!ClientUtil.renderTimeErase()) {
             return;
         }
         ci.cancel();
@@ -269,12 +269,24 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderSky",
             at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
-        if (!ClientUtil.renderSkyBox()){
+        if (!ClientUtil.renderTimeErase()){
             return;
         }
         if (!$$4) {
             FogType $$6 = $$3.getFluidInCamera();
             if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
+
+                float alpha = (float)ClientUtil.renderTimeEraseTime();
+                float dblcheck = $$2%1;
+                if (ClientUtil.isUsingTimeErase){
+                    alpha = Math.min(alpha+dblcheck,20);
+                } else {
+                    alpha = Math.max(alpha-dblcheck,0);
+                }
+                alpha/=(float)20;
+                alpha = Mth.clamp(alpha,0,1F);
+
+
                 RenderSystem.enableBlend();
                 RenderSystem.depthMask(false);
                 RenderSystem.setShaderFogStart(Float.MAX_VALUE);
@@ -319,10 +331,10 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
                     Matrix4f stack = $$0.last().pose();
                     bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                    bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(255, 255, 255, 255).endVertex();
-                    bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(255, 255, 255, 255).endVertex();
-                    bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(255, 255, 255, 255).endVertex();
-                    bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(255, 255, 255, 255).endVertex();
+                    bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                    bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                    bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                    bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
                     BufferUploader.drawWithShader(bufferBuilder.end());
                     $$0.popPose();
                 }

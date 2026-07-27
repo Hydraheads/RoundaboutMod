@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
@@ -128,6 +129,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
+    }
+    public boolean timeEraseActive = false;
+    public boolean isUsingTimeErase() {
+        return timeEraseActive;
     }
 
     public float getSped(Entity entity) {
@@ -1914,9 +1919,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
+            case SKILL_4_NORMAL -> {
+                timeEraseClient();
+            }
         }
     }
 
+    public void timeEraseClient(){
+        if (timeEraseActive){
+            timeEraseActive = false;
+        } else {
+            timeEraseActive = true;
+            ClientUtil.bootTimeErase();
+        }
+    }
     @Override
     public boolean isAppropriateToGrab(){
         if (!hasBlock()) {
