@@ -331,8 +331,17 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             ci.cancel();
         }
     }
-    @Inject(method = "renderSky",
-            at = @At(value = "TAIL"),cancellable = true)
+    @Inject(method = "renderEndSky",
+            at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$renderEndSky(PoseStack $$0, CallbackInfo ci) {
+        if (ClientUtil.renderTimeErase()) {
+            ci.cancel();
+        }
+    }
+
+
+        @Inject(method = "renderSky",
+            at = @At(value = "RETURN"),cancellable = true)
     private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
 
 
@@ -354,8 +363,6 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
                     RenderSystem.enableBlend();
                     RenderSystem.depthMask(false);
-                    RenderSystem.setShaderFogStart(Float.MAX_VALUE);
-                    RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
                     RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
                     Tesselator tess = Tesselator.getInstance();
                     BufferBuilder bufferBuilder = tess.getBuilder();
