@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -18,9 +19,11 @@ import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -41,6 +44,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -556,8 +560,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
 			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
-			this.level().destroyBlock(this.blockTarget, shouldDrop);
+			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+					this.getUser() instanceof Player) {
+
+				boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
+				this.level().destroyBlock(this.blockTarget, shouldDrop);
+			}
 			this.blockTarget = null;
 			this.setTargetType(NONE);
 		}
@@ -639,11 +648,25 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int getBlockWarm(BlockPos pos, Level level) {
 		BlockState info = level.getBlockState(pos);
 
-		return (int)(info.getLightEmission() * 1.5);
+		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
+
+		String tag = key.toString();
+        if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
+            return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
+        }
+
+        return (int)(info.getLightEmission() * 1.5);
 	}
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
+
+		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+
+		String tag = key.toString();
+		if (MainUtil.SHA_CUSTOM_ENTITY_HEAT.containsKey(tag)) {
+			return MainUtil.SHA_CUSTOM_ENTITY_HEAT.get(tag);
+		}
 
 		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
 
