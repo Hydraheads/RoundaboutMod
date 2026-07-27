@@ -38,7 +38,8 @@ public class ExplosionUtil {
 	public static boolean isBlockBlackListed(BlockState bs) {
 		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
 
-		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
+		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty()
+				&& rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
 		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), 18);
@@ -159,7 +160,8 @@ public class ExplosionUtil {
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
 			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
-					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)) {
+					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+					|| !MainUtil.isDestructible(level, location, info)) {
 				continue;
 			}
 
