@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EnderpearlItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -23,10 +24,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class StrayCatItem extends Item {
     public final byte breed;
+
     public StrayCatItem(Properties $$0) {
         super($$0);
         this.breed = 0;
     }
+
     public StrayCatItem(Properties $$0, byte variant) {
         super($$0);
         this.breed = variant;
@@ -37,14 +40,12 @@ public class StrayCatItem extends Item {
 
     private static final float SPEED = 0.4f;
     public byte getBubbleSkin() {
-        if (breed == 1) {
-            return 1;
-        }
+        if (breed == 1) { return 1; }
 
         return 0;
     }
 
-    private static final int COOLDOWN = 13;
+    private static final int COOLDOWN = 20;
 
     static public void saveStrayCatEntityInfo(ItemStack stack, StrayCatEntity stray) {
         CompoundTag tag = stack.getOrCreateTag();
@@ -66,7 +67,7 @@ public class StrayCatItem extends Item {
     public ItemStack finishUsingItem(ItemStack $$0, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player P) {
 
-            if (!level.isClientSide && !isSleeping(level)) {
+            if (!level.isClientSide && !isSleeping(level, livingEntity)) {
                 P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA,COOLDOWN);
                 P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME,COOLDOWN);
 
@@ -142,35 +143,30 @@ public class StrayCatItem extends Item {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    static boolean isSleeping(Level level) {
+    static boolean isSleeping(Level level, LivingEntity user) {
         long dayTime = level.getDayTime() % 24000;
+        boolean canSeeSun = true;
+        if (user != null) {
+            canSeeSun = level.canSeeSky(user.blockPosition());
+        }
 
-        return dayTime >= 13000 && dayTime <= 23750;
+        return dayTime >= 13000 && dayTime <= 23750 || !canSeeSun;
     }
 
 
-    public float getCurrentPredicateValue(Level level, ItemStack stack) {
+    public float getCurrentPredicateValue(Level level, ItemStack stack, LivingEntity user) {
         CompoundTag tag = stack.getOrCreateTag();
         float value = 0.0f;
 
         if (level != null) {
-            if (isSleeping(level)) {
+            if (isSleeping(level, user)) {
                 value += 0.1f;
             }
         }
 
         return value;
     }
-    /*
-    public ItemStack getDefaultInstance() {
-        ItemStack stack = new ItemStack(this);
-        CompoundTag tag = stack.getOrCreateTag();
-        //tag.putByte(SKIN_TAG, breed);
-        stack.setTag(tag);
 
-        return stack;
-    }
-    */
     @Override public int getUseDuration(ItemStack $$0) {
         return 1;
     }
