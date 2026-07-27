@@ -139,7 +139,7 @@ public class StepRuleEntity extends Entity {
                 }
 
                 if (getTurnedBad() && isAlive() && !isRemoved()) {
-                    AABB wallBox = this.getBoundingBox().inflate(0.1F);
+                    AABB wallBox = this.getBoundingBox().move(0,-1,0).inflate(0.1F);
 
                     for (Entity mob : level().getEntitiesOfClass(
                             Entity.class,

@@ -22,6 +22,7 @@ import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -174,7 +175,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingEpitaph()){
                 ticksIntoEpitaph++;
                 if (ticksIntoEpitaph > getEpitphDuration()){
-                    tryPowerPacket(PowerIndex.POWER_1);
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER);
                     epitaph.clear();
                     ticksIntoEpitaph = 0;
                 }
