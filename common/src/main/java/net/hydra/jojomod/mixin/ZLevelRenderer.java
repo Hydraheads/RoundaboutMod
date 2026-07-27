@@ -4,9 +4,9 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelRenderer;
+import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
@@ -15,12 +15,15 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.material.FogType;
@@ -55,6 +58,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 @Mixin(LevelRenderer.class)
 public abstract class ZLevelRenderer implements ILevelRenderer {
@@ -258,6 +262,68 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         }
     }
 
+    @Unique
+    public void rdbt$renderTerrainFragments(
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            Camera camera,
+            float partialTick
+    ) {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null && (((TimeStop) pl.level()).inTimeStopRange(pl))){
+            partialTick = 0;
+        }
+
+        Minecraft mc = Minecraft.getInstance();
+        BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
+
+        Vec3 cam = camera.getPosition();
+
+        Iterator<TerrainFragments> it = ClientEffectUtil.terrainFragments.iterator();
+
+        while (it.hasNext()) {
+            TerrainFragments frag = it.next();
+
+            if (frag.age >= frag.maxAge) {
+                it.remove();
+                continue;
+            }
+
+            poseStack.pushPose();
+
+            // Interpolated position
+            double x = Mth.lerp(partialTick, frag.prevPos.x, frag.pos.x) - cam.x;
+            double y = Mth.lerp(partialTick, frag.prevPos.y, frag.pos.y) - cam.y;
+            double z = Mth.lerp(partialTick, frag.prevPos.z, frag.pos.z) - cam.z;
+            float scale = Mth.lerp(partialTick, frag.prevScale, frag.scale);
+
+
+            poseStack.translate(x, y, z);
+
+            // Rotate the chunk
+            float rx = Mth.lerp(partialTick, frag.prevRotX, frag.rotX);
+            float ry = Mth.lerp(partialTick, frag.prevRotY, frag.rotY);
+            float rz = Mth.lerp(partialTick, frag.prevRotZ, frag.rotZ);
+
+            poseStack.mulPose(Axis.XP.rotationDegrees(rx));
+            poseStack.mulPose(Axis.YP.rotationDegrees(ry));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rz));
+
+            // Center rotation
+            poseStack.translate(-0.5, -0.5, -0.5);
+            poseStack.scale(scale,scale,scale);
+
+            dispatcher.renderSingleBlock(
+                    frag.state,
+                    poseStack,
+                    buffer,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY
+            );
+
+            poseStack.popPose();
+        }
+    }
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
@@ -268,87 +334,98 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderSky",
             at = @At(value = "TAIL"),cancellable = true)
     private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
-        if (!ClientUtil.renderTimeErase()){
-            return;
-        }
-        if (!$$4) {
-            FogType $$6 = $$3.getFluidInCamera();
-            if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
-
-                float alpha = (float)ClientUtil.renderTimeEraseTime();
-                float dblcheck = $$2%1;
-                if (ClientUtil.isUsingTimeErase){
-                    alpha = Math.min(alpha+dblcheck,20);
-                } else {
-                    alpha = Math.max(alpha-dblcheck,0);
-                }
-                alpha/=(float)20;
-                alpha = Mth.clamp(alpha,0,1F);
 
 
-                RenderSystem.enableBlend();
-                RenderSystem.depthMask(false);
-                RenderSystem.setShaderFogStart(Float.MAX_VALUE);
-                RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
-                RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-                Tesselator tess = Tesselator.getInstance();
-                BufferBuilder bufferBuilder = tess.getBuilder();
-                RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+        if (ClientUtil.renderTimeErase()) {
+            if (!$$4) {
+                FogType $$6 = $$3.getFluidInCamera();
+                if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
 
-                for (int integer = 0; integer < 6; ++integer) {
-                    $$0.pushPose();
-                    //Time erase rotates to the camera and then slowly drifts
-                    //float yaw = $$3.getYRot();
-                    //float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
-                    //$$0.mulPose(Axis.YP.rotationDegrees(-yaw - spin));
-                    float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
-                    $$0.mulPose(Axis.YP.rotationDegrees( spin));
+                    float alpha = (float) ClientUtil.renderTimeEraseTime();
+                    float dblcheck = $$2 % 1;
+                    if (ClientUtil.isUsingTimeErase) {
+                        alpha = Math.min(alpha + dblcheck, 20);
+                    } else {
+                        alpha = Math.max(alpha - dblcheck, 0);
+                    }
+                    alpha /= (float) 20;
+                    alpha = Mth.clamp(alpha, 0, 1F);
 
-                    $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
-                    $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
-                    if (integer == 0) {
+
+                    RenderSystem.enableBlend();
+                    RenderSystem.depthMask(false);
+                    RenderSystem.setShaderFogStart(Float.MAX_VALUE);
+                    RenderSystem.setShaderFogEnd(Float.MAX_VALUE);
+                    RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                    Tesselator tess = Tesselator.getInstance();
+                    BufferBuilder bufferBuilder = tess.getBuilder();
+                    RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+
+                    for (int integer = 0; integer < 6; ++integer) {
+                        $$0.pushPose();
+                        //Time erase rotates to the camera and then slowly drifts
+                        //float yaw = $$3.getYRot();
+                        //float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
+                        //$$0.mulPose(Axis.YP.rotationDegrees(-yaw - spin));
+                        float spin = (ClientUtil.clientTicker + ($$2 % 1)) * 0.1F;
+                        $$0.mulPose(Axis.YP.rotationDegrees(spin));
+
+                        $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
                         $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+                        if (integer == 0) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+                        }
+
+                        if (integer == 1) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[1]);
+                        }
+
+                        if (integer == 2) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
+                        }
+                        if (integer == 3) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
+                        }
+
+                        if (integer == 4) {
+                            $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
+                        }
+
+                        if (integer == 5) {
+                            $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[5]);
+                        }
+
+                        Matrix4f stack = $$0.last().pose();
+                        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                        bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                        BufferUploader.drawWithShader(bufferBuilder.end());
+                        $$0.popPose();
                     }
 
-                    if (integer == 1) {
-                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[1]);
-                    }
-
-                    if (integer == 2) {
-                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
-                    }
-                    if (integer == 3) {
-                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
-                    }
-
-                    if (integer == 4) {
-                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
-                    }
-
-                    if (integer == 5) {
-                        $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
-                        RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[5]);
-                    }
-
-                    Matrix4f stack = $$0.last().pose();
-                    bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                    bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
-                    bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
-                    bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
-                    bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
-                    BufferUploader.drawWithShader(bufferBuilder.end());
-                    $$0.popPose();
+                    RenderSystem.depthMask(true);
+                    RenderSystem.disableBlend();
                 }
-
-                RenderSystem.depthMask(true);
-                RenderSystem.disableBlend();
             }
         }
+        MultiBufferSource.BufferSource buffer = this.renderBuffers.bufferSource();
+
+        rdbt$renderTerrainFragments(
+                $$0,
+                buffer,
+                $$3,
+                $$2
+        );
+
+        buffer.endBatch();
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",

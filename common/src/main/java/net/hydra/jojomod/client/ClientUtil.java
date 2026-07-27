@@ -64,7 +64,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -120,6 +119,7 @@ public class ClientUtil {
     public static int getClientTicker(){
         return clientTicker;
     }
+
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
@@ -128,6 +128,9 @@ public class ClientUtil {
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                 if (PKC.isUsingTimeErase()){
+                    if (clientTicker % 2 == 0) {
+                        ClientEffectUtil.spawnTerrainFragment(player);
+                    }
                     isUsingTimeErase = true;
                     if (TimeErase < 20){
                         TimeErase++;
@@ -145,6 +148,7 @@ public class ClientUtil {
                 }
             }
         }
+        ClientEffectUtil.updateTerrainFragments();
         if (bitesTheDustTicker > -1){
             bitesTheDustTicker++;
             if (bitesTheDustTicker > 8){
