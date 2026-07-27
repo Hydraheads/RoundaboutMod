@@ -2882,6 +2882,9 @@
   "config.roundabout.timeSkipCooldown.name": "Time Skip CD",
   "config.roundabout.timeSkipCooldown.desc": "This cooldown for time skip in ticks.",
 
+  "config.roundabout.enableEpitaphPreSkip.name": "Epitaph Non-Skip",
+  "config.roundabout.enableEpitaphPreSkip.desc": "Enables using epitaph even with time skip unavailable. This is visually confusing but a highly requested feature.",
+
   "config.roundabout.epitaphCooldown.name": "Epitaph CD",
   "config.roundabout.epitaphCooldown.desc": "This cooldown in ticks.",
 

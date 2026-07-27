@@ -1087,6 +1087,8 @@ public class Config implements Cloneable {
         public Boolean enableKingCrimson;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableSkippingCooldowns;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableEpitaphPreSkip;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)

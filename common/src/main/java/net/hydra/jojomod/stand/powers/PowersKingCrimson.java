@@ -168,6 +168,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public int getTicksIntoEpitaph(){
         return ticksIntoEpitaph;
     }
+    public boolean canUseEpitaphWithoutSkip(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
+    }
     public int ticksIntoEpitaph = 0;
     @Override
     public void tickPower() {
@@ -1659,7 +1662,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (epitaph.isEmpty()) {
-                if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+                if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
                     return;
                 }
                 //debugPlayer();
@@ -1961,7 +1964,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
     public void epitaphClient(){
-        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
             return;
         }
         if (this.onCooldown(PowerIndex.SKILL_1)) {
@@ -2387,7 +2390,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return true;
         }
         if (slot == 1 && !isHoldingSneak() && onCooldown(PowerIndex.SKILL_2_SNEAK)){
-            return true;
+            if (!canUseEpitaphWithoutSkip()) {
+                return true;
+            }
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
