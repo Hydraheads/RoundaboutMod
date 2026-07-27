@@ -561,7 +561,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
             BRAZIL_SKIN = 5,
             RADIOACTIVE_SKIN = 6,
             POLLINATION_SKIN = 7,
-            UFO_TRANSFER_SKIN = 8;
+            UFO_TRANSFER_SKIN = 8,
+            FLESHY_TRANSFER_SKIN = 9;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -572,7 +573,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN,
-                UFO_TRANSFER_SKIN
+                UFO_TRANSFER_SKIN,
+                FLESHY_TRANSFER_SKIN
         );
     }
     public double dodgeBuff(){
@@ -786,6 +788,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.pollination_transfer");
         }else if (skinId == ManhattanTransferEntity.UFO_TRANSFER_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.ufotransfer");
+        }else if (skinId == ManhattanTransferEntity.FLESHY_TRANSFER_SKIN){
+            return Component.translatable(  "skins.roundabout.manhattan_transfer.fleshy_transfer");
         }
 
 

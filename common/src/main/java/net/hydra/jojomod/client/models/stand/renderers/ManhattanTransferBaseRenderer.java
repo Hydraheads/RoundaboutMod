@@ -38,6 +38,7 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
     private static final ResourceLocation RADIOACTIVE_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/radioactive_transfer.png");
     private static final ResourceLocation POLLINATION_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/pollination_transfer.png");
     private static final ResourceLocation UFO_TRANSFER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/ufotransfer.png");
+    private static final ResourceLocation FLESHY_TRANSFER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/fleshy_transfer.png");
 
     @Override
     public ResourceLocation getTextureLocation(ManhattanTransferEntity entity) {
@@ -65,6 +66,9 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
         }
         if (BT == ManhattanTransferEntity.UFO_TRANSFER_SKIN) {
             return UFO_TRANSFER_SKIN;
+        }
+        if(BT == ManhattanTransferEntity.FLESHY_TRANSFER_SKIN){
+            return FLESHY_TRANSFER_SKIN;
         }
         return ANIME_SKIN;
     }
