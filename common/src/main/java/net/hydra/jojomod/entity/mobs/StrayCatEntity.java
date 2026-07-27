@@ -194,6 +194,15 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
     }
 
+    public void randomizeBreed() {
+        double rand = getRandom().nextDouble();
+        if (rand < 0.4) {
+            setBreed((byte)1);
+        }else {
+            setBreed((byte) 0);
+        }
+    }
+
 
     @Override
     public void tick() {

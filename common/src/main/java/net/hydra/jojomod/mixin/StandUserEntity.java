@@ -5661,15 +5661,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         /// Stray Cat Spawn
-        if (me instanceof Cat) {
+        if (me instanceof Cat C && !C.isTame()) {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
                 BlockPos pos = me.getOnPos();
                 BlockState stateOn = me.level().getBlockState(pos);
-
+                /** Uncomment when Hydra approves the stray cat
+                 *
                 if (StrayCatEntity.canSurviveInBlock(stateOn)) {
-                    Roundabout.LOGGER.info("theres a not a cat here");
-                    // Will be added when the stray cat is finished
-                }
+                    StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create(me.level());
+                    FunnyCat.randomizeBreed();
+                    Vec3 strayCatPos = me.position();
+                    FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, me.getYRot(), 0.0f);
+                    me.level().addFreshEntity(FunnyCat);
+                }*/
             }
         }
 
