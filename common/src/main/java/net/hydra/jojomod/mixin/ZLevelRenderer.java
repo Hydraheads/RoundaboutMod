@@ -284,7 +284,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         while (it.hasNext()) {
             TerrainFragments frag = it.next();
 
-            if (frag.age >= frag.maxAge) {
+            if (frag.scale <= 0) {
                 it.remove();
                 continue;
             }
