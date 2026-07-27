@@ -17,6 +17,7 @@ import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
@@ -1329,7 +1330,7 @@ public class MainUtil {
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof StandEntity)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
                     return ((IMob)ME).roundabout$isWorthy();
                 }
             }
