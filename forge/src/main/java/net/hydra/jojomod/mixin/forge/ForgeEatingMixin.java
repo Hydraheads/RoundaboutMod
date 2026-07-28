@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.forge;
 
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
@@ -24,6 +25,10 @@ public abstract class ForgeEatingMixin {
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),remap = false,require = 0, cancellable = true)
     protected void roundabout$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
         if (entity != null){
+            if (PowerTypes.isErasingTime(entity)){
+                ci.cancel();
+                return;
+            }
             if (FateTypes.hasBloodHunger(entity)){
                 if (item.isEdible()) {
                     this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
