@@ -219,7 +219,7 @@ public enum PowerTypes {
         }
         return false;
     }
-    //d4c parallel run + time erase
+    //d4c parallel run + time erase + man in the mirror
     public static boolean isExistentiallyElsewhere(Entity entity){
         if (isErasingTime(entity)){
             return true;

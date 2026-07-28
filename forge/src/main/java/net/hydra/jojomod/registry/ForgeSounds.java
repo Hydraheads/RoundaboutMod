@@ -30,6 +30,8 @@ public class ForgeSounds {
             register(ModSounds.SKIP_TIME_2, ModSounds.SKIP_TIME_2_ID);
     public static final RegistryObject<SoundEvent> TIME_ERASE_FULL =
             register(ModSounds.TIME_ERASE_FULL, ModSounds.TIME_ERASE_FULL_ID);
+    public static final RegistryObject<SoundEvent> TIME_ERASE_END =
+            register(ModSounds.TIME_ERASE_END, ModSounds.TIME_ERASE_END_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =

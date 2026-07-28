@@ -53,6 +53,12 @@
       "roundabout:time_erase_full"
     ]
   },
+  "time_erase_end": {
+    "subtitle": "sounds.roundabout.time_erase_end",
+    "sounds": [
+      "roundabout:time_erase_end"
+    ]
+  },
   "king_crimson_punch_2": {
     "subtitle": "sounds.roundabout.king_crimson_punch_2",
     "sounds": [

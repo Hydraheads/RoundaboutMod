@@ -116,6 +116,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_ERASE) {
             return ModSounds.TIME_ERASE_FULL_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -125,6 +127,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte TIME_SKIP_1 = 108;
     public static final byte TIME_SKIP_2 = 109;
     public static final byte TIME_ERASE = 110;
+    public static final byte TIME_ERASE_END = 111;
 
     @Override
     public SoundEvent getImpaleSound() {
@@ -1144,7 +1147,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
         scatterPackets();
         if (skip_dump.isEmpty()){
             return;
@@ -1633,7 +1636,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
         scatterPackets();
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
@@ -1964,12 +1967,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (timeEraseActive){
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
-                S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
+                packetNearby2();
+                playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
             } else {
                 timeEraseActive = true;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
             }
             saveDiscAndSync();
         }

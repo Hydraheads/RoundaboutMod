@@ -44,6 +44,9 @@ public class ModSounds {
     public static final String TIME_ERASE_FULL = "time_erase_full";
     public static final ResourceLocation TIME_ERASE_FULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_FULL);
     public static SoundEvent TIME_ERASE_FULL_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_FULL_ID);
+    public static final String TIME_ERASE_END = "time_erase_end";
+    public static final ResourceLocation TIME_ERASE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_END);
+    public static SoundEvent TIME_ERASE_END_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_END_ID);
 
 
     public static final String OVA_THE_WORLD = "ova_the_world";

@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -385,6 +386,11 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
+        //if (PowerTypes.isExistentiallyElsewhere(((Entity) (Object)this))){
+         //   cir.setReturnValue(true);
+         //   return;
+        //}
+
         if (roundabout$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
             if (this.level().isClientSide()){
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
