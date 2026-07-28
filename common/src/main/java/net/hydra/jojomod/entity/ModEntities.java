@@ -71,6 +71,7 @@ public class ModEntities {
     public static EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
+    public static EntityType<BlazeTransferEntity> BLAZE_TRANSFER;
     public static EntityType<BlackSabbathEntity> BLACK_SABBATH;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;

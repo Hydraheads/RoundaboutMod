@@ -139,6 +139,8 @@ public class PowersManhattanTransfer extends NewDashPreset {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
             if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
                 return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
+            } else if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.BLAZE_TRANSFER_SKIN){
+                return ModEntities.BLAZE_TRANSFER.create(this.getSelf().level());
             }
             return ModEntities.MANHATTAN_TRANSFER.create(this.getSelf().level());
     }
@@ -561,7 +563,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
             BRAZIL_SKIN = 5,
             RADIOACTIVE_SKIN = 6,
             POLLINATION_SKIN = 7,
-            UFO_TRANSFER_SKIN = 8;
+            UFO_TRANSFER_SKIN = 8,
+            FLESHY_TRANSFER_SKIN = 9,
+            BLAZE_TRANSFER = 10;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -572,7 +576,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 BRAZIL_SKIN,
                 RADIOACTIVE_SKIN,
                 POLLINATION_SKIN,
-                UFO_TRANSFER_SKIN
+                UFO_TRANSFER_SKIN,
+                FLESHY_TRANSFER_SKIN,
+                BLAZE_TRANSFER
         );
     }
     public double dodgeBuff(){
@@ -759,6 +765,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale() {
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == ManhattanTransferEntity.BLAZE_TRANSFER_SKIN){
+            return 35;
+        }
         return 45;
     }
     @Override
@@ -786,6 +796,10 @@ public class PowersManhattanTransfer extends NewDashPreset {
             return Component.translatable(  "skins.roundabout.manhattan_transfer.pollination_transfer");
         }else if (skinId == ManhattanTransferEntity.UFO_TRANSFER_SKIN){
             return Component.translatable(  "skins.roundabout.manhattan_transfer.ufotransfer");
+        }else if (skinId == ManhattanTransferEntity.FLESHY_TRANSFER_SKIN){
+            return Component.translatable(  "skins.roundabout.manhattan_transfer.fleshy_transfer");
+        }else if(skinId == ManhattanTransferEntity.BLAZE_TRANSFER_SKIN){
+            return Component.translatable(  "skins.roundabout.manhattan_transfer.blaze_transfer");
         }
 
 

@@ -60,7 +60,9 @@ public class ManhattanTransferEntity extends StandEntity {
             BRAZIL_SKIN = 5,
             RADIOACTIVE_SKIN = 6,
             POLLINATION_SKIN = 7,
-            UFO_TRANSFER_SKIN = 8;
+            UFO_TRANSFER_SKIN = 8,
+            FLESHY_TRANSFER_SKIN = 9,
+            BLAZE_TRANSFER_SKIN = 10;
 
     /*The 12 billion values I need for the stand to work as intended*/
     @Override

@@ -117,7 +117,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch(move) {
             case PowerIndex.POWER_1 -> {
                 this.active = true;
-                this.setCooldown(PowerIndex.SKILL_1,80);
+                this.setCooldown(PowerIndex.SKILL_1,20);
             }
         }
         return true;
@@ -258,6 +258,17 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
+        switch (move) {
+            case PowerIndex.POWER_1_BONUS -> {
+                active = false;
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                    }
+                    this.getStandEntity(this.getSelf()).forceDespawnSet = true;
+                }
+            }
+        }
         return super.tryPower(move, forced);
     }
 
@@ -273,6 +284,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     public boolean active = false;
+    int stupidTicksSequel = 10;
 
     @Override
     public void tickPower() {
@@ -288,9 +300,9 @@ public class PowersBlackSabbath extends NewDashPreset {
         if (this.getStandEntity(self) == null && this.getSelf().isAlive() && active) {
             if (PowerTypes.hasStandActive(self)) {
                 if (!isClient()) {
-                    if (this.getSelf().position() != null) {
-                        placeBlackChest(this.getSelf().position());
-                    }
+                        if (this.getSelf().position() != null) {
+                            placeBlackChest(this.getSelf().position());
+                        }
                 }
             }
 
@@ -300,8 +312,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     public void placeBlackChest(Vec3 pos) {
-        int cooldown = 60;
-        this.setCooldown(PowerIndex.SKILL_1, cooldown);
+        this.setCooldown(PowerIndex.SKILL_1, 20);
         if (!isClient()) {
             if(self instanceof Player PL) {
                 blipStand(pos, PL);
@@ -328,6 +339,11 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 BE.openCustomInventoryScreen(PL);
         }
+    }
+
+    public void RecallClient() {
+        tryPower(PowerIndex.POWER_1_BONUS,true);
+        tryPowerPacket(PowerIndex.POWER_1_BONUS);
     }
 
     @Override
@@ -392,6 +408,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 return Component.translatable(  "skins.roundabout.black_sabbath.phantom");
             }else if (skinId == BlackSabbathEntity.SWEET){
                 return Component.translatable(  "skins.roundabout.black_sabbath.sweet");
+            }else if(skinId == BlackSabbathEntity.SACTHOTH){
+                return Component.translatable(  "skins.roundabout.black_sabbath.sacthoth");
             }
             return Component.translatable(  "skins.roundabout.black_sabbath.anime");
     }
@@ -441,7 +459,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             NIGHT_SKIN = 6,
             DEPARTURE_SKIN = 7,
             PHANTOM_SKIN = 8,
-            SWEET_SKIN = 9;
+            SWEET_SKIN = 9,
+            SACTHOTH_SKIN = 10;
 
     @Override
     public List<Byte> getSkinList() {
@@ -454,7 +473,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 NIGHT_SKIN,
                 DEPARTURE_SKIN,
                 PHANTOM_SKIN,
-                SWEET_SKIN
+                SWEET_SKIN,
+                SACTHOTH_SKIN
         );
     }
 

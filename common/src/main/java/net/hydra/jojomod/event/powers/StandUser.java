@@ -375,7 +375,7 @@ public interface StandUser {
     int rdbt$getCrawlTicks();
 
     void rdbt$SetBtdPlantedTicks(int e);
-    int rdbt$getBtdPlantedTicks();
+    boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();

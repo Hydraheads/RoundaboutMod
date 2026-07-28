@@ -473,6 +473,7 @@
   "entity.roundabout.planet_waves": "Planet Waves",
   "entity.roundabout.manhattan_transfer": "Manhattan Transfer",
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
+  "entity.roundabout.blaze_transfer": "Blaze Transfer",
   "entity.roundabout.black_sabbath": "Black Sabbath",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
@@ -2469,6 +2470,8 @@
   "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
   "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
   "skins.roundabout.manhattan_transfer.ufotransfer": "UFO",
+  "skins.roundabout.manhattan_transfer.fleshy_transfer": "Jawling",
+  "skins.roundabout.manhattan_transfer.blaze_transfer": "Blaze",
 
   "skins.roundabout.black_sabbath.anime":  "Anime",
   "skins.roundabout.black_sabbath.manga":  "Manga",
@@ -2479,6 +2482,7 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
