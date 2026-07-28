@@ -206,8 +206,8 @@ public class JusticeFogRenderer {
         progress = progress * progress * (3F - 2F * progress);
 
         float r = 0.07F;
-        float g = 0.01F;
-        float b = 0.04F;
+        float g = 0.00F;
+        float b = 0.05F;
         RenderSystem.clearColor(r,
                 g,
                 b,
