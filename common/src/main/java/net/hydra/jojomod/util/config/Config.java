@@ -1109,6 +1109,14 @@ public class Config implements Cloneable {
         public Integer epitaphCooldown;
         @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
         public Integer epitaphDuration;
+        @IntOption(group = "inherit", value = 220, min = 1, max = 72000)
+        public Integer timeEraseDuration;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer timeEraseMinimumCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer additionalCooldownPerSecondsUsed2;
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer additionalCooldownFromPlayerRunning;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableDaySkip;
         @BooleanOption(group = "inherit", value = true)

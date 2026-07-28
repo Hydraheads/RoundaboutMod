@@ -27,6 +27,7 @@ import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -192,7 +193,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public int timeEraseMaxTicks(){
-        return 220;
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeEraseDuration;
     }
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum){
@@ -2000,7 +2001,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public int getTimeEraseCooldown(){
-        return 600;
+        int maxTicks = timeEraseMaxTicks();
+        int ticksEaten = maxTicks - ticksOfEraseLeft;
+        ticksEaten = Math.max(ticksEaten,0);
+
+        int cooldownOverall = ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.timeEraseMinimumCooldown;
+        cooldownOverall += (int)(((float)ticksEaten)
+                *((ClientNetworking.getAppropriateConfig().kingCrimsonSettings.
+                additionalCooldownPerSecondsUsed2 *0.05)));
+
+        return cooldownOverall;
     }
 
     public void timeErase() {

@@ -2922,6 +2922,15 @@
 
   "config.roundabout.epitaphDuration.name": "Epitaph Duration",
   "config.roundabout.epitaphDuration.desc": "How long in ticks does epitaph last? (20 ticks = 1 second)",
+  "config.roundabout.timeEraseDuration.name": "Time Erase Duration",
+  "config.roundabout.timeEraseDuration.desc": "How long in ticks does max level time erase last? (20 ticks = 1 second)",
+
+  "config.roundabout.additionalCooldownPerSecondsUsed2.name": "TE CD Per Sec",
+  "config.roundabout.additionalCooldownPerSecondsUsed2.desc": "How many ticks of cooldown per second spent? (20 ticks = 1 second)",
+
+  "config.roundabout.additionalCooldownFromPlayerRunning.name": "TE Player Run CD",
+  "config.roundabout.additionalCooldownFromPlayerRunning.desc": "If you run far enough in pvp during TE this cooldown is added. (20 ticks = 1 second)",
+
 
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
