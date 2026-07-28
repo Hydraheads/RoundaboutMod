@@ -80,6 +80,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.PLANET_WAVES_COSMIC.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
@@ -705,6 +706,7 @@ public class ForgeEvents {
         ModEntities.PLANET_WAVES_COSMIC = ForgeEntities.PLANET_WAVES_COSMIC.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
+        ModEntities.BLAZE_TRANSFER = ForgeEntities.BLAZE_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();

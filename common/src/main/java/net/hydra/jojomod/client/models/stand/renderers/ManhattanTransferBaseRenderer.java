@@ -6,10 +6,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.ManhattanTransferModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
-import net.hydra.jojomod.entity.stand.DarkMirageEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
-import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
-import net.hydra.jojomod.entity.stand.PollinationTransferEntity;
+import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
@@ -39,6 +36,7 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
     private static final ResourceLocation POLLINATION_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/pollination_transfer.png");
     private static final ResourceLocation UFO_TRANSFER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/ufotransfer.png");
     private static final ResourceLocation FLESHY_TRANSFER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/manhattan_transfer/fleshy_transfer.png");
+    private static final ResourceLocation BLAZE_TRANFER_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/manhattan_transfer/blaze_transfer.png");
 
     @Override
     public ResourceLocation getTextureLocation(ManhattanTransferEntity entity) {
@@ -69,6 +67,9 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
         }
         if(BT == ManhattanTransferEntity.FLESHY_TRANSFER_SKIN){
             return FLESHY_TRANSFER_SKIN;
+        }
+        if(BT == ManhattanTransferEntity.BLAZE_TRANSFER_SKIN){
+            return BLAZE_TRANFER_SKIN;
         }
         return ANIME_SKIN;
     }
