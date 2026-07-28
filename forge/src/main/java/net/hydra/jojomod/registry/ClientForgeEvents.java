@@ -196,6 +196,7 @@ public class ClientForgeEvents {
         //event.registerBlockEntityRenderer(ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get(), ChessBoardRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
     }
 
     @SubscribeEvent

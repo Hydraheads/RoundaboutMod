@@ -174,6 +174,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_OASIS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_OASIS);
     public static SoundEvent SUMMON_OASIS_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_OASIS_ID);
 
+    public static final String OASIS_MUD_HIT = "oasis_mud_hit";
+    public static final ResourceLocation OASIS_MUD_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OASIS_MUD_HIT);
+    public static SoundEvent OASIS_MUD_HIT_EVENT = SoundEvent.createVariableRangeEvent(OASIS_MUD_HIT_ID);
+
     public static final String CKB_PLACE = "ckb_place";
     public static final ResourceLocation CKB_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_PLACE);
     public static SoundEvent CKB_PLACE_EVENT = SoundEvent.createVariableRangeEvent(CKB_PLACE_ID);
