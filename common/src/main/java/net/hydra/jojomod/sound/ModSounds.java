@@ -774,6 +774,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_DETONATE = "kq_minesweeper_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_DETONATE_ID);
+    public static final String KQ_MINESWEEPER_EXPLOSION = "kq_minesweeper_explosion";
+    public static final ResourceLocation KQ_MINESWEEPER_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_EXPLOSION);
+    public static SoundEvent KQ_MINESWEEPER_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_EXPLOSION_ID);
     public static final String KQ_MINESWEEPER_BTD_DETONATE = "kq_minesweeper_btd_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_BTD_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_BTD_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_BTD_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_BTD_DETONATE_ID);

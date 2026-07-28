@@ -853,6 +853,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(MoldTicks > 0){
             MoldTicks -= 1;
         }
+        if(BtdPlantedTicks > 0){
+            BtdPlantedTicks -= 1;
+        }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
         }
@@ -2600,7 +2603,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (user.roundabout$isGuarding() || user.roundabout$getStandPowers().isSpecialGuarding()) {
-            if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && user.roundabout$getGuardCooldown() > 0) {
+            if (user.roundabout$getLogSource() != null && !user.roundabout$getLogSource().is(DamageTypeTags.BYPASSES_COOLDOWN) && (user.roundabout$getGuardCooldown() > 0)) {
                 return;
             }
 
@@ -5665,15 +5668,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.getEffect(ModEffects.STAND_VIRUS) != null) {
                 BlockPos pos = me.getOnPos();
                 BlockState stateOn = me.level().getBlockState(pos);
-                /** Uncomment when Hydra approves the stray cat
-                 *
+
                 if (StrayCatEntity.canSurviveInBlock(stateOn)) {
                     StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create(me.level());
                     FunnyCat.randomizeBreed();
                     Vec3 strayCatPos = me.position();
                     FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, me.getYRot(), 0.0f);
                     me.level().addFreshEntity(FunnyCat);
-                }*/
+                }
             }
         }
 
@@ -6013,6 +6015,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public int getMoldTicks() {
         return MoldTicks;
+    }
+
+    public int BtdPlantedTicks;
+
+    @Override
+    public int rdbt$getBtdPlantedTicks() {
+        return BtdPlantedTicks;
+    }
+
+    @Override
+    public void rdbt$SetBtdPlantedTicks(int e) {
+        if(!this.level().isClientSide) {
+            BtdPlantedTicks = e;
+        }
     }
 
     @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)

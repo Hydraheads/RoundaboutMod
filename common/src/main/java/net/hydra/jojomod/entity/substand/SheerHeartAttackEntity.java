@@ -531,14 +531,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 			StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
 
 			if (!(SP instanceof PowersKillerQueen)) { return; }
-
 			PowersKillerQueen KQ = (PowersKillerQueen)SP;
 
 			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
 					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
 			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
-			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+
+
+			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (this.entityTarget != null) {
 				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
@@ -719,7 +720,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		double rand = Math.random();
 		if (skin == KillerQueenEntity.MINESWEEPER) {
-			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT; }
+			if (this.getTargetType() != NONE) {
+				if (rand >= 0.7) {
+					return ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_EVENT;
+				}
+				return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT;
+			}
 
 			return ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_EVENT;
 		} else if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {

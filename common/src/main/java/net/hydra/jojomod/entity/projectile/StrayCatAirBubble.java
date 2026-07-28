@@ -32,15 +32,13 @@ import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -97,11 +95,16 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         return this.level().getEntity(id);
     }
 
+    public float damageMultiplier = 1.0f;
+
+    public void setDamageMult(float v) {
+        damageMultiplier = v;
+    }
 
     static final float damagePoints = 2.5f;
 
     public float getDamagePoints() {
-        return damagePoints;
+        return damagePoints * damageMultiplier;
     }
 
     public Entity target;
@@ -207,6 +210,22 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
                 popBubble();
                 return;
+            }
+            if (!isRemoved()) {
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
+                }
             }
 
             if (this.target != null && this.target.isAlive()) {
@@ -315,14 +334,17 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-            if (KQ.detonateTimer > -1) {
-                KQ.explode();
-            }else {
+        if (!this.level().isClientSide()) {
+            if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                if (KQ.detonateTimer > -1) {
+                    KQ.explode();
+                    return;
+                }
                 KQ.bubbleFailed();
-                popBubble();
             }
-        } else {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
+                    $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
+                    30, 0.2, 0.05, 0.2, 0.3);
             popBubble();
         }
     }
@@ -421,9 +443,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 SoundSource.PLAYERS, 0.6F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
 
-            this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
-                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                    0, 0, 0);
+            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    1, 0, 0, 0, 0.015);
 
         }
 
