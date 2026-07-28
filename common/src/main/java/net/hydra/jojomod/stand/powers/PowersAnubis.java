@@ -927,7 +927,7 @@ public class PowersAnubis extends NewDashPreset {
                         anim = AnubisAnimations.Backflip;
                     }
                 }
-                case PowerIndex.GUARD -> anim = leftArm ? AnubisAnimations.L_Block : AnubisAnimations.Test;
+                case PowerIndex.GUARD -> anim = leftArm ? AnubisAnimations.L_Block : AnubisAnimations.Block;
                 case PowersAnubis.POGO -> anim = AnubisAnimations.PogoReady;
                 case PowerIndex.BARRAGE_CHARGE_2 -> anim = leftArm ? AnubisAnimations.L_ShieldbreakCharge : AnubisAnimations.ShieldbreakCharge;
                 case PowerIndex.BARRAGE_2 -> anim = leftArm ? AnubisAnimations.L_ShieldbreakHit : AnubisAnimations.ShieldbreakHit;
@@ -1039,7 +1039,11 @@ public class PowersAnubis extends NewDashPreset {
                 && canPogo()
                 && this.getAttackTime() > 5
                 && (this.fallTime > 3 || Minecraft.getInstance().options.keyJump.isDown())
-                && this.getActivePower() != PowersAnubis.POGO;
+                && this.getActivePower() != PowersAnubis.POGO
+                && this.getActivePower() != PowersAnubis.FLURRY
+                && this.getActivePower() != PowersAnubis.SPIN
+                && this.getActivePower() != PowerIndex.SNEAK_ATTACK
+                && this.getActivePower() != PowerIndex.SNEAK_ATTACK_CHARGE;
     }
 
     @Override
@@ -1756,6 +1760,8 @@ public class PowersAnubis extends NewDashPreset {
                     if (!isClient()) {
                         if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
                             this.getSelf().level().destroyBlock(blockHit.getBlockPos(), false, this.getSelf());
+                        } else {
+                            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),state.getSoundType().getBreakSound(),SoundSource.PLAYERS,1F,1F);
                         }
 
                         ThrownObjectEntity toe = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), state.getBlock().asItem().getDefaultInstance(), false);
