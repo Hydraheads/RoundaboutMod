@@ -44,6 +44,7 @@ public class FabricSounds {
         addSound(ModSounds.HIT_1_SOUND_ID, ModSounds.HIT_1_SOUND_EVENT);
         addSound(ModSounds.INHALE_ID, ModSounds.INHALE_EVENT);
         addSound(ModSounds.SUMMON_OASIS_ID, ModSounds.SUMMON_OASIS_EVENT);
+        addSound(ModSounds.OASIS_MUD_HIT_ID, ModSounds.OASIS_MUD_HIT_EVENT);
 
         addSound(ModSounds.TWAU_BARRAGE_ID, ModSounds.TWAU_BARRAGE_EVENT);
         addSound(ModSounds.TWAU_BARRAGE_2_ID, ModSounds.TWAU_BARRAGE_2_EVENT);
@@ -275,6 +276,7 @@ public class FabricSounds {
         addSound(ModSounds.MANHATTAN_VISION_ID, ModSounds.MANHATTAN_VISION_EVENT);
 
         addSound(ModSounds.BLACK_SABBATH_SUMMON_ID, ModSounds.BLACK_SABBATH_SUMMON_EVENT);
+        addSound(ModSounds.OPEN_BLACK_SABBATH_CHEST_ID, ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT);
         addSound(ModSounds.TURNING_ON_LIGHTER_ID, ModSounds.TURNING_ON_LIGHTER_EVENT);
 
         addSound(ModSounds.CENTURY_BOY_SUMMON_ID, ModSounds.CENTURY_BOY_SUMMON_EVENT);

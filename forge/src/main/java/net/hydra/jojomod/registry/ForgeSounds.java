@@ -137,6 +137,8 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> SUMMON_OASIS_EVENT =
             register(ModSounds.SUMMON_OASIS, ModSounds.SUMMON_OASIS_ID);
+    public static final RegistryObject<SoundEvent> OASIS_MUD_HIT_EVENT =
+            register(ModSounds.OASIS_MUD_HIT, ModSounds.OASIS_MUD_HIT_ID);
 
     public static final RegistryObject<SoundEvent> CREAM_SUMMON_EVENT =
             register(ModSounds.CREAM_SUMMON, ModSounds.CREAM_SUMMON_ID);
@@ -154,6 +156,8 @@ public class ForgeSounds {
             register(ModSounds.BLACK_SABBATH_SUMMON, ModSounds.BLACK_SABBATH_SUMMON_ID);
     public static final RegistryObject<SoundEvent> TURNING_ON_LIGHTER_EVENT =
             register(ModSounds.TURNING_ON_LIGHTER, ModSounds.TURNING_ON_LIGHTER_ID);
+    public static final RegistryObject<SoundEvent> OPEN_CHEST_EVENT =
+            register(ModSounds.OPEN_BLACK_SABBATH_CHEST, ModSounds.OPEN_BLACK_SABBATH_CHEST_ID);
 
     public static final RegistryObject<SoundEvent> CENTURY_BOY_SUMMON_EVENT =
             register(ModSounds.CENTURY_BOY_SUMMON, ModSounds.CENTURY_BOY_SUMMON_ID);

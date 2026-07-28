@@ -757,6 +757,7 @@
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
   "sounds.roundabout.summon_oasis": "Stand summoned",
+  "sounds.roundabout.oasis_mud_hit": "Block liquefied",
   "sounds.roundabout.summon_king_crimson": "Stand summoned",
   "sounds.roundabout.summon_anubis": "Stand summoned",
   "sounds.roundabout.summon_california": "Stand summoned",
@@ -1037,6 +1038,7 @@
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.lighter_click":  "Lighter Click",
+  "sounds.roundabout.black_sabbath_chest_open":  "Open Black Sabbath Chest",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",

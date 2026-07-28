@@ -33,6 +33,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -146,7 +147,6 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public void blackChestClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            this.getSelf().playSound(ModSounds.RATT_PLACE_EVENT, 1.0F, (float) (0.98F + (Math.random() * 0.04F)));
             Vec3 blockHitResult = self.position();
             if (blockHitResult != null) {
                 tryPosPower(PowerIndex.POWER_1, true, blockHitResult);
@@ -284,7 +284,6 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     public boolean active = false;
-    int stupidTicksSequel = 10;
 
     @Override
     public void tickPower() {
@@ -328,6 +327,11 @@ public class PowersBlackSabbath extends NewDashPreset {
         StandEntity stand = getNewStandEntity();
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
+        if (self.level() instanceof ServerLevel sl){
+            self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,
+                    (float) (0.99f + Math.random() * 0.02f));
+        }
         if (stand instanceof BlackSabbathEntity BE) {
                 BE.setMaster(this.self);
                 BE.absMoveTo(pn.x(), self.getY(), pn.z());

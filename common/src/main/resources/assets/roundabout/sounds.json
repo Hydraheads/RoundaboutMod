@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "oasis_mud_hit": {
+    "subtitle": "sounds.roundabout.oasis_mud_hit",
+    "sounds": [
+      "roundabout:oasis_mud_hit"
+    ]
+  },
   "summon_diver_down": {
     "subtitle": "sounds.roundabout.summon_diver_down",
     "sounds": [
@@ -783,6 +789,12 @@
     "subtitle": "sounds.roundabout.lighter_click",
     "sounds": [
       "roundabout:lighter_click"
+    ]
+  },
+  "black_sabbath_chest_open": {
+    "subtitle": "sounds.roundabout.black_sabbath_chest_open",
+    "sounds": [
+      "roundabout:black_sabbath_chest_open"
     ]
   },
   "century_boy_summon": {

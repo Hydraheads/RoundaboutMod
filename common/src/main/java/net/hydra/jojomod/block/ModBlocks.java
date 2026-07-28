@@ -148,6 +148,7 @@ public class ModBlocks {
     public static Block FOG_DIRT_COATING;
     public static Block FOG_TRAP;
 
+    public static Block OASIS_MUD_BLOCK;
 
     public static Block FROZEN_DIRT;
     public static Block FROZEN_STONE;
@@ -187,6 +188,7 @@ public class ModBlocks {
 
     public static Block MELON_PARFAIT;
 
+    public static BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY;
     public static BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY;
     public static BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY;
     public static BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY;
@@ -220,6 +222,16 @@ public class ModBlocks {
                     randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
                     noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
 
+    public static Block OASIS_MUD_BLOCK_PROPERTIES =
+            new OasisMudBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.CLAY)
+                    .noCollission()
+                    .noOcclusion()
+                    .strength(0F, 0F)
+                    .sound(SoundType.MUD)
+                    .pushReaction(PushReaction.DESTROY)
+                    .noParticlesOnBreak()
+            );
 
     public static Block COLD_AIR_PROPERTIES =
             new ColdAirBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
