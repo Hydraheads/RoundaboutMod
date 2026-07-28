@@ -405,7 +405,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
 
                     if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        if (SU.roundabout$getStandAnimation() == PowersAnubis.POGO || SU.roundabout$getStandAnimation() == PowersAnubis.STAB) {
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();
@@ -415,13 +415,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
 
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(P) || SU.roundabout$getStandAnimation() == PowerIndex.POWER_4_SNEAK ) ) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
-                        this.leftArm.xRot = 0;
-                        this.leftArm.yRot = 0;
-                        this.rightArm.xRot = 0;
-                        this.rightArm.yRot = 0;
+                        if ($$0.getMainArm() == HumanoidArm.LEFT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.leftArm.xRot = 0;
+                            this.leftArm.yRot = 0;
+                        }
+                        if ($$0.getMainArm() == HumanoidArm.RIGHT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.rightArm.xRot = 0;
+                            this.rightArm.yRot = 0;
+                        }
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
                     } else {

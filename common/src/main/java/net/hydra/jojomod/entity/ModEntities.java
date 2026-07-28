@@ -79,6 +79,7 @@ public class ModEntities {
     public static EntityType<TuskEntity> TUSK_A2;
     public static EntityType<TuskEntity> TUSK_A3;
     public static EntityType<TuskEntity> TUSK_A4;
+    public static EntityType<AnubisEntity> ANUBIS;
     public static EntityType<VillagerMinion> VILLAGER_MINION;
     public static EntityType<AxolotlMinion> AXOLOTL_MINION;
     public static EntityType<ChickenMinion> CHICKEN_MINION;

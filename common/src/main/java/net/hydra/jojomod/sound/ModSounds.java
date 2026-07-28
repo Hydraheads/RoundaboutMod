@@ -1159,6 +1159,9 @@ public class ModSounds {
     public static final String ANUBIS_EXTRA = "anubis_extra";
     public static final ResourceLocation ANUBIS_EXTRA_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EXTRA);
     public static SoundEvent ANUBIS_EXTRA_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EXTRA_ID);
+    public static final String ANUBIS_EMPOWER = "anubis_empower";
+    public static final ResourceLocation ANUBIS_EMPOWER_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EMPOWER);
+    public static SoundEvent ANUBIS_EMPOWER_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EMPOWER_ID);
 
 
 

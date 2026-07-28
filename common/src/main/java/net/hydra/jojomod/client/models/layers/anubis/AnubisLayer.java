@@ -28,6 +28,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.phys.Vec2;
 import org.joml.Quaternionf;
 
 
@@ -170,6 +171,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         return heyFull;
     }
 
+    private static final Vec2[] translations = {
+            new Vec2(-1, -1),
+            new Vec2(1, -1),
+            new Vec2(-1, 1),
+            new Vec2(1, 1),
+
+    };
+
     public static void renderAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {
 
         StandUser user = ((StandUser)entity );
@@ -184,6 +193,20 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (user.roundabout$getAnubisVanishTicks() != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, heyFull, user.roundabout$getStandSkin() );
+            if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
+                float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                time -= (15/20.0F);
+                if (time > 0 && time < (15/20.0F)) {
+                    float scaler = 0.75F * Math.min(time * 0.7F, 1);
+                    for (Vec2 translation : translations) {
+                        poseStack.pushPose();
+                        poseStack.translate(translation.x * scaler * Math.cos(partialTicks * 0.5),(time * 8) % 1, translation.y * scaler * Math.sin(partialTicks * 0.5));
+                        ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                                1, 1, 1, heyFull * (0.7F * (1 - time / 300)), user.roundabout$getStandSkin() );
+                        poseStack.popPose();
+                    }
+                }
+            }
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {

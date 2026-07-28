@@ -5506,12 +5506,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     @Unique
-    boolean roundabout$cancelsprintJump(){
+    boolean roundabout$cancelsprintJump() {
         byte curse = this.roundabout$getLocacacaCurse();
-        if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG))
-            return true;
-        if (HeatUtil.isLegsFrozen(rdbt$this()))
-            return true;
+        if (curse > -1 && (curse == LocacacaCurseIndex.RIGHT_LEG || curse == LocacacaCurseIndex.LEFT_LEG)) return true;
+        if (HeatUtil.isLegsFrozen(rdbt$this()) || this.hasEffect(ModEffects.CRIPPLED)) return true;
 
         int zapped = roundabout$getZappedToID();
         if (zapped > -1){

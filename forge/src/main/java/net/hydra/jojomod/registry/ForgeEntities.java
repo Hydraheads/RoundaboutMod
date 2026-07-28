@@ -494,6 +494,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4").toString())
             );
+    public static final RegistryObject<EntityType<AnubisEntity>> ANUBIS =
+            ENTITY_TYPES.register("anubis", () ->
+                    EntityType.Builder.of(AnubisEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "anubis").toString())
+            );
     public static final RegistryObject<EntityType<StarPlatinumBaseballEntity>> STAR_PLATINUM_BASEBALL =
             ENTITY_TYPES.register("star_platinum_baseball", () ->
                     EntityType.Builder.of(StarPlatinumBaseballEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
