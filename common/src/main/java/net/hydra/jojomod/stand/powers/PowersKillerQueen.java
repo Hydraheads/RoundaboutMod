@@ -797,15 +797,14 @@ public class PowersKillerQueen extends NewPunchingStand {
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
         if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
-            if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
+            Roundabout.LOGGER.info("Weird");
+            if (StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
                 return true;
             }
         }
 
         ItemStack item = this.getSelf().getMainHandItem();
-        if (item.getItem() instanceof StrayCatItem) {
-            return true;
-        }
+        if (item.getItem() instanceof StrayCatItem) { return true; }
 
         return false;
     }
