@@ -4197,6 +4197,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Hide from mobs with armor on*/
     @Inject(method = "getArmorCoverPercentage", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$getArmorCoverPercentage(CallbackInfoReturnable<Float> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(0f);
+            return;
+        }
+
         if (roundabout$getTrueInvis() > -1 && ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor) {
             cir.setReturnValue(0f);
         } else if (rdbt$this() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers().isFaded()){
