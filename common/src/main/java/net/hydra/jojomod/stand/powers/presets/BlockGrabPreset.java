@@ -1079,6 +1079,8 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int grabInventorySlot=1;
 
+    public void onItemGrab(){
+    }
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
@@ -1091,6 +1093,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
                     /**Boat throw*/
+                    onItemGrab();
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                         Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));

@@ -1995,7 +1995,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void timeSkipSelfClient() {
 
         if (isUsingTimeErase()){
-            itemGrabClient();
+            //blood
             return;
         }
         if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
@@ -2009,6 +2009,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if (isUsingEpitaph()){
             tryPowerPacket(PowerIndex.EXTRA);
+        }
+    }
+
+    @Override
+    public void onItemGrab(){
+        if (isErasingTime()){
+            timeErase();
         }
     }
     public void timeSkipClient() {

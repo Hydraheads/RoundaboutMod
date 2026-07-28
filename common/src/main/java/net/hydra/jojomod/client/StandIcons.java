@@ -436,6 +436,8 @@ public class StandIcons {
 
     public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/impale.png");
+    public static final ResourceLocation KING_CRIMSON_BLOOD_SPLASH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/blood_splash.png");
     public static final ResourceLocation KING_CRIMSON_EPITAPH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
