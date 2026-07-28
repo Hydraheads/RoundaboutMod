@@ -88,6 +88,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.PLANET_WAVES_COSMIC, PlanetWavesCosmicRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MANHATTAN_TRANSFER, ManhattanTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BLAZE_TRANSFER, BlazeTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLACK_SABBATH, BlackSabbathRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
@@ -243,6 +244,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PLANET_WAVES_COSMIC_LAYER, PlanetWavesCosmicModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.MANHATTAN_TRANSFER_LAYER, ManhattanTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.POLLINATION_TRANSFER_LAYER, PollinationTransferModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLAZE_TRANSFER_LAYER, BlazeTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLACK_SABBATH_LAYER, BlackSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
@@ -293,6 +295,7 @@ public class FabricEntityClient {
         //BlockEntityRenderers.register(ModBlocks.CHESSBOARD_BLOCK_ENTITY, ChessBoardRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.OASIS_MUD_BLOCK_ENTITY, OasisMudBlockEntityRenderer::new);
 
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();

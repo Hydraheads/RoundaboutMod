@@ -174,6 +174,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_OASIS_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_OASIS);
     public static SoundEvent SUMMON_OASIS_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_OASIS_ID);
 
+    public static final String OASIS_MUD_HIT = "oasis_mud_hit";
+    public static final ResourceLocation OASIS_MUD_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OASIS_MUD_HIT);
+    public static SoundEvent OASIS_MUD_HIT_EVENT = SoundEvent.createVariableRangeEvent(OASIS_MUD_HIT_ID);
+
     public static final String CKB_PLACE = "ckb_place";
     public static final ResourceLocation CKB_PLACE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+CKB_PLACE);
     public static SoundEvent CKB_PLACE_EVENT = SoundEvent.createVariableRangeEvent(CKB_PLACE_ID);
@@ -348,6 +352,9 @@ public class ModSounds {
     public static final String TURNING_ON_LIGHTER = "lighter_click";
     public static final ResourceLocation TURNING_ON_LIGHTER_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TURNING_ON_LIGHTER);
     public static SoundEvent TURNING_ON_LIGHTER_EVENT = SoundEvent.createVariableRangeEvent(TURNING_ON_LIGHTER_ID);
+    public static final String OPEN_BLACK_SABBATH_CHEST = "black_sabbath_chest_open";
+    public static final ResourceLocation OPEN_BLACK_SABBATH_CHEST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OPEN_BLACK_SABBATH_CHEST);
+    public static SoundEvent OPEN_BLACK_SABBATH_CHEST_EVENT = SoundEvent.createVariableRangeEvent(OPEN_BLACK_SABBATH_CHEST_ID);
 
 
     public static final String CENTURY_BOY_SUMMON = "century_boy_summon";

@@ -151,6 +151,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -535,12 +537,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
+        if (isUsingTimeErase()){
+            timeErase();
+        }
+    }
+    @Override
     public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
         /**This will be a denial of epitaph + block place*/
         if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.blocksCancelEpitaph2) {
             if (isUsingEpitaph()) {
                 epitaph();
             }
+        }
+        if (isUsingTimeErase()){
+            timeErase();
         }
         super.onPlaceBlock($$0,$$1,$$2);
     }
@@ -1995,7 +2006,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void timeSkipSelfClient() {
 
         if (isUsingTimeErase()){
-            itemGrabClient();
+            //blood
             return;
         }
         if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
@@ -2009,6 +2020,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if (isUsingEpitaph()){
             tryPowerPacket(PowerIndex.EXTRA);
+        }
+    }
+
+    @Override
+    public void onItemGrab(){
+        if (isErasingTime()){
+            timeErase();
         }
     }
     public void timeSkipClient() {
@@ -2179,6 +2197,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public boolean isErasingTime(){
         return timeEraseActive;
+    }
+
+    @Override
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        if (timeEraseActive){
+            if (!MainUtil.isSpecialDamage($$0)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

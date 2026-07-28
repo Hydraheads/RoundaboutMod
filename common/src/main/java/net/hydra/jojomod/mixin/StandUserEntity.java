@@ -854,7 +854,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             MoldTicks -= 1;
         }
         if(BtdPlantedTicks > 0){
-            BtdPlantedTicks -= 1;
+            if (roundabout$hasAStand()) {
+                BtdPlantedTicks = -1;
+            }else {
+                BtdPlantedTicks -= 1;
+            }
         }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
             this.roundabout$getStandPowers().tickPowerEnd();
@@ -3514,9 +3518,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
+
+        /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
+
+        if (rdbt$interceptIncomingHarmIfBTD($$0)) {
+            ci.setReturnValue(false);
+            return;
+        }
+
         if ($$0.getEntity() instanceof Player pe) {
             if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1, ((LivingEntity) (Object) this))) {
                 ci.setReturnValue(false);
@@ -6069,8 +6080,26 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public int BtdPlantedTicks;
 
     @Override
-    public int rdbt$getBtdPlantedTicks() {
-        return BtdPlantedTicks;
+    public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
+        if (BtdPlantedTicks > 0 && !this.level().isClientSide()) {
+            if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                    source.is(DamageTypes.WITHER) ||
+                    source.is(DamageTypes.DRAGON_BREATH) ||
+                    source.is(ModDamageTypes.GO_BEYOND) ||
+                    source.is(DamageTypes.GENERIC_KILL) ||
+                    source.is(DamageTypes.STARVE) ||
+                    source.is(DamageTypes.IN_FIRE) ||
+                    source.is(DamageTypes.LAVA) ||
+                    source.is(DamageTypes.DROWN) ||
+                    source.is(ModDamageTypes.SUNLIGHT)
+            ){
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override

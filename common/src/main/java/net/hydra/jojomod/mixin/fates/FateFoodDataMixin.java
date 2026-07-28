@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.access.AccessFateFoodData;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
@@ -49,6 +50,11 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$eat(Item $$0, ItemStack $$1, CallbackInfo ci) {
         if (rdbt$player != null){
+
+            if (PowerTypes.isErasingTime(rdbt$player)){
+                ci.cancel();
+                return;
+            }
             if (FateTypes.hasBloodHunger(rdbt$player)){
                 if ($$0.isEdible()) {
                     this.eat(MainUtil.getBloodAmount($$1), MainUtil.getSaturationAmount($$1));
@@ -61,6 +67,10 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     @Inject(method = "eat(IF)V", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$eat2(int $$0, float $$1, CallbackInfo ci) {
         if (rdbt$player != null){
+            if (PowerTypes.isErasingTime(rdbt$player)){
+                ci.cancel();
+                return;
+            }
             if (FateTypes.hasBloodHunger(rdbt$player)){
                 this.foodLevel = Math.min($$0 + this.foodLevel, 20);
                 this.rdbt$alternateSaturation = Math.min(this.rdbt$alternateSaturation + (float)$$0 * $$1 * 2.0F, (float)this.foodLevel);

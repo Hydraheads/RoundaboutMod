@@ -173,7 +173,27 @@ public class StandIcons {
             "textures/entity/other_layers/thin_ice.png");
 
     public static final ResourceLocation OASIS_MUD_HIT = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/oasis/mud_hit_icon.png");
+            "textures/gui/icons/oasis/mud_hit.png");
+    public static final ResourceLocation OASIS_DIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/dive.png");
+    public static final ResourceLocation OASIS_DIVE_LAUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/dive_launch.png");
+    public static final ResourceLocation OASIS_LIQUEFY = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/liquefy.png");
+    public static final ResourceLocation OASIS_UNDERGROUND_MOB_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/underground_mob_grab.png");
+    public static final ResourceLocation OASIS_MOLD_PASSIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/mold_passive.png");
+    public static final ResourceLocation OASIS_MOB_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/mob_grab.png");
+    public static final ResourceLocation OASIS_SHIELD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/shield.png");
+    public static final ResourceLocation OASIS_SPIT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/spit.png");
+    public static final ResourceLocation OASIS_SPIT_SPIKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/spit_spike.png");
+    public static final ResourceLocation OASIS_SUBMERGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/oasis/submerge.png");
 
     public static final ResourceLocation STONE_HEAD_OVERLAY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/stone_face.png");
@@ -436,6 +456,8 @@ public class StandIcons {
 
     public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/impale.png");
+    public static final ResourceLocation KING_CRIMSON_BLOOD_SPLASH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/blood_splash.png");
     public static final ResourceLocation KING_CRIMSON_EPITAPH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/epitaph.png");
     public static final ResourceLocation KING_CRIMSON_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,

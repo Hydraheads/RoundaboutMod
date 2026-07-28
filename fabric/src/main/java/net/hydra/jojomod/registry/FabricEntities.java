@@ -497,6 +497,14 @@ public class FabricEntities {
                             sized(0.70f, 0.60f).clientTrackingRange(32).build(Roundabout.MOD_ID+":pollination_transfer")
             );
 
+    public static final EntityType<BlazeTransferEntity> BLAZE_TRANSFER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "blaze_transfer"),
+                    EntityType.Builder.of(BlazeTransferEntity::new, MobCategory.MISC).
+                            sized(0.70f, 0.60f).clientTrackingRange(32).build(Roundabout.MOD_ID+":blaze_transfer")
+            );
+
     public static final EntityType<BlackSabbathEntity> BLACK_SABBATH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1015,6 +1023,7 @@ public class FabricEntities {
                 ModEntities.PLANET_WAVES_COSMIC = PLANET_WAVES_COSMIC;
                 ModEntities.MANHATTAN_TRANSFER = MANHATTAN_TRANSFER;
                 ModEntities.POLLINATION_TRANSFER = POLLINATION_TRANSFER;
+                ModEntities.BLAZE_TRANSFER = BLAZE_TRANSFER;
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1200,6 +1209,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_COSMIC, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLAZE_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());

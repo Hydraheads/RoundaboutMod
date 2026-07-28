@@ -381,7 +381,13 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
     }
-    @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "lavaHurt", at = @At("HEAD"), cancellable = true)
+    public void roundabout$lavaHurt(CallbackInfo ci) {
+        if (PowerTypes.isErasingTime(((Entity)(Object) this))){
+            ci.cancel();
+        }
+    }
+        @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
         if (PowerTypes.isExistentiallyElsewhere(((Entity) (Object)this))){
             if (!(this.level().isClientSide() && ClientUtil.isPlayer((Entity) (Object) this))) {

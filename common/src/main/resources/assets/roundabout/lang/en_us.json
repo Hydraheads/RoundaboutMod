@@ -473,6 +473,7 @@
   "entity.roundabout.planet_waves": "Planet Waves",
   "entity.roundabout.manhattan_transfer": "Manhattan Transfer",
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
+  "entity.roundabout.blaze_transfer": "Blaze Transfer",
   "entity.roundabout.black_sabbath": "Black Sabbath",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
@@ -756,6 +757,7 @@
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
   "sounds.roundabout.summon_oasis": "Stand summoned",
+  "sounds.roundabout.oasis_mud_hit": "Block liquefied",
   "sounds.roundabout.summon_king_crimson": "Stand summoned",
   "sounds.roundabout.summon_anubis": "Stand summoned",
   "sounds.roundabout.summon_california": "Stand summoned",
@@ -775,7 +777,7 @@
   "sounds.roundabout.skip_time_1": "???",
   "sounds.roundabout.skip_time_2": "???",
   "sounds.roundabout.time_erase_full": "Time falls apart",
-  "sounds.roundabout.time_erase_end": "Something happened",
+  "sounds.roundabout.time_erase_end": "???",
   "sounds.roundabout.epitaph_activate": "Future appears",
   "sounds.roundabout.epitaph_fade": "Future vanishes",
 
@@ -1036,6 +1038,7 @@
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.lighter_click":  "Lighter Click",
+  "sounds.roundabout.black_sabbath_chest_open":  "Open Black Sabbath Chest",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
@@ -2469,6 +2472,8 @@
   "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
   "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
   "skins.roundabout.manhattan_transfer.ufotransfer": "UFO",
+  "skins.roundabout.manhattan_transfer.fleshy_transfer": "Jawling",
+  "skins.roundabout.manhattan_transfer.blaze_transfer": "Blaze",
 
   "skins.roundabout.black_sabbath.anime":  "Anime",
   "skins.roundabout.black_sabbath.manga":  "Manga",
@@ -2479,6 +2484,7 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",

@@ -240,9 +240,12 @@ public class FabricBlocks {
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
     public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
     public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
+    public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
+    public static final BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY =
+            registerBE("oasis_mud_block",BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK));
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
@@ -455,6 +458,8 @@ public class FabricBlocks {
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
 
+        ModBlocks.OASIS_MUD_BLOCK = OASIS_MUD_BLOCK;
+        ModBlocks.OASIS_MUD_BLOCK_ENTITY = OASIS_MUD_BLOCK_ENTITY;
 
         ModBlocks.CHESS_PIECE = CHESS_PIECE;
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;

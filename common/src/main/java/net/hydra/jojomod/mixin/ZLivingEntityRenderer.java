@@ -87,6 +87,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"))
     private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+
         if (PowersMetallica.hasAnyFadeActive(entity)) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.cameraEntity != null) {

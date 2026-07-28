@@ -3,10 +3,12 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
@@ -28,6 +30,12 @@ public class AchtungEntityRenderDispatcher {
      */
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
+
+        if (PowerTypes.isExistentiallyElsewhere(entity)
+        && !ClientUtil.isPlayer(entity)){
+            ci.cancel();
+            return;
+        }
 
             float throwFadeToTheEther = ClientUtil.getThrowFadePercent(entity, $$5);
 

@@ -112,7 +112,7 @@ public class StrayCatItem extends Item {
 
         BlockPos abovePos = blockPos.above();
         BlockState aboveState = level.getBlockState(abovePos);
-        if (!aboveState.isAir() && player.isCrouching()) return InteractionResult.FAIL;
+        if (!aboveState.isAir() || !player.isCrouching()) return InteractionResult.PASS;
 
         if (!level.isClientSide && aboveState.isAir() && player.isCrouching()) {
             Vec3 spawnPos = Vec3.atCenterOf(abovePos);

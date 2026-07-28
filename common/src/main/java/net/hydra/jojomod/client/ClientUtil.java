@@ -1495,10 +1495,12 @@ public class ClientUtil {
                 return;
             }
             if (target instanceof LivingEntity LE) {
-                ((StandUser) target).roundabout$setBlip(vec);
+                if (!isPlayer(target)) {
+                    ((StandUser) target).roundabout$setBlip(vec);
+                    ((StandUser) target).roundabout$tryBlip();
+                }
 
                 StandEntity SE = ((StandUser) target).roundabout$getStand();
-                ((StandUser) target).roundabout$tryBlip();
                 if (SE instanceof FollowingStandEntity fse && fse.getFollowing() != null && fse.getFollowing().is(target)) {
                     byte OT = fse.getOffsetType();
                     if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {

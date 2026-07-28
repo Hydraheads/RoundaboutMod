@@ -54,7 +54,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             NIGHT = 6,
             DEPARTURE = 7,
             PHANTOM = 8,
-            SWEET = 9;
+            SWEET = 9,
+            SACTHOTH = 10;
 
     public final AnimationState coat_open = new AnimationState();
 

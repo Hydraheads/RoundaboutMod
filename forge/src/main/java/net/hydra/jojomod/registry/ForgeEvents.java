@@ -80,6 +80,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.PLANET_WAVES_COSMIC.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
@@ -273,6 +274,7 @@ public class ForgeEvents {
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
+        ModBlocks.OASIS_MUD_BLOCK = ForgeBlocks.OASIS_MUD_BLOCK.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
@@ -287,6 +289,7 @@ public class ForgeEvents {
         ModBlocks.MIRROR_BLOCK_ENTITY = ForgeBlocks.MIRROR_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
+        ModBlocks.OASIS_MUD_BLOCK_ENTITY = ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
@@ -705,6 +708,7 @@ public class ForgeEvents {
         ModEntities.PLANET_WAVES_COSMIC = ForgeEntities.PLANET_WAVES_COSMIC.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
+        ModEntities.BLAZE_TRANSFER = ForgeEntities.BLAZE_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
