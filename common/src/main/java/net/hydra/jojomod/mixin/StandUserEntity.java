@@ -3514,7 +3514,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
+   @Inject(method = "canStandOnFluid", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    private void roundabout$canStandOnFluid(FluidState $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isErasingTime(rdbt$this())){
+            if ($$0.is(FluidTags.LAVA)){
+                cir.setReturnValue(true);
+            }
+        }
+    }
+        /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
         if ($$0.getEntity() instanceof Player pe) {
