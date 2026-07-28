@@ -2647,7 +2647,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 StandEntity stand = this.getStandEntity(this.getSelf());
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE) {
                     Entity plantedBTD = KQE.getPlantedBitesTheDust();
-                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
+                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()
+                            && !((StandUser)plantedBTD).roundabout$hasAStand()) {
                         stand.setFadePercent(30);
 
                         Vec3 pos = KQE.getBitesTheDustOffset((LivingEntity)plantedBTD);
