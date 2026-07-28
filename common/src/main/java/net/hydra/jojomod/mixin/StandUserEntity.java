@@ -3524,6 +3524,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
+            this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
             ci.setReturnValue(false);
             return;
         }
