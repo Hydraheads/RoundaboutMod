@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlazeTransferRenderer extends ManhattanTransferBaseRenderer {
 
-    //TODO: ADD THE ACTUAL MODEL & ANIMS
     public BlazeTransferRenderer(EntityRendererProvider.Context context) {
         super(context, new BlazeTransferModel(context.bakeLayer(ModEntityRendererClient.BLAZE_TRANSFER_LAYER)), 0f);
     }
