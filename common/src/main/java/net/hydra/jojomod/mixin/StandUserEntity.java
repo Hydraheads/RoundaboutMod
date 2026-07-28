@@ -3517,7 +3517,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
-
+        if ($$0.getEntity() instanceof Player pe) {
+            if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1, ((LivingEntity) (Object) this))) {
+                ci.setReturnValue(false);
+                return;
+            }
+        }
         //Stand Damage new IFrames vs melee
         if ((float)this.invulnerableTime > 10.0F && !$$0.is(DamageTypeTags.BYPASSES_COOLDOWN)) {
             if (!MainUtil.isStandDamage($$0) && roundabout$standHurtTicks > 0){
@@ -4189,8 +4194,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return rdbt$modelTravel($$1);
     }
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+    protected void roundabout$getVisibilityPercent(@javax.annotation.Nullable Entity $$0,CallbackInfoReturnable<Double> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)){
             cir.setReturnValue(0.0);
             return;
         }
@@ -4208,6 +4213,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "isPushable", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$isPushable(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "canBeSeenAsEnemy", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$canBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "canBeSeenByAnyone", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$canBeSeenByAnyone(CallbackInfoReturnable<Boolean> cir) {
         if (PowerTypes.isExistentiallyElsewhere(this)){
             cir.setReturnValue(false);
             return;

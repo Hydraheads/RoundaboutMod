@@ -2991,6 +2991,12 @@ public class MainUtil {
                     pkc.epitaph();
                 }
             }
+        } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER_2) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isUsingTimeErase()){
+                    pkc.timeErase();
+                }
+            }
         } else if (context == PacketDataIndex.RELOAD_GUN) {
             if (player.getUseItem().getItem() instanceof FirearmItem fm){
 
