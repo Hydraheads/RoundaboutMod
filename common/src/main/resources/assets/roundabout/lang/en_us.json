@@ -777,7 +777,7 @@
   "sounds.roundabout.skip_time_1": "???",
   "sounds.roundabout.skip_time_2": "???",
   "sounds.roundabout.time_erase_full": "Time falls apart",
-  "sounds.roundabout.time_erase_end": "Something happened",
+  "sounds.roundabout.time_erase_end": "???",
   "sounds.roundabout.epitaph_activate": "Future appears",
   "sounds.roundabout.epitaph_fade": "Future vanishes",
 
@@ -1038,6 +1038,7 @@
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.lighter_click":  "Lighter Click",
+  "sounds.roundabout.black_sabbath_chest_open":  "Open Black Sabbath Chest",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
@@ -2483,6 +2484,7 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",

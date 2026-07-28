@@ -151,6 +151,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -2186,6 +2188,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public boolean isErasingTime(){
         return timeEraseActive;
+    }
+
+    @Override
+    public boolean interceptIncomingHarm(DamageSource $$0, float $$1){
+        if (timeEraseActive){
+            if (!MainUtil.isSpecialDamage($$0)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

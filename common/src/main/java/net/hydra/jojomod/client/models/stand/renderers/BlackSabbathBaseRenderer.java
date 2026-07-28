@@ -26,6 +26,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation DEPARTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/shadow_departure.png");
     private static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/phantom.png");
     private static final ResourceLocation SWEET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sweet.png");
+    private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
@@ -60,6 +61,9 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         }
         if(BT == BlackSabbathEntity.SWEET){
             return SWEET;
+        }
+        if(BT == BlackSabbathEntity.SACTHOTH){
+            return SACTHOTH;
         }
         return ANIME;
     }

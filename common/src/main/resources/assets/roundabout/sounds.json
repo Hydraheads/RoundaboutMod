@@ -791,6 +791,12 @@
       "roundabout:lighter_click"
     ]
   },
+  "black_sabbath_chest_open": {
+    "subtitle": "sounds.roundabout.black_sabbath_chest_open",
+    "sounds": [
+      "roundabout:black_sabbath_chest_open"
+    ]
+  },
   "century_boy_summon": {
     "subtitle": "sounds.roundabout.century_boy_summon",
     "sounds": [

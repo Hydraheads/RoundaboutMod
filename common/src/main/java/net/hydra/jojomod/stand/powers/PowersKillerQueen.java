@@ -797,15 +797,14 @@ public class PowersKillerQueen extends NewPunchingStand {
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
         if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
-            if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
+            Roundabout.LOGGER.info("Weird");
+            if (StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
                 return true;
             }
         }
 
         ItemStack item = this.getSelf().getMainHandItem();
-        if (item.getItem() instanceof StrayCatItem) {
-            return true;
-        }
+        if (item.getItem() instanceof StrayCatItem) { return true; }
 
         return false;
     }
@@ -2648,7 +2647,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 StandEntity stand = this.getStandEntity(this.getSelf());
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE) {
                     Entity plantedBTD = KQE.getPlantedBitesTheDust();
-                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()) {
+                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()
+                            && !((StandUser)plantedBTD).roundabout$hasAStand()) {
                         stand.setFadePercent(30);
 
                         Vec3 pos = KQE.getBitesTheDustOffset((LivingEntity)plantedBTD);

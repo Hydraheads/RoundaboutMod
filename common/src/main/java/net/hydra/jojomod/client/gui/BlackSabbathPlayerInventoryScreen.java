@@ -2,14 +2,20 @@ package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.hydra.jojomod.util.C2SPacketUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+
 import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderEntityInInventoryFollowsMouse;
 
 
@@ -49,5 +55,18 @@ public class BlackSabbathPlayerInventoryScreen
         this.yMouse = (float)$$2;
         super.render($$0, $$1, $$2, $$3);
         this.renderTooltip($$0, $$1, $$2);
+    }
+
+    @Override
+    public void onClose() {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null) {
+            StandUser user = ((StandUser) pl);
+            StandPowers powers = user.roundabout$getStandPowers();
+            if(powers instanceof PowersBlackSabbath pb){
+                pb.RecallClient();
+            }
+        }
+        super.onClose();
     }
 }
