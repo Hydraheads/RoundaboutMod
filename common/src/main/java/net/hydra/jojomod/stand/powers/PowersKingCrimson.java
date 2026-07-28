@@ -132,12 +132,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
-
     }
+
+    public int ticksOfEraseLeft = 0;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("timeEraseActive",timeEraseActive);
+        $$0.putInt("ticksOfEraseLeft",ticksOfEraseLeft);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -149,6 +151,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     ClientUtil.bootTimeErase();
                 }
             }
+        }
+        if ($$0.contains("ticksOfEraseLeft")) {
+            ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
         }
     }
 
@@ -185,13 +190,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+    public int timeEraseMaxTicks(){
+        return 220;
+    }
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum){
+        if (isUsingTimeErase()){
+            StandHudRender.renderTimeErase(context,cameraPlayer,screenWidth,screenHeight,x,this);
+            return;
+        }
         StandHudRender.renderEpitaph(context,cameraPlayer,screenWidth,screenHeight,x,this);
     }
 
     public boolean replaceHudActively(){
-        return isUsingEpitaph();
+        return isUsingEpitaph() || isErasingTime();
     }
     public int getEpitphDuration(){
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphDuration;
@@ -205,6 +218,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public int ticksIntoEpitaph = 0;
     @Override
     public void tickPower() {
+        if (isUsingTimeErase()) {
+            if (ticksOfEraseLeft > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    ticksOfEraseLeft--;
+                    if (ticksOfEraseLeft == 0) {
+                        if (self.level().isClientSide()) {
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                        } else {
+                            timeErase();
+                        }
+                    }
+                }
+            }
+        }
         if (self.level().isClientSide()){
             if (isUsingEpitaph()){
                 ticksIntoEpitaph++;
@@ -1987,13 +2014,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
                 packetNearby2();
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
+                saveDiscAndSync();
             } else {
                 timeEraseActive = true;
+                ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
+                saveDiscAndSync();
+                ticksOfEraseLeft++;
             }
-            saveDiscAndSync();
         }
     }
     @Override
