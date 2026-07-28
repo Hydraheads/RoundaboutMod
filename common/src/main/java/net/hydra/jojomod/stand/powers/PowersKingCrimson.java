@@ -114,6 +114,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.SKIP_TIME_1_EVENT;
         } else if (soundChoice == TIME_SKIP_2) {
             return ModSounds.SKIP_TIME_2_EVENT;
+        } else if (soundChoice == TIME_ERASE) {
+            return ModSounds.TIME_ERASE_FULL_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -122,6 +124,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte EPITAPH_FADE_NOISE = 107;
     public static final byte TIME_SKIP_1 = 108;
     public static final byte TIME_SKIP_2 = 109;
+    public static final byte TIME_ERASE = 110;
 
     @Override
     public SoundEvent getImpaleSound() {
@@ -1961,9 +1964,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (timeEraseActive){
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
             } else {
                 timeEraseActive = true;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
             }
             saveDiscAndSync();
         }
@@ -2266,7 +2271,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             this.timeSkip(false);
             return true;
         } else if (move == PowerIndex.EXTRA){
-            Roundabout.LOGGER.info("6");
             this.timeSkip(true);
             return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){

@@ -213,7 +213,7 @@ public class JusticeFogRenderer {
                 b,
                 1.0F);
         fogRed = r;
-        fogBlue =g;
-        fogGreen = b;
+        fogGreen = g;
+        fogBlue =b;
     }
 }

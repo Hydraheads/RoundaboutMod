@@ -22,6 +22,7 @@ public class FabricSounds {
         addSound(ModSounds.BONE_CHOMP_ID, ModSounds.BONE_CHOMP_EVENT);
         addSound(ModSounds.SKIP_TIME_1_ID, ModSounds.SKIP_TIME_1_EVENT);
         addSound(ModSounds.SKIP_TIME_2_ID, ModSounds.SKIP_TIME_2_EVENT);
+        addSound(ModSounds.TIME_ERASE_FULL_ID, ModSounds.TIME_ERASE_FULL_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);

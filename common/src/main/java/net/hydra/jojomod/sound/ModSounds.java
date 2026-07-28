@@ -41,6 +41,10 @@ public class ModSounds {
     public static final ResourceLocation SKIP_TIME_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKIP_TIME_2);
     public static SoundEvent SKIP_TIME_2_EVENT = SoundEvent.createVariableRangeEvent(SKIP_TIME_2_ID);
 
+    public static final String TIME_ERASE_FULL = "time_erase_full";
+    public static final ResourceLocation TIME_ERASE_FULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_FULL);
+    public static SoundEvent TIME_ERASE_FULL_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_FULL_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);
