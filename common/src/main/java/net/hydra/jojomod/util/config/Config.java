@@ -110,6 +110,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public KingCrimsonSettings kingCrimsonSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -452,8 +454,10 @@ public class Config implements Cloneable {
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
-    	@BooleanOption(group = "inherit", value = false)
+    	@BooleanOption(group = "inherit", value = true)
         public Boolean enableBitesTheDustDayMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
@@ -488,6 +492,16 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
+        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        public Integer bitesTheDustPlantCooldown;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer bitesTheDustCombatActivationCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer bitesTheDustCombatCooldownBonus;
+        @FloatOption(group = "inherit", value = 15.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatMobsDamage;
+        @FloatOption(group = "inherit", value = 8.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatPlayersDamage;
     }
     
     public static class SoftAndWetSettings {
@@ -1080,6 +1094,30 @@ public class Config implements Cloneable {
         public Integer emperorBulletRange;
     }
 
+    public static class KingCrimsonSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKingCrimson;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableSkippingCooldowns;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableEpitaphPreSkip;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer timeSkipRange;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer timeSkipCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer epitaphCooldown;
+        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        public Integer epitaphDuration;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableDaySkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphInterrupt;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean blocksCancelEpitaph2;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean freeTimeSkip;
+    }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableTheWorld;

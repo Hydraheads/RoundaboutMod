@@ -199,10 +199,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity implements PreRe
 
                                 if (canFreeze(targetPos)
                                         && iceState.canSurvive(level(), targetPos)) {
-                                    if (MainUtil.getIsGamemodeApproriateForGrief(user)) {
                                         level().setBlockAndUpdate(targetPos, iceState);
                                         level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan + 2));
-                                    }
                                 }
                                 // placement logic
                             }

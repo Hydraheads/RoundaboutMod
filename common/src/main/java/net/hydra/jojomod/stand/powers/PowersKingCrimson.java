@@ -5,23 +5,26 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
-import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -29,35 +32,34 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.vehicle.Minecart;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -66,10 +68,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
@@ -80,13 +79,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public PowersKingCrimson(LivingEntity self) {
         super(self);
     }
+
     public final Map<Integer, TimeSkipSnapshot> epitaph = new HashMap<>();
     public final Map<Integer, TimeSkipSnapshot> skip_dump = new HashMap<>();
 
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled() {
-        return ClientNetworking.getAppropriateConfig().theWorldSettings.enableTheWorld;
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableKingCrimson;
     }
 
 
@@ -114,26 +114,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.SKIP_TIME_1_EVENT;
         } else if (soundChoice == TIME_SKIP_2) {
             return ModSounds.SKIP_TIME_2_EVENT;
+        } else if (soundChoice == TIME_ERASE) {
+            return ModSounds.TIME_ERASE_FULL_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
+
     public static final byte EPITAPH_NOISE = 106;
     public static final byte EPITAPH_FADE_NOISE = 107;
     public static final byte TIME_SKIP_1 = 108;
     public static final byte TIME_SKIP_2 = 109;
+    public static final byte TIME_ERASE = 110;
+    public static final byte TIME_ERASE_END = 111;
+
     @Override
-    public SoundEvent getImpaleSound(){
+    public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
     }
-
-    public boolean isUsingEpitaph(){
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("timeEraseActive",timeEraseActive);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("timeEraseActive")) {
+            timeEraseActive = $$0.getBoolean("timeEraseActive");
+            if (self.level().isClientSide()){
+                if (timeEraseActive){
+                    ClientUtil.bootTimeErase();
+                }
+            }
+        }
+    }
+    public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
+    public boolean timeEraseActive = false;
+    public boolean isUsingTimeErase() {
+        return timeEraseActive;
+    }
 
-    public float getSped(Entity entity){
-        if (entity instanceof LivingEntity LE){
-            if (LE.getSpeed() <= 0){
+    public float getSped(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            if (LE.getSpeed() <= 0) {
                 if (LE.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
                     return (float) LE.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 }
@@ -143,6 +171,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return 0;
     }
 
+    public void skipBlockEntities(int ticks) {
+        ((ILevelAccess)self.level()).rdbt$skipTime(self,ticks,getSkipRange());
+    }
+    private void skipDayTime(int ticks) {
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableDaySkip){
+            if (self.level() instanceof ServerLevel sl){
+                if (sl.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+                    sl.setDayTime(sl.getDayTime() + ticks);
+                }
+            }
+        }
+    }
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+                                  boolean removeNum){
+        StandHudRender.renderEpitaph(context,cameraPlayer,screenWidth,screenHeight,x,this);
+    }
+
+    public boolean replaceHudActively(){
+        return isUsingEpitaph();
+    }
+    public int getEpitphDuration(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphDuration;
+    }
+    public int getTicksIntoEpitaph(){
+        return ticksIntoEpitaph;
+    }
+    public boolean canUseEpitaphWithoutSkip(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
+    }
+    public int ticksIntoEpitaph = 0;
+    @Override
+    public void tickPower() {
+        if (self.level().isClientSide()){
+            if (isUsingEpitaph()){
+                ticksIntoEpitaph++;
+                if (ticksIntoEpitaph > getEpitphDuration()){
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER);
+                    epitaph.clear();
+                    ticksIntoEpitaph = 0;
+                }
+            } else {
+                ticksIntoEpitaph = 0;
+            }
+        }
+
+        skipRange = ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipRange;
+        super.tickPower();
+    }
     public static Vec3 getPredictedDirection() {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
@@ -159,11 +235,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof FlyingMob){
             return predicted;
         }
+        if (liv instanceof WanderingTrader){
+            return predicted;
+        }
 
         float speed = (float) (Math.random()*0.9F);
-        if (liv instanceof WanderingTrader){
-            speed = (float) (Math.random()*0.3F);
-        }
         float sped = getSped(liv);
         Vec3 basevelocity = getPredictedDirection()
                 .normalize()
@@ -208,13 +284,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     Mth.floor(checkBox.minX), Mth.floor(checkBox.minY), Mth.floor(checkBox.minZ),
                     Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
 
-                if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                boolean isStrider = liv instanceof Strider;
+                if (level.getFluidState(pos).is(FluidTags.LAVA) && !isStrider) {
                     return predicted;
                 }
 
 
                 BlockState state = level.getBlockState(pos);
-                if (MainUtil.isDangerous(level, pos, state)) {
+                if (MainUtil.isDangerous(level, pos, state, liv instanceof Strider)) {
                     return predicted;
                 }
             }
@@ -230,7 +307,37 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
+
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2_SNEAK
+                || num == PowerIndex.SKILL_4) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
+
+        boolean inTimeLockBlock = false;
+
+        AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                Mth.floor(checkBoxOG.minX), Mth.floor(checkBoxOG.minY), Mth.floor(checkBoxOG.minZ),
+                Mth.floor(checkBoxOG.maxX), Mth.floor(checkBoxOG.maxY), Mth.floor(checkBoxOG.maxZ))) {
+
+            BlockState state = player.level().getBlockState(pos);
+
+            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+                    || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
+                inTimeLockBlock = true;
+                break;
+            }
+        }
+
+        if (inTimeLockBlock) {
+            return player.position();
+        }
         Level level = player.level();
 
         Vec3 predicted = player.position();
@@ -268,6 +375,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             baseVelocity = baseVelocity.multiply(1, 0, 1);
 
         for (int i = 0; i < ticks; i++) {
+            hitWall2 = false;
 
             // ----- Estimate movement direction -----
 
@@ -338,7 +446,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
                     collided = steppedMove;
                 }
-                if (collided.y <= 0){
+                if (collided.y == 0){
                     hitWall2 = true;
                 }
             }
@@ -363,13 +471,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     }
 
                     BlockState state = level.getBlockState(pos);
-                    if (MainUtil.isDangerous(level, pos, state)) {
+                    if (MainUtil.isDangerous(level, pos, state, false)) {
                         predicted = previousPreviousSafe;
                         break;
                     }
                 }
             }
         }
+
+
 
         boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
@@ -415,7 +525,124 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         return predicted;
-    }public Vec3 predictBoat(Boat boat, int ticks) {
+    }
+
+    public boolean canUseTimeSkip(){
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.freeTimeSkip){
+            return true;
+        }
+        return (canAttackLight() || isGuarding()) && !self.isUsingItem() && !isClashing();
+    }
+
+    @Override
+    public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
+        /**This will be a denial of epitaph + block place*/
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.blocksCancelEpitaph2) {
+            if (isUsingEpitaph()) {
+                epitaph();
+            }
+        }
+        super.onPlaceBlock($$0,$$1,$$2);
+    }
+    public Vec3 predictStrider(Strider strider, int ticks) {
+        Level level = strider.level();
+
+        Entity rider = strider.getControllingPassenger();
+        if (!(rider instanceof Player player)) {
+            return strider.position();
+        }
+
+        Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
+
+        Vec3 oldPos = player.position();
+
+        if (history != null && history.size() >= 2) {
+            Iterator<Vec3> it = history.descendingIterator();
+
+            it.next();
+            Vec3 previous = it.next();
+            oldPos = previous;
+        }
+
+        if (player.position().distanceTo(oldPos) < 0.1) {
+            return strider.position();
+        }
+
+        Vec3 predicted = strider.position();
+        AABB box = strider.getBoundingBox();
+
+        Vec3 velocity = player.position()
+                .subtract(oldPos)
+                .normalize()
+                .scale(getSped(player) * 2.5);
+
+        // Striders don't need normal gravity prediction as aggressively
+        velocity = velocity.multiply(1, 0, 1);
+
+        Vec3 previousSafe = predicted;
+
+        for (int i = 0; i < ticks; i++) {
+
+            Vec3 move = velocity;
+
+            // Only apply gravity if NOT over lava
+            BlockPos below = BlockPos.containing(
+                    predicted.x,
+                    predicted.y - 0.5,
+                    predicted.z
+            );
+
+            boolean overLava = level.getFluidState(below).is(FluidTags.LAVA);
+
+            if (!overLava) {
+                move = move.add(0, -0.08, 0);
+            }
+
+            Vec3 collided = Entity.collideBoundingBox(
+                    strider,
+                    move,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            previousSafe = predicted;
+            predicted = predicted.add(collided);
+            box = box.move(collided);
+
+
+            // Don't let striders walk onto solid ground if desired
+            AABB check = box.inflate(-0.05);
+
+            boolean touchingInvalid = false;
+
+            for (BlockPos pos : BlockPos.betweenClosed(
+                    Mth.floor(check.minX),
+                    Mth.floor(check.minY),
+                    Mth.floor(check.minZ),
+                    Mth.floor(check.maxX),
+                    Mth.floor(check.maxY),
+                    Mth.floor(check.maxZ))) {
+
+                BlockState state = level.getBlockState(pos);
+
+                // Striders like lava
+                if (state.isSolid() && !level.getFluidState(pos).is(FluidTags.LAVA)) {
+                    touchingInvalid = true;
+                    break;
+                }
+            }
+
+            if (touchingInvalid) {
+                return previousSafe;
+            }
+        }
+
+        return predicted;
+    }
+
+
+    public Vec3 predictBoat(Boat boat, int ticks) {
         Level level = boat.level();
 
         if (!(boat.getControllingPassenger() instanceof Player player)) {
@@ -477,16 +704,58 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return predicted;
     }
+    public Vec3 predictTNT(PrimedTnt tnt, int ticks) {
+        Level level = tnt.level();
+
+        Vec3 predicted = tnt.position();
+        Vec3 velocity = tnt.getDeltaMovement();
+
+        AABB box = tnt.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // vanilla TNT gravity
+            velocity = velocity.add(0, -0.04, 0);
+
+            // vanilla air drag
+            velocity = velocity.scale(0.98);
+
+            Vec3 movement = Entity.collideBoundingBox(
+                    tnt,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            predicted = predicted.add(movement);
+            box = box.move(movement);
+
+            // Hit ground, stop falling
+            if (movement.y != velocity.y) {
+                velocity = new Vec3(
+                        velocity.x * 0.7,
+                        0,
+                        velocity.z * 0.7
+                );
+            }
+        }
+
+        return predicted;
+    }
     public Vec3 predictMinecart(AbstractMinecart cart, int ticks) {
         Level level = cart.level();
 
         Entity rider = cart.getFirstPassenger();
         if (!(rider instanceof Player player)) {
+            if (!cart.onGround()) {
+                return predictFallingMinecart(cart, ticks);
+            }
             return cart.position();
         }
 
+        // Figure out initial movement direction from player history.
         Deque<Vec3> history = ((IPlayerEntity) player).rdbt$getMovementHistory();
-
         Vec3 oldPos = player.position();
 
         if (history != null && history.size() >= 3) {
@@ -498,100 +767,171 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         Vec3 movement = player.position().subtract(oldPos);
 
-        if (movement.horizontalDistanceSqr() < 0.0001) {
-            return cart.position();
+        Direction dir;
+        if (Math.abs(movement.x) > Math.abs(movement.z)) {
+            dir = movement.x > 0 ? Direction.EAST : Direction.WEST;
+        } else {
+            dir = movement.z > 0 ? Direction.SOUTH : Direction.NORTH;
         }
 
-        Vec3 predicted = cart.position();
-        Vec3 previousSafe = predicted;
+        BlockPos railPos = BlockPos.containing(cart.position());
 
-        double speed = Math.min(movement.length(), 0.4);
+        if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+            railPos = railPos.below();
+            if (!BaseRailBlock.isRail(level.getBlockState(railPos))) {
+                return cart.position();
+            }
+        }
+        double remaining = cart.getDeltaMovement().horizontalDistance() * ticks;
 
-        Vec3 direction = movement.normalize();
-
-        for (int i = 0; i < ticks; i++) {
-
-            previousSafe = predicted;
-
-            BlockPos railPos = BlockPos.containing(predicted);
+        while (remaining >= 1.0) {
+            // move to next rail
+            remaining -= 1.0;
 
             BlockState state = level.getBlockState(railPos);
+            RailShape shape = state.getValue(((BaseRailBlock) state.getBlock()).getShapeProperty());
 
-            if (!(state.getBlock() instanceof BaseRailBlock)) {
-                state = level.getBlockState(railPos.below());
-                railPos = railPos.below();
+            // Curves
+            switch (shape) {
+                case NORTH_EAST -> {
+                    if (dir == Direction.NORTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.NORTH;
+                }
+                case NORTH_WEST -> {
+                    if (dir == Direction.NORTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.NORTH;
+                }
+                case SOUTH_EAST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.EAST;
+                    else if (dir == Direction.EAST) dir = Direction.SOUTH;
+                }
+                case SOUTH_WEST -> {
+                    if (dir == Direction.SOUTH) dir = Direction.WEST;
+                    else if (dir == Direction.WEST) dir = Direction.SOUTH;
+                }
+                default -> {}
+            }
 
-                if (!(state.getBlock() instanceof BaseRailBlock)) {
-                    return previousSafe;
+            BlockPos next = railPos.relative(dir);
+
+            // descending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                next = next.below();
+            }
+
+            // ascending rail
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                BlockPos up = railPos.relative(dir).above();
+                if (BaseRailBlock.isRail(level.getBlockState(up))) {
+                    next = up;
                 }
             }
 
-            RailShape shape = state.getValue(((BaseRailBlock)state.getBlock()).getShapeProperty());
+            if (!BaseRailBlock.isRail(level.getBlockState(next))) {
+                break;
+            }
 
-            direction = railDirection(shape, direction);
+            BlockState nextState = level.getBlockState(next);
+            RailShape nextShape = nextState.getValue(
+                    ((BaseRailBlock) nextState.getBlock()).getShapeProperty()
+            );
 
-            predicted = predicted.add(direction.scale(speed));
+            if (nextShape == RailShape.NORTH_EAST ||
+                    nextShape == RailShape.NORTH_WEST ||
+                    nextShape == RailShape.SOUTH_EAST ||
+                    nextShape == RailShape.SOUTH_WEST) {
 
-            // keep the cart centered on the rail
-            predicted = new Vec3(
-                    railPos.getX() + 0.5,
-                    railPos.getY() + railYOffset(shape),
-                    railPos.getZ() + 0.5
-            ).add(direction.scale(0.25));
+                break;
+            }
+
+            railPos = next;
         }
 
-        return predicted;
+        BlockState endState = level.getBlockState(railPos);
+        RailShape endShape = endState.getValue(((BaseRailBlock) endState.getBlock()).getShapeProperty());
+
+        return new Vec3(
+                railPos.getX() + 0.5,
+                railPos.getY() + railYOffset(endShape),
+                railPos.getZ() + 0.5
+        );
     }
-    private static Vec3 railDirection(RailShape shape, Vec3 current) {
+    private boolean isConnectedRail(Level level, BlockPos from, BlockPos to) {
+        BlockState fromState = level.getBlockState(from);
+        BlockState toState = level.getBlockState(to);
 
-        return switch (shape) {
+        if (!BaseRailBlock.isRail(fromState) || !BaseRailBlock.isRail(toState)) {
+            return false;
+        }
 
-            case NORTH_SOUTH ->
-                    new Vec3(0, 0, Math.signum(current.z));
+        RailShape fromShape = fromState.getValue(
+                ((BaseRailBlock) fromState.getBlock()).getShapeProperty()
+        );
 
-            case EAST_WEST ->
-                    new Vec3(Math.signum(current.x), 0, 0);
+        RailShape toShape = toState.getValue(
+                ((BaseRailBlock) toState.getBlock()).getShapeProperty()
+        );
 
-            case ASCENDING_EAST ->
-                    new Vec3(1, 1, 0).normalize();
+        Direction travel = Direction.fromDelta(
+                to.getX() - from.getX(),
+                to.getY() - from.getY(),
+                to.getZ() - from.getZ()
+        );
 
-            case ASCENDING_WEST ->
-                    new Vec3(-1, 1, 0).normalize();
+        if (travel == null) {
+            return false;
+        }
 
-            case ASCENDING_NORTH ->
-                    new Vec3(0, 1, -1).normalize();
+        // The next rail must have an exit back toward the rail we came from
+        return switch (toShape) {
+            case NORTH_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case EAST_WEST -> travel == Direction.EAST || travel == Direction.WEST;
 
-            case ASCENDING_SOUTH ->
-                    new Vec3(0, 1, 1).normalize();
+            case ASCENDING_NORTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
+            case ASCENDING_EAST -> travel == Direction.EAST || travel == Direction.WEST;
+            case ASCENDING_WEST -> travel == Direction.EAST || travel == Direction.WEST;
 
-            case SOUTH_EAST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,1);
-                else
-                    yield new Vec3(1,0,0);
-            }
-
-            case SOUTH_WEST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,1);
-                else
-                    yield new Vec3(-1,0,0);
-            }
-
-            case NORTH_EAST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,-1);
-                else
-                    yield new Vec3(1,0,0);
-            }
-
-            case NORTH_WEST -> {
-                if (Math.abs(current.x) > Math.abs(current.z))
-                    yield new Vec3(0,0,-1);
-                else
-                    yield new Vec3(-1,0,0);
-            }
+            case SOUTH_EAST -> travel == Direction.SOUTH || travel == Direction.EAST;
+            case SOUTH_WEST -> travel == Direction.SOUTH || travel == Direction.WEST;
+            case NORTH_EAST -> travel == Direction.NORTH || travel == Direction.EAST;
+            case NORTH_WEST -> travel == Direction.NORTH || travel == Direction.WEST;
         };
+    }
+    public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
+        Level level = cart.level();
+
+        Entity rider = cart.getFirstPassenger();
+        if (!(rider instanceof Player player)) {
+
+            Vec3 predicted = cart.position();
+            AABB box = cart.getBoundingBox();
+
+            Vec3 velocity = Vec3.ZERO;
+
+            for (int i = 0; i < ticks; i++) {
+                velocity = velocity.add(0, -0.08, 0); // vanilla gravity
+
+                Vec3 move = Entity.collideBoundingBox(
+                        cart,
+                        velocity,
+                        box,
+                        level,
+                        List.of()
+                );
+
+                predicted = predicted.add(move);
+                box = box.move(move);
+
+                // Hit the ground
+                if (move.y != velocity.y) {
+                    break;
+                }
+            }
+
+            return predicted;
+        }
+        return cart.position();
     }
     private static double railYOffset(RailShape shape) {
         return switch (shape) {
@@ -629,8 +969,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
         if (mob.getControllingPassenger() instanceof Player pl){
-            Vec3 pred = predictPlayer(mob,40);
-            return pred;
+            if (mob instanceof Strider str){
+                Vec3 pred = predictStrider(str,40);
+                return pred;
+            } else {
+                Vec3 pred = predictPlayer(mob,40);
+                return pred;
+            }
         }
 
 
@@ -699,20 +1044,34 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean hitWall2 = false;
 
     public void basicSkip(boolean skipSelf){
+        hitWall2 = false;
         AABB area = self.getBoundingBox().inflate(getSkipRange());
-
+        List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            hitWall2 = false;
             if (entity instanceof Projectile proj) {
-                skip_dump.put(proj.getId(), new TimeSkipSnapshot(
-                        proj.getId(),
-                        predictProjectile(proj, 100),
-                        proj.getXRot(),
-                        proj.getYRot()
+                if (proj instanceof FireworkRocketEntity){
+                    proj.discard();
+                } else {
+                    skip_dump.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
+            } else if (entity instanceof ItemEntity it) {
+                Vec3 predicted = predictItem(it, 100);
+                skip_dump.put(it.getId(), new TimeSkipSnapshot(
+                        it.getId(),
+                        predicted,
+                        it.getXRot(),
+                        it.getYRot()
                 ));
-            } else if (entity instanceof PrimedTnt pt){
-                pt.setFuse(1);
-            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
-                Vec3 boat = predictBoat(bt,40);
+            } else if (entity instanceof FallingBlockEntity fbe){
+                fallingBlocks.add(fbe);
+            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player) {
+                Vec3 boat = predictBoat(bt, 40);
 
                 skip_dump.put(bt.getId(), new TimeSkipSnapshot(
                         bt.getId(),
@@ -720,6 +1079,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         bt.getXRot(),
                         bt.getYRot()
                 ));
+            } else if (entity instanceof PrimedTnt tnt) {
+                Vec3 predicted = predictTNT(tnt, 100);
+
+                skip_dump.put(
+                        entity.getId(),
+                        new TimeSkipSnapshot(
+                                entity.getId(),
+                                predicted,
+                                entity.getXRot(),
+                                entity.getYRot()
+                        )
+                );
             } else if (entity instanceof AbstractMinecart bt ){
                 Vec3 minecart = predictMinecart(bt,40);
 
@@ -747,12 +1118,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         float yRot = living.getYRot();
                         if (!living.isSleeping()) {
                             if (living instanceof Mob mob) {
-                                if (!mob.isLeashed()) {
+                                if (!mob.isLeashed() && !(mob instanceof WanderingTrader)) {
                                     predicted = predictPosition(mob, 100);
                                 }
                             } else if (living instanceof Player player) {
                                 // Fallback for players, armor stands, etc.
-                                hitWall2 = false;
                                 predicted = predictPlayer(player, 40);
                                 if (player.getId() == self.getId()) {
                                     if (predicted.distanceTo(self.getPosition(1)) < 0.1) {
@@ -777,7 +1147,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, 75, true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
         scatterPackets();
         if (skip_dump.isEmpty()){
             return;
@@ -786,6 +1156,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
             skipSingle(snapshot);
         }
         skip_dump.clear();
+        if (!fallingBlocks.isEmpty()) {
+            fallingBlocks.sort(
+                    Comparator.comparingDouble(entity -> entity.position().y)
+            );
+
+
+            for (FallingBlockEntity falling : fallingBlocks) {
+                skipFallingBlock(falling, 100);
+            }
+        }
 
     }
 
@@ -817,6 +1197,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return false;
     }
 
+    private static final int SKIP_TICKS = 100;
+
+    public static void skipEffects(LivingEntity entity) {
+        if (entity.getActiveEffects().isEmpty()) {
+            return;
+        }
+
+        List<MobEffectInstance> effects = new ArrayList<>(entity.getActiveEffects());
+
+        for (MobEffectInstance effect : effects) {
+            // Don't touch your custom effect
+            int duration = effect.getDuration();
+            if (effect.getEffect() == ModEffects.STAND_VIRUS ||
+                    duration == MobEffectInstance.INFINITE_DURATION) {
+                continue;
+            }
+
+
+        // Preserve infinite effects
+            duration -= SKIP_TICKS;
+
+            // Keep it alive for one tick so vanilla can remove it naturally
+            if (duration <= 0) {
+                duration = 1;
+            }
+
+            MobEffectInstance replacement = new MobEffectInstance(
+                    effect.getEffect(),
+                    duration,
+                    effect.getAmplifier(),
+                    effect.isAmbient(),
+                    effect.isVisible(),
+                    effect.showIcon()
+            );
+
+            entity.removeEffect(effect.getEffect());
+            entity.addEffect(replacement);
+        }
+
+        // Fire uses its own timer
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(Math.max(
+                    0,
+                    entity.getRemainingFireTicks() - SKIP_TICKS
+            ));
+        }
+    }
+
     public void skipSingle(TimeSkipSnapshot snapshot){
         if (snapshot.getEntityId() == -1) {
             return;
@@ -833,6 +1261,36 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if (entity.isPassenger()){
             return;
+        }
+        double distance = entity.position().distanceTo(snapshot.position);
+        if (distance > getSkipBonusRange()) {
+            return;
+        }
+        if ((entity instanceof ThrowableProjectile && !(entity instanceof GasolineCanEntity))|| entity instanceof ItemEntity) {
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
+        } else if (entity instanceof Projectile pj) {
+            if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
+                Vec3 motion = pj.getDeltaMovement();
+
+                boolean aboutToHit = false;
+
+                if (!motion.equals(Vec3.ZERO)) {
+                    AABB box = pj.getBoundingBox().move(motion);
+
+                    for (VoxelShape shape : entity.level().getBlockCollisions(entity, box)) {
+                        if (!shape.isEmpty()) {
+                            aboutToHit = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!aboutToHit) {
+                    pj.setDeltaMovement(pj.getDeltaMovement().x,Math.min(0,pj.getDeltaMovement().y),
+                            pj.getDeltaMovement().z);
+                    pj.setDeltaMovement(motion.scale(0.4));
+                }
+            }
         }
 
         if (entity instanceof LivingEntity LE) {
@@ -856,6 +1314,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
 
+        boolean isStrider = entity instanceof Strider;
             if (deviousStratBlocker && (entity instanceof Player || entity.getControllingPassenger() instanceof Player)) {
                 // 2. Check for dangerous blocks inside target box
                 boolean cancel = false;
@@ -867,7 +1326,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     Block block = state.getBlock();
 
                     // List of bad blocks to avoid
-                    if (block == Blocks.COBWEB || block == Blocks.LAVA
+                    if (block == Blocks.COBWEB || (block == Blocks.LAVA && !isStrider)
                             || block == ModBlocks.BARBED_WIRE_BUNDLE) {
                         cancel = true;
                         break;
@@ -890,26 +1349,39 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        packetNearby(new Vector3f((float) snapshot.position.x,
-                        (float) snapshot.position.y,
-                        (float) snapshot.position.z),
-                entity.getId());
 
-        entity.teleportTo(
-                snapshot.position.x,
-                snapshot.position.y,
-                snapshot.position.z
-        );
-        entity.setYRot(snapshot.yRot);
-        entity.setYHeadRot(snapshot.yRot);
-        entity.teleportTo(((ServerLevel) entity.level()),snapshot.position.x,
-                snapshot.position.y,
-                snapshot.position.z,
-                Set.of(
-                        RelativeMovement.X,
-                        RelativeMovement.Y,
-                        RelativeMovement.Z),
-                snapshot.yRot,entity.getXRot());
+        if (entity instanceof AbstractMinecart am){
+            MinecraftServer server = entity.level().getServer();
+
+            am.setPos(snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z);
+            ((AccessMinecart)am).rodbt$cleardata();
+        } else {
+            skipFire(entity);
+            if (entity instanceof LivingEntity living && entity.getId() != snapshot.entityId) {
+                skipEffects(living);
+            }
+            if (entity instanceof PrimedTnt pt){
+                pt.setFuse(1);
+            }
+            packetNearby(new Vector3f((float) snapshot.position.x,
+                            (float) snapshot.position.y,
+                            (float) snapshot.position.z),
+                    entity.getId());
+            entity.teleportTo(
+                    snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z
+            );
+            entity.setYRot(snapshot.yRot);
+            entity.setYHeadRot(snapshot.yRot);
+            entity.teleportTo(((ServerLevel) entity.level()), snapshot.position.x,
+                    snapshot.position.y,
+                    snapshot.position.z,
+                    EnumSet.noneOf(RelativeMovement.class),
+                    snapshot.yRot, entity.getXRot());
+        }
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 mb.getNavigation().stop();
             if (!MainUtil.blockConfusionTicks(mb)) {
@@ -918,9 +1390,124 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    private static void skipItemUse(Entity entity) {
+        if (entity instanceof LivingEntity player) {
+            if (!player.isUsingItem()) {
+                return;
+            }
 
+            ItemStack stack = player.getUseItem();
 
-    public static Vec3 predictProjectile(Projectile projectile, int ticks) {
+            if (stack.isEmpty()) {
+                player.stopUsingItem();
+                return;
+            }
+
+            Item item = stack.getItem();
+
+            if (item.getFoodProperties() != null || item instanceof BowlFoodItem || item instanceof PotionItem
+                    || item instanceof MilkBucketItem || item instanceof SpyglassItem || item instanceof ChorusFruitItem) {
+                // Force the normal vanilla completion logic
+                ((StandUser) player).rdbt$completeUsingItem();
+            } else if (item instanceof CrossbowItem ci){
+                ci.releaseUsing(stack,entity.level(),player,0);
+            } else {
+                // Bow, crossbow, shield, spyglass, trident, etc.
+                player.stopUsingItem();
+            }
+        }
+    }
+    public static void skipFire(Entity entity) {
+        if (entity.getRemainingFireTicks() > 0) {
+            entity.setRemainingFireTicks(
+                    Math.max(1, entity.getRemainingFireTicks() - 100)
+            );
+        }
+        if (entity instanceof  LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$getRemainingFireTicks() > 0){
+                entity.setRemainingFireTicks(
+                        Math.max(1, user.roundabout$getRemainingFireTicks() - 100)
+                );
+            }
+        }
+        skipItemUse(entity);
+        if (entity instanceof Player player) {
+            FishingHook hook = player.fishing;
+            if (hook != null) {
+                hook.discard();
+                player.fishing = null;
+            }
+            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableSkippingCooldowns) {
+                ItemCooldowns cds = player.getCooldowns();
+                if (cds != null) {
+                    ((IItemCooldowns) cds).rdbt$skipItemCooldowns(100);
+                }
+            }
+        }
+    }
+
+    public Vec3 predictItem(ItemEntity item, int ticks) {
+        Level level = item.level();
+
+        Vec3 predicted = item.position();
+        Vec3 velocity = item.getDeltaMovement();
+
+        AABB box = item.getBoundingBox();
+
+        for (int i = 0; i < ticks; i++) {
+
+            // gravity
+            velocity = velocity.add(0, -0.04, 0);
+
+            Vec3 move = Entity.collideBoundingBox(
+                    item,
+                    velocity,
+                    box,
+                    level,
+                    List.of()
+            );
+
+            predicted = predicted.add(move);
+            box = box.move(move);
+
+            // Hit ground
+            if (move.y != velocity.y && velocity.y < 0) {
+                // Item landed, stop completely
+                return predicted;
+            }
+
+            // vanilla drag while airborne
+            velocity = velocity.scale(0.98);
+
+            if (predicted.y < level.getMinBuildHeight()) {
+                break;
+            }
+        }
+
+        return predicted;
+    }
+
+    public  void onEggHit(HitResult $$0) {
+        if (!self.level().isClientSide) {
+            if (self.getRandom().nextInt(8) == 0) {
+                int $$1 = 1;
+                if (self.getRandom().nextInt(32) == 0) {
+                    $$1 = 4;
+                }
+
+                for(int $$2 = 0; $$2 < $$1; ++$$2) {
+                    Chicken $$3 = (Chicken)EntityType.CHICKEN.create(self.level());
+                    if ($$3 != null) {
+                        $$3.setAge(-24000);
+                        $$3.moveTo($$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z, 0, 0.0F);
+                        self.level().addFreshEntity($$3);
+                    }
+                }
+            }
+        }
+    }
+    public  Vec3 predictProjectile(Projectile projectile, int ticks) {
         Level level = projectile.level();
 
         Vec3 pos = projectile.position();
@@ -940,6 +1527,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
             ));
 
             if (hit.getType() == HitResult.Type.BLOCK) {
+                if (projectile instanceof Snowball || projectile instanceof ThrownEgg){
+                    if (projectile instanceof ThrownEgg){
+                        onEggHit(hit);
+                    }
+                    projectile.discard();
+                }
                 return pos;
                 //return hit.getLocation();
             }
@@ -965,45 +1558,68 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return pos;
     }
 
+    private void skipFallingBlock(FallingBlockEntity falling, int ticks) {
+        if (falling.isRemoved())
+            return;
+
+        for (int i = 0; i < ticks; i++) {
+            if (falling.isRemoved())
+                break;
+
+            falling.tick();
+        }
+    }
+
     public void timeSkip(boolean skipSelf) {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
-
+        if (isUsingTimeErase()){
+            return;
+        }
+        if (!canUseTimeSkip()){
+            return;
+        }
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
+        setCooldown(PowerIndex.SKILL_2_SNEAK,
+                ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
+        skipBlockEntities(100);
+        skipDayTime(100);
+        skipFire(self);
+        skipEffects(self);
         if (epitaph.isEmpty()) {
             basicSkip(skipSelf);
             return;
         }
-
+        List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof Projectile proj){
-                epitaph.put(proj.getId(), new TimeSkipSnapshot(
-                        proj.getId(),
-                        predictProjectile(proj,100),
-                        proj.getXRot(),
-                        proj.getYRot()
+                if (proj instanceof FireworkRocketEntity) {
+                    proj.discard();
+                } else {
+                    epitaph.put(proj.getId(), new TimeSkipSnapshot(
+                            proj.getId(),
+                            predictProjectile(proj, 40),
+                            proj.getXRot(),
+                            proj.getYRot()
+                    ));
+                }
+            } else if (entity instanceof ItemEntity it) {
+                Vec3 predicted = predictItem(it, 100);
+                skip_dump.put(it.getId(), new TimeSkipSnapshot(
+                        it.getId(),
+                        predicted,
+                        it.getXRot(),
+                        it.getYRot()
                 ));
-            } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
-                Vec3 boat = predictBoat(bt,40);
-                epitaph.put(bt.getId(), new TimeSkipSnapshot(
-                        bt.getId(),
-                        boat,
-                        bt.getXRot(),
-                        bt.getYRot()
-                ));
-            } else if (entity instanceof AbstractMinecart bt){
-                Vec3 minecart = predictMinecart(bt,40);
-                epitaph.put(bt.getId(), new TimeSkipSnapshot(
-                        bt.getId(),
-                        minecart,
-                        bt.getXRot(),
-                        bt.getYRot()
-                ));
-            } else if (entity instanceof PrimedTnt pt){
-                pt.setFuse(1);
+            } else if (entity instanceof FallingBlockEntity fbe){
+                fallingBlocks.add(fbe);
             }
         }
+
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
             if (!skipSelf && snapshot.getEntityId() == self.getId()){
                 continue;
@@ -1011,9 +1627,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
             skipSingle(snapshot);
         }
 
+        if (!fallingBlocks.isEmpty()) {
+            fallingBlocks.sort(
+                    Comparator.comparingDouble(entity -> entity.position().y)
+            );
+
+
+            for (FallingBlockEntity falling : fallingBlocks) {
+                skipFallingBlock(falling, 100);
+            }
+        }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, 75, true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
         scatterPackets();
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
@@ -1022,8 +1648,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void scatterPackets(){
         packetNearby2();
     }
+    int skipRange = 50;
     public int getSkipRange(){
         return 50;
+    }
+    public int getSkipBonusRange(){
+        return getSkipRange()+25;
     }
     public final void packetNearby2() {
         if (!this.self.level().isClientSide) {
@@ -1037,7 +1667,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, 75)) {
+                if (blockPos.closerToCenterThan(userLocation, getSkipBonusRange())) {
                     S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.TIME_SKIP);
                 }
             }
@@ -1063,7 +1693,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
+            if (isUsingTimeErase()){
+                return;
+            }
             if (epitaph.isEmpty()) {
+                if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
+                    return;
+                }
                 //debugPlayer();
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
@@ -1081,7 +1717,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 float yRot = entity.getYRot();
                                 if (!lv.isSleeping()) {
                                     if (entity instanceof Mob mob) {
-                                        if (!mob.isLeashed()) {
+                                        if (!mob.isLeashed() && !(mob instanceof WanderingTrader)) {
                                             predicted = predictPosition(mob, 100);
                                         }
                                     } else if (entity instanceof Player player) {
@@ -1104,11 +1740,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 S2CPacketUtil.addEpitaph(pl, id, predicted, xRot, yRot);
                             }
                         }
-                    } else if (entity instanceof Boat bt && bt.getControllingPassenger() instanceof Player){
+                    } else if (entity instanceof Boat bt){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
-                        predicted = predictBoat(bt,40);
+                        if (bt.getControllingPassenger() instanceof Player) {
+                            predicted = predictBoat(bt, 40);
+                        }
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
@@ -1116,6 +1754,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 yRot
                         ));
                         S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, xRot, yRot);
+                    } else if (entity instanceof PrimedTnt tnt) {
+                        Vec3 predicted = predictTNT(tnt, 100);
+
+                        epitaph.put(
+                                entity.getId(),
+                                new TimeSkipSnapshot(
+                                        entity.getId(),
+                                        predicted,
+                                        entity.getXRot(),
+                                        entity.getYRot()
+                                )
+                        );
+                        S2CPacketUtil.addEpitaph(pl, entity.getId(), predicted, entity.getXRot(),
+                                entity.getYRot());
                     } else if (entity instanceof AbstractMinecart bt){
                         Vec3 predicted = entity.position();
                         float xRot = entity.getXRot();
@@ -1141,6 +1793,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
                 S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
             } else {
+
+                setCooldown(PowerIndex.SKILL_1,
+                        ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphCooldown);
                 S2CPacketUtil.sendPlaySoundPacket(pl,this.self.getId(),EPITAPH_FADE_NOISE);
                 S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
                 epitaph.clear();
@@ -1222,6 +1877,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (isUsingEpitaph() && ClientNetworking.getAppropriateConfig().kingCrimsonSettings.epitaphInterrupt) {
+            epitaph();
+        }
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             int cdr = ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1291,9 +1949,42 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
+            case SKILL_4_NORMAL -> {
+                timeEraseClient();
+            }
         }
     }
 
+    public void timeEraseClient(){
+        if (!onCooldown(PowerIndex.SKILL_4)) {
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+    public int getTimeEraseCooldown(){
+        return 600;
+    }
+
+    public void timeErase() {
+        if (!self.level().isClientSide() && self instanceof ServerPlayer sp) {
+            if (onCooldown(PowerIndex.SKILL_4)) {
+                return;
+            }
+            if (timeEraseActive){
+                timeEraseActive = false;
+                setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
+                packetNearby2();
+                playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
+            } else {
+                timeEraseActive = true;
+                S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
+            }
+            saveDiscAndSync();
+        }
+    }
     @Override
     public boolean isAppropriateToGrab(){
         if (!hasBlock()) {
@@ -1302,7 +1993,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return false;
     }
     public void timeSkipSelfClient() {
+
+        if (isUsingTimeErase()){
+            itemGrabClient();
+            return;
+        }
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
         if (hasBlock()){
+            return;
+        }
+        if (!canUseTimeSkip()){
             return;
         }
         if (isUsingEpitaph()){
@@ -1310,6 +2012,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void timeSkipClient() {
+
+        if (isUsingTimeErase()){
+            itemGrabClient();
+            return;
+        }
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            return;
+        }
+        if (!canUseTimeSkip()){
+            return;
+        }
         if (hasBlock()){
             itemGrabClient();
             return;
@@ -1327,7 +2040,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
     public void epitaphClient(){
-
+        if (isUsingTimeErase()){
+            impaleClient();
+            return;
+        }
+        if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
+            return;
+        }
+        if (this.onCooldown(PowerIndex.SKILL_1)) {
+            return;
+        }
         if (hasBlock())
             return;
         tryPowerPacket(PowerIndex.POWER_1);
@@ -1367,13 +2089,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (!isHoldingSneak()){
+        if (!isHoldingSneak() && !isUsingTimeErase()){
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_EPITAPH, PowerIndex.SKILL_1, 0);
         } else {
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
         }
 
-        if (!isHoldingSneak()){
+        if (!isHoldingSneak() && !isUsingTimeErase()){
             if (hasBlock()){
                 LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
 
@@ -1455,6 +2177,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return zamn >= 0.5F;
     }
 
+    public boolean isErasingTime(){
+        return timeEraseActive;
+    }
+
+    @Override
+    public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
+        if (timeEraseActive){
+            timeErase();
+        }
+        return false;
+    }
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
@@ -1476,6 +2210,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
                 } else {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
                         int atd = this.getAttackTimeDuring();
                         this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
                         tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
@@ -1485,6 +2220,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else {
                 if (keyIsDown) {
                     if (!isHoldingSneak()) {
+                        if (isErasingTime()) {
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                        }
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
                         if (this.canAttack()) {
@@ -1492,6 +2230,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             holdDownClick = true;
                             tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
                         } else {
+                            if (isErasingTime()) {
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                            }
                             super.buttonInputAttack(keyIsDown, options);
                         }
                     }
@@ -1540,6 +2281,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void updateImpale(){
         if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 7 && isErasingTime() && self.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+            }
             if (this.attackTimeDuring > 24) {
                 this.standImpale();
             } else {
@@ -1579,6 +2323,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_4){
+           this.timeErase();
+           return true;
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -1747,6 +2494,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (hasBlock()){
             return true;
         }
+        if (slot == 1 && !isHoldingSneak() && onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            if (!canUseEpitaphWithoutSkip()) {
+                return true;
+            }
+        }
         return super.isAttackIneptVisually(activeP,slot);
     }
 
@@ -1809,6 +2561,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void updateFinalAttackCharge(){
         if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 14 && isErasingTime() && self.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+            }
             if (this.attackTimeDuring >= 60) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);

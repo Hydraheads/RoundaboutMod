@@ -17,6 +17,7 @@ import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
@@ -222,6 +223,8 @@ public class MainUtil {
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
     public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_BLOCK_HEAT = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -1316,7 +1319,7 @@ public class MainUtil {
     public static boolean canCauseRejection(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
                     return true;
                 }
             }
@@ -1330,7 +1333,7 @@ public class MainUtil {
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof StandEntity)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
                     return ((IMob)ME).roundabout$isWorthy();
                 }
             }
@@ -1547,10 +1550,10 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isDangerous(Level level, BlockPos pos, BlockState state){
+    public static boolean isDangerous(Level level, BlockPos pos, BlockState state, boolean isStrider){
         if (state.is(Blocks.COBWEB)
-                || state.is(Blocks.FIRE)
-                || state.is(Blocks.SOUL_FIRE)
+                || (state.is(Blocks.FIRE) && !isStrider)
+                || (state.is(Blocks.SOUL_FIRE) && !isStrider)
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
@@ -1558,7 +1561,7 @@ public class MainUtil {
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)
                 || state.is(Blocks.SWEET_BERRY_BUSH)
-                || level.getFluidState(pos).is(FluidTags.LAVA)) {
+                || (level.getFluidState(pos).is(FluidTags.LAVA)) && !isStrider) {
             return true;
 
         }
@@ -2852,20 +2855,6 @@ public class MainUtil {
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY){
-            BlackSabbathPlayerInventory $$6 = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
-            PowerTypes.initializeStandPower(player);
-
-            if (player.containerMenu != player.inventoryMenu) {
-                player.containerMenu = player.inventoryMenu;
-            }
-
-            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
-            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
-                    cid);
-         //   player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
-            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
@@ -2995,6 +2984,18 @@ public class MainUtil {
                 if (finalATime <= 1) {
                     user.roundabout$getStandPowers().setAttackTime((attackTimeMax+1));
                     user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
+                }
+            }
+        } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isUsingEpitaph()){
+                    pkc.epitaph();
+                }
+            }
+        } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER_2) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isUsingTimeErase()){
+                    pkc.timeErase();
                 }
             }
         } else if (context == PacketDataIndex.RELOAD_GUN) {

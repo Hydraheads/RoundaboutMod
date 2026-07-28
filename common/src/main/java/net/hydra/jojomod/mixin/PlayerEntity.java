@@ -58,6 +58,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -81,6 +82,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -1746,6 +1748,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
             }
         } else {
+            FishingHook hook = fishing;
+
+            if (hook != null) {
+                if (PowerTypes.isBrawling(this) || ((StandUser)this).roundabout$getEffectiveCombatMode()){
+                    hook.discard();
+                    fishing = null;
+                }
+            }
+
             PowerTypes.fixPowers(this);
             roundabout$qmessageTick();
             byte pos = roundabout$GetPos2();
@@ -2006,6 +2017,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
     @Shadow
     public abstract void resetAttackStrengthTicker();
+
+    @Shadow
+    @Nullable
+    public FishingHook fishing;
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {

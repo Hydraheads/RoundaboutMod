@@ -29,6 +29,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -64,7 +65,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -114,7 +114,132 @@ public class ClientUtil {
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+    public static int clientTicker;
+    public static int timeSkipTicker = -1;
+    public static int bitesTheDustTicker = -1;
+    public static int getClientTicker(){
+        return clientTicker;
+    }
 
+    public static boolean isUsingTimeErase = false;
+    public static void tickClientUtilStuff(){
+        clientTicker++;
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            PlayerTickStart = player.tickCount;
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                if (PKC.isUsingTimeErase()){
+                    if (clientTicker % 2 == 0) {
+                        ClientEffectUtil.spawnTerrainFragment(player);
+                    }
+                    isUsingTimeErase = true;
+                    if (TimeErase < fadeTime){
+                        TimeErase++;
+                    }
+                } else {
+                    isUsingTimeErase = false;
+                    if (TimeErase > -1){
+                        TimeErase--;
+                    }
+                }
+            } else {
+                isUsingTimeErase = false;
+                if (TimeErase > -1){
+                    TimeErase--;
+                }
+            }
+        }
+        ClientEffectUtil.updateTerrainFragments();
+        if (bitesTheDustTicker > -1){
+            bitesTheDustTicker++;
+            if (bitesTheDustTicker > 8){
+                bitesTheDustTicker = -1;
+            }
+        }
+
+        if (timeSkipTicker > -1){
+            timeSkipTicker++;
+            if (timeSkipTicker > 9){
+                timeSkipTicker = -1;
+            }
+        }
+
+        if (heldSwap > 0){
+            heldSwap--;
+        }
+        if (renderBloodTicks > 0){
+            renderBloodTicks--;
+        }
+        /**
+         Minecraft mc = Minecraft.getInstance();
+         if (mc!= null && mc.player != null) {
+         markBlockAsInvisible(mc.player.getOnPos());
+         markBlockAsInvisible(mc.player.getOnPos().below());
+         }
+         **/
+        if (ClientUtil.popSounds != null){
+            ClientUtil.popSounds.popSounds();
+            ClientUtil.popSounds = null;
+        }
+
+
+        Player pl = getPlayer();
+        if (pl != null){
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int cont = ipe.roundabout$getControlling();
+            if (cont > 0){
+                Entity zentity = pl.level().getEntity(cont);
+                if (zentity == null ||
+                        !zentity.level().dimension().equals(pl.level().dimension())
+                        || zentity.isRemoved() || !zentity.isAlive()){
+                    ipe.roundabout$setIsControlling(0);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
+        }
+
+        if (roadRollerPickingRRE != null) {
+            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
+                roadRollerPickingRRE = null;
+            }
+        }
+
+        if (ClientUtil.isInCinderellaMobUI > -1){
+            if (!ClientUtil.hasCinderellaShopUI()){
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
+                ClientUtil.isInCinderellaMobUI = -1;
+            }
+        } if (ClientUtil.setScreenNull){
+            ClientUtil.setScreenNull = false;
+            Minecraft.getInstance().setScreen(null);
+        }
+        if (skipInterpolationFixAccidentTicks > -1){
+            skipInterpolationFixAccidentTicks--;
+        } if (skipInterpolation){
+            if (skipInterpolationFixAccidentTicks <= -1){
+                skipInterpolation = false;
+            }
+        }
+    }
+
+
+    public static final float fadeTime = 14F;
+
+    public static boolean renderTimeErase(){
+        return TimeErase > -1;
+    }
+    public static int renderTimeEraseTime(){
+        return TimeErase;
+    }
+    public static void setTimeErase(int time){
+        TimeErase = time;
+    }
+    public static void bootTimeErase(){
+        if (TimeErase < 0){
+            TimeErase = 0;
+        }
+    }
     public static void animateZombieArmsNoBob(ModelPart $$0, ModelPart $$1, boolean $$2, float $$3, float $$4) {
         float $$5 = Mth.sin($$3 * (float) Math.PI);
         float $$6 = Mth.sin((1.0F - (1.0F - $$3) * (1.0F - $$3)) * (float) Math.PI);
@@ -163,6 +288,9 @@ public class ClientUtil {
         return rendersRipperEyes(ent);
     }
 
+    public static boolean renderSkyBox(){
+        return false;
+    }
     public static boolean hasChangedArms(Entity ent){
         if (cancelWithSuitStand(ent)){
             return false;
@@ -262,87 +390,7 @@ public class ClientUtil {
     public static int getFrozenLevel(){
         return frozenLevel;
     }
-    public static int clientTicker;
-    public static int timeSkipTicker = -1;
-    public static int bitesTheDustTicker = -1;
-    public static int getClientTicker(){
-        return clientTicker;
-    }
-    public static void tickClientUtilStuff(){
-        clientTicker++;
 
-        if (bitesTheDustTicker > -1){
-            bitesTheDustTicker++;
-            if (bitesTheDustTicker > 8){
-                bitesTheDustTicker = -1;
-            }
-        }
-
-        if (timeSkipTicker > -1){
-            timeSkipTicker++;
-            if (timeSkipTicker > 9){
-                timeSkipTicker = -1;
-            }
-        }
-
-        if (heldSwap > 0){
-            heldSwap--;
-        }
-        if (renderBloodTicks > 0){
-            renderBloodTicks--;
-        }
-        /**
-        Minecraft mc = Minecraft.getInstance();
-        if (mc!= null && mc.player != null) {
-            markBlockAsInvisible(mc.player.getOnPos());
-            markBlockAsInvisible(mc.player.getOnPos().below());
-        }
-         **/
-        if (ClientUtil.popSounds != null){
-            ClientUtil.popSounds.popSounds();
-            ClientUtil.popSounds = null;
-        }
-
-
-        Player pl = getPlayer();
-        if (pl != null){
-            IPlayerEntity ipe = ((IPlayerEntity) pl);
-            int cont = ipe.roundabout$getControlling();
-            if (cont > 0){
-                Entity zentity = pl.level().getEntity(cont);
-                if (zentity == null ||
-                        !zentity.level().dimension().equals(pl.level().dimension())
-                || zentity.isRemoved() || !zentity.isAlive()){
-                    ipe.roundabout$setIsControlling(0);
-                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
-                    ClientUtil.setCameraEntity(null);
-                }
-            }
-        }
-
-        if (roadRollerPickingRRE != null) {
-            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
-                roadRollerPickingRRE = null;
-            }
-        }
-
-        if (ClientUtil.isInCinderellaMobUI > -1){
-            if (!ClientUtil.hasCinderellaShopUI()){
-                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
-                ClientUtil.isInCinderellaMobUI = -1;
-            }
-        } if (ClientUtil.setScreenNull){
-            ClientUtil.setScreenNull = false;
-            Minecraft.getInstance().setScreen(null);
-        }
-        if (skipInterpolationFixAccidentTicks > -1){
-            skipInterpolationFixAccidentTicks--;
-        } if (skipInterpolation){
-            if (skipInterpolationFixAccidentTicks <= -1){
-                skipInterpolation = false;
-            }
-        }
-    }
     public static void preRenderLifeTracker(LifeTrackerEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         ent.travelAheadRender($$4);
     }
@@ -861,9 +909,6 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
             checkthisdat = data;
             checkthis = 1;
-        } else if (context == PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY){
-            checkthisdat = data;
-            checkthis = 2;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
             ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
@@ -992,15 +1037,19 @@ public class ClientUtil {
         return 0;
     }
     public static float GameTimeStart = 0;
+    public static float PlayerTickStart = 0;
+    public static int TimeErase = -1;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC) {
-
-            if (PKC.isUsingEpitaph()){
-                return true;
-            } else {
-                GameTimeStart = player.tickCount;
-                return false;
+        if (player != null){
+            PlayerTickStart = player.tickCount;
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                if (PKC.isUsingEpitaph()) {
+                    return true;
+                } else {
+                    GameTimeStart = player.tickCount;
+                    return false;
+                }
             }
         }
         if (player != null){
@@ -1431,12 +1480,12 @@ public class ClientUtil {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
             if (target != null && target.getPassengers() != null && !target.getPassengers().isEmpty() &&
-                    (target.getControllingPassenger() instanceof Player || (target instanceof AbstractMinecart &&
-                            target.getFirstPassenger() instanceof Player))){
+                    target.getControllingPassenger() instanceof Player pl
+                    ){
                 if (!(target instanceof Boat) || target.getPosition(1f).distanceTo(new Vec3(vec.x,vec.y,vec.z)) > 0.4F){
                     target.setPos(vec.x,vec.y,vec.z);
                     Player cli = ClientUtil.getPlayer();
-                    if (cli != null && cli.is(target) && cli.isPassenger()){
+                    if (cli != null && cli.is(pl) && cli.isPassenger()){
                         Entity rv = cli.getRootVehicle();
                         if (rv != null) {
                             target.positionRider(cli);

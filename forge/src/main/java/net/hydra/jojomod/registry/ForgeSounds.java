@@ -28,6 +28,10 @@ public class ForgeSounds {
             register(ModSounds.SKIP_TIME_1, ModSounds.SKIP_TIME_1_ID);
     public static final RegistryObject<SoundEvent> SKIP_TIME_2 =
             register(ModSounds.SKIP_TIME_2, ModSounds.SKIP_TIME_2_ID);
+    public static final RegistryObject<SoundEvent> TIME_ERASE_FULL =
+            register(ModSounds.TIME_ERASE_FULL, ModSounds.TIME_ERASE_FULL_ID);
+    public static final RegistryObject<SoundEvent> TIME_ERASE_END =
+            register(ModSounds.TIME_ERASE_END, ModSounds.TIME_ERASE_END_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
@@ -304,6 +308,8 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_SHA_KOCCHI, ModSounds.KILLER_QUEEN_SHA_KOCCHI_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI, ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_EVENT =
+            register(ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI, ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_ALT_DEDE_EVENT =
             register(ModSounds.KILLER_QUEEN_SHA_ALT_DEDE, ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_SHA_DEDEDEDE_EVENT =
@@ -353,6 +359,8 @@ public class ForgeSounds {
             register(ModSounds.KQ_MINESWEEPER_DETONATE, ModSounds.KQ_MINESWEEPER_DETONATE_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_DETONATE_EVENT =
             register(ModSounds.KQ_MINESWEEPER_BTD_DETONATE, ModSounds.KQ_MINESWEEPER_BTD_DETONATE_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_EXPLOSION_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_EXPLOSION, ModSounds.KQ_MINESWEEPER_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_PLANT_EVENT =
             register(ModSounds.KQ_MINESWEEPER_BTD_PLANT, ModSounds.KQ_MINESWEEPER_BTD_PLANT_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BTD_NOISE_EVENT =
@@ -570,6 +578,13 @@ public class ForgeSounds {
             register(ModSounds.RATT_LEAP, ModSounds.RATT_LEAP_ID);
     public static final RegistryObject<SoundEvent> RATT_MODE_CHANGE =
             register(ModSounds.RATT_MODE_CHANGE, ModSounds.RATT_MODE_CHANGE_ID);
+
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_1 =
+            register(ModSounds.STRAY_CAT_SOUND_1, ModSounds.STRAY_CAT_SOUND_1_ID);
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_2 =
+            register(ModSounds.STRAY_CAT_SOUND_2, ModSounds.STRAY_CAT_SOUND_2_ID);
+    public static final RegistryObject<SoundEvent> STRAY_CAT_SOUND_3 =
+            register(ModSounds.STRAY_CAT_SOUND_3, ModSounds.STRAY_CAT_SOUND_3_ID);
 
     public static final RegistryObject<SoundEvent> ANUBIS_POSSESSION =
             register(ModSounds.ANUBIS_POSSESSION, ModSounds.ANUBIS_POSSESSION_ID);

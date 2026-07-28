@@ -4,9 +4,11 @@ package net.hydra.jojomod.mixin.justice;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IClientLevel;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.core.Holder;
@@ -20,12 +22,22 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.material.FogType;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FogRenderer.class)
 public class JusticeFogRenderer {
+
+    @Shadow
+    private static float fogRed;
+
+    @Shadow
+    private static float fogBlue;
+
+    @Shadow
+    private static float fogGreen;
 
     /**This is the main part of where the fog rendering magic, the other part happens in the ClientLevel.
      * Vanilla fog rendering is relatively complex, so it may take a bit of examing to understand the code.
@@ -80,7 +92,7 @@ public class JusticeFogRenderer {
                     if (isBlind){
                         MobEffectInstance mi = $$9.getEffect(MobEffects.BLINDNESS);
                         if (mi != null) {
-                            float joever = mi.isInfiniteDuration() ? 5.0F : Mth.lerp(Math.min(1.0F, (float) mi.getDuration() / 20.0F), $$2, 5.0F);
+                            float joever = mi.isInfiniteDuration() ? 5.0F : Mth.lerp(Math.min(1.0F, (float) mi.getDuration() / ClientUtil.fadeTime), $$2, 5.0F);
                             if ($$1 == FogRenderer.FogMode.FOG_SKY) {
                                 start = 0.0F;
                                 end = joever * 0.8F;
@@ -135,4 +147,73 @@ public class JusticeFogRenderer {
         }
     }
 
+    @Inject(method = "setupFog", at = @At("TAIL"))
+    private static void roundabout$timeEraseFog(
+            Camera camera,
+            FogRenderer.FogMode mode,
+            float renderDistance,
+            boolean thickFog,
+            float partialTick,
+            CallbackInfo ci) {
+
+        if (!ClientUtil.isUsingTimeErase)
+            return;
+        float progress;
+
+        float s = 23F;
+        float e = 45.0F;
+
+        float pt = partialTick;
+        if (!ClientUtil.isUsingTimeErase){
+            pt*=-1;
+        }
+
+        progress = Math.max(((ClientUtil.renderTimeEraseTime() + pt) / ClientUtil.fadeTime),0);
+        progress = Math.min(progress,1);
+
+        // smoothstep
+        progress = progress * progress * (3.0F - 2.0F * progress);
+
+        float start = Mth.lerp(progress, renderDistance * 0.75F, s);
+        float end = Mth.lerp(progress, renderDistance, e);
+
+        RenderSystem.setShaderFogStart(start);
+        RenderSystem.setShaderFogEnd(end);
+    }
+    @Inject(method = "setupColor", at = @At("RETURN"))
+    private static void roundabout$timeEraseFogColor(
+            Camera camera,
+            float partialTick,
+            ClientLevel level,
+            int renderDistance,
+            float darkenWorldAmount,
+            CallbackInfo ci) {
+
+        if (ClientUtil.TimeErase < 1 || !ClientUtil.isUsingTimeErase)
+            return;
+
+
+        float pt = partialTick;
+        if (!ClientUtil.isUsingTimeErase){
+            pt*=-1;
+        }
+        float progress = Mth.clamp(
+                (ClientUtil.renderTimeEraseTime() + pt) / ClientUtil.fadeTime,
+                0F,
+                1F
+        );
+
+        progress = progress * progress * (3F - 2F * progress);
+
+        float r = 0.07F;
+        float g = 0.00F;
+        float b = 0.05F;
+        RenderSystem.clearColor(r,
+                g,
+                b,
+                1.0F);
+        fogRed = r;
+        fogGreen = g;
+        fogBlue =b;
+    }
 }

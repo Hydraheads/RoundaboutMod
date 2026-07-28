@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -134,6 +135,15 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.setFollowing(StandSet);
     }
 
+    @Override
+    public boolean isInvisible() {
+        if (PowerTypes.isExistentiallyElsewhere(getUser())) {
+            if (!(this.level().isClientSide() && ClientUtil.isPlayer(getUser()))) {
+                return true;
+            }
+        }
+        return super.isInvisible();
+    }
     public void setFollowing(LivingEntity StandSet){
     }
 

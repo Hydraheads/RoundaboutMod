@@ -7,14 +7,24 @@ import net.hydra.jojomod.event.index.PlunderTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +37,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Mixin(Level.class)
-public class ZLevel implements ILevelAccess {
+public abstract class ZLevel implements ILevelAccess, LevelAccessor {
+
+    @Shadow
+    @Final
+    protected List<TickingBlockEntity> blockEntityTickers;
+
+    @Shadow
+    public abstract boolean shouldTickBlocksAt(BlockPos blockPos);
 
     @Unique
     public List<SoftAndWetPlunderBubbleEntity> roundabout$plunderBubbles = new ArrayList<>();
@@ -38,6 +55,62 @@ public class ZLevel implements ILevelAccess {
     public List<SoftAndWetPlunderBubbleEntity> roundabout$frictionBubbles = new ArrayList<>();
     @Unique
     public List<SoftAndWetPlunderBubbleEntity> roundabout$entityFrictionBubbles = new ArrayList<>();
+
+    @Unique
+    public void rdbt$skipTime(LivingEntity self,int ticks, int maxRange){
+        if (((Level)(Object)this) instanceof ServerLevel serverLevel) {
+            Position position = self.position();
+            Iterator<TickingBlockEntity> iterator = this.blockEntityTickers.iterator();
+            while (iterator.hasNext()) {
+                TickingBlockEntity tickingBlockEntity = iterator.next();
+                if (tickingBlockEntity.isRemoved()) {
+                    iterator.remove();
+                    continue;
+                }
+                if (!this.shouldTickBlocksAt(tickingBlockEntity.getPos())) continue;
+
+                BlockPos pos = tickingBlockEntity.getPos();
+                if (MainUtil.cheapDistanceTo(position.x(), position.y(), position.z(),
+                        pos.getX(), pos.getY(), pos.getZ()) < maxRange) {
+                    BlockEntity be = this.getBlockEntity(tickingBlockEntity.getPos());
+                    if (be == null || be.isRemoved()) {
+                        break;
+                    }
+                    if (be instanceof AbstractFurnaceBlockEntity furnace) {
+                        // skip furnace
+                        for (int i = 0; i < ticks; i++) {
+                            AbstractFurnaceBlockEntity.serverTick(
+                                    serverLevel,
+                                    furnace.getBlockPos(),
+                                    furnace.getBlockState(),
+                                    furnace
+                            );
+                        }
+                    } else if (be instanceof BrewingStandBlockEntity brewing) {
+                        // skip brewing
+                        for (int i = 0; i < ticks; i++) {
+                            BrewingStandBlockEntity.serverTick(
+                                    serverLevel,
+                                    brewing.getBlockPos(),
+                                    brewing.getBlockState(),
+                                    brewing
+                            );
+                        }
+                    } else if (be instanceof CampfireBlockEntity campfireBlock) {
+                        // campfire block
+                        for (int i = 0; i < ticks; i++) {
+                            CampfireBlockEntity.cookTick(
+                                    serverLevel,
+                                    campfireBlock.getBlockPos(),
+                                    campfireBlock.getBlockState(),
+                                    campfireBlock
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Unique
     public void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){

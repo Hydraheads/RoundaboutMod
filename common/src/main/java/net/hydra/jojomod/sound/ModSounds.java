@@ -41,6 +41,13 @@ public class ModSounds {
     public static final ResourceLocation SKIP_TIME_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKIP_TIME_2);
     public static SoundEvent SKIP_TIME_2_EVENT = SoundEvent.createVariableRangeEvent(SKIP_TIME_2_ID);
 
+    public static final String TIME_ERASE_FULL = "time_erase_full";
+    public static final ResourceLocation TIME_ERASE_FULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_FULL);
+    public static SoundEvent TIME_ERASE_FULL_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_FULL_ID);
+    public static final String TIME_ERASE_END = "time_erase_end";
+    public static final ResourceLocation TIME_ERASE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_END);
+    public static SoundEvent TIME_ERASE_END_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_END_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);
@@ -658,6 +665,16 @@ public class ModSounds {
     public static final ResourceLocation STAND_BARRAGE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_BARRAGE_END);
     public static SoundEvent STAND_BARRAGE_END_EVENT = SoundEvent.createVariableRangeEvent(STAND_BARRAGE_END_ID);
 
+    public static final String STRAY_CAT_SOUND_1 = "stray_cat_sound_1";
+    public static final ResourceLocation STRAY_CAT_SOUND_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_1);
+    public static SoundEvent STRAY_CAT_SOUND_1_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_1_ID);
+    public static final String STRAY_CAT_SOUND_2 = "stray_cat_sound_2";
+    public static final ResourceLocation STRAY_CAT_SOUND_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_2);
+    public static SoundEvent STRAY_CAT_SOUND_2_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_2_ID);
+    public static final String STRAY_CAT_SOUND_3 = "stray_cat_sound_3";
+    public static final ResourceLocation STRAY_CAT_SOUND_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_SOUND_3);
+    public static SoundEvent STRAY_CAT_SOUND_3_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_SOUND_3_ID);
+
     public static final String KILLER_QUEEN_IMPALE = "killer_queen_impale";
     public static final ResourceLocation KILLER_QUEEN_IMPALE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_IMPALE);
     public static SoundEvent KILLER_QUEEN_IMPALE_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_IMPALE_ID);
@@ -764,6 +781,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_DETONATE = "kq_minesweeper_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_DETONATE_ID);
+    public static final String KQ_MINESWEEPER_EXPLOSION = "kq_minesweeper_explosion";
+    public static final ResourceLocation KQ_MINESWEEPER_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_EXPLOSION);
+    public static SoundEvent KQ_MINESWEEPER_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_EXPLOSION_ID);
     public static final String KQ_MINESWEEPER_BTD_DETONATE = "kq_minesweeper_btd_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_BTD_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_BTD_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_BTD_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_BTD_DETONATE_ID);

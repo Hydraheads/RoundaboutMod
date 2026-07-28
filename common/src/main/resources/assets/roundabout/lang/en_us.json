@@ -438,6 +438,8 @@
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
   "item.roundabout.painting_venus": "Birth of Venus",
 
+  "entity.roundabout.stray_cat_bubble": "Air Bubble",
+  "entity.roundabout.stray_cat_entity": "Stray Cat",
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.cold_twister": "Cold Twister",
@@ -772,6 +774,8 @@
   "sounds.roundabout.king_crimson_barrage_hit": "Barrage",
   "sounds.roundabout.skip_time_1": "???",
   "sounds.roundabout.skip_time_2": "???",
+  "sounds.roundabout.time_erase_full": "Time falls apart",
+  "sounds.roundabout.time_erase_end": "Something happened",
   "sounds.roundabout.epitaph_activate": "Future appears",
   "sounds.roundabout.epitaph_fade": "Future vanishes",
 
@@ -1250,31 +1254,51 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
+  "sounds.roundabout.kq_minesweeper_barrage": "[Shibabababa!]",
   "sounds.roundabout.killer_queen_shiba": "Shiba!",
+  "sounds.roundabout.kq_minesweeper_punch_1": "[Impact!]",
+  "sounds.roundabout.kq_minesweeper_punch_2": "[Heavy Impact!]",
+  "sounds.roundabout.kq_minesweeper_shiba": "[Shiba!]",
   "sounds.roundabout.killer_queen_shibaba": "Shibaba!",
+  "sounds.roundabout.kq_minesweeper_shibaba": "[Shibaba!]",
   "sounds.roundabout.killer_queen_punch": "Stand Punch",
   "sounds.roundabout.sha_moving": "Sheer Heart Attack Moving",
   "sounds.roundabout.sha_jump": "Sheer Heart Attack Jump",
-  "sounds.roundabout.killer_queen_bubble_launch": "Killer Queen Bubble Launch",
+  "sounds.roundabout.killer_queen_bubble_launch": "Air Bubble been created",
+  "sounds.roundabout.kq_minesweeper_bubble_send": "[Air Bubble been created]",
   "sounds.roundabout.killer_queen_explosion": "Killer Queen explosion",
   "sounds.roundabout.killer_queen_bomb_detonate": "Killer Queen detonation",
+  "sounds.roundabout.killer_queen_select": "Target Select",
+  "sounds.roundabout.kq_minesweeper_detonate": "[MINESWEEPER detonation]",
+  "sounds.roundabout.kq_minesweeper_explosion": "[MINESWEEPER explosion]",
   "sounds.roundabout.killer_queen_impale":  "Impaled",
+  "sounds.roundabout.kq_minesweeper_impale":  "[Impaled]",
   "sounds.roundabout.bites_the_dust_detonate":  "Bites the dust Detonate",
   "sounds.roundabout.bites_the_dust_planted":  "Bites the dust Planted",
+  "sounds.roundabout.kq_minesweeper_btd_plant":  "[Bites the dust Planted]",
+  "sounds.roundabout.kq_minesweeper_btd_detonate":  "[Bites the dust Detonate]",
+  "sounds.roundabout.kq_minesweeper_btd_noise":  "[Bites the dust noise...]",
   "sounds.roundabout.bites_the_dust_noise":  "Bites the dust noise...",
   "sounds.roundabout.sha_kocchi_1": "Kocchi Wo Miro!",
-  "sounds.roundabout.sha_alt_kocchi": "[ Kocchi Wo Miro! ]",
-  "sounds.roundabout.sha_alt_dede": "[ Idede! ]",
+  "sounds.roundabout.sha_alt_kocchi": "[Kocchi Wo Miro!]",
+  "sounds.roundabout.sha_alt_cracked_kocchi": "[ occhi Wo... Mi...]",
+  "sounds.roundabout.sha_alt_dede": "[Idededede]",
   "sounds.roundabout.sha_cracked_kocchi": "Kocchi Wo... Mi...",
   "sounds.roundabout.sha_cracked_dede": "Idere...",
   "sounds.roundabout.sha_dededede": "Idededede",
   "sounds.roundabout.sha_summon": "Sheer Heart Attack Summoned",
-  "sounds.roundabout.sha_kocchi_2": "Omo mo deee...",
+  "sounds.roundabout.sha_heavy": "Omo mo deee...",
   "sounds.roundabout.straycat_bubble_redirect": "Air Bubble Redirecting",
   "sounds.roundabout.straycat_bubble_sound": "Air Bubble shoot",
   "sounds.roundabout.killer_queen_heavy_punch" : "Heavy Punch",
+  "sounds.roundabout.kq_minesweeper_heavy_punch" : "[Heavy Punch]",
+  "sounds.roundabout.kq_minesweeper_kick" : "[Stand Punch]",
   "sounds.roundabout.straycat_bubble_pop": "Air Bubble pop",
+  "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
@@ -2775,6 +2799,8 @@
   "text.roundabout.century_stances.redstone_stance": "Redstone Stance",
   "text.roundabout.century_stances.ground_stance": "Ground Stance",
 
+  "text.roundabout.black_sabbath_inventory": "Invisi-Vision On",
+
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
@@ -2840,6 +2866,27 @@
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
   "config.roundabout.enableWhiteAlbum.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
+  "config.roundabout.enableKingCrimson.name": "Enable Stand",
+  "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+
+  "config.roundabout.enableSkippingCooldowns.name": "Item CD Skip",
+  "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
+
+  "config.roundabout.timeSkipRange.name": "Time Skip Range",
+  "config.roundabout.timeSkipRange.desc": "How far entities get skipped. The effect and sounds play 25 blocks further than this as padding for people witnessing it. This could be laggy if you drastically increase the range so I would recommend avoiding that.",
+
+  "config.roundabout.enableDaySkip.name": "Day Skip",
+  "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
+
+  "config.roundabout.blocksCancelEpitaph2.name": "Blocks Stop Epitaph",
+  "config.roundabout.blocksCancelEpitaph2.desc": "By default placing blocks stops your projection so you can't skip someone into traps or hazards.",
+
+  "config.roundabout.freeTimeSkip.name": "Free Time Skip",
+  "config.roundabout.freeTimeSkip.desc": "Enable to be able to skip while using items or attacks.",
+
+
+
+
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
   "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
 
@@ -2854,6 +2901,21 @@
 
   "config.roundabout.doNotHurtMeRewindCD.name": "Cower Success CD",
   "config.roundabout.doNotHurtMeRewindCD.desc": "This cooldown appears when you restore health with your counter.",
+
+  "config.roundabout.timeSkipCooldown.name": "Time Skip CD",
+  "config.roundabout.timeSkipCooldown.desc": "This cooldown for time skip in ticks.",
+
+  "config.roundabout.enableEpitaphPreSkip.name": "Epitaph Non-Skip",
+  "config.roundabout.enableEpitaphPreSkip.desc": "Enables using epitaph even with time skip unavailable. This is visually confusing but a highly requested feature.",
+
+  "config.roundabout.epitaphCooldown.name": "Epitaph CD",
+  "config.roundabout.epitaphCooldown.desc": "This cooldown in ticks.",
+
+  "config.roundabout.epitaphInterrupt.name": "Epitaph Interrupt",
+  "config.roundabout.epitaphInterrupt.desc": "Should being attacked interrupt epitaph? For balancing.",
+
+  "config.roundabout.epitaphDuration.name": "Epitaph Duration",
+  "config.roundabout.epitaphDuration.desc": "How long in ticks does epitaph last? (20 ticks = 1 second)",
 
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
@@ -3644,7 +3706,19 @@
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
 
   "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
-  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (enabled by default)",
+  "config.roundabout.bitesTheDustDayModeAffectGlobalTime.name": "Bites the dust Day Mode rewinds global time",
+  "config.roundabout.bitesTheDustDayModeAffectGlobalTime.desc": "Turn on/off if Bites the Dust Day mode can change the global time (disabled by default), when disabled, it will interpolate the sky on client side instead like how timestop does",
+  "config.roundabout.bitesTheDustPlantCooldown.name": "Bites the Dust plant cooldown",
+  "config.roundabout.bitesTheDustPlantCooldown.desc": "Set the cooldown of the Bites the Dust plant move",
+  "config.roundabout.bitesTheDustCombatActivationCooldown.name": "Bites the Dust Combat Activation cooldown",
+  "config.roundabout.bitesTheDustCombatActivationCooldown.desc": "Set the cooldown of the Bites the Dust combat, this cooldown is seted when ever you plant bites the dust on someone",
+  "config.roundabout.bitesTheDustCombatCooldownBonus.name": "Bites the Dust Combat cooldown bonus",
+  "config.roundabout.bitesTheDustCombatCooldownBonus.desc": "Cooldown bonus that is added with the activation cooldown whenever you detonates it",
+  "config.roundabout.bitesTheDustCombatMobsDamage.name": "Bites the Dust Combat mobs Damage",
+  "config.roundabout.bitesTheDustCombatMobsDamage.desc": "Set the damage amount that bites the dust combat deal to mobs",
+  "config.roundabout.bitesTheDustCombatPlayersDamage.name": "Bites the Dust Combat players Damage",
+  "config.roundabout.bitesTheDustCombatPlayersDamage.desc": "Set the damage amount that bites the dust combat deal to players (if the config of user mobs receiving reduced damage is activated, they receive this damage instead!)",
   "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
   "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
   "config.roundabout.blocksDestruction.name": "Blocks Explode",
@@ -3954,6 +4028,7 @@
   "config.roundabout.whiteAlbumSettings.name": "White Album",
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
+  "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 

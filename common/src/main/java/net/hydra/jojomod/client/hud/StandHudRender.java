@@ -784,7 +784,32 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
+    public static void renderEpitaph(GuiGraphics context, Player playerEntity,
+                                         int scaledWidth, int scaledHeight, int x, PowersKingCrimson pkc) {
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        float maxDistance = pkc.getEpitphDuration();
+        float distance =  Math.max(maxDistance - pkc.getTicksIntoEpitaph(), 0);
+        int maxDistance2 = ((int) (distance/20)) + 1;
 
+        int blt =  (int) Math.floor(((double) 182 / maxDistance) * (distance));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 97, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 102, blt, 5);
+        }
+
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = maxDistance2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
     public static void renderCKBDistance(GuiGraphics context, Player playerEntity,
                                                  int scaledWidth, int scaledHeight, int x, int targ) {
         Minecraft client = Minecraft.getInstance();
