@@ -386,10 +386,12 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
-        //if (PowerTypes.isExistentiallyElsewhere(((Entity) (Object)this))){
-         //   cir.setReturnValue(true);
-         //   return;
-        //}
+        if (PowerTypes.isExistentiallyElsewhere(((Entity) (Object)this))){
+            if (!(this.level().isClientSide() && ClientUtil.isPlayer((Entity) (Object) this))) {
+                cir.setReturnValue(true);
+                return;
+            }
+        }
 
         if (roundabout$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
             if (this.level().isClientSide()){
