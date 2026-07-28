@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -32,6 +33,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -126,7 +128,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
     }
-
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("timeEraseActive",timeEraseActive);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("timeEraseActive")) {
+            timeEraseActive = $$0.getBoolean("timeEraseActive");
+            if (self.level().isClientSide()){
+                if (timeEraseActive){
+                    ClientUtil.bootTimeErase();
+                }
+            }
+        }
+    }
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -507,7 +525,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.freeTimeSkip){
             return true;
         }
-        return canAttackLight() && !self.isUsingItem() && !isClashing();
+        return (canAttackLight() || isGuarding()) && !self.isUsingItem() && !isClashing();
     }
 
     @Override
@@ -1926,11 +1944,28 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void timeEraseClient(){
-        if (timeEraseActive){
-            timeEraseActive = false;
-        } else {
-            timeEraseActive = true;
-            ClientUtil.bootTimeErase();
+        if (!onCooldown(PowerIndex.SKILL_4)) {
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+    public int getTimeEraseCooldown(){
+        return 600;
+    }
+
+    public void timeErase() {
+        if (!self.level().isClientSide() && self instanceof ServerPlayer sp) {
+            if (onCooldown(PowerIndex.SKILL_4)) {
+                return;
+            }
+            if (timeEraseActive){
+                timeEraseActive = false;
+                setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+            } else {
+                timeEraseActive = true;
+                S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
+            }
+            saveDiscAndSync();
         }
     }
     @Override
@@ -2231,12 +2266,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
             this.timeSkip(false);
             return true;
         } else if (move == PowerIndex.EXTRA){
+            Roundabout.LOGGER.info("6");
             this.timeSkip(true);
             return true;
         } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_4){
+           this.timeErase();
+           return true;
         }
         return super.setPowerOther(move,lastMove);
     }
