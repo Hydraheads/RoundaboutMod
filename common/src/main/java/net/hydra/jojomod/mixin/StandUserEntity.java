@@ -3518,7 +3518,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
+
+        /**Here, we cancel barrage if it has not "wound up" and the user is hit*/
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 

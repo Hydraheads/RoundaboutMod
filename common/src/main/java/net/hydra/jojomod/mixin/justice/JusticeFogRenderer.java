@@ -158,6 +158,9 @@ public class JusticeFogRenderer {
 
         if (!ClientUtil.isUsingTimeErase)
             return;
+        FogType $$5 = camera.getFluidInCamera();
+        if ($$5 != FogType.NONE)
+            return;
         float progress;
 
         float s = 23F;
@@ -192,6 +195,9 @@ public class JusticeFogRenderer {
         if (ClientUtil.TimeErase < 1 || !ClientUtil.isUsingTimeErase)
             return;
 
+        FogType $$5 = camera.getFluidInCamera();
+        if ($$5 != FogType.NONE)
+            return;
 
         float pt = partialTick;
         if (!ClientUtil.isUsingTimeErase){
