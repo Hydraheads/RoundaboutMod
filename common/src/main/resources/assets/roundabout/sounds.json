@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "oasis_mud_hit": {
+    "subtitle": "sounds.roundabout.oasis_mud_hit",
+    "sounds": [
+      "roundabout:oasis_mud_hit"
+    ]
+  },
   "summon_diver_down": {
     "subtitle": "sounds.roundabout.summon_diver_down",
     "sounds": [

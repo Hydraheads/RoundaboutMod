@@ -46,8 +46,6 @@ public class ForgeBlocks {
             () -> AJA_BLOCK_PROPERTIES
     );
 
-
-
     public static final RegistryObject<Block> CHESS_PIECE = BLOCKS.register("chess_piece",
             () -> ModBlocks.getChessBlock()
     );
@@ -366,6 +364,8 @@ public class ForgeBlocks {
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> OASIS_MUD_BLOCK = BLOCKS.register("oasis_mud_block",
+            () -> OASIS_MUD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
@@ -380,6 +380,9 @@ public class ForgeBlocks {
             () -> ModBlocks.CREAM_FIRE_PROPERTIES);
     public static final RegistryObject<Block> FANCY_LIGHTER_BLOCK = BLOCKS.register("fancy_lighter_block",
             () -> ModBlocks.FANCY_LIGHTER_PROPRETIES);
+
+    public static final RegistryObject<BlockEntityType<OasisMudBlockEntity>> OASIS_MUD_BLOCK_ENTITY = BLOCK_ENTITIES.register("oasis_mud_block",
+            () -> BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "oasis_mud_block")));
     public static final RegistryObject<BlockEntityType<MirrorBlockEntity>> MIRROR_BLOCK_ENTITY = BLOCK_ENTITIES.register("mirror",
             () -> BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "mirror")));
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",

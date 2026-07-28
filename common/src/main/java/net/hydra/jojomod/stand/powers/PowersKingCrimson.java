@@ -537,12 +537,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
+    public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
+        if (isUsingTimeErase()){
+            timeErase();
+        }
+    }
+    @Override
     public void onPlaceBlock(ServerPlayer $$0, BlockPos $$1, ItemStack $$2){
         /**This will be a denial of epitaph + block place*/
         if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.blocksCancelEpitaph2) {
             if (isUsingEpitaph()) {
                 epitaph();
             }
+        }
+        if (isUsingTimeErase()){
+            timeErase();
         }
         super.onPlaceBlock($$0,$$1,$$2);
     }
