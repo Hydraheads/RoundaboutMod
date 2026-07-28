@@ -4190,8 +4190,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$getVisibilityPercent(CallbackInfoReturnable<Double> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(0.0);
+            return;
+        }
+
         if (roundabout$getStandPowers() instanceof PowersAchtungBaby PB && PB.inBurstState() && ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstAlertsMobs){
             cir.setReturnValue(0.33);
+        }
+    }
+    @Inject(method = "isPickable", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$isPickable(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "isPushable", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$isPushable(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "pushEntities", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$pushEntities(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            ci.cancel();
+            return;
         }
     }
     /**Hide from mobs with armor on*/
