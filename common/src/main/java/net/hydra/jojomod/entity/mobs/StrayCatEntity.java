@@ -494,6 +494,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             bubble.setSkin(this.getBubbleSkin());
             bubble.setTarget(livingEntity);
 
+            if (!this.isTame()) { bubble.setDamageMult(2.4f); }
+
             Vec3 addToPosition = new Vec3(0, this.getEyeHeight() * 0.85f, 0);
             Direction direction = ((IGravityEntity) this).roundabout$getGravityDirection();
             if (direction != Direction.DOWN) {

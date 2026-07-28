@@ -629,6 +629,12 @@
       "roundabout:sha_cracked_kocchi"
     ]
   },
+  "sha_alt_cracked": {
+    "subtitle": "sounds.roundabout.sha_alt_cracked_kocchi",
+    "sounds": [
+      "roundabout:sha_alt_cracked"
+    ]
+  },
   "sha_dededede": {
     "subtitle": "sounds.roundabout.sha_dededede",
     "sounds": [
