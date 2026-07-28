@@ -827,11 +827,6 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 ItemStack bulletItem = BE.getBulletItemStack();
                                 SE.setHeldItem(bulletItem);
                             }
-                        } else if (ent instanceof ThrownAnubisEntity TAE) {
-                            success = true;
-                            SE.canAcquireHeldItem = true;
-                            ItemStack anubisItem = TAE.getItem();
-                            SE.setHeldItem(anubisItem);
                         } else if (ent instanceof ThrownObjectEntity TO) {
                             ItemStack ii = TO.getItem();
                             if (!ii.isEmpty()) {

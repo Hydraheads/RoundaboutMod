@@ -82,8 +82,11 @@ public class ThrownObjectRenderer<T extends Entity>
         } else {
 
             if (MainUtil.isThrownBlockItem(item.getItem()) &&
-                    entity instanceof ThrownObjectEntity TOE && (TOE.getStyle() == ThrownObjectEntity.SPTHROW || TOE.getStyle() == ThrownObjectEntity.TWTHROW
-                    || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE)){
+                    entity instanceof ThrownObjectEntity TOE &&
+                    (TOE.getStyle() == ThrownObjectEntity.SPTHROW
+                    || TOE.getStyle() == ThrownObjectEntity.TWTHROW
+                    || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE)
+            ){
                 poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
             } else {
                 poseStack.scale(this.scale, this.scale, this.scale);

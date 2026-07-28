@@ -68,6 +68,11 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> MOLD =
             POTION_EFFECTS.register("mold", () ->
                     new Effect(MobEffectCategory.HARMFUL, 0));
+    public static final RegistryObject<MobEffect> CRIPPLED =
+            POTION_EFFECTS.register("crippled", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 725255)
+                            .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL));
+
 
 
     public static class Effect extends MobEffect{

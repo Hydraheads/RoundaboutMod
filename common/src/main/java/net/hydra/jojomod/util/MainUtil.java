@@ -44,6 +44,7 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -3689,6 +3690,24 @@ public class MainUtil {
         return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 entity));
+    }
+
+    public static boolean canBlockGrab(LivingEntity user, BlockPos blockPos) {
+        StandUser standUser = ((StandUser) user);
+        StandPowers standPower = standUser.roundabout$getStandPowers();
+        BlockState state = user.level().getBlockState(blockPos);
+
+        return !MainUtil.isBlockBlacklisted(state)
+                && (!(standPower instanceof BlockGrabPreset BGP) || blockPos.distSqr(user.getOnPos()) <= BGP.getGrabRange() )
+                && state.getBlock().isCollisionShapeFullBlock(state, user.level(), blockPos)
+                && !state.is(Blocks.REINFORCED_DEEPSLATE)
+                && !(state.getBlock() instanceof InfestedBlock)
+                && !user.hasEffect(MobEffects.DIG_SLOWDOWN)
+                && !(state.getBlock() instanceof SlabBlock)
+                && !(state.getBlock() instanceof FrostedIceBlock)
+                && !(state.getBlock() instanceof BuddingAmethystBlock)
+                && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK;
+
     }
 
 }

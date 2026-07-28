@@ -716,14 +716,14 @@ public class StandIcons {
     public static final ResourceLocation ANUBIS_EXP = Roundabout.location("textures/gui/icons/anubis/extra_xp.png");
     public static final ResourceLocation ANUBIS_SPEED = Roundabout.location("textures/gui/icons/anubis/extreme_speed.png");
     public static final ResourceLocation ANUBIS_SLASH = Roundabout.location("textures/gui/icons/anubis/slash.png");
-    public static final ResourceLocation ANUBIS_WIDE_SLASH = Roundabout.location("textures/gui/icons/anubis/wide_slash.png");
     public static final ResourceLocation ANUBIS_DIVE_ATTACK = Roundabout.location("textures/gui/icons/anubis/dive_attack.png");
-    public static final ResourceLocation ANUBIS_DOUBLE_CUT = Roundabout.location("textures/gui/icons/anubis/double_cut.png");
     public static final ResourceLocation ANUBIS_UPPERCUT = Roundabout.location("textures/gui/icons/anubis/uppercut.png");
-    public static final ResourceLocation ANUBIS_THRUST_CUT = Roundabout.location("textures/gui/icons/anubis/thrust_cut.png");
     public static final ResourceLocation ANUBIS_BARRAGE = Roundabout.location("textures/gui/icons/anubis/barrage.png");
     public static final ResourceLocation ANUBIS_SHIELDBREAK = Roundabout.location("textures/gui/icons/anubis/maybe_shieldbreak.png");
     public static final ResourceLocation ANUBIS_GUARD = Roundabout.location("textures/gui/icons/anubis/guard.png");
+    public static final ResourceLocation ANUBIS_EMPOWER = Roundabout.location("textures/gui/icons/anubis/empower.png");
+    public static final ResourceLocation ANUBIS_SWORD_THROW = Roundabout.location("textures/gui/icons/anubis/sword_throw.png");
+
 
     public static final ResourceLocation TUSK_ACTS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/tusk_acts.png");

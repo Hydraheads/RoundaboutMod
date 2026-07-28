@@ -2048,6 +2048,12 @@
       "roundabout:anubis_extra"
     ]
   },
+  "anubis_empower": {
+    "subtitle": "sounds.roundabout.anubis_empower",
+    "sounds": [
+      "roundabout:anubis_empower"
+    ]
+  },
 
 
 

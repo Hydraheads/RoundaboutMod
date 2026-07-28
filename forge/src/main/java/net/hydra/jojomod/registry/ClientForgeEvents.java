@@ -92,6 +92,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.POLLINATION_TRANSFER.get(), PollinationTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.ANUBIS.get(), AnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DARK_MIRAGE.get(), DarkMirageRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_A1.get(), TuskAct1Renderer::new);
@@ -129,7 +130,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.THROWN_ANUBIS.get(), ThrownObjectRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.THROWN_ANUBIS.get(), ThrownAnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CONCEALED_FLAME_OBJECT.get(), ConcealedFlameObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get(), CinderellaVisageDisplayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GROUND_HURRICANE.get(), NoRenderer::new);
@@ -258,6 +259,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A3_LAYER, TuskAct3Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
@@ -312,7 +314,6 @@ public class ClientForgeEvents {
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ANUBIS = new AnubisModel();
-        ModStrayModels.ANUBIS_HUMAN = new AnubisHumanoidModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.MoldSpine = new MoldSpineModel();

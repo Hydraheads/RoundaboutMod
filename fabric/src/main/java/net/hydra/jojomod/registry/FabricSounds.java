@@ -312,6 +312,7 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
+        addSound(ModSounds.ANUBIS_EMPOWER_ID, ModSounds.ANUBIS_EMPOWER_EVENT);
 
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BARRAGE_ID, ModSounds.KQ_MINESWEEPER_BARRAGE_EVENT);

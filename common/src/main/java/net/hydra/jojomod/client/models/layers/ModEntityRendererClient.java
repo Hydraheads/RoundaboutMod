@@ -66,6 +66,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation TUSK_A2_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"), "main");
     public static final ModelLayerLocation TUSK_A3_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"), "main");
     public static final ModelLayerLocation TUSK_A4_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4"), "main");
+    public static final ModelLayerLocation ANUBIS = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
