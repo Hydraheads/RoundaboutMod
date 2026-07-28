@@ -929,6 +929,56 @@ public abstract class InputEvents implements IInputEvents {
     @Unique
     private void roundabout$startUseOppositeItem() {
 
+
+
+        StandUser standComp = ((StandUser) player);
+        StandPowers powers = standComp.roundabout$getStandPowers();
+
+        if (standComp.roundabout$isPossessed()) {
+            return;
+        }
+
+        if(powers instanceof PowersGreenDay PGD){
+            if(!PGD.HasMainArm && !roundabout$TryGuard()){
+                return;
+            }
+        }
+
+        if (powers instanceof Powers20thCenturyBoy centuryBoy){
+            if (centuryBoy.invincibleState) return;
+        }
+
+
+        if (PowerTypes.isExistentiallyElsewhere(player)){
+            roundabout$TryGuard();
+            return;
+        }
+
+        if (powers.interceptAllInteractions()) {
+            roundabout$TryGuard();
+            return;
+        }
+        if (powers.isPiloting()){
+            if (!roundaboutPlaceBlock()) {
+                powers.pilotInputInteract();
+            }
+
+            return;
+        }
+
+        if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+            return;
+        } else if (PowerTypes.hasStandActive(this.player)) {
+            if (standComp.roundabout$isGuardInput() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
+
+                return;
+            }
+        } else {
+            if (((IFatePlayer)this.player).rdbt$getFatePowers().cancelItemUse()){
+
+                return;
+            }
+        }
         if (!this.gameMode.isDestroying()) {
             this.rightClickDelay = 4;
             if (!this.player.isHandsBusy()) {
