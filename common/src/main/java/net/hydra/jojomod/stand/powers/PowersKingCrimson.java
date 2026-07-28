@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -32,6 +33,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -112,6 +114,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.SKIP_TIME_1_EVENT;
         } else if (soundChoice == TIME_SKIP_2) {
             return ModSounds.SKIP_TIME_2_EVENT;
+        } else if (soundChoice == TIME_ERASE) {
+            return ModSounds.TIME_ERASE_FULL_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -120,13 +126,31 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte EPITAPH_FADE_NOISE = 107;
     public static final byte TIME_SKIP_1 = 108;
     public static final byte TIME_SKIP_2 = 109;
+    public static final byte TIME_ERASE = 110;
+    public static final byte TIME_ERASE_END = 111;
 
     @Override
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
 
     }
-
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("timeEraseActive",timeEraseActive);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("timeEraseActive")) {
+            timeEraseActive = $$0.getBoolean("timeEraseActive");
+            if (self.level().isClientSide()){
+                if (timeEraseActive){
+                    ClientUtil.bootTimeErase();
+                }
+            }
+        }
+    }
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -507,7 +531,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.freeTimeSkip){
             return true;
         }
-        return canAttackLight() && !self.isUsingItem() && !isClashing();
+        return (canAttackLight() || isGuarding()) && !self.isUsingItem() && !isClashing();
     }
 
     @Override
@@ -1123,7 +1147,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
         scatterPackets();
         if (skip_dump.isEmpty()){
             return;
@@ -1550,6 +1574,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!(self instanceof ServerPlayer pl)) {
             return;
         }
+        if (isUsingTimeErase()){
+            return;
+        }
         if (!canUseTimeSkip()){
             return;
         }
@@ -1612,7 +1639,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
-        playStandUserOnlySoundsIfNearby(TIME_SKIP_1, getSkipBonusRange(), true, false);
+        playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
         scatterPackets();
         epitaph.clear();
         S2CPacketUtil.clearEpitaph(pl);
@@ -1666,6 +1693,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
+            if (isUsingTimeErase()){
+                return;
+            }
             if (epitaph.isEmpty()) {
                 if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
                     return;
@@ -1926,11 +1956,33 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void timeEraseClient(){
-        if (timeEraseActive){
-            timeEraseActive = false;
-        } else {
-            timeEraseActive = true;
-            ClientUtil.bootTimeErase();
+        if (!onCooldown(PowerIndex.SKILL_4)) {
+            tryPowerPacket(PowerIndex.POWER_4);
+        }
+    }
+
+    public int getTimeEraseCooldown(){
+        return 600;
+    }
+
+    public void timeErase() {
+        if (!self.level().isClientSide() && self instanceof ServerPlayer sp) {
+            if (onCooldown(PowerIndex.SKILL_4)) {
+                return;
+            }
+            if (timeEraseActive){
+                timeEraseActive = false;
+                setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
+                packetNearby2();
+                playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
+            } else {
+                timeEraseActive = true;
+                S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
+                S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
+            }
+            saveDiscAndSync();
         }
     }
     @Override
@@ -1942,6 +1994,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public void timeSkipSelfClient() {
 
+        if (isUsingTimeErase()){
+            //blood
+            return;
+        }
         if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
             return;
         }
@@ -1955,8 +2011,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
             tryPowerPacket(PowerIndex.EXTRA);
         }
     }
+
+    @Override
+    public void onItemGrab(){
+        if (isErasingTime()){
+            timeErase();
+        }
+    }
     public void timeSkipClient() {
 
+        if (isUsingTimeErase()){
+            itemGrabClient();
+            return;
+        }
         if (onCooldown(PowerIndex.SKILL_2_SNEAK)){
             return;
         }
@@ -1980,6 +2047,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
     public void epitaphClient(){
+        if (isUsingTimeErase()){
+            impaleClient();
+            return;
+        }
         if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
             return;
         }
@@ -2025,13 +2096,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (!isHoldingSneak()){
+        if (!isHoldingSneak() && !isUsingTimeErase()){
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_EPITAPH, PowerIndex.SKILL_1, 0);
         } else {
             LockedOrNot(context, x, y, 1, StandIcons.KING_CRIMSON_IMAPLE, PowerIndex.SKILL_1_SNEAK,getImpaleLevel());
         }
 
-        if (!isHoldingSneak()){
+        if (!isHoldingSneak() && !isUsingTimeErase()){
             if (hasBlock()){
                 LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
 
@@ -2113,6 +2184,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return zamn >= 0.5F;
     }
 
+    public boolean isErasingTime(){
+        return timeEraseActive;
+    }
+
+    @Override
+    public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
+        if (timeEraseActive){
+            timeErase();
+        }
+        return false;
+    }
+
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
@@ -2134,6 +2217,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
                 } else {
                     if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
                         int atd = this.getAttackTimeDuring();
                         this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
                         tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
@@ -2143,6 +2227,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else {
                 if (keyIsDown) {
                     if (!isHoldingSneak()) {
+                        if (isErasingTime()) {
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                        }
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
                         if (this.canAttack()) {
@@ -2150,6 +2237,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             holdDownClick = true;
                             tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
                         } else {
+                            if (isErasingTime()) {
+                                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                            }
                             super.buttonInputAttack(keyIsDown, options);
                         }
                     }
@@ -2198,6 +2288,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void updateImpale(){
         if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 7 && isErasingTime() && self.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+            }
             if (this.attackTimeDuring > 24) {
                 this.standImpale();
             } else {
@@ -2237,6 +2330,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK){
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_4){
+           this.timeErase();
+           return true;
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -2472,6 +2568,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void updateFinalAttackCharge(){
         if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring == 14 && isErasingTime() && self.level().isClientSide()) {
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+            }
             if (this.attackTimeDuring >= 60) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);

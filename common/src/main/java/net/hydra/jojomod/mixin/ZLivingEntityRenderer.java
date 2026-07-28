@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
@@ -179,16 +180,51 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         if ($$0 instanceof Player P) {
             StandUser SU = (StandUser) P;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                float backflip = PA.getAttackTimeDuring()+$$4;
-                if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
-                    if (backflip < 16) {
-                        poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((backflip)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                float leftHand = $$0.getMainArm() == HumanoidArm.LEFT ? -1 : 1;
+
+                float deltaTime = PA.getAttackTimeDuring()+$$4;
+                float realTime = SU.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                switch (SU.roundabout$getStandAnimation()) {
+                    case PowerIndex.SNEAK_MOVEMENT -> {
+                        if (deltaTime < 16) {
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((deltaTime)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
+                        }
                     }
-                } else if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                    poseStack.translate(0,0.5,0.5);
-                    float time =  Math.min(1,(backflip)/(PowersAnubis.PogoDelay-2) );
-                    float end = -100-P.getViewXRot(0F);
-                    poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0, time*end  ), 0, P.getEyeHeight()*0.4F, 0 );
+                    case PowersAnubis.POGO, PowersAnubis.STAB -> {
+                        if (PA.getAttackTimeDuring() > 0) {
+                            poseStack.translate(0, 0.5, 0.5);
+                            float time = Math.min(1, (deltaTime) / (PA.getPogoDelay() - 2));
+                            float end = -100 - P.getViewXRot(0F);
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, time * end), 0, P.getEyeHeight() * 0.4F, 0);
+                        }
+                    }
+                    case PowersAnubis.CLEAVE -> {
+                        if (realTime < 1.125) {
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime/1.125F,0,leftHand*-60)),0,0,0);
+                        } else if (realTime < 1.25) {
+                            realTime -= 1.125F;
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime/0.125F,leftHand*-60,leftHand*60)),0,0,0);
+                        } else if (realTime < 1.375F) {
+                            realTime -= 1.25F;
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime/0.125F,leftHand*60,0)),0,0,0);
+                        }
+                    }
+                    case PowersAnubis.SPIN -> {
+                        if (realTime > 0.35F && realTime < 1.35F) {
+                            realTime -= 0.35F;
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime,0,leftHand*720)),0,0,0);
+                        }
+                    }
+                    case PowersAnubis.FLURRY -> {
+                        if (realTime < 0.75F) {
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime/0.75F,0,leftHand*-20)),0,0,0);
+                        } else if (realTime < 0.88F) {
+                            realTime -= 0.75F;
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,Mth.lerp(realTime/0.13F,0,leftHand*10)),0,0,0);
+                        } else if (realTime < 1.58F) {
+                            poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,leftHand*10),0,0,0);
+                        }
+                    }
                 }
             } else if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
                if (SU.roundabout$getStandAnimation() != PowersTusk.NONE) {

@@ -407,6 +407,8 @@ public class StandPowers extends AbilityScapeBasis {
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
         return false;
+    }    public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
+        return false;
     }
     /**Same as above but happens later in the damage code after a hit is already confirmed*/
     public boolean interceptSuccessfulDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){

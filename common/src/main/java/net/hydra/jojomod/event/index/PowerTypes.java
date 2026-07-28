@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -215,6 +216,20 @@ public enum PowerTypes {
             if (user.roundabout$getStandPowers() != null) {
                 return user.roundabout$getStandPowers().isMiningStand();
             }
+        }
+        return false;
+    }
+    //d4c parallel run + time erase + man in the mirror
+    public static boolean isExistentiallyElsewhere(Entity entity){
+        if (isErasingTime(entity)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isErasingTime(Entity entity){
+        if (entity instanceof Player pl){
+            return ((StandUser)pl).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                    pkc.timeEraseActive;
         }
         return false;
     }

@@ -1004,16 +1004,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
-                if (this.grabBlock != null && !MainUtil.isBlockBlacklisted(state)
-                        && grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
-                        && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
-                        && !state.is(Blocks.REINFORCED_DEEPSLATE)
-                        && !(state.getBlock() instanceof InfestedBlock)
-                        && !this.self.hasEffect(MobEffects.DIG_SLOWDOWN)
-                        && !(state.getBlock() instanceof SlabBlock)
-                        && !(state.getBlock() instanceof FrostedIceBlock)
-                        && !(state.getBlock() instanceof BuddingAmethystBlock)
-                        && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
+                if (MainUtil.canBlockGrab(this.getSelf(),this.grabBlock)) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof ServerPlayer PE &&
@@ -1079,6 +1070,8 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int grabInventorySlot=1;
 
+    public void onItemGrab(){
+    }
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
@@ -1091,6 +1084,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
                     /**Boat throw*/
+                    onItemGrab();
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                         Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));

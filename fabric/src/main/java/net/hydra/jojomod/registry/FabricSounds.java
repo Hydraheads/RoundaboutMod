@@ -22,6 +22,8 @@ public class FabricSounds {
         addSound(ModSounds.BONE_CHOMP_ID, ModSounds.BONE_CHOMP_EVENT);
         addSound(ModSounds.SKIP_TIME_1_ID, ModSounds.SKIP_TIME_1_EVENT);
         addSound(ModSounds.SKIP_TIME_2_ID, ModSounds.SKIP_TIME_2_EVENT);
+        addSound(ModSounds.TIME_ERASE_FULL_ID, ModSounds.TIME_ERASE_FULL_EVENT);
+        addSound(ModSounds.TIME_ERASE_END_ID, ModSounds.TIME_ERASE_END_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
         addSound(ModSounds.SUMMON_MANDOM_ID, ModSounds.SUMMON_MANDOM_EVENT);
@@ -316,6 +318,7 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_UPPERCUT_ID, ModSounds.ANUBIS_UPPERCUT_EVENT);
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
+        addSound(ModSounds.ANUBIS_EMPOWER_ID, ModSounds.ANUBIS_EMPOWER_EVENT);
 
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BARRAGE_ID, ModSounds.KQ_MINESWEEPER_BARRAGE_EVENT);
@@ -340,6 +343,7 @@ public class FabricSounds {
         addSound(ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_ID, ModSounds.KILLER_QUEEN_SHA_CRACKED_KOCCHI_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_KOCCHI_ID, ModSounds.KILLER_QUEEN_SHA_KOCCHI_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_ID, ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT);
+        addSound(ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_ID, ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_EVENT);
         addSound(ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_ID, ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BTD_NOISE_ID, ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_BTD_PLANTED_ID, ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT);
@@ -349,6 +353,7 @@ public class FabricSounds {
         addSound(ModSounds.KILLER_QUEEN_SUMMON_ID, ModSounds.KILLER_QUEEN_SUMMON_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_START_ID, ModSounds.KQ_MINESWEEPER_START_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_DETONATE_ID, ModSounds.KQ_MINESWEEPER_DETONATE_EVENT);
+        addSound(ModSounds.KQ_MINESWEEPER_EXPLOSION_ID, ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BTD_DETONATE_ID, ModSounds.KQ_MINESWEEPER_BTD_DETONATE_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BTD_PLANT_ID, ModSounds.KQ_MINESWEEPER_BTD_PLANT_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BTD_NOISE_ID, ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT);

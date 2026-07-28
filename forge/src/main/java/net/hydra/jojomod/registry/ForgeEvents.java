@@ -91,6 +91,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TUSK_A2.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A3.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
@@ -664,6 +665,8 @@ public class ForgeEvents {
         ModEffects.UNBALANCED = ForgeEffects.UNBALANCED.get();
         ModEffects.SWITCH = ForgeEffects.SWITCH.get();
         ModEffects.MOLD = ForgeEffects.MOLD.get();
+        ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
+
 
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
@@ -710,6 +713,7 @@ public class ForgeEvents {
         ModEntities.TUSK_A2 = ForgeEntities.TUSK_A2.get();
         ModEntities.TUSK_A3 = ForgeEntities.TUSK_A3.get();
         ModEntities.TUSK_A4 = ForgeEntities.TUSK_A4.get();
+        ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();

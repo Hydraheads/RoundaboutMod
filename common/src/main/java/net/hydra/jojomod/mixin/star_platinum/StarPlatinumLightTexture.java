@@ -28,7 +28,9 @@ public class StarPlatinumLightTexture {
             if (((StandUser)this.minecraft.player).roundabout$getStandPowers().scopeTime > -1) {
                 return (float) Math.min($$0 + (((((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeTime) * 0.1)), 1F);
             } else if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp) {
-                return (float) Math.min($$0 + 0.3F*((10-vp.dimTickEye)*0.1F), 1F);
+                return (float) Math.min($$0 + 0.3F * ((10 - vp.dimTickEye) * 0.1F), 1F);
+            } else if (ClientUtil.TimeErase > -1){
+                return (float) Math.min($$0 + 0.3F * ((ClientUtil.TimeErase/ClientUtil.fadeTime) * 0.25F), 1F);
             } else if(ClientUtil.checkIfClientCanSeeMobsForWindVision() && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
                 return (float) Math.min($$0 + 0.8F*((10-PM.visionTicks)*0.1F), 1F);
             }

@@ -21,6 +21,7 @@
     "ZMob",
     "ZSkeletonMixin",
     "ZStrayMixin",
+    "ZTargetingConditions",
     "access.AccessAbstractArrow",
     "access.AccessAbstractFurnaceMenu",
     "access.AccessAreaOfEffectCloud",

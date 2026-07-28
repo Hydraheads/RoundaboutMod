@@ -41,6 +41,13 @@ public class ModSounds {
     public static final ResourceLocation SKIP_TIME_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SKIP_TIME_2);
     public static SoundEvent SKIP_TIME_2_EVENT = SoundEvent.createVariableRangeEvent(SKIP_TIME_2_ID);
 
+    public static final String TIME_ERASE_FULL = "time_erase_full";
+    public static final ResourceLocation TIME_ERASE_FULL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_FULL);
+    public static SoundEvent TIME_ERASE_FULL_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_FULL_ID);
+    public static final String TIME_ERASE_END = "time_erase_end";
+    public static final ResourceLocation TIME_ERASE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_END);
+    public static SoundEvent TIME_ERASE_END_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_END_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);
@@ -774,6 +781,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_DETONATE = "kq_minesweeper_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_DETONATE_ID);
+    public static final String KQ_MINESWEEPER_EXPLOSION = "kq_minesweeper_explosion";
+    public static final ResourceLocation KQ_MINESWEEPER_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_EXPLOSION);
+    public static SoundEvent KQ_MINESWEEPER_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_EXPLOSION_ID);
     public static final String KQ_MINESWEEPER_BTD_DETONATE = "kq_minesweeper_btd_detonate";
     public static final ResourceLocation KQ_MINESWEEPER_BTD_DETONATE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_BTD_DETONATE);
     public static SoundEvent KQ_MINESWEEPER_BTD_DETONATE_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_BTD_DETONATE_ID);
@@ -1149,6 +1159,9 @@ public class ModSounds {
     public static final String ANUBIS_EXTRA = "anubis_extra";
     public static final ResourceLocation ANUBIS_EXTRA_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EXTRA);
     public static SoundEvent ANUBIS_EXTRA_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EXTRA_ID);
+    public static final String ANUBIS_EMPOWER = "anubis_empower";
+    public static final ResourceLocation ANUBIS_EMPOWER_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EMPOWER);
+    public static SoundEvent ANUBIS_EMPOWER_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EMPOWER_ID);
 
 
 

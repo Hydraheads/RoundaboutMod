@@ -95,6 +95,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.TUSK_A2, TuskAct2Renderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A3, TuskAct3Renderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A4, TuskAct4Renderer::new);
+        EntityRendererRegistry.register(FabricEntities.ANUBIS, AnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
@@ -125,7 +126,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownObjectRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownAnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CONCEALED_FLAME_OBJECT, ConcealedFlameObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.CINDERELLA_VISAGE_DISPLAY, CinderellaVisageDisplayRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GROUND_HURRICANE, NoRenderer::new);
@@ -248,6 +249,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A3_LAYER, TuskAct3Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
@@ -307,7 +309,6 @@ public class FabricEntityClient {
         ModStrayModels.WORN_BLOODY_STONE_MASK = new WornBloodyStoneMaskModel();
         ModStrayModels.MANDOM = new MandomModel();
         ModStrayModels.ANUBIS = new AnubisModel();
-        ModStrayModels.ANUBIS_HUMAN = new AnubisHumanoidModel();
         ModStrayModels.RATT_SHOULDER = new RattShoulderModel();
         ModStrayModels.REDD_SHOULDER = new ReddShoulderModel();
         ModStrayModels.CHAIR_RATT_SHOULDER = new ChairRattShoulderModel();

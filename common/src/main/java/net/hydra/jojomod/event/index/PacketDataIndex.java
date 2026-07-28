@@ -79,6 +79,7 @@ public class PacketDataIndex {
     public static final byte CALIFORNIA_BISHOP_USE = 41;
     public static final byte FIX_COOLDOWN_FOR_SERVER = 50;
     public static final byte SINGLE_STAND_TRIGGER = 52;
+    public static final byte SINGLE_STAND_TRIGGER_2 = 53;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;

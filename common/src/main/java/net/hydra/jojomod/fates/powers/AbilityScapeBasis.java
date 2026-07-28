@@ -812,7 +812,14 @@ public class AbilityScapeBasis {
     }
 
     /**same as above but for the standard attack packet*/
-    public void updateAttack(){
+    public void updateAttack() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > this.attackTimeMax) {
+                this.attackTime = -1;
+                this.attackTimeMax = 0;
+                ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        }
     }
 
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut

@@ -47,6 +47,18 @@
       "roundabout:skip_time_2"
     ]
   },
+  "time_erase_full": {
+    "subtitle": "sounds.roundabout.time_erase_full",
+    "sounds": [
+      "roundabout:time_erase_full"
+    ]
+  },
+  "time_erase_end": {
+    "subtitle": "sounds.roundabout.time_erase_end",
+    "sounds": [
+      "roundabout:time_erase_end"
+    ]
+  },
   "king_crimson_punch_2": {
     "subtitle": "sounds.roundabout.king_crimson_punch_2",
     "sounds": [
@@ -627,6 +639,12 @@
     "subtitle": "sounds.roundabout.sha_cracked_kocchi",
     "sounds": [
       "roundabout:sha_cracked_kocchi"
+    ]
+  },
+  "sha_alt_cracked": {
+    "subtitle": "sounds.roundabout.sha_alt_cracked_kocchi",
+    "sounds": [
+      "roundabout:sha_alt_cracked"
     ]
   },
   "sha_dededede": {
@@ -2064,6 +2082,12 @@
     "subtitle": "sounds.roundabout.anubis_extra",
     "sounds": [
       "roundabout:anubis_extra"
+    ]
+  },
+  "anubis_empower": {
+    "subtitle": "sounds.roundabout.anubis_empower",
+    "sounds": [
+      "roundabout:anubis_empower"
     ]
   },
 
