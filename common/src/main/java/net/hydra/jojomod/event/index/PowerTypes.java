@@ -219,6 +219,13 @@ public enum PowerTypes {
         }
         return false;
     }
+    //d4c parallel run + time erase
+    public static boolean isExistentiallyElsewhere(Entity entity){
+        if (isErasingTime(entity)){
+            return true;
+        }
+        return false;
+    }
     public static boolean isErasingTime(Entity entity){
         if (entity instanceof Player pl){
             return ((StandUser)pl).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&

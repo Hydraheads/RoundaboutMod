@@ -1964,6 +1964,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (timeEraseActive){
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+                S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
             } else {
                 timeEraseActive = true;

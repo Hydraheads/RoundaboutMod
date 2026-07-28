@@ -4145,7 +4145,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public double rdbt$modelTravel(double $$1){
         float cooking = 0.2F;
-        if (((LivingEntity)(Object)this) instanceof Player && ((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)) {
+        if (((LivingEntity)(Object)this) instanceof Player && ((TimeStop)((LivingEntity)(Object)this).level()).isTimeStoppingEntity((LivingEntity)(Object)this)
+        || PowerTypes.isErasingTime(this)) {
 
             boolean TSJumping = ((IPlayerEntity)this).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT;
             if (TSJumping) {
