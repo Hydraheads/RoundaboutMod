@@ -92,7 +92,7 @@ public class JusticeFogRenderer {
                     if (isBlind){
                         MobEffectInstance mi = $$9.getEffect(MobEffects.BLINDNESS);
                         if (mi != null) {
-                            float joever = mi.isInfiniteDuration() ? 5.0F : Mth.lerp(Math.min(1.0F, (float) mi.getDuration() / 20.0F), $$2, 5.0F);
+                            float joever = mi.isInfiniteDuration() ? 5.0F : Mth.lerp(Math.min(1.0F, (float) mi.getDuration() / ClientUtil.fadeTime), $$2, 5.0F);
                             if ($$1 == FogRenderer.FogMode.FOG_SKY) {
                                 start = 0.0F;
                                 end = joever * 0.8F;
@@ -168,7 +168,7 @@ public class JusticeFogRenderer {
             pt*=-1;
         }
 
-        progress = Math.max(((ClientUtil.renderTimeEraseTime() + pt) / 20.0F),0);
+        progress = Math.max(((ClientUtil.renderTimeEraseTime() + pt) / ClientUtil.fadeTime),0);
         progress = Math.min(progress,1);
 
         // smoothstep
@@ -198,7 +198,7 @@ public class JusticeFogRenderer {
             pt*=-1;
         }
         float progress = Mth.clamp(
-                (ClientUtil.renderTimeEraseTime() + pt) / 20.0F,
+                (ClientUtil.renderTimeEraseTime() + pt) / ClientUtil.fadeTime,
                 0F,
                 1F
         );

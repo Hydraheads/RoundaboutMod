@@ -353,11 +353,11 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     float alpha = (float) ClientUtil.renderTimeEraseTime();
                     float dblcheck = $$2 % 1;
                     if (ClientUtil.isUsingTimeErase) {
-                        alpha = Math.min(alpha + dblcheck, 20);
+                        alpha = Math.min(alpha + dblcheck, ClientUtil.fadeTime);
                     } else {
                         alpha = Math.max(alpha - dblcheck, 0);
                     }
-                    alpha /= (float) 20;
+                    alpha /= (float) ClientUtil.fadeTime;
                     alpha = Mth.clamp(alpha, 0, 1F);
 
 

@@ -133,7 +133,7 @@ public class ClientUtil {
                         ClientEffectUtil.spawnTerrainFragment(player);
                     }
                     isUsingTimeErase = true;
-                    if (TimeErase < 20){
+                    if (TimeErase < fadeTime){
                         TimeErase++;
                     }
                 } else {
@@ -223,6 +223,8 @@ public class ClientUtil {
         }
     }
 
+
+    public static final float fadeTime = 14F;
 
     public static boolean renderTimeErase(){
         return TimeErase > -1;
