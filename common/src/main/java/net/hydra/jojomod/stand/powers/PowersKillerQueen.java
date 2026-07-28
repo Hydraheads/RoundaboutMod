@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -141,6 +142,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BLOCK_CONTACT = 5,
         BUBBLE_CONTACT = 6,
         BITES_THE_DUST = 7,
+        BITES_THE_DUST_BIGGER = 8,
 
     // Sheer Heart Attack Status things
         SHA_NONE = 0,
@@ -152,10 +154,17 @@ public class PowersKillerQueen extends NewPunchingStand {
     private int bombConfig = 2;
 
     public HashMap<Integer, SavedSecond> combatSavedBTD = new HashMap<>();
-
     public void combatSavedBTDinit() {
         if (combatSavedBTD == null) {
             combatSavedBTD = new HashMap<>();
+        }
+    }
+
+    public HashSet<Integer> daySavedBTD = new HashSet<>();
+
+    public void daySavedBTDinit() {
+        if (daySavedBTD == null) {
+            daySavedBTD = new HashSet<>();
         }
     }
 
@@ -396,7 +405,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean inBitesTheDustMode() {
-        return this.currentBombStatus == BITES_THE_DUST;
+        return this.currentBombStatus == BITES_THE_DUST || this.currentBombStatus == BITES_THE_DUST_BIGGER;
     }
 
     // Level stufff
@@ -632,7 +641,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	        			detonateClient();
 	        		}
         		}else {
-                    // detonate bites the dust
+                    tryBitesTheDustDay();
                 }
         	}
         	case SKILL_1_CROUCH -> {
@@ -645,14 +654,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                         detonateClient();
                     }
                 }else {
-                    // detonate bites the dust
+                    tryBitesTheDustDay();
                 }
         	}
         	case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
                 if (!this.inBitesTheDustMode()) {
                     this.tryBombConfig();
                 }else {
-                    // detonate bites the dust
+                    tryBitesTheDustDay();
                 }
         	}
         	case SKILL_2_NORMAL -> {
@@ -1619,6 +1628,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         ((StandUser) this.getSelf()).roundabout$tryPower(BITES_THE_DUST_COMBAT, true);
         tryPowerPacket(BITES_THE_DUST_COMBAT);
     }
+
+    public void tryBitesTheDustDay() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(BITES_THE_DUST_DAY, true);
+        tryPowerPacket(BITES_THE_DUST_DAY);
+    }
     
     public void tryBombConfig() {
     	if (!inBitesTheDustMode()) {
@@ -1953,7 +1967,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(target);
-            saveEntitiesSeconds(target.position());
+            saveCombatEntitiesSeconds(target.position());
             btdTicks = 0;
 
             this.syncBombStatus(BITES_THE_DUST);
@@ -1971,7 +1985,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void saveEntitiesSeconds(Vec3 pos) {
+    public void saveCombatEntitiesSeconds(Vec3 pos) {
         float range = 50.0f;
         combatSavedBTDinit();
         clearEntitiesSeconds();
@@ -1989,9 +2003,31 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public HashSet<Entity> getDayEntities(Vec3 pos) {
+        float range = 50.0f;
+        combatSavedBTDinit();
+        clearEntitiesSeconds();
+
+        List<Entity> entities = MainUtil.genHitbox(this.self.level(),
+                pos.x(), pos.y(), pos.z(), range, range, range);
+        HashSet<Entity> approved = new HashSet<>();
+
+        for (Entity ent : entities) {
+            int id = ent.getId();
+            if (ent instanceof StandEntity || !ent.isAlive() || ent.isRemoved()
+                    || approved.contains(id)) { continue; }
+
+            approved.add(ent);
+        }
+
+        return approved;
+    }
+
     public void clearEntitiesSeconds() {
         combatSavedBTDinit();
+        daySavedBTDinit();
         this.combatSavedBTD.clear();
+        this.daySavedBTD.clear();
     }
 
     public boolean bitesTheDustCombatActivate() {
@@ -2071,14 +2107,105 @@ public class PowersKillerQueen extends NewPunchingStand {
             S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BTD_DETONATE);
         }
 
-        saveEntitiesSeconds(target.position());
+        saveCombatEntitiesSeconds(target.position());
+
+        return true;
+    }
+
+    public boolean bitesTheDustDayActivate() {
+        if (!ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode) {
+            return false;
+        }
+
+        if (this.isClient()) {
+            btdTicks = 0;
+            return true;
+        }
+
+        StandEntity stand = this.getStandEntity(this.self);
+        KillerQueenEntity standKQ;
+        Entity target;
+        if (stand instanceof KillerQueenEntity KQE) {
+            standKQ = KQE;
+            target = KQE.getPlantedBitesTheDust();
+        }else {
+            btdDefuseServer();
+            return false;
+        }
+        if (target == null || target.isRemoved() || !target.isAlive()) {
+            btdDefuseServer();
+            return false;
+        }
+
+        detectWhoBitedTheDust(target);
+        HashSet<Entity> list = getDayEntities(target.getPosition(1));
+
+        btdTicks = 0;
+
+        if (!list.isEmpty()) {
+            int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
+
+            for (Entity ent : list) {
+                if (ent != null && MainUtil.canRewindInTime(ent, this.self)) {
+
+                    Vec3 dayPos = ((IEntityAndData)ent).roundabout$getInitialDayPos();
+
+                    if (SavedSecond.canTeleportTo(ent.level(), dayPos, ent) && ent instanceof LivingEntity) {
+                        Vector3f posPacket = new Vector3f(
+                                (float) dayPos.x,
+                                (float) dayPos.y,
+                                (float) dayPos.z
+                        );
+
+                        ent.teleportTo(((ServerLevel) ent.level()),dayPos.x,dayPos.y,dayPos.z,
+                            Set.of(
+                                    RelativeMovement.X,
+                                    RelativeMovement.Y,
+                                    RelativeMovement.Z), ent.getYHeadRot(), ent.getXRot());
+                        ent.hurtMarked = true;
+                        ent.fallDistance = 0;
+                        ent.hasImpulse = true;
+
+                        packetNearby(posPacket, ent.getId());
+                    }
+
+
+                    if (ent instanceof LivingEntity LE && LE.isUsingItem()){ LE.stopUsingItem(); }
+
+                    if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
+                        mb.getNavigation().stop();
+                        if (!MainUtil.blockConfusionTicks(mb)) {
+                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                        }
+                    }
+
+                    if (!ent.is(this.self) && ent instanceof LivingEntity LE){
+                        StandUser user = ((StandUser)LE);
+                        StandPowers powers = user.roundabout$getStandPowers();
+                        if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > mandomRewindCooldown)){
+                            PM.setCooldown(PowerIndex.SKILL_2,mandomRewindCooldown);
+                        }
+                    }
+                }
+            }
+            packetNearby2();
+        }
+
+        this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
+                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
+
+        if (this.self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
+            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BTD_DETONATE);
+        }
 
         return true;
     }
 
     public void detectWhoBitedTheDust(Entity target) {
         Vec3 pos = target.position();
-        float range = 9.0f;
+        float range = 5.0f;
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
                 pos.x(), pos.y(), pos.z(), range, range, range);
@@ -2476,7 +2603,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                     continue;
                 }
 
-                //BlockPos blockPos = serverPlayerEntity.blockPosition();
                 int id = serverPlayerEntity.getId();
                 this.combatSavedBTDinit();
                 if (this.combatSavedBTD.containsKey(id)) {
