@@ -217,6 +217,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
     }
     public int ticksIntoEpitaph = 0;
+    public boolean vibeCheck = false;
     @Override
     public void tickPower() {
         if (isUsingTimeErase()) {
@@ -230,6 +231,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             timeErase();
                         }
                     }
+                }
+            }
+        } else {
+            if (disengageTime > 0){
+                disengageTime--;
+                if (disengageTime <= 0){
+                    setDisengageTarget(null);
                 }
             }
         }
@@ -2000,6 +2008,60 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    // Code for additional cooldown penalty for running in a fight
+    // Only applies in pvp
+    @Override
+    public void onActuallyHurt(DamageSource $$0, float $$1){
+        if (!self.level().isClientSide() && $$0.getEntity() instanceof Player pl &&
+        pl.getId() != self.getId()) {
+            setDisengageTarget($$0.getEntity());
+            disengageTime = 600;
+        }
+    }
+    public void setDisengageTarget(Entity target) {
+        disengageTarget = target;
+        if (self instanceof ServerPlayer sp && target instanceof Player pl &&
+                pl.getId() != self.getId()) {
+            if (target != null) {
+                S2CPacketUtil.sendGenericIntToClientPacket(sp,
+                        PacketDataIndex.S2C_STAND_SPECIAL_INT,
+                        disengageTarget.getId());
+            } else {
+                S2CPacketUtil.sendGenericIntToClientPacket(sp,
+                        PacketDataIndex.S2C_STAND_SPECIAL_INT,
+                        -1);
+            }
+        }
+    }
+    @Override
+    public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        if (!self.level().isClientSide()) {
+            setDisengageTarget(target);
+        disengageTime = 600;
+
+        }
+        return false;
+    }
+
+
+    public int getDisengageDistance(){
+        return 25;
+    }
+    public int disengageTime = 0;
+    public boolean isBeyondRange(){
+        if (self.level().isClientSide()){
+            disengageTarget = self.level().getEntity(disengageTargetInt);
+        }
+
+        if (disengageTarget != null && disengageTarget.isAlive() &&
+                disengageTarget.distanceTo(self) > getDisengageDistance()){
+            return true;
+        }
+        return false;
+    }
+    public Entity disengageTarget = null;
+    public int disengageTargetInt = -1;
+
     public int getTimeEraseCooldown(){
         int maxTicks = timeEraseMaxTicks();
         int ticksEaten = maxTicks - ticksOfEraseLeft;
@@ -2010,6 +2072,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         cooldownOverall += (int)(((float)ticksEaten)
                 *((ClientNetworking.getAppropriateConfig().kingCrimsonSettings.
                 additionalCooldownPerSecondsUsed2 *0.05)));
+
+        if (isBeyondRange()) {
+            cooldownOverall+=ClientNetworking.getAppropriateConfig().
+                    kingCrimsonSettings.additionalCooldownFromPlayerRunning;
+        }
 
         return cooldownOverall;
     }

@@ -980,6 +980,11 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
             IPlayerEntity ipe = ((IPlayerEntity) player);
             ipe.rdbt$setLevelDecreaseTicks(data);
+        } else if (context == PacketDataIndex.S2C_STAND_SPECIAL_INT) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersKingCrimson ckb){
+                ckb.disengageTargetInt = data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {

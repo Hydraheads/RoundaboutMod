@@ -986,6 +986,10 @@ public class AbilityScapeBasis {
                 if (num <=9){
                     offset = x+7;
                 }
+                //If 100 or more seconds long shift to the left
+                if (num >= 100){
+                    offset = offset-3;
+                }
 
                 if (!cd.isFrozen())
                     context.drawString(Minecraft.getInstance().font, ""+num,offset,y,0xffffff,true);

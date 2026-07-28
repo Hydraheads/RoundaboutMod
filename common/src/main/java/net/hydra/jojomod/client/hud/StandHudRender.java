@@ -820,9 +820,14 @@ public class StandHudRender {
 
         int blt =  (int) Math.floor( ((double) 182 / maxDistance) * (distance));
         l = scaledHeight - 32 + 3;
-        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 97, 182, 5);
+
+        int i = 97;
+        if (pkc.isBeyondRange()){
+            i = 107;
+        }
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, i, 182, 5);
         if (blt > 0) {
-            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 102, blt, 5);
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, i+5, blt, 5);
         }
 
         int y = 16173823;
