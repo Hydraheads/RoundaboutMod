@@ -1632,6 +1632,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         setCooldown(PowerIndex.SKILL_2_SNEAK,
                 ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit){
+            setCooldown(PowerIndex.SKILL_4,
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
+        }
+
         skipBlockEntities(100);
         skipDayTime(100);
         skipFire(self);
@@ -2089,7 +2094,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (timeEraseActive){
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+                if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
+                    setCooldown(PowerIndex.SKILL_2_SNEAK,
+                            ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
+                }
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE);
+
                 packetNearby2();
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();

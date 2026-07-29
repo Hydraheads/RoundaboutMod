@@ -2931,6 +2931,9 @@
   "config.roundabout.additionalCooldownFromPlayerRunning.name": "TE Player Run CD",
   "config.roundabout.additionalCooldownFromPlayerRunning.desc": "If you run far enough in pvp during TE this cooldown is added. (20 ticks = 1 second)",
 
+  "config.roundabout.cooldownSplit.name": "Cooldown Sync",
+  "config.roundabout.cooldownSplit.desc": "Time Erase and Time Skip put each other on cooldown so they can't be chained.",
+
 
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",

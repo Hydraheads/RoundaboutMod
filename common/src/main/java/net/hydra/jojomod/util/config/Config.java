@@ -1117,6 +1117,8 @@ public class Config implements Cloneable {
         public Integer additionalCooldownPerSecondsUsed2;
         @IntOption(group = "inherit", value = 1300, min = 0, max = 72000)
         public Integer additionalCooldownFromPlayerRunning;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean cooldownSplit;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableDaySkip;
         @BooleanOption(group = "inherit", value = true)
