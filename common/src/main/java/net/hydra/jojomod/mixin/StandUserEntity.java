@@ -875,63 +875,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (level().isClientSide()){
             ClientUtil.tickHeartbeat(this);
         } else {
-            if (this.getEffect(ModEffects.SINGE) != null) {
-                Vec3 vec3d2;
-                    Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
+            if (!PowerTypes.isExistentiallyElsewhere(this)) {
+                if (this.getEffect(ModEffects.SINGE) != null) {
+                    Vec3 vec3d2;
+                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
                     vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
                             this.getRandomY(),
                             this.getRandomZ(0.5)), dir));
-                int stacks = this.getEffect(ModEffects.SINGE).getAmplifier();
-                int bloodticks = 8;
-                if (stacks == 3) {
-                    bloodticks = 6;
-                } else if (stacks > 5) {
-                    bloodticks = 4;
-                }
-                if (this.tickCount % bloodticks == 0) {
-
-                    ((ServerLevel) this.level()).sendParticles(
-                            ParticleTypes.LAVA,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z,
-                            0, 0, 0, 0, 0.1);
-                }
-            }
-            if (this.getEffect(ModEffects.MELTING) != null) {
-                Vec3 vec3d2;
-                Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
-                vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
-                        this.getRandomY(),
-                        this.getRandomZ(0.5)), dir));
-
-                int stacks = this.getEffect(ModEffects.MELTING).getAmplifier();
-                int bloodticks = 8;
-                if (stacks == 3) {
-                    bloodticks = 6;
-                } else if (stacks > 5) {
-                    bloodticks = 4;
-                }
-                if (this.tickCount % bloodticks == 0) {
-
-                    ((ServerLevel) this.level()).sendParticles(
-                            ModParticles.MELTING,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z,
-                            0, 0, 0, 0, 0.1);
-                }
-            }
-            if (this.getEffect(ModEffects.STAND_MELTING) != null) {
-                StandEntity getStand = roundabout$getStand();
-                if (getStand != null && !getStand.isRemoved() && getStand.isAlive()) {
-                    Vec3 vec3d2;
-                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
-                    vec3d2 = getStand.position().subtract(RotationUtil.vecPlayerToWorld(getStand.position().subtract(getStand.getRandomX(0.5),
-                            getStand.getRandomY(),
-                            getStand.getRandomZ(0.5)), dir));
-
-                    int stacks = this.getEffect(ModEffects.STAND_MELTING).getAmplifier();
+                    int stacks = this.getEffect(ModEffects.SINGE).getAmplifier();
                     int bloodticks = 8;
                     if (stacks == 3) {
                         bloodticks = 6;
@@ -940,12 +891,63 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     if (this.tickCount % bloodticks == 0) {
 
-                        ((ServerLevel) getStand.level()).sendParticles(
+                        ((ServerLevel) this.level()).sendParticles(
+                                ParticleTypes.LAVA,
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z,
+                                0, 0, 0, 0, 0.1);
+                    }
+                }
+                if (this.getEffect(ModEffects.MELTING) != null) {
+                    Vec3 vec3d2;
+                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
+                    vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
+                            this.getRandomY(),
+                            this.getRandomZ(0.5)), dir));
+
+                    int stacks = this.getEffect(ModEffects.MELTING).getAmplifier();
+                    int bloodticks = 8;
+                    if (stacks == 3) {
+                        bloodticks = 6;
+                    } else if (stacks > 5) {
+                        bloodticks = 4;
+                    }
+                    if (this.tickCount % bloodticks == 0) {
+
+                        ((ServerLevel) this.level()).sendParticles(
                                 ModParticles.MELTING,
                                 vec3d2.x,
                                 vec3d2.y,
                                 vec3d2.z,
                                 0, 0, 0, 0, 0.1);
+                    }
+                }
+                if (this.getEffect(ModEffects.STAND_MELTING) != null) {
+                    StandEntity getStand = roundabout$getStand();
+                    if (getStand != null && !getStand.isRemoved() && getStand.isAlive()) {
+                        Vec3 vec3d2;
+                        Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
+                        vec3d2 = getStand.position().subtract(RotationUtil.vecPlayerToWorld(getStand.position().subtract(getStand.getRandomX(0.5),
+                                getStand.getRandomY(),
+                                getStand.getRandomZ(0.5)), dir));
+
+                        int stacks = this.getEffect(ModEffects.STAND_MELTING).getAmplifier();
+                        int bloodticks = 8;
+                        if (stacks == 3) {
+                            bloodticks = 6;
+                        } else if (stacks > 5) {
+                            bloodticks = 4;
+                        }
+                        if (this.tickCount % bloodticks == 0) {
+
+                            ((ServerLevel) getStand.level()).sendParticles(
+                                    ModParticles.MELTING,
+                                    vec3d2.x,
+                                    vec3d2.y,
+                                    vec3d2.z,
+                                    0, 0, 0, 0, 0.1);
+                        }
                     }
                 }
             }
@@ -5848,14 +5850,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(!this.level().isClientSide){
 
                 if(this.hasEffect(ModEffects.MOLD)) {
-
-                    for (int i = 0; i < 4; i = i + 1) {
-                        if (this.tickCount % 20 == 0) {
-                            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
-                                    this.getY() + 1, this.getZ(),
-                                    1,
-                                    0, 0, 0,
-                                    0.01);
+                    if (!PowerTypes.isExistentiallyElsewhere(rdbt$this())) {
+                        for (int i = 0; i < 4; i = i + 1) {
+                            if (this.tickCount % 20 == 0) {
+                                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                        this.getY() + 1, this.getZ(),
+                                        1,
+                                        0, 0, 0,
+                                        0.01);
+                            }
                         }
                     }
                }
