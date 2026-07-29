@@ -677,6 +677,21 @@ public abstract class EntityAndData implements IEntityAndData {
     @SuppressWarnings("deprecation")
     @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
     protected void roundabout$spawnSprintParticle(CallbackInfo ci){
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs)){
+            ci.cancel();
+            return;
+        }
+        if (thirs instanceof LivingEntity LE) {
+            if (((StandUser) this).roundabout$getStandPowers().cancelSprintParticles()) {
+                ci.cancel();
+                return;
+            }
+            if (((IPowersPlayer) this).rdbt$getPowers().cancelSprintParticles()) {
+                ci.cancel();
+                return;
+            }
+        }
         BlockPos $$0 = getOnPosLegacy();
         BlockState $$1 = this.level().getBlockState($$0);
         if ($$1.getBlock() instanceof FogBlock){
