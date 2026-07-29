@@ -28,6 +28,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
@@ -153,6 +154,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public boolean followOwnerView = false;
     public void setFollowOwnerView(boolean value) {this.followOwnerView = value;}
+
+    public void setLifeSpan(int value) {
+        lifeSpan = value;
+    }
 
     @Override
     public boolean dealWithPenetration(Entity proj){
@@ -415,10 +420,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
                     vec3d2 = vec3d2.add(0, 0.4F, 0);
 
-                    MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z);
+                    double $$11 = Math.max(0.0, 1.0 - $$7.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                    Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.2 * $$11);
+                    if ($$12.lengthSqr() > 0.0) {
+                        $$7.push($$12.x, 0.1, $$12.z);
+                    }
 
                     if (user instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects($$7, user);
