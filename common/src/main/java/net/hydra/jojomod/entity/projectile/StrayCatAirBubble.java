@@ -155,6 +155,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public boolean followOwnerView = false;
     public void setFollowOwnerView(boolean value) {this.followOwnerView = value;}
 
+    public void setLifeSpan(int value) {
+        lifeSpan = value;
+    }
+
     @Override
     public boolean dealWithPenetration(Entity proj){
         popBubble();
