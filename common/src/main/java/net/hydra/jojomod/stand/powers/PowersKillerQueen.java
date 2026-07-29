@@ -912,6 +912,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         20, 0, 0, 0, 0.4);
                 this.hasBitesTheDust = true;
 
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+
                 syncCanBTDStatus(true);
 
                 return true;
@@ -1814,6 +1816,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean addStrayCatto() {
         if (!this.isClient()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
+
             Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
             if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
