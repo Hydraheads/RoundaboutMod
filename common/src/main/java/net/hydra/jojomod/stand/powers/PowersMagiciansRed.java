@@ -1462,7 +1462,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()){
-            user.roundabout$setSealedTicks(sealTime);
+            user.roundabout$sealStand(sealTime);
         }
         user.roundabout$setActive(false);
     }

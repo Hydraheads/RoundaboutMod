@@ -158,6 +158,9 @@ public interface StandUser {
     boolean rdbt$getExperienceTaken();
     void rdbt$setExperienceTaken(boolean taken);
 
+
+    void roundabout$sealStand(int ticks);
+
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
