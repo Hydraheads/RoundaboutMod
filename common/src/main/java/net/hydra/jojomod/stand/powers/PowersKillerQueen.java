@@ -2884,8 +2884,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             for (int id : toRemoveFromList) {
                 bitedTheDust.remove(id);
             }
-        }else{
-            Roundabout.LOGGER.info("Hm?");
         }
     }
 
@@ -2899,8 +2897,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target != null && target.isAlive() && !target.isRemoved()) {
                     int timeToDust = dayBitedTheDust.get(id);
-
-                    Roundabout.LOGGER.info("time to dust: " + timeToDust + " the current time: " + dayTime);
 
                     if (timeToDust == dayTime) {
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
