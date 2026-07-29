@@ -3095,9 +3095,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (soundChoice == SHIBA || soundChoice == SHIBABA) {
             return 0.74f;
         }
-        if (soundChoice == BUBBLE_TARGET) {
-            return 1.2f;
-        }
+        if (soundChoice == BUBBLE_TARGET) { return 2.3f; }
 
         return super.getSoundVolumeFromByte(soundChoice);
     }
