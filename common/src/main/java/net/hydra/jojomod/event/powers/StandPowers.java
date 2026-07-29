@@ -53,6 +53,7 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -2190,20 +2191,34 @@ public class StandPowers extends AbilityScapeBasis {
         $$0.putByte("Skin",standSkin);
         $$0.putByte("Pose",idlePos);
     }
+    public void setStandSkinLight(byte skin){
+        standSkin = skin;
+
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setSkin(skin);
+        }
+    }
+    public void setIdlePosLight(byte pos){
+        idlePos = pos;
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setIdleAnimation(pos);
+        }
+    }
     public void readAdditionalSaveData(CompoundTag $$0) {
-        StandUser user = getStandUserSelf();
         if ($$0.contains("Skin")) {
             byte skn = ($$0.getByte("Skin"));
-            user.roundabout$setStandSkinLight(skn);
+            setStandSkinLight(skn);
         } else {
-            user.roundabout$setStandSkinLight((byte) 0);
+            setStandSkinLight((byte) 0);
         }
 
         if ($$0.contains("Pose")) {
             byte skn = ($$0.getByte("Pose"));
-            user.roundabout$setIdlePosLight(skn);
+            setIdlePosLight(skn);
         } else {
-            user.roundabout$setIdlePosLight((byte) 0);
+            setIdlePosLight((byte) 0);
         }
     }
     // run this to trigger the disc saving and syncing
