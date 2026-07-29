@@ -687,9 +687,11 @@ public abstract class EntityAndData implements IEntityAndData {
                 ci.cancel();
                 return;
             }
-            if (((IPowersPlayer) this).rdbt$getPowers().cancelSprintParticles()) {
-                ci.cancel();
-                return;
+            if (thirs instanceof Player pl) {
+                if (((IPowersPlayer) pl).rdbt$getPowers().cancelSprintParticles()) {
+                    ci.cancel();
+                    return;
+                }
             }
         }
         BlockPos $$0 = getOnPosLegacy();
