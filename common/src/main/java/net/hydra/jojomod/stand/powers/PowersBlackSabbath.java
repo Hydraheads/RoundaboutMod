@@ -31,6 +31,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -38,6 +39,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -48,7 +50,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -77,6 +81,7 @@ public class PowersBlackSabbath extends NewDashPreset {
             if (desummon) {
 
                 if (active) {
+                    setIsChesting(false);
                     active = false;
                 }
 
@@ -260,6 +265,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
             case PowerIndex.POWER_1_BONUS -> {
+                setIsChesting(false);
                 active = false;
                 if (this.getStandEntity(this.getSelf()) != null) {
                     if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
@@ -272,18 +278,52 @@ public class PowersBlackSabbath extends NewDashPreset {
         return super.tryPower(move, forced);
     }
 
+    private BlockPos getValidPlacement(){
+
+        Vec3 lvec = getLookAngleChest(self.getYRot(), self);
+        Position pn = self.getEyePosition().add(lvec.scale(1));
+        BlockPos bpos = BlockPos.containing(pn.x(), self.getY(), pn.z());
+        BlockPos myPos = BlockPos.containing(self.getX(), self.getY(), self.getZ());
+        BlockPos bposExtra =BlockPos.containing(pn.x(), self.getY() - 1, pn.z());
+
+        if (self.onGround()) {
+            if (this.self.level().getBlockState(bpos.below()).isSolid()) {
+                setShouldBSummonBot(false);
+                return bpos;
+            } else if (this.self.level().getBlockState(bposExtra.below()).isSolid()) {
+                setShouldBSummonBot(true);
+                return bposExtra;
+            }
+        }
+
+        var blockState = this.self.level().getBlockState(bpos);
+        var blockState2 = this.self.level().getBlockState(bposExtra);
+
+        if ((!blockState.canOcclude() || blockState.isAir()) && (!blockState2.canOcclude() || blockState2.isAir())) {
+            return null;
+        }
+
+        return null;
+    }
+
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
-        if(slot == 1 && !this.checkIfYouAreInDark()){
+        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null) && !self.isSwimming()){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
     public boolean active = false;
+
+    boolean shouldBSummonBot = false;
+    void setShouldBSummonBot(boolean a){shouldBSummonBot = a;}
+
+    boolean isChesting = false;
+    void setIsChesting(boolean chest){ isChesting = chest;}
 
     @Override
     public void tickPower() {
@@ -307,6 +347,8 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         }
 
+        getValidPlacement();
+
         super.tickPower();
     }
 
@@ -314,6 +356,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         this.setCooldown(PowerIndex.SKILL_1, 20);
         if (!isClient()) {
             if(self instanceof Player PL) {
+                setIsChesting(true);
                 blipStand(pos, PL);
             }
         }
@@ -332,16 +375,20 @@ public class PowersBlackSabbath extends NewDashPreset {
                     ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,
                     (float) (0.99f + Math.random() * 0.02f));
         }
+        float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
                 BE.setMaster(this.self);
-                BE.absMoveTo(pn.x(), self.getY(), pn.z());
                 BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
                 this.getStandUserSelf().roundabout$standMount(BE);
                 BE.setShouldFloat(true);
                 BE.setDeltaMovement(Vec3.ZERO);
+                self.setDeltaMovement(Vec3.ZERO);
                 this.self.level().addFreshEntity(BE);
                 this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 BE.openCustomInventoryScreen(PL);
+                if(getValidPlacement() != null) {
+                    BE.absMoveTo(pn.x(), evilY, pn.z());
+             }
         }
     }
 
@@ -352,14 +399,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame()) {
+        if (isLarpingOjiroSasame() || isChesting) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame()) {
+        if (isLarpingOjiroSasame() || isChesting) {
             return true;
         }
         return super.cancelJump();
@@ -367,7 +414,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame()) {
+        if (isLarpingOjiroSasame() || isChesting) {
             return true;
         }
         return super.cancelSprintParticles();
