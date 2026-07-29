@@ -117,6 +117,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         BITES_THE_DUST_CHASE = 66,
         BITES_THE_DUST_DEFUSE = 67,
         ENTITY_SHA = 68,
+        STRAY_CAT = 69,
+        BTD_POWER = 70,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -211,6 +213,24 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.updatePowerInt(PowersKillerQueen.SHEER_HEART_ATTACK, status);
         if (this.getSelf() instanceof Player) {
             S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.SHEER_HEART_ATTACK, status);
+        }
+    }
+
+    public void syncCanStrayCatStatus(boolean strayCat) {
+        byte status = (byte) (strayCat ? 1 : 0);
+
+        this.updatePowerInt(PowersKillerQueen.STRAY_CAT, status);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.STRAY_CAT, status);
+        }
+    }
+
+    public void syncCanBTDStatus(boolean btd) {
+        byte status = (byte) (btd == true ? 1 : 0);
+
+        this.updatePowerInt(PowersKillerQueen.BTD_POWER, status);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_POWER, status);
         }
     }
 
@@ -595,7 +615,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (!canExecuteMoveWithLevel(getBitesTheDustLevel())) {
+        if (!canExecuteMoveWithLevel(getBitesTheDustLevel()) || !hasBitesTheDust) {
             setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
         } else if (inBitesTheDustMode()) {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.NO_CD);
@@ -807,7 +827,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canAddStrayCatto() {
-        if (!this.canExecuteMoveWithLevel(getStrayCatLevel())) {
+        if (!this.canExecuteMoveWithLevel(getStrayCatLevel()) || hasStrayCat) {
             return false;
         }
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
@@ -891,6 +911,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
                 this.hasBitesTheDust = true;
+
+                syncCanBTDStatus(true);
 
                 return true;
             }else {
@@ -1477,6 +1499,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.SHA = null;
                 }
             }
+            case PowersKillerQueen.STRAY_CAT-> {
+                if (data == 1) {
+                    this.hasStrayCat = true;
+                }
+            }
+            case PowersKillerQueen.BTD_POWER-> {
+                if (data == 1) {
+                    this.hasBitesTheDust = true;
+                }
+            }
             case PowersKillerQueen.ENTITY_BOMB -> {
                 this.bombEntityID = data;
                 this.bombEntity = this.getSelf().level().getEntity(data);
@@ -1788,6 +1820,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
                     StrayCatForSure.discard();
                     this.hasStrayCat = true;
+                    syncCanStrayCatStatus(true);
                     this.saveDiscAndSync();
 
                     return true;
@@ -2831,8 +2864,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 StandEntity stand = this.getStandEntity(this.getSelf());
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE) {
                     Entity plantedBTD = KQE.getPlantedBitesTheDust();
-                    if (plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()
-                            && !((StandUser)plantedBTD).roundabout$hasAStand()) {
+                    if ((plantedBTD != null && !plantedBTD.isRemoved() && plantedBTD.isAlive()
+                            && !((StandUser)plantedBTD).roundabout$hasAStand()) && canExecuteMoveWithLevel(getBitesTheDustLevel())
+                            && (canExecuteMoveWithLevel(getBitesTheDustDayLevel()) || currentBombStatus != BITES_THE_DUST_BIGGER)
+                    ) {
                         stand.setFadePercent(30);
 
                         Vec3 pos = KQE.getBitesTheDustOffset((LivingEntity)plantedBTD);
