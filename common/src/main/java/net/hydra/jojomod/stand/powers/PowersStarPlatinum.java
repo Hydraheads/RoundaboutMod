@@ -13,10 +13,7 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -652,6 +649,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             Direction gravD = ((IGravityEntity)self).roundabout$getGravityDirection();
 
             for (Entity value : listEnt) {
+                if (PowerTypes.isExistentiallyElsewhere(value)){
+                    return;
+                }
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
                 if (gravD != Direction.DOWN) {
                     lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
