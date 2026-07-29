@@ -88,7 +88,6 @@ public class StrayCatItem extends Item {
                     Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
                     bubble.setPos(pos.x(), pos.y(), pos.z());
                     bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
-                    //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                     level.addFreshEntity(bubble);
                 }
