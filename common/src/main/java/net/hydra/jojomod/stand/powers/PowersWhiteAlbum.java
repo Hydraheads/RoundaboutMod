@@ -114,7 +114,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return skatesActive && PowerTypes.hasStandActive(self);
     }
 
-
     @Override
     public boolean isBrawling(){
         return fistsOut;

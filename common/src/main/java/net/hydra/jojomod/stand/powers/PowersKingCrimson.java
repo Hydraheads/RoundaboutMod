@@ -269,6 +269,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
+        if (liv.getPose() == Pose.SITTING){
+            return predicted;
+        }
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
