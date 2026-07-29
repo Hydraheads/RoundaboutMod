@@ -134,9 +134,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean isMiningStand() {
-        if (timeEraseActive){
-            return false;
-        }
         return super.isMiningStand();
     }
 
@@ -2174,6 +2171,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
                 saveDiscAndSync();
                 ticksOfEraseLeft++;
+
             }
         }
     }

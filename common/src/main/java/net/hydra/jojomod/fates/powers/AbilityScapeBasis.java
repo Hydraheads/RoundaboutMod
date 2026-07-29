@@ -644,6 +644,9 @@ public class AbilityScapeBasis {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
+                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
+                    continue;
+                }
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
@@ -718,7 +721,9 @@ public class AbilityScapeBasis {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
-
+                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
+                    continue;
+                }
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
                     if (onSelf) {

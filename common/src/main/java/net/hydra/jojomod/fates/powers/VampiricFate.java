@@ -328,7 +328,8 @@ public int speedActivated = 0;
                 if (attackTimeDuring > duration || self.getHealth() >= maxHealth){
                     xTryPower(PowerIndex.NONE, true);
                     this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
+
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
             }
         }
@@ -567,7 +568,7 @@ public int speedActivated = 0;
                     bloodSpeed
             );
             setFast();
-            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+            playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SPEED_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
 
         }
     }
