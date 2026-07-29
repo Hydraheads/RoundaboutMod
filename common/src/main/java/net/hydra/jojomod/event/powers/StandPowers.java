@@ -987,7 +987,13 @@ public class StandPowers extends AbilityScapeBasis {
         if (this.self.isCrouching()){
             return;
         }
-        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), this.getSummonSound());
+            }
+        } else {
+            playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        }
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public float getBarrageChargePitch(){
