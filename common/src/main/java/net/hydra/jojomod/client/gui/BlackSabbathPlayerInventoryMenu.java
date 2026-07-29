@@ -2,7 +2,9 @@ package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -74,8 +76,15 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player $$0) {
         if(((StandUser)$$0).roundabout$getStand() instanceof BlackSabbathEntity be){
-            if(be != null && !be.isRemoved() && be.isAlive()){
+            if(be != null && !be.isRemoved() && be.isAlive() && be.distanceTo($$0) < 2){
                 return true;
+            } else {
+                StandUser user = ((StandUser) $$0);
+                StandPowers powers = user.roundabout$getStandPowers();
+                if(powers instanceof PowersBlackSabbath pb){
+                    pb.RecallClient();
+                    return false;
+                }
             }
         }
         return false;

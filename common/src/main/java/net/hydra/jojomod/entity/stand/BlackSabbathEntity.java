@@ -77,7 +77,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public boolean lockPos(){
-        return shouldFloat;
+        return false;
     }
     @Override
     public boolean hasNoPhysics(){
@@ -86,12 +86,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public boolean isNoGravity() {
-        return shouldFloat;
+        return false;
     }
 
     @Override
     public boolean standHasGravity() {
-        return !shouldFloat;
+        return true;
     }
 
     @Override
