@@ -85,14 +85,6 @@ public class OasisMudBlock extends BaseEntityBlock {
     }
 
 
-    public static boolean revertBlock(ServerLevel level, BlockPos pos) {
-        if (level.getBlockEntity(pos) instanceof OasisMudBlockEntity be) {
-            be.revert(level, pos);
-            return true;
-        }
-        return false;
-    }
-
 
     @Override
     public float getDestroyProgress(BlockState blockState, Player player, BlockGetter level, BlockPos blockPos) {

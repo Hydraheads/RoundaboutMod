@@ -49,6 +49,7 @@ import java.util.function.Predicate;
 public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public StrayCatEntity(EntityType<? extends TamableAnimal> $$0, Level $$1) {
         super($$0, $$1);
+        this.setMaxUpStep(0.0F);
     }
 
     private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
@@ -207,7 +208,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override
     public void tick() {
         super.tick();
-
         if (this.level().isClientSide()){
             setupAnimationStates();
         } else {

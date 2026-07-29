@@ -53,6 +53,7 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -842,6 +843,12 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.COLT_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.TOMMY_RELOAD) {
             return ModSounds.TOMMY_RELOAD_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
@@ -910,6 +917,9 @@ public class StandPowers extends AbilityScapeBasis {
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
     public static final byte TIME_RESUME_NOISE_3 = 62;
+    public static final byte TIME_SKIP_1 = 63;
+    public static final byte TIME_SKIP_2 = 64;
+    public static final byte TIME_ERASE_END = 65;
 
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
@@ -986,7 +996,13 @@ public class StandPowers extends AbilityScapeBasis {
         if (this.self.isCrouching()){
             return;
         }
-        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), this.getSummonSound());
+            }
+        } else {
+            playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        }
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public float getBarrageChargePitch(){
@@ -2190,20 +2206,34 @@ public class StandPowers extends AbilityScapeBasis {
         $$0.putByte("Skin",standSkin);
         $$0.putByte("Pose",idlePos);
     }
+    public void setStandSkinLight(byte skin){
+        standSkin = skin;
+
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setSkin(skin);
+        }
+    }
+    public void setIdlePosLight(byte pos){
+        idlePos = pos;
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setIdleAnimation(pos);
+        }
+    }
     public void readAdditionalSaveData(CompoundTag $$0) {
-        StandUser user = getStandUserSelf();
         if ($$0.contains("Skin")) {
             byte skn = ($$0.getByte("Skin"));
-            user.roundabout$setStandSkinLight(skn);
+            setStandSkinLight(skn);
         } else {
-            user.roundabout$setStandSkinLight((byte) 0);
+            setStandSkinLight((byte) 0);
         }
 
         if ($$0.contains("Pose")) {
             byte skn = ($$0.getByte("Pose"));
-            user.roundabout$setIdlePosLight(skn);
+            setIdlePosLight(skn);
         } else {
-            user.roundabout$setIdlePosLight((byte) 0);
+            setIdlePosLight((byte) 0);
         }
     }
     // run this to trigger the disc saving and syncing
