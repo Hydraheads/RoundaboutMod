@@ -417,7 +417,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     vec3d2 = vec3d2.add(0, 0.4F, 0);
 
                     double $$11 = Math.max(0.0, 1.0 - $$7.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-                    Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.5 * 0.6 * $$11);
+                    Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.2 * $$11);
                     if ($$12.lengthSqr() > 0.0) {
                         $$7.push($$12.x, 0.1, $$12.z);
                     }
