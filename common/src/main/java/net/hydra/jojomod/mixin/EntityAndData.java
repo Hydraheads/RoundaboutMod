@@ -701,6 +701,13 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);

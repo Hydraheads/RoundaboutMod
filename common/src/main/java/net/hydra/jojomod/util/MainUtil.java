@@ -2199,6 +2199,9 @@ public class MainUtil {
     /**Creative players should only be rewound by themselves*/
     public static boolean canRewindInTime(Entity ent, Entity rewinder){
         if (!ent.isRemoved() && ent.isAlive()) {
+            if (PowerTypes.isExistentiallyElsewhere(ent)){
+                return false;
+            }
             if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
                 return false;
             }

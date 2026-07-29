@@ -163,7 +163,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STEVE_NPC, PlayerNPCRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ALEX_NPC, PlayerAlexRenderer::new);
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.FOG_CLONE, FogCloneRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FOG_CLONE, CloneRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_CLONE, CloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_ZOMBIE, FallenZombieRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SKELETON, FallenSkeletonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SPIDER, FallenSpiderRenderer::new);

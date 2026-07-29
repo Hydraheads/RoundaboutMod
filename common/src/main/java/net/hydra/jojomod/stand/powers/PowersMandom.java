@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -330,7 +331,7 @@ public class PowersMandom extends NewDashPreset {
             return ModParticles.RED_CLOCK;
         if (ent !=null && ent.is(this.self))
             return ModParticles.CLOCK;
-        if (ent instanceof Player)
+        if (ent instanceof Player || ent instanceof CloneEntity)
             return ModParticles.BLUE_CLOCK;
         if (ent instanceof Projectile || ent instanceof ItemEntity)
             return ModParticles.ORANGE_CLOCK;

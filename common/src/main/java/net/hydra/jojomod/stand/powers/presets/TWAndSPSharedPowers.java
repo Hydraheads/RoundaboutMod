@@ -796,7 +796,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.getSelf().level().isClientSide()) {
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.5 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.5 + (Math.random() * 0.04)));
         }
         return true;
     }

@@ -1012,7 +1012,7 @@ public class PowersAnubis extends NewDashPreset {
                 || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
 
             if (iframeTicks > 0) {
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,1F);
+                playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,1F);
                 return true;
             }
             return false;
@@ -1020,7 +1020,7 @@ public class PowersAnubis extends NewDashPreset {
         }
         if (!$$0.is(ModDamageTypes.TIME) && !$$0.is(ModDamageTypes.GO_BEYOND) && $$0.getEntity() != null ) {
             if (iframeTicks > 0 && this.getActivePower() == PowersAnubis.WEAVE) {
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,0.1f+((float) Math.random()*0.2F));
+                playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,0.1f+((float) Math.random()*0.2F));
                 return true;
             }
             return false;
@@ -1448,7 +1448,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
         } else if (this.attackTimeDuring == 16) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1F, 0.4F + ((float) Math.random() * 0.2F));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1F, 0.4F + ((float) Math.random() * 0.2F));
             if (!isClient()) {
                 ThrownAnubisEntity thrownAnubis = new ThrownAnubisEntity(this.getSelf(), this.getSelf().level());
                 thrownAnubis.setOwner(this.getSelf());
@@ -3009,7 +3009,7 @@ public class PowersAnubis extends NewDashPreset {
                                 rDir.y,
                                 rDir.z,
                                 0.8);
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
 
                         this.getSelf().setYHeadRot(MainUtil.getLookAtEntityYaw(this.getSelf(), attackTarget));
                         this.getSelf().setYRot(MainUtil.getLookAtEntityYaw(this.getSelf(), attackTarget));
