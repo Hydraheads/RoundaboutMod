@@ -67,7 +67,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+        if(this.getUser() != null){
+            this.chest_open.startIfStopped(this.tickCount);
+            if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+
+            }
+        } else {
             this.coat_open.startIfStopped(this.tickCount);
         }
     }

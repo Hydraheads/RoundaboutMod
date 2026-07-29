@@ -48,6 +48,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -83,6 +84,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if (active) {
                     setIsChesting(false);
                     active = false;
+                    setTickDown(10);
                 }
 
             }
@@ -249,13 +251,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
-        for(int i = 0; i == 100; i++) {
-            Entity entity = EntityType.TNT.create(this.getSelf().level());
-            if(entity instanceof PrimedTnt PT){
-                PT.setFuse(100);
-            }
-            self.level().addFreshEntity(entity);
-        }
+
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
@@ -273,6 +269,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                     }
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
+                setTickDown(10);
             }
         }
         return super.tryPower(move, forced);
@@ -325,6 +322,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     boolean isChesting = false;
     void setIsChesting(boolean chest){ isChesting = chest;}
 
+    public int tickDown = 10;
+    void setTickDown(int t){tickDown = t;}
+
     @Override
     public void tickPower() {
         if(fingerEatingTick > 0){
@@ -345,6 +345,20 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
             }
 
+        }
+
+        if(self instanceof Player PL) {
+            if (self != null && this.getStandEntity(self) instanceof BlackSabbathEntity BSE) {
+                if(active){
+                    if(tickDown > 1){
+                        tickDown--;
+                        System.out.println(tickDown);
+                        if (tickDown == 1){
+                            BSE.openCustomInventoryScreen(PL);
+                        }
+                    }
+                }
+            }
         }
 
         getValidPlacement();
@@ -377,6 +391,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
         float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
+                BE.absMoveTo(pn.x(), evilY, pn.z());
                 BE.setMaster(this.self);
                 BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
                 this.getStandUserSelf().roundabout$standMount(BE);
@@ -384,10 +399,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 BE.setDeltaMovement(Vec3.ZERO);
                 self.setDeltaMovement(Vec3.ZERO);
                 this.self.level().addFreshEntity(BE);
-                BE.openCustomInventoryScreen(PL);
-                if(getValidPlacement() != null) {
-                    BE.absMoveTo(pn.x(), evilY, pn.z());
-             }
+                BE.incFadeOut((byte) 3);
+              //  BE.openCustomInventoryScreen(PL);
         }
     }
 
@@ -398,14 +411,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             return true;
         }
         return super.cancelJump();
@@ -413,7 +426,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             return true;
         }
         return super.cancelSprintParticles();
@@ -530,19 +543,21 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean returnFakeStandForHud(){
-        return true;
+        if(this.self != null) {
+            return !(this.getStandEntity(this.self) != null);
+        }
+        return false;
     }
 
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
             displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+        } else if(displayStand instanceof BlackSabbathEntity BSE){
+            BSE.coat_open.start(BSE.tickCount);
         }
         if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
             displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
             displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
-            if(displayStand instanceof BlackSabbathEntity BSE){
-
-            }
         }
         return displayStand;
     }
