@@ -2713,7 +2713,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (impaleTicks > 0){ impaleTicks--; }
         if (btdTicks >= 0) { btdTicks++; }
 
-        if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 4 == 0
+        if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 6 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
             StandEntity KQE = this.getStandEntity(this.self);
             float factor = 0.5F + (((FollowingStandEntity)KQE).getSizePercent()/2);
@@ -2730,7 +2730,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             Vec3 unhandledBubbblePos = new Vec3(
                 (KQE.getRandom().nextFloat()*0.4)-0.2,
                 (KQE.getRandom().nextFloat()*0.2)-0.2 + 1,
-                0.8
+                0.7
             );
             Vec3 bubblePos = unhandledBubbblePos
                     .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
