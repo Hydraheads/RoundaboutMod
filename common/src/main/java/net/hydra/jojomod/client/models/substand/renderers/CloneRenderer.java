@@ -8,7 +8,7 @@ import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
-import net.hydra.jojomod.entity.FogCloneEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.item.FirearmItem;
@@ -21,7 +21,6 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.*;
-import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -36,13 +35,13 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
-public class FogCloneRenderer<T extends FogCloneEntity> extends LivingEntityRenderer<T, PlayerModel<T>> {
+public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T, PlayerModel<T>> {
 
-    public FogCloneRenderer(EntityRendererProvider.Context $$0, PlayerModel $$1, float $$2) {
+    public CloneRenderer(EntityRendererProvider.Context $$0, PlayerModel $$1, float $$2) {
         super($$0, $$1, $$2);
     }
 
-    public FogCloneRenderer(EntityRendererProvider.Context context) {
+    public CloneRenderer(EntityRendererProvider.Context context) {
         super(context,new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER),true),0.5F);
         //this.addLayer(new LocacacaBeamLayer<>($$0, this));
         this.addLayer(new StoneLayer<>(context, this));
