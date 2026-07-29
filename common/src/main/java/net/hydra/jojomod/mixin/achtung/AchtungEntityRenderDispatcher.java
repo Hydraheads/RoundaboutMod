@@ -35,27 +35,29 @@ public class AchtungEntityRenderDispatcher {
 
         if (PowerTypes.isExistentiallyElsewhere(entity)){
             if (!ClientUtil.isPlayer(entity)) {
-                ci.cancel();
-                return;
-            }
-        }
-
-        if (entity instanceof StandEntity SE) {
-            if (entity instanceof FollowingStandEntity fse) {
-                if (PowerTypes.isExistentiallyElsewhere(fse.getFollowing())) {
-                    if (!ClientUtil.isPlayer(fse.getFollowing())) {
-                        ci.cancel();
-                        return;
+                if (entity instanceof StandEntity SE) {
+                    if (entity instanceof FollowingStandEntity fse) {
+                        if (PowerTypes.isExistentiallyElsewhere(fse.getFollowing())) {
+                            if (!ClientUtil.isPlayer(fse.getFollowing())) {
+                                ci.cancel();
+                                return;
+                            }
+                        }
                     }
-                }
-            }
-            if (PowerTypes.isExistentiallyElsewhere(SE.getUser())) {
-                if (!ClientUtil.isPlayer(SE.getUser())) {
+                    if (PowerTypes.isExistentiallyElsewhere(SE.getUser())) {
+                        if (!ClientUtil.isPlayer(SE.getUser())) {
+                            ci.cancel();
+                            return;
+                        }
+                    }
+                } else {
                     ci.cancel();
                     return;
                 }
             }
         }
+
+
 
             float throwFadeToTheEther = ClientUtil.getThrowFadePercent(entity, $$5);
 

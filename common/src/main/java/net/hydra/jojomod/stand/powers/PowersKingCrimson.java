@@ -360,7 +360,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return super.isServerControlledCooldown(num);
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
-
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1353,11 +1352,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (snapshot.getEntityId() == -1) {
             return;
         }
+
         Level level = self.level();
 
         Entity entity = level.getEntity(snapshot.getEntityId());
 
         if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
             return;
         }
         if (entity instanceof StandEntity) {
@@ -1817,7 +1820,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
-                    if (entity instanceof LivingEntity lv) {
+                    if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
                         if (!(stand != null && stand.getId() == id)) {
