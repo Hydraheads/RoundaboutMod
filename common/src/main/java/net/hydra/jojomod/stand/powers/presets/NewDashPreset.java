@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -140,7 +141,7 @@ public class NewDashPreset extends StandPowerRewrite {
             if (Math.random() > 0.85){
                 addEXP(1);
             }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
 
         }
         return true;
@@ -215,13 +216,15 @@ public class NewDashPreset extends StandPowerRewrite {
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                            0,
-                            dvec.x,
-                            dvec.y,
-                            dvec.z,
-                            0.8);
+                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                0,
+                                dvec.x,
+                                dvec.y,
+                                dvec.z,
+                                0.8);
+                    }
                 }
             }
         }
@@ -229,7 +232,7 @@ public class NewDashPreset extends StandPowerRewrite {
             if (Math.random() > 0.8){
                 addEXP(1);
             }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
