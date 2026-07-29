@@ -809,7 +809,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
         if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
-            Roundabout.LOGGER.info("Weird");
             if (StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
                 return true;
             }
@@ -1005,7 +1004,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             } else {
                 if (keyIsDown) {
-                    //if (!this.inBitesTheDustMode()){
                     if (!isHoldingSneak()) {
                         super.buttonInputAttack(keyIsDown, options);
                     } else {
@@ -1017,7 +1015,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                             super.buttonInputAttack(keyIsDown, options);
                         }
                     }
-                    //}
                 }
             }
         } else {
@@ -2042,11 +2039,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void clearEntitiesSeconds() {
         combatSavedBTDinit();
-        dayBitedTheDustinit();
-        bitedTheDustInit();
         this.combatSavedBTD.clear();
-        this.bitedTheDust.clear();
-        this.dayBitedTheDust.clear();
     }
 
     public boolean bitesTheDustCombatActivate() {
@@ -2077,6 +2070,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         detectWhoBitedTheDust(target);
+
         btdTicks = 0;
 
         if (!combatSavedBTD.isEmpty()) {
@@ -2268,6 +2262,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             dayBitedTheDust.put(id, dayTime);
                         }
                     }else{
+                        Roundabout.LOGGER.info("checking for bited the dust... time: " + btdTicks);
                         bitedTheDustInit();
                         if (bitedTheDust.containsKey(id)) {
                             int oldTicks = bitedTheDust.get(id);
@@ -2889,6 +2884,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             for (int id : toRemoveFromList) {
                 bitedTheDust.remove(id);
             }
+        }else{
+            Roundabout.LOGGER.info("Hm?");
         }
     }
 
@@ -2902,6 +2899,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target != null && target.isAlive() && !target.isRemoved()) {
                     int timeToDust = dayBitedTheDust.get(id);
+
+                    Roundabout.LOGGER.info("time to dust: " + timeToDust + " the current time: " + dayTime);
 
                     if (timeToDust == dayTime) {
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
