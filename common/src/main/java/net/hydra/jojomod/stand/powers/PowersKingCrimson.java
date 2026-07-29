@@ -505,6 +505,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         Mth.floor(checkBox.maxX), Mth.floor(checkBox.maxY), Mth.floor(checkBox.maxZ))) {
 
                     if (level.getFluidState(pos).is(FluidTags.LAVA)) {
+                        if (!hasGroundWithin3Blocks(level, player, previousPreviousSafe)) {
+                            return player.position();
+                        }
                         return previousPreviousSafe;
                     }
 
@@ -561,8 +564,57 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 return player.position();
             }
         }
-
+        if (!hasGroundWithin3Blocks(level, player, predicted)) {
+            return player.position();
+        }
         return predicted;
+    }
+
+    private boolean hasGroundWithin3Blocks(Level level, LivingEntity player, Vec3 predicted) {
+        if (player instanceof Player pl2 && pl2.getAbilities().flying){
+            return true;
+        }
+
+        double halfWidth = player.getBbWidth() * 0.5 - 0.05;
+
+        // Check each corner of the player's feet
+        double[] xs = {
+                predicted.x - halfWidth,
+                predicted.x + halfWidth
+        };
+        double[] zs = {
+                predicted.z - halfWidth,
+                predicted.z + halfWidth
+        };
+
+        int startY = Mth.floor(predicted.y - 0.01);
+
+        for (double x : xs) {
+            for (double z : zs) {
+
+                boolean supported = false;
+
+                for (int dy = 1; dy <= 3; dy++) {
+                    BlockPos pos = BlockPos.containing(x, startY - dy, z);
+
+                    BlockState state = level.getBlockState(pos);
+
+                    if (!state.isAir()
+                            && state.blocksMotion()
+                            && state.getCollisionShape(level, pos).isEmpty() == false) {
+                        supported = true;
+                        break;
+                    }
+                }
+
+                // One corner has no support within 3 blocks
+                if (!supported) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public boolean canUseTimeSkip(){
