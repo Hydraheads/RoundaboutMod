@@ -117,18 +117,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_ERASE) {
             return ModSounds.TIME_ERASE_FULL_EVENT;
-        } else if (soundChoice == TIME_ERASE_END) {
-            return ModSounds.TIME_ERASE_END_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
 
     public static final byte EPITAPH_NOISE = 106;
     public static final byte EPITAPH_FADE_NOISE = 107;
-    public static final byte TIME_SKIP_1 = 108;
-    public static final byte TIME_SKIP_2 = 109;
     public static final byte TIME_ERASE = 110;
-    public static final byte TIME_ERASE_END = 111;
 
     @Override
     public SoundEvent getImpaleSound() {

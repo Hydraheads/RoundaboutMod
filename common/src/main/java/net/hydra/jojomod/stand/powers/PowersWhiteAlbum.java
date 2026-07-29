@@ -1604,10 +1604,6 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return super.isAttackIneptVisually(activeP,slot);
     }
 
-    public static final byte
-            PLACE = 61,
-            RETRACT = 62,
-            SHOCK = 63;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.toggle_brawl",

@@ -843,6 +843,12 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.COLT_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.TOMMY_RELOAD) {
             return ModSounds.TOMMY_RELOAD_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
@@ -911,6 +917,9 @@ public class StandPowers extends AbilityScapeBasis {
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
     public static final byte TIME_RESUME_NOISE_3 = 62;
+    public static final byte TIME_SKIP_1 = 63;
+    public static final byte TIME_SKIP_2 = 64;
+    public static final byte TIME_ERASE_END = 65;
 
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {

@@ -354,13 +354,13 @@ public class PowersHeyYa extends NewDashPreset {
             VAMPIRE = 25;
 
     public static final byte
-            YAP_1 = 61,
-            YAP_2 = 62,
-            YAP_3 = 63,
-            YAP_4 = 64,
-            YAP_5 = 65,
-            YAP_6 = 66,
-            YAP_7 = 67;
+            YAP_1 = 71,
+            YAP_2 = 72,
+            YAP_3 = 73,
+            YAP_4 = 74,
+            YAP_5 = 75,
+            YAP_6 = 76,
+            YAP_7 = 77;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
