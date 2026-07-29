@@ -1369,25 +1369,27 @@ public class PowersKingCrimson extends BlockGrabPreset {
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
         } else if (entity instanceof Projectile pj) {
             if (!(pj instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())) {
-                Vec3 motion = pj.getDeltaMovement();
+                if (pj instanceof ThrowableProjectile || pj instanceof AbstractArrow) {
+                    Vec3 motion = pj.getDeltaMovement();
 
-                boolean aboutToHit = false;
+                    boolean aboutToHit = false;
 
-                if (!motion.equals(Vec3.ZERO)) {
-                    AABB box = pj.getBoundingBox().move(motion);
+                    if (!motion.equals(Vec3.ZERO)) {
+                        AABB box = pj.getBoundingBox().move(motion);
 
-                    for (VoxelShape shape : entity.level().getBlockCollisions(entity, box)) {
-                        if (!shape.isEmpty()) {
-                            aboutToHit = true;
-                            break;
+                        for (VoxelShape shape : entity.level().getBlockCollisions(entity, box)) {
+                            if (!shape.isEmpty()) {
+                                aboutToHit = true;
+                                break;
+                            }
                         }
                     }
-                }
 
-                if (!aboutToHit) {
-                    pj.setDeltaMovement(pj.getDeltaMovement().x,Math.min(0,pj.getDeltaMovement().y),
-                            pj.getDeltaMovement().z);
-                    pj.setDeltaMovement(motion.scale(0.4));
+                    if (!aboutToHit) {
+                        pj.setDeltaMovement(pj.getDeltaMovement().x, Math.min(0, pj.getDeltaMovement().y),
+                                pj.getDeltaMovement().z);
+                        pj.setDeltaMovement(motion.scale(0.4));
+                    }
                 }
             }
         }
@@ -1644,12 +1646,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             // Vanilla gravity
             if (!projectile.isNoGravity()) {
                 if (!(projectile instanceof AbstractArrow aa && ((ISuperThrownAbstractArrow)aa).roundabout$getSuperThrow())){
-                    float gravity = -0.05F;
-                    if (projectile instanceof ThrowableProjectile aa){
-                        gravity =  -1*((AccessThrowableProjectile)aa).rdbt$getGravity();
-                    }
+                    if (projectile instanceof AbstractArrow || projectile instanceof ThrowableProjectile) {
+                        float gravity = -0.05F;
+                        if (projectile instanceof ThrowableProjectile aa) {
+                            gravity = -1 * ((AccessThrowableProjectile) aa).rdbt$getGravity();
+                        }
 
-                    velocity = velocity.add(0.0, gravity, 0.0);
+                        velocity = velocity.add(0.0, gravity, 0.0);
+                    }
                 }
             }
         }
