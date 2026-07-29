@@ -576,62 +576,65 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters &&
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
                             && this.getHealth() < this.getMaxHealth())){
-
-                this.level()
-                        .addParticle(
-                                ModParticles.FOG_CHAIN,
-                                vec3d.x,
-                                vec3d.y,
-                                vec3d.z,
-                                0,
-                                0.2,
-                                0
-                        );
+                if (!PowerTypes.isExistentiallyElsewhere(this)) {
+                    this.level()
+                            .addParticle(
+                                    ModParticles.FOG_CHAIN,
+                                    vec3d.x,
+                                    vec3d.y,
+                                    vec3d.z,
+                                    0,
+                                    0.2,
+                                    0
+                            );
+                }
             }
         }
+        if (!PowerTypes.isExistentiallyElsewhere(this)) {
         if (this.roundabout$getGlow() == 2){
             if (this.tickCount %2 == 0) {
-                this.level().addParticle(ModParticles.CINDERELLA_GLOW, this.getRandomX(0.6D), this.getRandomY(), this.getRandomZ(0.6D), 0.0D, 0.0D, 0.0D);
+                    this.level().addParticle(ModParticles.CINDERELLA_GLOW, this.getRandomX(0.6D), this.getRandomY(), this.getRandomZ(0.6D), 0.0D, 0.0D, 0.0D);
             }
         }
         if (this.roundabout$getBleedLevel() > -1) {
-            if (!PowersMetallica.hasAnyFadeActive((LivingEntity)(Object)this)) {
-            if (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)){
-                this.level()
-                        .addParticle(
-                                ModParticles.FOG_CHAIN,
-                                vec3d.x,
-                                vec3d.y,
-                                vec3d.z,
-                                0,
-                                0.2,
-                                0
-                        );
-            }
-            int bleedlvl = this.roundabout$getBleedLevel();
-            int bloodticks = 8;
-            if (bleedlvl == 1) {
-                bloodticks = 6;
-            } else if (bleedlvl > 1) {
-                bloodticks = 4;
-            }
-            if (this.tickCount % bloodticks == 0 && this.isAlive()) {
-                SimpleParticleType bloodType = ModParticles.BLOOD;
-                if (MainUtil.hasEnderBlood(this)) {
-                    bloodType = ModParticles.ENDER_BLOOD;
-                } else if (MainUtil.hasBlueBlood(this)) {
-                    bloodType = ModParticles.BLUE_BLOOD;
+            if (!PowersMetallica.hasAnyFadeActive((LivingEntity) (Object) this)) {
+                if (((IPermaCasting) this.level()).roundabout$inPermaCastFogRange(this)) {
+                    this.level()
+                            .addParticle(
+                                    ModParticles.FOG_CHAIN,
+                                    vec3d.x,
+                                    vec3d.y,
+                                    vec3d.z,
+                                    0,
+                                    0.2,
+                                    0
+                            );
                 }
-                this.level()
-                        .addParticle(
-                                bloodType,
-                                vec3d2.x,
-                                vec3d2.y,
-                                vec3d2.z,
-                                0,
-                                0,
-                                0
-                        );
+                int bleedlvl = this.roundabout$getBleedLevel();
+                int bloodticks = 8;
+                if (bleedlvl == 1) {
+                    bloodticks = 6;
+                } else if (bleedlvl > 1) {
+                    bloodticks = 4;
+                }
+                if (this.tickCount % bloodticks == 0 && this.isAlive()) {
+                    SimpleParticleType bloodType = ModParticles.BLOOD;
+                    if (MainUtil.hasEnderBlood(this)) {
+                        bloodType = ModParticles.ENDER_BLOOD;
+                    } else if (MainUtil.hasBlueBlood(this)) {
+                        bloodType = ModParticles.BLUE_BLOOD;
+                    }
+                    this.level()
+                            .addParticle(
+                                    bloodType,
+                                    vec3d2.x,
+                                    vec3d2.y,
+                                    vec3d2.z,
+                                    0,
+                                    0,
+                                    0
+                            );
+                }
             }
         }
     }
@@ -1522,8 +1525,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 if (PowerTypes.isUsingStand(this)) {
                     color = this.roundabout$getStandPowers().getLeapColor();
                 }
+                if (!PowerTypes.isExistentiallyElsewhere(this)) {
                 ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
+                }
             }
         }
         if (roundabout$leapTicks <= -1){
@@ -1550,8 +1555,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$cancelConsumableItem((LivingEntity) (Object) this);
                 roundabout$destructionModeTrailTicks--;
                 if (!this.level().isClientSide) {
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE, this.getX(), this.getY(), this.getZ(),
-                            1, 0, 0, 0, 0.1);
+                    if (!PowerTypes.isExistentiallyElsewhere(this)) {
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE, this.getX(), this.getY(), this.getZ(),
+                                1, 0, 0, 0, 0.1);
+                    }
                 }
             }
         }
@@ -1562,6 +1569,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
             if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);
+            }
+            if (roundabout$sealedTicks < 0) {
+                roundabout$maxSealedTicks = 0;
+                if (((LivingEntity)(Object)this) instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket(P,PacketDataIndex.S2C_INT_MAX_SEAL,0);
+                }
             }
         }
         if (roundabout$gasolineIFRAMES > 0){
@@ -1593,8 +1606,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         float width = this.getBbWidth() / 2;
                         float height = this.getBbHeight() / 4;
                         float height2 = this.getBbHeight()/2;
+                        if (!PowerTypes.isExistentiallyElsewhere(this)) {
                         ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
                                 1, width, height, width, 0.1);
+                        }
                     }
                 }
             }
@@ -3098,6 +3113,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public int roundabout$maxSealedTicks = -1;
 
+
+    @Override
+    public void roundabout$sealStand(int ticks) {
+        Roundabout.LOGGER.info(this.roundabout$getMaxSealedTicks() + " / " + ticks);
+        if (this.roundabout$getMaxSealedTicks() < ticks) {
+            this.roundabout$setSealedTicks(ticks);
+        }
+    }
+
     @Override
     @Unique
     public void roundabout$setSealedTicks(int ticks){
@@ -3524,6 +3548,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
+            this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
             ci.setReturnValue(false);
             return;
         }
@@ -3858,7 +3883,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
 
                     if (!this.level().isClientSide()) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.FRICTIONLESS,
+                        roundabout$getStandPowers().sendParticlesIfPossible(level(), ModParticles.FRICTIONLESS,
                                 this.getX(), this.getY() + 0.2, this.getZ(),
                                 1, 0, 0, 0, 0.015);
                     }
@@ -4557,11 +4582,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         || (stack.getItem() instanceof BlockItem BI && (BI.getBlock() instanceof CactusBlock
                 || BI.getBlock() instanceof GoddessStatueBlock || BI.getBlock() instanceof SweetBerryBushBlock || BI.getBlock() instanceof BarbedWireBlock))) {
                     roundabout$setBubbleEncased((byte) 0);
-                    this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                            SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                    ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
-                            this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
-                            5, 0.25, 0.25, 0.25, 0.025);
+                    if (!PowerTypes.isExistentiallyElsewhere(this)) {
+                        this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
+                                SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                                this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
+                                5, 0.25, 0.25, 0.25, 0.025);
+                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -115,6 +116,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.ALEX_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.MODIFIED_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
+        event.put(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneEntity.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SPIDER.get(), FallenSpider.createAttributes().build());
@@ -810,6 +812,7 @@ public class ForgeEvents {
         ModEntities.MODIFIED_NPC = ForgeEntities.MODIFIED_NPC.get();
         ModEntities.MODIFIED_NPC = ForgeEntities.MODIFIED_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
+        ModEntities.KING_CRIMSON_CLONE = ForgeEntities.KING_CRIMSON_CLONE.get();
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();

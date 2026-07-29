@@ -124,6 +124,8 @@ public class ClientConfig implements Cloneable {
         public Boolean epitaphSeePresentEntitiesAndParticles;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
         public Float timeSkipOpacity;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float bitesTheDustOpacity;
     }
     public static class ConfigSettings {
 

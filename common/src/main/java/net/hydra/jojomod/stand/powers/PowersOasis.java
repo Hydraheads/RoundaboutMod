@@ -48,6 +48,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PowersOasis extends NewDashPreset {
@@ -271,6 +272,12 @@ public class PowersOasis extends NewDashPreset {
         return super.tryBlockPosPower(move, forced,pos);
     }
 
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == MUD_HIT_WINDUP){
+            mudHitEntityImpact(target);
+        }
+    }
 
     @Override
     public void tickPower() {
@@ -347,7 +354,7 @@ public class PowersOasis extends NewDashPreset {
                             && !(blockState.getBlock() instanceof OasisMudBlock)) {
 
                         if (this.self.level() instanceof ServerLevel serverLevel) {
-                            OasisMudBlock.replaceBlock(serverLevel, blockPos, 100);
+                            OasisMudBlock.replaceBlock(serverLevel, blockPos, 1000);
                         }
 
                     }
@@ -418,14 +425,6 @@ public class PowersOasis extends NewDashPreset {
     }
 
 
-    @Override
-    public void handleStandAttack(Player player, Entity target){
-        if (this.getActivePower() == MUD_HIT_WINDUP){
-            mudHitEntityImpact(target);
-        }
-    }
-
-
 
     public void doMudHit() {
         int blockReach = 5;
@@ -471,10 +470,14 @@ public class PowersOasis extends NewDashPreset {
     }
 
 
-    // TODO put in list before falling the blocks, check if block below, if block pos below is not apart of that array, do not fall the block.
-
     List<FallingBlockEntity> fallingMudBlocks = new ArrayList<>();
+    List<BlockPos> fallingMudBlockHolder = new ArrayList<>();
+    List<BlockPos> fallingBlocksGrouped = new ArrayList<>();
+    HashSet<BlockPos> fallenBlocks = new HashSet<>();
+
     public void mudHitBlockImpact() {
+
+        Roundabout.LOGGER.info("mudhitblockimpact");
 
         this.setActivePower(PowerIndex.NONE);
         this.setAttackTimeDuring(-10);
@@ -500,37 +503,71 @@ public class PowersOasis extends NewDashPreset {
                                 blockState = blockState.setValue(BlockStateProperties.SNOWY, false);
                             }
 
+                            fallingMudBlockHolder.add(blockPos);
+
                             FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), blockPos, blockState);
                             fallingMudBlocks.add(fallingBlock);
+
                         }
                     }
                 }
             }
         }
 
-
-
         /*
-        for (int i = -1; i <= 3; i++) {
-            for (int j = -1; j <= 3; j++) {
-                BlockPos newBlockPos = packetBlockPos.offset(i, 0, j);
-                BlockState newBlockState = this.self.level().getBlockState(newBlockPos);
+        fallingMudBlockHolder.sort((a, b) -> Integer.compare(b.getY(), a.getY()));
 
-                if (newBlockState.getBlock() == Blocks.AIR) {
-                    continue;
+        for (BlockPos blockPos : fallingMudBlockHolder) {
+
+            if (fallenBlocks.contains(blockPos)) {
+                continue;
+            }
+
+
+            for (int i = 1; i <= (radius*2)+1; i++) {
+                BlockPos blockBelow = blockPos.offset(0, -i, 0);
+                BlockState blockStateBelow = this.self.level().getBlockState(blockBelow);
+
+                if (!fallingMudBlockHolder.contains(blockBelow) && (blockStateBelow.isAir() || blockStateBelow.canBeReplaced())) {
+                    for (int j = 0; j < i; j ++) {
+                        BlockPos blockPos2 = blockPos.offset(0, -j, 0);
+
+                        fallenBlocks.add(blockPos2);
+                        fallingBlocksGrouped.add(blockPos2);
+                    }
+
+                    Roundabout.LOGGER.info("fall column");
+                    break;
                 }
-
-                if (newBlockState.hasProperty(BlockStateProperties.SNOWY)) {
-                    newBlockState = newBlockState.setValue(BlockStateProperties.SNOWY, false);
-                }
-
-                FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), newBlockPos, newBlockState);
-                fallingMudBlocks.add(fallingBlock);
             }
         }
 
+
+        fallingMudBlockHolder.clear();
+        groupFallingBlocks();
+        fallenBlocks.clear();
+
          */
     }
+
+    public void groupFallingBlocks() {
+
+        fallingBlocksGrouped.sort((a, b) -> Integer.compare(b.getY(), a.getY()));
+        for (BlockPos blockPos : fallingBlocksGrouped) {
+            BlockState blockState = this.self.level().getBlockState(blockPos);
+
+            FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), blockPos, blockState);
+            fallingMudBlocks.add(fallingBlock);
+        }
+
+        fallingBlocksGrouped.clear();
+    }
+
+
+
+
+
+
 
     public void onFallingBlockLand(BlockPos blockPos, BlockState blockState) {
         if (!this.self.level().isClientSide) {

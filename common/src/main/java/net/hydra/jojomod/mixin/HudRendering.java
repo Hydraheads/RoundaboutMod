@@ -128,7 +128,7 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
                                     "textures/misc/bites_the_dust/frame_" + ClientUtil.bitesTheDustTicker + ".png"),
-                            1F, 1F, 1F, 1F);
+                            ConfigManager.getClientConfig().generalSettings.bitesTheDustOpacity, 1F, 1F, 1F);
                 }
             }
 

@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -815,7 +816,14 @@ public class PowersCalifornia extends NewDashPreset {
             }
 
             if (leaded != null) {
-                if (leaded.isAlive()) {
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        setLeadTarget(pkc.activeClone);
+                    }
+                }
+            }
+            if (leaded != null) {
+                if (leaded.isAlive() && !PowerTypes.isExistentiallyElsewhere(leaded)) {
                     if (leaded instanceof Mob mb) {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
                                 leaded instanceof Aesthetician ||
@@ -884,8 +892,13 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
-            return true;
+        if (!getCapturedEntityIds().isEmpty()){
+            if (isCapturedEntity(ent)) {
+                return true;
+            }
+            if (ent instanceof CloneEntity ce && isCapturedEntity(ce.player)){
+                return true;
+            }
         }
         if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
             if (hasStandActive(self)) {

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.Roundabout;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +26,9 @@ public class OasisMudBlockEntity extends BlockEntity {
     }
 
     public void tick() {
+        if (level != null && !level.isClientSide && --ticksRemaining <= 0 && level.getBlockEntity(worldPosition) == this) {
+            this.revert(this.getBlockPos());
+        }
     }
 
     public static void tickBlockEnt(Level lvl, BlockPos bp, BlockState bs, OasisMudBlockEntity oasisMudBlockEntity) {
@@ -33,14 +37,14 @@ public class OasisMudBlockEntity extends BlockEntity {
 
 
 
-
-
-    public void revert(ServerLevel level, BlockPos pos) {
-        BlockState restore = this.copiedState;
-        if (restore.isAir()) {
-            level.removeBlock(pos, false);
-        } else {
-            level.setBlock(pos, restore, Block.UPDATE_ALL);
+    public void revert(BlockPos pos) {
+        if (level != null && !level.isClientSide) {
+            BlockState restore = this.copiedState;
+            if (restore.isAir()) {
+                level.removeBlock(pos, false);
+            } else {
+                level.setBlock(pos, restore, Block.UPDATE_ALL);
+            }
         }
     }
 

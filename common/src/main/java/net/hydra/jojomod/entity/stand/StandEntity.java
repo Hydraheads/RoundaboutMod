@@ -136,6 +136,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     @Override
+    public boolean isIgnoringBlockTriggers() {
+        return true;
+    }
+
+    @Override
     public boolean isInvisible() {
         if (PowerTypes.isExistentiallyElsewhere(getUser())) {
             if (!(this.level().isClientSide() && ClientUtil.isPlayer(getUser()))) {
