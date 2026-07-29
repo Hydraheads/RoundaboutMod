@@ -3883,11 +3883,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
 
                     if (!this.level().isClientSide()) {
-                        if (!PowerTypes.isExistentiallyElsewhere(this)) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.FRICTIONLESS,
+                        roundabout$getStandPowers().sendParticlesIfPossible(level(), ModParticles.FRICTIONLESS,
                                 this.getX(), this.getY() + 0.2, this.getZ(),
                                 1, 0, 0, 0, 0.015);
-                        }
                     }
                 } else {
                     roundabout$frictionSave = Vec3.ZERO;
