@@ -2147,6 +2147,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (onCooldown(PowerIndex.SKILL_4)) {
                 return;
             }
+            if (isUsingEpitaph())
+                return;
             if (timeEraseActive){
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
