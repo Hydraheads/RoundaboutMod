@@ -5827,7 +5827,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
-    public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
 
     public double StartingYPos = getY();
