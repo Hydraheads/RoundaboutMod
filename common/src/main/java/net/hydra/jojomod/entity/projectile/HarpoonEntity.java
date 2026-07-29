@@ -192,11 +192,15 @@ public class HarpoonEntity extends AbstractArrow {
                     $$2*=1.25F;
                 }
                 if ($$1 instanceof Player){
-                    float dist = this.distanceTo($$1);
-                    if (dist <= 3){
-                        $$2*=0.5F;
-                    } else if (dist <= 5){
-                        $$2*=0.7F;
+                    if (getOwner() != null){
+                        float dist = getOwner().distanceTo($$1);
+                        if (dist <= 3){
+                            $$2*=0.5F;
+                        } else if (dist <= 5){
+                            $$2*=0.7F;
+                        } else {
+                            $$2*=0.95F;
+                        }
                     } else {
                         $$2*=0.95F;
                     }
