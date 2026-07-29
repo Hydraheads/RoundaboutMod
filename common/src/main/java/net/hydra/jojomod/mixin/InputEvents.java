@@ -485,6 +485,13 @@ public abstract class InputEvents implements IInputEvents {
                 StandUser standComp = ((StandUser) player);
                 StandPowers powers = standComp.roundabout$getStandPowers();
 
+                if (PowerTypes.isExistentiallyElsewhere(player)) {
+                    if (this.gameMode != null) {
+                        this.gameMode.stopDestroyBlock();
+                    }
+                    ci.cancel();
+                    return;
+                }
                 if (standComp.roundabout$isPossessed()) {
                     ci.cancel();
                     return;

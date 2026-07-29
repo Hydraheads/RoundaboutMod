@@ -132,6 +132,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
     }
+    @Override
+    public boolean isMiningStand() {
+        if (timeEraseActive){
+            return false;
+        }
+        return super.isMiningStand();
+    }
 
     public int ticksOfEraseLeft = 0;
     @Override
