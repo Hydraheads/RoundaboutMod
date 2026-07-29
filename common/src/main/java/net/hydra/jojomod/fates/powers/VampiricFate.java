@@ -429,7 +429,7 @@ public int speedActivated = 0;
 
             if (this.getActivePower() == BLOOD_SUCK){
                 if (attackTimeDuring == 0 || attackTimeDuring == 5){
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_EVENT, SoundSource.PLAYERS, 1F, 0.95F+(float)(Math.random()*0.1));
 
                 }
                 if (attackTimeDuring >= 20){
@@ -684,8 +684,8 @@ public int speedActivated = 0;
                             pl.getFoodData().eat(6, 0);
                         }
                     }
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
                     int $$23 = (int)((double)2 * 0.5);
                     ((ServerLevel)this.self.level()).sendParticles(ParticleTypes.CRIT,
                             bloodSuckingTarget.getEyePosition().x,
@@ -694,7 +694,7 @@ public int speedActivated = 0;
                              15, 0.2, 0.2, 0.2, 0.0);
                     addBloodExp(15,bloodSuckingTarget);
                 } else {
-                    self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     if (((AccessFateFoodData) pl.getFoodData()).rdbt$getRealSaturation() < 7) {
                         pl.getFoodData().eat(2, 0.1F);
                     } else {
