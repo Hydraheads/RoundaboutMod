@@ -181,6 +181,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         bitedTheDustInit();
         bitedTheDust.clear();
     }
+    public void clearDayBitedTheDust() {
+        dayBitedTheDustinit();
+        dayBitedTheDust.clear();
+    }
 
     @Override
     public void onStandSummon(boolean desummon) {
@@ -1814,6 +1818,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (!this.isClient()) {
             clearEntitiesSeconds();
             clearBitedTheDust();
+            clearDayBitedTheDust();
             btdTicks = -1;
 
             if (inBitesTheDustMode()) {
@@ -1941,7 +1946,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 Vec3 pos = user.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(user.getForward().scale(user.getBbWidth() * 1));
                 bubble.setPos(pos.x(), pos.y(), pos.z());
                 bubble.shootFromRotationDeltaAgnostic(user, user.getXRot(), user.getYRot(), 1.0F, getStrayCatAirBubbleSpeed(), 0);
-                //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                 user.level().addFreshEntity(bubble);
 
@@ -2204,9 +2208,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             long dayTime = ((ServerLevel) this.self.level()).getDayTime();
             ((ServerLevel) this.self.level()).setDayTime(dayTime - (dayTime % 24000));
         }
+
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
                 ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus);
-        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
+                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus);
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
@@ -2903,10 +2909,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         if (MainUtil.getReducedDamage(target)) {
                             target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatPlayersDamage);
+                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayPlayersDamage);
                         }else {
                             target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage);
+                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
                         }
 
                         ExplosionUtil.explodeEffects(target.position(), target.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.35f);
