@@ -1563,6 +1563,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (!roundabout$isSealed()){
                 this.roundabout$setDrowning(false);
             }
+            if (roundabout$sealedTicks < 0) {
+                roundabout$maxSealedTicks = 0;
+                if (((LivingEntity)(Object)this) instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket(P,PacketDataIndex.S2C_INT_MAX_SEAL,0);
+                }
+            }
         }
         if (roundabout$gasolineIFRAMES > 0){
             roundabout$gasolineIFRAMES--;
@@ -3097,6 +3103,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public int roundabout$sealedTicks = -1;
     @Unique
     public int roundabout$maxSealedTicks = -1;
+
+
+    @Override
+    public void roundabout$sealStand(int ticks) {
+        Roundabout.LOGGER.info(this.roundabout$getMaxSealedTicks() + " / " + ticks);
+        if (this.roundabout$getMaxSealedTicks() < ticks) {
+            this.roundabout$setSealedTicks(ticks);
+        }
+    }
 
     @Override
     @Unique

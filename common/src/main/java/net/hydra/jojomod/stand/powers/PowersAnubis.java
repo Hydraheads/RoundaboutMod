@@ -56,6 +56,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -641,6 +642,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.WEAVE -> {
                 this.empower = false;
                 this.iframeTicks = 10;
+                this.setCooldown(PowerIndex.SKILL_1,80);
                 this.setActivePower(PowersAnubis.WEAVE);
             }
             case PowersAnubis.LAUNCH -> setPowerVariant(PowersAnubis.LAUNCH,100);
@@ -1462,7 +1464,7 @@ public class PowersAnubis extends NewDashPreset {
             this.getStandUserSelf().roundabout$setAnubisVanishTicks(0);
             super.setPowerNone();
             if (!this.self.level().isClientSide()){
-                this.getStandUserSelf().roundabout$setSealedTicks(400);
+                this.getStandUserSelf().roundabout$sealStand(400);
             }
        //     this.getStandUserSelf().roundabout$setActive(false);
         }
@@ -1544,8 +1546,11 @@ public class PowersAnubis extends NewDashPreset {
     public void spinHit(Entity e) {
 
         if (e.hurt(ModDamageTypes.of(this.getSelf().level(),ModDamageTypes.ANUBIS_SPIN,this.getSelf()),this.getHeavyPunchStrength(e)) ) {
-            if (e instanceof LivingEntity) {
+            if (e instanceof LivingEntity LE) {
                 addEXP(1);
+                if (MainUtil.getMobBleed(LE)) {
+                    MainUtil.makeBleed(LE,0,200,this.getSelf());
+                }
             }
             Vec3 vec3 = e.getPosition(0).subtract(this.getSelf().getPosition(0)).multiply(1,0,1).normalize().reverse();
             MainUtil.takeKnockbackWithY(e,1.5F,vec3.x,-0.15,vec3.z);
@@ -2301,6 +2306,21 @@ public class PowersAnubis extends NewDashPreset {
 
         }
         super.onStandSummon(desummon);
+    }
+
+    @Override
+    public void onStandSwitchInto() {
+        super.onStandSwitchInto();
+        if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
+            if (this.getSelf() instanceof Player) {
+                if (!isClient()) {
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 100);
+                    S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_4_SNEAK, 320);
+                }
+            }
+            this.setCooldown(PowerIndex.SKILL_1, 100);
+            this.setCooldown(PowerIndex.SKILL_4_SNEAK, 320);
+        }
     }
 
     public List<Entity> getBasicSwordHitBox() {

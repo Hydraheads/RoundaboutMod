@@ -41,7 +41,7 @@ public class EmptyStandDiscItem extends Item {
                     StandUser user = ((StandUser) $$1);
                     user.roundabout$getStandPowers().onStandSwitch();
                     if (!$$1.isCreative()) {
-                        ((StandUser)$$1).roundabout$setSealedTicks(
+                        ((StandUser)$$1).roundabout$sealStand(
                                 ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
                     }
                     user.roundabout$setStand(null);
