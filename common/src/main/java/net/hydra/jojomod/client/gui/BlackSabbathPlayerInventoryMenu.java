@@ -82,6 +82,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
                 StandUser user = ((StandUser) $$0);
                 StandPowers powers = user.roundabout$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb){
+                    pb.active = false;
                     pb.RecallClient();
                     return false;
                 }

@@ -384,7 +384,6 @@ public class PowersBlackSabbath extends NewDashPreset {
                 BE.setDeltaMovement(Vec3.ZERO);
                 self.setDeltaMovement(Vec3.ZERO);
                 this.self.level().addFreshEntity(BE);
-                this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 BE.openCustomInventoryScreen(PL);
                 if(getValidPlacement() != null) {
                     BE.absMoveTo(pn.x(), evilY, pn.z());
@@ -542,7 +541,7 @@ public class PowersBlackSabbath extends NewDashPreset {
             displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
             displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
             if(displayStand instanceof BlackSabbathEntity BSE){
-                BSE.coat_open.start(BSE.tickCount);
+
             }
         }
         return displayStand;

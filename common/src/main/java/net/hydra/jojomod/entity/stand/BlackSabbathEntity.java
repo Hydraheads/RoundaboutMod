@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -58,6 +59,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             SACTHOTH = 10;
 
     public final AnimationState coat_open = new AnimationState();
+    public final AnimationState chest_open = new AnimationState();
 
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
@@ -65,8 +67,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
-            coat_open.startIfStopped(this.tickCount);
+        if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+            this.coat_open.startIfStopped(this.tickCount);
         }
     }
 

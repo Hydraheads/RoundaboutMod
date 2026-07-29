@@ -64,6 +64,7 @@ public class BlackSabbathPlayerInventoryScreen
             StandUser user = ((StandUser) pl);
             StandPowers powers = user.roundabout$getStandPowers();
             if(powers instanceof PowersBlackSabbath pb){
+                pb.active = false;
                 pb.RecallClient();
             }
         }
