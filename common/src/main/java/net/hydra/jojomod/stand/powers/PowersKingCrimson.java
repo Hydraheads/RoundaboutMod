@@ -2088,9 +2088,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void setDisengageTarget(Entity target) {
-        disengageTarget = target;
         if (self instanceof ServerPlayer sp && target instanceof Player pl &&
                 pl.getId() != self.getId()) {
+            disengageTarget = target;
             if (target != null) {
                 S2CPacketUtil.sendGenericIntToClientPacket(sp,
                         PacketDataIndex.S2C_STAND_SPECIAL_INT,
@@ -2104,7 +2104,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
-        if (!self.level().isClientSide()) {
+        if (!self.level().isClientSide() && target instanceof Player pl &&  pl.getId() != self.getId()) {
             setDisengageTarget(target);
         disengageTime = 600;
 
