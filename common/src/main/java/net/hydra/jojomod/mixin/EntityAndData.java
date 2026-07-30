@@ -44,6 +44,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -55,7 +57,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -700,8 +704,40 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
+    @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "isSteppingCarefully", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$isSteppingCarefully(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            cir.setReturnValue(true);
+        }
+    }
+    @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$waterSwimSound(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
 
-    @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
+        @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
         Entity thisEnt = ((Entity) (Object) this);
         if (PowerTypes.isExistentiallyElsewhere(thisEnt)){

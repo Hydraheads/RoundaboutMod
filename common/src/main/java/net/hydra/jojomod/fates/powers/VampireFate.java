@@ -716,7 +716,7 @@ public class VampireFate extends VampiricFate {
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             return 0.10F + 0.01F*getVampireData().resilienceLevel;
         }
-        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET) || source.is(ModDamageTypes.KNIFE)){
+        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.HARPOON) || source.is(DamageTypes.TRIDENT) || source.is(ModDamageTypes.BULLET) || source.is(ModDamageTypes.KNIFE)){
             return 0.1F + 0.02F*getVampireData().resilienceLevel;
         }
         return super.getDamageReduction(source,amt);

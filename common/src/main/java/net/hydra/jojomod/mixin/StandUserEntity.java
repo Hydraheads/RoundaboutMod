@@ -66,6 +66,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -651,6 +652,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
             shift = At.Shift.AFTER, ordinal = 0), cancellable = true, require = 0)
     public void roundabout$tickEffects(CallbackInfo ci) {
+
         if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
             ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
@@ -714,8 +716,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$safeToRemoveLove = yup;
     }
 
-    @Inject(method = "tickEffects", at = @At(value = "HEAD"))
+    @Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }@Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack2(LivingEntity $$0, TargetingConditions $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            ci.cancel();
+            return;
+        }
         if (!this.level().isClientSide) {
             rdbt$setRemoveLoveSafety(false);
         }
@@ -875,63 +894,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (level().isClientSide()){
             ClientUtil.tickHeartbeat(this);
         } else {
-            if (this.getEffect(ModEffects.SINGE) != null) {
-                Vec3 vec3d2;
-                    Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
+            if (!PowerTypes.isExistentiallyElsewhere(this)) {
+                if (this.getEffect(ModEffects.SINGE) != null) {
+                    Vec3 vec3d2;
+                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
                     vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
                             this.getRandomY(),
                             this.getRandomZ(0.5)), dir));
-                int stacks = this.getEffect(ModEffects.SINGE).getAmplifier();
-                int bloodticks = 8;
-                if (stacks == 3) {
-                    bloodticks = 6;
-                } else if (stacks > 5) {
-                    bloodticks = 4;
-                }
-                if (this.tickCount % bloodticks == 0) {
-
-                    ((ServerLevel) this.level()).sendParticles(
-                            ParticleTypes.LAVA,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z,
-                            0, 0, 0, 0, 0.1);
-                }
-            }
-            if (this.getEffect(ModEffects.MELTING) != null) {
-                Vec3 vec3d2;
-                Direction dir = ((IGravityEntity)this).roundabout$getGravityDirection();
-                vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
-                        this.getRandomY(),
-                        this.getRandomZ(0.5)), dir));
-
-                int stacks = this.getEffect(ModEffects.MELTING).getAmplifier();
-                int bloodticks = 8;
-                if (stacks == 3) {
-                    bloodticks = 6;
-                } else if (stacks > 5) {
-                    bloodticks = 4;
-                }
-                if (this.tickCount % bloodticks == 0) {
-
-                    ((ServerLevel) this.level()).sendParticles(
-                            ModParticles.MELTING,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z,
-                            0, 0, 0, 0, 0.1);
-                }
-            }
-            if (this.getEffect(ModEffects.STAND_MELTING) != null) {
-                StandEntity getStand = roundabout$getStand();
-                if (getStand != null && !getStand.isRemoved() && getStand.isAlive()) {
-                    Vec3 vec3d2;
-                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
-                    vec3d2 = getStand.position().subtract(RotationUtil.vecPlayerToWorld(getStand.position().subtract(getStand.getRandomX(0.5),
-                            getStand.getRandomY(),
-                            getStand.getRandomZ(0.5)), dir));
-
-                    int stacks = this.getEffect(ModEffects.STAND_MELTING).getAmplifier();
+                    int stacks = this.getEffect(ModEffects.SINGE).getAmplifier();
                     int bloodticks = 8;
                     if (stacks == 3) {
                         bloodticks = 6;
@@ -940,12 +910,63 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     if (this.tickCount % bloodticks == 0) {
 
-                        ((ServerLevel) getStand.level()).sendParticles(
+                        ((ServerLevel) this.level()).sendParticles(
+                                ParticleTypes.LAVA,
+                                vec3d2.x,
+                                vec3d2.y,
+                                vec3d2.z,
+                                0, 0, 0, 0, 0.1);
+                    }
+                }
+                if (this.getEffect(ModEffects.MELTING) != null) {
+                    Vec3 vec3d2;
+                    Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
+                    vec3d2 = this.position().subtract(RotationUtil.vecPlayerToWorld(this.position().subtract(this.getRandomX(0.5),
+                            this.getRandomY(),
+                            this.getRandomZ(0.5)), dir));
+
+                    int stacks = this.getEffect(ModEffects.MELTING).getAmplifier();
+                    int bloodticks = 8;
+                    if (stacks == 3) {
+                        bloodticks = 6;
+                    } else if (stacks > 5) {
+                        bloodticks = 4;
+                    }
+                    if (this.tickCount % bloodticks == 0) {
+
+                        ((ServerLevel) this.level()).sendParticles(
                                 ModParticles.MELTING,
                                 vec3d2.x,
                                 vec3d2.y,
                                 vec3d2.z,
                                 0, 0, 0, 0, 0.1);
+                    }
+                }
+                if (this.getEffect(ModEffects.STAND_MELTING) != null) {
+                    StandEntity getStand = roundabout$getStand();
+                    if (getStand != null && !getStand.isRemoved() && getStand.isAlive()) {
+                        Vec3 vec3d2;
+                        Direction dir = ((IGravityEntity) this).roundabout$getGravityDirection();
+                        vec3d2 = getStand.position().subtract(RotationUtil.vecPlayerToWorld(getStand.position().subtract(getStand.getRandomX(0.5),
+                                getStand.getRandomY(),
+                                getStand.getRandomZ(0.5)), dir));
+
+                        int stacks = this.getEffect(ModEffects.STAND_MELTING).getAmplifier();
+                        int bloodticks = 8;
+                        if (stacks == 3) {
+                            bloodticks = 6;
+                        } else if (stacks > 5) {
+                            bloodticks = 4;
+                        }
+                        if (this.tickCount % bloodticks == 0) {
+
+                            ((ServerLevel) getStand.level()).sendParticles(
+                                    ModParticles.MELTING,
+                                    vec3d2.x,
+                                    vec3d2.y,
+                                    vec3d2.z,
+                                    0, 0, 0, 0, 0.1);
+                        }
                     }
                 }
             }
@@ -1377,6 +1398,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             mb.setTarget(null);
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
+
+            if (((LivingEntity)(Object)this) instanceof AnubisGuardian AG) {
+                AG.getEntityData().set(AnubisGuardian.SUMMONER_ID,0);
+            }
         }
 
     }
@@ -1408,6 +1433,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             box = new AABB(box.minX, box.minY - 0.5, box.minZ, box.maxX, box.maxY, box.maxZ);
             if (this.level().findSupportingBlock(this, box).isPresent()) {
                 roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+            }
+        }
+
+        if (rdbt$this() instanceof Mob mb){
+            LivingEntity terg = mb.getTarget();
+            if (terg != null && PowerTypes.isExistentiallyElsewhere(terg)){
+                roundabout$deeplyRemoveAttackTarget();
+                if (((StandUser)terg).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                    if (pkc.isErasingTime() && pkc.activeClone != null){
+                        mb.setTarget(pkc.activeClone);
+                    }
+                }
+            }
+        }
+        LivingEntity terg2 = getLastHurtMob();
+        LivingEntity terg3 = lastHurtByMob;
+        if (terg2 != null && PowerTypes.isExistentiallyElsewhere(terg2)){
+            if (((StandUser)terg2).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtMob(pkc.activeClone);
+                }
+            }
+        }
+        if (terg3 != null && PowerTypes.isExistentiallyElsewhere(terg3)){
+            if (((StandUser)terg3).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtByMob(pkc.activeClone);
+                }
             }
         }
 
@@ -4320,6 +4373,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
             MobEffectInstance mi = getEffect(ModEffects.BANISH);
             if (mi != null) {
@@ -5714,6 +5772,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     protected abstract void completeUsingItem();
 
+    @Shadow
+    @javax.annotation.Nullable
+    public abstract LivingEntity getLastHurtMob();
+
+    @Shadow
+    @javax.annotation.Nullable
+    private LivingEntity lastHurtByMob;
     public double previousYpos = getY();
 
 
@@ -5827,7 +5892,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
-    public float MoldLevel = 0.0f;
     public int jumpImmunityTicks = 0;
 
     public double StartingYPos = getY();
@@ -5849,14 +5913,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(!this.level().isClientSide){
 
                 if(this.hasEffect(ModEffects.MOLD)) {
-
-                    for (int i = 0; i < 4; i = i + 1) {
-                        if (this.tickCount % 20 == 0) {
-                            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
-                                    this.getY() + 1, this.getZ(),
-                                    1,
-                                    0, 0, 0,
-                                    0.01);
+                    if (!PowerTypes.isExistentiallyElsewhere(rdbt$this())) {
+                        for (int i = 0; i < 4; i = i + 1) {
+                            if (this.tickCount % 20 == 0) {
+                                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                        this.getY() + 1, this.getZ(),
+                                        1,
+                                        0, 0, 0,
+                                        0.01);
+                            }
                         }
                     }
                }

@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
@@ -223,6 +225,15 @@ public enum PowerTypes {
     public static boolean isExistentiallyElsewhere(Entity entity){
         if (isErasingTime(entity)){
             return true;
+        }
+        if (entity instanceof FollowingStandEntity se) {
+            if (se.getFollowing() != null){
+                return isExistentiallyElsewhere(se.getFollowing());
+            }
+        } if (entity instanceof StandEntity se){
+            if (se.getUser() != null){
+                return isExistentiallyElsewhere(se.getUser());
+            }
         }
         return false;
     }

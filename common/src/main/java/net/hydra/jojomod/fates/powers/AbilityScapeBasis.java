@@ -392,13 +392,16 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    public float guardMod(){
+        return 0.2f;
+    }
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (isBrawling()){
             StandUser standUser = ((StandUser) this.getSelf());
             if (isGuarding() && this.getSelf().getVehicle() == null) {
-                basis*=0.2f;
+                basis*=guardMod();
             } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
                 basis*=0.2f;
             } else if (this.isBarrageCharging()) {
@@ -1893,10 +1896,12 @@ public class AbilityScapeBasis {
         }
     }
 
-    public void playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+    public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isExistentiallyElsewhere(self)) {
             level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            return true;
         }
+        return false;
     }
 
     public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
@@ -1910,7 +1915,11 @@ public class AbilityScapeBasis {
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
-                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.VAULT_NOISE);
+                }
+            }
         }
         return true;
     }
@@ -1981,7 +1990,11 @@ public class AbilityScapeBasis {
             }
         }
         if (!this.getSelf().level().isClientSide()) {
-            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.DODGE_NOISE);
+                }
+            }
         }
         return true;
     }

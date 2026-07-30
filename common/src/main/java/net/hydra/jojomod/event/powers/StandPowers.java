@@ -851,6 +851,10 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
+        } else if (soundChoice == DODGE_NOISE) {
+            return ModSounds.DODGE_EVENT;
+        } else if (soundChoice == VAULT_NOISE) {
+            return ModSounds.DODGE_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_5) {
@@ -914,6 +918,8 @@ public class StandPowers extends AbilityScapeBasis {
     public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
     public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
     public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
+    public static final byte VAULT_NOISE = 58;
+    public static final byte DODGE_NOISE = 59;
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
     public static final byte TIME_RESUME_NOISE_3 = 62;
@@ -971,6 +977,10 @@ public class StandPowers extends AbilityScapeBasis {
             return this.getBarrageChargePitch();
         } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE){
             return 0.9F;
+        } else if (soundChoice == DODGE_NOISE) {
+            return (float) (0.98 + (Math.random() * 0.04));
+        } else if (soundChoice == VAULT_NOISE) {
+            return (float) (0.8 + (Math.random() * 0.04));
         } else {
             return 1F;
         }

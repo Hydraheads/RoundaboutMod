@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.PlayerEntity;
@@ -145,6 +146,7 @@ public class MoldSporesEntity extends StandEntity {
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
                             && !isStand
+                            && !(PowerTypes.isExistentiallyElsewhere(entity))
                             && !isBoss
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)

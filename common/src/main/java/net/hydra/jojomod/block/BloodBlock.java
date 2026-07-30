@@ -2,6 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.AccessFateFoodData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -137,7 +138,8 @@ public class BloodBlock extends Block {
     /**Consume blood from blood puddles*/
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (!entity.isCrouching() && entity instanceof Player PE && !level.isClientSide()) {
+        if (!entity.isCrouching() && entity instanceof Player PE && !level.isClientSide() &&
+                !PowerTypes.isExistentiallyElsewhere(entity)) {
             if (FateTypes.hasBloodHunger(PE)){
                 level.removeBlock(blockPos, false);
                 PE.getFoodData().eat(1,2f);

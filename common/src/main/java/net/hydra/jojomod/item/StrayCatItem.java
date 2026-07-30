@@ -45,7 +45,8 @@ public class StrayCatItem extends Item {
         return 0;
     }
 
-    private static final int COOLDOWN = 20;
+    private static final int COOLDOWN = 30;
+    private static final int LIFE_SPAN = 180;
 
     static public void saveStrayCatEntityInfo(ItemStack stack, StrayCatEntity stray) {
         CompoundTag tag = stack.getOrCreateTag();
@@ -77,6 +78,7 @@ public class StrayCatItem extends Item {
                     bubble.setOwner(P);
                     bubble.setSkin(this.getBubbleSkin());
                     bubble.setFollowOwnerView(true);
+                    bubble.setLifeSpan(LIFE_SPAN);
 
                     Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
                     Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
@@ -86,7 +88,6 @@ public class StrayCatItem extends Item {
                     Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
                     bubble.setPos(pos.x(), pos.y(), pos.z());
                     bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
-                    //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
 
                     level.addFreshEntity(bubble);
                 }

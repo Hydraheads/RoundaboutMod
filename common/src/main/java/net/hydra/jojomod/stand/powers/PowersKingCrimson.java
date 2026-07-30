@@ -218,6 +218,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean canUseEpitaphWithoutSkip(){
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
     }
+    public boolean canPredictIdles(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.predictIdles;
+    }
     public int ticksIntoEpitaph = 0;
     public boolean vibeCheck = false;
     @Override
@@ -263,12 +266,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
+        if (!canPredictIdles()){
+            return liv.position();
+        }
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
+        if (liv.getPose() == Pose.SITTING){
+            return predicted;
+        }
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
@@ -357,7 +366,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return super.isServerControlledCooldown(num);
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
-
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1350,11 +1358,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (snapshot.getEntityId() == -1) {
             return;
         }
+
         Level level = self.level();
 
         Entity entity = level.getEntity(snapshot.getEntityId());
 
         if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
             return;
         }
         if (entity instanceof StandEntity) {
@@ -1814,7 +1826,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
-                    if (entity instanceof LivingEntity lv) {
+                    if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
                         if (!(stand != null && stand.getId() == id)) {
@@ -2082,9 +2094,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void setDisengageTarget(Entity target) {
-        disengageTarget = target;
-        if (self instanceof ServerPlayer sp && target instanceof Player pl &&
-                pl.getId() != self.getId()) {
+        if (self instanceof ServerPlayer sp) {
+            if (target instanceof Player pl &&
+                    pl.getId() != self.getId()){
+                disengageTarget = target;
+            } else {
+                if (target == null){
+                    disengageTarget = target;
+                } else {
+                    return;
+                }
+            }
             if (target != null) {
                 S2CPacketUtil.sendGenericIntToClientPacket(sp,
                         PacketDataIndex.S2C_STAND_SPECIAL_INT,
@@ -2098,7 +2118,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
-        if (!self.level().isClientSide()) {
+        if (!self.level().isClientSide() && target instanceof Player pl &&  pl.getId() != self.getId()) {
             setDisengageTarget(target);
         disengageTime = 600;
 
@@ -2545,6 +2565,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         animateFinalAttackHit();
         //playBarrageCrySound();
         return true;
+    }
+    @Override
+    public boolean setPowerBarrageCharge() {
+        if (!self.level().isClientSide()){
+            if (isUsingTimeErase()){
+                timeErase();
+            }
+        }
+        return super.setPowerBarrageCharge();
     }
     @Override
     public void handleStandAttack(Player player, Entity target){

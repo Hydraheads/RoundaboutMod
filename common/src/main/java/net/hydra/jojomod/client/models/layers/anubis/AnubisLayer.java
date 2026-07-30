@@ -230,7 +230,10 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         if (((IEntityAndData) entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
-        if (AnubisLayer.shouldRender(entity) != null && entity.getMainHandItem().getItem().equals(ModItems.ANUBIS_ITEM) && !entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)) {
+        if (AnubisLayer.shouldRender(entity) != null
+                && entity.getMainHandItem().getItem().equals(ModItems.ANUBIS_ITEM) && !entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)
+                && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis )
+                && !((StandUser)entity).roundabout$isPossessed() ) {
 
 
             ClientUtil.pushPoseAndCooperate(poseStack, 48);
@@ -249,7 +252,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 poseStack.translate(0,-0.2,0); // +right, +down?
             }
 
-            if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
+            if (entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis )) {
                 LivingEntity target = MainUtil.findClosestEntity(entity.level(),entity.position(),5F, livingEntity -> (livingEntity instanceof AbstractIllager &&  !(livingEntity instanceof AnubisGuardian))  || (livingEntity instanceof Villager V && V.getVillagerData().getProfession().equals(VillagerProfession.CLERIC)) );
                 if (target != null) {
                     float shakeMod = (5F-Math.min(5F,target.distanceTo(entity)))/5F;

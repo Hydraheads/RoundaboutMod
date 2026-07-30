@@ -1936,6 +1936,7 @@ public class MainUtil {
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
+                        && !(PowerTypes.isExistentiallyElsewhere($$1))
                         && !(value instanceof FallenMob)) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
