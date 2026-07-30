@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -103,10 +104,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public void tick(){
+        validateUUID();
+        float pitch = this.getXRot();
+        float yaw = this.getYRot();
+
+
         if(shouldFloat && this.getUser() != null){
-            this.setXRot((this.getUser().getXRot() % 360) - 180);
-            this.setYRot((this.getUser().getYHeadRot() % 360) - 180);
-            this.setYBodyRot((this.getUser().getYHeadRot() % 360) - 180);
+            if (!this.level().isClientSide()) {
+                this.setXRot(pitch);
+                this.setYRot(yaw);
+                this.setYBodyRot(yaw);
+                this.xRotO = pitch;
+                this.yRotO = yaw;
+            }
         }
         super.tick();
     }

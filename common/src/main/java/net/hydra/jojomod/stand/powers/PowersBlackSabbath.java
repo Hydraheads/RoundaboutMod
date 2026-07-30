@@ -393,14 +393,14 @@ public class PowersBlackSabbath extends NewDashPreset {
         if (stand instanceof BlackSabbathEntity BE) {
                 BE.absMoveTo(pn.x(), evilY, pn.z());
                 BE.setMaster(this.self);
+                BE.setYRot((self.getYRot() % 360) - 180);
                 BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
                 this.getStandUserSelf().roundabout$standMount(BE);
                 BE.setShouldFloat(true);
                 BE.setDeltaMovement(Vec3.ZERO);
                 self.setDeltaMovement(Vec3.ZERO);
-                this.self.level().addFreshEntity(BE);
                 BE.incFadeOut((byte) 3);
-              //  BE.openCustomInventoryScreen(PL);
+                this.self.level().addFreshEntity(BE);
         }
     }
 
