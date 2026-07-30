@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.networking.ModPacketHandler;
@@ -1072,6 +1073,10 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         if (gravityDirection == Direction.DOWN) return;
 
         ci.cancel();
+        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            return;
+        }
+
 
         Vec3 floorPos = this.position().subtract(RotationUtil.vecPlayerToWorld(0.0D, 0.20000000298023224D, 0.0D, gravityDirection));
 

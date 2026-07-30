@@ -66,6 +66,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -651,6 +652,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
             shift = At.Shift.AFTER, ordinal = 0), cancellable = true, require = 0)
     public void roundabout$tickEffects(CallbackInfo ci) {
+
         if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
             ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
@@ -714,8 +716,25 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$safeToRemoveLove = yup;
     }
 
-    @Inject(method = "tickEffects", at = @At(value = "HEAD"))
+    @Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }@Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack2(LivingEntity $$0, TargetingConditions $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            ci.cancel();
+            return;
+        }
         if (!this.level().isClientSide) {
             rdbt$setRemoveLoveSafety(false);
         }
@@ -1414,6 +1433,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             box = new AABB(box.minX, box.minY - 0.5, box.minZ, box.maxX, box.maxY, box.maxZ);
             if (this.level().findSupportingBlock(this, box).isPresent()) {
                 roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
+            }
+        }
+
+        if (rdbt$this() instanceof Mob mb){
+            LivingEntity terg = mb.getTarget();
+            if (terg != null && PowerTypes.isExistentiallyElsewhere(terg)){
+                roundabout$deeplyRemoveAttackTarget();
+                if (((StandUser)terg).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                    if (pkc.isErasingTime() && pkc.activeClone != null){
+                        mb.setTarget(pkc.activeClone);
+                    }
+                }
+            }
+        }
+        LivingEntity terg2 = getLastHurtMob();
+        LivingEntity terg3 = lastHurtByMob;
+        if (terg2 != null && PowerTypes.isExistentiallyElsewhere(terg2)){
+            if (((StandUser)terg2).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtMob(pkc.activeClone);
+                }
+            }
+        }
+        if (terg3 != null && PowerTypes.isExistentiallyElsewhere(terg3)){
+            if (((StandUser)terg3).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtByMob(pkc.activeClone);
+                }
             }
         }
 
@@ -4326,6 +4373,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
             MobEffectInstance mi = getEffect(ModEffects.BANISH);
             if (mi != null) {
@@ -5720,6 +5772,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     protected abstract void completeUsingItem();
 
+    @Shadow
+    @javax.annotation.Nullable
+    public abstract LivingEntity getLastHurtMob();
+
+    @Shadow
+    @javax.annotation.Nullable
+    private LivingEntity lastHurtByMob;
     public double previousYpos = getY();
 
 
