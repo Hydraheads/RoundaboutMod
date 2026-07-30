@@ -2561,6 +2561,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return true;
     }
     @Override
+    public boolean setPowerBarrageCharge() {
+        if (!self.level().isClientSide()){
+            if (isUsingTimeErase()){
+                timeErase();
+            }
+        }
+        return super.setPowerBarrageCharge();
+    }
+    @Override
     public void handleStandAttack(Player player, Entity target){
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             impaleImpact(target);
