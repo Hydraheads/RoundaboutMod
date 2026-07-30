@@ -4322,6 +4322,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
             MobEffectInstance mi = getEffect(ModEffects.BANISH);
             if (mi != null) {
