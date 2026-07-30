@@ -61,19 +61,29 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
+    public final AnimationState chest_close = new AnimationState();
 
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
+    public int tickDownSecond = 0;
+    public void setTickDownSecond(int td){tickDownSecond = td;}
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if(this.getUser() != null){
-            this.chest_open.startIfStopped(this.tickCount);
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-
+                if(pb.active) {
+                    chest_close.stop();
+                    this.chest_open.startIfStopped(this.tickCount);
+                } else {
+                    this.chest_open.stop();
+                    this.coat_open.stop();
+                    this.chest_close.startIfStopped(this.tickCount);
+                }
             }
         } else {
+            this.chest_open.stop();
             this.coat_open.startIfStopped(this.tickCount);
         }
     }
@@ -116,6 +126,15 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 this.setYBodyRot(yaw);
                 this.xRotO = pitch;
                 this.yRotO = yaw;
+            }
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                if(tickDownSecond > 1){
+                    tickDownSecond--;
+
+                    if(tickDownSecond == 4){
+                        this.forceDespawnSet = true;
+                    }
+                }
             }
         }
         super.tick();

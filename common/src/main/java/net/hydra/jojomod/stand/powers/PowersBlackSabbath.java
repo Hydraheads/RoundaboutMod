@@ -222,9 +222,9 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(isDay){
                  if ($$0.level().isRaining() || $$0.level().isThundering()){
                     return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 11 ){
+                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 12 ){
                     return true;
-                } else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11){
+                } else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 12){
                     return true;
                 } else {
                     return false;
@@ -267,7 +267,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                     if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                     }
-                    this.getStandEntity(this.getSelf()).forceDespawnSet = true;
+                    if(this.getStandEntity(self) instanceof BlackSabbathEntity b){
+                        b.setTickDownSecond(10);
+                    }
                 }
                 setTickDown(10);
             }
@@ -352,10 +354,13 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if(active){
                     if(tickDown > 1){
                         tickDown--;
-                        System.out.println(tickDown);
                         if (tickDown == 1){
                             BSE.openCustomInventoryScreen(PL);
                         }
+                    }
+                    if(!checkIfYouAreInDark()){
+                        this.active = false;
+                        this.RecallClient();
                     }
                 }
             }

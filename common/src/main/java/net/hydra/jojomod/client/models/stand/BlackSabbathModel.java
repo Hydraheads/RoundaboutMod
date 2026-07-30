@@ -207,6 +207,7 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
         this.animate(pEntity.coat_open, BlackSabbathAnimations.CoatOpen, pAgeInTicks, 1f);
         this.animate(pEntity.chest_open, BlackSabbathAnimations.Chest_Open, pAgeInTicks, 1f);
+        this.animate(pEntity.chest_close, BlackSabbathAnimations.Chest_Close, pAgeInTicks, 1f);
 	}
 
 	@Override
