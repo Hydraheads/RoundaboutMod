@@ -37,6 +37,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -44,6 +45,7 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -206,9 +208,9 @@ public class PowersAnubis extends NewDashPreset {
         return new AnubisEntity(ModEntities.ANUBIS,this.getSelf().level());
     }
     @Override
-    public boolean rendersPlayer(){
-        return true;
-    }
+    public void animateStand(byte r) {}
+    @Override
+    public boolean rendersPlayer(){return true;}
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak() && !this.isEmpowered() ) {
@@ -697,7 +699,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public void tickPower() {
 
-       // Roundabout.LOGGER.info("ANIM: " + this.getStandUserSelf().roundabout$getStandAnimation() + " CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
+       // Roundabout.LOGGER.info("CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
 
         StandUser SU = this.getStandUserSelf();
 
@@ -1030,7 +1032,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean canAttack() {
-        return super.canAttack() || this.getActivePower() == PowerIndex.SNEAK_MOVEMENT && this.activePowerPhase < this.activePowerPhaseMax && this.getActivePower() < CLEAVE;
+        return super.canAttack() && this.activePowerPhase < this.activePowerPhaseMax && this.getActivePower() < CLEAVE;
     }
 
 
@@ -1075,10 +1077,12 @@ public class PowersAnubis extends NewDashPreset {
                             tryPowerPackets(PowersAnubis.CLEAVE);
                         }
                     } else if (this.canAttack()) {
+                        Roundabout.LOGGER.info(this.activePowerPhase + " / " + this.activePowerPhaseMax);
 
                         if (this.isHoldingSneak()) {
                             tryPowerPackets(PowerIndex.SNEAK_ATTACK_CHARGE);
                         } else {
+                            Roundabout.LOGGER.info("bang");
                             tryPowerPackets(PowerIndex.ATTACK);
                         }
                     }
@@ -1116,7 +1120,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
                 setPowerNone();
-            } else if (this.activePowerPhase == 0 && this.attackTimeDuring == 5 || this.attackTimeDuring == 7) {
+            } else if (this.activePowerPhase == 0 && this.attackTimeDuring == 3 || this.attackTimeDuring == 5) {
                 this.standPunch();
             }
         }
@@ -1536,7 +1540,7 @@ public class PowersAnubis extends NewDashPreset {
         } else if (this.attackTimeDuring > this.getSpinWindup()+getSpinDuration()) {
             this.setPowerNone();
             this.setAttackTime(0);
-            this.setAttackTimeMax(60);
+            this.setAttackTimeMax(40);
             this.setActivePowerPhase(this.getActivePowerPhaseMax());
         }
     }
@@ -1578,7 +1582,7 @@ public class PowersAnubis extends NewDashPreset {
         } else if (this.attackTimeDuring > this.getFlurryWindup()+getFlurryDuration()) {
             super.setPowerNone();
             this.setAttackTime(0);
-            this.setAttackTimeMax(60);
+            this.setAttackTimeMax(40);
             this.setActivePowerPhase(this.getActivePowerPhaseMax());
         }
     }
@@ -2377,7 +2381,8 @@ public class PowersAnubis extends NewDashPreset {
 
 
             if (ePos.distanceTo(fVec) > ePos.distanceTo(bVec)) {return true;}
-            if (dist > radius-(dungle*factor*0.35)) {return true;}
+            AABB box = entity.getBoundingBox();
+            if (dist > radius-(dungle*factor*0.35)+(box.getXsize()+box.getZsize())/4) {return true;}
             return (dungle > angle );
         });
 
@@ -2714,7 +2719,8 @@ public class PowersAnubis extends NewDashPreset {
 
             Item item = AM.item;
             if (item != null) {
-                ret = ret + Item.getId(item);
+                ret = ret + BuiltInRegistries.ITEM.getKey(item).toString();
+                Roundabout.LOGGER.info("key:" + ret);
 
                 ret = ret + "/" + AM.memory_type;
 
@@ -2744,7 +2750,7 @@ public class PowersAnubis extends NewDashPreset {
         String cf = ConfigManager.getClientConfig().anubisMemories.getFromMemory(slot);
         if (cf.equals("nothing yet :P")) {cf = "";ConfigManager.getClientConfig().anubisMemories.saveToMemory(slot,"");}
 
-        Item item = null;
+        Item item = ModItems.ANUBIS_ITEM;
         byte Mode = (byte)-1;
         List<AnubisMoment> moments = new ArrayList<>();
         List<Vec3> rots = new ArrayList<>();
@@ -2754,11 +2760,14 @@ public class PowersAnubis extends NewDashPreset {
             Scanner s = new Scanner(cf);
             s.useDelimiter("/");
             if (s.hasNext()) {
-                int intItem;
+                String itemName = s.next();
+                Roundabout.LOGGER.info("name: "+itemName);
                 try {
-                    intItem = Integer.parseInt(s.next());
-                    item = Item.byId(intItem);
-                } catch (NumberFormatException e) {}
+                    item = BuiltInRegistries.ITEM.get(new ResourceLocation(itemName));
+                    if (item.equals(Items.AIR)) {
+                        item = ModItems.ANUBIS_ITEM;
+                    }
+                } catch (ResourceLocationException e) {}
 
 
                 if (s.hasNext()) {
@@ -2951,7 +2960,7 @@ public class PowersAnubis extends NewDashPreset {
 
     public float getRange(){
         if (self instanceof AnubisGuardian)
-            return 1.4f;
+            return 2F;
         return 3.3F;
     }
 
@@ -2964,13 +2973,11 @@ public class PowersAnubis extends NewDashPreset {
 
 
             if (this.getSelf().distanceTo(attackTarget) < getRange() && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
-                if (this.attackTimeDuring == -1) {
-                    if ( (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)) {
-                        StandUser SU = (StandUser) this.getSelf();
-                        SU.roundabout$tryPower(PowerIndex.ATTACK, true);
-                        this.getSelf().swing(InteractionHand.MAIN_HAND);
-                        this.setAttackTimeDuring(0);
-                    }
+                if (canAttack() && this.attackTime > 10) {
+                    StandUser SU = (StandUser) this.getSelf();
+                    SU.roundabout$tryPower(PowerIndex.ATTACK, true);
+                    this.getSelf().swing(InteractionHand.MAIN_HAND);
+                    this.setAttackTimeDuring(0);
                 }
             } else if (PowersAnubis.shouldDash((Mob)this.getSelf())) {
                 tickDashing(attackTarget);
