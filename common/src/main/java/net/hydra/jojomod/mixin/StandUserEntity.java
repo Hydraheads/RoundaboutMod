@@ -1379,6 +1379,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             mb.setTarget(null);
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
+
+            if (((LivingEntity)(Object)this) instanceof AnubisGuardian AG) {
+                AG.getEntityData().set(AnubisGuardian.SUMMONER_ID,0);
+            }
         }
 
     }
