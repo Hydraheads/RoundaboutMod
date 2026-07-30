@@ -112,7 +112,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
-       // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
@@ -308,6 +308,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
+            return  true;
+        }
+        if(slot == 2 && !this.checkIfYouAreInDark()) {
             return  true;
         }
         if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null) && !self.isSwimming()){
@@ -572,7 +575,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
-                "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,2,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
