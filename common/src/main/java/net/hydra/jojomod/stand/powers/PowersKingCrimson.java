@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
@@ -356,6 +357,34 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
+    public boolean spawnClone(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
+            fclone.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
+            fclone.setPlayer(PE);
+            float first = ((this.getSelf().getYHeadRot()-25)%360);
+            float second = ((this.getSelf().getYHeadRot()+25)%360);
+            fclone.setYRot(first);
+            fclone.yRotO = first;
+            this.getSelf().level().addFreshEntity(fclone);
+            fclone.setYRot(first);
+            fclone.yRotO = first;
+            fclone.setDeltaMovement(PE.getDeltaMovement());
+            ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
+            LivingEntity last = self.getLastHurtMob();
+            LivingEntity last2 = self.getLastHurtByMob();
+            if (last != null){
+                fclone.setLastHurtMob(last);
+                fclone.setTarget(last);
+            } else {
+                fclone.setTarget(last2);
+            } if (last2 != null){
+                fclone.setLastHurtByMob(last);
+            }
+            activeClone = fclone;
+        }
+        return true;
+    }
 
     @Override
     public boolean isServerControlledCooldown(byte num){
@@ -2172,6 +2201,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingEpitaph())
                 return;
             if (timeEraseActive){
+                if (activeClone != null){
+                    activeClone.discardStand();
+                    activeClone.discard();
+                }
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
                 if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
@@ -2184,6 +2217,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();
             } else {
+                spawnClone();
                 timeEraseActive = true;
                 ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
@@ -2191,7 +2225,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
                 saveDiscAndSync();
                 ticksOfEraseLeft++;
-
             }
         }
     }

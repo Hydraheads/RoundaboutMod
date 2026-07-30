@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
@@ -24,6 +25,7 @@ import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -426,8 +428,16 @@ public abstract class EntityAndData implements IEntityAndData {
     }
         @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
-        if (PowerTypes.isExistentiallyElsewhere(((Entity) (Object)this))){
-            if (!(this.level().isClientSide() && ClientUtil.isPlayer((Entity) (Object) this))) {
+        Entity ent = (Entity) (Object) this;
+        if (PowerTypes.isExistentiallyElsewhere(ent)){
+            if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
+            || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ||
+                    (ent instanceof StandEntity se &&
+                            se.getUser() instanceof KingCrimsonCloneEntity kcc2 && ClientUtil.isPlayer(kcc2.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ))) {
                 cir.setReturnValue(true);
                 return;
             }

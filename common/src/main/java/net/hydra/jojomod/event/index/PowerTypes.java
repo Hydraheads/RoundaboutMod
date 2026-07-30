@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -223,6 +225,16 @@ public enum PowerTypes {
     }
     //d4c parallel run + time erase + man in the mirror
     public static boolean isExistentiallyElsewhere(Entity entity){
+        if (entity == null){
+            return false;
+        }
+        if (entity.level().isClientSide()){
+            if (entity instanceof KingCrimsonCloneEntity kcc){
+                if (ClientUtil.isPlayer(kcc.getPlayer())){
+                    return true;
+                }
+            }
+        }
         if (isErasingTime(entity)){
             return true;
         }

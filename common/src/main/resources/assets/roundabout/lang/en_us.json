@@ -2929,6 +2929,9 @@
   "config.roundabout.timeEraseDuration.name": "Time Erase Duration",
   "config.roundabout.timeEraseDuration.desc": "How long in ticks does max level time erase last? (20 ticks = 1 second)",
 
+  "config.roundabout.timeEraseMinimumCooldown.name": "TE Min Cooldown",
+  "config.roundabout.timeEraseMinimumCooldown.desc": "How many ticks of cooldown are guaranteed for time erase? (20 ticks = 1 second)",
+
   "config.roundabout.additionalCooldownPerSecondsUsed2.name": "TE CD Per Sec",
   "config.roundabout.additionalCooldownPerSecondsUsed2.desc": "How many ticks of cooldown per second spent? (20 ticks = 1 second)",
 
@@ -4172,6 +4175,9 @@
 
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
+  "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
+  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",
 
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.name": "Epitaph Shows Present",
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.desc": "If turned on, renders particles and a phantom image of present locations of mobs during epitaph. The intention is to be distracted, though.",

@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
@@ -38,21 +40,29 @@ public class AchtungEntityRenderDispatcher {
                 if (entity instanceof StandEntity SE) {
                     if (entity instanceof FollowingStandEntity fse) {
                         if (PowerTypes.isExistentiallyElsewhere(fse.getFollowing())) {
-                            if (!ClientUtil.isPlayer(fse.getFollowing())) {
+                            if (!ClientUtil.isPlayer(fse.getFollowing()) &&
+                                    !(fse.getFollowing() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                                            && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
                                 ci.cancel();
                                 return;
                             }
                         }
                     }
                     if (PowerTypes.isExistentiallyElsewhere(SE.getUser())) {
-                        if (!ClientUtil.isPlayer(SE.getUser())) {
+                        if (!ClientUtil.isPlayer(SE.getUser()) &&
+                                !(SE.getUser() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                                        && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
                             ci.cancel();
                             return;
                         }
                     }
                 } else {
-                    ci.cancel();
-                    return;
+                    if (!(entity instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                    && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ){
+                        ci.cancel();
+                        return;
+                    }
                 }
             }
         }

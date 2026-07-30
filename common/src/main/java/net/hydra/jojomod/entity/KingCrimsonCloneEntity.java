@@ -3,10 +3,13 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -52,8 +55,27 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         return super.hurt($$0,$$1);
     }
 
+    public void discardStand(){
+        StandEntity SE = ((StandUser)this).roundabout$getStand();
+        if (SE != null){
+            SE.discard();
+        }
+    }
     @Override
     public void tick() {
+        if (!level().isClientSide()) {
+            if (player == null) {
+                discardStand();
+                discard();
+
+            } else if (
+                    !(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                            pkc.timeEraseActive)
+            ){
+                discardStand();
+                discard();
+            }
+        }
         super.tick();
     }
 

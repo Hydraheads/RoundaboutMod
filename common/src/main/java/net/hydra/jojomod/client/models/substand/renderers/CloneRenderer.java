@@ -2,12 +2,14 @@ package net.hydra.jojomod.client.models.substand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.FakeCapeLayer;
 import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
@@ -99,7 +101,6 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
-
         Player pl = entity.getPlayer();
         if (pl instanceof AbstractClientPlayer acp) {
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
