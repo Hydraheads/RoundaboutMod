@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -360,15 +361,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean spawnClone(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
-            fclone.absMoveTo(this.getSelf().getX(), this.getSelf().getY(), this.getSelf().getZ());
             fclone.setPlayer(PE);
-            float first = ((this.getSelf().getYHeadRot()-25)%360);
-            float second = ((this.getSelf().getYHeadRot()+25)%360);
-            fclone.setYRot(first);
-            fclone.yRotO = first;
+            fclone.copyPosition(PE);
             this.getSelf().level().addFreshEntity(fclone);
-            fclone.setYRot(first);
-            fclone.yRotO = first;
             fclone.setDeltaMovement(PE.getDeltaMovement());
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -382,6 +377,30 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 fclone.setLastHurtByMob(last);
             }
             activeClone = fclone;
+
+            StandEntity st = getStandEntity(self);
+            ((StandUser)activeClone).roundabout$setActive(true);
+            if (st != null && !st.isRemoved()) {
+                StandEntity stand = getNewStandEntity();
+                if (stand instanceof FollowingStandEntity fse && st instanceof FollowingStandEntity ste) {
+                    ((StandUser)activeClone).roundabout$setStand(stand);
+                    stand.setFollowing(activeClone);
+                    stand.setUser(activeClone);
+
+                    stand.setFadePercent(st.getFadePercent());
+                    stand.setFadeOut((byte) st.getFadeOut());
+                    stand.copyPosition(st);
+                    stand.setSkin(st.getSkin());
+                    stand.setIdleAnimation(st.getIdleAnimation());
+                    fse.setDistanceOut(ste.getDistanceOut());
+                    fse.setAnchorPlace(ste.getAnchorPlace());
+                    fse.setAnchorPlaceAttack(ste.getAnchorPlaceAttack());
+                    fse.setSizePercent(ste.getSizePercent());
+                    fse.setIdleRotation(ste.getIdleRotation());
+                    fse.setIdleYOffset(ste.getIdleYOffset());
+                    self.level().addFreshEntity(stand);
+                }
+            }
         }
         return true;
     }
