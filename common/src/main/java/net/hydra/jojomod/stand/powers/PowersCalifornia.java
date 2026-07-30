@@ -1008,7 +1008,14 @@ public class PowersCalifornia extends NewDashPreset {
                 Map.Entry<Entity, Integer> entry = it.next();
 
                 Entity entity = entry.getKey();
-
+                if (entity instanceof Player PE && ((StandUser)PE).roundabout$getStandPowers() instanceof
+                PowersKingCrimson pkc && pkc.isErasingTime()){
+                    if (pkc.activeClone != null) {
+                        entity = pkc.activeClone;
+                    } else {
+                        continue;
+                    }
+                }
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity, exp, true, -1);
