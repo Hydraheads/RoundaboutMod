@@ -2115,7 +2115,7 @@ public class ClientUtil {
 
             StandUser standUser = (StandUser) cameraEnt;
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
-            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
+            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && (!play.getMainHandItem().is(ModItems.ANUBIS_ITEM) || PowerTypes.isUsingStand(play) || standUser.roundabout$isPossessed()) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
                 stack.pushPose();

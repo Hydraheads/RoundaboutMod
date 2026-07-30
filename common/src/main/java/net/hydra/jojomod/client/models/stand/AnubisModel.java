@@ -236,7 +236,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 }
             } */
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
-            alpha = alphaTicks;
             skin = user.roundabout$getStandSkin();
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
@@ -250,13 +249,17 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
 
 
+        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity));
 
         poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
-        poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.3) ,0); //  +up
+        if (renderItem || user.roundabout$isPossessed()) {
+            alphaTicks = 1;
+        }
+        poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.9) ,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
-        if (skin == (byte) 0 || skin == (byte)17 || skin == (byte)18) {
+        if (renderItem && !user.roundabout$isPossessed()) {
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
             poseStack.translate(0,0.35,0);
             poseStack.translate(0.1,0,0);
@@ -305,11 +308,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             }
         }
 
-        if (PowerTypes.hasStandActive(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
-            alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
-
-        }
         render(entity,skin,poseStack,bufferSource,packedLight,alpha);
     }
 
