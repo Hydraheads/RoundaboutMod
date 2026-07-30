@@ -704,7 +704,18 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
-
+    @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$waterSwimSound(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
     @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
