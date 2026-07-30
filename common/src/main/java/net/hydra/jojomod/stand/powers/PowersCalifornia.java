@@ -818,6 +818,7 @@ public class PowersCalifornia extends NewDashPreset {
             if (leaded != null) {
                 if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
                     if (pkc.timeEraseActive){
+                        clearLeaded();
                         setLeadTarget(pkc.activeClone);
                     }
                 }

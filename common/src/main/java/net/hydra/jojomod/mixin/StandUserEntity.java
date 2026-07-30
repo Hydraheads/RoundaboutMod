@@ -66,6 +66,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
@@ -715,7 +716,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$safeToRemoveLove = yup;
     }
 
-    @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }@Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    public void roundabout$canAttack2(LivingEntity $$0, TargetingConditions $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+            cir.setReturnValue(false);
+            return;
+        }
+    }
+    @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
         if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
             ci.cancel();
