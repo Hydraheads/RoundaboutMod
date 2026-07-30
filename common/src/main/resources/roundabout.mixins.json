@@ -15,6 +15,7 @@
     "WorldTickServer",
     "ZAbstractSkeleton",
     "ZDragonEggBlock",
+    "ZEnchantmentTableBlockEntity",
     "ZFlyingMob",
     "ZGossipContainer",
     "ZItemCooldowns",
