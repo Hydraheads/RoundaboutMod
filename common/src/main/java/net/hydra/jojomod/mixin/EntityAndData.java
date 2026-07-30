@@ -710,6 +710,12 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
+    @Inject(method = "isSteppingCarefully", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$isSteppingCarefully(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$waterSwimSound(CallbackInfo ci) {
         if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
