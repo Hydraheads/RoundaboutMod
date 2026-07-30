@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.visages;
 
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -43,7 +44,24 @@ public class CloneEntity extends PathfinderMob {
             this.entityData.define(PLAYER, Optional.empty());
         }
     }
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
 
+        getPlayerUUID().ifPresent(uuid -> tag.putUUID("PlayerUUID", uuid));
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+
+        if (tag.hasUUID("PlayerUUID")) {
+            UUID uuid = tag.getUUID("PlayerUUID");
+            setPlayerUUID(uuid);
+        } else {
+            setPlayerUUID(null);
+            this.player = null;
+        }
+    }
     public final Optional<UUID> getPlayerUUID() {
         return this.entityData.get(PLAYER);
     }
