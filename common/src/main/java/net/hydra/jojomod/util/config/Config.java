@@ -498,10 +498,16 @@ public class Config implements Cloneable {
         public Integer bitesTheDustCombatActivationCooldown;
         @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
         public Integer bitesTheDustCombatCooldownBonus;
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer bitesTheDustDayCooldownBonus;
         @FloatOption(group = "inherit", value = 15.5F, min = 0, max = 200F)
         public Float bitesTheDustCombatMobsDamage;
         @FloatOption(group = "inherit", value = 8.5F, min = 0, max = 200F)
         public Float bitesTheDustCombatPlayersDamage;
+        @FloatOption(group = "inherit", value = 38.5F, min = 0, max = 200F)
+        public Float bitesTheDustDayMobsDamage;
+        @FloatOption(group = "inherit", value = 17.5F, min = 0, max = 200F)
+        public Float bitesTheDustDayPlayersDamage;
     }
     
     public static class SoftAndWetSettings {

@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -346,6 +347,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         return super.inputSpeedModifiers(basis);
     }
+
+    @Override
+    public float guardMod(){
+        if (self.onGround()){
+            return 0.5f;
+        } else {
+            return 1f;
+        }
+    }
     @Override
     public boolean cancelSprintJump(){
         return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||
@@ -664,18 +674,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             }
 
                             if (target.hurtTime == 0) {
-                                if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                    addToCombo(target);
-                                    bleedEnt(target);
-                                } else if (target.isBlocking()) {
-                                    MainUtil.knockShieldPlusStand(target, 200);
+                                if (!((TimeStop) self.level()).CanTimeStopEntity(self)) {
                                     if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
                                         addToCombo(target);
                                         bleedEnt(target);
+                                    } else if (target.isBlocking()) {
+                                        MainUtil.knockShieldPlusStand(target, 200);
+                                        if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                            addToCombo(target);
+                                            bleedEnt(target);
+                                        }
                                     }
-                                }
-                                if (!alreadyBeamed.contains(target)) {
-                                    alreadyBeamed.add(target);
+                                    if (!alreadyBeamed.contains(target)) {
+                                        alreadyBeamed.add(target);
+                                    }
                                 }
                             }
 

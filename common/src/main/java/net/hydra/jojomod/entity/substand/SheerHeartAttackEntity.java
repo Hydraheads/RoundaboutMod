@@ -42,6 +42,7 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -802,6 +803,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return super.mobInteract($$0, $$1);
 	}
 
+	@Override public boolean canBeLeashed(Player p_21418_) { return false;}
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
 	@Override public boolean hasNoPhysics() { return false;}

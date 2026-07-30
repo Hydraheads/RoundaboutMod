@@ -132,6 +132,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
     }
+    @Override
+    public boolean isMiningStand() {
+        return super.isMiningStand();
+    }
 
     public int ticksOfEraseLeft = 0;
     @Override
@@ -265,6 +269,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 predicted = liv.position();
         AABB box = liv.getBoundingBox();
 
+        if (liv.getPose() == Pose.SITTING){
+            return predicted;
+        }
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
@@ -353,7 +360,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return super.isServerControlledCooldown(num);
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
-
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1346,11 +1352,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (snapshot.getEntityId() == -1) {
             return;
         }
+
         Level level = self.level();
 
         Entity entity = level.getEntity(snapshot.getEntityId());
 
         if (entity == null || !entity.isAlive()) {
+            return;
+        }
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
             return;
         }
         if (entity instanceof StandEntity) {
@@ -1810,7 +1820,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
-                    if (entity instanceof LivingEntity lv) {
+                    if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
                         if (!(stand != null && stand.getId() == id)) {
@@ -2078,9 +2088,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void setDisengageTarget(Entity target) {
-        disengageTarget = target;
         if (self instanceof ServerPlayer sp && target instanceof Player pl &&
                 pl.getId() != self.getId()) {
+            disengageTarget = target;
             if (target != null) {
                 S2CPacketUtil.sendGenericIntToClientPacket(sp,
                         PacketDataIndex.S2C_STAND_SPECIAL_INT,
@@ -2094,7 +2104,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
-        if (!self.level().isClientSide()) {
+        if (!self.level().isClientSide() && target instanceof Player pl &&  pl.getId() != self.getId()) {
             setDisengageTarget(target);
         disengageTime = 600;
 
@@ -2167,6 +2177,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
                 saveDiscAndSync();
                 ticksOfEraseLeft++;
+
             }
         }
     }
