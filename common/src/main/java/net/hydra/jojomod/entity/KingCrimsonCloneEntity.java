@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -41,6 +42,15 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         return super.getSpeed();
     }
 
+    @Override
+    public boolean hurt(DamageSource $$0, float $$1) {
+        if ($$0.is(ModDamageTypes.GO_BEYOND)){
+            if (this.getPlayer() != null){
+                this.getPlayer().hurt($$0,$$1);
+            }
+        }
+        return super.hurt($$0,$$1);
+    }
 
     @Override
     public void tick() {
