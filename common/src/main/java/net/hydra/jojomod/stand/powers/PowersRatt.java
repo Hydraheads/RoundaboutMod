@@ -509,7 +509,8 @@ public class PowersRatt extends NewDashPreset {
 
                 if (e instanceof LivingEntity L) {
                     if (!isAuto() && !L.equals(this.getSelf()) && !L.equals(SE)) {
-                        if (!(L instanceof StandEntity) && !MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
+                        if (!(L instanceof StandEntity) && !MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null
+                        && !(PowerTypes.isExistentiallyElsewhere(L))) {
                             setShootTarget(L);
                         }
                     }
