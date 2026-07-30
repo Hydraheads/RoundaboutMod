@@ -1522,7 +1522,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             STRAY =8,
             FRIGID =9,
             MANGA =10,
-            YUKI =11;
+            YUKI =11,
+            ICE =12;
 
 
     public static final int coldFromBlockLaunch = -8;
@@ -1531,6 +1532,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(BASE);
         $$1.add(MANGA);
+        $$1.add(ICE);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
@@ -1574,6 +1576,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case SHADE -> "shade";
             case MANGA -> "manga";
             case YUKI -> "yuki";
+            case ICE -> "ice";
             default -> "base";
         };
     }
