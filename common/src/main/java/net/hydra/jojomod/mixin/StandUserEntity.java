@@ -1432,6 +1432,34 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
+        if (rdbt$this() instanceof Mob mb){
+            LivingEntity terg = mb.getTarget();
+            if (terg != null && PowerTypes.isExistentiallyElsewhere(terg)){
+                roundabout$deeplyRemoveAttackTarget();
+                if (((StandUser)terg).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                    if (pkc.isErasingTime() && pkc.activeClone != null){
+                        mb.setTarget(pkc.activeClone);
+                    }
+                }
+            }
+        }
+        LivingEntity terg2 = getLastHurtMob();
+        LivingEntity terg3 = lastHurtByMob;
+        if (terg2 != null && PowerTypes.isExistentiallyElsewhere(terg2)){
+            if (((StandUser)terg2).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtMob(pkc.activeClone);
+                }
+            }
+        }
+        if (terg3 != null && PowerTypes.isExistentiallyElsewhere(terg3)){
+            if (((StandUser)terg3).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isErasingTime() && pkc.activeClone != null){
+                    setLastHurtByMob(pkc.activeClone);
+                }
+            }
+        }
+
         roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
@@ -5740,6 +5768,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     protected abstract void completeUsingItem();
 
+    @Shadow
+    @javax.annotation.Nullable
+    public abstract LivingEntity getLastHurtMob();
+
+    @Shadow
+    @javax.annotation.Nullable
+    private LivingEntity lastHurtByMob;
     public double previousYpos = getY();
 
 
