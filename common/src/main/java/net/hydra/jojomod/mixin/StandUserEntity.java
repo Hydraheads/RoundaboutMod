@@ -651,6 +651,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             target = "Lnet/minecraft/network/syncher/SynchedEntityData;get(Lnet/minecraft/network/syncher/EntityDataAccessor;)Ljava/lang/Object;",
             shift = At.Shift.AFTER, ordinal = 0), cancellable = true, require = 0)
     public void roundabout$tickEffects(CallbackInfo ci) {
+
         if (rdbt$tickEffectsBleedEdition(false)){
             ci.cancel();
             ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(true);
@@ -716,6 +717,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "tickEffects", at = @At(value = "HEAD"))
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            ci.cancel();
+            return;
+        }
         if (!this.level().isClientSide) {
             rdbt$setRemoveLoveSafety(false);
         }
