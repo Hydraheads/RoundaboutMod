@@ -91,6 +91,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private static InteractionHand IH;
 
 
+    @Unique
+    @Override
+    public void rdbt$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2) {
+        scale($$0,$$1,$$2);
+    }
 
         /**Stone Arms with locacaca first person*/
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
