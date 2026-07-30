@@ -187,9 +187,9 @@ public class HarpoonEntity extends AbstractArrow {
             /**Harpoon Buff and Nerf*/
             if (isThrown){
                 if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
-                    $$2*=1.25F;
+                    $$2*=1.2F;
                 } else {
-                    $$2*=1.25F;
+                    $$2*=1.2F;
                 }
                 if ($$1 instanceof Player){
                     if (getOwner() != null){
