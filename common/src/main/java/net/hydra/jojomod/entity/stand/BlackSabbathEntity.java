@@ -74,6 +74,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(this.getUser() != null){
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
                 if(pb.active) {
+                    this.coat_open.stop();
                     chest_close.stop();
                     this.chest_open.startIfStopped(this.tickCount);
                 } else {

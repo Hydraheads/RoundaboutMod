@@ -224,9 +224,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                     return true;
                 } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 12 ){
                     return true;
-                } else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 12){
+                }/* else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 12){
                     return true;
-                } else {
+                }*/ else {
                     return false;
                 }
             } else if (!isDay){
