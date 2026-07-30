@@ -442,6 +442,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
 
         if (!self.level().isClientSide()) {
+            if (!isBrawling()) {
+                if (isChargingCold()){
+                    xTryPower(PowerIndex.NONE,true);
+                }
+            }
             if (hasSkatesActivated() && self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampiricFate vf &&
                     vf.isPlantedInWall()){
                 toggleSkates();
@@ -1126,13 +1131,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
         int cooldown = 9;
         this.setCooldown(PowerIndex.SKILL_4, cooldown);
         if (!this.self.level().isClientSide()){
-            fistsOut = !fistsOut;
-            if (fistsOut){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
-            } else {
-                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            if (!isChargingCold()) {
+                fistsOut = !fistsOut;
+                if (fistsOut) {
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
+                } else {
+                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                }
+                saveDiscAndSync();
             }
-            saveDiscAndSync();
         }
     }
 
@@ -1149,7 +1156,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             this.setAttackTime(0);
             this.setActivePowerPhase(this.getActivePowerPhaseMax());
             this.setAttackTimeMax(gap);
-            tryPowerPacket(PowerIndex.EXTRA_2);
+            if (isBrawling()) {
+                tryPowerPacket(PowerIndex.EXTRA_2);
+            }
         } else {
             C2SPacketUtil.guardCancelPacket();
         }
@@ -1273,16 +1282,17 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 this.setAttackTime(0);
                 this.setActivePowerPhase(this.getActivePowerPhaseMax());
                 this.setAttackTimeMax(gap);
-
-                self.level().playSound((Player)null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
-                        SoundSource.NEUTRAL, 1F, (float)(1F+Math.random()*0.08f));
-                if (!self.level().isClientSide) {
-                    ColdBlastProjectile bubble = new ColdBlastProjectile(self,self.level());
-                    bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
-                    bubble.setUser(self);
-                    bubble.setOwner(self);
-                    bubble.shootThis2(pl,1.75F);
-                    self.level().addFreshEntity(bubble);
+                if (isBrawling()) {
+                    self.level().playSound((Player) null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                            SoundSource.NEUTRAL, 1F, (float) (1F + Math.random() * 0.08f));
+                    if (!self.level().isClientSide) {
+                        ColdBlastProjectile bubble = new ColdBlastProjectile(self, self.level());
+                        bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
+                        bubble.setUser(self);
+                        bubble.setOwner(self);
+                        bubble.shootThis2(pl, 1.75F);
+                        self.level().addFreshEntity(bubble);
+                    }
                 }
             }
         }
