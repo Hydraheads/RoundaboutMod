@@ -264,7 +264,11 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 3;
+                if (target instanceof Player){
+                    damage += 2;
+                } else {
+                    damage += 3;
+                }
                 skyHit = true;
             }
 
