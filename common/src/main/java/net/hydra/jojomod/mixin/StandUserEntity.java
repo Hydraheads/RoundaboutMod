@@ -715,7 +715,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$safeToRemoveLove = yup;
     }
 
-    @Inject(method = "tickEffects", at = @At(value = "HEAD"))
+    @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
         if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
             ci.cancel();

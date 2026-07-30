@@ -705,6 +705,13 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
     @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
