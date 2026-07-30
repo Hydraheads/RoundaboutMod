@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
@@ -13,22 +14,154 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
 public class PowersSilverChariot extends NewPunchingStand {
-	public PowersSilverChariot(LivingEntity self) {
+
+    public static final byte
+            SILVER_CHARIOT_RAPIER_SLASH = 84,
+            SILVER_CHARIOT_RAPIER_SPIN = 83,
+            SILVER_CHARIOT_OFFHAND_WEAPON = 82,
+            SILVER_CHARIOT_CONTROL_MODE_ONE = 85,
+            SILVER_CHARIOT_ARMOR_SHED = 86,
+            SILVER_CHARIOT_SELF_GRAB = 87,
+            SILVER_CHARIOT_SLAB_CUTTING = 88,
+            SILVER_CHARIOT_STATUE_CUTTING = 89,
+            SILVER_CHARIOT_RAPIER_SHOT = 90,
+            SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = 91;
+
+
+    // Configs
+    public int getAttackMultOnPlayers() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotAttackMultOnPlayers;
+    }
+
+    public int getAttackMultOnMobs() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotAttackMultOnMobs;
+    }
+
+    public int getGuardPoints() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.silverChariotGuardPoints;
+    }
+
+    public int getMiningSpeedMultiplierSilverChariot() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.miningSpeedMultiplierSilverChariot;
+    }
+
+    public int getMiningTier() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.getMiningTierSilverChariot;
+    }
+
+    // Levels
+
+    @Override
+    public byte getMaxLevel() {
+        return 7;
+    }
+
+    public int getRapierSlashLevel() {
+        return 1;
+    }
+
+    public int getRapierSpinLevel() {
+        return 1;
+    }
+
+    public int getOffhandWeaponLevel() {
+        return 1;
+    }
+
+    public int getControlModeOneLevel() {
+        return 1;
+    }
+
+    public int getArmorShedLevel() {
+        return 1;
+    }
+
+    public int getSelfGrabLevel() {
+        return 1;
+    }
+
+    public int getSlabCuttingLevel() {
+        return 1;
+    }
+
+    public int getStatueCuttingLevel() {
+        return 1;
+    }
+
+    public int getRapierShotLevel() {
+        return 1;
+    }
+
+    public int getRapierShotPlatformLevel() {
+        return 1;
+    }
+
+    // Cooldowns
+    public int getCooldownRapierSpin() {
+        return 1;
+    }
+
+    public int getCooldownRapierSlash() {
+        return 1;
+    }
+
+    public int getCooldownOffhandWeapon() {
+        return 1;
+    }
+
+    public int getCooldownControlModeOne() {
+        return 1;
+    }
+
+    public int getCooldownArmorShed() {
+        return 1;
+    }
+
+    public int getCooldownSelfGrab() {
+        return 1;
+    }
+
+    public int getCooldownSlabCutting() {
+        return 1;
+    }
+
+    public int getCooldownStatueCutting() {
+        return 1;
+    }
+
+    public int getCooldownRapierShot() {
+        return 1;
+    }
+
+    public int getCooldownRapierShotPlatform() {
+        return 1;
+    }
+
+    @Override
+    public boolean isStandEnabled() {
+        return ClientNetworking.getAppropriateConfig().silverChariotSettings.enableSilverChariot;
+    }
+
+    public PowersSilverChariot(LivingEntity self) {
         super(self);
     }
 
@@ -59,6 +192,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
     }
 
+    // Client side
     @Override
     public void powerActivate(PowerContext context) {
         /**Making dash usable on both key presses*/
@@ -68,12 +202,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // TODO: Implement rapier spin ability
                 // rapierSpinClient();
             }
-
             case SKILL_1_CROUCH -> {
                 // TODO: Implement rapier slash ability
-                // rapierSlashClient();
+                rapierSlashClient();
             }
-
             case SKILL_1_GUARD -> {
                 // Might implement another ability here
             }
@@ -82,7 +214,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_NORMAL -> {
                 // TODO: Implement control mode ability
-                toggleControlModeClient(0);
+                // toggleControlModeClient(0);
             }
             case SKILL_2_CROUCH -> {
                 // Might implement another ability here
@@ -123,6 +255,17 @@ public class PowersSilverChariot extends NewPunchingStand {
 
             }
         }
+    }
+
+    // Server side
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move) {
+            case PowerIndex.POWER_1_SNEAK -> {
+                rapierSlashServer();
+            }
+        }
+        return super.setPowerOther(move, lastMove);
     }
 
     @Override
@@ -232,11 +375,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             IPlayerEntity ipe = (IPlayerEntity) PE;
             Entity ent = this.self.level().getEntity(ID);
             if (ent != null && ent.is(this.getPilotingStand())) {
-                // poseStand(OffsetIndex.LOOSE);
+                poseStand(OffsetIndex.LOOSE);
                 ipe.roundabout$setIsControlling(ID);
             } else {
                 ipe.roundabout$setIsControlling(ID);
-                // poseStand(OffsetIndex.FLOAT);
+                poseStand(OffsetIndex.FLOAT);
             }
         }
     }
@@ -280,8 +423,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
             } else {
                 entity.setDeltaMovement(Vec3.ZERO);
-                // entity.xxa = 0;
-                // entity.zza = 0;
+                entity.xxa = 0;
+                entity.zza = 0;
             }
         }
     }
@@ -322,6 +465,78 @@ public class PowersSilverChariot extends NewPunchingStand {
             if (ent != null) {
                 ClientUtil.synchToCamera(ent);
             }
+        }
+    }
+
+    public void rapierSlashClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            if (canExecuteMoveWithLevel(getRapierSlashLevel())) {
+                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                }
+            }
+        }
+    }
+
+    public void rapierSlashServer() {
+        setAttackTimeDuring(-10);
+        if (!self.level().isClientSide())
+        {
+            MainUtil.playPop(self);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
+            List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
+                    self.getZ(), 4, 4, 4), 4, 360,true);
+            if (hitbox != null)
+            {
+                for (Entity e : hitbox)
+                {
+                    if (!e.isInvulnerable() && e.isAlive() && e.getUUID() != self.getUUID() && (MainUtil.isStandPickable(e) || e instanceof StandEntity))
+                    {
+                        if
+                        (
+                            !(e instanceof StandEntity SE1 && SE1.getUser() != null && SE1.getUser().is(self))
+                        )
+                        {
+                            if
+                            (
+                                DamageHandler.StandDamageEntity(e, getRapierSlashStrength(e), this.self)
+                            )
+                            {
+                                e.setDeltaMovement(0, 0, 0);
+
+                                if (e instanceof LivingEntity LE){
+                                    MainUtil.makeBleed(LE,1,300,this.self);
+                                }
+
+                                if (e instanceof Player pl){
+                                    setDazed(pl,(byte) 16);
+                                } else if (e instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
+                                    setDazed(livingEntity,(byte) 16);
+                                }
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
+                            } else {
+                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public float getRapierSlashStrength(Entity entity) {
+        if (this.getReducedDamage(entity)) {
+            return levelupDamageMod(
+                    (float) ((float) 1.35F * (getAttackMultOnPlayers() * 0.01))
+            );
+        } else {
+            return levelupDamageMod(
+                    (float) ((float) 5F * (getAttackMultOnMobs() * 0.01))
+            );
         }
     }
 }

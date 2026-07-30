@@ -114,6 +114,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
     @NestedOption(group = "modded")
+    public SilverChariotSettings silverChariotSettings;
+    @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
 
     public static class VanillaMCTweaks {
@@ -1127,6 +1129,22 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer starFingerInterruptCooldown;
     }
+
+    public static class SilverChariotSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableSilverChariot;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer silverChariotGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierSilverChariot;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierSilverChariot;
+    }
+
     public static class TimeStopSettings {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer maxTimeStopTicksStarPlatinum;
