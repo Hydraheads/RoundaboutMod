@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
@@ -844,6 +845,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
 
                 if (!(((Mob) (Object) this) instanceof Enemy)
+                        && !(((Mob) (Object) this) instanceof CloneEntity)
                         && !(((Mob) (Object) this) instanceof NeutralMob) &&
                         !(isStandUser && this.roundabout$getFightOrFlight())) {
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){
