@@ -1107,6 +1107,8 @@ public class Config implements Cloneable {
         public Boolean enableSkippingCooldowns;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableEpitaphPreSkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean predictIdles;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)

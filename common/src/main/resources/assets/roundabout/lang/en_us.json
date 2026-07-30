@@ -2915,6 +2915,9 @@
   "config.roundabout.enableEpitaphPreSkip.name": "Epitaph Non-Skip",
   "config.roundabout.enableEpitaphPreSkip.desc": "Enables using epitaph even with time skip unavailable. This is visually confusing but a highly requested feature.",
 
+  "config.roundabout.predictIdles.name": "Predict Idles",
+  "config.roundabout.predictIdles.desc": "Randomizes movement between idle mobs via epitaph and time skip. This creates a more lively movement, but if you have other mods that cause conflict or only want to read the future in a purely literal sense, disable this.",
+
   "config.roundabout.epitaphCooldown.name": "Epitaph CD",
   "config.roundabout.epitaphCooldown.desc": "This cooldown in ticks.",
 

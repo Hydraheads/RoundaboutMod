@@ -218,6 +218,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean canUseEpitaphWithoutSkip(){
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
     }
+    public boolean canPredictIdles(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.predictIdles;
+    }
     public int ticksIntoEpitaph = 0;
     public boolean vibeCheck = false;
     @Override
@@ -263,6 +266,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
+        if (!canPredictIdles()){
+            return liv.position();
+        }
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
