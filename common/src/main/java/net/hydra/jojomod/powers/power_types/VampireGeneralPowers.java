@@ -346,6 +346,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         return super.inputSpeedModifiers(basis);
     }
+
+    @Override
+    public float guardMod(){
+        if (self.onGround()){
+            return 0.5f;
+        } else {
+            return 1f;
+        }
+    }
     @Override
     public boolean cancelSprintJump(){
         return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||

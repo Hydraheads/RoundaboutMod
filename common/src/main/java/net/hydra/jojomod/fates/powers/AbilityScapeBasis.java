@@ -392,13 +392,16 @@ public class AbilityScapeBasis {
         return true;
     }
 
+    public float guardMod(){
+        return 0.2f;
+    }
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (isBrawling()){
             StandUser standUser = ((StandUser) this.getSelf());
             if (isGuarding() && this.getSelf().getVehicle() == null) {
-                basis*=0.2f;
+                basis*=guardMod();
             } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
                 basis*=0.2f;
             } else if (this.isBarrageCharging()) {
