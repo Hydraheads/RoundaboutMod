@@ -63,8 +63,11 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
             Iterator<TickingBlockEntity> iterator = this.blockEntityTickers.iterator();
             while (iterator.hasNext()) {
                 TickingBlockEntity tickingBlockEntity = iterator.next();
-                if (tickingBlockEntity.isRemoved()) {
+                if (tickingBlockEntity == null || tickingBlockEntity.isRemoved()) {
                     iterator.remove();
+                    continue;
+                }
+                if (tickingBlockEntity.getPos() == null){
                     continue;
                 }
                 if (!this.shouldTickBlocksAt(tickingBlockEntity.getPos())) continue;
