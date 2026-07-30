@@ -2088,9 +2088,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void setDisengageTarget(Entity target) {
-        if (self instanceof ServerPlayer sp && target instanceof Player pl &&
-                pl.getId() != self.getId()) {
-            disengageTarget = target;
+        if (self instanceof ServerPlayer sp) {
+            if (target instanceof Player pl &&
+                    pl.getId() != self.getId()){
+                disengageTarget = target;
+            } else {
+                if (target == null){
+                    disengageTarget = target;
+                } else {
+                    return;
+                }
+            }
             if (target != null) {
                 S2CPacketUtil.sendGenericIntToClientPacket(sp,
                         PacketDataIndex.S2C_STAND_SPECIAL_INT,

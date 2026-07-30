@@ -19,6 +19,8 @@
     "ZItemCooldowns",
     "ZLevel",
     "ZMob",
+    "ZSculkSensorBlock",
+    "ZSculkShriekerBlock",
     "ZSkeletonMixin",
     "ZStrayMixin",
     "ZTargetingConditions",
