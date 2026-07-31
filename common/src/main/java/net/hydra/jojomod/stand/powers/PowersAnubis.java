@@ -2099,7 +2099,6 @@ public class PowersAnubis extends NewDashPreset {
         }
         return !item.equals(ModItems.ANUBIS_ITEM)
                 && !item.equals(Items.SHIELD)
-                && !(item instanceof FirearmItem)
                 && !item.equals(Items.FISHING_ROD);
     }
 
