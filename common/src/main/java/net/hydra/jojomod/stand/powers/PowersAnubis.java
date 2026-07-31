@@ -1258,7 +1258,7 @@ public class PowersAnubis extends NewDashPreset {
         if (this.getSelf().isSprinting()) {knockbackStrength += 0.15F;}
         if (this.activePowerPhase == this.activePowerPhaseMax) {knockbackStrength += 0.3F;}
 
-        float pow = getPunchStrength(entity) * (this.getActivePower() == PowerIndex.SNEAK_ATTACK ? 1.5F : 1F);
+        float pow = this.activePowerPhase == activePowerPhaseMax ? getHeavyPunchStrength(entity) : getPunchStrength(entity);
         if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
             if (entity instanceof LivingEntity) {
                 addEXP(1);
@@ -2420,7 +2420,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.4F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
         }
@@ -2428,7 +2428,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2.2F));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
