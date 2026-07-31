@@ -1,7 +1,9 @@
 package net.hydra.jojomod.entity.visages;
 
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -13,6 +15,8 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,10 +30,13 @@ public class CloneEntity extends PathfinderMob {
             EntityDataSerializers.OPTIONAL_UUID);
 
     public Player player;
+    public Component name;
+    public ItemStack visage = ItemStack.EMPTY;
 
     public void setPlayer(Player player){
         this.player = player;
         setPlayerUUID(player.getUUID());
+        this.name = player.getDisplayName();
     }
     public Player getPlayer(){
         if (this.player == null && this.getPlayerUUID().isPresent()){
@@ -48,11 +55,23 @@ public class CloneEntity extends PathfinderMob {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
+        if (!visage.isEmpty() || tag.contains("roundabout.Mask", 10)) {
+            CompoundTag compoundtag = new CompoundTag();
+            tag.put("roundabout.Mask",visage.save(compoundtag));
+        }
+
         getPlayerUUID().ifPresent(uuid -> tag.putUUID("PlayerUUID", uuid));
     }
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        if (tag.contains("roundabout.Mask", 10)) {
+            CompoundTag compoundtag = tag.getCompound("roundabout.Mask");
+            ItemStack itemstack = ItemStack.of(compoundtag);
+            if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD) {
+                visage = itemstack;
+            }
+        }
 
         if (tag.hasUUID("PlayerUUID")) {
             UUID uuid = tag.getUUID("PlayerUUID");
