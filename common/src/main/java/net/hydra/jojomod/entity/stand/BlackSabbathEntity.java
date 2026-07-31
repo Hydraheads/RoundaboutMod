@@ -7,8 +7,10 @@ import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -58,15 +60,32 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             SACTHOTH = 10;
 
     public final AnimationState coat_open = new AnimationState();
+    public final AnimationState chest_open = new AnimationState();
+    public final AnimationState chest_close = new AnimationState();
 
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
+    public int tickDownSecond = 0;
+    public void setTickDownSecond(int td){tickDownSecond = td;}
 
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
-            coat_open.startIfStopped(this.tickCount);
+        if(this.getUser() != null){
+            if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                if(pb.active) {
+                    this.coat_open.stop();
+                    chest_close.stop();
+                    this.chest_open.startIfStopped(this.tickCount);
+                } else {
+                    this.chest_open.stop();
+                    this.coat_open.stop();
+                    this.chest_close.startIfStopped(this.tickCount);
+                }
+            }
+        } else {
+            this.chest_open.stop();
+            this.coat_open.startIfStopped(this.tickCount);
         }
     }
 
@@ -96,10 +115,28 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public void tick(){
+        validateUUID();
+        float pitch = this.getXRot();
+        float yaw = this.getYRot();
+
+
         if(shouldFloat && this.getUser() != null){
-            this.setXRot((this.getUser().getXRot() % 360) - 180);
-            this.setYRot((this.getUser().getYHeadRot() % 360) - 180);
-            this.setYBodyRot((this.getUser().getYHeadRot() % 360) - 180);
+            if (!this.level().isClientSide()) {
+                this.setXRot(pitch);
+                this.setYRot(yaw);
+                this.setYBodyRot(yaw);
+                this.xRotO = pitch;
+                this.yRotO = yaw;
+            }
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                if(tickDownSecond > 1){
+                    tickDownSecond--;
+
+                    if(tickDownSecond == 4){
+                        this.forceDespawnSet = true;
+                    }
+                }
+            }
         }
         super.tick();
     }

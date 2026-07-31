@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -13,9 +12,9 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -29,7 +28,6 @@ import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
@@ -218,6 +216,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean canUseEpitaphWithoutSkip(){
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableEpitaphPreSkip;
     }
+    public boolean canPredictIdles(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.predictIdles;
+    }
     public int ticksIntoEpitaph = 0;
     public boolean vibeCheck = false;
     @Override
@@ -263,6 +264,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
+        if (!canPredictIdles()){
+            return liv.position();
+        }
         //Mobs and Players that are still still need to move when idle
         Level level = liv.level();
 
@@ -350,6 +354,88 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     }
 
+    public boolean spawnClone(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
+            fclone.setPlayer(PE);
+            fclone.copyPosition(PE);
+            // Position
+            fclone.setPos(PE.getX(), PE.getY(), PE.getZ());
+            fclone.xOld = PE.xOld;
+            fclone.yOld = PE.yOld;
+            fclone.zOld = PE.zOld;
+
+            // Body rotation
+            fclone.setYRot(PE.getYRot());
+            fclone.yRotO = PE.yRotO;
+
+            // Pitch
+            fclone.setXRot(PE.getXRot());
+            fclone.xRotO = PE.xRotO;
+
+            // Body/head rotations
+            fclone.yBodyRot = PE.yBodyRot;
+            fclone.yBodyRotO = PE.yBodyRotO;
+            fclone.yHeadRot = PE.yHeadRot;
+            fclone.yHeadRotO = PE.yHeadRotO;
+
+            // Animation
+            fclone.walkAnimation.setSpeed(PE.walkAnimation.speed());
+            fclone.walkAnimation.position(PE.walkAnimation.position());
+            ILivingEntityAccess entityAndData = ((ILivingEntityAccess) fclone);
+            ILivingEntityAccess playerAndData = ((ILivingEntityAccess) PE);
+
+            entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
+            entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
+            entityAndData.roundabout$setLerp(new Vector3f(
+                    (float) playerAndData.roundabout$getLerpX(),
+                    (float) playerAndData.roundabout$getLerpY(),
+                    (float) playerAndData.roundabout$getLerpZ()
+            ));
+
+
+            this.getSelf().level().addFreshEntity(fclone);
+
+            fclone.setDeltaMovement(PE.getDeltaMovement());
+            ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
+            LivingEntity last = self.getLastHurtMob();
+            LivingEntity last2 = self.getLastHurtByMob();
+            if (last != null){
+                fclone.setLastHurtMob(last);
+                fclone.setTarget(last);
+            } else {
+                fclone.setTarget(last2);
+            } if (last2 != null){
+                fclone.setLastHurtByMob(last);
+            }
+            activeClone = fclone;
+
+            StandEntity st = getStandEntity(self);
+            ((StandUser)activeClone).roundabout$setActive(true);
+            if (st != null && !st.isRemoved()) {
+                StandEntity stand = getNewStandEntity();
+                if (stand instanceof FollowingStandEntity fse && st instanceof FollowingStandEntity ste) {
+                    ((StandUser)activeClone).roundabout$setStand(stand);
+                    stand.setFollowing(activeClone);
+                    stand.setUser(activeClone);
+
+                    stand.setFadePercent(st.getFadePercent());
+                    stand.setFadeOut((byte) st.getFadeOut());
+                    stand.copyPosition(st);
+                    stand.setSkin(st.getSkin());
+                    stand.setIdleAnimation(st.getIdleAnimation());
+                    fse.setDistanceOut(ste.getDistanceOut());
+                    fse.setAnchorPlace(ste.getAnchorPlace());
+                    fse.setAnchorPlaceAttack(ste.getAnchorPlaceAttack());
+                    fse.setSizePercent(ste.getSizePercent());
+                    fse.setIdleRotation(ste.getIdleRotation());
+                    fse.setIdleYOffset(ste.getIdleYOffset());
+                    self.level().addFreshEntity(stand);
+                }
+            }
+        }
+        return true;
+    }
 
     @Override
     public boolean isServerControlledCooldown(byte num){
@@ -2166,6 +2252,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingEpitaph())
                 return;
             if (timeEraseActive){
+                if (activeClone != null){
+                    activeClone.discardStand();
+                    activeClone.discard();
+                }
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
                 if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
@@ -2178,6 +2268,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();
             } else {
+                spawnClone();
                 timeEraseActive = true;
                 ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
@@ -2185,7 +2276,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 S2CPacketUtil.sendCancelSoundPacket(sp,this.self.getId(),TIME_ERASE_END);
                 saveDiscAndSync();
                 ticksOfEraseLeft++;
-
             }
         }
     }
@@ -2559,6 +2649,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         animateFinalAttackHit();
         //playBarrageCrySound();
         return true;
+    }
+    @Override
+    public boolean setPowerBarrageCharge() {
+        if (!self.level().isClientSide()){
+            if (isUsingTimeErase()){
+                timeErase();
+            }
+        }
+        return super.setPowerBarrageCharge();
     }
     @Override
     public void handleStandAttack(Player player, Entity target){

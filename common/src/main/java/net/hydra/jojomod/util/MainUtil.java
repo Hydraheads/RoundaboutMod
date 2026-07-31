@@ -29,6 +29,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
@@ -661,7 +662,7 @@ public class MainUtil {
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC || isMobStandUserBlacklisted(mob)){
+        || mob instanceof JojoNPC|| mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)){
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -682,7 +683,7 @@ public class MainUtil {
     }
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof ZombieAesthetician
+                || mob instanceof JojoNPC|| mob instanceof CloneEntity || mob instanceof ZombieAesthetician
         || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){

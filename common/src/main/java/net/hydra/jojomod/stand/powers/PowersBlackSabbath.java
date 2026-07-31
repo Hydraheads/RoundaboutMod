@@ -48,6 +48,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -83,6 +84,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 if (active) {
                     setIsChesting(false);
                     active = false;
+                    setTickDown(10);
                 }
 
             }
@@ -110,7 +112,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
-       // setSkillIcon(context, x, y, 2, StandIcons.MINING_YAP, PowerIndex.SKILL_2);
+        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
@@ -220,11 +222,11 @@ public class PowersBlackSabbath extends NewDashPreset {
             if(isDay){
                  if ($$0.level().isRaining() || $$0.level().isThundering()){
                     return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 11 ){
+                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 12 ){
                     return true;
-                } else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 11){
+                }/* else if($$0.level().getBrightness(LightLayer.SKY, $$0.blockPosition()) < 12){
                     return true;
-                } else {
+                }*/ else {
                     return false;
                 }
             } else if (!isDay){
@@ -249,13 +251,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
-        for(int i = 0; i == 100; i++) {
-            Entity entity = EntityType.TNT.create(this.getSelf().level());
-            if(entity instanceof PrimedTnt PT){
-                PT.setFuse(100);
-            }
-            self.level().addFreshEntity(entity);
-        }
+
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
@@ -271,8 +267,11 @@ public class PowersBlackSabbath extends NewDashPreset {
                     if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
                         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                     }
-                    this.getStandEntity(this.getSelf()).forceDespawnSet = true;
+                    if(this.getStandEntity(self) instanceof BlackSabbathEntity b){
+                        b.setTickDownSecond(10);
+                    }
                 }
+                setTickDown(10);
             }
         }
         return super.tryPower(move, forced);
@@ -311,6 +310,9 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
+        if(slot == 2 && !this.checkIfYouAreInDark()) {
+            return  true;
+        }
         if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null) && !self.isSwimming()){
             return true;
         }
@@ -324,6 +326,9 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     boolean isChesting = false;
     void setIsChesting(boolean chest){ isChesting = chest;}
+
+    public int tickDown = 10;
+    void setTickDown(int t){tickDown = t;}
 
     @Override
     public void tickPower() {
@@ -345,6 +350,23 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
             }
 
+        }
+
+        if(self instanceof Player PL) {
+            if (self != null && this.getStandEntity(self) instanceof BlackSabbathEntity BSE) {
+                if(active){
+                    if(tickDown > 1){
+                        tickDown--;
+                        if (tickDown == 1){
+                            BSE.openCustomInventoryScreen(PL);
+                        }
+                    }
+                    if(!checkIfYouAreInDark()){
+                        this.active = false;
+                        this.RecallClient();
+                    }
+                }
+            }
         }
 
         getValidPlacement();
@@ -377,18 +399,16 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
         float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
+                BE.absMoveTo(pn.x(), evilY, pn.z());
                 BE.setMaster(this.self);
+                BE.setYRot((self.getYRot() % 360) - 180);
                 BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
                 this.getStandUserSelf().roundabout$standMount(BE);
                 BE.setShouldFloat(true);
                 BE.setDeltaMovement(Vec3.ZERO);
                 self.setDeltaMovement(Vec3.ZERO);
+                BE.incFadeOut((byte) 3);
                 this.self.level().addFreshEntity(BE);
-                this.getSelf().level().playSound(this.getSelf(), this.getSelf().blockPosition(), ModSounds.RATT_PLACE_EVENT, SoundSource.PLAYERS, 1F, 1F);
-                BE.openCustomInventoryScreen(PL);
-                if(getValidPlacement() != null) {
-                    BE.absMoveTo(pn.x(), evilY, pn.z());
-             }
         }
     }
 
@@ -399,14 +419,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             return true;
         }
         return super.cancelJump();
@@ -414,7 +434,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame() || isChesting) {
+        if (isLarpingOjiroSasame() || active) {
             return true;
         }
         return super.cancelSprintParticles();
@@ -531,19 +551,21 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean returnFakeStandForHud(){
-        return true;
+        if(this.self != null) {
+            return !(this.getStandEntity(this.self) != null);
+        }
+        return false;
     }
 
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
             displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+        } else if(displayStand instanceof BlackSabbathEntity BSE){
+            BSE.coat_open.start(BSE.tickCount);
         }
         if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
             displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
             displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
-            if(displayStand instanceof BlackSabbathEntity BSE){
-                BSE.coat_open.start(BSE.tickCount);
-            }
         }
         return displayStand;
     }
@@ -553,7 +575,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
                 "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
-                "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,2,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
