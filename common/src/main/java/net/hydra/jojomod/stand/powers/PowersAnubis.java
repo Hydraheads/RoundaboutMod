@@ -116,7 +116,7 @@ public class PowersAnubis extends NewDashPreset {
                 "instruction.roundabout.kick_barrage", StandIcons.ANUBIS_SHIELDBREAK,1,level,bypass));
 
 
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+80, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+80, 0, "ability.roundabout.anubis_dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,4, "ability.roundabout.anubis_backflip",
                 "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_BACKFLIP,3,level,bypass));
@@ -213,7 +213,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean rendersPlayer(){return true;}
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isHoldingSneak() && !this.isEmpowered() ) {
+        if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 1, StandIcons.ANUBIS_ALLURING_LIGHT, PowerIndex.SKILL_1_SNEAK);
             setSkillIcon(context, x, y, 2, StandIcons.ANUBIS_RAGING_LIGHT, PowerIndex.SKILL_2_SNEAK);
         } else {
@@ -322,7 +322,7 @@ public class PowersAnubis extends NewDashPreset {
                 }
             }
             case SKILL_3_NORMAL -> {
-                if(isEmpowered()) {
+                if(isEmpowered() && this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
                     tryPowerPackets(PowersAnubis.WEAVE);
                 }
                 dash();
@@ -1077,12 +1077,10 @@ public class PowersAnubis extends NewDashPreset {
                             tryPowerPackets(PowersAnubis.CLEAVE);
                         }
                     } else if (this.canAttack()) {
-                        Roundabout.LOGGER.info(this.activePowerPhase + " / " + this.activePowerPhaseMax);
 
                         if (this.isHoldingSneak()) {
                             tryPowerPackets(PowerIndex.SNEAK_ATTACK_CHARGE);
                         } else {
-                            Roundabout.LOGGER.info("bang");
                             tryPowerPackets(PowerIndex.ATTACK);
                         }
                     }
@@ -1120,7 +1118,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
                 setPowerNone();
-            } else if (this.activePowerPhase == 0 && this.attackTimeDuring == 3 || this.attackTimeDuring == 5) {
+            } else if (this.activePowerPhase == 1 && this.attackTimeDuring == 4 || this.attackTimeDuring == 5) {
                 this.standPunch();
             }
         }
@@ -1240,7 +1238,7 @@ public class PowersAnubis extends NewDashPreset {
             }
         }
 
-        if (entities.isEmpty()) {
+        if (entities.isEmpty() && !isClient()) {
             playMissSound(this.getSelf().level());
         }
 
@@ -2720,7 +2718,6 @@ public class PowersAnubis extends NewDashPreset {
             Item item = AM.item;
             if (item != null) {
                 ret = ret + BuiltInRegistries.ITEM.getKey(item).toString();
-                Roundabout.LOGGER.info("key:" + ret);
 
                 ret = ret + "/" + AM.memory_type;
 
@@ -2761,7 +2758,6 @@ public class PowersAnubis extends NewDashPreset {
             s.useDelimiter("/");
             if (s.hasNext()) {
                 String itemName = s.next();
-                Roundabout.LOGGER.info("name: "+itemName);
                 try {
                     item = BuiltInRegistries.ITEM.get(new ResourceLocation(itemName));
                     if (item.equals(Items.AIR)) {

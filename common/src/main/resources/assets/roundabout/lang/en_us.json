@@ -1813,15 +1813,15 @@
   "ability.roundabout.ratt_mining.desc": "Locks Ratt to the block you are facing, causing it to automatically shoot in that direction indefinitely. In this mode, if griefing is enabled, it can melt blocks, making it gradually drill a hole.",
 
 
-  "ability.roundabout.anubis_attack": "Slash",
+  "ability.roundabout.anubis_attack": "Slash / Cleave",
   "ability.roundabout.anubis_attack.desc": "Swing Anubis, dealing a sweeping attack. Goes through walls. When empowered, do a sweeping cut.",
-  "ability.roundabout.anubis_sneak_attack": "Uppercut",
+  "ability.roundabout.anubis_sneak_attack": "Uppercut / Launch",
   "ability.roundabout.anubis_sneak_attack.desc": "Charge up a dashing uppercut. When empowered, swipe in front of you, launching any blocks in your path",
-  "ability.roundabout.anubis_pogo": "Diving Slash",
+  "ability.roundabout.anubis_pogo": "Diving Slash / Stab",
   "ability.roundabout.anubis_pogo.desc": "Dive forwards and swing your sword, breaking shield. Does not require your attacks to be off cooldown. When empowered, launch even further and inflict bleed.",
-  "ability.roundabout.anubis_quickdraw": "Rushing Slice",
+  "ability.roundabout.anubis_quickdraw": "Rushing Slice / Flurry",
   "ability.roundabout.anubis_quickdraw.desc": "Wind up your sword, then lunge forwards with incredible speed, cutting everything in your path. When empowered, do a quick barrage in front of you.",
-  "ability.roundabout.anubis_shieldbreak": "Shield Breaker",
+  "ability.roundabout.anubis_shieldbreak": "Shield Breaker / Sword Spin",
   "ability.roundabout.anubis_shieldbreak.desc": "Do a brief windup, then swipe in front of you. Does moderate knockback and breaks shields for a long time. When empowered, spin around, knocking back and bleeding enemies.",
   "ability.roundabout.anubis_alluring_light": "Alluring Light",
   "ability.roundabout.anubis_alluring_light.desc": "Hypnotize all mobs near you, causing them to follow you for a while.",
@@ -1843,7 +1843,7 @@
   "ability.roundabout.anubis_sword_throw.desc": "In exchange for sealing your stand, throw Anubis forwards, phasing through walls and wounding whatever it hits",
   "ability.roundabout.anubis_empower": "Empower",
   "ability.roundabout.anubis_empower.desc": "Enter a stance that does a different, stronger attack depending on what button you press.",
-  "ability.roundabout.anubis_dodge": "Dash",
+  "ability.roundabout.anubis_dodge": "Dash / Weave",
   "ability.roundabout.anubis_dodge.desc": "A quick burst of speed, useful for dodging. If you time it with a jump, it travels further, but takes longer to recharge. When empowered, dodge past projectiles.",
 
 
