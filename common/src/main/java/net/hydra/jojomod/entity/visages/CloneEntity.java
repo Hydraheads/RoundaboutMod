@@ -36,6 +36,7 @@ public class CloneEntity extends PathfinderMob {
     public boolean isMovingForward = false;
     public boolean isSneaking = false;
     public boolean isJumping = false;
+    public boolean isSprinting = false;
 
     public ItemStack getVisage(){
         return entityData.get(VISAGE);
@@ -133,6 +134,7 @@ public class CloneEntity extends PathfinderMob {
     protected CloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
     }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).

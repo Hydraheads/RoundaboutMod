@@ -381,6 +381,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isBackingUp = isBackingUp;
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
+            fclone.isSprinting = isSprinting;
             fclone.isJumping = isJumping;
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -398,6 +399,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     last2.distanceTo(self) < 30){
                 fclone.setLastHurtByMob(last);
             }
+
             activeClone = fclone;
 
             StandEntity st = getStandEntity(self);
@@ -431,6 +433,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean isMovingForward = false;
     public boolean isSneaking = false;
     public boolean isJumping = false;
+    public boolean isSprinting = false;
     public Vec3 delta = Vec3.ZERO;
 
 

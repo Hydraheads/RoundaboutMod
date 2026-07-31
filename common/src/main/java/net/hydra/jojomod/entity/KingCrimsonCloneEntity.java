@@ -5,15 +5,18 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class KingCrimsonCloneEntity extends CloneEntity {
 
@@ -52,11 +55,29 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             SE.discard();
         }
     }
+    public int onGroundTime = 0;
     @Override
     public void tick() {
         if (!level().isClientSide()) {
-            if (isJumping && onGround()) {
-                jumpFromGround();
+            if (isMovingForward || isBackingUp) {
+                if (getNavigation().isDone()) {
+                    float direction = isBackingUp ? -1.0F : 1.0F;
+
+                    float yaw = yBodyRot * ((float) Math.PI / 180F);
+                    double distance = 20;
+                    double x = getX() - Mth.sin(yaw) * distance * direction;
+                    double z = getZ() + Mth.cos(yaw) * distance * direction;
+
+                    getNavigation().moveTo(x, getY(), z, 1.0D);
+                }
+            }
+            if (isSprinting && !isBackingUp){
+                setSprinting( true);
+            } if (isSneaking){
+                setPose(Pose.CROUCHING);
+            }
+            if (onGround()){
+                onGroundTime++;
             }
             if (player == null) {
                 discardStand();
@@ -71,6 +92,26 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             }
         }
         super.tick();
+        if (!level().isClientSide()) {
+
+            if (isJumping && onGround() && onGroundTime >= 2) {
+                jumpFromGround();
+
+                onGroundTime= 0;
+                getNavigation().recomputePath();
+            }
+        }
     }
 
+    @Override
+    protected void jumpFromGround() {
+        Vec3 $$0 = this.getDeltaMovement();
+        this.setDeltaMovement($$0.x, (double)this.getJumpPower(), $$0.z);
+        if (this.isSprinting()) {
+            float $$1 = this.getYRot() * (float) (Math.PI / 180.0);
+            this.setDeltaMovement(this.getDeltaMovement().add((double)(-Mth.sin($$1) * 0.4F), 0, (double)(Mth.cos($$1) * 0.4F)));
+        }
+
+        this.hasImpulse = true;
+    }
 }

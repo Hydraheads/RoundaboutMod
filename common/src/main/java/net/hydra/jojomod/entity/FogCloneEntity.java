@@ -218,4 +218,9 @@ public class FogCloneEntity extends CloneEntity {
         goPoof();
         return false;
     }
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.35).add(Attributes.MAX_HEALTH, 20)
+                .add(Attributes.ATTACK_DAMAGE, 1).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
 }
