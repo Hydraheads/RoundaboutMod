@@ -32,6 +32,11 @@ public class CloneEntity extends PathfinderMob {
     private static final EntityDataAccessor<ItemStack> VISAGE = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.ITEM_STACK);
 
+    public boolean isBackingUp = false;
+    public boolean isMovingForward = false;
+    public boolean isSneaking = false;
+    public boolean isJumping = false;
+
     public ItemStack getVisage(){
         return entityData.get(VISAGE);
     }

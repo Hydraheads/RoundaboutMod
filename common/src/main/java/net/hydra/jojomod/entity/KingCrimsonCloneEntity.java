@@ -23,16 +23,9 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     }
 
     @Override
-    public float getSpeed() {
-        if (this.getPlayer() != null){
-            return this.getPlayer().getSpeed();
-        }
-        return super.getSpeed();
-    }
-
-    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0, 0.0F));
         this.addBehaviourGoals();
     }
@@ -62,6 +55,9 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     @Override
     public void tick() {
         if (!level().isClientSide()) {
+            if (isJumping && onGround()) {
+                jumpFromGround();
+            }
             if (player == null) {
                 discardStand();
                 discard();

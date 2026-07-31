@@ -201,6 +201,20 @@ public class C2SPacketUtil {
         );
     }
 
+    public static void sendControlDataPacket(boolean isBackingUp,
+                                             boolean isMovingForward,
+                                             boolean isSneaking,
+                                             boolean isJumping,
+                                             Vec3 delta){
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.ControlDataKC.value,
+                isBackingUp,
+                isMovingForward,
+                isSneaking,
+                isJumping,
+                new Vector3f((float) delta.x, (float) delta.y, (float) delta.z)
+        );
+    }
     public static void timeStopHoveringPacket(boolean hover){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.TimeStopHovering.value,
