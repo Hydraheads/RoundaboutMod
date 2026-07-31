@@ -393,19 +393,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     (float) playerAndData.roundabout$getLerpZ()
             ));
 
-
+            fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
             this.getSelf().level().addFreshEntity(fclone);
 
             fclone.setDeltaMovement(PE.getDeltaMovement());
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
             LivingEntity last2 = self.getLastHurtByMob();
-            if (last != null){
+            if (last != null && last.getUUID() != self.getUUID()){
                 fclone.setLastHurtMob(last);
                 fclone.setTarget(last);
             } else {
-                fclone.setTarget(last2);
-            } if (last2 != null){
+                if (last2.getUUID() != self.getUUID()) {
+                    fclone.setTarget(last2);
+                }
+            } if (last2 != null && last2.getUUID() != self.getUUID()){
                 fclone.setLastHurtByMob(last);
             }
             activeClone = fclone;

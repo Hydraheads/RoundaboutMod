@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -93,6 +94,9 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     } else if (shift == ShapeShifts.EERIE) {
                         visage = null;
                     }
+                } else if (entity instanceof CloneEntity jnpc && !(entity instanceof FogCloneEntity) &&
+                jnpc.getPlayer() != null) {
+                    visage = jnpc.getVisage();
                 } else if (entity instanceof JojoNPC jnpc) {
                     visage = jnpc.getBasis();
                 } else if (entity instanceof ZombieAesthetician znpc) {
