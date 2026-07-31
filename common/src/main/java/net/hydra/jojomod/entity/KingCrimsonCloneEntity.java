@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -84,12 +85,60 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public void die(DamageSource source) {
         if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getPlayer() instanceof ServerPlayer sp
         && ((StandUser)sp).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+
             if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath) {
-                sp.sendSystemMessage(this.getCombatTracker().getDeathMessage());
-                pkc.fakedDeath = true;
+                if (!pkc.fakedDeath) {
+                    if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+                        dropInventoryAsFakeItems(player);
+                    }
+
+                    sp.sendSystemMessage(this.getCombatTracker().getDeathMessage());
+                    pkc.fakedDeath = true;
+                }
             }
         }
         super.die(source);
+    }
+
+    private void dropInventoryAsFakeItems(Player player) {
+        for (ItemStack stack : player.getInventory().items) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+
+        for (ItemStack stack : player.getInventory().armor) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+
+        for (ItemStack stack : player.getInventory().offhand) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+    }
+
+    private void spawnFakeItem(ItemStack stack) {
+        float angle = this.random.nextFloat() * ((float)Math.PI * 2F);
+        float speed = this.random.nextFloat() * 0.5F;
+
+        double vx = -Mth.sin(angle) * speed;
+        double vz = Mth.cos(angle) * speed;
+
+        FakeItemEntity item = new FakeItemEntity(
+                ModEntities.FAKE_ITEM,
+                level()
+        );
+
+        item.setItem(stack.copy());
+        item.setPos(getX(), getEyeY() - 0.3, getZ());
+        item.setDeltaMovement(vx, 0.2F, vz);
+
+        item.host = getPlayer();
+
+        level().addFreshEntity(item);
     }
 
     public void discardStand(){

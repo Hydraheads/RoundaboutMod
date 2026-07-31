@@ -109,6 +109,7 @@ public class ModEntities {
     public static EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE;
     public static EntityType<PWMeteorEntity> PW_METEOR;
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
+    public static EntityType<FakeItemEntity> FAKE_ITEM;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
