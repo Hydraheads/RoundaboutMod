@@ -2251,8 +2251,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void timeEraseClient(){
         if (!onCooldown(PowerIndex.SKILL_4)) {
-            ClientUtil.sendControlData();
-            tryPowerPacket(PowerIndex.POWER_4);
+            if (!hasBlock() && canAttackLight()) {
+                ClientUtil.sendControlData();
+                tryPowerPacket(PowerIndex.POWER_4);
+            }
         }
     }
 
@@ -2381,6 +2383,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 spawnClone();
                 timeEraseActive = true;
                 self.stopUsingItem();
+                if (hasBlock()){
+                    resetItem();
+                }
                 ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);

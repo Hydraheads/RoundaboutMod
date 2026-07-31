@@ -170,6 +170,23 @@ public class BlockGrabPreset extends NewPunchingStand {
     }
 
 
+    public void resetItem(){
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+            if (standEntity.canAcquireHeldItem) {
+                this.addItem(standEntity);
+            }
+
+            if (this.getAnimation() == StandEntity.ITEM_GRAB) {
+                animateStand(StandEntity.ITEM_RETRACT);
+            } else {
+                animateStand(StandEntity.BLOCK_RETRACT);
+            }
+
+            standEntity.setHeldItem(ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public boolean setPowerGuard(){
         if (this.getSelf() instanceof Player) {
