@@ -1412,11 +1412,12 @@ public class ClientUtil {
         if (mc.player != null) {
             boolean isBackingUp = mc.options.keyDown.isDown();
             boolean isMovingForward = mc.options.keyUp.isDown();
-            boolean isSneaking = mc.options.keyShift.isDown();
-            boolean isJumping = mc.options.keyJump.isDown();
+            boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
+            boolean isJumping = mc.options.keyJump.isDown() || !mc.player.onGround();
+            boolean isSprinting = mc.player.isSprinting();
             Vec3 delta = mc.player.getDeltaMovement();
             C2SPacketUtil.sendControlDataPacket(isBackingUp, isMovingForward, isSneaking, isJumping,
-                    delta);
+                    delta,isSprinting);
         }
     }
 

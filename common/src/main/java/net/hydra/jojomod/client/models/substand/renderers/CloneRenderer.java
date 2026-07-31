@@ -15,13 +15,13 @@ import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -32,18 +32,16 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -165,6 +163,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
+        PlayerModel<T> $$1 = this.getModel();
+        $$1.setAllVisible(true);
         if (entity instanceof FogCloneEntity) {
             Player pl = entity.getPlayer();
             if (pl instanceof AbstractClientPlayer acp) {
@@ -213,9 +213,76 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                 }
             }
 
+            matrices.pushPose();
+            this.setModelProperties(entity);
+            if (entity.isCrouching()) {
+                matrices.translate(0.0D, -0.125D, 0.0D);
+            }
             super.render(entity, entityYaw, partialTick, matrices, bufferSource, packedLight);
+            matrices.popPose();
         }
 
+    }
+    public void setModelProperties(T $$0) {
+        PlayerModel<T> $$1 = this.getModel();
+        $$1.setAllVisible(true);
+        $$1.crouching = $$0.isCrouching();
+        LivingEntity ent = $$0;
+
+        HumanoidModel.ArmPose $$2 = getArmPose(ent, InteractionHand.MAIN_HAND);
+        HumanoidModel.ArmPose $$3 = getArmPose(ent, InteractionHand.OFF_HAND);
+        if ($$2.isTwoHanded()) {
+            $$3 = ent.getOffhandItem().isEmpty() ? HumanoidModel.ArmPose.EMPTY : HumanoidModel.ArmPose.ITEM;
+        }
+
+        if (ent.getMainArm() == HumanoidArm.RIGHT) {
+            $$1.rightArmPose = $$2;
+            $$1.leftArmPose = $$3;
+        } else {
+            $$1.rightArmPose = $$3;
+            $$1.leftArmPose = $$2;
+        }
+    }
+    private static HumanoidModel.ArmPose getArmPose(LivingEntity $$0, InteractionHand $$1) {
+        ItemStack $$2 = $$0.getItemInHand($$1);
+        if ($$2.isEmpty()) {
+            return HumanoidModel.ArmPose.EMPTY;
+        } else {
+            if ($$0.getUsedItemHand() == $$1 && $$0.getUseItemRemainingTicks() > 0) {
+                UseAnim $$3 = $$2.getUseAnimation();
+                if ($$3 == UseAnim.BLOCK) {
+                    return HumanoidModel.ArmPose.BLOCK;
+                }
+
+                if ($$3 == UseAnim.BOW) {
+                    return HumanoidModel.ArmPose.BOW_AND_ARROW;
+                }
+
+                if ($$3 == UseAnim.SPEAR) {
+                    return HumanoidModel.ArmPose.THROW_SPEAR;
+                }
+
+                if ($$3 == UseAnim.CROSSBOW && $$1 == $$0.getUsedItemHand()) {
+                    return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+                }
+
+                if ($$3 == UseAnim.SPYGLASS) {
+                    return HumanoidModel.ArmPose.SPYGLASS;
+                }
+
+                if ($$3 == UseAnim.TOOT_HORN) {
+                    return HumanoidModel.ArmPose.TOOT_HORN;
+                }
+
+                if ($$3 == UseAnim.BRUSH) {
+                    return HumanoidModel.ArmPose.BRUSH;
+                }
+            } else if (!$$0.swinging && $$2.is(Items.CROSSBOW) && CrossbowItem.isCharged($$2)) {
+                return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+            }
+
+            return HumanoidModel.ArmPose.ITEM;
+        }
     }
 
     @Override

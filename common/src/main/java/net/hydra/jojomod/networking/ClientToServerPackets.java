@@ -613,11 +613,13 @@ public class ClientToServerPackets {
                     boolean isSneaking = (boolean)vargs[2];
                     boolean isJumping = (boolean)vargs[3];
                     Vector3f delta = (Vector3f) vargs[4];
+                    boolean isSprinting = (boolean)vargs[5];
                     if (((StandUser)sender).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
                         pkc.isBackingUp = isBackingUp;
                         pkc.isMovingForward = isMovingForward;
                         pkc.isSneaking = isSneaking;
                         pkc.isJumping = isJumping;
+                        pkc.isSprinting = isSprinting;
                         pkc.delta = new Vec3(delta.x,delta.y,delta.z);
                     }
                 }

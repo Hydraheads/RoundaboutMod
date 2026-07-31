@@ -2441,6 +2441,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.roundabout$dazeTime > 0;
     }
     @Unique
+    public byte roundabout$getDazeTime(){
+        return this.roundabout$dazeTime;
+    }
+    @Unique
     public void roundabout$setDazeTime(byte dazeTime){
         this.roundabout$dazeTime = dazeTime;
     }

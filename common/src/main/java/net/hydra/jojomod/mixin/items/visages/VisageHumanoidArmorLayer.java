@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -37,8 +39,11 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if (PowerTypes.isExistentiallyElsewhere($$3)){
             if (!(ClientUtil.isPlayer($$3))) {
-                ci.cancel();
-                return;
+                if (!($$3 instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                        && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                    ci.cancel();
+                    return;
+                }
             }
         }
 

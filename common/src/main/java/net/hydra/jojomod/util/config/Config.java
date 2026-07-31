@@ -1135,6 +1135,8 @@ public class Config implements Cloneable {
         public Boolean blocksCancelEpitaph2;
         @BooleanOption(group = "inherit", value = false)
         public Boolean freeTimeSkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean skipPastDeath;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
