@@ -1392,6 +1392,10 @@ public class ClientUtil {
         return false;
     }
 
+    public static boolean isPlayerUUID(UUID uuid){
+        LocalPlayer player = Minecraft.getInstance().player;
+        return uuid == player.getUUID();
+    }
     public static boolean isPlayer(Entity PE){
         if (PE instanceof Player){
             LocalPlayer player = Minecraft.getInstance().player;

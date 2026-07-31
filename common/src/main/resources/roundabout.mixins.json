@@ -243,6 +243,7 @@
     "star_platinum.StarPlatinumTridentEntity",
     "survivor.SurvivorBrain",
     "survivor.SurvivorThrownPotion",
+    "time_stop.TimeSlopGuardian",
     "time_stop.TimeStopAbstractArrow",
     "time_stop.TimeStopBlockEntity",
     "time_stop.TimeStopBoatAccess",

@@ -42,11 +42,6 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
 
 
     @Override
-    protected boolean shouldShowName(T $$0) {
-        return true;
-    }
-
-    @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
         if (!entity.turned){
             Player pl = entity.getPlayer();

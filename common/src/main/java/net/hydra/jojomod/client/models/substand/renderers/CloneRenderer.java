@@ -1,9 +1,12 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.FacelessLayer;
+import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.FakeCapeLayer;
 import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
@@ -11,7 +14,10 @@ import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.ShapeShifts;
 import net.hydra.jojomod.item.MaskItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
@@ -37,6 +43,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -94,8 +101,38 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         }
     }
 
+    public ResourceLocation roundabout$getTextureLocation(T thisr) {
+            ItemStack visage = thisr.getVisage();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI.visageData.isCharacterVisage()) {
+                        if (FateTypes.isUndisguisedZombie(thisr)) {
+                            // 37 67 -34
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                        } else {
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+
+                        }
+                    } else if (visage.is(ModItems.RAT_MASK)){
+                        return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
+                    }
+                }
+            }
+
+            if (FateTypes.isUndisguisedZombie(thisr)) {
+                PlayerModel pm = ClientUtil.getPlayerModel(thisr);
+                if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
+                    return (StandIcons.ZOMBIE_SKIN_SLIM);
+                } else {
+                    return (StandIcons.ZOMBIE_SKIN);
+                }
+            }
+            return null;
+    }
+
     @Override
     public ResourceLocation getTextureLocation(T entity) {
+
         Player player = entity.getPlayer();
         if (player instanceof AbstractClientPlayer clientPlayer) {
             return clientPlayer.getSkinTextureLocation();
@@ -111,6 +148,11 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         PlayerInfo info = mc.getConnection() == null ? null : mc.getConnection().getPlayerInfo(uuid.get());
         if (info != null) {
             return info.getSkinLocation();
+        }
+
+        ResourceLocation loc = roundabout$getTextureLocation(entity);
+        if (loc != null){
+            return loc;
         }
 
         return DefaultPlayerSkin.getDefaultSkin(uuid.get());
@@ -155,13 +197,15 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             if (entity.getPlayer() != null) {
                 IPlayerEntity pl = ((IPlayerEntity) entity.getPlayer());
                 visage = pl.roundabout$getMaskSlot();
+            } else {
+                visage = entity.getVisage();
             }
 
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI.visageData.isCharacterVisage()) {
                         if (MI.visageData.isSlim()){
-                            this.model = bulk;
+                            this.model = slim;
                         } else {
                             this.model = bulk;
                         }
@@ -184,6 +228,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         if (entity.getPlayer() != null) {
             IPlayerEntity pl = ((IPlayerEntity) entity.getPlayer());
             visage = pl.roundabout$getMaskSlot();
+        } else {
+            visage = entity.getVisage();
         }
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
@@ -210,7 +256,26 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
     @Override
     protected boolean shouldShowName(T $$0) {
-        return false;
+        boolean characterType = true;
+        if ($$0.getPlayer() != null){
+            return $$0.getPlayer().shouldShowName() && !ClientUtil.isPlayer($$0.getPlayer());
+        } if ($$0.getVisage() != null && !$$0.getVisage().isEmpty() && $$0.getVisage().getItem() instanceof MaskItem ME) {
+            characterType = ME.visageData.isCharacterVisage();
+
+            if (ClientNetworking.getAppropriateConfig() != null  && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                if (characterType) {
+                    /**Do character visages hide nametags*/
+                    if (!ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages) {
+                        return false;
+                    }
+                }
+            }
+        }
+        Optional<UUID> uuid = $$0.getPlayerUUID();
+        if (uuid.isPresent() && ClientUtil.isPlayerUUID(uuid.get())){
+            return false;
+        }
+        return !ClientUtil.isPlayer($$0.getPlayer());
     }
 }
 

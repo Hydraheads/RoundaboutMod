@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.visages;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
@@ -28,12 +29,34 @@ public class CloneEntity extends PathfinderMob {
     @Unique
     private static final EntityDataAccessor<Optional<UUID>> PLAYER = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<ItemStack> VISAGE = SynchedEntityData.defineId(CloneEntity.class,
+            EntityDataSerializers.ITEM_STACK);
 
+    public ItemStack getVisage(){
+        return entityData.get(VISAGE);
+    }
+    public void setVisage(ItemStack visage){
+        entityData.set(VISAGE,visage);
+    }
     @Override
     public Component getDisplayName() {
         Player player = getPlayer();
         if (player != null) {
             return player.getDisplayName();
+        } else {
+            boolean characterType = true;
+            if (getVisage() != null && !getVisage().isEmpty() && getVisage().getItem() instanceof MaskItem ME) {
+                characterType = ME.visageData.isCharacterVisage();
+
+                if (ClientNetworking.getAppropriateConfig() != null  && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                    if (characterType) {
+                        if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
+
+                            return ME.getDisplayNameTag();
+                        }
+                    }
+                }
+            }
         }
 
         if (this.name != null) {
@@ -46,7 +69,6 @@ public class CloneEntity extends PathfinderMob {
     public boolean turned = false;
     public Player player;
     public Component name;
-    public ItemStack visage = ItemStack.EMPTY;
 
     public void setPlayer(Player player){
         this.player = player;
@@ -64,15 +86,16 @@ public class CloneEntity extends PathfinderMob {
         if (!this.entityData.hasItem(PLAYER)) {
             super.defineSynchedData();
             this.entityData.define(PLAYER, Optional.empty());
+            this.entityData.define(VISAGE, ItemStack.EMPTY);
         }
     }
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
-        if (!visage.isEmpty() || tag.contains("roundabout.Mask", 10)) {
+        if (!getVisage().isEmpty() || tag.contains("roundabout.Mask", 10)) {
             CompoundTag compoundtag = new CompoundTag();
-            tag.put("roundabout.Mask",visage.save(compoundtag));
+            tag.put("roundabout.Mask",getVisage().save(compoundtag));
         }
 
         getPlayerUUID().ifPresent(uuid -> tag.putUUID("PlayerUUID", uuid));
@@ -84,7 +107,7 @@ public class CloneEntity extends PathfinderMob {
             CompoundTag compoundtag = tag.getCompound("roundabout.Mask");
             ItemStack itemstack = ItemStack.of(compoundtag);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD) {
-                visage = itemstack;
+                setVisage(itemstack);
             }
         }
 

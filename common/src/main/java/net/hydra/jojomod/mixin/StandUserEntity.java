@@ -1395,6 +1395,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             mb.stopBeingAngry();
         }
         if (((LivingEntity)(Object)this) instanceof Mob mb){
+            if (((LivingEntity)(Object)this) instanceof Guardian gd){
+                ((AccessGuardian)gd).rdbt$setAttackTargetG(null);
+            }
             mb.setTarget(null);
             ((IMob)mb).roundabout$deeplyRemoveTargets();
             ((IMob)mb).roundabout$setSightProtectionTicks(ClientNetworking.getAppropriateConfig().softAndWetSettings.ticksBetweenSightStealsOnSameMob);
