@@ -2094,7 +2094,7 @@ public class PowersAnubis extends NewDashPreset {
 
     @Override
     public boolean canCombatModeUse(Item item) {
-        if (this.getActivePower() != PowerIndex.NONE) {
+        if (this.getActivePower() != PowerIndex.NONE && this.getActivePower() != PowerIndex.ATTACK ) {
             return false;
         }
         return !item.equals(ModItems.ANUBIS_ITEM)
