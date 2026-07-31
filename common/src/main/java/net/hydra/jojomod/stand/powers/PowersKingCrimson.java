@@ -2362,9 +2362,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 saveDiscAndSync();
                 if (fakedDeath){
                     if (!self.level().isClientSide && self.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
-                        sp.sendSystemMessage(Component.translatable("text.roundabout.time_erase",
-                                        self.getDisplayName())
-                                );
+
+                        double range = getSkipBonusRange();
+                        double rangeSqr = range * range;
+
+                        Component message = Component.translatable("text.roundabout.time_erase",
+                                self.getDisplayName());
+
+                        for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
+                            if (player.distanceToSqr(self) <= rangeSqr) {
+                                player.sendSystemMessage(message);
+                            }
+                        }
                     }
                     fakedDeath = false;
                 }

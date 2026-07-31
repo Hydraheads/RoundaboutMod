@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatTracker;
@@ -92,7 +93,17 @@ public class KingCrimsonCloneEntity extends CloneEntity {
                         dropInventoryAsFakeItems(player);
                     }
 
-                    sp.sendSystemMessage(this.getCombatTracker().getDeathMessage());
+                    double range = pkc.getSkipBonusRange();
+                    double rangeSqr = range * range;
+
+                    Component message = this.getCombatTracker().getDeathMessage();
+
+                    for (ServerPlayer player : ((ServerLevel) level()).players()) {
+                        if (player.distanceToSqr(this) <= rangeSqr) {
+                            player.sendSystemMessage(message);
+                        }
+                    }
+
                     pkc.fakedDeath = true;
                 }
             }
