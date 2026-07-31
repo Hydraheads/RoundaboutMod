@@ -359,7 +359,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                         if (!$$0.getAbilities().instabuild) {
                             $$2.shrink(1);
                         }
-                        ItemStack item = new ItemStack(ModItems.STRAY_CAT_ANIME);
+                        ItemStack item;
+                        if (this.getBreed() == (byte)1) {
+                            item = new ItemStack(ModItems.STRAY_CAT_MANGA);
+                        }else {
+                            item = new ItemStack(ModItems.STRAY_CAT_ANIME);
+                        }
                         StrayCatItem.saveStrayCatEntityInfo(item, this);
 
                         $$0.addItem(item);
