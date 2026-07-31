@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -357,57 +358,44 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean spawnClone(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
+            fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
             // Position
             fclone.setPos(PE.getX(), PE.getY(), PE.getZ());
-            fclone.xOld = PE.xOld;
-            fclone.yOld = PE.yOld;
-            fclone.zOld = PE.zOld;
-
-            // Body rotation
             fclone.setYRot(PE.getYRot());
             fclone.yRotO = PE.yRotO;
 
-            // Pitch
             fclone.setXRot(PE.getXRot());
             fclone.xRotO = PE.xRotO;
 
-            // Body/head rotations
             fclone.yBodyRot = PE.yBodyRot;
             fclone.yBodyRotO = PE.yBodyRotO;
+
             fclone.yHeadRot = PE.yHeadRot;
             fclone.yHeadRotO = PE.yHeadRotO;
-
-            // Animation
-            fclone.walkAnimation.setSpeed(PE.walkAnimation.speed());
-            fclone.walkAnimation.position(PE.walkAnimation.position());
-            ILivingEntityAccess entityAndData = ((ILivingEntityAccess) fclone);
-            ILivingEntityAccess playerAndData = ((ILivingEntityAccess) PE);
-
-            entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
-            entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
-            entityAndData.roundabout$setLerp(new Vector3f(
-                    (float) playerAndData.roundabout$getLerpX(),
-                    (float) playerAndData.roundabout$getLerpY(),
-                    (float) playerAndData.roundabout$getLerpZ()
-            ));
-
-            fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
+            fclone.getNavigation().stop();
             this.getSelf().level().addFreshEntity(fclone);
 
-            fclone.setDeltaMovement(PE.getDeltaMovement());
+            fclone.setDeltaMovement(delta);
+            fclone.isBackingUp = isBackingUp;
+            fclone.isMovingForward = isMovingForward;
+            fclone.isSneaking = isSneaking;
+            fclone.isJumping = isJumping;
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
             LivingEntity last2 = self.getLastHurtByMob();
-            if (last != null && last.getUUID() != self.getUUID()){
+            if (last != null && last.getUUID() != self.getUUID() && last.isAlive() &&
+                    last.distanceTo(self) < 30){
                 fclone.setLastHurtMob(last);
                 fclone.setTarget(last);
             } else {
-                if (last2.getUUID() != self.getUUID()) {
+                if (last2 != null && last2.getUUID() != self.getUUID() && last2.isAlive() &&
+                last2.distanceTo(self) < 30) {
                     fclone.setTarget(last2);
                 }
-            } if (last2 != null && last2.getUUID() != self.getUUID()){
+            } if (last2 != null && last2.getUUID() != self.getUUID() && last2.isAlive() &&
+                    last2.distanceTo(self) < 30){
                 fclone.setLastHurtByMob(last);
             }
             activeClone = fclone;
@@ -438,6 +426,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         return true;
     }
+
+    public boolean isBackingUp = false;
+    public boolean isMovingForward = false;
+    public boolean isSneaking = false;
+    public boolean isJumping = false;
+    public Vec3 delta = Vec3.ZERO;
+
+    
 
     @Override
     public boolean isServerControlledCooldown(byte num){
@@ -2161,6 +2157,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void timeEraseClient(){
         if (!onCooldown(PowerIndex.SKILL_4)) {
+            ClientUtil.sendControlData();
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
