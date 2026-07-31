@@ -180,6 +180,11 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 	}
 
 	@Override
+	public ModelPart getHead() {
+		return this.head2;
+	}
+
+	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
 	}

@@ -214,7 +214,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_NORMAL -> {
                 // TODO: Implement control mode ability
-                // toggleControlModeClient(0);
+                toggleControlModeClient(0);
             }
             case SKILL_2_CROUCH -> {
                 // Might implement another ability here
