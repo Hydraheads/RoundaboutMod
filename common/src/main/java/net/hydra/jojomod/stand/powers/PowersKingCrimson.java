@@ -359,7 +359,43 @@ public class PowersKingCrimson extends BlockGrabPreset {
             KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
+            // Position
+            fclone.setPos(PE.getX(), PE.getY(), PE.getZ());
+            fclone.xOld = PE.xOld;
+            fclone.yOld = PE.yOld;
+            fclone.zOld = PE.zOld;
+
+            // Body rotation
+            fclone.setYRot(PE.getYRot());
+            fclone.yRotO = PE.yRotO;
+
+            // Pitch
+            fclone.setXRot(PE.getXRot());
+            fclone.xRotO = PE.xRotO;
+
+            // Body/head rotations
+            fclone.yBodyRot = PE.yBodyRot;
+            fclone.yBodyRotO = PE.yBodyRotO;
+            fclone.yHeadRot = PE.yHeadRot;
+            fclone.yHeadRotO = PE.yHeadRotO;
+
+            // Animation
+            fclone.walkAnimation.setSpeed(PE.walkAnimation.speed());
+            fclone.walkAnimation.position(PE.walkAnimation.position());
+            ILivingEntityAccess entityAndData = ((ILivingEntityAccess) fclone);
+            ILivingEntityAccess playerAndData = ((ILivingEntityAccess) PE);
+
+            entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
+            entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
+            entityAndData.roundabout$setLerp(new Vector3f(
+                    (float) playerAndData.roundabout$getLerpX(),
+                    (float) playerAndData.roundabout$getLerpY(),
+                    (float) playerAndData.roundabout$getLerpZ()
+            ));
+
+
             this.getSelf().level().addFreshEntity(fclone);
+
             fclone.setDeltaMovement(PE.getDeltaMovement());
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();

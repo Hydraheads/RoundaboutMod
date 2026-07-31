@@ -121,8 +121,6 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
     }
 
-
-
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
         if (entity instanceof FogCloneEntity) {

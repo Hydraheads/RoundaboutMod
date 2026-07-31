@@ -98,6 +98,14 @@ public abstract class AccessLivingEntity extends Entity implements ILivingEntity
     }
 
     @Override
+    public void roundabout$setLerpXRot(double d) {
+        lerpXRot = d;
+    }
+    @Override
+    public void roundabout$setLerpYRot(double d) {
+        lerpYRot = d;
+    }
+    @Override
     public double roundabout$getLerpXRot() {
         return lerpXRot;
     }

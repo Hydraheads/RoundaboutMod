@@ -29,6 +29,9 @@ public class CloneEntity extends PathfinderMob {
     private static final EntityDataAccessor<Optional<UUID>> PLAYER = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.OPTIONAL_UUID);
 
+
+
+    public boolean turned = false;
     public Player player;
     public Component name;
     public ItemStack visage = ItemStack.EMPTY;

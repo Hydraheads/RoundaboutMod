@@ -27,6 +27,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
@@ -41,6 +43,50 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
     @Override
     protected boolean shouldShowName(T $$0) {
         return false;
+    }@Override
+    public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
+        if (!entity.turned){
+            Player pl = entity.getPlayer();
+            if (pl != null) {
+
+                // Position
+                entity.setPos(pl.getX(), pl.getY(), pl.getZ());
+                entity.xOld = pl.xOld;
+                entity.yOld = pl.yOld;
+                entity.zOld = pl.zOld;
+
+                // Body rotation
+                entity.setYRot(pl.getYRot());
+                entity.yRotO = pl.yRotO;
+
+                // Pitch
+                entity.setXRot(pl.getXRot());
+                entity.xRotO = pl.xRotO;
+
+                // Body/head rotations
+                entity.yBodyRot = pl.yBodyRot;
+                entity.yBodyRotO = pl.yBodyRotO;
+                entity.yHeadRot = pl.yHeadRot;
+                entity.yHeadRotO = pl.yHeadRotO;
+
+                // Animation
+                entity.walkAnimation.setSpeed(pl.walkAnimation.speed());
+                entity.walkAnimation.position(pl.walkAnimation.position());
+                ILivingEntityAccess entityAndData = ((ILivingEntityAccess) entity);
+                ILivingEntityAccess playerAndData = ((ILivingEntityAccess) pl);
+
+                entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
+                entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
+                entityAndData.roundabout$setLerp(new Vector3f(
+                        (float) playerAndData.roundabout$getLerpX(),
+                        (float) playerAndData.roundabout$getLerpY(),
+                        (float) playerAndData.roundabout$getLerpZ()
+                ));
+                entity.turned = true;
+            }
+        }
+
+        super.render(entity,entityYaw,partialTick,matrices,bufferSource,packedLight);
     }
 }
 
