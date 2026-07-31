@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.entity.zombie_minion.VillagerMinion;
 import net.hydra.jojomod.event.*;
@@ -5690,7 +5691,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
 
         // Vampire mobs (not players) are faster
-        if (FateTypes.isVampire(rdbt$this())){
+        if (FateTypes.isVampire(rdbt$this()) && !(rdbt$this() instanceof CloneEntity)){
             basis *= 1.3F;
         }
 

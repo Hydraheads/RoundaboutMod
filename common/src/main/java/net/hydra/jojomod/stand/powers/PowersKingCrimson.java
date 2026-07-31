@@ -49,6 +49,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -433,6 +434,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             activeClone.hurtTime = self.hurtTime;
             activeClone.fallDistance = self.fallDistance;
             StandUser activeCloneUser = ((StandUser) activeClone);
+            ((IMob)activeClone).roundabout$setFate(((IPlayerEntity) PE).roundabout$getFate());
+            if (FateTypes.takesSunlightDamage(activeClone)) {
+                ((IMob) activeClone).roundabout$getGoalSelector().addGoal(2, new RestrictSunGoal(activeClone));
+            }
             StandUser thisUser = getStandUserSelf();
             activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
             activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
@@ -445,6 +450,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             activeCloneUser.roundabout$setGasolineTime(thisUser.roundabout$getGasolineTime());
             activeCloneUser.roundabout$setLeapTicks(thisUser.roundabout$getLeapTicks());
 
+            StandPowers powers = activeCloneUser.roundabout$getStandPowers();
+            powers.attackTime = attackTimeMax;
+            powers.attackTimeMax = attackTimeMax;
+            powers.activePowerPhase = activePowerPhase;
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
