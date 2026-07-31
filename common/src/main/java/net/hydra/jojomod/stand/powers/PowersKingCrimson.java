@@ -2351,6 +2351,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 packetNearby2();
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();
+                if (fakedDeath){
+                    if (!self.level().isClientSide && self.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
+                        sp.sendSystemMessage(Component.translatable("text.roundabout.time_erase",
+                                        self.getDisplayName())
+                                );
+                    }
+                    fakedDeath = false;
+                }
             } else {
                 spawnClone();
                 timeEraseActive = true;
@@ -2512,6 +2520,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
         }
     }
+
+    public boolean fakedDeath = false;
 
     @Override
     public boolean isWip(){

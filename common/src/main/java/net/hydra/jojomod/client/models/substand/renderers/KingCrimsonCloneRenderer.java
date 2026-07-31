@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3f;
 
@@ -23,6 +24,10 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
             Player pl = entity.getPlayer();
             if (pl != null) {
 
+                if (pl.isCrouching()){
+                    entity.setShiftKeyDown(true);
+                    entity.setPose(Pose.CROUCHING);
+                }
                 // Position
                 entity.setPos(pl.getX(), pl.getY(), pl.getZ());
                 entity.xOld = pl.xOld;

@@ -1,15 +1,19 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -20,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -73,6 +78,18 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             spd*=0.3F;
         }
         return spd;
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getPlayer() instanceof ServerPlayer sp
+        && ((StandUser)sp).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath) {
+                sp.sendSystemMessage(this.getCombatTracker().getDeathMessage());
+                pkc.fakedDeath = true;
+            }
+        }
+        super.die(source);
     }
 
     public void discardStand(){

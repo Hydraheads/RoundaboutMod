@@ -1,4 +1,5 @@
 {
+  "text.roundabout.time_erase": "%1$s erased their death!",
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
@@ -2892,6 +2893,9 @@
   "config.roundabout.freeTimeSkip.name": "Free Time Skip",
   "config.roundabout.freeTimeSkip.desc": "Enable to be able to skip while using items or attacks.",
 
+
+  "config.roundabout.skipPastDeath.name": "Fake Death Skip",
+  "config.roundabout.skipPastDeath.desc": "Makes your fated self play a fake death message and potentially drop fake items based on gamerule.",
 
 
 
