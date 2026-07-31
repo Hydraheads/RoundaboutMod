@@ -190,6 +190,7 @@ public interface StandUser {
     boolean roundabout$isGuardingEffectively2();
     boolean roundabout$shieldNotDisabled();
     boolean roundabout$isDazed();
+    byte roundabout$getDazeTime();
     boolean roundabout$isRestrained();
     int roundabout$getRestrainedTicks();
     void roundabout$setRestrainedTicks(int restrain);

@@ -27,6 +27,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -256,6 +257,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else {
                 ticksIntoEpitaph = 0;
             }
+        } else {
+            //Cancel erase on relog
+            if (isErasingTime() && activeClone == null){
+                timeErase();
+            }
         }
 
         skipRange = ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipRange;
@@ -358,6 +364,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean spawnClone(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
+            activeClone = fclone;
             fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
@@ -382,7 +389,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
             fclone.isSprinting = isSprinting;
-            fclone.isJumping = isJumping;
+            fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
             LivingEntity last2 = self.getLastHurtByMob();
@@ -399,8 +406,45 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     last2.distanceTo(self) < 30){
                 fclone.setLastHurtByMob(last);
             }
+            activeClone.setHealth(self.getHealth());
+            activeClone.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                    self.getMaxHealth()
+            );
+            for (MobEffectInstance effect : self.getActiveEffects()) {
+                activeClone.addEffect(new MobEffectInstance(effect));
+            }
+            activeClone.setInvulnerable(self.isInvulnerable());
+            activeClone.setNoGravity(self.isNoGravity());
+            activeClone.setSilent(self.isSilent());
+            activeClone.setArrowCount(self.getArrowCount());
+            activeClone.setStingerCount(self.getStingerCount());
+            activeClone.setSharedFlagOnFire(self.isOnFire());
+            activeClone.setRemainingFireTicks(self.getRemainingFireTicks());
+            activeClone.setAirSupply(self.getAirSupply());
+            activeClone.setItemSlot(EquipmentSlot.HEAD, self.getItemBySlot(EquipmentSlot.HEAD).copy());
+            activeClone.setItemSlot(EquipmentSlot.CHEST, self.getItemBySlot(EquipmentSlot.CHEST).copy());
+            activeClone.setItemSlot(EquipmentSlot.LEGS, self.getItemBySlot(EquipmentSlot.LEGS).copy());
+            activeClone.setItemSlot(EquipmentSlot.FEET, self.getItemBySlot(EquipmentSlot.FEET).copy());
+            activeClone.setItemSlot(EquipmentSlot.MAINHAND, self.getMainHandItem().copy());
+            activeClone.setItemSlot(EquipmentSlot.OFFHAND, self.getOffhandItem().copy());
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                activeClone.setDropChance(slot, 0.0F);
+            }
+            activeClone.hurtTime = self.hurtTime;
+            activeClone.fallDistance = self.fallDistance;
+            StandUser activeCloneUser = ((StandUser) activeClone);
+            StandUser thisUser = getStandUserSelf();
+            activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
+            activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
+            activeCloneUser.roundabout$setOnStandFire(thisUser.roundabout$getOnStandFire());
+            activeCloneUser.roundabout$setRemainingStandFireTicks(
+                    thisUser.roundabout$getRemainingFireTicks());
+            activeCloneUser.roundabout$setBubbleEncased(thisUser.roundabout$getBubbleEncased());
+            HeatUtil.setHeat(activeClone,HeatUtil.getHeat(self));
+            activeCloneUser.roundabout$setLocacacaCurse(thisUser.roundabout$getLocacacaCurse());
+            activeCloneUser.roundabout$setGasolineTime(thisUser.roundabout$getGasolineTime());
+            activeCloneUser.roundabout$setLeapTicks(thisUser.roundabout$getLeapTicks());
 
-            activeClone = fclone;
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
@@ -448,8 +492,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void tickCloneAi(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive()){
+            float distanceTo = attackTarget.distanceTo(this.getSelf());
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
-                    || attackTarget.distanceTo(this.getSelf()) <= 5){
+                    || distanceTo <= 5){
                 rotateMobHead(attackTarget);
             }
 
@@ -457,9 +502,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (targetEntity != null && targetEntity.is(attackTarget)) {
                 if (this.attackTimeDuring <= -1) {
                     double RNG = Math.random();
-                    if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                    if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge) {
                         wentForCharge = true;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                    } else if (RNG < 0.6 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge
+                    && distanceTo <= 3){
+                        wentForCharge = true;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
                     } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                         wentForCharge = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
@@ -2183,7 +2232,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
-            case SKILL_4_NORMAL -> {
+            case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 timeEraseClient();
             }
         }

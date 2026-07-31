@@ -5,17 +5,24 @@ import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class KingCrimsonCloneEntity extends CloneEntity {
@@ -23,8 +30,13 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public int timer = 0;
     public KingCrimsonCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
+        this.goalSelector.addGoal(1, new OpenDoorGoal(this, true));
+        ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
+        ((GroundPathNavigation)this.getNavigation()).setCanPassDoors(true);
     }
 
+    protected static final EntityDataAccessor<Boolean> JUMPING = SynchedEntityData.defineId(KingCrimsonCloneEntity.class,
+            EntityDataSerializers.BOOLEAN);
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -38,7 +50,12 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
     }
-
+    public final void setIsJumping(boolean jumping) {
+        this.entityData.set(JUMPING, jumping);
+    }
+    public final boolean getIsJumping() {
+        return this.entityData.get(JUMPING);
+    }
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.GO_BEYOND)){
@@ -47,6 +64,15 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             }
         }
         return super.hurt($$0,$$1);
+    }
+
+    @Override
+    public float getSpeed(){
+        float spd = super.getSpeed();
+        if (isSneaking){
+            spd*=0.3F;
+        }
+        return spd;
     }
 
     public void discardStand(){
@@ -67,13 +93,61 @@ public class KingCrimsonCloneEntity extends CloneEntity {
                     double distance = 20;
                     double x = getX() - Mth.sin(yaw) * distance * direction;
                     double z = getZ() + Mth.cos(yaw) * distance * direction;
-
-                    getNavigation().moveTo(x, getY(), z, 1.0D);
+                    double speed = 1.0D;
+                    getNavigation().moveTo(x, getY(), z, speed);
                 }
             }
-            if (isSprinting && !isBackingUp){
-                setSprinting( true);
-            } if (isSneaking){
+
+            // This code basically makes it stop at ledges while sneaking
+            if (isSneaking) {
+                float yaw = getYRot() * ((float)Math.PI / 180F);
+
+                double step = 0.5D;
+
+                double checkX = getX() - Mth.sin(yaw) * step;
+                double checkZ = getZ() + Mth.cos(yaw) * step;
+
+                BlockPos belowAhead = BlockPos.containing(
+                        checkX,
+                        getY() - 1.0,
+                        checkZ
+                );
+
+                BlockState state = level().getBlockState(belowAhead);
+
+                if (!state.blocksMotion()) {
+                    getNavigation().stop();
+                    return;
+                }
+            }
+            LivingEntity target = getTarget();
+            boolean closeToTarget =
+                    target != null && distanceToSqr(target) <= 25.0D;
+
+            // If we've reached melee range once, never jump again.
+            if (getIsJumping()) {
+                if (closeToTarget) {
+                    setIsJumping(false);
+                }
+                Vec3 forward = getLookAngle().normalize().scale(0.5);
+
+                AABB forwardBox = getBoundingBox().move(forward).move(0.0, 1.0, 0.0);
+
+                //Your fated self stops jumping if it is going to collide, if this is removed
+                //then it does a really funny tree leaf skidding thing
+                if (!level().noCollision(this, forwardBox)) {
+                    setIsJumping(false);
+                }
+            }
+
+            // Resume sprinting automatically when no longer close.
+            if (isSprinting && !isBackingUp && !closeToTarget) {
+                setSprinting(true);
+            } else {
+                setSprinting(false);
+            }
+            setShiftKeyDown(isSneaking);
+            if (isSneaking){
                 setPose(Pose.CROUCHING);
             }
             if (onGround()){
@@ -93,13 +167,19 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         }
         super.tick();
         if (!level().isClientSide()) {
-
-            if (isJumping && onGround() && onGroundTime >= 2) {
+            if (getIsJumping() && onGround() && onGroundTime >= 2) {
                 jumpFromGround();
 
                 onGroundTime= 0;
                 getNavigation().recomputePath();
             }
+        }
+    }
+    @Override
+    protected void defineSynchedData() {
+        if (!this.entityData.hasItem(JUMPING)) {
+            super.defineSynchedData();
+            this.entityData.define(JUMPING, false);
         }
     }
 
@@ -113,5 +193,10 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         }
 
         this.hasImpulse = true;
+    }
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.MAX_HEALTH, 20)
+                .add(Attributes.ATTACK_DAMAGE, 1).
+                add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 }
