@@ -43,24 +43,31 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
         return ACT_2;
     }
 
-    public void render(TuskNailEntity $$0, float $$1, float $$2, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
+    public void render(TuskNailEntity $$0, float $$1, float partialTicks, PoseStack poseStack, MultiBufferSource $$4, int $$5) {
         if ($$0.getOwner() != null && $$0.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect($$4, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
             poseStack.pushPose();
             poseStack.scale(1.6F, 1.6F, 1.6F);
             poseStack.translate(0, -1.3, 0);
-            this.model.setupAnim($$0, $$0.tickCount + $$2);
+            this.model.setupAnim($$0, $$0.tickCount + partialTicks);
 
             float scale = 0.05F;
             float r = PT.getNailColor().x;
             float g = PT.getNailColor().y;
             float b = PT.getNailColor().z;
-            r *= (1 - scale) + (float) Math.sin($$2 + 1) * scale;
-            g *= (1 - scale) + (float) Math.sin($$2 + 2) * scale;
-            b *= (1 - scale) + (float) Math.sin($$2 + 3) * scale;
+            if ($$0.getExtra() == TuskNailEntity.GOLDEN) {
+                float lerp = (float) (Math.sin(partialTicks*0.4)+1)/2;
+                r = Mth.lerp(lerp,r,1);
+                g = Mth.lerp(lerp,g,1);
+                b = Mth.lerp(lerp,b,0.33F);
+
+            }
+            r *= (1 - scale) + (float) Math.sin(partialTicks + 1) * scale;
+            g *= (1 - scale) + (float) Math.sin(partialTicks + 2) * scale;
+            b *= (1 - scale) + (float) Math.sin(partialTicks + 3) * scale;
             this.model.renderToBuffer(poseStack, $$6, $$5, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
             poseStack.popPose();
-            super.render($$0, $$1, $$2, poseStack, $$4, $$5);
+            super.render($$0, $$1, partialTicks, poseStack, $$4, $$5);
         }
     }
 

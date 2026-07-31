@@ -55,7 +55,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
     }
 
-    int lifespan = 150;
+    int lifespan = 100;
     public boolean isVortex() {return entityData.get(VORTEX);}
 
     public boolean isClinging() {return entityData.get(CLINGING) != Direction.DOWN;}

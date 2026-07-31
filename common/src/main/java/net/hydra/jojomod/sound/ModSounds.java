@@ -1170,6 +1170,19 @@ public class ModSounds {
     public static final ResourceLocation ANUBIS_EMPOWER_ID = new ResourceLocation(Roundabout.MOD_ID,ANUBIS_EMPOWER);
     public static SoundEvent ANUBIS_EMPOWER_EVENT = SoundEvent.createVariableRangeEvent(ANUBIS_EMPOWER_ID);
 
+    public static final String TUSK_SAW_MINE = "tusk_saw_mine";
+    public static final ResourceLocation TUSK_SAW_MINE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_SAW_MINE);
+    public static SoundEvent TUSK_SAW_MINE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_SAW_MINE_ID);
+    public static final String TUSK_LEAP = "tusk_leap";
+    public static final ResourceLocation TUSK_LEAP_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_LEAP);
+    public static SoundEvent TUSK_LEAP_EVENT = SoundEvent.createVariableRangeEvent(TUSK_LEAP_ID);
+    public static final String TUSK_SHOCKWAVE = "tusk_shockwave";
+    public static final ResourceLocation TUSK_SHOCKWAVE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_SHOCKWAVE);
+    public static SoundEvent TUSK_SHOCKWAVE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_SHOCKWAVE_ID);
+    public static final String TUSK_SPIN_THROW = "tusk_spin_throw";
+    public static final ResourceLocation TUSK_SPIN_THROW_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_SPIN_THROW);
+    public static SoundEvent TUSK_SPIN_THROW_EVENT = SoundEvent.createVariableRangeEvent(TUSK_SPIN_THROW_ID);
+
 
 
     public static final String UNLOCK_SKIN = "unlock_skin";
