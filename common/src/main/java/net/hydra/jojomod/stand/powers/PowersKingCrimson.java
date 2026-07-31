@@ -1868,6 +1868,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
         }
 
+        self.fallDistance = 0;
+
         skipBlockEntities(100);
         skipDayTime(100);
         skipFire(self);
