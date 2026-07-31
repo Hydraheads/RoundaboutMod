@@ -2380,6 +2380,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else {
                 spawnClone();
                 timeEraseActive = true;
+                self.stopUsingItem();
                 ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
