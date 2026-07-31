@@ -55,6 +55,9 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     @Override
     public void tick() {
         if (!level().isClientSide()) {
+            if (isJumping && onGround()) {
+                jumpFromGround();
+            }
             if (player == null) {
                 discardStand();
                 discard();

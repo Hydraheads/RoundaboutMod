@@ -433,7 +433,38 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean isJumping = false;
     public Vec3 delta = Vec3.ZERO;
 
-    
+
+    @Override
+    public void tickMobAI(LivingEntity attackTarget){
+        if (self instanceof KingCrimsonCloneEntity){
+            tickCloneAi(attackTarget);
+        } else {
+            super.tickMobAI(attackTarget);
+        }
+    }
+
+    public void tickCloneAi(LivingEntity attackTarget){
+        if (attackTarget != null && attackTarget.isAlive()){
+            if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
+                    || attackTarget.distanceTo(this.getSelf()) <= 5){
+                rotateMobHead(attackTarget);
+            }
+
+            Entity targetEntity = getTargetEntity(this.self, -1);
+            if (targetEntity != null && targetEntity.is(attackTarget)) {
+                if (this.attackTimeDuring <= -1) {
+                    double RNG = Math.random();
+                    if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
+                        wentForCharge = true;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                    } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                        wentForCharge = false;
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     public boolean isServerControlledCooldown(byte num){
