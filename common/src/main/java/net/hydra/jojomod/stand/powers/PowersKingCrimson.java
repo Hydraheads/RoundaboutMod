@@ -2535,7 +2535,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
         } else {
-            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4,0);
         }
     }
 
