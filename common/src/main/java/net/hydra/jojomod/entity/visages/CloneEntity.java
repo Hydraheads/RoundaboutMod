@@ -29,7 +29,19 @@ public class CloneEntity extends PathfinderMob {
     private static final EntityDataAccessor<Optional<UUID>> PLAYER = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.OPTIONAL_UUID);
 
+    @Override
+    public Component getDisplayName() {
+        Player player = getPlayer();
+        if (player != null) {
+            return player.getDisplayName();
+        }
 
+        if (this.name != null) {
+            return this.name;
+        }
+
+        return super.getDisplayName();
+    }
 
     public boolean turned = false;
     public Player player;

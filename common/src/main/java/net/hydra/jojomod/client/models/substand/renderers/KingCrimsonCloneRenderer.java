@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -42,8 +43,10 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
 
     @Override
     protected boolean shouldShowName(T $$0) {
-        return false;
-    }@Override
+        return true;
+    }
+
+    @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
         if (!entity.turned){
             Player pl = entity.getPlayer();
