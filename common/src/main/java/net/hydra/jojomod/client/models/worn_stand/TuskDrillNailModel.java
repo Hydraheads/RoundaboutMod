@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -60,7 +61,7 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
      //   nail2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
-    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int i) {
+    public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int i, boolean golden) {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
@@ -79,6 +80,13 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
                 float r = PT.getNailColor().x;
                 float g = PT.getNailColor().y;
                 float b = PT.getNailColor().z;
+
+                if (golden) {
+                    float lerp = (float) (Math.sin(partialTicks*0.4)+1)/2;
+                    r = Mth.lerp(lerp,r,1);
+                    g = Mth.lerp(lerp,g,1);
+                    b = Mth.lerp(lerp,b,0.33F);
+                }
 
                 r *= (1 - scale) + (float) Math.sin(partialTicks + i) * scale;
                 g *= (1 - scale) + (float) Math.sin(partialTicks + i * 2) * scale;

@@ -629,6 +629,14 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> ANUBIS_EMPOWER =
             register(ModSounds.ANUBIS_EMPOWER, ModSounds.ANUBIS_EMPOWER_ID);
 
+    public static final RegistryObject<SoundEvent> TUSK_SAW_MINE =
+            register(ModSounds.TUSK_SAW_MINE, ModSounds.TUSK_SAW_MINE_ID);
+    public static final RegistryObject<SoundEvent> TUSK_LEAP =
+            register(ModSounds.TUSK_LEAP, ModSounds.TUSK_LEAP_ID);
+    public static final RegistryObject<SoundEvent> TUSK_SHOCKWAVE =
+            register(ModSounds.TUSK_SHOCKWAVE, ModSounds.TUSK_SHOCKWAVE_ID);
+    public static final RegistryObject<SoundEvent> TUSK_SPIN_THROW =
+            register(ModSounds.TUSK_SPIN_THROW, ModSounds.TUSK_SPIN_THROW_ID);
 
 
 

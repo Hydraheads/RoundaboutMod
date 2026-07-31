@@ -322,6 +322,12 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
         addSound(ModSounds.ANUBIS_EMPOWER_ID, ModSounds.ANUBIS_EMPOWER_EVENT);
 
+        addSound(ModSounds.TUSK_SAW_MINE_ID, ModSounds.TUSK_SAW_MINE_EVENT);
+        addSound(ModSounds.TUSK_LEAP_ID, ModSounds.TUSK_LEAP_EVENT);
+        addSound(ModSounds.TUSK_SHOCKWAVE_ID, ModSounds.TUSK_SHOCKWAVE_EVENT);
+        addSound(ModSounds.TUSK_SPIN_THROW_ID, ModSounds.TUSK_SPIN_THROW_EVENT);
+
+
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BARRAGE_ID, ModSounds.KQ_MINESWEEPER_BARRAGE_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_KICK_ID, ModSounds.KQ_MINESWEEPER_KICK_EVENT);

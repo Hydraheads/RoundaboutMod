@@ -95,7 +95,13 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
             if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
                 poseStack.pushPose();
-                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
+                boolean golden = false;
+                if (SU.roundabout$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
+                    float scale = PT.getChargeScale(PT.getAttackTimeDuring()+partialTicks%1);
+                    poseStack.scale(1+scale*1.3F,1+scale*1.3F,1+scale*1.3F);
+                    golden = scale == 1;
+                }
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time,golden);
                 poseStack.popPose();
             } else {
                 this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
@@ -117,7 +123,13 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
                     poseStack.translate(-0.02,0.1,0); // RIGHT BACKWARD, LEFT FORWARD, U/D, L/R
                 }
                 poseStack.rotateAround(new Quaternionf(0, 1, 0, nailCount > 5 ? -1 : 1), 0, 0, 0);
-                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time);
+                boolean golden = false;
+                if (SU.roundabout$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
+                    float scale = PT.getChargeScale(PT.getAttackTimeDuring()+partialTicks%1);
+                    poseStack.scale(1+scale,1+scale,1+scale);
+                    golden = scale == 1;
+                }
+                ModStrayModels.TUSK_DRILL_NAIL.render(livingEntity, partialTicks, poseStack, bufferSource, time,golden);
                 poseStack.popPose();
             } else {
                 this.render(livingEntity,partialTicks, poseStack, bufferSource, time,PT.getAct() == 1);
