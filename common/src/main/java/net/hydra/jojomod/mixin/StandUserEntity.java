@@ -4690,7 +4690,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             return;
         }
         boolean adj = false;
-        if (roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+        if (roundabout$getStandPowers() instanceof PowersWalkingHeart){
             $$1/=2;
             adj = true;
         }
@@ -4698,7 +4698,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             StandUser SU = (StandUser) pl;
             float fd = ((IFatePlayer)pl).rdbt$getFatePowers().getJumpHeightAddonMax();
             if (SU.roundabout$getStandPowers() != null) {
-                fd += SU.roundabout$getStandPowers().getJumpHeightAddon();
+                if (SU.roundabout$getStandPowers().getJumpHeightAddon() != 0) {
+                    fd += SU.roundabout$getStandPowers().getJumpHeightAddon() + 0.5F;
+                }
             }
             if (fd > 0){
                 adj = true;

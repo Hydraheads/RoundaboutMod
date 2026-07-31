@@ -102,15 +102,15 @@ public class AnubisFirstPersonAnimations {
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(026.341F, 23.9275F, 39.3227F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.4F, KeyframeAnimations.degreeVec(-26.6577F, -22.3816F, -37.2048F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.2F, KeyframeAnimations.degreeVec(-26.6577F, -22.3816F, -37.2048F), AnimationChannel.Interpolations.CATMULLROM),
 
-                    new Keyframe(0.46F, KeyframeAnimations.degreeVec(-26.6577F, -22.3816F, -37.2048F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.26F, KeyframeAnimations.degreeVec(-26.6577F, -22.3816F, -37.2048F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 
             ))
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
-                    new Keyframe(0.4F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.46F, KeyframeAnimations.posVec(0.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.2F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.26F, KeyframeAnimations.posVec(0.0F, 0.0F, 2.0F), AnimationChannel.Interpolations.LINEAR),
 
                     new Keyframe(0.5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
@@ -120,12 +120,14 @@ public class AnubisFirstPersonAnimations {
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(40.8423F, -22.3816F, 50.2048F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.375F, KeyframeAnimations.degreeVec(-6.8751F, 33.356F, -13.6866F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.375F, KeyframeAnimations.degreeVec(-6.8751F, 33.356F, -13.6866F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(5F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, -1.0F, 4.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.375F, KeyframeAnimations.posVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.375F, KeyframeAnimations.posVec(0.0F, 0.0F, 3.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(5F, KeyframeAnimations.posVec(0.0F, 0.0F, 0), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
 
@@ -133,13 +135,13 @@ public class AnubisFirstPersonAnimations {
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(-6.8751F, 33.356F, -13.6866F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.1625F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 57.5F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.244F, KeyframeAnimations.degreeVec(-12.003F, 5.7134F, -82.1412F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-12.003F, 5.7134F, -82.1412F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.460F, KeyframeAnimations.degreeVec(-12.003F, 5.7134F, -82.1412F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.65F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 5.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.244F, KeyframeAnimations.posVec(0.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.25F, KeyframeAnimations.posVec(0.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.460F, KeyframeAnimations.posVec(0.0F, 4.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.65F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
