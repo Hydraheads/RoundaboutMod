@@ -98,6 +98,8 @@ public enum FateTypes {
     public static boolean isZombie(LivingEntity entity){
         if (entity instanceof Player PE){
             return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+        } else if (entity instanceof Mob mb){
+            return ((IMob)mb).roundabout$getFate() == ZOMBIE.ordinal();
         }
         return false;
     }
@@ -201,6 +203,9 @@ public enum FateTypes {
     }
     public static boolean takesSunlightDamage(LivingEntity entity){
         if (entity instanceof Player PE){
+            if (PowerTypes.isErasingTime(entity)){
+                return false;
+            }
             if (PE.isCreative()){
                 return false;
             }
@@ -208,7 +213,8 @@ public enum FateTypes {
                     ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal()) &&
                     ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick > 0;
         }
-        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+        if (entity instanceof Mob mb && (((IMob)mb).roundabout$isVampire() ||
+                ((IMob)mb).roundabout$getFate() == ZOMBIE.ordinal()))
             return true;
         if (entity instanceof Zombiefish)
             return true;
