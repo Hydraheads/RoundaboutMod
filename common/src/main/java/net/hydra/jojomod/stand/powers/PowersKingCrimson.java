@@ -1420,6 +1420,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
             if (entity instanceof KingCrimsonProjectionEntity kcpj){
+                kcpj.spawnDeathParticles();
+                kcpj.discard();
                 continue;
             }
             hitWall2 = false;

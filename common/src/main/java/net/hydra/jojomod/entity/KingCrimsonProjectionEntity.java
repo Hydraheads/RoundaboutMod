@@ -92,38 +92,40 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
     public PowersKingCrimson pkc = null;
     public void spawnDeathParticles() {
         if (!level().isClientSide()) {
-            if (pkc != null){
-                pkc.playStandUserOnlySoundsIfNearby(PowersKingCrimson.EPITAPH_PROJECTION_2, 40, true, false);
-            }
-            ServerLevel level = (ServerLevel) this.level();
+            if (!isRemoved()) {
+                if (pkc != null) {
+                    pkc.playStandUserOnlySoundsIfNearby(PowersKingCrimson.EPITAPH_PROJECTION_2, 40, true, false);
+                }
+                ServerLevel level = (ServerLevel) this.level();
 
-            float radius = this.getBbWidth() * 0.65F;
-            float height = this.getBbHeight();
+                float radius = this.getBbWidth() * 0.65F;
+                float height = this.getBbHeight();
 
-            int rings = 14;
-            int particlesPerRing = 18;
+                int rings = 14;
+                int particlesPerRing = 18;
 
-            for (int ring = 0; ring < rings; ring++) {
+                for (int ring = 0; ring < rings; ring++) {
 
-                double y = this.getY() + (height * ring / (rings - 1));
+                    double y = this.getY() + (height * ring / (rings - 1));
 
-                // Twist every ring a little
-                double offset = (ring * Math.PI / particlesPerRing);
+                    // Twist every ring a little
+                    double offset = (ring * Math.PI / particlesPerRing);
 
-                for (int i = 0; i < particlesPerRing; i++) {
+                    for (int i = 0; i < particlesPerRing; i++) {
 
-                    double angle = offset + (Math.PI * 2.0 * i / particlesPerRing);
+                        double angle = offset + (Math.PI * 2.0 * i / particlesPerRing);
 
-                    double x = this.getX() + Math.cos(angle) * radius;
-                    double z = this.getZ() + Math.sin(angle) * radius;
+                        double x = this.getX() + Math.cos(angle) * radius;
+                        double z = this.getZ() + Math.sin(angle) * radius;
 
-                    level.sendParticles(
-                            DustParticleOptions.REDSTONE,
-                            x, y, z,
-                            1,
-                            0, 0, 0,
-                            0
-                    );
+                        level.sendParticles(
+                                DustParticleOptions.REDSTONE,
+                                x, y, z,
+                                1,
+                                0, 0, 0,
+                                0
+                        );
+                    }
                 }
             }
         }
