@@ -296,7 +296,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
-        if (!canPredictIdles()){
+        if (!canPredictIdles() || !isGravityNormal(liv)){
             return liv.position();
         }
         //Mobs and Players that are still still need to move when idle
@@ -560,6 +560,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return super.isServerControlledCooldown(num);
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
+
+        if (!isGravityNormal(player)){
+            return player.position();
+        }
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1271,6 +1275,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return water * 2 >= total;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
+        if (!isGravityNormal(mob)){
+            return mob.position();
+        }
         if (mob.getControllingPassenger() instanceof Player pl){
             if (mob instanceof Strider str){
                 Vec3 pred = predictStrider(str,40);
