@@ -30,8 +30,8 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
     public boolean hurt(DamageSource $$0, float $$1) {
         if (!this.level().isClientSide()){
             if ($$0.getEntity() != null && this.tickCount >= 10) {
-                discard();
                 spawnDeathParticles();
+                discard();
             }
         }
         return false;

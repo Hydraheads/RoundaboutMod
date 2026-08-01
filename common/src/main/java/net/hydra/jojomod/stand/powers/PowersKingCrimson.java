@@ -2350,6 +2350,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
+            case SKILL_3_CROUCH -> {
+                tryBloodClient();
+            }
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 timeEraseClient();
             }
@@ -2359,6 +2362,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public void tryBloodClient(){
+        if (!onCooldown(PowerIndex.SKILL_3)) {
+            if (!hasBlock()) {
+                tryPowerPacket(PowerIndex.POWER_3);
+            }
+        }
+    }
+    public void bloodSplash() {
+        if (!onCooldown(PowerIndex.SKILL_3) && self.level() instanceof ServerLevel sl) {
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.VAMPIRE_DRAIN_EVENT,
+                    SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                    self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
+                    30, 0, 0, 0, 0.1);
+        }
+    }
     public void projectionClient(){
         if (!onCooldown(PowerIndex.SKILL_4_SNEAK) && !isUsingTimeErase()) {
             if (!hasBlock()) {
@@ -2782,12 +2802,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         if (canVault()){
-            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
+                    PowerIndex.GLOBAL_DASH);
         } else {
             if (!isHoldingSneak()){
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             } else {
-                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
+                setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_BLOOD_SPLASH,
+                        PowerIndex.SKILL_3);
             }
         }
         if (isGuarding() && !isUsingTimeErase()) {
@@ -3010,6 +3032,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } else if (move == PowerIndex.POWER_4){
            this.timeErase();
            return true;
+        } else if (move == PowerIndex.POWER_3){
+            this.bloodSplash();
+            return true;
         } else if (move == PowerIndex.POWER_4_SNEAK){
             this.hologram();
             return true;
