@@ -116,7 +116,8 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
 
             if (nearestClone != null
                     && (target == null
-                    || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))) {
+                    || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))
+            && mob.hasLineOfSight(nearestClone)) {
                 this.target = nearestClone;
             }
         }
