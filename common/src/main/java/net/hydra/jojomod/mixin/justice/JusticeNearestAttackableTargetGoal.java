@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -113,12 +114,16 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
         }
         if (this.target == null) {
             CloneEntity nearestClone = ActiveCloneManager.getNearest(mob);
-
+            if (mob.getAttributes().hasAttribute(Attributes.FOLLOW_RANGE)){
+            double followRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
+            double followRangeSqr = followRange * followRange;
             if (nearestClone != null
+                    && mob.distanceToSqr(nearestClone) <= followRangeSqr
                     && (target == null
                     || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))
             && mob.hasLineOfSight(nearestClone)) {
                 this.target = nearestClone;
+            }
             }
         }
     }
