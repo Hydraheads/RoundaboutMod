@@ -68,6 +68,11 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public boolean hurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.GO_BEYOND)){
             if (this.getPlayer() != null){
+                if ((((StandUser) this.getPlayer()).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                        pkc.timeEraseActive)
+                ){
+                    pkc.timeErase();
+                }
                 this.getPlayer().hurt($$0,$$1);
             }
         }
@@ -88,7 +93,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getPlayer() instanceof ServerPlayer sp
         && ((StandUser)sp).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
 
-            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath) {
+            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath
+            && !source.is(ModDamageTypes.GO_BEYOND)) {
                 if (!pkc.fakedDeath) {
                     if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
                         dropInventoryAsFakeItems(player);
