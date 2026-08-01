@@ -17,6 +17,18 @@
       "roundabout:oasis_mud_hit"
     ]
   },
+  "hologram_end": {
+    "subtitle": "sounds.roundabout.hologram_end",
+    "sounds": [
+      "roundabout:hologram_end"
+    ]
+  },
+  "king_hologram": {
+    "subtitle": "sounds.roundabout.king_hologram",
+    "sounds": [
+      "roundabout:king_hologram"
+    ]
+  },
   "summon_diver_down": {
     "subtitle": "sounds.roundabout.summon_diver_down",
     "sounds": [

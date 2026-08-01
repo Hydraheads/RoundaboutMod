@@ -2335,7 +2335,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 timeEraseClient();
             }
+            case SKILL_4_GUARD,SKILL_4_CROUCH_GUARD -> {
+                projectionClient();
+            }
         }
+    }
+
+    public void projectionClient(){
+
     }
 
     public void timeEraseClient(){
@@ -2647,7 +2654,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
             }
         }
-        if (!isHoldingSneak()){
+        if (isGuarding()) {
+            LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, 0);
+        } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
         } else {
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4,0);

@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StandEntity;
