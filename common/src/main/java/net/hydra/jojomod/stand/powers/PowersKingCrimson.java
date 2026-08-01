@@ -144,6 +144,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("timeEraseActive",timeEraseActive);
         $$0.putInt("ticksOfEraseLeft",ticksOfEraseLeft);
+        if (onCooldown(PowerIndex.SKILL_4)){
+            $$0.putInt("timeEraseCooldown",getCooldown(PowerIndex.SKILL_4).time);
+        } else {
+            $$0.putInt("timeEraseCooldown",0);
+        }
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -159,9 +164,26 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if ($$0.contains("ticksOfEraseLeft")) {
             ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
         }
+        if ($$0.contains("timeEraseCooldown")) {
+            if (!self.level().isClientSide()){
+                int jint = $$0.getInt("timeEraseCooldown");
+                if (jint > 0){
+                    setCooldown(PowerIndex.SKILL_4,jint);
+                }
+            }
+        }
     }
 
 
+    @Override
+    public void onStandSwitchInto(){
+        super.onStandSwitchInto();
+        setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
+        if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
+            setCooldown(PowerIndex.SKILL_2_SNEAK,
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
+        }
+    }
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -2323,6 +2345,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public int getTimeEraseCooldown(){
         int maxTicks = timeEraseMaxTicks();
         int ticksEaten = maxTicks - ticksOfEraseLeft;
+        ticksEaten = Math.max(ticksEaten,0);
+
+        int cooldownOverall = ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.timeEraseMinimumCooldown;
+        cooldownOverall += (int)(((float)ticksEaten)
+                *((ClientNetworking.getAppropriateConfig().kingCrimsonSettings.
+                additionalCooldownPerSecondsUsed2 *0.05)));
+
+        if (isBeyondRange()) {
+            cooldownOverall+=ClientNetworking.getAppropriateConfig().
+                    kingCrimsonSettings.additionalCooldownFromPlayerRunning;
+        }
+
+        return cooldownOverall;
+    }
+
+    public int getTimeEraseCooldownMax(){
+        int maxTicks = timeEraseMaxTicks();
+        int ticksEaten = maxTicks;
         ticksEaten = Math.max(ticksEaten,0);
 
         int cooldownOverall = ClientNetworking.getAppropriateConfig().
