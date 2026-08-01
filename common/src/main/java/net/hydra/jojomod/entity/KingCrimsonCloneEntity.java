@@ -256,7 +256,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             if (onGround()){
                 onGroundTime++;
             }
-            if (player == null) {
+            if (player == null || !player.isAlive()) {
                 discardStand();
                 discard();
 

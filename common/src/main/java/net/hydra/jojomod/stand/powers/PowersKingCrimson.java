@@ -2435,6 +2435,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         clone.user = player;
         clone.setYRot(self.getYRot());
+        clone.setXRot(self.getXRot());
+        clone.setYBodyRot(self.yBodyRot);
+        clone.setYHeadRot(self.getYHeadRot());
         clone.lifespan = 160;
         clone.pkc = this;
         playStandUserOnlySoundsIfNearby(EPITAPH_PROJECTION, 40, false, false);

@@ -51,7 +51,7 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
                 if (pkc != null && (pkc.isErasingTime() || pkc.isUsingEpitaph())){
                     spawnDeathParticles();
                     discard();
-                } else if (user == null || pkc == null){
+                } else if (user == null || pkc == null || !user.isAlive()){
                     spawnDeathParticles();
                     discard();
                 }
