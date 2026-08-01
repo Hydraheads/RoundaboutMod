@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
@@ -394,6 +395,15 @@ public class ClientUtil {
 
     public static void preRenderLifeTracker(LifeTrackerEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         ent.travelAheadRender($$4);
+    }
+
+    public static void preRenderFloatSabbath(BlackSabbathEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        ent.travelAheadRender($$4);
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
     }
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){

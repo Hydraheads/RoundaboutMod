@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
@@ -254,6 +255,8 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                 } else if (entity instanceof LifeTrackerEntity pre) {
                     ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                } else if(entity instanceof BlackSabbathEntity bs){
+                    ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                 }
             }
             //ci.cancel();

@@ -14,10 +14,12 @@ import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -65,6 +67,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
+    public boolean shouldSelect = false;
+    public void setShouldSelect(boolean bool){shouldSelect = bool;}
     public int tickDownSecond = 0;
     public void setTickDownSecond(int td){tickDownSecond = td;}
 
@@ -73,18 +77,23 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         super.setupAnimationStates();
         if(this.getUser() != null){
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                if(pb.active) {
-                    this.coat_open.stop();
-                    chest_close.stop();
-                    this.chest_open.startIfStopped(this.tickCount);
-                } else {
-                    this.chest_open.stop();
-                    this.coat_open.stop();
-                    this.chest_close.startIfStopped(this.tickCount);
+                {
+                    if(!pb.selecting) {
+                        if (pb.active) {
+                            this.coat_open.stop();
+                            chest_close.stop();
+                            this.chest_open.startIfStopped(this.tickCount);
+                        } else {
+                            this.chest_open.stop();
+                            this.coat_open.stop();
+                            this.chest_close.startIfStopped(this.tickCount);
+                        }
+                    }
                 }
             }
         } else {
             this.chest_open.stop();
+            this.chest_close.stop();
             this.coat_open.startIfStopped(this.tickCount);
         }
     }
@@ -139,8 +148,44 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
         super.tick();
+        travelAhead();
     }
 
+
+    public void travelAhead(){
+        if (this.getUser() != null && shouldSelect && !shouldFloat) {
+            Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), -1).getLocation();
+            if (!this.level().isClientSide()) {
+                setOldPosAndRot();
+            }
+
+            xOld = junkPos.x;
+            yOld = junkPos.y;
+            zOld = junkPos.z;
+            if (this.level().isClientSide()) {
+                absMoveTo(junkPos.x, this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            } else {
+                setPos(junkPos.x,this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            }
+        }
+    }
+    public void travelAheadRender(float render){
+        if (this.getUser() != null && shouldSelect && !shouldFloat) {
+            Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), -1.25F, render).getLocation();
+            if (!this.level().isClientSide()) {
+                setOldPosAndRot();
+            }
+
+            xOld = junkPos.x;
+            yOld = junkPos.y;
+            zOld = junkPos.z;
+            if (this.level().isClientSide()) {
+                absMoveTo(junkPos.x,this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            } else {
+                setPos(junkPos.x, this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            }
+        }
+    }
     @Override
     protected void defineSynchedData() {
             super.defineSynchedData();
