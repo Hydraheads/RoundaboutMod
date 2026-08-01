@@ -2364,7 +2364,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
 
-        setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
+        setCooldown(PowerIndex.SKILL_4_SNEAK, 240);
 
         if (!(getSelf() instanceof Player player) || player.level().isClientSide()) {
             return;
