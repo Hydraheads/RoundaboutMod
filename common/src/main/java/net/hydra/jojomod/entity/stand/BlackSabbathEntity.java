@@ -77,19 +77,24 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         super.setupAnimationStates();
         if(this.getUser() != null){
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                {
-                    if(!pb.selecting) {
-                        if (pb.active) {
-                            this.coat_open.stop();
-                            chest_close.stop();
-                            this.chest_open.startIfStopped(this.tickCount);
-                        } else {
-                            this.chest_open.stop();
-                            this.coat_open.stop();
-                            this.chest_close.startIfStopped(this.tickCount);
-                        }
-                    }
-                }
+                   switch (pb.moveMode) {
+                      case 1 -> {
+                          if (pb.active) {
+                              this.coat_open.stop();
+                              chest_close.stop();
+                              this.chest_open.startIfStopped(this.tickCount);
+                          } else {
+                              this.chest_open.stop();
+                              this.coat_open.stop();
+                              this.chest_close.startIfStopped(this.tickCount);
+                          }
+                      }
+                      case 2 -> {
+                          this.chest_open.stop();
+                          this.chest_close.stop();
+                          this.coat_open.startIfStopped(this.tickCount);
+                      }
+                   }
             }
         } else {
             this.chest_open.stop();
@@ -105,20 +110,32 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public boolean lockPos(){
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+            return pb.moveMode == 2;
+        }
         return false;
     }
     @Override
     public boolean hasNoPhysics(){
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+            return pb.moveMode == 2;
+        }
         return false;
     }
 
     @Override
     public boolean isNoGravity() {
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+            return pb.moveMode == 2;
+        }
         return false;
     }
 
     @Override
     public boolean standHasGravity() {
+        if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+            return pb.moveMode != 2;
+        }
         return true;
     }
 
@@ -154,7 +171,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     public void travelAhead(){
         if (this.getUser() != null && shouldSelect && !shouldFloat) {
-            Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), -1).getLocation();
+            Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), -1.25F).getLocation();
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
             }
@@ -197,6 +214,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public boolean isPickable() {return true;}
     @Override
     public boolean skipAttackInteraction(Entity $$0) {return false;}
+    @Override
+    public void knockback(double $$0, double $$1, double $$2) {}
+    public boolean isInvulnerable() {
+        return false;
+    }
 
     public void openCustomInventoryScreen(Player player) {
         if (!this.level().isClientSide) {
