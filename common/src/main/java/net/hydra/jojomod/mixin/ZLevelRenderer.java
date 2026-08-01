@@ -9,6 +9,7 @@ import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -118,6 +120,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 return;
             }
         }
+
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
@@ -131,133 +134,134 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     }
                 }
             }
-        }
 
-        if (ClientUtil.isUsingEpitaph() && entity != null){
-            Player pl = ClientUtil.getPlayer();
-            if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
-                    instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
-                TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                TimeSkipSnapshot renderSkip = skip;
+            if (ClientUtil.isUsingEpitaph()){
+                if (MainUtil.isGravityNormal(entity)) {
+                    Player pl = ClientUtil.getPlayer();
+                    if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                            instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()) {
+                        TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
+                        TimeSkipSnapshot renderSkip = skip;
 
-                if (entity.isPassenger()) {
-                    Entity vehicle = entity.getVehicle();
+                        if (entity.isPassenger()) {
+                            Entity vehicle = entity.getVehicle();
 
-                    if (vehicle != null) {
-                        TimeSkipSnapshot vehicleSkip = pkc.epitaph.get(vehicle.getId());
+                            if (vehicle != null) {
+                                TimeSkipSnapshot vehicleSkip = pkc.epitaph.get(vehicle.getId());
 
-                        if (vehicleSkip != null) {
-                            // Vehicle moved by this amount
-                            Vec3 delta = vehicleSkip.position.subtract(vehicle.position());
+                                if (vehicleSkip != null) {
+                                    // Vehicle moved by this amount
+                                    Vec3 delta = vehicleSkip.position.subtract(vehicle.position());
 
-                            // Create a synthetic snapshot for the passenger
-                            renderSkip = new TimeSkipSnapshot(
-                                    entity.getId(),
-                                    entity.position().add(delta),
-                                    entity.getXRot(),
-                                    vehicleSkip.yRot
+                                    // Create a synthetic snapshot for the passenger
+                                    renderSkip = new TimeSkipSnapshot(
+                                            entity.getId(),
+                                            entity.position().add(delta),
+                                            entity.getXRot(),
+                                            vehicleSkip.yRot
+                                    );
+                                }
+                            }
+                        }
+
+                        if (renderSkip != null) {
+                            float progress = Mth.clamp(
+                                    (ClientUtil.getGameTimeStart() + (partialTick % 1)) / 6.0F,
+                                    0.0F,
+                                    1.0F
                             );
+                            double $$7 = renderSkip.position.x;
+                            double $$8 = renderSkip.position.y;
+                            double $$9 = renderSkip.position.z;
+                            float renderYaw = renderSkip.yRot;
+                            if (progress < 1) {
+                                double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
+                                double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
+                                double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
+
+                                $$7 = Mth.lerp(progress, x, $$7);
+                                $$8 = Mth.lerp(progress, y, $$8);
+                                $$9 = Mth.lerp(progress, z, $$9);
+                                if (skip != null) {
+                                    renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+                                } else {
+                                    renderYaw = Mth.rotLerp(progress, entity.yRotO, entity.getYRot());
+                                }
+                            }
+
+
+                            if (entity instanceof LivingEntity LE) {
+                                float oldBody = LE.yBodyRot;
+                                float oldBodyO = LE.yBodyRotO;
+                                float oldHead = LE.yHeadRot;
+                                float oldHeadO = LE.yHeadRotO;
+                                float oldYaw = entity.getYRot();
+                                float oldYawO = entity.yRotO;
+                                float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
+                                float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
+
+                                LE.yBodyRot = renderYaw;
+                                LE.yBodyRotO = renderYaw;
+                                LE.yHeadRot = renderYaw + headOffset;
+                                LE.yHeadRotO = renderYaw + headOffsetO;
+
+                                entity.setYRot(renderYaw);
+                                entity.yRotO = renderYaw;
+
+                                this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+
+                                LE.yBodyRot = oldBody;
+                                LE.yBodyRotO = oldBodyO;
+                                LE.yHeadRot = oldHead;
+                                LE.yHeadRotO = oldHeadO;
+                                entity.setYRot(oldYaw);
+                                entity.yRotO = oldYawO;
+                            } else {
+
+                                this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                            }
+
                         }
-                    }
-                }
+                        ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+                        if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
+                                SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
+                            if (!(entity.getPassengers() != null && entity.hasPassenger(ClientUtil.getPlayer()))) {
+                                if (ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles) {
+                                    ClientUtil.setThrowFadeToTheEther(0.2F);
+                                    ClientUtil.forceFade = true;
+                                    ClientUtil.forceFade2 = 0.2F;
+                                    double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
+                                    double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
+                                    double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
+                                    float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+                                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                                    ClientUtil.forceFade = false;
+                                    ClientUtil.forceFade2 = 1F;
+                                }
 
-                if (renderSkip != null) {
-                    float progress = Mth.clamp(
-                            (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
-                            0.0F,
-                            1.0F
-                    );
-                    double $$7 = renderSkip.position.x;
-                    double $$8 = renderSkip.position.y;
-                    double $$9 = renderSkip.position.z;
-                    float renderYaw = renderSkip.yRot;
-                    if (progress < 1){
-                        double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
-                        double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
-                        double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
-
-                        $$7 = Mth.lerp(progress, x, $$7);
-                        $$8 = Mth.lerp(progress, y, $$8);
-                        $$9 = Mth.lerp(progress, z, $$9);
-                        if (skip != null){
-                            renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
-                        } else {
-                            renderYaw = Mth.rotLerp(progress, entity.yRotO, entity.getYRot());
+                                ci.cancel();
+                                return;
+                            }
                         }
-                    }
-
-
-
-                    if (entity instanceof  LivingEntity LE) {
-                        float oldBody = LE.yBodyRot;
-                        float oldBodyO = LE.yBodyRotO;
-                        float oldHead = LE.yHeadRot;
-                        float oldHeadO = LE.yHeadRotO;
-                        float oldYaw = entity.getYRot();
-                        float oldYawO = entity.yRotO;
-                        float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
-                        float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
-
-                        LE.yBodyRot = renderYaw;
-                        LE.yBodyRotO = renderYaw;
-                        LE.yHeadRot = renderYaw + headOffset;
-                        LE.yHeadRotO = renderYaw + headOffsetO;
-
-                        entity.setYRot(renderYaw);
-                        entity.yRotO = renderYaw;
-
-                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-
-                        LE.yBodyRot = oldBody;
-                        LE.yBodyRotO = oldBodyO;
-                        LE.yHeadRot = oldHead;
-                        LE.yHeadRotO = oldHeadO;
-                        entity.setYRot(oldYaw);
-                        entity.yRotO = oldYawO;
-                    } else {
-
-                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-                    }
-
-                }
-                ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
-                if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
-                        SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
-                    if (!(entity.getPassengers() != null &&  entity.hasPassenger(ClientUtil.getPlayer()))) {
-                        if (ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles) {
-                            ClientUtil.setThrowFadeToTheEther(0.2F);
-                            ClientUtil.forceFade = true;
-                            ClientUtil.forceFade2 = 0.2F;
-                            double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
-                            double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
-                            double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
-                            float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
-                            this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-                            ClientUtil.forceFade = false;
-                            ClientUtil.forceFade2 = 1F;
-                        }
-
-                        ci.cancel();
-                        return;
                     }
                 }
             }
-        }
-        if (!roundabout$recurse) {
+            if (!roundabout$recurse) {
 
-            if (entity.level().isClientSide()) {
-                if (entity instanceof CinderellaVisageDisplayEntity pre) {
-                    ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof SurvivorEntity pre) {
-                    ClientUtil.preRenderSurvivor(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof CrossfireHurricaneEntity pre) {
-                    ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof LifeTrackerEntity pre) {
-                    ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                if (entity.level().isClientSide()) {
+                    if (entity instanceof CinderellaVisageDisplayEntity pre) {
+                        ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof SurvivorEntity pre) {
+                        ClientUtil.preRenderSurvivor(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof CrossfireHurricaneEntity pre) {
+                        ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof LifeTrackerEntity pre) {
+                        ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    }
                 }
+                //ci.cancel();
+                //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
             }
-            //ci.cancel();
-            //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",

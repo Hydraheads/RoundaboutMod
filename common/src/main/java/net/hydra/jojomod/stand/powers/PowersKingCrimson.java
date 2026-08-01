@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
@@ -117,18 +118,20 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.EPITAPH_ACTIVATE_EVENT;
         } else if (soundChoice == EPITAPH_FADE_NOISE) {
             return ModSounds.EPITAPH_FADE_EVENT;
-        } else if (soundChoice == TIME_SKIP_1) {
-            return ModSounds.SKIP_TIME_1_EVENT;
-        } else if (soundChoice == TIME_SKIP_2) {
-            return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_ERASE) {
             return ModSounds.TIME_ERASE_FULL_EVENT;
+        } else if (soundChoice == EPITAPH_PROJECTION) {
+            return ModSounds.HOLOGRAM_START_EVENT;
+        }else if (soundChoice == EPITAPH_PROJECTION_2) {
+            return ModSounds.HOLOGRAM_END_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
 
     public static final byte EPITAPH_NOISE = 106;
     public static final byte EPITAPH_FADE_NOISE = 107;
+    public static final byte EPITAPH_PROJECTION = 108;
+    public static final byte EPITAPH_PROJECTION_2 = 109;
     public static final byte TIME_ERASE = 110;
 
     @Override
@@ -612,7 +615,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean isServerControlledCooldown(byte num){
         if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_2_SNEAK
-                || num == PowerIndex.SKILL_4) {
+                || num == PowerIndex.SKILL_4|| num == PowerIndex.SKILL_4_SNEAK) {
             return true;
         }
         return super.isServerControlledCooldown(num);
@@ -1634,6 +1637,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
+        if (!isGravityNormal(entity))
+            return;
         double distance = entity.position().distanceTo(snapshot.position);
         if (distance > getSkipBonusRange()) {
             return;
@@ -2087,6 +2092,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 AABB area = self.getBoundingBox().inflate(getSkipRange());
 
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+                    if (!isGravityNormal(entity))
+                        continue;
                     if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
@@ -2342,7 +2349,118 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void projectionClient(){
+        if (!onCooldown(PowerIndex.SKILL_4_SNEAK) && !isUsingTimeErase()) {
+            if (!hasBlock()) {
+                ClientUtil.sendControlData();
+                tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+            }
+        }
+    }
+    public void hologram() {
+        if (onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            return;
+        }
+        if (isUsingTimeErase()){
+            return;
+        }
 
+        setCooldown(PowerIndex.SKILL_4_SNEAK, 400);
+
+        if (!(getSelf() instanceof Player player) || player.level().isClientSide()) {
+            return;
+        }
+
+        KingCrimsonProjectionEntity clone =
+                ModEntities.KING_CRIMSON_PROJECTION.create(player.level());
+
+        if (clone == null) {
+            return;
+        }
+
+        Level level = player.level();
+
+        // Where the player is looking
+        Vec3 start = player.getEyePosition();
+        Vec3 end = start.add(player.getLookAngle().scale(20.0));
+
+        // Hit a block if possible
+        BlockHitResult hit = level.clip(new ClipContext(
+                start,
+                end,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+
+        Vec3 target = hit.getType() == HitResult.Type.MISS
+                ? end
+                : hit.getLocation();
+
+        BlockPos pos = BlockPos.containing(target);
+
+        // Search downward for ground
+        while (pos.getY() > level.getMinBuildHeight()
+                && !level.getBlockState(pos).isSolid()) {
+            pos = pos.below();
+        }
+
+        // Stand on top of the first solid block
+        pos = pos.above();
+
+        // Make sure there's room for a player-sized entity
+        while (pos.getY() < level.getMaxBuildHeight() - 2) {
+            if (!level.getBlockState(pos).isSolid()
+                    && !level.getBlockState(pos.above()).isSolid()) {
+                break;
+            }
+            pos = pos.above();
+        }
+
+        clone.moveTo(
+                pos.getX() + 0.5,
+                pos.getY(),
+                pos.getZ() + 0.5,
+                player.getYRot(),
+                player.getXRot()
+        );
+
+        clone.setYRot(self.getYRot());
+        clone.lifespan = 160;
+        clone.pkc = this;
+        playStandUserOnlySoundsIfNearby(EPITAPH_PROJECTION, 40, false, false);
+        level.addFreshEntity(clone);
+        AABB search = clone.getBoundingBox().inflate(40);
+
+        for (Mob mob : self.level().getEntitiesOfClass(Mob.class, search)) {
+
+            LivingEntity targetT = mob.getTarget();
+
+            if (targetT != player) {
+                continue;
+            }
+            if (MainUtil.isBossMob(targetT)){
+                continue;
+            }
+
+            if (!mob.hasLineOfSight(clone)) {
+                continue;
+            }
+
+            float yaw = mob.yHeadRot * Mth.DEG_TO_RAD;
+            Vec3 forward = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
+            Vec3 toClone = clone.position().subtract(mob.position()).normalize();
+
+            if (forward.dot(toClone) <= 0.0) {
+                continue; // Clone is behind the mob
+            }
+
+            double distToPlayer = mob.distanceToSqr(player);
+            double distToProjection = mob.distanceToSqr(clone);
+
+            if (distToProjection < distToPlayer) {
+                ((StandUser) mob).roundabout$aggressivelyEnforceAggro(clone);
+            }
+        }
     }
 
     public void timeEraseClient(){
@@ -2654,7 +2772,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
             }
         }
-        if (isGuarding()) {
+        if (isGuarding() && !isUsingTimeErase()) {
             LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, 0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
@@ -2874,6 +2992,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } else if (move == PowerIndex.POWER_4){
            this.timeErase();
            return true;
+        } else if (move == PowerIndex.POWER_4_SNEAK){
+            this.hologram();
+            return true;
         }
         return super.setPowerOther(move,lastMove);
     }

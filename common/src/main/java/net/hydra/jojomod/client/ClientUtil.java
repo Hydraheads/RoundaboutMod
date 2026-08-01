@@ -11,6 +11,8 @@ import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
@@ -1181,6 +1183,10 @@ public class ClientUtil {
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
+        }
+
+        if (ent instanceof KingCrimsonProjectionEntity kcpe){
+            throwFade*=((Math.min(((float) kcpe.fadeInTick)+delta, (float) kcpe.maxFadeInTick)) /((float)kcpe.maxFadeInTick));
         }
 
         if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
