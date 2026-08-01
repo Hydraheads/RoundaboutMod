@@ -15,6 +15,7 @@ import net.hydra.jojomod.stand.powers.PowersCinderella;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -44,6 +45,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen {
+
+    private MoveFunction positionUpdater;
 
     public BlackSabbathEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -165,57 +168,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
         super.tick();
-        travelAhead();
+        travelAhead(Entity::setPos);
     }
-
-
-    public void travelAhead(){
-        if (this.getUser() != null && shouldSelect && !shouldFloat) {
-            Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), -1.25F).getLocation();
-            Vec3 lvec = null;
-            Position pn = null;
-            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                pn = this.getUser().getEyePosition().add(lvec.scale(1));
-            }
-            if (!this.level().isClientSide()) {
-                setOldPosAndRot();
-            }
-            if(pn != null) {
-                xOld = pn.x();
-                yOld = pn.y();
-                zOld = pn.z();
-                if (this.level().isClientSide()) {
-                    absMoveTo(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
-                } else {
-                    setPos(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
-                }
-            }
-        }
-    }
-    public void travelAheadRender(float render){
-        if (this.getUser() != null && shouldSelect && !shouldFloat) {
-            Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), -1.25F, render).getLocation();
-            Vec3 lvec = null;
-            Position pn = null;
-            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                pn = this.getUser().getEyePosition().add(lvec.scale(1));
-            }
-            if (!this.level().isClientSide()) {
-                setOldPosAndRot();
-            }
-            if(pn != null) {
-
-            xOld = pn.x();
-            yOld = pn.y();
-            zOld = pn.z();
-
-                if (this.level().isClientSide()) {
-                    absMoveTo(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
-                } else {
-                    setPos(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
-                }
+    public void travelAhead(Entity.MoveFunction positionUpdater) {
+        if (this.getUser() != null) {
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && pb.moveMode == 2) {
+                Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
+                Position pn = this.getUser().getEyePosition().add(lvec.scale(-1F));
+                positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.35), pn.z());
             }
         }
     }

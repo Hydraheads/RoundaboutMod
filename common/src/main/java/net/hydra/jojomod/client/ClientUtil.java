@@ -398,7 +398,6 @@ public class ClientUtil {
     }
 
     public static void preRenderFloatSabbath(BlackSabbathEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        ent.travelAheadRender($$4);
         float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
