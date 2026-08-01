@@ -894,7 +894,7 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (!getCapturedEntityIds().isEmpty()){
-            if (isCapturedEntity(ent)) {
+            if (ent != null && isCapturedEntity(ent)) {
                 return true;
             }
             if (ent instanceof CloneEntity ce && isCapturedEntity(ce.player)){
