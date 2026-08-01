@@ -1417,10 +1417,57 @@ public class ClientUtil {
             boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && getPlayer().fallDistance < 2 &&
                     !getPlayer().getAbilities().flying);
             boolean isSprinting = mc.player.isSprinting();
+            boolean runaway = isTargetBehindPlayer(mc.player);
+
             Vec3 delta = mc.player.getDeltaMovement();
             C2SPacketUtil.sendControlDataPacket(isBackingUp, isMovingForward, isSneaking, isJumping,
-                    delta,isSprinting);
+                    delta,isSprinting,runaway);
         }
+    }
+
+    public static boolean isTargetBehindPlayer(Player player) {
+        LivingEntity target = null;
+
+        // Prefer the entity the player last attacked
+        LivingEntity lastHurt = player.getLastHurtMob();
+        if (lastHurt != null && lastHurt.isAlive() && player.distanceToSqr(lastHurt) <= 50 * 50) {
+            target = lastHurt;
+        }
+
+        // Otherwise use the last entity that hurt the player
+        if (target == null) {
+            LivingEntity lastAttacker = player.getLastHurtByMob();
+            if (lastAttacker != null && lastAttacker.isAlive()
+                    && player.distanceToSqr(lastAttacker) <= 50 * 50) {
+                target = lastAttacker;
+            }
+        }
+
+        if (target == null) {
+            return false;
+        }
+
+        // Horizontal look vector
+        Vec3 look = player.getLookAngle();
+        look = new Vec3(look.x, 0.0, look.z);
+
+        if (look.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        look = look.normalize();
+
+        // Horizontal vector to target
+        Vec3 toTarget = target.position().subtract(player.position());
+        toTarget = new Vec3(toTarget.x, 0.0, toTarget.z);
+
+        if (toTarget.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        toTarget = toTarget.normalize();
+
+        return look.dot(toTarget) < 0.0;
     }
 
     public static Player getPlayer(){

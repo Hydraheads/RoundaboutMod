@@ -206,7 +206,8 @@ public class C2SPacketUtil {
                                              boolean isSneaking,
                                              boolean isJumping,
                                              Vec3 delta,
-                                             boolean isSprinting
+                                             boolean isSprinting,
+                                             boolean runaway
                                              ){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.ControlDataKC.value,
@@ -215,7 +216,8 @@ public class C2SPacketUtil {
                 isSneaking,
                 isJumping,
                 new Vector3f((float) delta.x, (float) delta.y, (float) delta.z),
-                isSprinting
+                isSprinting,
+                runaway
         );
     }
     public static void timeStopHoveringPacket(boolean hover){

@@ -110,6 +110,7 @@ public class ModEntities {
     public static EntityType<PWMeteorEntity> PW_METEOR;
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
     public static EntityType<FakeItemEntity> FAKE_ITEM;
+    public static EntityType<FakeExperienceOrb> FAKE_EXP;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;

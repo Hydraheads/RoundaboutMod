@@ -84,6 +84,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         float spd = super.getSpeed();
         if (isSneaking){
             spd*=0.3F;
+        } else if (!isSprinting){
+            spd*=1.3F;
         }
         return spd;
     }
@@ -286,7 +288,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         this.hasImpulse = true;
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.MAX_HEALTH, 20)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.281).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

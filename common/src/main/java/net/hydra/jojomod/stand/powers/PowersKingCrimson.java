@@ -414,6 +414,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
             fclone.isSprinting = isSprinting;
+            fclone.runaway = runaway;
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -511,20 +512,24 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean isSneaking = false;
     public boolean isJumping = false;
     public boolean isSprinting = false;
+    public boolean runaway = false;
     public Vec3 delta = Vec3.ZERO;
 
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if (self instanceof KingCrimsonCloneEntity){
-            tickCloneAi(attackTarget);
+        if (self instanceof KingCrimsonCloneEntity kce){
+            tickCloneAi(attackTarget, kce);
         } else {
             super.tickMobAI(attackTarget);
         }
     }
 
-    public void tickCloneAi(LivingEntity attackTarget){
+    public void tickCloneAi(LivingEntity attackTarget, KingCrimsonCloneEntity kce){
         if (attackTarget != null && attackTarget.isAlive()){
+            if (kce.runaway){
+                return;
+            }
             float distanceTo = attackTarget.distanceTo(this.getSelf());
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || distanceTo <= 5){
