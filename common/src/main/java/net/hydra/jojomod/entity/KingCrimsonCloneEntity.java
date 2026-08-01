@@ -76,7 +76,16 @@ public class KingCrimsonCloneEntity extends CloneEntity {
                 this.getPlayer().hurt($$0,$$1);
             }
         }
-        return super.hurt($$0,$$1);
+        boolean hurt = super.hurt($$0,$$1);
+        if (hurt && !level().isClientSide && runaway && isAlive()) {
+            hitsTaken++;
+
+            if (hitsTaken >= 2) {
+                runaway = false;
+                addBehaviourGoals();
+            }
+        }
+        return hurt;
     }
 
     @Override
@@ -169,11 +178,12 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             SE.discard();
         }
     }
+    private int hitsTaken = 0;
+
     public boolean contains = false;
     public int onGroundTime = 0;
     @Override
     public void tick() {
-        Roundabout.LOGGER.info("run" +runaway);
         if (!level().isClientSide()) {
             if (!contains) {
                 contains = true;

@@ -417,7 +417,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isSprinting = isSprinting;
             runaway = isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
-            Roundabout.LOGGER.info("run" +runaway);
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -515,14 +514,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
     public static boolean isTargetBehindPlayer(Player player) {
-        Roundabout.LOGGER.info("1");
         LivingEntity target = null;
 
         // Prefer the entity the player last attacked
         LivingEntity lastHurt = player.getLastHurtMob();
         if (lastHurt != null && lastHurt.isAlive() && player.distanceToSqr(lastHurt) <= 50 * 50) {
             target = lastHurt;
-            Roundabout.LOGGER.info("2");
         }
 
         // Otherwise use the last entity that hurt the player
@@ -531,12 +528,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (lastAttacker != null && lastAttacker.isAlive()
                     && player.distanceToSqr(lastAttacker) <= 50 * 50) {
                 target = lastAttacker;
-                Roundabout.LOGGER.info("3");
             }
         }
 
         if (target == null) {
-            Roundabout.LOGGER.info("4");
             return false;
         }
 
@@ -544,7 +539,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 look = player.getLookAngle();
         look = new Vec3(look.x, 0.0, look.z);
 
-        Roundabout.LOGGER.info("5");
         if (look.lengthSqr() < 1.0E-6) {
             return false;
         }
@@ -555,15 +549,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         Vec3 toTarget = target.position().subtract(player.position());
         toTarget = new Vec3(toTarget.x, 0.0, toTarget.z);
 
-        Roundabout.LOGGER.info("6");
         if (toTarget.lengthSqr() < 1.0E-6) {
             return false;
         }
 
-        Roundabout.LOGGER.info("7");
         toTarget = toTarget.normalize();
 
-        Roundabout.LOGGER.info("8");
         return look.dot(toTarget) < 0.0;
     }
 
