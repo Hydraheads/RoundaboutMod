@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -680,6 +681,36 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     float yRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.yRot = yRot;
                     this.hat.yRot = yRot;
+
+                }
+            }
+
+        }
+        if ($$0 instanceof CloneEntity CE){
+            ItemStack visage = CE.getVisage();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI instanceof ModificationMaskItem MD){
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag != null && tag.contains("head")) {
+                            int faceSize = tag.getInt("head");
+                            float yeah = (float) (0.73F + (faceSize * 0.002));
+                            head.xScale *= yeah;
+                            head.yScale *= yeah;
+                            head.zScale *= yeah;
+                            hat.xScale *= yeah;
+                            hat.yScale *= yeah;
+                            hat.zScale *= yeah;
+                        }
+                    } else {
+                        Vector3f scale = MI.visageData.scaleHead();
+                        head.xScale *= scale.x;
+                        head.yScale *= scale.y;
+                        head.zScale *= scale.z;
+                        hat.xScale *= scale.x;
+                        hat.yScale *= scale.y;
+                        hat.zScale *= scale.z;
+                    }
 
                 }
             }
