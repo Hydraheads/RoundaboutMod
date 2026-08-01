@@ -48,6 +48,13 @@ public class ModSounds {
     public static final ResourceLocation TIME_ERASE_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+TIME_ERASE_END);
     public static SoundEvent TIME_ERASE_END_EVENT = SoundEvent.createVariableRangeEvent(TIME_ERASE_END_ID);
 
+    public static final String HOLOGRAM_START = "king_hologram";
+    public static final ResourceLocation HOLOGRAM_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HOLOGRAM_START);
+    public static SoundEvent HOLOGRAM_START_EVENT = SoundEvent.createVariableRangeEvent(HOLOGRAM_START_ID);
+    public static final String HOLOGRAM_END = "hologram_end";
+    public static final ResourceLocation HOLOGRAM_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HOLOGRAM_END);
+    public static SoundEvent HOLOGRAM_END_EVENT = SoundEvent.createVariableRangeEvent(HOLOGRAM_END_ID);
+
 
     public static final String OVA_THE_WORLD = "ova_the_world";
     public static final ResourceLocation OVA_THE_WORLD_ID = new ResourceLocation(Roundabout.MOD_ID+":"+OVA_THE_WORLD);

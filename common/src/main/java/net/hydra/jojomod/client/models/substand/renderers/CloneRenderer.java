@@ -324,9 +324,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
     @Override
     protected boolean shouldShowName(T $$0) {
         boolean characterType = true;
-        if ($$0.getPlayer() != null){
-            return $$0.getPlayer().shouldShowName() && !ClientUtil.isPlayer($$0.getPlayer());
-        } if ($$0.getVisage() != null && !$$0.getVisage().isEmpty() && $$0.getVisage().getItem() instanceof MaskItem ME) {
+         if ($$0.getVisage() != null && !$$0.getVisage().isEmpty() && $$0.getVisage().getItem() instanceof MaskItem ME) {
             characterType = ME.visageData.isCharacterVisage();
 
             if (ClientNetworking.getAppropriateConfig() != null  && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
@@ -335,8 +333,15 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                     if (!ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnCharacterVisages) {
                         return false;
                     }
+                } else {
+
+                    if (!ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagOnPlayerVisages) {
+                        return false;
+                    }
                 }
             }
+        }if ($$0.getPlayer() != null){
+            return $$0.getPlayer().shouldShowName() && !ClientUtil.isPlayer($$0.getPlayer());
         }
         Optional<UUID> uuid = $$0.getPlayerUUID();
         if (uuid.isPresent() && ClientUtil.isPlayerUUID(uuid.get())){

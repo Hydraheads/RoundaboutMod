@@ -426,6 +426,9 @@ public abstract class EntityAndData implements IEntityAndData {
             ci.cancel();
         }
     }
+    public boolean rdbt$getSharedFlag(int flag){
+        return getSharedFlag(flag);
+    }
         @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
         Entity ent = (Entity) (Object) this;
@@ -867,6 +870,9 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     public boolean hasImpulse;
+
+    @Shadow
+    protected abstract boolean getSharedFlag(int i);
 
     @Override
     @Unique

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.CombatTracker;
@@ -24,6 +26,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,13 +47,12 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             EntityDataSerializers.BOOLEAN);
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        //this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0, 0.0F));
-        this.addBehaviourGoals();
+        //this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0, 0.0F));
     }
 
-    protected void addBehaviourGoals() {
+    public void addBehaviourGoals() {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
@@ -65,10 +67,24 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public boolean hurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.GO_BEYOND)){
             if (this.getPlayer() != null){
+                if ((((StandUser) this.getPlayer()).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                        pkc.timeEraseActive)
+                ){
+                    pkc.timeErase();
+                }
                 this.getPlayer().hurt($$0,$$1);
             }
         }
-        return super.hurt($$0,$$1);
+        boolean hurt = super.hurt($$0,$$1);
+        if (hurt && !level().isClientSide && runaway && isAlive()) {
+            hitsTaken++;
+
+            if (hitsTaken >= 2) {
+                runaway = false;
+                addBehaviourGoals();
+            }
+        }
+        return hurt;
     }
 
     @Override
@@ -76,6 +92,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         float spd = super.getSpeed();
         if (isSneaking){
             spd*=0.3F;
+        } else if (!isSprinting){
+            spd*=1.3F;
         }
         return spd;
     }
@@ -84,12 +102,73 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public void die(DamageSource source) {
         if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getPlayer() instanceof ServerPlayer sp
         && ((StandUser)sp).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
-            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath) {
-                sp.sendSystemMessage(this.getCombatTracker().getDeathMessage());
-                pkc.fakedDeath = true;
+
+            if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath
+            && !source.is(ModDamageTypes.GO_BEYOND)) {
+                if (!pkc.fakedDeath) {
+                    if (!this.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+                        dropInventoryAsFakeItems(player);
+                    }
+
+                    double range = pkc.getSkipBonusRange();
+                    double rangeSqr = range * range;
+
+                    Component message = this.getCombatTracker().getDeathMessage();
+
+                    for (ServerPlayer player : ((ServerLevel) level()).players()) {
+                        if (player.distanceToSqr(this) <= rangeSqr) {
+                            player.sendSystemMessage(message);
+                        }
+                    }
+
+                    pkc.fakedDeath = true;
+                }
             }
         }
         super.die(source);
+    }
+
+
+
+    private void dropInventoryAsFakeItems(Player player) {
+        for (ItemStack stack : player.getInventory().items) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+
+        for (ItemStack stack : player.getInventory().armor) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+
+        for (ItemStack stack : player.getInventory().offhand) {
+            if (!stack.isEmpty()) {
+                spawnFakeItem(stack);
+            }
+        }
+    }
+
+    private void spawnFakeItem(ItemStack stack) {
+        float angle = this.random.nextFloat() * ((float)Math.PI * 2F);
+        float speed = this.random.nextFloat() * 0.5F;
+
+        double vx = -Mth.sin(angle) * speed;
+        double vz = Mth.cos(angle) * speed;
+
+        FakeItemEntity item = new FakeItemEntity(
+                ModEntities.FAKE_ITEM,
+                level()
+        );
+
+        item.setItem(stack.copy());
+        item.setPos(getX(), getEyeY() - 0.3, getZ());
+        item.setDeltaMovement(vx, 0.2F, vz);
+
+        item.host = getPlayer();
+
+        level().addFreshEntity(item);
     }
 
     public void discardStand(){
@@ -98,10 +177,17 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             SE.discard();
         }
     }
+    private int hitsTaken = 0;
+
+    public boolean contains = false;
     public int onGroundTime = 0;
     @Override
     public void tick() {
         if (!level().isClientSide()) {
+            if (!contains) {
+                contains = true;
+                ActiveCloneManager.add(this);
+            }
             if (isMovingForward || isBackingUp) {
                 if (getNavigation().isDone()) {
                     float direction = isBackingUp ? -1.0F : 1.0F;
@@ -212,7 +298,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         this.hasImpulse = true;
     }
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.MAX_HEALTH, 20)
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.281).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).
                 add(Attributes.FOLLOW_RANGE, 48.0D);
     }

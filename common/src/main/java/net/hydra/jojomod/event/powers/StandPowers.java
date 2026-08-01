@@ -162,6 +162,16 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean isGravityNormal(Entity entity){
+        if (entity != null){
+            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN){
+                return false;
+            }
+        }
+
+        return true;
+    }
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);

@@ -24,6 +24,7 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
             Player pl = entity.getPlayer();
             if (pl != null) {
 
+
                 if (pl.isCrouching()){
                     entity.setShiftKeyDown(true);
                     entity.setPose(Pose.CROUCHING);

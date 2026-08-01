@@ -1,5 +1,5 @@
 {
-  "text.roundabout.time_erase": "%1$s erased their death!",
+  "text.roundabout.time_erase": "%1$s erased their own death!",
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
@@ -448,6 +448,8 @@
   "entity.roundabout.block_wall_entity": "Block Wall",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
+  "entity.roundabout.king_crimson_clone": "Player",
+  "entity.roundabout.king_crimson_hologram": "Projection",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
@@ -753,6 +755,8 @@
   "sounds.roundabout.chess_piece": "Piece",
   "sounds.roundabout.chess_place": "Chess place",
   "sounds.roundabout.chess_break": "Chess remove",
+  "sounds.roundabout.hologram_end": "Blip",
+  "sounds.roundabout.king_hologram": "Projection",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",

@@ -3,6 +3,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.client.FakeItemEntityRenderer;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
@@ -153,6 +154,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.JOSUKE_PART_EIGHT, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AESTHETICIAN, VisageBasisRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FAKE_ITEM, FakeItemEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ZOMBIE_AESTHETICIAN, ZombieAestheticianRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POCOLOCO, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GUCCIO, VisageBasisRenderer::new);

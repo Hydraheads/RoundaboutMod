@@ -819,6 +819,7 @@ public class PowersCalifornia extends NewDashPreset {
                 if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
                     if (pkc.timeEraseActive){
                         clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
                         setLeadTarget(pkc.activeClone);
                     }
                 }
@@ -894,7 +895,7 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
         if (!getCapturedEntityIds().isEmpty()){
-            if (isCapturedEntity(ent)) {
+            if (ent != null && isCapturedEntity(ent)) {
                 return true;
             }
             if (ent instanceof CloneEntity ce && isCapturedEntity(ce.player)){

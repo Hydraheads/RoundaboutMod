@@ -733,6 +733,32 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
         if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            // tick effects down but don't spawn particles
+            try {
+                Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
+                while ($$0.hasNext()) {
+                    MobEffect $$1 = $$0.next();
+                    MobEffectInstance $$2 = this.activeEffects.get($$1);
+                    if (!$$2.tick(rdbt$this(), () -> this.onEffectUpdated($$2, true, null))) {
+                        if (!this.level().isClientSide) {
+                            $$0.remove();
+                            this.onEffectRemoved($$2);
+                        }
+                    } else if ($$2.getDuration() % 600 == 0) {
+                        this.onEffectUpdated($$2, false, null);
+                    }
+                }
+            } catch (ConcurrentModificationException var11) {
+            }
+
+            if (this.effectsDirty) {
+                if (!this.level().isClientSide) {
+                    this.updateInvisibilityStatus();
+                    this.updateGlowingStatus();
+                }
+
+                this.effectsDirty = false;
+            }
             ci.cancel();
             return;
         }
@@ -5790,6 +5816,22 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Shadow
     @javax.annotation.Nullable
     private LivingEntity lastHurtByMob;
+
+    @Shadow
+    protected abstract void onEffectRemoved(MobEffectInstance $$0);
+
+    @Shadow
+    protected abstract void onEffectUpdated(MobEffectInstance $$0, boolean $$1, @Nullable Entity $$2);
+
+    @Shadow
+    private boolean effectsDirty;
+
+    @Shadow
+    protected abstract void updateInvisibilityStatus();
+
+    @Shadow
+    protected abstract void updateGlowingStatus();
+
     public double previousYpos = getY();
 
 

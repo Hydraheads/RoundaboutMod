@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -49,6 +50,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -144,6 +146,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("timeEraseActive",timeEraseActive);
         $$0.putInt("ticksOfEraseLeft",ticksOfEraseLeft);
+        if (onCooldown(PowerIndex.SKILL_4)){
+            $$0.putInt("timeEraseCooldown",getCooldown(PowerIndex.SKILL_4).time);
+        } else {
+            $$0.putInt("timeEraseCooldown",0);
+        }
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -159,9 +166,28 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if ($$0.contains("ticksOfEraseLeft")) {
             ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
         }
+        if ($$0.contains("timeEraseCooldown")) {
+            if (!self.level().isClientSide()){
+                int jint = $$0.getInt("timeEraseCooldown");
+                if (jint > 0){
+                    setCooldown(PowerIndex.SKILL_4,jint);
+                }
+            }
+        }
     }
 
 
+    @Override
+    public void onStandSwitchInto(){
+        super.onStandSwitchInto();
+        if (!self.level().isClientSide()) {
+            int minCo = ClientNetworking.getAppropriateConfig().
+                    kingCrimsonSettings.timeEraseMinimumCooldown;
+            if (!onCooldown(PowerIndex.SKILL_4) || getCooldown(PowerIndex.SKILL_4).time < minCo) {
+                setCooldown(PowerIndex.SKILL_4, minCo);
+            }
+        }
+    }
     public boolean isUsingEpitaph() {
         return !epitaph.isEmpty();
     }
@@ -272,7 +298,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
-        if (!canPredictIdles()){
+        if (!canPredictIdles() || !isGravityNormal(liv)){
             return liv.position();
         }
         //Mobs and Players that are still still need to move when idle
@@ -390,6 +416,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
             fclone.isSprinting = isSprinting;
+            runaway = isTargetBehindPlayer(PE);
+            fclone.runaway = runaway;
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -438,6 +466,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (FateTypes.takesSunlightDamage(activeClone)) {
                 ((IMob) activeClone).roundabout$getGoalSelector().addGoal(2, new RestrictSunGoal(activeClone));
             }
+            if (!runaway){
+                ((IMob) activeClone).roundabout$getGoalSelector().addGoal(8, new LookAtPlayerGoal(activeClone, Player.class, 8.0F));
+                activeClone.addBehaviourGoals();
+            }
             StandUser thisUser = getStandUserSelf();
             activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
             activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
@@ -482,25 +514,75 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return true;
     }
 
+
+    public static boolean isTargetBehindPlayer(Player player) {
+        LivingEntity target = null;
+
+        // Prefer the entity the player last attacked
+        LivingEntity lastHurt = player.getLastHurtMob();
+        if (lastHurt != null && lastHurt.isAlive() && player.distanceToSqr(lastHurt) <= 50 * 50) {
+            target = lastHurt;
+        }
+
+        // Otherwise use the last entity that hurt the player
+        if (target == null) {
+            LivingEntity lastAttacker = player.getLastHurtByMob();
+            if (lastAttacker != null && lastAttacker.isAlive()
+                    && player.distanceToSqr(lastAttacker) <= 50 * 50) {
+                target = lastAttacker;
+            }
+        }
+
+        if (target == null) {
+            return false;
+        }
+
+        // Horizontal look vector
+        Vec3 look = player.getLookAngle();
+        look = new Vec3(look.x, 0.0, look.z);
+
+        if (look.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        look = look.normalize();
+
+        // Horizontal vector to target
+        Vec3 toTarget = target.position().subtract(player.position());
+        toTarget = new Vec3(toTarget.x, 0.0, toTarget.z);
+
+        if (toTarget.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        toTarget = toTarget.normalize();
+
+        return look.dot(toTarget) < 0.0;
+    }
+
     public boolean isBackingUp = false;
     public boolean isMovingForward = false;
     public boolean isSneaking = false;
     public boolean isJumping = false;
     public boolean isSprinting = false;
+    public boolean runaway = false;
     public Vec3 delta = Vec3.ZERO;
 
 
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-        if (self instanceof KingCrimsonCloneEntity){
-            tickCloneAi(attackTarget);
+        if (self instanceof KingCrimsonCloneEntity kce){
+            tickCloneAi(attackTarget, kce);
         } else {
             super.tickMobAI(attackTarget);
         }
     }
 
-    public void tickCloneAi(LivingEntity attackTarget){
+    public void tickCloneAi(LivingEntity attackTarget, KingCrimsonCloneEntity kce){
         if (attackTarget != null && attackTarget.isAlive()){
+            if (kce.runaway){
+                return;
+            }
             float distanceTo = attackTarget.distanceTo(this.getSelf());
             if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE)
                     || distanceTo <= 5){
@@ -536,6 +618,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return super.isServerControlledCooldown(num);
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
+
+        if (!isGravityNormal(player)){
+            return player.position();
+        }
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1247,6 +1333,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return water * 2 >= total;
     }
     public Vec3 predictPosition(Mob mob, int ticks) {
+        if (!isGravityNormal(mob)){
+            return mob.position();
+        }
         if (mob.getControllingPassenger() instanceof Player pl){
             if (mob instanceof Strider str){
                 Vec3 pred = predictStrider(str,40);
@@ -2246,13 +2335,22 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_4_NORMAL,SKILL_4_CROUCH -> {
                 timeEraseClient();
             }
+            case SKILL_4_GUARD,SKILL_4_CROUCH_GUARD -> {
+                projectionClient();
+            }
         }
+    }
+
+    public void projectionClient(){
+
     }
 
     public void timeEraseClient(){
         if (!onCooldown(PowerIndex.SKILL_4)) {
-            ClientUtil.sendControlData();
-            tryPowerPacket(PowerIndex.POWER_4);
+            if (!hasBlock() && canAttackLight()) {
+                ClientUtil.sendControlData();
+                tryPowerPacket(PowerIndex.POWER_4);
+            }
         }
     }
 
@@ -2337,6 +2435,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return cooldownOverall;
     }
 
+    public int getTimeEraseCooldownMax(){
+        int maxTicks = timeEraseMaxTicks();
+        int ticksEaten = maxTicks;
+        ticksEaten = Math.max(ticksEaten,0);
+
+        int cooldownOverall = ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.timeEraseMinimumCooldown;
+        cooldownOverall += (int)(((float)ticksEaten)
+                *((ClientNetworking.getAppropriateConfig().kingCrimsonSettings.
+                additionalCooldownPerSecondsUsed2 *0.05)));
+
+        if (isBeyondRange()) {
+            cooldownOverall+=ClientNetworking.getAppropriateConfig().
+                    kingCrimsonSettings.additionalCooldownFromPlayerRunning;
+        }
+
+        return cooldownOverall;
+    }
+
     public void timeErase() {
         if (!self.level().isClientSide() && self instanceof ServerPlayer sp) {
             if (onCooldown(PowerIndex.SKILL_4)) {
@@ -2362,15 +2479,29 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 saveDiscAndSync();
                 if (fakedDeath){
                     if (!self.level().isClientSide && self.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
-                        sp.sendSystemMessage(Component.translatable("text.roundabout.time_erase",
-                                        self.getDisplayName())
-                                );
+
+                        double range = getSkipBonusRange();
+                        double rangeSqr = range * range;
+
+                        Component message = Component.translatable("text.roundabout.time_erase",
+                                self.getDisplayName()).withStyle(ChatFormatting.BOLD).
+                                withStyle(ChatFormatting.WHITE);
+
+                        for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
+                            if (player.distanceToSqr(self) <= rangeSqr) {
+                                player.sendSystemMessage(message);
+                            }
+                        }
                     }
                     fakedDeath = false;
                 }
             } else {
                 spawnClone();
                 timeEraseActive = true;
+                self.stopUsingItem();
+                if (hasBlock()){
+                    resetItem();
+                }
                 ticksOfEraseLeft = timeEraseMaxTicks()-1;
                 S2CPacketUtil.sendSimpleByteToClientPacket(sp,PacketDataIndex.TIME_SKIP);
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), TIME_ERASE);
@@ -2523,10 +2654,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.SKILL_3);
             }
         }
-        if (!isHoldingSneak()){
+        if (isGuarding()) {
+            LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, 0);
+        } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
         } else {
-            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4_SNEAK,getImpaleLevel());
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4,0);
         }
     }
 

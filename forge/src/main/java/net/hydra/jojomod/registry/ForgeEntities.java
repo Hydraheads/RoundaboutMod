@@ -23,6 +23,8 @@ import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -175,6 +177,17 @@ public class ForgeEntities {
                     EntityType.Builder.of(FogCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "fog_clone").toString())
+            );
+    public static final RegistryObject<EntityType<FakeItemEntity>> FAKE_ITEM =
+            ENTITY_TYPES.register("fake_item", () ->
+                    EntityType.Builder.<FakeItemEntity>of(
+                                    FakeItemEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(0.25f, 0.25f)
+                            .clientTrackingRange(6)
+                            .updateInterval(20)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "fake_item").toString())
             );
     public static final RegistryObject<EntityType<KingCrimsonCloneEntity>> KING_CRIMSON_CLONE =
             ENTITY_TYPES.register("king_crimson_clone", () ->

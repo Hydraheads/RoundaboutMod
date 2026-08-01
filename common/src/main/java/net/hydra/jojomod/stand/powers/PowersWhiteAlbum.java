@@ -513,7 +513,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             lastAcceleration = acceleration;
             if (hasSkatesActivated()){
                 if (self.isInWater() || self.hurtTime > 0 || self.isUsingItem()
-                || !self.isSprinting() || self.isSwimming()) {
+                || !self.isSprinting() || self.isSwimming() || self.isPassenger()) {
                     acceleration = 0;
                 } else if (!self.onGround()) {
                     if (lastY < self.getY()){

@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.projectile;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.WorthyArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,12 +27,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -151,6 +155,10 @@ public class StandArrowEntity extends AbstractArrow {
                 }
             }
         }
+        boolean hadStandEffect = false;
+        if ($$1 instanceof Mob mb) {
+            hadStandEffect = mb.getEffect(ModEffects.STAND_VIRUS) != null;
+        }
             if (!worthy && $$1.hurt($$6, X)) {
                 if ($$8) {
                     return;
@@ -165,6 +173,20 @@ public class StandArrowEntity extends AbstractArrow {
                             }
                         }
                     }
+
+                    if (!$$1.isAlive() && !hadStandEffect && $$1 instanceof Cat C && !C.isTame()){
+                        BlockPos pos = $$1.getOnPos();
+                        BlockState stateOn = $$1.level().getBlockState(pos);
+
+                        if (StrayCatEntity.canSurviveInBlock(stateOn)) {
+                            StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create($$1.level());
+                            FunnyCat.randomizeBreed();
+                            Vec3 strayCatPos = $$1.position();
+                            FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, $$1.getYRot(), 0.0f);
+                            $$1.level().addFreshEntity(FunnyCat);
+                        }
+                    }
+
                     if (this.getKnockback() > 0) {
                         double $$11 = Math.max(0.0, 1.0 - $$10.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                         Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) this.getKnockback() * 0.6 * $$11);

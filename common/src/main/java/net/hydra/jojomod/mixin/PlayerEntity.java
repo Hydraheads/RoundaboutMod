@@ -214,6 +214,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.setReturnValue(false);
         }
     }
+    @Inject(
+            method = "touch",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$touch(Entity $$0, CallbackInfo ci){
+        if (PowerTypes.isExistentiallyElsewhere(this) ||
+                PowerTypes.isExistentiallyElsewhere($$0)){
+            ci.cancel();
+        }
+
+    }
+
 
     //0.00392156862
     @Unique
@@ -2059,6 +2072,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else if (SU.roundabout$getStandPowers() instanceof PowersBlackSabbath PB){
             if(PB.active){
                 PB.active = false;
+            }
+            PB.moveMode = 2;
+            if (PB.getSelf() instanceof Player) {
+                PB.setNull();
             }
         }
     }

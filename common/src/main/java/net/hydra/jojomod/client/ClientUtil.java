@@ -16,6 +16,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
@@ -86,6 +87,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -393,6 +395,14 @@ public class ClientUtil {
 
     public static void preRenderLifeTracker(LifeTrackerEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         ent.travelAheadRender($$4);
+    }
+
+    public static void preRenderFloatSabbath(BlackSabbathEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
     }
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){
@@ -1413,13 +1423,17 @@ public class ClientUtil {
             boolean isBackingUp = mc.options.keyDown.isDown();
             boolean isMovingForward = mc.options.keyUp.isDown();
             boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
-            boolean isJumping = mc.options.keyJump.isDown() || !mc.player.onGround();
+            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && getPlayer().fallDistance < 2 &&
+                    !getPlayer().getAbilities().flying);
             boolean isSprinting = mc.player.isSprinting();
+            boolean runaway = false;
+
             Vec3 delta = mc.player.getDeltaMovement();
             C2SPacketUtil.sendControlDataPacket(isBackingUp, isMovingForward, isSneaking, isJumping,
-                    delta,isSprinting);
+                    delta,isSprinting,runaway);
         }
     }
+
 
     public static Player getPlayer(){
         return Minecraft.getInstance().player;

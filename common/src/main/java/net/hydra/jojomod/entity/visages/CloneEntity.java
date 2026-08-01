@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.visages;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +37,7 @@ public class CloneEntity extends PathfinderMob {
     public boolean isMovingForward = false;
     public boolean isSneaking = false;
     public boolean isSprinting = false;
+    public boolean runaway = false;
 
     public ItemStack getVisage(){
         return entityData.get(VISAGE);
@@ -46,9 +48,7 @@ public class CloneEntity extends PathfinderMob {
     @Override
     public Component getDisplayName() {
         Player player = getPlayer();
-        if (player != null) {
-            return player.getDisplayName();
-        } else {
+
             boolean characterType = true;
             if (getVisage() != null && !getVisage().isEmpty() && getVisage().getItem() instanceof MaskItem ME) {
                 characterType = ME.visageData.isCharacterVisage();
@@ -62,7 +62,11 @@ public class CloneEntity extends PathfinderMob {
                     }
                 }
             }
+
+        if (player != null) {
+            return player.getDisplayName();
         }
+
 
         if (this.name != null) {
             return this.name;
@@ -85,6 +89,12 @@ public class CloneEntity extends PathfinderMob {
             this.player = this.level().getPlayerByUUID(this.getPlayerUUID().get());
         }
         return this.player;
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        ActiveCloneManager.remove(this);
+        super.remove(reason);
     }
     @Override
     protected void defineSynchedData() {

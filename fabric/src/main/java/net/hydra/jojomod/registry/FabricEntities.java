@@ -126,6 +126,19 @@ public class FabricEntities {
                         EntityType.Builder.of(Aesthetician::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":aesthetician")
                 );
+    public static final EntityType<FakeItemEntity> FAKE_ITEM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "fake_item"),
+                    EntityType.Builder.<FakeItemEntity>of(
+                                    FakeItemEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(0.25f, 0.25f)
+                            .clientTrackingRange(6)
+                            .updateInterval(20)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "fake_item").toString())
+            );
         public static final EntityType<ZombieAesthetician> ZOMBIE_AESTHETICIAN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1117,6 +1130,7 @@ public class FabricEntities {
                 ModEntities.JOSUKE_PART_EIGHT = JOSUKE_PART_EIGHT;
                 ModEntities.AYA = AYA;
                 ModEntities.AESTHETICIAN = AESTHETICIAN;
+                ModEntities.FAKE_ITEM = FAKE_ITEM;
                 ModEntities.ZOMBIE_AESTHETICIAN = ZOMBIE_AESTHETICIAN;
                 ModEntities.POCOLOCO = POCOLOCO;
                 ModEntities.GUCCIO = GUCCIO;
