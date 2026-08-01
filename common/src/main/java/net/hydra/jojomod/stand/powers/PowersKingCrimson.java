@@ -2445,6 +2445,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (!mob.hasLineOfSight(clone)) {
                 continue;
             }
+            if (((StandUser)mob).roundabout$hasAStand() || (mob instanceof NeutralMob)){
+                continue;
+            }
 
             float yaw = mob.yHeadRot * Mth.DEG_TO_RAD;
             Vec3 forward = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
