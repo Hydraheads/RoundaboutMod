@@ -682,7 +682,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$isPossessed()) {
+            } if (user.roundabout$isPossessed() && user.roundabout$getPossessor() != null && user.roundabout$getPossessor().getTarget() != null) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {

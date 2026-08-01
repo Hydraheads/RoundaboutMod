@@ -256,7 +256,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         if (renderItem || user.roundabout$isPossessed()) {
             alphaTicks = 1;
         }
-        poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.9) ,0); //  +up
+        poseStack.translate(0,-0.3 - ((1-alphaTicks)*3) ,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
         if (renderItem && !user.roundabout$isPossessed()) {

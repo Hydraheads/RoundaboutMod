@@ -1216,8 +1216,12 @@ public class PowersAnubis extends NewDashPreset {
 
     public void standPunch(){
         List<Entity> entities = getBasicSwordHitBox();
-        if (this.self instanceof Player){
+        if (this.self instanceof Player P){
             if (isPacketPlayer()){
+                if (this.activePowerPhase == this.activePowerPhaseMax) {
+                    P.resetAttackStrengthTicker();
+                }
+
                 this.attackTimeDuring = -10;
                 if (!entities.isEmpty()){
                     for (Entity entity : entities) {
@@ -2305,6 +2309,9 @@ public class PowersAnubis extends NewDashPreset {
             }
 
         } else {
+            if (this.getSelf() instanceof Player P) {
+                P.resetAttackStrengthTicker();
+            }
             if (isEmpowered()) {
                 this.empower = false;
             }
