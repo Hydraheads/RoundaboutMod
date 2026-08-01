@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.visages;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
@@ -85,6 +86,12 @@ public class CloneEntity extends PathfinderMob {
             this.player = this.level().getPlayerByUUID(this.getPlayerUUID().get());
         }
         return this.player;
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        ActiveCloneManager.remove(this);
+        super.remove(reason);
     }
     @Override
     protected void defineSynchedData() {

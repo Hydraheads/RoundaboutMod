@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -111,6 +112,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         super.die(source);
     }
 
+
+
     private void dropInventoryAsFakeItems(Player player) {
         for (ItemStack stack : player.getInventory().items) {
             if (!stack.isEmpty()) {
@@ -158,10 +161,15 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             SE.discard();
         }
     }
+    public boolean contains = false;
     public int onGroundTime = 0;
     @Override
     public void tick() {
         if (!level().isClientSide()) {
+            if (!contains) {
+                contains = true;
+                ActiveCloneManager.add(this);
+            }
             if (isMovingForward || isBackingUp) {
                 if (getNavigation().isDone()) {
                     float direction = isBackingUp ? -1.0F : 1.0F;
