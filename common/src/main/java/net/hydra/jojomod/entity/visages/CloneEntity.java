@@ -47,9 +47,7 @@ public class CloneEntity extends PathfinderMob {
     @Override
     public Component getDisplayName() {
         Player player = getPlayer();
-        if (player != null) {
-            return player.getDisplayName();
-        } else {
+
             boolean characterType = true;
             if (getVisage() != null && !getVisage().isEmpty() && getVisage().getItem() instanceof MaskItem ME) {
                 characterType = ME.visageData.isCharacterVisage();
@@ -63,7 +61,11 @@ public class CloneEntity extends PathfinderMob {
                     }
                 }
             }
+
+        if (player != null) {
+            return player.getDisplayName();
         }
+
 
         if (this.name != null) {
             return this.name;
