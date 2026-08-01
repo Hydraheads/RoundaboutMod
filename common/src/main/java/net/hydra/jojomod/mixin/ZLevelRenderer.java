@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -111,7 +112,12 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
-
+        if (entity instanceof CloneEntity ce){
+            if (ce.getPlayer() != null && !ce.turned &&((IEntityAndData)ce.getPlayer()).rdbt$getSharedFlag(5)){
+                ci.cancel();
+                return;
+            }
+        }
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
