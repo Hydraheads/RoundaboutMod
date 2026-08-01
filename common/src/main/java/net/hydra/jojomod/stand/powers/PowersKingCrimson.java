@@ -1419,6 +1419,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
+            if (entity instanceof KingCrimsonProjectionEntity kcpj){
+                continue;
+            }
             hitWall2 = false;
             if (entity instanceof Projectile proj) {
                 if (proj instanceof FireworkRocketEntity){
@@ -1620,7 +1623,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (snapshot.getEntityId() == -1) {
             return;
         }
-
         Level level = self.level();
 
         Entity entity = level.getEntity(snapshot.getEntityId());
@@ -1629,6 +1631,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
         if (PowerTypes.isExistentiallyElsewhere(entity)){
+            return;
+        }
+        if (entity instanceof KingCrimsonProjectionEntity kcpj){
             return;
         }
         if (entity instanceof StandEntity) {
@@ -2094,6 +2099,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
                     if (!isGravityNormal(entity))
                         continue;
+
+                    if (entity instanceof KingCrimsonProjectionEntity kcpj){
+                        continue;
+                    }
                     if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
@@ -2424,6 +2433,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 player.getXRot()
         );
 
+        clone.user = player;
         clone.setYRot(self.getYRot());
         clone.lifespan = 160;
         clone.pkc = this;
