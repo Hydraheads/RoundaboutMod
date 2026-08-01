@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -50,10 +51,9 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0, 0.0F));
-        this.addBehaviourGoals();
     }
 
-    protected void addBehaviourGoals() {
+    public void addBehaviourGoals() {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
@@ -173,6 +173,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public int onGroundTime = 0;
     @Override
     public void tick() {
+        Roundabout.LOGGER.info("run" +runaway);
         if (!level().isClientSide()) {
             if (!contains) {
                 contains = true;

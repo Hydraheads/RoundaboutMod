@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -414,7 +415,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
             fclone.isSprinting = isSprinting;
+            runaway = isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
+            Roundabout.LOGGER.info("run" +runaway);
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -463,6 +466,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (FateTypes.takesSunlightDamage(activeClone)) {
                 ((IMob) activeClone).roundabout$getGoalSelector().addGoal(2, new RestrictSunGoal(activeClone));
             }
+            if (!runaway){
+                activeClone.addBehaviourGoals();
+            }
             StandUser thisUser = getStandUserSelf();
             activeCloneUser.roundabout$setStandSkin(thisUser.roundabout$getStandSkin());
             activeCloneUser.roundabout$setDazeTime(thisUser.roundabout$getDazeTime());
@@ -505,6 +511,60 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
         return true;
+    }
+
+
+    public static boolean isTargetBehindPlayer(Player player) {
+        Roundabout.LOGGER.info("1");
+        LivingEntity target = null;
+
+        // Prefer the entity the player last attacked
+        LivingEntity lastHurt = player.getLastHurtMob();
+        if (lastHurt != null && lastHurt.isAlive() && player.distanceToSqr(lastHurt) <= 50 * 50) {
+            target = lastHurt;
+            Roundabout.LOGGER.info("2");
+        }
+
+        // Otherwise use the last entity that hurt the player
+        if (target == null) {
+            LivingEntity lastAttacker = player.getLastHurtByMob();
+            if (lastAttacker != null && lastAttacker.isAlive()
+                    && player.distanceToSqr(lastAttacker) <= 50 * 50) {
+                target = lastAttacker;
+                Roundabout.LOGGER.info("3");
+            }
+        }
+
+        if (target == null) {
+            Roundabout.LOGGER.info("4");
+            return false;
+        }
+
+        // Horizontal look vector
+        Vec3 look = player.getLookAngle();
+        look = new Vec3(look.x, 0.0, look.z);
+
+        Roundabout.LOGGER.info("5");
+        if (look.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        look = look.normalize();
+
+        // Horizontal vector to target
+        Vec3 toTarget = target.position().subtract(player.position());
+        toTarget = new Vec3(toTarget.x, 0.0, toTarget.z);
+
+        Roundabout.LOGGER.info("6");
+        if (toTarget.lengthSqr() < 1.0E-6) {
+            return false;
+        }
+
+        Roundabout.LOGGER.info("7");
+        toTarget = toTarget.normalize();
+
+        Roundabout.LOGGER.info("8");
+        return look.dot(toTarget) < 0.0;
     }
 
     public boolean isBackingUp = false;
@@ -2424,7 +2484,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         double rangeSqr = range * range;
 
                         Component message = Component.translatable("text.roundabout.time_erase",
-                                self.getDisplayName());
+                                self.getDisplayName()).withStyle(ChatFormatting.BOLD).
+                                withStyle(ChatFormatting.WHITE);
 
                         for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
                             if (player.distanceToSqr(self) <= rangeSqr) {
