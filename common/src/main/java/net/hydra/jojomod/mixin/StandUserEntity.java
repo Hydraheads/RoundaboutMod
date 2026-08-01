@@ -1526,12 +1526,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
 
             if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE) {
-                if (rdbt$this() instanceof Player P && P.isCreative()) {
-                    APE.discard();
-                }
-
-                if (rdbt$this() instanceof Player P) {
-
+                if (rdbt$this() instanceof Player P ) {
+                    if (P.isCreative()) {
+                        APE.discard();
+                    }
                     if (APE.getLifeSpan() == 1) {
                         this.roundabout$onPossessionFinish();
                     }
@@ -1703,14 +1701,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /// consider adding a tracked byte of some kind to possession to allow it to be used by several stands
     @Override
     public void roundabout$onPossessionFinish() {
+        if (this.rdbt$this() instanceof Player P) {
+            if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE && APE.getLifeSpan() < 290) {
+                P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message2").withStyle(ChatFormatting.RED), true);
+            } else {
+                P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
+            }
+        }
         if (this.roundabout$getPossessor() != null) {
             this.roundabout$getPossessor().discard();
             this.roundabout$setPossessor(null);
         }
-        if (this.rdbt$this() instanceof Player P) {
-            P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);
-        }
-
     }
 
     @Override

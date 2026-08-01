@@ -68,8 +68,6 @@ public class AnubisItem extends Item {
 
                 if (!targets.isEmpty()) {
                     ((StandUser)$$2).roundabout$setActive(false);
-                } else {
-                    P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.failure").withStyle(ChatFormatting.RED),true);
                 }
 
                 AnubisItem.aggroOnto($$2);

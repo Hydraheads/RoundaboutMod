@@ -249,7 +249,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
 
 
-        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity));
+        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
 
         poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
