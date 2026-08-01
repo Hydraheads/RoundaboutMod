@@ -172,34 +172,50 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public void travelAhead(){
         if (this.getUser() != null && shouldSelect && !shouldFloat) {
             Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), -1.25F).getLocation();
+            Vec3 lvec = null;
+            Position pn = null;
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
+                pn = this.getUser().getEyePosition().add(lvec.scale(1));
+            }
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
             }
-
-            xOld = junkPos.x;
-            yOld = junkPos.y;
-            zOld = junkPos.z;
-            if (this.level().isClientSide()) {
-                absMoveTo(junkPos.x, this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
-            } else {
-                setPos(junkPos.x,this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            if(pn != null) {
+                xOld = pn.x();
+                yOld = pn.y();
+                zOld = pn.z();
+                if (this.level().isClientSide()) {
+                    absMoveTo(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
+                } else {
+                    setPos(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
+                }
             }
         }
     }
     public void travelAheadRender(float render){
         if (this.getUser() != null && shouldSelect && !shouldFloat) {
             Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), -1.25F, render).getLocation();
+            Vec3 lvec = null;
+            Position pn = null;
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
+                lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
+                pn = this.getUser().getEyePosition().add(lvec.scale(1));
+            }
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
             }
+            if(pn != null) {
 
-            xOld = junkPos.x;
-            yOld = junkPos.y;
-            zOld = junkPos.z;
-            if (this.level().isClientSide()) {
-                absMoveTo(junkPos.x,this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
-            } else {
-                setPos(junkPos.x, this.getUser().getY() + (this.getUser().getBbHeight() / 2), junkPos.z);
+            xOld = pn.x();
+            yOld = pn.y();
+            zOld = pn.z();
+
+                if (this.level().isClientSide()) {
+                    absMoveTo(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
+                } else {
+                    setPos(pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2), pn.z());
+                }
             }
         }
     }

@@ -227,6 +227,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     public boolean toggleSelection() {
 
         this.setActivePower(PowerIndex.POWER_2);
+        Vec3 lvec = getLookAngleChest(self.getYRot(), self);
+        Position pn = self.getEyePosition().add(lvec.scale(1));
         if (!this.getSelf().level().isClientSide()) {
             if (tracker == null || tracker.isRemoved()){
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
@@ -241,7 +243,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                         if (gravD != Direction.DOWN){
                             bam = RotationUtil.vecPlayerToWorld(bam,gravD);
                         }
-                        BE.absMoveTo(this.self.getX()+bam.x, this.self.getY()+bam.y, this.self.getZ()+bam.z);
+                        if(self != null) {
+                            BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2), pn.z());
+                        }
                         BE.setMaster(this.self);
                         BE.setYRot((self.getYRot() % 360) - 180);
                         BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
