@@ -178,11 +178,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public void onStandSwitchInto(){
         super.onStandSwitchInto();
-        int minCo = ClientNetworking.getAppropriateConfig().
-                kingCrimsonSettings.timeEraseMinimumCooldown;
-        if (!onCooldown(PowerIndex.SKILL_4) || getCooldown(PowerIndex.SKILL_4).time < minCo){
-            setCooldown(PowerIndex.SKILL_4,minCo);
-
+        if (!self.level().isClientSide()) {
+            int minCo = ClientNetworking.getAppropriateConfig().
+                    kingCrimsonSettings.timeEraseMinimumCooldown;
+            if (!onCooldown(PowerIndex.SKILL_4) || getCooldown(PowerIndex.SKILL_4).time < minCo) {
+                setCooldown(PowerIndex.SKILL_4, minCo);
+            }
         }
     }
     public boolean isUsingEpitaph() {
