@@ -3,6 +3,9 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.GoddessStatueBlock;
+import net.hydra.jojomod.block.GoddessStatuePart;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -22,12 +25,15 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -249,7 +255,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_4_GUARD -> {
                 // TODO: Implement statue cutting ability
-                // tryToCreateStatue();
+                statueCuttingClient();
             }
             case SKILL_4_CROUCH_GUARD -> {
 
@@ -263,6 +269,9 @@ public class PowersSilverChariot extends NewPunchingStand {
         switch (move) {
             case PowerIndex.POWER_1_SNEAK -> {
                 rapierSlashServer();
+            }
+            case PowerIndex.POWER_4_BLOCK -> {
+                statueCuttingServer();
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -538,5 +547,69 @@ public class PowersSilverChariot extends NewPunchingStand {
                     (float) ((float) 5F * (getAttackMultOnMobs() * 0.01))
             );
         }
+    }
+
+
+
+    // Statue cutting ability
+    public void statueCuttingClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_4_GUARD) && canExecuteMoveWithLevel(getRapierSlashLevel())) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BLOCK, true);
+            tryPowerPacket(PowerIndex.POWER_4_BLOCK);
+        }
+    }
+
+    public void statueCuttingServer() {
+        if (!this.self.level().isClientSide() && this.self instanceof Player player) {
+            if (MainUtil.getIsGamemodeApproriateForGrief(player)) {
+                if (canCreateStatue()) {
+
+                }
+            }
+        }
+    }
+
+    public boolean canCreateStatue() {
+        HitResult res = this.self.pick(5.0d, 0.0f, false);
+
+        if (res.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult bhr = (BlockHitResult) res;
+            BlockPos bp = bhr.getBlockPos();
+            BlockPos bp2 = bp.below();
+            BlockPos bp3 = bp.above();
+
+            BlockState bs = this.self.level().getBlockState(bp);
+            BlockState bs2 = this.self.level().getBlockState(bp2);
+            BlockState bs3 = this.self.level().getBlockState(bp3);
+
+            if (bs.is(Blocks.STONE) && bs2.is(Blocks.STONE) && bs3.is(Blocks.STONE)) {
+                BlockState bs4 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.BOTTOM);
+                BlockState bs5 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.MIDDLE);
+                BlockState bs6 = ModBlocks.GODDESS_STATUE_BLOCK.defaultBlockState()
+                        .setValue(GoddessStatueBlock.FACING, this.self.getDirection())
+                        .setValue(GoddessStatueBlock.PART, GoddessStatuePart.TOP);
+
+                this.self.level().setBlock(
+                        bp2,
+                        bs4,
+                        GoddessStatueBlock.UPDATE_ALL
+                );
+                this.self.level().setBlock(
+                        bp,
+                        bs5,
+                        GoddessStatueBlock.UPDATE_ALL
+                );this.self.level().setBlock(
+                        bp3,
+                        bs6,
+                        GoddessStatueBlock.UPDATE_ALL
+                );
+
+            }
+        }
+        return false;
     }
 }
