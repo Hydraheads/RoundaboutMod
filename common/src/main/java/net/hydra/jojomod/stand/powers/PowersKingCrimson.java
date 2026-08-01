@@ -50,6 +50,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -466,6 +467,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 ((IMob) activeClone).roundabout$getGoalSelector().addGoal(2, new RestrictSunGoal(activeClone));
             }
             if (!runaway){
+                ((IMob) activeClone).roundabout$getGoalSelector().addGoal(8, new LookAtPlayerGoal(activeClone, Player.class, 8.0F));
                 activeClone.addBehaviourGoals();
             }
             StandUser thisUser = getStandUserSelf();
