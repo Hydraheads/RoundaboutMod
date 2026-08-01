@@ -327,11 +327,14 @@ public class PowersMandom extends NewDashPreset {
     public int meltDodgeTicks = -1;
 
     public SimpleParticleType getParticle(Entity ent){
-        if (ent instanceof Monster || (ent instanceof Mob mb && mb.isAggressive()))
+        if (ent instanceof CloneEntity) {
+            return ModParticles.BLUE_CLOCK;
+        }
+        if ((ent instanceof Monster || (ent instanceof Mob mb && mb.isAggressive())))
             return ModParticles.RED_CLOCK;
         if (ent !=null && ent.is(this.self))
             return ModParticles.CLOCK;
-        if (ent instanceof Player || ent instanceof CloneEntity)
+        if (ent instanceof Player)
             return ModParticles.BLUE_CLOCK;
         if (ent instanceof Projectile || ent instanceof ItemEntity)
             return ModParticles.ORANGE_CLOCK;
