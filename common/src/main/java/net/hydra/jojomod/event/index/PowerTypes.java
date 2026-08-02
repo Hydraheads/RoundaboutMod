@@ -235,7 +235,7 @@ public enum PowerTypes {
                     return true;
                 }
             }
-            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 3){
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 2){
                 if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
                     return false;
                 } else {
