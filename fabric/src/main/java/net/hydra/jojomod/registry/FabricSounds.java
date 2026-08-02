@@ -25,6 +25,7 @@ public class FabricSounds {
         addSound(ModSounds.TIME_ERASE_FULL_ID, ModSounds.TIME_ERASE_FULL_EVENT);
         addSound(ModSounds.TIME_ERASE_END_ID, ModSounds.TIME_ERASE_END_EVENT);
         addSound(ModSounds.HOLOGRAM_END_ID, ModSounds.HOLOGRAM_END_EVENT);
+        addSound(ModSounds.KING_BLOOD_SPLASH_ID, ModSounds.KING_BLOOD_SPLASH_EVENT);
         addSound(ModSounds.HOLOGRAM_START_ID, ModSounds.HOLOGRAM_START_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);

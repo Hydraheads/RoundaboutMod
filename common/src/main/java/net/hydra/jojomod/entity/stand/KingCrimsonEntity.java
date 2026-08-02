@@ -44,11 +44,15 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public final AnimationState blockRetractAnimation = new AnimationState();
     public final AnimationState itemRetractAnimation = new AnimationState();
     public final AnimationState entityGrabAnimation = new AnimationState();
+    public final AnimationState bloodSplashWindup = new AnimationState();
+    public final AnimationState bloodSplashThrow = new AnimationState();
 
     public static final byte
             FINAL_1 = 82,
             FINAL_2 = 83,
-            IMPALE_2 = 84;
+            IMPALE_2 = 84,
+            BLOOD_SPLASH_WINDUP = 50,
+            BLOOD_SPLASH_THROW = 51;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -68,6 +72,16 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                 this.impale2.startIfStopped(this.tickCount);
             } else {
                 this.impale2.stop();
+            }
+            if (animation == BLOOD_SPLASH_WINDUP) {
+                this.bloodSplashWindup.startIfStopped(this.tickCount);
+            } else {
+                this.bloodSplashWindup.stop();
+            }
+            if (animation == BLOOD_SPLASH_THROW) {
+                this.bloodSplashThrow.startIfStopped(this.tickCount);
+            } else {
+                this.bloodSplashThrow.stop();
             }
 
             if (this.getAnimation() == ITEM_GRAB) {

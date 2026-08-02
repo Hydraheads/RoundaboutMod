@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "king_blood_splash": {
+    "subtitle": "sounds.roundabout.king_blood_splash",
+    "sounds": [
+      "roundabout:king_blood_splash"
+    ]
+  },
   "oasis_mud_hit": {
     "subtitle": "sounds.roundabout.oasis_mud_hit",
     "sounds": [

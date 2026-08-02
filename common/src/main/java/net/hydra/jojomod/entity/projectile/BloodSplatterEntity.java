@@ -7,7 +7,10 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -23,6 +26,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -69,6 +74,16 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         this.getEntityData().define(SPLATTER_TYPE, (byte)0);
     }
 
+    //0 = default, healing vampire blood
+    //1 = king crimson splash, damaging and blinding
+
+    public byte getSplatterType(){
+        return this.getEntityData().get(SPLATTER_TYPE);
+    }
+    public void setSplatterType(byte type){
+        this.getEntityData().set(SPLATTER_TYPE,type);
+    }
+
     public boolean isBundle = false;
 
     @Override
@@ -108,14 +123,29 @@ public class BloodSplatterEntity extends ThrowableProjectile {
             }
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                     15, 0.4, 0.4, 0.25, 0.4);
-            SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
-            this.playSound($$6, 1F, 1.5F);
-            if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
-            LE instanceof Player pl || LE instanceof BaseMinion bm)) {
-                LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
-                if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
-                || (LE instanceof Player pl && FateTypes.isHuman(pl))){
-                    LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+
+            if (getSplatterType() == 0){
+                SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
+                this.playSound($$6, 1F, 1.5F);
+                if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
+                        LE instanceof Player pl || LE instanceof BaseMinion bm)) {
+                    LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
+                    if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
+                            || (LE instanceof Player pl && FateTypes.isHuman(pl))){
+                        LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+                    }
+                }
+            } else {
+                float damage = 1;
+                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                instanceof PowersKingCrimson pkc){
+                    damage = pkc.getBloodSplashStrength($$0.getEntity());
+                }
+                if (DamageHandler.StandDamageEntity($$0.getEntity(),damage, getOwner())){
+                    if ($$0.getEntity() instanceof LivingEntity LE) {
+
+                        LE.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1), getOwner());
+                    }
                 }
             }
             this.discard();
@@ -169,6 +199,9 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     }
     @Override
     protected float getGravity() {
+        if (getSplatterType() == 1){
+            return 0.04F;
+        }
         return 0.06F;
     }
 }

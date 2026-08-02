@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -2221,6 +2222,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
         }
     }
+
+    public float getBloodSplashStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (1.5F)));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (6F * (ClientNetworking.getAppropriateConfig().
+                    generalStandSettings.generalImpaleAttackMultiplier *0.01))));
+        }
+    }
         @Override
     public StandEntity getNewStandEntity() {
         byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
@@ -2271,7 +2281,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean cancelSprintJump(){
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK
-                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+                || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE ||
+        isChargingBloodSplash()){
             return true;
         }
         return super.cancelSprintJump();
@@ -2365,18 +2376,86 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void tryBloodClient(){
         if (!onCooldown(PowerIndex.SKILL_3)) {
             if (!hasBlock()) {
+                tryPower(PowerIndex.POWER_3,true);
                 tryPowerPacket(PowerIndex.POWER_3);
             }
         }
     }
+    public boolean cancelSprintParticles(){
+        return super.cancelSprintParticles() || isChargingBloodSplash();
+    }
+    /**Cancel all sprinting*/
+    public boolean cancelSprint(){
+        return super.cancelSprint() || isChargingBloodSplash();
+    }
+    public boolean isChargingBloodSplash(){
+        return activePower == PowerIndex.SKILL_3;
+    }
+
+    public void standBloodShot(){
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.setAttackTimeDuring(-13);
+                impaleTicks = 15;
+                tryPowerPacket(PowerIndex.POWER_3_SNEAK_EXTRA);
+            }
+        } else {
+            shootBloodServer();
+        }
+    }
+
+    public void shootBloodServer(){
+        animateStand(KingCrimsonEntity.BLOOD_SPLASH_THROW);
+        setAttackTimeDuring(-13);
+        BloodSplatterEntity bloodsplash = new BloodSplatterEntity(self, self.level());
+        bloodsplash.healthAmt = 1;
+        float SHOOT_POWER = 1.5F;
+        bloodsplash.setSplatterType((byte) 1);
+        this.self.level().playSound(null, this.self.blockPosition(),
+                ModSounds.KING_BLOOD_SPLASH_EVENT,
+                SoundSource.PLAYERS, 1F, (float) (0.99F + Math.random() * 0.02));
+        bloodsplash.shootFromRotation(self, self.getXRot(), self.getYRot(), -5, SHOOT_POWER, 1.0F);
+        bloodsplash.setPos(self.getPosition(1).add((self.getEyePosition().subtract(self.getPosition(1))).scale(0.5f)));
+        self.level().addFreshEntity(bloodsplash);
+    }
+    public void updateBloodShot(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 13) {
+                this.standBloodShot();
+            }
+        }
+    }
     public void bloodSplash() {
-        if (!onCooldown(PowerIndex.SKILL_3) && self.level() instanceof ServerLevel sl) {
+        setActivePower(PowerIndex.POWER_3);
+        setAttackTimeDuring(0);
+        setCooldown(PowerIndex.SKILL_3, 140);
+        animateStand(KingCrimsonEntity.BLOOD_SPLASH_WINDUP);
+        if (self.level() instanceof ServerLevel sl) {
+            int bloodTime = 240;
+            MobEffectInstance instance = self.getEffect(ModEffects.BLEED);
+            boolean isBigOuchie = false;
+            if (instance != null){
+                if (instance.getDuration() > 0) {
+                    isBigOuchie = instance.getAmplifier() > 0;
+                    bloodTime += instance.getDuration();
+                }
+            }
+            if (!isBigOuchie) {
+                MainUtil.makeBleed(self, 0, bloodTime, self);
+                this.self.level().playSound(null, this.self.blockPosition(),
+                        ModSounds.KING_CRIMSON_PUNCH_EVENT,
+                        SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                        self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
+                        30, 0, 0, 0, 0.1);
+            } else {
+                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                        self.getEyePosition().x(), self.getEyePosition().y()+0.3F, self.getEyePosition().z(),
+                        30, 0, 0, 0, 0.3);
+            }
             this.self.level().playSound(null, this.self.blockPosition(),
                     ModSounds.VAMPIRE_DRAIN_EVENT,
-                    SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
-                    self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
-                    30, 0, 0, 0, 0.1);
+                    SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
         }
     }
     public void projectionClient(){
@@ -2961,6 +3040,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 basis *= g;
             }
             basis *= 0.3f;
+        } else if (this.getActivePower()==PowerIndex.POWER_3){
+            basis *= 0.3f;
         } else if (this.getActivePower()==PowerIndex.POWER_1_SNEAK){
             if (this.getSelf().isCrouching()){
                 float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
@@ -2979,6 +3060,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             updateFinalAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.POWER_3) {
+            this.updateBloodShot();
         }
         super.updateUniqueMoves();
     }
@@ -2987,7 +3070,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public void updateImpale(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring == 7 && isErasingTime() && self.level().isClientSide()) {
+            if (this.attackTimeDuring == 7 && isPacketPlayer() && isErasingTime() && self.level().isClientSide()) {
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
             }
             if (this.attackTimeDuring > 24) {
@@ -3034,6 +3117,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
            return true;
         } else if (move == PowerIndex.POWER_3){
             this.bloodSplash();
+            return true;
+        } else if (move == PowerIndex.POWER_3_SNEAK_EXTRA){
+            this.shootBloodServer();
             return true;
         } else if (move == PowerIndex.POWER_4_SNEAK){
             this.hologram();

@@ -54,6 +54,9 @@ public class ModSounds {
     public static final String HOLOGRAM_END = "hologram_end";
     public static final ResourceLocation HOLOGRAM_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HOLOGRAM_END);
     public static SoundEvent HOLOGRAM_END_EVENT = SoundEvent.createVariableRangeEvent(HOLOGRAM_END_ID);
+    public static final String KING_BLOOD_SPLASH = "king_blood_splash";
+    public static final ResourceLocation KING_BLOOD_SPLASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KING_BLOOD_SPLASH);
+    public static SoundEvent KING_BLOOD_SPLASH_EVENT = SoundEvent.createVariableRangeEvent(KING_BLOOD_SPLASH_ID);
 
 
     public static final String OVA_THE_WORLD = "ova_the_world";
