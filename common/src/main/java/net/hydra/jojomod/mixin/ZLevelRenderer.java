@@ -123,11 +123,6 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             }
         }
 
-        boolean alternateEpitaph = false;
-        if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
-                ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
-            alternateEpitaph = true;
-        }
 
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
@@ -144,6 +139,12 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             }
 
             if (ClientUtil.isUsingEpitaph()){
+
+                boolean alternateEpitaph = false;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                        ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+                    alternateEpitaph = true;
+                }
                 if (MainUtil.isGravityNormal(entity)) {
                     Player pl = ClientUtil.getPlayer();
                     if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
