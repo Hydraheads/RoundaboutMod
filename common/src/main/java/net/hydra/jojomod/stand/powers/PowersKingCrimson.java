@@ -1665,6 +1665,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             int duration = effect.getDuration();
             if (effect.getEffect() == ModEffects.STAND_VIRUS ||
                     effect.getEffect() == MobEffects.ABSORPTION ||
+                    effect.getEffect() == MobEffects.HEALTH_BOOST ||
+                    effect.getEffect() == ModEffects.MELTING ||
                     duration == MobEffectInstance.INFINITE_DURATION) {
                 continue;
             }
