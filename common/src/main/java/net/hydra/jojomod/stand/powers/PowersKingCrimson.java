@@ -2517,8 +2517,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void projectionClient(){
         if (!onCooldown(PowerIndex.SKILL_4_SNEAK) && !isUsingTimeErase()) {
             if (!hasBlock()) {
-                ClientUtil.sendControlData();
-                tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                if (!isUsingEpitaph()) {
+                    ClientUtil.sendControlData();
+                    tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                }
             }
         }
     }
@@ -2527,6 +2529,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return;
         }
         if (isUsingTimeErase()){
+            return;
+        }
+        if (isUsingEpitaph()) {
             return;
         }
 
@@ -2948,7 +2953,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         PowerIndex.SKILL_3);
             }
         }
-        if (isGuarding() && !isUsingTimeErase()) {
+        if (isGuarding() && !isUsingTimeErase() && !isUsingEpitaph()) {
             LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, 0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
