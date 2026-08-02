@@ -286,6 +286,28 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         }
     }
 
+    private void redirectAggroBackToPlayer() {
+        if (level().isClientSide() || player == null) {
+            return;
+        }
+
+        AABB search = getBoundingBox().inflate(64.0);
+
+        for (Mob mob : level().getEntitiesOfClass(Mob.class, search)) {
+            if (mob.getTarget() == this || (mob.getTarget() != null && mob.getTarget().getId() == this.getId())) {
+                if (mob.distanceTo(this.getPlayer()) < 25 && !(mob instanceof Monster)){
+                    ((StandUser) mob).roundabout$aggressivelyEnforceAggro(player);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void remove(Entity.RemovalReason $$0) {
+        redirectAggroBackToPlayer();
+        super.remove($$0);
+    }
+
     @Override
     protected void jumpFromGround() {
         Vec3 $$0 = this.getDeltaMovement();

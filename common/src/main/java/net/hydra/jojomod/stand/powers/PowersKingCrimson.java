@@ -2758,10 +2758,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingEpitaph())
                 return;
             if (timeEraseActive){
-                if (activeClone != null){
-                    activeClone.discardStand();
-                    activeClone.discard();
-                }
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
                 if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
@@ -2773,6 +2769,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 packetNearby2();
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();
+
+                if (activeClone != null){
+                    activeClone.discardStand();
+                    activeClone.discard();
+                }
                 applyBloodSplatterEffects();
                 if (fakedDeath){
                     if (!self.level().isClientSide && self.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {

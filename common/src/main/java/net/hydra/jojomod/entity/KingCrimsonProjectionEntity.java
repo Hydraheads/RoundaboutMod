@@ -13,8 +13,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
@@ -36,6 +38,10 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
         }
         return false;
     }
+
+    public boolean isPickable(){
+        return false;
+    }
     public boolean contains = false;
     @Override
     public void tick() {
@@ -54,6 +60,21 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
                 } else if (user == null || pkc == null || !user.isAlive()){
                     spawnDeathParticles();
                     discard();
+                }
+            }
+            if (!isRemoved()){
+                for (Projectile projectile : level().getEntitiesOfClass(
+                        Projectile.class,
+                        this.getBoundingBox().inflate(3.0))) {
+
+                    Vec3 from = projectile.position().subtract(projectile.getDeltaMovement());
+                    Vec3 to = projectile.position();
+
+                    if (this.getBoundingBox().inflate(0.2).clip(from, to).isPresent()) {
+                        spawnDeathParticles();
+                        discard();
+                        return;
+                    }
                 }
             }
             if (!contains) {
@@ -87,8 +108,7 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
 
     public Player user = null;
 
-    @Override
-    public boolean isPickable() {return false;}
+
     public PowersKingCrimson pkc = null;
     public void spawnDeathParticles() {
         if (!level().isClientSide()) {
