@@ -53,6 +53,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.*;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -387,6 +388,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
 
         if (this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
+            DimensionType t = ME.level().dimensionType();
+            DimensionType T = this.self.level().dimensionType();
+
+            if (t != T) {
+                ((StandUser)this.self).roundabout$setActive(false);
+            }
             if (ME.isInRain()) {
                 if (ME.DodgeRainTicks >= 1) {
                     ME.DodgeRainTicks--;

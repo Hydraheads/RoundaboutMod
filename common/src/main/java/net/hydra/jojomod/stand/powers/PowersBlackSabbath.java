@@ -53,6 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -87,7 +88,25 @@ public class PowersBlackSabbath extends NewDashPreset {
     public void setNull(){
         moveMode = 0;
         if (this.getSelf() instanceof Player) {
-            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, 0);
+        }
+    }
+    public void setOne(){
+        moveMode = 1;
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, 1);
+        }
+    }
+    public void setTwo(){
+        moveMode = 2;
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, 2);
+        }
+    }
+    public void setThree(){
+        moveMode = 3;
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, 3);
         }
     }
 
@@ -104,18 +123,24 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         if (!isClient()) {
             if (desummon) {
-
                 if (active) {
                     active = false;
                     setTickDown(10);
+                    blackSelect = null;
                 }
-
+                if (selecting) {
+                    selecting = false;
+                    blackSelect = null;
+                }
             }
             if(!desummon){
-                moveMode = 0;
-                if (this.getSelf() instanceof Player) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
-                }
+                setNull();
+                blackSelect = null;
+            }
+        } else {
+            if(desummon && moveMode == 2){
+                this.setCooldown(PowerIndex.SKILL_1, 40);
+                this.setCooldown(PowerIndex.SKILL_2, 40);
             }
         }
     }
@@ -137,6 +162,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     public boolean canSummonStandAsEntity(){
         return false;
     }
+
+    public int securityTickDown = 10;
+    void setSecurityTickDown(int i){securityTickDown = i;}
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -187,19 +215,24 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     public void blackSelectClient(){
-        this.setCooldown(PowerIndex.SKILL_1, 20);
-        this.setCooldown(PowerIndex.SKILL_2, 20);
+        sharedChestSelectCooldown();
+        setSecurityTickDown(40);
                 tryPower(PowerIndex.POWER_2, true);
                 tryPowerPacket(PowerIndex.POWER_2);
     }
     public void blackChestClient(){
-        this.setCooldown(PowerIndex.SKILL_1, 20);
-        this.setCooldown(PowerIndex.SKILL_2, 20);
+        sharedChestSelectCooldown();
+        setSecurityTickDown(40);
             Vec3 blockHitResult = self.position();
             if (blockHitResult != null) {
                 tryPosPower(PowerIndex.POWER_1, true, blockHitResult);
                 tryPosPowerPacket(PowerIndex.POWER_1, blockHitResult);
             }
+    }
+
+    public void sharedChestSelectCooldown(){
+        this.setCooldown(PowerIndex.SKILL_1, 40);
+        this.setCooldown(PowerIndex.SKILL_2, 40);
     }
 
     public int cooldownFinger = ClientNetworking.getAppropriateConfig().blackSabbathSettings.fingerBiteCooldown;
@@ -209,7 +242,8 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (move)
         {
             case PowerIndex.POWER_2 -> {
-                return toggleSelection();
+                this.selecting = true;
+                return two();
             }
             case PowerIndex.POWER_4 -> {
                 if(this.getSelf().getHealth() > 1) {
@@ -230,37 +264,35 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public StandEntity blackSelect = null;
 
-    public boolean toggleSelection() {
-
-        this.setActivePower(PowerIndex.POWER_2);
+    public boolean two(){
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
-        Position pn = this.self.getEyePosition().add(lvec.scale(-1F));
-        if (!this.getSelf().level().isClientSide()) {
-            if (blackSelect == null || blackSelect.isRemoved()){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
-                StandEntity stand = this.getNewStandEntity();
-                if (stand != null) {
-                    blackSelect = stand;
-                    if (stand instanceof BlackSabbathEntity BE) {
-                        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-                        BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.35F), pn.z());
-                        BE.setMaster(this.self);
-                        BE.setYRot((self.getYRot() % 360) - 180);
-                        BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
-                        this.getStandUserSelf().roundabout$standMount(BE);
-                        BE.setShouldFloat(false);
-                        BE.setShouldSelect(true);
-                        BE.setDeltaMovement(Vec3.ZERO);
-                        self.setDeltaMovement(Vec3.ZERO);
-                        BE.incFadeOut((byte) 1);
-                        this.self.level().addFreshEntity(BE);
-                    }
-                    moveMode = 2;
-                    if (this.getSelf() instanceof Player) {
-                        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
+        Position pn = this.self.getEyePosition().add(lvec.scale(-0.9F));
+        if(moveMode == 0) {
+            if (!this.getSelf().level().isClientSide()) {
+                if (blackSelect == null || blackSelect.isRemoved()){
+                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    StandEntity stand = this.getNewStandEntity();
+                    if (stand != null) {
+                        blackSelect = stand;
+                        if (stand instanceof BlackSabbathEntity BE) {
+                            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                            BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.35F), pn.z());
+                            BE.setMaster(this.self);
+                            BE.setYRot((self.getYRot() % 360) - 180);
+                            BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
+                            this.getStandUserSelf().roundabout$standMount(BE);
+                            BE.setShouldFloat(false);
+                            BE.setShouldSelect(true);
+                            BE.setDeltaMovement(Vec3.ZERO);
+                            self.setDeltaMovement(Vec3.ZERO);
+                            BE.incFadeOut((byte) 1);
+                            this.self.level().addFreshEntity(BE);
+                        }
                     }
                 }
-            } else {
+            }
+        } else {
+            if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
                 this.self.level().playSound(null, this.self.getX(), this.self.getY(),
                         this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
@@ -350,6 +382,12 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
                 setTickDown(10);
             }
+            case PowerIndex.POWER_2_BONUS -> {
+                selecting = false;
+                if (this.getStandEntity(this.getSelf()) != null) {
+                    this.getStandEntity(self).forceDespawn(true);
+                }
+            }
         }
         return super.tryPower(move, forced);
     }
@@ -387,10 +425,10 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
-        if(slot == 2 && !this.checkIfYouAreInDark()) {
+        if(slot == 2 && (!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 || this.moveMode == 3 || this.securityTickDown > 1)) {
             return  true;
         }
-        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null) && !self.isSwimming() ||slot == 1 && moveMode != 1 && moveMode != 0){
+        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1)){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -417,10 +455,11 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
 
         if(this.getStandEntity(self) == null && moveMode != 0){
-            moveMode = 0;
-            if (this.getSelf() instanceof Player) {
-                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
-            }
+            setNull();
+        }
+
+        if(this.securityTickDown > 0){
+            securityTickDown--;
         }
 
         if (this.getStandEntity(self) == null && this.getSelf().isAlive() && active) {
@@ -435,20 +474,19 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
 
         if(this.getStandEntity(self) == null){
-            moveMode = 0;
-            if (this.getSelf() instanceof Player) {
-                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
+            if(moveMode != 0) {
+                setNull();
             }
         } else {
             if(active && moveMode == 0){
-                moveMode = 1;
-                if (this.getSelf() instanceof Player) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC, moveMode);
-                }
+                setOne();
+            }
+            if(selecting && moveMode == 0){
+                setTwo();
             }
         }
 
-        System.out.println(moveMode);
+        System.out.println(moveMode + ". Level is Clientside: " + this.isClient());
 
         if(self instanceof Player PL) {
             if (self != null && this.getStandEntity(self) instanceof BlackSabbathEntity BSE) {
@@ -464,6 +502,24 @@ public class PowersBlackSabbath extends NewDashPreset {
                         this.RecallClient();
                     }
                 }
+                if(selecting){
+                    if(!checkIfYouAreInDark()){
+                        this.selecting = false;
+                        BSE.forceDespawn(true);
+                    }
+                }
+            }
+        }
+
+        if(this.getStandEntity(this.getSelf()) != null) {
+            DimensionType t = this.getStandEntity(this.getSelf()).level().dimensionType();
+            DimensionType T = this.getSelf().level().dimensionType();
+
+
+            if (t != T) {
+                ((StandUser) this.self).roundabout$setActive(false);
+                this.getStandEntity(this.getSelf()).discard();
+                setNull();
             }
         }
 

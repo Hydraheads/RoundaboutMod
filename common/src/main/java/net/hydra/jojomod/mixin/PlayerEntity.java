@@ -2073,10 +2073,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if(PB.active){
                 PB.active = false;
             }
-            PB.moveMode = 2;
-            if (PB.getSelf() instanceof Player) {
-                PB.setNull();
+            if(PB.selecting){
+                PB.selecting = false;
             }
+                PB.setNull();
         }
     }
 
