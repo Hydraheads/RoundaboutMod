@@ -1075,6 +1075,9 @@ public class ClientUtil {
         return false;
     }
     public static boolean canRenderEpitaphScreen() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
         if (isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
             if (ConfigManager.getClientConfig().generalSettings.epitaphScreenEffect) {
                 return true;
@@ -1083,6 +1086,9 @@ public class ClientUtil {
         return false;
     }
     public static boolean canEpitaphRenderShader() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
         if (isUsingEpitaph() && ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
             return true;
         }
