@@ -281,13 +281,21 @@ public class PowersSilverChariot extends NewPunchingStand {
             case PowerIndex.POWER_4_BLOCK -> {
                 statueCuttingServer();
             }
+            case PowerIndex.POWER_3_SNEAK_EXTRA -> {
+                selfGrabClient();
+            }
         }
         return super.setPowerOther(move, lastMove);
     }
 
     @Override
-    public void updateUniqueMoves() {
+    public boolean tryPower(int move, boolean forced) {
+        return super.tryPower(move, forced);
+    }
 
+    @Override
+    public void updateUniqueMoves() {
+        super.updateUniqueMoves();
     }
 
     @Override
@@ -298,6 +306,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public boolean setPowerAttack() {
         return super.setPowerAttack();
+    }
+
+    @Override
+    public boolean setPowerNone() {
+        return super.setPowerNone();
     }
 
     @Override
@@ -379,7 +392,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 controlModeZero();
             }
             case 1 -> {
-                // controlMode1();
+                controlModeOne();
             }
             case 2 -> {
                 // controlMode2();
@@ -693,16 +706,29 @@ public class PowersSilverChariot extends NewPunchingStand {
 
 
     // Self grab
+    public void controlModeOne() {
+
+    }
+
     public void selfGrabClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_3_GUARD) && canExecuteMoveWithLevel(getSelfGrabLevel())) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
-            tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+        if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getSelfGrabLevel())) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+            tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
         }
     }
 
     public void selfGrabServer() {
         if (!this.self.level().isClientSide() && this.self instanceof Player player) {
+            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+                Entity entity = this.getSelf();
 
+
+                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                this.setActivePower(PowerIndex.POWER_3_SNEAK_EXTRA);
+                this.setAttackTimeDuring(0);
+                poseStand(OffsetIndex.LOOSE);
+            }
         }
     }
 }
