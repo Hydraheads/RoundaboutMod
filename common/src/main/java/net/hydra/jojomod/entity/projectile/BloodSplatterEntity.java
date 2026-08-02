@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -136,6 +137,8 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                     }
                 }
             } else {
+                SoundEvent $$6 = ModSounds.BLOOD_SLICE_EVENT;
+                this.playSound($$6, 1F, 1F);
                 float damage = 1;
                 if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
                 instanceof PowersKingCrimson pkc){
@@ -144,7 +147,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 if (DamageHandler.StandDamageEntity($$0.getEntity(),damage, getOwner())){
                     if ($$0.getEntity() instanceof LivingEntity LE) {
 
-                        LE.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1), getOwner());
+                        LE.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1, false,false), getOwner());
                     }
                 }
             }

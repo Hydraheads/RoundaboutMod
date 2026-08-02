@@ -57,6 +57,9 @@ public class ModSounds {
     public static final String KING_BLOOD_SPLASH = "king_blood_splash";
     public static final ResourceLocation KING_BLOOD_SPLASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KING_BLOOD_SPLASH);
     public static SoundEvent KING_BLOOD_SPLASH_EVENT = SoundEvent.createVariableRangeEvent(KING_BLOOD_SPLASH_ID);
+    public static final String BLOOD_SLICE = "blood_slice";
+    public static final ResourceLocation BLOOD_SLICE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_SLICE);
+    public static SoundEvent BLOOD_SLICE_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_SLICE_ID);
 
 
     public static final String OVA_THE_WORLD = "ova_the_world";

@@ -396,6 +396,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             KingCrimsonCloneEntity fclone = ModEntities.KING_CRIMSON_CLONE.create(this.getSelf().level());
             activeClone = fclone;
+            Entity mount = PE.getVehicle();
+            if (mount != null && mount.getId() != self.getId()){
+                PE.stopRiding();
+            }
             fclone.setVisage(((IPlayerEntity)PE).roundabout$getMaskSlot());
             fclone.setPlayer(PE);
             fclone.copyPosition(PE);
@@ -415,6 +419,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.getNavigation().stop();
             this.getSelf().level().addFreshEntity(fclone);
 
+            if (mount != null && mount.getId() != self.getId()){
+                fclone.startRiding(mount);
+            }
             fclone.setDeltaMovement(delta);
             fclone.isBackingUp = isBackingUp;
             fclone.isMovingForward = isMovingForward;
@@ -2414,7 +2421,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         this.self.level().playSound(null, this.self.blockPosition(),
                 ModSounds.KING_BLOOD_SPLASH_EVENT,
                 SoundSource.PLAYERS, 1F, (float) (0.99F + Math.random() * 0.02));
-        bloodsplash.shootFromRotation(self, self.getXRot(), self.getYRot(), -5, SHOOT_POWER, 1.0F);
+        bloodsplash.shootFromRotation(self, self.getXRot(), self.getYRot(), -7, SHOOT_POWER, 1.5F);
         bloodsplash.setPos(self.getPosition(1).add((self.getEyePosition().subtract(self.getPosition(1))).scale(0.5f)));
         self.level().addFreshEntity(bloodsplash);
     }
@@ -2441,10 +2448,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 }
             }
             if (!isBigOuchie) {
-                MainUtil.makeBleed(self, 0, bloodTime, self);
-                this.self.level().playSound(null, this.self.blockPosition(),
-                        ModSounds.KING_CRIMSON_PUNCH_EVENT,
-                        SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    MainUtil.makeBleed(self, 0, bloodTime, self);
+                    this.self.level().playSound(null, this.self.blockPosition(),
+                            ModSounds.KING_CRIMSON_PUNCH_EVENT,
+                            SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
+                }
                 ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
                         self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
                         30, 0, 0, 0, 0.1);

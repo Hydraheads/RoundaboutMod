@@ -17,6 +17,12 @@
       "roundabout:king_blood_splash"
     ]
   },
+  "blood_slice": {
+    "subtitle": "sounds.roundabout.blood_slice",
+    "sounds": [
+      "roundabout:blood_slice"
+    ]
+  },
   "oasis_mud_hit": {
     "subtitle": "sounds.roundabout.oasis_mud_hit",
     "sounds": [

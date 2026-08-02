@@ -46,6 +46,10 @@ public class CloneEntity extends PathfinderMob {
         entityData.set(VISAGE,visage);
     }
     @Override
+    public double getMyRidingOffset() {
+        return -0.35;
+    }
+    @Override
     public Component getDisplayName() {
         Player player = getPlayer();
 

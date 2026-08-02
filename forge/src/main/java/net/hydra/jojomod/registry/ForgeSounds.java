@@ -38,6 +38,8 @@ public class ForgeSounds {
             register(ModSounds.HOLOGRAM_END, ModSounds.HOLOGRAM_END_ID);
     public static final RegistryObject<SoundEvent> KING_BLOOD_SPLASH =
             register(ModSounds.KING_BLOOD_SPLASH, ModSounds.KING_BLOOD_SPLASH_ID);
+    public static final RegistryObject<SoundEvent> BLOOD_SLICE =
+            register(ModSounds.BLOOD_SLICE, ModSounds.BLOOD_SLICE_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
