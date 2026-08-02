@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
@@ -118,6 +120,10 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 return;
 
             if (getSplatterType() == 0){
+                if ($$0.getEntity() instanceof EnderMan em) {
+                    ((IEnderMan) em).roundabout$teleport();
+                    return;
+                }
                 if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
                     gwe.setBled(true);
                 }
@@ -134,6 +140,10 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                     }
                 }
             } else if (getSplatterType() == 1) {
+                if ($$0.getEntity() instanceof EnderMan em) {
+                    ((IEnderMan) em).roundabout$teleport();
+                    return;
+                }
                 if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
                     gwe.setBled(true);
                 }
