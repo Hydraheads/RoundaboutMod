@@ -396,9 +396,9 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
-        BlockPos bpos = BlockPos.containing(pn.x(), self.getY(), pn.z());
+        BlockPos bpos = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
         BlockPos myPos = BlockPos.containing(self.getX(), self.getY(), self.getZ());
-        BlockPos bposExtra =BlockPos.containing(pn.x(), self.getY() - 1, pn.z());
+        BlockPos bposExtra =BlockPos.containing(pn.x(), Math.round(self.getY()) - 1, pn.z());
 
         if (self.onGround()) {
             if (this.self.level().getBlockState(bpos.below()).isSolid()) {
@@ -472,6 +472,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
 
         }
+
+        System.out.println(getValidPlacement());
 
         if(this.getStandEntity(self) == null){
             if(moveMode != 0) {
@@ -552,7 +554,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
         float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
-                BE.absMoveTo(pn.x(), evilY, pn.z());
+                BE.absMoveTo(pn.x(), Math.round(evilY), pn.z());
                 BE.setMaster(this.self);
                 BE.setYRot((self.getYRot() % 360) - 180);
                 BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
@@ -577,14 +579,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame() || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame() || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             return true;
         }
         return super.cancelJump();
@@ -592,7 +594,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame() || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             return true;
         }
         return super.cancelSprintParticles();
