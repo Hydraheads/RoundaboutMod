@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -122,6 +123,12 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             }
         }
 
+        boolean alternateEpitaph = false;
+        if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            alternateEpitaph = true;
+        }
+
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
             entityAndData.roundabout$setExclusiveLayers(true);
@@ -209,8 +216,17 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                 entity.setYRot(renderYaw);
                                 entity.yRotO = renderYaw;
 
+                                if (alternateEpitaph){
+                                    ClientUtil.setThrowFadeToTheEther(0.5F);
+                                    ClientUtil.forceFade = true;
+                                    ClientUtil.forceFade2 = 0.5F;
+                                    LE.hurtTime+=2;
+                                }
                                 this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
 
+                                if (alternateEpitaph){
+                                    LE.hurtTime-=2;
+                                }
                                 LE.yBodyRot = oldBody;
                                 LE.yBodyRotO = oldBodyO;
                                 LE.yHeadRot = oldHead;
@@ -219,6 +235,10 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                 entity.yRotO = oldYawO;
                             } else {
 
+                                if (alternateEpitaph){
+                                    ClientUtil.forceFade = true;
+                                    ClientUtil.forceFade2 = 0.2F;
+                                }
                                 this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
                             }
 
@@ -227,10 +247,17 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
                                 SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
                             if (!(entity.getPassengers() != null && entity.hasPassenger(ClientUtil.getPlayer()))) {
-                                if (ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles) {
-                                    ClientUtil.setThrowFadeToTheEther(0.2F);
-                                    ClientUtil.forceFade = true;
-                                    ClientUtil.forceFade2 = 0.2F;
+                                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                                        ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles ||
+                                        alternateEpitaph) {
+                                    if (!alternateEpitaph) {
+                                        ClientUtil.setThrowFadeToTheEther(0.2F);
+                                        ClientUtil.forceFade = true;
+                                        ClientUtil.forceFade2 = 0.2F;
+                                    } else {
+                                        ClientUtil.setThrowFadeToTheEther(1F);
+                                        ClientUtil.forceFade = false;
+                                    }
                                     double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
                                     double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
                                     double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
