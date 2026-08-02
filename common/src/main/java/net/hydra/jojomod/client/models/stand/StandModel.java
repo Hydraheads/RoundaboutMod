@@ -152,6 +152,10 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
+        if (pEntity.firstRenderFrame){
+            pEntity.firstRenderFrame = false;
+            pEntity.setupAnimationStates();
+        }
     }
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {

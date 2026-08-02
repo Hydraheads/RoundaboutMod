@@ -1,8 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.NoVibrationEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -41,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.UUID;
 
@@ -203,9 +206,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState armlessAnimation = new AnimationState();
     public final AnimationState armlessAnimationIdle = new AnimationState();
 
+    public boolean turned = false;
     /**Override this to define animations. Above are animation states defined.*/
     public void setupAnimationStates() {
-        if (this.getUser() != null) {
+        tryHardTimeEraseRendering();
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
             if (animation == IDLE && idle == 1) {
@@ -300,8 +304,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.standLeapEndAnimationState.startIfStopped(this.tickCount);
             else
                 this.standLeapEndAnimationState.stop();
-        }
+
     }
+
+    public boolean firstRenderFrame = true;
 
     public boolean forceVisible = false;
 
@@ -1017,4 +1023,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
     }
 
+    //For people with nasa space shuttle eyes complaining about perfect rotations on stands on time erase
+    public void tryHardTimeEraseRendering(){
+
+    }
 }

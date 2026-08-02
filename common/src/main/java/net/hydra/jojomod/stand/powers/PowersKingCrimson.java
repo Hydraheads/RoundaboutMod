@@ -543,6 +543,40 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     stand.setFollowing(activeClone);
                     stand.setUser(activeClone);
 
+                    stand.setPos(st.getX(), st.getY(), st.getZ());
+                    stand.xOld = st.xOld;
+                    stand.yOld = st.yOld;
+                    stand.zOld = st.zOld;
+
+                    // Body rotation
+                    stand.setYRot(st.getYRot());
+                    stand.yRotO = st.yRotO;
+
+                    // Pitch
+                    stand.setXRot(st.getXRot());
+                    stand.xRotO = st.xRotO;
+
+                    // Body/head rotations
+                    stand.yBodyRot = st.yBodyRot;
+                    stand.yBodyRotO = st.yBodyRotO;
+                    stand.yHeadRot = st.yHeadRot;
+                    stand.yHeadRotO = st.yHeadRotO;
+
+                    // Animation
+                    stand.walkAnimation.setSpeed(st.walkAnimation.speed());
+                    stand.walkAnimation.position(st.walkAnimation.position());
+                    ILivingEntityAccess entityAndData = ((ILivingEntityAccess) stand);
+                    ILivingEntityAccess playerAndData = ((ILivingEntityAccess) st);
+
+                    entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
+                    entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
+                    entityAndData.roundabout$setLerp(new Vector3f(
+                            (float) playerAndData.roundabout$getLerpX(),
+                            (float) playerAndData.roundabout$getLerpY(),
+                            (float) playerAndData.roundabout$getLerpZ()
+                    ));
+
+
                     stand.setFadePercent(st.getFadePercent());
                     stand.setFadeOut((byte) st.getFadeOut());
                     stand.copyPosition(st);

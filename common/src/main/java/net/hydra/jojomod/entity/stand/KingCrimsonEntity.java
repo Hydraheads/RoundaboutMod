@@ -1,9 +1,13 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.access.ILivingEntityAccess;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
+import org.joml.Vector3f;
 
 public class KingCrimsonEntity extends FollowingStandEntity {
     public KingCrimsonEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -156,5 +160,50 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             }
         }
         super.tick();
+    }
+
+    @Override
+    public void tryHardTimeEraseRendering(){
+        if (getUser() != null && getUser() instanceof KingCrimsonCloneEntity kc){
+            if (!turned){
+                if (kc.getPlayer() != null && ((StandUser)kc.getPlayer()).roundabout$getStand() instanceof
+                        KingCrimsonEntity pl) {
+                    turned = true;
+                    // Position
+                    this.setPos(pl.getX(), pl.getY(), pl.getZ());
+                    this.xOld = pl.xOld;
+                    this.yOld = pl.yOld;
+                    this.zOld = pl.zOld;
+
+                    // Body rotation
+                    this.setYRot(pl.getYRot());
+                    this.yRotO = pl.yRotO;
+
+                    // Pitch
+                    this.setXRot(pl.getXRot());
+                    this.xRotO = pl.xRotO;
+
+                    // Body/head rotations
+                    this.yBodyRot = pl.yBodyRot;
+                    this.yBodyRotO = pl.yBodyRotO;
+                    this.yHeadRot = pl.yHeadRot;
+                    this.yHeadRotO = pl.yHeadRotO;
+
+                    // Animation
+                    this.walkAnimation.setSpeed(pl.walkAnimation.speed());
+                    this.walkAnimation.position(pl.walkAnimation.position());
+                    ILivingEntityAccess entityAndData = ((ILivingEntityAccess) this);
+                    ILivingEntityAccess playerAndData = ((ILivingEntityAccess) pl);
+
+                    entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
+                    entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
+                    entityAndData.roundabout$setLerp(new Vector3f(
+                            (float) playerAndData.roundabout$getLerpX(),
+                            (float) playerAndData.roundabout$getLerpY(),
+                            (float) playerAndData.roundabout$getLerpZ()
+                    ));
+                }
+            }
+        }
     }
 }
