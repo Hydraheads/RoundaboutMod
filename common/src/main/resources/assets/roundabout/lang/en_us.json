@@ -4187,6 +4187,9 @@
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
 
+  "config.roundabout.alternateEpitaph.name": "Alternate Epitaph",
+  "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",
+
   "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
   "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",
 
