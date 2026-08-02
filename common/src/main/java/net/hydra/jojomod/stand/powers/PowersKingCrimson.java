@@ -2447,24 +2447,26 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     bloodTime += instance.getDuration();
                 }
             }
-            if (!isBigOuchie) {
-                if (!(self instanceof Player pl && pl.isCreative())) {
-                    MainUtil.makeBleed(self, 0, bloodTime, self);
-                    this.self.level().playSound(null, this.self.blockPosition(),
-                            ModSounds.KING_CRIMSON_PUNCH_EVENT,
-                            SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
+            if (!isUsingTimeErase()) {
+                if (!isBigOuchie) {
+                    if (!(self instanceof Player pl && pl.isCreative())) {
+                        MainUtil.makeBleed(self, 0, bloodTime, self);
+                        this.self.level().playSound(null, this.self.blockPosition(),
+                                ModSounds.KING_CRIMSON_PUNCH_EVENT,
+                                SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
+                    }
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                            self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
+                            30, 0, 0, 0, 0.1);
+                } else {
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                            self.getEyePosition().x(), self.getEyePosition().y() + 0.3F, self.getEyePosition().z(),
+                            30, 0, 0, 0, 0.3);
                 }
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
-                        self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
-                        30, 0, 0, 0, 0.1);
-            } else {
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
-                        self.getEyePosition().x(), self.getEyePosition().y()+0.3F, self.getEyePosition().z(),
-                        30, 0, 0, 0, 0.3);
+                this.self.level().playSound(null, this.self.blockPosition(),
+                        ModSounds.VAMPIRE_DRAIN_EVENT,
+                        SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
             }
-            this.self.level().playSound(null, this.self.blockPosition(),
-                    ModSounds.VAMPIRE_DRAIN_EVENT,
-                    SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
         }
     }
     public void projectionClient(){
