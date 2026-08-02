@@ -30,6 +30,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -205,15 +206,20 @@ public class PowersSilverChariot extends NewPunchingStand {
         switch (context)
         {
             case SKILL_1_NORMAL -> {
+                // Look at PowersMagiciansRed code
+
                 // TODO: Implement rapier spin ability
                 // rapierSpinClient();
+
+                // Might implement forward barrage with 3 block range
             }
             case SKILL_1_CROUCH -> {
                 // TODO: Implement rapier slash ability
                 rapierSlashClient();
             }
             case SKILL_1_GUARD -> {
-                // Might implement another ability here
+                // TODO: Implement slab cutting ability
+                slabCuttingClient();
             }
             case SKILL_1_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -239,8 +245,8 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // toggleControlModeClient((short) 1);
             }
             case SKILL_3_GUARD -> {
-                // TODO: Implement slab cutting ability
-                // tryCutBlockIntoSlabsClient();
+                // TODO: Implement Silver Chariot arm render ability
+                // armRenderClient();
             }
             case SKILL_3_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -263,12 +269,14 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
     }
 
-    // Server side
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
             case PowerIndex.POWER_1_SNEAK -> {
                 rapierSlashServer();
+            }
+            case PowerIndex.POWER_1_BLOCK -> {
+                slabCuttingServer();
             }
             case PowerIndex.POWER_4_BLOCK -> {
                 statueCuttingServer();
@@ -278,8 +286,26 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public void updateUniqueMoves() {
+
+    }
+
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int chargeTime) {
+        return super.tryIntPower(move, forced, chargeTime);
+    }
+
+    @Override
+    public boolean setPowerAttack() {
+        return super.setPowerAttack();
+    }
+
+    @Override
     public void tickPower() {
         // super.tickPower();
+
+        // Control mode
+
         if (this.getStandEntity(this.getSelf()) instanceof SilverChariotEntity SCE) {
             if (!isPiloting()) {
                 SCE.setDeltaMovement(SCE.getDeltaMovement().x, 0, SCE.getDeltaMovement().z);
@@ -477,16 +503,27 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
     }
 
+    public void rapierSpinClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_1) && canExecuteMoveWithLevel(getRapierSpinLevel())) {
+
+        }
+    }
+
+    public void rapierSpinServer() {
+        setAttackTimeDuring(-10);
+        if (!self.level().isClientSide()) {
+
+        }
+    }
+
     public void rapierSlashClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            if (canExecuteMoveWithLevel(getRapierSlashLevel())) {
-                if (this.activePower == PowerIndex.POWER_1_SNEAK) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    tryPowerPacket(PowerIndex.NONE);
-                } else {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                    tryPowerPacket(PowerIndex.POWER_1_SNEAK);
-                }
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK) && canExecuteMoveWithLevel(getRapierSlashLevel())) {
+            if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                tryPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
         }
     }
@@ -611,5 +648,61 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
         return false;
+    }
+
+
+
+    // Slab cutting
+    public void slabCuttingClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_1_GUARD) && canExecuteMoveWithLevel(getSlabCuttingLevel())) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
+            tryPowerPacket(PowerIndex.POWER_1_BLOCK);
+        }
+    }
+
+    public void slabCuttingServer() {
+        if (!this.self.level().isClientSide() && this.self instanceof Player player) {
+            if (MainUtil.getIsGamemodeApproriateForGrief(player)) {
+                if (canCreateSlab()) {
+
+                }
+            }
+        }
+    }
+
+    public boolean canCreateSlab() {
+        HitResult res = this.self.pick(5.0d, 0.0f, false);
+
+        if (res.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult bhr = (BlockHitResult) res;
+            BlockPos bp = bhr.getBlockPos();
+            BlockState bs = this.self.level().getBlockState(bp);
+
+            Block slab = MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.get(bs.getBlock());
+            if (slab != null && !(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, bp))) {
+                self.level().setBlock(
+                        bp,
+                        slab.defaultBlockState(),
+                        Block.UPDATE_ALL
+                );
+            }
+        }
+        return false;
+    }
+
+
+
+    // Self grab
+    public void selfGrabClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_3_GUARD) && canExecuteMoveWithLevel(getSelfGrabLevel())) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+            tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+        }
+    }
+
+    public void selfGrabServer() {
+        if (!this.self.level().isClientSide() && this.self instanceof Player player) {
+
+        }
     }
 }
