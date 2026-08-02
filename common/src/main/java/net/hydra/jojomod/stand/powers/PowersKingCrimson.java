@@ -50,6 +50,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -125,6 +126,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.HOLOGRAM_START_EVENT;
         }else if (soundChoice == EPITAPH_PROJECTION_2) {
             return ModSounds.HOLOGRAM_END_EVENT;
+        }else if (soundChoice == DING_NOISE) {
+            return ModSounds.DING_EVENT;
+        }else if (soundChoice == DRAIN_NOISE) {
+            return ModSounds.VAMPIRE_DRAIN_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -134,6 +139,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte EPITAPH_PROJECTION = 108;
     public static final byte EPITAPH_PROJECTION_2 = 109;
     public static final byte TIME_ERASE = 110;
+    public static final byte DING_NOISE = 111;
+    public static final byte DRAIN_NOISE = 112;
 
     @Override
     public SoundEvent getImpaleSound() {
@@ -143,7 +150,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean isMiningStand() {
         return super.isMiningStand();
     }
-
+    public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
     public int ticksOfEraseLeft = 0;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
@@ -179,7 +186,36 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+    public void applyBloodSplatterEffects() {
+        if (bloodSplatterHits.isEmpty()){
+            return;
+        }
+        for (Iterator<LivingEntity> it = bloodSplatterHits.iterator(); it.hasNext();) {
+            LivingEntity entity = it.next();
 
+            if (entity.isRemoved() || !entity.isAlive()) {
+                it.remove();
+                continue;
+            }
+
+            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                    entity.getEyePosition().x(), entity.getEyePosition().y(), entity.getEyePosition().z(),
+                    30, 0, 0, 0, 0.1);
+            entity.addEffect(new MobEffectInstance(
+                    MobEffects.BLINDNESS,
+                    80,
+                    1,
+                    false,
+                    true,
+                    true
+            ));
+            if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
+                ((IMob)mb).roundabout$setConfusionTicks(60);
+            }
+        }
+
+        bloodSplatterHits.clear();
+    }
 
     @Override
     public void onStandSwitchInto(){
@@ -2417,10 +2453,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         BloodSplatterEntity bloodsplash = new BloodSplatterEntity(self, self.level());
         bloodsplash.healthAmt = 1;
         float SHOOT_POWER = 1.5F;
-        bloodsplash.setSplatterType((byte) 1);
-        this.self.level().playSound(null, this.self.blockPosition(),
-                ModSounds.KING_BLOOD_SPLASH_EVENT,
-                SoundSource.PLAYERS, 1F, (float) (0.99F + Math.random() * 0.02));
+        if (!isUsingTimeErase()) {
+            bloodsplash.setSplatterType((byte) 1);
+
+            this.self.level().playSound(null, this.self.blockPosition(),
+                    ModSounds.KING_BLOOD_SPLASH_EVENT,
+                    SoundSource.PLAYERS, 1F, (float) (0.99F + Math.random() * 0.02));
+        } else {
+            bloodsplash.setSplatterType((byte) 2);
+        }
         bloodsplash.shootFromRotation(self, self.getXRot(), self.getYRot(), -7, SHOOT_POWER, 1.5F);
         bloodsplash.setPos(self.getPosition(1).add((self.getEyePosition().subtract(self.getPosition(1))).scale(0.5f)));
         self.level().addFreshEntity(bloodsplash);
@@ -2466,6 +2507,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 this.self.level().playSound(null, this.self.blockPosition(),
                         ModSounds.VAMPIRE_DRAIN_EVENT,
                         SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
+            } else {
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, sp.getId(), PowersKingCrimson.DRAIN_NOISE);
+                }
             }
         }
     }
@@ -2723,6 +2768,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 packetNearby2();
                 playStandUserOnlySoundsIfNearby(TIME_ERASE_END, getSkipBonusRange(), true, false);
                 saveDiscAndSync();
+                applyBloodSplatterEffects();
                 if (fakedDeath){
                     if (!self.level().isClientSide && self.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
 

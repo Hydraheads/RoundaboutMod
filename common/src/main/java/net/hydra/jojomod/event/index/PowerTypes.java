@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -233,6 +234,17 @@ public enum PowerTypes {
                 if (ClientUtil.isPlayer(kcc.getPlayer())){
                     return true;
                 }
+            }
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 3){
+                if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 3){
+                return true;
             }
         }
         if (isErasingTime(entity)){
