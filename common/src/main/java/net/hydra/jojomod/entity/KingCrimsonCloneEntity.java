@@ -287,7 +287,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     }
 
     private void redirectAggroBackToPlayer() {
-        if (level().isClientSide() || player == null) {
+        if (level().isClientSide() || this.getPlayer() == null) {
             return;
         }
 
@@ -295,7 +295,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
 
         for (Mob mob : level().getEntitiesOfClass(Mob.class, search)) {
             if (mob.getTarget() == this || (mob.getTarget() != null && mob.getTarget().getId() == this.getId())) {
-                if (mob.distanceTo(this.getPlayer()) < 25 && !(mob instanceof Monster)){
+                if (mob.distanceTo(this.getPlayer()) < 25 && !(mob instanceof Monster) &&
+                mob.hasLineOfSight(this.getPlayer())){
                     ((StandUser) mob).roundabout$aggressivelyEnforceAggro(player);
                 }
             }
