@@ -2935,7 +2935,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void detectBitedTheDustDay() {
         dayBitedTheDustinit();
         if (!dayBitedTheDust.isEmpty()) {
-            int dayTime = ((int)this.self.level().getDayTime()) % 24000;
+            //int dayTime = ((int)this.self.level().getDayTime()) % 24000;
             HashSet<Integer> toRemoveFromList = new HashSet<>();
             for (int id : dayBitedTheDust.keySet()) {
                 Entity target = this.self.level().getEntity(id);
@@ -2943,7 +2943,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (target != null && target.isAlive() && !target.isRemoved()) {
                     int timeToDust = dayBitedTheDust.get(id);
 
-                    if (timeToDust == dayTime) {
+                    if (timeToDust == btdTicks) {
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
 
                         if (MainUtil.getReducedDamage(target)) {
