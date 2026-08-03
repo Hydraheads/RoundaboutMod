@@ -3225,13 +3225,21 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+    public void swingStandHands(){
+
+    }
+
     public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (impactTimeStamp != self.level().getGameTime()) {
                 impactTimeStamp = self.level().getGameTime();
                 attackTargetId = 0;
-                self.swing(InteractionHand.MAIN_HAND, true);
+                if (PowerTypes.hasHandsActive(self)){
+                    swingStandHands();
+                } else {
+                    self.swing(InteractionHand.MAIN_HAND, true);
+                }
                 if (entity != null) {
                     if (entity.distanceTo(self) > 3.8) {
                         return;

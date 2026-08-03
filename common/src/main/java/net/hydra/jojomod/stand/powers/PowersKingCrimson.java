@@ -102,6 +102,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     protected Byte getSummonSound() {
+        if (hasHandsOut()){
+            return SoundIndex.NO_SOUND;
+        }
         return SoundIndex.SUMMON_SOUND;
     }
 
@@ -2503,7 +2506,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!onCooldown(PowerIndex.SKILL_3_GUARD)) {
             if (!hasBlock() && canAttackHeavy()) {
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
-                setCooldown(PowerIndex.SKILL_3_GUARD, 25);
+                setCooldown(PowerIndex.SKILL_3_GUARD, 7);
             }
         }
     }
@@ -3138,7 +3141,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             return 0.75F;
         } else {
-            return 2.5F;
+            return 3F;
         }
     }
     public boolean crossedThreshold(){
