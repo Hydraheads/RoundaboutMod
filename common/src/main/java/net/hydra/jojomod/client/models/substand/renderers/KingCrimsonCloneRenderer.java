@@ -1,8 +1,10 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Pose;
@@ -24,7 +26,7 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
             Player pl = entity.getPlayer();
             if (pl != null) {
 
-
+                ((StandUser)entity).roundabout$setArmVanishTicks(((StandUser)pl).roundabout$getArmVanishTicks());
                 if (pl.isCrouching()){
                     entity.setShiftKeyDown(true);
                     entity.setPose(Pose.CROUCHING);

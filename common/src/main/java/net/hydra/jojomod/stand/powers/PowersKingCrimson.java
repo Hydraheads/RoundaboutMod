@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -495,10 +496,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isSprinting = isSprinting;
             runaway = hasHandsOut() || isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
-            fclone.runawayTrue = hasHandsOut();
+            if (hasHandsOut()){
+                fclone.runaway = true;
+                fclone.runawayTrue = true;
+            }
 
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
+
             LivingEntity last = self.getLastHurtMob();
             LivingEntity last2 = self.getLastHurtByMob();
             if (last != null && last.getUUID() != self.getUUID() && last.isAlive() &&
@@ -1534,6 +1539,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 kcpj.discard();
                 continue;
             }
+            if (!canSkip(entity))
+                continue;
             hitWall2 = false;
             if (entity instanceof Projectile proj) {
                 if (proj instanceof FireworkRocketEntity){
@@ -2199,6 +2206,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
     }
+
+    public boolean canSkip(Entity entity){
+        if (entity instanceof FallenMob fm && !fm.getActivated()){
+            return false;
+        }
+        return true;
+    }
     public void epitaph() {
         if (self instanceof ServerPlayer pl) {
             if (isUsingTimeErase()){
@@ -2213,6 +2227,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
                 for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
                     if (!isGravityNormal(entity))
+                        continue;
+                    if (!canSkip(entity))
                         continue;
 
                     if (entity instanceof KingCrimsonProjectionEntity kcpj){
@@ -3231,6 +3247,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return false;
         }
         return super.setPowerAttack();
+    }
+
+    @Override
+    public void setAttack(){
+        if (!self.level().isClientSide()){
+            if (isUsingTimeErase()){
+                timeErase();
+            }
+        }
+        super.setAttack();
     }
     //hold input
     public boolean holdDownClick = false;

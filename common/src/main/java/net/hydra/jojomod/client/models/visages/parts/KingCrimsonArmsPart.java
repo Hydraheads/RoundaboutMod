@@ -110,7 +110,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                     partialTicks = 0;
                 }
                 int heyTicks = user.roundabout$getArmVanishTicks();
-                boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActiveRendering(LE));
+                boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE) && PowerTypes.hasHandsActiveRendering(LE));
 
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
