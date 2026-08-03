@@ -2422,7 +2422,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL-> {
+            case SKILL_1_NORMAL,SKILL_1_GUARD-> {
                 epitaphClient();
             }
             case SKILL_1_CROUCH -> {

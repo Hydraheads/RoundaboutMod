@@ -9,17 +9,20 @@ import net.hydra.jojomod.access.ILevelRenderer;
 import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
@@ -138,7 +141,46 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 }
             }
 
-            if (ClientUtil.isUsingEpitaph()){
+            if (ClientUtil.isUsingTimeErase) {
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                        ConfigManager.getClientConfig().generalSettings.timeEraseRedProjections){
+                    if (entity instanceof LivingEntity lv){
+                    Player pl = ClientUtil.getPlayer();
+                        if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                                instanceof PowersKingCrimson pkc && pl.getId() != entity.getId() &&
+                                !(((StandUser)pl).roundabout$getStand() instanceof KingCrimsonEntity kce &&
+                                kce.getId() == entity.getId()) &&
+                                !(entity instanceof KingCrimsonEntity kce2 &&
+                                        kce2.getUser() instanceof KingCrimsonCloneEntity kcce2 && kcce2.getPlayer() != null &&
+                                        kcce2.getPlayer().getId() == pl.getId())
+                                &&
+                                !((entity instanceof KingCrimsonCloneEntity kcce && kcce.getPlayer() != null &&
+                                        kcce.getPlayer().getId() == pl.getId()))
+                        ) {
+                            if (!entity.isPassenger()) {
+                                ClientUtil.setThrowFadeToTheEther(0.35F);
+                                ClientUtil.forceFade = true;
+                                ClientUtil.forceFade2 = 0.35F;
+                                Vec3 forward = entity.getForward().scale(entity.getBbWidth() * 1.5F);
+                                double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
+                                double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
+                                double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
+                                float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+                                if (entity instanceof LivingEntity LE) {
+                                    LE.hurtTime += 2;
+                                }
+                                this.entityRenderDispatcher.render(entity, ($$7 + forward.x) - cameraX,
+                                        ($$8 + forward.y) - cameraY, ($$9 + forward.z) - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                                ClientUtil.forceFade = false;
+                                ClientUtil.forceFade2 = 1F;
+                                if (entity instanceof LivingEntity LE) {
+                                    LE.hurtTime -= 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (ClientUtil.isUsingEpitaph()){
 
                 boolean alternateEpitaph = false;
                 if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
