@@ -30,6 +30,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -636,6 +637,32 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public boolean interceptAttack(){
         return this.moveMode == 2;
+    }
+
+    boolean holdAttack = false;
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (keyIsDown) {
+            if (!holdAttack) {
+                holdAttack = true;
+                if (moveMode == 2) {
+                    selectTargetClient();
+                }
+            }
+        } else if (holdAttack){
+            holdAttack = false;
+        }
+    }
+
+    public Entity EntityTargetOne = null;
+
+    public void selectTargetClient(){
+        Entity TE = MainUtil.getTargetEntity(this.self, 100, 10);
+        if (EntityTargetOne == null){
+                EntityTargetOne = TE;
+                this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+        } else {
+            this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 1F);
+        }
     }
 
     @Override
