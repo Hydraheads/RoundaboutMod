@@ -284,6 +284,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         StandHudRender.renderEpitaph(context,cameraPlayer,screenWidth,screenHeight,x,this);
     }
 
+
     public boolean replaceHudActively(){
         return isUsingEpitaph() || isErasingTime();
     }
@@ -2502,7 +2503,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!onCooldown(PowerIndex.SKILL_3_GUARD)) {
             if (!hasBlock() && canAttackHeavy()) {
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
-                setCooldown(PowerIndex.SKILL_3_GUARD, 10);
+                setCooldown(PowerIndex.SKILL_3_GUARD, 25);
             }
         }
     }
@@ -3079,7 +3080,38 @@ public class PowersKingCrimson extends BlockGrabPreset {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+        if (hasArmsOut){
+            int barTexture = 0;
+            Entity TE = getTargetEntity(playerEntity, 3, getBrawlPunchAngle());
+            float attackTimeMax = getAttackTimeMax();
+            if (attackTimeMax > 0) {
+                float attackTime = getAttackTime();
+                float finalATime = attackTime / attackTimeMax;
+                if (finalATime <= 1) {
+
+                    if (getActivePowerPhase() == getActivePowerPhaseMax()) {
+                        barTexture = 24;
+                    } else if (TE != null && isBrawling()) {
+                        barTexture = 12;
+                    } else {
+                        barTexture = 18;
+                    }
+
+
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+                    int finalATimeInt = Math.round(finalATime * 15);
+                    context.blit(StandIcons.JOJO_ICONS, k, j, 193, barTexture, finalATimeInt, 6);
+
+                }
+            }
+            if (standOn) {
+                if (TE != null) {
+                    if (barTexture == 0) {
+                        context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+                    }
+                }
+            }
+        } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             Entity TE = this.getTargetEntity(playerEntity, impaleRange);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
@@ -3098,6 +3130,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } else {
             super.renderAttackHud(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
+    }
+
+    @Override
+    public float getBrawlPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return 0.75F;
+        } else {
+            return 2.5F;
         }
     }
     public boolean crossedThreshold(){
