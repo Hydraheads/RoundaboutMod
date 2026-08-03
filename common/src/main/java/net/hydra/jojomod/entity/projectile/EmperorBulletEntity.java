@@ -12,16 +12,19 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersEmperor;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -67,7 +70,7 @@ public class EmperorBulletEntity extends AbstractArrow {
             }
         }
 
-        return 3.0F;
+        return ClientNetworking.getAppropriateConfig().emperorSettings.emperorBulletDamage;
     }
 
     @Override
@@ -78,6 +81,13 @@ public class EmperorBulletEntity extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
+
+        Entity owner = getOwner();
+
+        if (owner == null || !owner.isAlive()) {
+            discard();
+            return;
+        }
 
         if (!initialized) {
             startPos = this.position();
@@ -96,8 +106,11 @@ public class EmperorBulletEntity extends AbstractArrow {
         this.setNoGravity(true);
 
         double t = distance / maxRange;
-        double slowFactor = 2.0 - (t * t);
-        slowFactor = Math.max(0.05, slowFactor);
+
+        double slowFactor = 0.25 + 1.75 * (1.0 - t) * (1.0 - t);
+
+        Vec3 direction = this.getDeltaMovement().normalize();
+        this.setDeltaMovement(direction.scale(baseSpeed * slowFactor));
 
         this.setDeltaMovement(this.getDeltaMovement().scale(slowFactor));
 
@@ -154,7 +167,7 @@ public class EmperorBulletEntity extends AbstractArrow {
             boolean headshot = diff < 0.3;
 
             if (headshot) {
-                damage *= 1.5F;
+                damage *= 2.0F;
             }
 
             boolean didDamage = livingEntity.hurt(
@@ -162,6 +175,38 @@ public class EmperorBulletEntity extends AbstractArrow {
                     damage
             );
             if (didDamage) {
+                applyEffect(livingEntity);
+
+
+            }
+
+            if (didDamage) {
+
+                if (livingEntity instanceof IronGolem) {
+                    level().playSound(
+                            null,
+                            entity.getX(), entity.getY(), entity.getZ(),
+                            ModSounds.EMPEROR_METAL_EVENT,
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            1.0F
+                    );
+                }
+                else if (!MainUtil.getMobBleed(livingEntity)) {
+                    level().playSound(
+                            null,
+                            entity.getX(), entity.getY(), entity.getZ(),
+                            ModSounds.EMPEROR_NON_BLEED_EVENT,
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            1.0F
+                    );
+                } else {
+                    this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.EMPEROR_IMPACT_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+                    this.discard();
+                }
+            }
+            else {
                 applyEffect(livingEntity);
             }
         }
@@ -175,8 +220,6 @@ public class EmperorBulletEntity extends AbstractArrow {
             livingOwner.setLastHurtMob(entity);
         }
 
-        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.EMPEROR_IMPACT_EVENT, this.getSoundSource(), 1.0F, 1.0F);
-        this.discard();
     }
 
     public void applyEffect(LivingEntity target) {
