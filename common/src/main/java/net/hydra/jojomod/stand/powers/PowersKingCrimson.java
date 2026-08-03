@@ -3085,7 +3085,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
-                    PowerIndex.GLOBAL_DASH);
+                    PowerIndex.SKILL_3_GUARD);
         } else if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);
