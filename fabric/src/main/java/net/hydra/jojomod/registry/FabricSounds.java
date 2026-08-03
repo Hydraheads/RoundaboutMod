@@ -578,5 +578,13 @@ public class FabricSounds {
         addSound(ModSounds.PLANET_WAVES_BIG_METEOR_ID,ModSounds.PLANET_WAVES_BIG_METEOR_EVENT);
         addSound(ModSounds.PLANET_WAVES_DISINTEGRATION_ID,ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT);
         addSound(ModSounds.PLANET_WAVES_TARGET_ID,ModSounds.PLANET_WAVES_TARGET_EVENT);
+
+        addSound(ModSounds.EMPEROR_SUMMON_ID,ModSounds.EMPEROR_SUMMON_EVENT);
+        addSound(ModSounds.EMPEROR_IMPACT_ID,ModSounds.EMPEROR_IMPACT_EVENT);
+        addSound(ModSounds.EMPEROR_SHOOT_ID,ModSounds.EMPEROR_SHOOT_EVENT);
+        addSound(ModSounds.EMPEROR_HEADSHOT_ID,ModSounds.EMPEROR_HEADSHOT_EVENT);
+        addSound(ModSounds.EMPEROR_METAL_ID,ModSounds.EMPEROR_METAL_EVENT);
+        addSound(ModSounds.EMPEROR_NON_BLEED_ID,ModSounds.EMPEROR_NON_BLEED_EVENT);
+        addSound(ModSounds.EMPEROR_SQUINT_ID,ModSounds.EMPEROR_SQUINT_EVENT);
     }
 }

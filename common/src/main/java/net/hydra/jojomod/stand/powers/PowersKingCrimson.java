@@ -148,6 +148,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean isMiningStand() {
+        if (hasHandsOut()){
+            return false;
+        }
         return super.isMiningStand();
     }
     public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
@@ -156,12 +159,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("timeEraseActive",timeEraseActive);
+        $$0.putBoolean("hasArmsOut",hasArmsOut);
         $$0.putInt("ticksOfEraseLeft",ticksOfEraseLeft);
         if (onCooldown(PowerIndex.SKILL_4)){
             $$0.putInt("timeEraseCooldown",getCooldown(PowerIndex.SKILL_4).time);
         } else {
             $$0.putInt("timeEraseCooldown",0);
         }
+    }
+    @Override
+    public boolean hasHandsOut(){
+        return hasArmsOut;
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -173,6 +181,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     ClientUtil.bootTimeErase();
                 }
             }
+        }
+        if ($$0.contains("hasArmsOut")) {
+            hasArmsOut = $$0.getBoolean("hasArmsOut");
         }
         if ($$0.contains("ticksOfEraseLeft")) {
             ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
@@ -2422,7 +2433,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_NORMAL-> {
+            case SKILL_1_NORMAL,SKILL_1_GUARD-> {
                 epitaphClient();
             }
             case SKILL_1_CROUCH -> {
@@ -2438,6 +2449,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
             }
+            case SKILL_3_GUARD -> {
+                handsActiveClient();
+            }
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
@@ -2449,6 +2463,46 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
             case SKILL_4_GUARD,SKILL_4_CROUCH_GUARD -> {
                 projectionClient();
+            }
+        }
+    }
+
+    public Vec3 getEpitaphColors(){
+        byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (sk == KingCrimsonEntity.MANGA_SKIN){
+            return new Vec3(0.5,0.5,0.5);
+        } if (sk == KingCrimsonEntity.STARLESS){
+            return new Vec3(1,0,0.5);
+        } if (sk == KingCrimsonEntity.BETA){
+            return new Vec3(1.5,0,0);
+        } if (sk == KingCrimsonEntity.DARK){
+            return new Vec3(0,0,0);
+        } if (sk == KingCrimsonEntity.GREEN){
+            return new Vec3(0,1,0);
+        } if (sk == KingCrimsonEntity.YELLOW){
+            return new Vec3(1,1,0);
+        } if (sk == KingCrimsonEntity.AQUA){
+            return new Vec3(0.2,0.5,1);
+        } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
+            return new Vec3(0.75,0,1.5);
+        }
+        return new Vec3(1,0,1);
+    }
+
+    public boolean hasArmsOut = false;
+    //hands code for hiding stand
+    public boolean canSummonStandAsEntity(){
+        if (hasArmsOut){
+            return false;
+        }
+        return super.canSummonStandAsEntity();
+    }
+
+    public void handsActiveClient(){
+        if (!onCooldown(PowerIndex.SKILL_3_GUARD)) {
+            if (!hasBlock() && canAttackHeavy()) {
+                tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+                setCooldown(PowerIndex.SKILL_3_GUARD, 10);
             }
         }
     }
@@ -2980,7 +3034,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
         }
 
-        if (canVault()){
+        if (isGuarding()) {
+            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
+                    PowerIndex.GLOBAL_DASH);
+        } else if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);
         } else {
@@ -3130,6 +3187,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public void switchHands(){
+        if (!self.level().isClientSide()){
+            this.poseStand(OffsetIndex.FOLLOW);
+            animateStand(StandEntity.IDLE);
+            if (!hasArmsOut){
+                StandEntity stand = getStandUserSelf().roundabout$getStand();
+                if (stand != null){
+                    stand.forceDespawn(true);
+                }
+            } else {
+                xTryPower(PowerIndex.NONE,true);
+            }
+            hasArmsOut = !hasArmsOut;
+            saveDiscAndSync();
+        }
+    }
+
     @Override
     /**Stand related things that slow you down or speed you up*/
     public float inputSpeedModifiers(float basis){
@@ -3217,6 +3291,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
            return true;
         } else if (move == PowerIndex.POWER_3){
             this.bloodSplash();
+            return true;
+        } else if (move == PowerIndex.POWER_3_BLOCK){
+            this.switchHands();
             return true;
         } else if (move == PowerIndex.POWER_3_SNEAK_EXTRA){
             this.shootBloodServer();

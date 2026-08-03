@@ -519,7 +519,6 @@ public class StandHudRender {
         int max = PE.getMaxShootTicks();
         int current = Mth.clamp(PE.getShootTicks(), 0, max);
 
-        // background bar
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 151, 182, 5);
 
         if (max > 0) {
@@ -535,7 +534,6 @@ public class StandHudRender {
         int k = scaledWidth / 2 - 5;
         l = scaledHeight - 31 - 5;
 
-        // IMPORTANT: fix shoot state logic (don’t rely on ticks alone)
         if (PE.emperorZoomActive()) {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 80, 9, 9);
         } else if (PE.canShoot()) {

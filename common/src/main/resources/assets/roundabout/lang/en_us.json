@@ -3393,9 +3393,20 @@
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
   "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
   "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
-  "config.roundabout.emperorBulletRange.name": "Bullet Range",
-  "config.roundabout.emperorBulletRange.desc": "[PLACEHOLDER]",
-
+  "config.roundabout.tripleShotHeat.name": "Triple shot heat",
+  "config.roundabout.tripleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotHeat.name": "Single shot heat",
+  "config.roundabout.singleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.tripleShotCooldown.name": "Triple shot cooldown",
+  "config.roundabout.tripleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotCooldown.name": "Single shot cooldown",
+  "config.roundabout.singleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.maxShootTicks.name": "Maximum shooting ticks",
+  "config.roundabout.maxShootTicks.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorBulletDamage.name": "Bullet damage",
+  "config.roundabout.emperorBulletDamage.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorShootingModeRange.name": "Bullet range",
+  "config.roundabout.emperorShootingModeRange.desc": "[PLACEHOLDER]",
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
   "config.roundabout.meteorsEmitParticles.desc": "If ancient meteors emit particles when touching an impact mound.",
@@ -4189,6 +4200,9 @@
 
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
+  "config.roundabout.timeEraseRedProjections.name": "Time Erase Red",
+  "config.roundabout.timeEraseRedProjections.desc": "Whether or not to draw red copies of entities in front of them during time erase.",
 
   "config.roundabout.alternateEpitaph.name": "Alternate Epitaph",
   "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",

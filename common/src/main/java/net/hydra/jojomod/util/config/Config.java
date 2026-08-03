@@ -1092,14 +1092,24 @@ public class Config implements Cloneable {
         public Boolean enableEmperor;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer emperorShootingModePower;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
-        public Integer heatGainedPerShot;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer bulletShootSpeedMultiplier;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer emperorBulletRange;
+        @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
+        public Integer tripleShotHeat;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer singleShotHeat;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer singleShotCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer tripleShotCooldown;
+        @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
+        public Integer maxShootTicks;
+        @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
+        public Integer emperorBulletDamage;
     }
 
     public static class KingCrimsonSettings {

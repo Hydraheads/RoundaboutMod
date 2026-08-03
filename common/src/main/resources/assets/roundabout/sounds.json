@@ -293,6 +293,30 @@
       "roundabout:emperor_impact"
     ]
   },
+  "emperor_squint": {
+    "subtitle": "sounds.roundabout.emperor_squint",
+    "sounds": [
+      "roundabout:emperor_squint"
+    ]
+  },
+  "emperor_headshot": {
+    "subtitle": "sounds.roundabout.emperor_headshot",
+    "sounds": [
+      "roundabout:emperor_headshot"
+    ]
+  },
+  "emperor_metal": {
+    "subtitle": "sounds.roundabout.emperor_metal",
+    "sounds": [
+      "roundabout:emperor_metal"
+    ]
+  },
+  "emperor_non_bleed": {
+    "subtitle": "sounds.roundabout.emperor_non_bleed",
+    "sounds": [
+      "roundabout:emperor_non_bleed"
+    ]
+  },
   "bone_chomp": {
     "subtitle": "sounds.roundabout.bone_chomp",
     "sounds": [

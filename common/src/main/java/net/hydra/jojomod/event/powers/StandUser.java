@@ -112,7 +112,7 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
-
+    AnimationState roundabout$getWornStandActiveAnimation();
     AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setWornStandIdleAnimation(AnimationState layer);
 
@@ -121,6 +121,8 @@ public interface StandUser {
     // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
+    int roundabout$getArmVanishTicks();
+    void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();

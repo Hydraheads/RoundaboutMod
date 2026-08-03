@@ -2018,6 +2018,7 @@ public class MainUtil {
                     || blk instanceof FrogspawnBlock
                     || blk instanceof CauldronBlock
                     || blk instanceof BellBlock
+                    || blk instanceof ChessPieceBlock
                     || blk instanceof SnowLayerBlock
                     || blk instanceof TurtleEggBlock
                     || blk instanceof CarpetBlock

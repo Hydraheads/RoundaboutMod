@@ -38,6 +38,7 @@ public class ModStrayModels {
     public static AnubisModel ANUBIS;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;
+    public static KingCrimsonArmsPart kingCrimsonArmsPart;
     public static ChestPart ChestPart;
     public static SmallChestPart SmallChestPart;
     public static BodySpikePart bodySpikePart;
