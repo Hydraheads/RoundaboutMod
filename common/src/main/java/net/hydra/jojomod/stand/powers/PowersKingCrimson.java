@@ -3133,12 +3133,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (hasArmsOut && (move == PowerIndex.BARRAGE || move == PowerIndex.BARRAGE_CHARGE
+        || move == PowerIndex.SNEAK_ATTACK_CHARGE || move == PowerIndex.SNEAK_ATTACK))
+            return false;
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
         }
         return super.tryPower(move,forced);
     }
 
+    @Override
+    public boolean setPowerAttack(){
+        if (hasArmsOut) {
+            setAttack();
+            return false;
+        }
+        return super.setPowerAttack();
+    }
     //hold input
     public boolean holdDownClick = false;
     @Override
@@ -3147,35 +3158,44 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (impaleTicks > 0){
                 return;
             }
-            if (holdDownClick) {
+            if (hasArmsOut){
                 if (keyIsDown) {
-
-                } else {
-                    if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                        C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
-                        int atd = this.getAttackTimeDuring();
-                        this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
-                        tryIntPowerPacket(PowerIndex.SNEAK_ATTACK,atd);
+                    if (activePowerPhase == 0) {
+                        this.tryPower(PowerIndex.ATTACK);
                     }
-                    holdDownClick = false;
                 }
+                holdDownClick = false;
             } else {
-                if (keyIsDown) {
-                    if (!isHoldingSneak()) {
-                        if (isErasingTime()) {
-                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
-                        }
-                        super.buttonInputAttack(keyIsDown, options);
+                if (holdDownClick) {
+                    if (keyIsDown) {
+
                     } else {
-                        if (this.canAttack()) {
-                            this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
-                            holdDownClick = true;
-                            tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                        } else {
+                        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                            int atd = this.getAttackTimeDuring();
+                            this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
+                            tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
+                        }
+                        holdDownClick = false;
+                    }
+                } else {
+                    if (keyIsDown) {
+                        if (!isHoldingSneak()) {
                             if (isErasingTime()) {
                                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
                             }
                             super.buttonInputAttack(keyIsDown, options);
+                        } else {
+                            if (this.canAttack()) {
+                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                holdDownClick = true;
+                                tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
+                            } else {
+                                if (isErasingTime()) {
+                                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_STAND_TRIGGER_2);
+                                }
+                                super.buttonInputAttack(keyIsDown, options);
+                            }
                         }
                     }
                 }
@@ -3191,13 +3211,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!self.level().isClientSide()){
             this.poseStand(OffsetIndex.FOLLOW);
             animateStand(StandEntity.IDLE);
+            xTryPower(PowerIndex.NONE,true);
             if (!hasArmsOut){
                 StandEntity stand = getStandUserSelf().roundabout$getStand();
                 if (stand != null){
                     stand.forceDespawn(true);
                 }
-            } else {
-                xTryPower(PowerIndex.NONE,true);
             }
             hasArmsOut = !hasArmsOut;
             saveDiscAndSync();
@@ -3315,6 +3334,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public boolean setPowerBarrageCharge() {
+        if (hasArmsOut)
+            return false;
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){
                 timeErase();
