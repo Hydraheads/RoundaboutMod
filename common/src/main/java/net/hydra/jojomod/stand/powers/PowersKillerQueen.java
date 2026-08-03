@@ -3228,7 +3228,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                     return ent == target;
                 }
             }
-            return ent == this.entityTargetBuffer || (this.bombBubble != null && this.bombBubble.getTarget() == ent);
+            return ent == this.entityTargetBuffer
+                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent
+                    && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
+                    && LE.getEffect(MobEffects.INVISIBILITY) != null)));
         }
         return false;
     }
