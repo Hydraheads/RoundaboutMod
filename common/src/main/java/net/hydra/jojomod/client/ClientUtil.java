@@ -2032,6 +2032,33 @@ public class ClientUtil {
             }
             byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
             // vampire again
+
+            if (PowerTypes.hasHandsActive(play)){
+
+                stack.pushPose();
+                float r = 1;
+                float g = 1;
+                float b = 1;
+                Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
+                boolean isGuarding = ((StandUser)play).roundabout$getStandAnimation() == StandPowers.GUARD;
+                if (isGuarding){
+                        gtranslation = new Vec3(0, -0.5, -0.05);
+                }
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                float opacity = 1F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerStandArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(5));
+                if (isGuarding){
+                        stack.mulPose(Axis.XP.rotationDegrees(-17));
+                }
+                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity, 0.85F);
+                stack.popPose();
+            }
             if (ClientUtil.rendersRipperEyes(play)) {
                 stack.pushPose();
                 Vec3 gtranslation = new Vec3(0, -0.1, 0);

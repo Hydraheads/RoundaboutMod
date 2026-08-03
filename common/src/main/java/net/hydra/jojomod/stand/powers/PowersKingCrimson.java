@@ -159,11 +159,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
     public int ticksOfEraseLeft = 0;
+    public boolean isRenderingArms = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("timeEraseActive",timeEraseActive);
         $$0.putBoolean("hasArmsOut",hasArmsOut);
+        $$0.putBoolean("isRenderingArms",isRenderingArms);
         $$0.putInt("ticksOfEraseLeft",ticksOfEraseLeft);
         if (onCooldown(PowerIndex.SKILL_4)){
             $$0.putInt("timeEraseCooldown",getCooldown(PowerIndex.SKILL_4).time);
@@ -174,6 +176,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean hasHandsOut(){
         return hasArmsOut;
+    }
+    @Override
+    public boolean hasHandsOutRendering(){
+        return isRenderingArms && self instanceof Player;
+    }
+    @Override
+    public void flipArmRendering(){
+        isRenderingArms = false;
+        saveDiscAndSync();
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
@@ -188,6 +199,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
         if ($$0.contains("hasArmsOut")) {
             hasArmsOut = $$0.getBoolean("hasArmsOut");
+        }
+        if ($$0.contains("isRenderingArms")) {
+            isRenderingArms = $$0.getBoolean("isRenderingArms");
         }
         if ($$0.contains("ticksOfEraseLeft")) {
             ticksOfEraseLeft = $$0.getInt("ticksOfEraseLeft");
@@ -479,8 +493,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
             fclone.isSprinting = isSprinting;
-            runaway = isTargetBehindPlayer(PE);
+            runaway = hasHandsOut() || isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
+            fclone.runawayTrue = hasHandsOut();
+
             fclone.setIsJumping(isJumping);
             ((StandUser)fclone).roundabout$setStandDisc(((StandUser)self).roundabout$getStandDisc().copy());
             LivingEntity last = self.getLastHurtMob();
@@ -2472,6 +2488,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public void itemGrabClient(){
+        if (hasHandsOut())
+            return;
+        super.itemGrabClient();
+    }
+
     public Vec3 getEpitaphColors(){
         byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
         if (sk == KingCrimsonEntity.MANGA_SKIN){
@@ -2515,6 +2537,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void tryBloodClient(){
         if (!onCooldown(PowerIndex.SKILL_3)) {
             if (!hasBlock()) {
+                if (hasHandsOut())
+                    return;
                 tryPower(PowerIndex.POWER_3,true);
                 tryPowerPacket(PowerIndex.POWER_3);
             }
@@ -2570,6 +2594,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     public void bloodSplash() {
+        if (hasHandsOut())
+            return;
         setActivePower(PowerIndex.POWER_3);
         setAttackTimeDuring(0);
         setCooldown(PowerIndex.SKILL_3, 140);
@@ -2998,6 +3024,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!canImpale()){
             return;
         }
+        if (hasHandsOut())
+            return;
 
         if (hasBlock())
             return;
@@ -3188,6 +3216,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
+    public void refreshArms(){
+        if (!self.level().isClientSide()) {
+            isRenderingArms = true;
+            handTicks = getMaxHandTicks();
+        }
+        super.refreshArms();
+    }
+
+    @Override
     public boolean setPowerAttack(){
         if (hasArmsOut) {
             setAttack();
@@ -3262,6 +3299,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (stand != null){
                     stand.forceDespawn(true);
                 }
+                isRenderingArms = true;
             }
             hasArmsOut = !hasArmsOut;
             saveDiscAndSync();
@@ -3544,6 +3582,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (hasBlock()){
             return true;
         }
+
+        if (hasArmsOut){
+            if (slot ==1){
+                if (isHoldingSneak() || isErasingTime()){
+                    return true;
+                }
+            } if (slot ==2){
+                if (isHoldingSneak() || isErasingTime()){
+                    return true;
+                }
+            }  if (slot ==3){
+                if (isHoldingSneak() && !canVault() && !isGuarding()){
+                    return true;
+                }
+            }
+        }
+
         if (slot == 1 && !isHoldingSneak() && onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (!canUseEpitaphWithoutSkip()) {
                 return true;

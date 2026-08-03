@@ -73,7 +73,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, float var9, float var10) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft != null){
-            if (entity instanceof CloneEntity fcg && fcg.player != null){
+            T ogEnt = entity;
+            if (entity instanceof FogCloneEntity fcg && fcg.player != null){
                 entity = (T)fcg.player;
             }
 
@@ -579,8 +580,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 //dibbo
-                if (user.roundabout$getArmVanishTicks() > 0){
-                    renderKingCrimsonArms(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0){
+                    renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,
                             1,1,1);
                 }
 
@@ -673,7 +674,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().body.translateAndRotate(poseStack);
         poseStack.mulPose(Axis.XP.rotation(entity.getXRot() * Mth.DEG_TO_RAD));
         ModStrayModels.kingCrimsonArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                r, g, b, 1);
+                r, g, b, 1, 1);
         ClientUtil.popPoseAndCooperate(poseStack,32);
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,

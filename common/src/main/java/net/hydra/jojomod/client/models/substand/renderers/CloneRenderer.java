@@ -195,6 +195,11 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                         } else {
                             this.model = slim;
                         }
+//                        if (ER instanceof PlayerRenderer PR && PR.getModel() instanceof PlayerModel<AbstractClientPlayer>) {
+//                            this.model = ((IPlayerModel) PR.getModel()).roundabout$getSlim()? slim : bulk;
+//                        } else {
+//                            this.model = slim;
+//                        }
                     } else {
                         this.model = slim;
                     }

@@ -691,6 +691,7 @@ public class StandPowers extends AbilityScapeBasis {
             } else {
                 getStandUserSelf().roundabout$setStandAnimation(NONE);
             }
+            refreshArms();
         } else {
             if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
@@ -1943,6 +1944,10 @@ public class StandPowers extends AbilityScapeBasis {
     public StandPowers(LivingEntity self) {
         super(self);
     }
+    public void flipArmRendering(){
+
+    }
+
 
     @Override
     public void baseTickPower(){
@@ -1962,6 +1967,16 @@ public class StandPowers extends AbilityScapeBasis {
             StandUser userSelf = getStandUserSelf();
             byte animationType = userSelf.roundabout$getStandAnimation();
 
+            if (handTicks > 0) {
+                if (isGuarding()) {
+                    handTicks = getMaxHandTicks();
+                } else {
+                    handTicks--;
+                    if (handTicks <= 0){
+                        flipArmRendering();
+                    }
+                }
+            }
             if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
                     !userSelf.roundabout$getGuardBroken()) {
                 userSelf.roundabout$setStandAnimation(GUARD);
@@ -2090,8 +2105,18 @@ public class StandPowers extends AbilityScapeBasis {
             getStandUserSelf().roundabout$setStandAnimation(NONE);
         }
     }
+    public int handTicks = 0;
     public int twirlTicks = 0;
     public void onLandingAnimatedJump(){}
+
+    public int getMaxHandTicks(){
+        return 50;
+    }
+    @Override
+    public void refreshArms(){
+        saveDiscAndSync();
+        super.refreshArms();
+    }
 
     /**Iteration through skins in the power inventory*/
     public void getSkinInDirection(boolean right, boolean sealed){

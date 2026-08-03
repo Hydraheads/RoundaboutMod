@@ -38,6 +38,7 @@ public class CloneEntity extends PathfinderMob {
     public boolean isSneaking = false;
     public boolean isSprinting = false;
     public boolean runaway = false;
+    public boolean runawayTrue = false;
 
     public ItemStack getVisage(){
         return entityData.get(VISAGE);

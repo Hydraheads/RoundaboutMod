@@ -554,6 +554,9 @@ public class AbilityScapeBasis {
     public boolean hasHandsOut(){
         return false;
     }
+    public boolean hasHandsOutRendering(){
+        return false;
+    }
 
     public void xTryPower(byte index, boolean forced){
         tryPower(index, forced);
@@ -1784,6 +1787,7 @@ public class AbilityScapeBasis {
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
+                    refreshArms();
                     return true;
                 }
                 return true;
@@ -3243,6 +3247,7 @@ public class AbilityScapeBasis {
                 impactTimeStamp = self.level().getGameTime();
                 attackTargetId = 0;
                 if (PowerTypes.hasHandsActive(self)){
+                    refreshArms();
                     swingStandHands();
                 } else {
                     self.swing(InteractionHand.MAIN_HAND, true);
@@ -3355,6 +3360,9 @@ public class AbilityScapeBasis {
             }
 
         }
+    }
+    public void refreshArms(){
+
     }
 
     public void setAttack(){

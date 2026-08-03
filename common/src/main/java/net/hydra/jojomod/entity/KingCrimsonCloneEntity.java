@@ -79,7 +79,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         if (hurt && !level().isClientSide && runaway && isAlive()) {
             hitsTaken++;
 
-            if (hitsTaken >= 2) {
+            if (hitsTaken >= 2 && !runawayTrue) {
                 runaway = false;
                 addBehaviourGoals();
             }

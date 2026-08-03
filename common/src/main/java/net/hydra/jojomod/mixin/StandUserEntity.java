@@ -5472,7 +5472,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         /**hey ya fade ticks*/
         boolean active = PowerTypes.hasStandActive(rdbt$this());
-        if (active && PowerTypes.hasHandsActive(rdbt$this())){
+        if (active && PowerTypes.hasHandsActiveRendering(rdbt$this())
+                && PowerTypes.hasHandsActive(rdbt$this())){
             roundabout$setArmVanishTicks(roundabout$getArmVanishTicks()+1);
         } else {
             roundabout$setArmVanishTicks(roundabout$getArmVanishTicks()-1);

@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -98,46 +99,52 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
-                       int light, float r, float g, float b, float alpha) {
+                       int light, float r, float g, float b, float alpha, float speed) {
         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer()))
             return;
         if (context instanceof LivingEntity LE) {
             StandUser user = ((StandUser) LE);
-            this.root().getAllParts().forEach(ModelPart::resetPose);
-            if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
-                partialTicks = 0;
-            }
-            int heyTicks = user.roundabout$getArmVanishTicks();
-            boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE));
+            if (user.roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                this.root().getAllParts().forEach(ModelPart::resetPose);
+                if (((TimeStop) context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()) {
+                    partialTicks = 0;
+                }
+                int heyTicks = user.roundabout$getArmVanishTicks();
+                boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActiveRendering(LE));
 
-            float heyFull = 0;
-            float fixedPartial = partialTicks % 1;
-            if (hasHeyYaOut){
-                heyFull = heyTicks+fixedPartial;
-                heyFull = Math.min(heyFull/10,1f);
-            } else {
-                heyFull = heyTicks-fixedPartial;
-                heyFull = Math.max(heyFull/10,0);
-            }
-            byte animation = user.roundabout$getStandAnimation();
-            VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
-            //The number at the end is inversely proportional so 2 is half speed
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-            if (animation == StandPowers.GUARD){
-                this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
-            } else {
-                this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
-                if (animation == StandPowers.PUNCH_LEFT){
-                    this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, 1f);
-                } else if (animation == StandPowers.PUNCH_RIGHT){
-                    this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, 1f);
+                float heyFull = 0;
+                float fixedPartial = partialTicks % 1;
+                if (hasHeyYaOut) {
+                    heyFull = heyTicks + fixedPartial;
+                    heyFull = Math.min(heyFull / 10, 1f);
                 } else {
+                    heyFull = heyTicks - fixedPartial;
+                    heyFull = Math.max(heyFull / 10, 0);
+                }
+                heyFull = Math.min(heyFull,alpha);
+                if (heyFull <= 0){
+                    return;
+                }
+                byte animation = user.roundabout$getStandAnimation();
+                VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
+                //The number at the end is inversely proportional so 2 is half speed
+                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+                if (animation == StandPowers.GUARD) {
+                    this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
+                } else {
+                    this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
+                    if (animation == StandPowers.PUNCH_LEFT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, speed);
+                    } else if (animation == StandPowers.PUNCH_RIGHT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
+                    } else {
+                    }
+
                 }
 
+                //this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
+                root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
             }
-
-            //this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
-            root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
         }
     }
 
