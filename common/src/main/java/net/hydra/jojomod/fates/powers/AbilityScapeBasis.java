@@ -544,6 +544,10 @@ public class AbilityScapeBasis {
     }
 
 
+    public boolean hasHandsOut(){
+        return false;
+    }
+
     public void xTryPower(byte index, boolean forced){
         tryPower(index, forced);
         tryPowerStuff();
@@ -1650,6 +1654,13 @@ public class AbilityScapeBasis {
     public boolean canAttack(){
         if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
             return this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax;
+        }
+        return false;
+    }
+    public boolean canAttackHeavy(){
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE
+                || getActivePower() == PowerIndex.GUARD) {
+            return this.attackTime >= this.attackTimeMax || attackTime < 0;
         }
         return false;
     }

@@ -99,6 +99,9 @@ public class FollowingStandEntity extends StandEntity{
     }
 
     public final byte getOffsetType() {
+        if (PowerTypes.hasHandsActive(getUser())){
+            return OffsetIndex.FOLLOW_STYLE;
+        }
         if (this.level().isClientSide()){
             if (ClientUtil.getScreenFreeze()){
                 return this.lastOffsetType;

@@ -2524,6 +2524,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         roundabout$heyYaVanishTicks = Mth.clamp(set,0,10);
     }
 
+
+    @Unique
+    public int roundabout$armVanishTicks = 0;
+
+    @Unique
+    @Override
+    public int roundabout$getArmVanishTicks(){
+        return roundabout$armVanishTicks;
+    }
+    @Unique
+    @Override
+    public void roundabout$setArmVanishTicks(int set){
+        roundabout$armVanishTicks = Mth.clamp(set,0,10);
+    }
+
     @Unique
     public int roundabout$oasisVanishTicks = 0;
 
@@ -2616,9 +2631,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public AnimationState roundabout$wornStandIdleAnimation = new AnimationState();
     @Unique
+    public AnimationState roundabout$wornStandActiveAnimation = new AnimationState();
+    @Unique
     @Override
     public AnimationState roundabout$getWornStandIdleAnimation(){
         return roundabout$wornStandIdleAnimation;
+    }
+    @Unique
+    @Override
+    public AnimationState roundabout$getWornStandActiveAnimation(){
+        return roundabout$wornStandActiveAnimation;
     }
     @Unique
     @Override
@@ -5435,6 +5457,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         /**hey ya fade ticks*/
         boolean active = PowerTypes.hasStandActive(rdbt$this());
+        if (active && PowerTypes.hasHandsActive(rdbt$this())){
+            roundabout$setArmVanishTicks(roundabout$getArmVanishTicks()+1);
+        } else {
+            roundabout$setArmVanishTicks(roundabout$getArmVanishTicks()-1);
+        }
         if (roundabout$getStandPowers() instanceof PowersHeyYa && active){
             roundabout$setHeyYaVanishTicks(roundabout$getHeyYaVanishTicks()+1);
         } else {

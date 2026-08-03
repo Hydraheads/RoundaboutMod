@@ -114,6 +114,15 @@ public enum PowerTypes {
         return false;
     }
 
+    public static boolean hasHandsActive(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+            if (isUsingStand(livingEntity)) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+            }
+        }
+        return true;
+    }
     public static boolean isBrawling(Entity ent){
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
