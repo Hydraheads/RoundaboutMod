@@ -27,6 +27,24 @@
       "values": [0.0]
     },
     {
+      "name": "RedValue",
+      "type": "float",
+      "count": 1,
+      "values": [0.0]
+    },
+    {
+      "name": "BlueValue",
+      "type": "float",
+      "count": 1,
+      "values": [0.0]
+    },
+    {
+      "name": "GreenValue",
+      "type": "float",
+      "count": 1,
+      "values": [0.0]
+    },
+    {
       "name": "PartialTick",
       "type": "float",
       "count": 1,

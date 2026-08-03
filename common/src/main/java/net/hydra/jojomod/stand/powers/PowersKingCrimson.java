@@ -2453,6 +2453,28 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+    public Vec3 getEpitaphColors(){
+        byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (sk == KingCrimsonEntity.MANGA_SKIN){
+            return new Vec3(0.5,0.5,0.5);
+        } if (sk == KingCrimsonEntity.STARLESS){
+            return new Vec3(1,0,0.5);
+        } if (sk == KingCrimsonEntity.BETA){
+            return new Vec3(1.5,0,0);
+        } if (sk == KingCrimsonEntity.DARK){
+            return new Vec3(0,0,0);
+        } if (sk == KingCrimsonEntity.GREEN){
+            return new Vec3(0,1,0);
+        } if (sk == KingCrimsonEntity.YELLOW){
+            return new Vec3(1,1,0);
+        } if (sk == KingCrimsonEntity.AQUA){
+            return new Vec3(0.2,0.5,1);
+        } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
+            return new Vec3(0.75,0,1.5);
+        }
+        return new Vec3(1,0,1);
+    }
+
     public void tryBloodClient(){
         if (!onCooldown(PowerIndex.SKILL_3)) {
             if (!hasBlock()) {
