@@ -59,6 +59,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
@@ -896,7 +897,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canBubbleTarget(Entity target) {
         if (target == null) { return false; }
 
-        if (target instanceof StandEntity SE && this.self.is(SE.getUser())) {
+        if (target instanceof StandEntity SE && this.self.is(SE.getUser())
+                || MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null)) {
             return false;
         }
 
@@ -2946,16 +2948,28 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (timeToDust == btdTicks) {
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
 
-                        if (MainUtil.getReducedDamage(target)) {
-                            target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayPlayersDamage);
-                        }else {
-                            target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
+                        if ((PowerTypes.isExistentiallyElsewhere(target))) {
+                            if (((StandUser)target).roundabout$getStandPowers() instanceof
+                                    PowersKingCrimson pkc && pkc.timeEraseActive){
+                                target = pkc.activeClone;
+                            } else {
+                                target = null;
+                            }
                         }
 
-                        ExplosionUtil.explodeEffects(target.position(), target.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.35f);
-                        this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                        if(target != null) {
+
+                            if (MainUtil.getReducedDamage(target)) {
+                                target.hurt(dmg,
+                                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayPlayersDamage);
+                            } else {
+                                target.hurt(dmg,
+                                        ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
+                            }
+
+                            ExplosionUtil.explodeEffects(target.position(), target.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.35f);
+                            this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                        }
                     }
                 }else {
                     toRemoveFromList.add(id);
@@ -2978,7 +2992,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 LivingEntity.class, wallBox)) {
 
             if (entity.equals(this.self) || entity.equals(((StandUser)this.self).roundabout$getStand()) || entity.equals(bomb)
-                    || entity instanceof StandEntity SE && SE.getUser() == this.self || !entity.isAlive() || entity.isDeadOrDying()) {
+                    || entity instanceof StandEntity SE && SE.getUser() == this.self || !entity.isAlive() || entity.isDeadOrDying()
+                    || PowerTypes.isExistentiallyElsewhere(entity)) {
                 continue;
             }
 
@@ -3493,6 +3508,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             } else if (bStatus == PowersKillerQueen.BOMB_ENTITY || bStatus == PowersKillerQueen.BLOCK_CONTACT || bStatus == PowersKillerQueen.BUBBLE_CONTACT) {
                 target = getBombEntity();
+                if ((PowerTypes.isExistentiallyElsewhere(target))) {
+                    if (((StandUser)target).roundabout$getStandPowers() instanceof
+                            PowersKingCrimson pkc && pkc.timeEraseActive){
+                        target = pkc.activeClone;
+                    }
+                }
+
                 if (target != null) {
                     vPos = target.position();
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());

@@ -6,10 +6,12 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -27,6 +29,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
@@ -235,7 +238,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
             if (this.target != null && this.target.isAlive()) {
                 if (this.redirectCooldown <= 0) {
-                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)) {
+                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)
+                            && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
                     }
@@ -474,9 +478,20 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 
-        Vec3 pos = this.target.getPosition(0);
-        Vec3 addToPosition = new Vec3(0, this.target.getBbHeight() * 0.5f, 0);
-        Direction direction = ((IGravityEntity) this.target).roundabout$getGravityDirection();
+        Entity currentTarget = target;
+        if (PowerTypes.isExistentiallyElsewhere(currentTarget)){
+            if (((StandUser)currentTarget).roundabout$getStandPowers() instanceof
+                    PowersKingCrimson pkc && pkc.timeEraseActive){
+                currentTarget = pkc.activeClone;
+            } else {
+                return;
+            }
+        }
+
+
+        Vec3 pos = currentTarget.getPosition(0);
+        Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);
+        Direction direction = ((IGravityEntity) currentTarget).roundabout$getGravityDirection();
         if (direction != Direction.DOWN) {
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
         }
