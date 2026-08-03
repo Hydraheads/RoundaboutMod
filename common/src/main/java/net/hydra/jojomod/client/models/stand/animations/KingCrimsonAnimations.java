@@ -218,12 +218,12 @@ public class KingCrimsonAnimations {
 
     public static final AnimationDefinition left_punch = AnimationDefinition.Builder.withLength(0.2917F)
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(44.4835F, 0.9474F, -73.2184F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(83.3331F, 7.8973F, -82.4128F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-49.6128F, -0.975F, -80.5447F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(-24.1F, -0.58F, -47.98F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -243,7 +243,8 @@ public class KingCrimsonAnimations {
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-84.8793F, -12.4517F, -1.1069F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(-85.62F, -16.28F, 1.66F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-16.3638F, -20.1162F, 4.4225F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(-7.5042F, -2.5022F, 0.109F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-7.5042F, -2.5022F, 0.109F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_left_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
                     new Keyframe(0.125F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),
@@ -251,6 +252,7 @@ public class KingCrimsonAnimations {
                     new Keyframe(0.2083F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .build();
+
 
     public static final AnimationDefinition block = AnimationDefinition.Builder.withLength(0.0833F)
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -270,15 +272,15 @@ public class KingCrimsonAnimations {
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-15.843F, -41.8411F, 6.3834F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-32.1126F, -52.616F, 13.9575F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.0833F, KeyframeAnimations.posVec(2.0F, 0.0F, -6.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0833F, KeyframeAnimations.posVec(0.0F, 0.0F, -5.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-110.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-97.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
@@ -288,12 +290,12 @@ public class KingCrimsonAnimations {
 
     public static final AnimationDefinition right_punch = AnimationDefinition.Builder.withLength(0.2917F)
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+                    new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(44.4835F, -0.9474F, 73.2184F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(83.3331F, -7.8973F, 82.4128F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-49.6128F, 0.975F, 80.5447F), AnimationChannel.Interpolations.CATMULLROM),
                     new Keyframe(0.25F, KeyframeAnimations.degreeVec(-24.1F, 0.58F, 47.98F), AnimationChannel.Interpolations.CATMULLROM),
-                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
             ))
             .addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
                     new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -313,7 +315,8 @@ public class KingCrimsonAnimations {
                     new Keyframe(0.0833F, KeyframeAnimations.degreeVec(-84.8793F, 12.4517F, 1.1069F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.125F, KeyframeAnimations.degreeVec(-85.62F, 16.28F, -1.66F), AnimationChannel.Interpolations.LINEAR),
                     new Keyframe(0.1667F, KeyframeAnimations.degreeVec(-16.3638F, 20.1162F, -4.4225F), AnimationChannel.Interpolations.LINEAR),
-                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(-7.5042F, 2.5022F, -0.109F), AnimationChannel.Interpolations.LINEAR)
+                    new Keyframe(0.25F, KeyframeAnimations.degreeVec(-7.5042F, 2.5022F, -0.109F), AnimationChannel.Interpolations.LINEAR),
+                    new Keyframe(0.2917F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
             ))
             .addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
                     new Keyframe(0.125F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.LINEAR),

@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -308,6 +309,7 @@ public interface StandUser {
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
     byte roundabout$getStandAnimation();
+    void rdbt$synchedData(EntityDataAccessor<?> $$0);
     void roundabout$setStandAnimation(byte anim);
     byte roundabout$getIdlePos();
     void roundabout$setIdlePosX(byte pos);

@@ -1889,6 +1889,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 this.getStyleAnimation().stop();
             }
         }
+        ((StandUser)this).rdbt$synchedData($$0);
     }
     @Override
     @Unique

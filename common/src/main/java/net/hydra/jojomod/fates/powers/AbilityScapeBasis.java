@@ -392,6 +392,13 @@ public class AbilityScapeBasis {
         return true;
     }
 
+
+    //Punch Mode Animations
+    public static final byte
+            PUNCH_LEFT = 30,
+            PUNCH_RIGHT = 31,
+            GUARD = 32;
+
     public float guardMod(){
         return 0.2f;
     }

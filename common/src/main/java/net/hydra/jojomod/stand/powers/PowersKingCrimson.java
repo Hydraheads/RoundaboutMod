@@ -108,6 +108,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return SoundIndex.SUMMON_SOUND;
     }
 
+
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersKingCrimson(entity);

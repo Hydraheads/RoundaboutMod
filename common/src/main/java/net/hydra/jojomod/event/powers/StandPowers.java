@@ -673,15 +673,34 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean setPowerGuard() {
-        if (((StandUser)this.self).roundabout$getGuardBroken()) {
-            animateStand(StandEntity.BROKEN_GUARD);
+
+    public boolean lastRight = false;
+    @Override
+    public void swingStandHands(){
+        if (lastRight){
+            getStandUserSelf().roundabout$setStandAnimation(PUNCH_LEFT);
         } else {
-            animateStand(StandEntity.BLOCK);
+            getStandUserSelf().roundabout$setStandAnimation(PUNCH_RIGHT);
         }
-        this.attackTimeDuring = 0;
+        lastRight = !lastRight;
+    }
+    public boolean setPowerGuard() {
+        if (PowerTypes.hasHandsActive(self)){
+            if (!((StandUser)this.self).roundabout$getGuardBroken()) {
+                getStandUserSelf().roundabout$setStandAnimation(GUARD);
+            } else {
+                getStandUserSelf().roundabout$setStandAnimation(NONE);
+            }
+        } else {
+            if (((StandUser)this.self).roundabout$getGuardBroken()) {
+                animateStand(StandEntity.BROKEN_GUARD);
+            } else {
+                animateStand(StandEntity.BLOCK);
+            }
+            this.poseStand(OffsetIndex.GUARD);
+        }
         this.setActivePower(PowerIndex.GUARD);
-        this.poseStand(OffsetIndex.GUARD);
+        this.attackTimeDuring = 0;
         return true;
     }
 
@@ -1939,6 +1958,24 @@ public class StandPowers extends AbilityScapeBasis {
                 }
             }
         } else {
+
+            StandUser userSelf = getStandUserSelf();
+            byte animationType = userSelf.roundabout$getStandAnimation();
+
+            if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
+                    !userSelf.roundabout$getGuardBroken()) {
+                userSelf.roundabout$setStandAnimation(GUARD);
+            } else if (animationType == GUARD){
+                if (!isGuarding() || userSelf.roundabout$getGuardBroken()
+                || !PowerTypes.hasHandsActive(self)){
+                    userSelf.roundabout$setStandAnimation(NONE);
+                }
+            } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT){
+                if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)){
+                    userSelf.roundabout$setStandAnimation(NONE);
+                }
+            }
+
             if (softenTicks > 0) {
                 softenTicks-= 2;
             }

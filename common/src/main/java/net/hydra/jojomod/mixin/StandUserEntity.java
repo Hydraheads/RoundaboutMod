@@ -1803,6 +1803,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 0;
     }
 
+
     @Override
     @Unique
     public void roundabout$setStandAnimation(byte anim){
@@ -2320,6 +2321,20 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
          **/
 
+        if (level().isClientSide()) {
+            rdbt$synchedData($$0);
+        }
+    }
+
+    public void rdbt$synchedData(EntityDataAccessor<?> $$0){
+        if ($$0.equals(ROUNDABOUT$STAND_ANIMATION)){
+            byte posEmote = this.roundabout$getStandAnimation();
+            if (posEmote != Poses.NONE.id) {
+                this.roundabout$wornStandActiveAnimation.start(this.tickCount);
+            } else {
+                this.roundabout$wornStandActiveAnimation.stop();
+            }
+        }
     }
 
 

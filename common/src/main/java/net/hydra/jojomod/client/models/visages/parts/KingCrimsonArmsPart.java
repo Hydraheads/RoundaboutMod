@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.renderers.KingCrimsonRenderer;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersHeyYa;
@@ -118,10 +119,22 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                 heyFull = heyTicks-fixedPartial;
                 heyFull = Math.max(heyFull/10,0);
             }
+            byte animation = user.roundabout$getStandAnimation();
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
             //The number at the end is inversely proportional so 2 is half speed
             user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
+            if (animation == StandPowers.GUARD){
+                this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
+            } else {
+                this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
+                if (animation == StandPowers.PUNCH_LEFT){
+                    this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, 1f);
+                } else if (animation == StandPowers.PUNCH_RIGHT){
+                    this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, 1f);
+                } else {
+                }
+
+            }
 
             //this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
