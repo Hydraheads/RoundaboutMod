@@ -3217,8 +3217,16 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (this.getSelf().hasLineOfSight(ent)) {
-            if (this.currentBombStatus == BOMB_ENTITY) {
-                if (this.getBombEntity() != null) {
+
+            if (this.currentBombStatus == BOMB_ENTITY && this.getBombEntity() != null) {
+                if ((PowerTypes.isExistentiallyElsewhere(this.getBombEntity()))) {
+                    if (((StandUser)this.getBombEntity()).roundabout$getStandPowers() instanceof
+                            PowersKingCrimson pkc && pkc.timeEraseActive){
+                        return this.getBombEntity() == pkc.activeClone;
+                    }else {
+                        return false;
+                    }
+                } else {
                     return ent == this.getBombEntity();
                 }
             }
