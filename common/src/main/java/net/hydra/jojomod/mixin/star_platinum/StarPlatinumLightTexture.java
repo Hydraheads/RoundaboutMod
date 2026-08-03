@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -33,6 +34,8 @@ public class StarPlatinumLightTexture {
                 return (float) Math.min($$0 + 0.3F * ((ClientUtil.TimeErase/ClientUtil.fadeTime) * 0.25F), 1F);
             } else if(ClientUtil.checkIfClientCanSeeMobsForWindVision() && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
                 return (float) Math.min($$0 + 0.8F*((10-PM.visionTicks)*0.1F), 1F);
+            } else if (((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+                return (float) Math.min($$0 + 0.3F * ((10 - pb.visionTicks) * 0.1F), 1F);
             }
         }
         return $$0;
