@@ -879,6 +879,34 @@ public class StandIcons {
             "textures/gui/icons/emperor/emperor_speed_up.png");
     public static final ResourceLocation EMPEROR_SPEED_DOWN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_down.png");
+    public static final ResourceLocation EMPEROR_SPEED_1UP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_1up.png");
+    public static final ResourceLocation EMPEROR_SPEED_1DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_1down.png");
+    public static final ResourceLocation EMPEROR_SPEED_1ADSU = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_1adsu.png");
+    public static final ResourceLocation EMPEROR_SPEED_1AUSD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_1ausd.png");
+    public static final ResourceLocation EMPEROR_SPEED_2UP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_2up.png");
+    public static final ResourceLocation EMPEROR_SPEED_2DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_2down.png");
+    public static final ResourceLocation EMPEROR_SPEED_2ADSU = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_2adsu.png");
+    public static final ResourceLocation EMPEROR_SPEED_2AUSD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_2ausd.png");
+    public static final ResourceLocation EMPEROR_SPEED_3UP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_3up.png");
+    public static final ResourceLocation EMPEROR_SPEED_3DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_3down.png");
+    public static final ResourceLocation EMPEROR_SPEED_3ADSU = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_3adsu.png");
+    public static final ResourceLocation EMPEROR_SPEED_3AUSD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_3ausd.png");
+    public static final ResourceLocation EMPEROR_SPEED_NUP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_nup.png");
+    public static final ResourceLocation EMPEROR_SPEED_NDOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/emperor/emperor_speed_ndown.png");
     public static final ResourceLocation EMPEROR_HEAT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_heat.png");
     public static final ResourceLocation EMPEROR_SHOOT = new ResourceLocation(Roundabout.MOD_ID,
