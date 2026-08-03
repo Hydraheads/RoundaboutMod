@@ -731,6 +731,8 @@
   "sounds.roundabout.uv_blast": "Energy Ripples",
   "sounds.roundabout.skate_equip": "Ice forms",
   "sounds.roundabout.skate_retract": "Ice fades",
+  "sounds.roundabout.king_blood_splash": "Blood shot",
+  "sounds.roundabout.blood_slice": "Blood cuts",
   "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
   "sounds.roundabout.vsong_twisted": "Twisted",
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
@@ -2491,6 +2493,7 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.oculus":  "Oculus",
   "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
@@ -2975,8 +2978,11 @@
   "config.roundabout.enablePickyIconRendering.name": "Enable Icon Cooldown Hiding",
   "config.roundabout.enablePickyIconRendering.desc": "Hides ability icons when all of your cooldowns are off.",
 
+  "config.roundabout.opacityOfPlayerStandArms.name": "Player Stand Arms",
+  "config.roundabout.opacityOfPlayerStandArms.desc": "The opacity of first person stand arms (as in hidden mode king crimson punches, for example).",
 
-  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Skin Barrage Arms",
+
+  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Barrage Arms",
   "config.roundabout.opacityOfPlayerBarrageArms.desc": "The opacity of first person barrage arms coming from the player (as in vampirism or hamon rushes).",
 
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
@@ -3202,7 +3208,7 @@
   "config.roundabout.manhattanDashCooldown.name":"Manhattan Transfer Dash Cooldown",
   "config.roundabout.manhattanDashCooldown.desc":"Cooldown for Manhattan Transfer's dash move",
   "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Other Mobs Can Load Your Manhattan Transfer",
-  "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Enderpearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Ender Pearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
   "config.roundabout.windVisionUsesNightVision.name":"Wind Vision uses Potion Effect",
@@ -3210,6 +3216,8 @@
 
   "config.roundabout.fingerBiteCooldown.name":"Finger Bite Cooldown",
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
+  "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
+  "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
   "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3388,9 +3396,20 @@
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
   "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
   "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
-  "config.roundabout.emperorBulletRange.name": "Bullet Range",
-  "config.roundabout.emperorBulletRange.desc": "[PLACEHOLDER]",
-
+  "config.roundabout.tripleShotHeat.name": "Triple shot heat",
+  "config.roundabout.tripleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotHeat.name": "Single shot heat",
+  "config.roundabout.singleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.tripleShotCooldown.name": "Triple shot cooldown",
+  "config.roundabout.tripleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotCooldown.name": "Single shot cooldown",
+  "config.roundabout.singleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.maxShootTicks.name": "Maximum shooting ticks",
+  "config.roundabout.maxShootTicks.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorBulletDamage.name": "Bullet damage",
+  "config.roundabout.emperorBulletDamage.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorShootingModeRange.name": "Bullet range",
+  "config.roundabout.emperorShootingModeRange.desc": "[PLACEHOLDER]",
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
   "config.roundabout.meteorsEmitParticles.desc": "If ancient meteors emit particles when touching an impact mound.",
@@ -4184,6 +4203,12 @@
 
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
+  "config.roundabout.timeEraseRedProjections.name": "Time Erase Red",
+  "config.roundabout.timeEraseRedProjections.desc": "Whether or not to draw red copies of entities in front of them during time erase.",
+
+  "config.roundabout.alternateEpitaph.name": "Alternate Epitaph",
+  "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",
 
   "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
   "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",

@@ -36,6 +36,10 @@ public class ForgeSounds {
             register(ModSounds.HOLOGRAM_START, ModSounds.HOLOGRAM_START_ID);
     public static final RegistryObject<SoundEvent> HOLOGRAM_END =
             register(ModSounds.HOLOGRAM_END, ModSounds.HOLOGRAM_END_ID);
+    public static final RegistryObject<SoundEvent> KING_BLOOD_SPLASH =
+            register(ModSounds.KING_BLOOD_SPLASH, ModSounds.KING_BLOOD_SPLASH_ID);
+    public static final RegistryObject<SoundEvent> BLOOD_SLICE =
+            register(ModSounds.BLOOD_SLICE, ModSounds.BLOOD_SLICE_ID);
     public static final RegistryObject<SoundEvent> TERRIER_SOUND_EVENT =
             register(ModSounds.TERRIER_SOUND, ModSounds.TERRIER_SOUND_ID);
     public static final RegistryObject<SoundEvent> WORLD_SUMMON_SOUND_EVENT =
@@ -870,6 +874,22 @@ public class ForgeSounds {
             register(ModSounds.PLANET_WAVES_DISINTEGRATION, ModSounds.PLANET_WAVES_DISINTEGRATION_ID);
     public static final RegistryObject<SoundEvent> PLANET_WAVES_TARGET=
             register(ModSounds.PLANET_WAVES_TARGET, ModSounds.PLANET_WAVES_TARGET_ID);
+
+    public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
+            register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_IMPACT =
+            register(ModSounds.EMPEROR_IMPACT, ModSounds.EMPEROR_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_SHOOT =
+            register(ModSounds.EMPEROR_SHOOT, ModSounds.EMPEROR_SHOOT_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_HEADSHOT =
+            register(ModSounds.EMPEROR_HEADSHOT, ModSounds.EMPEROR_HEADSHOT_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_METAL =
+            register(ModSounds.EMPEROR_METAL, ModSounds.EMPEROR_METAL_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_NON_BLEED =
+            register(ModSounds.EMPEROR_NON_BLEED, ModSounds.EMPEROR_NON_BLEED_ID);
+    public static final RegistryObject<SoundEvent> EMPEROR_SQUINT =
+            register(ModSounds.EMPEROR_SQUINT, ModSounds.EMPEROR_SQUINT_ID);
+
 
     public static final RegistryObject<SoundEvent> DIO_HOHO =
             register(ModSounds.DIO_HOHO, ModSounds.DIO_HOHO_ID);

@@ -167,6 +167,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FOG_CLONE, FogCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_CLONE, KingCrimsonCloneRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_PROJECTION, HologramCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_ZOMBIE, FallenZombieRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SKELETON, FallenSkeletonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SPIDER, FallenSpiderRenderer::new);
@@ -323,6 +324,7 @@ public class FabricEntityClient {
         ModStrayModels.MoldLeftArm = new MoldLeftArm();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
+        ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();

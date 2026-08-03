@@ -54,6 +54,12 @@ public class ModSounds {
     public static final String HOLOGRAM_END = "hologram_end";
     public static final ResourceLocation HOLOGRAM_END_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HOLOGRAM_END);
     public static SoundEvent HOLOGRAM_END_EVENT = SoundEvent.createVariableRangeEvent(HOLOGRAM_END_ID);
+    public static final String KING_BLOOD_SPLASH = "king_blood_splash";
+    public static final ResourceLocation KING_BLOOD_SPLASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KING_BLOOD_SPLASH);
+    public static SoundEvent KING_BLOOD_SPLASH_EVENT = SoundEvent.createVariableRangeEvent(KING_BLOOD_SPLASH_ID);
+    public static final String BLOOD_SLICE = "blood_slice";
+    public static final ResourceLocation BLOOD_SLICE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOOD_SLICE);
+    public static SoundEvent BLOOD_SLICE_EVENT = SoundEvent.createVariableRangeEvent(BLOOD_SLICE_ID);
 
 
     public static final String OVA_THE_WORLD = "ova_the_world";
@@ -342,6 +348,18 @@ public class ModSounds {
     public static final String EMPEROR_IMPACT = "emperor_impact";
     public static final ResourceLocation EMPEROR_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_IMPACT);
     public static SoundEvent EMPEROR_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_IMPACT_ID);
+    public static final String EMPEROR_HEADSHOT = "emperor_headshot";
+    public static final ResourceLocation EMPEROR_HEADSHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_HEADSHOT);
+    public static SoundEvent EMPEROR_HEADSHOT_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_HEADSHOT_ID);
+    public static final String EMPEROR_METAL = "emperor_metal";
+    public static final ResourceLocation EMPEROR_METAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_METAL);
+    public static SoundEvent EMPEROR_METAL_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_METAL_ID);
+    public static final String EMPEROR_NON_BLEED = "emperor_non_bleed";
+    public static final ResourceLocation EMPEROR_NON_BLEED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_NON_BLEED);
+    public static SoundEvent EMPEROR_NON_BLEED_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_NON_BLEED_ID);
+    public static final String EMPEROR_SQUINT = "emperor_squint";
+    public static final ResourceLocation EMPEROR_SQUINT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EMPEROR_SQUINT);
+    public static SoundEvent EMPEROR_SQUINT_EVENT = SoundEvent.createVariableRangeEvent(EMPEROR_SQUINT_ID);
 
     public static final String MANHATTAN_SUMMON = "manhattan_summoning";
     public static final ResourceLocation MANHATTAN_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MANHATTAN_SUMMON);

@@ -392,6 +392,13 @@ public class AbilityScapeBasis {
         return true;
     }
 
+
+    //Punch Mode Animations
+    public static final byte
+            PUNCH_LEFT = 30,
+            PUNCH_RIGHT = 31,
+            GUARD = 32;
+
     public float guardMod(){
         return 0.2f;
     }
@@ -543,6 +550,13 @@ public class AbilityScapeBasis {
         }
     }
 
+
+    public boolean hasHandsOut(){
+        return false;
+    }
+    public boolean hasHandsOutRendering(){
+        return false;
+    }
 
     public void xTryPower(byte index, boolean forced){
         tryPower(index, forced);
@@ -1653,6 +1667,13 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+    public boolean canAttackHeavy(){
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE
+                || getActivePower() == PowerIndex.GUARD) {
+            return this.attackTime >= this.attackTimeMax || attackTime < 0;
+        }
+        return false;
+    }
     public boolean canAttackLight(){
         if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
             return true;
@@ -1766,6 +1787,7 @@ public class AbilityScapeBasis {
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
+                    refreshArms();
                     return true;
                 }
                 return true;
@@ -3214,13 +3236,22 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+    public void swingStandHands(){
+
+    }
+
     public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (impactTimeStamp != self.level().getGameTime()) {
                 impactTimeStamp = self.level().getGameTime();
                 attackTargetId = 0;
-                self.swing(InteractionHand.MAIN_HAND, true);
+                if (PowerTypes.hasHandsActive(self)){
+                    refreshArms();
+                    swingStandHands();
+                } else {
+                    self.swing(InteractionHand.MAIN_HAND, true);
+                }
                 if (entity != null) {
                     if (entity.distanceTo(self) > 3.8) {
                         return;
@@ -3329,6 +3360,9 @@ public class AbilityScapeBasis {
             }
 
         }
+    }
+    public void refreshArms(){
+
     }
 
     public void setAttack(){

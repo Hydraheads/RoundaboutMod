@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -170,7 +171,7 @@ public class PowersHeyYa extends NewDashPreset {
         if (!isYapping()){
             setYapTime(40);
             getStandUserSelf().roundabout$setStandAnimation(YAP);
-            playStandUserOnlySoundsIfNearby((byte) (61 + Mth.floor(Math.random() * 7)), 100, false, true);
+            playStandUserOnlySoundsIfNearby((byte) (71 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
     }
 

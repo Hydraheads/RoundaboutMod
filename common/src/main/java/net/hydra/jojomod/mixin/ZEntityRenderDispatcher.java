@@ -9,8 +9,10 @@ import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -280,6 +282,10 @@ public abstract class ZEntityRenderDispatcher {
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if (!((IEntityAndData)$$2).roundabout$getShadow()){
             ((IEntityAndData)$$2).roundabout$setShadow(true);
+            ci.cancel();
+            return;
+        }
+        if ($$2 instanceof KingCrimsonCloneEntity kcc && kcc.getPlayer() != null && !PowerTypes.isErasingTime( kcc.getPlayer())){
             ci.cancel();
             return;
         }

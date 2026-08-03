@@ -11,6 +11,8 @@ import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
@@ -1073,6 +1075,9 @@ public class ClientUtil {
         return false;
     }
     public static boolean canRenderEpitaphScreen() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
         if (isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
             if (ConfigManager.getClientConfig().generalSettings.epitaphScreenEffect) {
                 return true;
@@ -1081,6 +1086,9 @@ public class ClientUtil {
         return false;
     }
     public static boolean canEpitaphRenderShader() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
         if (isUsingEpitaph() && ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
             return true;
         }
@@ -1190,6 +1198,10 @@ public class ClientUtil {
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
+        }
+
+        if (ent instanceof KingCrimsonProjectionEntity kcpe){
+            throwFade*=((Math.min(((float) kcpe.fadeInTick)+delta, (float) kcpe.maxFadeInTick)) /((float)kcpe.maxFadeInTick));
         }
 
         if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
@@ -2055,6 +2067,33 @@ public class ClientUtil {
             }
             byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
             // vampire again
+
+            if (PowerTypes.hasHandsActive(play)){
+
+                stack.pushPose();
+                float r = 1;
+                float g = 1;
+                float b = 1;
+                Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
+                boolean isGuarding = ((StandUser)play).roundabout$getStandAnimation() == StandPowers.GUARD;
+                if (isGuarding){
+                        gtranslation = new Vec3(0, -0.5, -0.05);
+                }
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                float opacity = 1F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerStandArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(5));
+                if (isGuarding){
+                        stack.mulPose(Axis.XP.rotationDegrees(-17));
+                }
+                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity, 0.85F);
+                stack.popPose();
+            }
             if (ClientUtil.rendersRipperEyes(play)) {
                 stack.pushPose();
                 Vec3 gtranslation = new Vec3(0, -0.1, 0);

@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -14,6 +15,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
@@ -162,6 +164,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 		WALK = 1;
 
 	public Entity entityTarget = null;
+	public Entity getEntityTarget() {
+		if (PowerTypes.isExistentiallyElsewhere(entityTarget)) {
+			if (((StandUser)entityTarget).roundabout$getStandPowers() instanceof
+					PowersKingCrimson pkc && pkc.timeEraseActive){
+				return pkc.activeClone;
+			} else {
+				return null;
+			}
+		}
+		return entityTarget;
+	}
+
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 	public int returnTicks = 0;
@@ -341,14 +355,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean hasTarget() {
 		if (this.getTargetType() == ENTITY) {
-			if (this.entityTarget == null) {
+			if (getEntityTarget() == null) {
 				this.setTargetType(NONE);
 				return false;
 			}
-			if (!this.entityTarget.isAlive()) {
+			if (!getEntityTarget().isAlive()) {
 				this.setTargetType(NONE);
 			}
-			if (this.entityTarget instanceof LivingEntity LE) {
+			if (getEntityTarget() instanceof LivingEntity LE) {
 				if (LE.isDeadOrDying()) {
 					this.setTargetType(NONE);
 				}
@@ -384,13 +398,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 				targetPosY = this.blockTarget.getY();
 				targetPosZ = this.blockTarget.getZ();
 			}
-		}else if (this.getTargetType() == ENTITY && this.entityTarget != null
-				&& this.entityTarget.isAlive()) {
-			harmest = getEntityWarm(this.entityTarget);
+		}else if (this.getTargetType() == ENTITY && getEntityTarget() != null
+				&& getEntityTarget().isAlive()) {
+			harmest = getEntityWarm(getEntityTarget());
 			if (harmest > 0) {
 				currentChoice = ENTITY;
-				harmestDistance = this.entityTarget.distanceToSqr(this.position());
-				targetEnt = this.entityTarget;
+				harmestDistance = getEntityTarget().distanceToSqr(this.position());
+				targetEnt = getEntityTarget();
 			}
 		}
 
@@ -511,7 +525,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (type == BLOCK) {
 				targetPos = this.blockTarget.getCenter();
 			}else {
-				targetPos = this.entityTarget.position();
+				targetPos = getEntityTarget().position();
 			}
 
 			return targetPos;
@@ -542,13 +556,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			if (this.entityTarget != null) {
-				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
+			if (getEntityTarget() != null) {
+				MainUtil.takeDeterminedKnockbackWithY(this, getEntityTarget(), 0.6f);
 
-				if (!this.entityTarget.isAlive()) {
+				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;
 					this.setTargetType(NONE);
-				} else if (this.entityTarget instanceof LivingEntity LE) {
+				} else if (getEntityTarget() instanceof LivingEntity LE) {
 					if (LE.isDeadOrDying()) {
 						this.entityTarget = null;
 						this.setTargetType(NONE);
@@ -622,7 +636,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (this.getHaveToReturn()) {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
 			}else if (this.getTargetType() == ENTITY) {
-				newPath = this.getNavigation().createPath(this.entityTarget, 0);
+				newPath = this.getNavigation().createPath(getEntityTarget(), 0);
 			}else if (this.getTargetType() == BLOCK) {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
@@ -673,9 +687,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
 
 		if (entity instanceof LivingEntity LE) {
-			if (LE.isDeadOrDying()) { return points; }
-			if (LE instanceof Player pl) {
-				if (pl.isCreative()) { return points; }
+			if (LE.isDeadOrDying()
+					|| (LE instanceof Player pl && pl.isCreative())
+					|| PowerTypes.isExistentiallyElsewhere(entity)) {
+				return 0;
 			}
 			points += 20;
 			points += HeatUtil.getHeat(LE);

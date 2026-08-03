@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -87,6 +88,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
                 StandPowers powers = user.roundabout$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb){
                     pb.active = false;
+                    pb.sharedChestSelectCooldown();
                     pb.RecallClient();
                     return false;
                 }

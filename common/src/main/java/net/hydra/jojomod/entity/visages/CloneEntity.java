@@ -38,12 +38,17 @@ public class CloneEntity extends PathfinderMob {
     public boolean isSneaking = false;
     public boolean isSprinting = false;
     public boolean runaway = false;
+    public boolean runawayTrue = false;
 
     public ItemStack getVisage(){
         return entityData.get(VISAGE);
     }
     public void setVisage(ItemStack visage){
         entityData.set(VISAGE,visage);
+    }
+    @Override
+    public double getMyRidingOffset() {
+        return -0.35;
     }
     @Override
     public Component getDisplayName() {

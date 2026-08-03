@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -112,7 +113,7 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
-
+    AnimationState roundabout$getWornStandActiveAnimation();
     AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setWornStandIdleAnimation(AnimationState layer);
 
@@ -121,6 +122,8 @@ public interface StandUser {
     // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
+    int roundabout$getArmVanishTicks();
+    void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
@@ -306,6 +309,7 @@ public interface StandUser {
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
     byte roundabout$getStandAnimation();
+    void rdbt$synchedData(EntityDataAccessor<?> $$0);
     void roundabout$setStandAnimation(byte anim);
     byte roundabout$getIdlePos();
     void roundabout$setIdlePosX(byte pos);

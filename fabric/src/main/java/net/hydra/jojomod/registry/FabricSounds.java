@@ -25,6 +25,8 @@ public class FabricSounds {
         addSound(ModSounds.TIME_ERASE_FULL_ID, ModSounds.TIME_ERASE_FULL_EVENT);
         addSound(ModSounds.TIME_ERASE_END_ID, ModSounds.TIME_ERASE_END_EVENT);
         addSound(ModSounds.HOLOGRAM_END_ID, ModSounds.HOLOGRAM_END_EVENT);
+        addSound(ModSounds.KING_BLOOD_SPLASH_ID, ModSounds.KING_BLOOD_SPLASH_EVENT);
+        addSound(ModSounds.BLOOD_SLICE_ID, ModSounds.BLOOD_SLICE_EVENT);
         addSound(ModSounds.HOLOGRAM_START_ID, ModSounds.HOLOGRAM_START_EVENT);
         addSound(ModSounds.TERRIER_SOUND_ID, ModSounds.TERRIER_SOUND_EVENT);
         addSound(ModSounds.STAR_SUMMON_SOUND_ID, ModSounds.STAR_SUMMON_SOUND_EVENT);
@@ -576,5 +578,13 @@ public class FabricSounds {
         addSound(ModSounds.PLANET_WAVES_BIG_METEOR_ID,ModSounds.PLANET_WAVES_BIG_METEOR_EVENT);
         addSound(ModSounds.PLANET_WAVES_DISINTEGRATION_ID,ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT);
         addSound(ModSounds.PLANET_WAVES_TARGET_ID,ModSounds.PLANET_WAVES_TARGET_EVENT);
+
+        addSound(ModSounds.EMPEROR_SUMMON_ID,ModSounds.EMPEROR_SUMMON_EVENT);
+        addSound(ModSounds.EMPEROR_IMPACT_ID,ModSounds.EMPEROR_IMPACT_EVENT);
+        addSound(ModSounds.EMPEROR_SHOOT_ID,ModSounds.EMPEROR_SHOOT_EVENT);
+        addSound(ModSounds.EMPEROR_HEADSHOT_ID,ModSounds.EMPEROR_HEADSHOT_EVENT);
+        addSound(ModSounds.EMPEROR_METAL_ID,ModSounds.EMPEROR_METAL_EVENT);
+        addSound(ModSounds.EMPEROR_NON_BLEED_ID,ModSounds.EMPEROR_NON_BLEED_EVENT);
+        addSound(ModSounds.EMPEROR_SQUINT_ID,ModSounds.EMPEROR_SQUINT_EVENT);
     }
 }

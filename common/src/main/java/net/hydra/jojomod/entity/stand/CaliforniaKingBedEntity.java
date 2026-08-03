@@ -56,7 +56,6 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
             if (this.getAnimation() == FALL_BRACE) {
                 this.fall_brace.startIfStopped(this.tickCount);
             } else {
@@ -67,7 +66,6 @@ public class CaliforniaKingBedEntity extends FollowingStandEntity {
             } else {
                 this.sleep.stop();
             }
-        }
     }
     @Override
     public float getDistanceOutModified() {return getDistanceOut()*1.15F;}

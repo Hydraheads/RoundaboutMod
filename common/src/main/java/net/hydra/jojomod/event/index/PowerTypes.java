@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -113,6 +114,24 @@ public enum PowerTypes {
         return false;
     }
 
+    public static boolean hasHandsActive(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+            if (isUsingStand(livingEntity)) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+            }
+        }
+        return true;
+    }
+    public static boolean hasHandsActiveRendering(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+            if (isUsingStand(livingEntity)) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOutRendering();
+            }
+        }
+        return true;
+    }
     public static boolean isBrawling(Entity ent){
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
@@ -233,6 +252,17 @@ public enum PowerTypes {
                 if (ClientUtil.isPlayer(kcc.getPlayer())){
                     return true;
                 }
+            }
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 2){
+                if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 3){
+                return true;
             }
         }
         if (isErasingTime(entity)){

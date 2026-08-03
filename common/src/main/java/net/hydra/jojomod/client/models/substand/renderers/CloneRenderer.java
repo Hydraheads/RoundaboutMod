@@ -183,14 +183,40 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
             if (uuid != null && Minecraft.getInstance().getConnection() != null) {
                 PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(uuid);
-
                 if (info != null) {
                     this.model = "slim".equals(info.getModelName()) ? slim : bulk;
                 } else {
-                    this.model = bulk;
+                    Player pl = entity.getPlayer();
+                    if (pl instanceof AbstractClientPlayer acp) {
+                        EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+                        EntityRenderer<? super AbstractClientPlayer> ER = $$7.getRenderer(acp);
+                        if (ER instanceof PlayerRenderer PR && PR.getModel() != null) {
+                            this.model = ((PlayerModel) PR.getModel());
+                        } else {
+                            this.model = slim;
+                        }
+//                        if (ER instanceof PlayerRenderer PR && PR.getModel() instanceof PlayerModel<AbstractClientPlayer>) {
+//                            this.model = ((IPlayerModel) PR.getModel()).roundabout$getSlim()? slim : bulk;
+//                        } else {
+//                            this.model = slim;
+//                        }
+                    } else {
+                        this.model = slim;
+                    }
                 }
             } else {
-                this.model = bulk;
+                Player pl = entity.getPlayer();
+                if (pl instanceof AbstractClientPlayer acp) {
+                    EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
+                    EntityRenderer<? super AbstractClientPlayer> ER = $$7.getRenderer(acp);
+                    if (ER instanceof PlayerRenderer PR && PR.getModel() != null) {
+                        this.model = ((PlayerModel) PR.getModel());
+                    } else {
+                        this.model = slim;
+                    }
+                } else {
+                    this.model = slim;
+                }
             }
 
             ItemStack visage = null;

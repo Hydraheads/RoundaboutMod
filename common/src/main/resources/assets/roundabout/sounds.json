@@ -11,6 +11,18 @@
       "roundabout:summon_oasis"
     ]
   },
+  "king_blood_splash": {
+    "subtitle": "sounds.roundabout.king_blood_splash",
+    "sounds": [
+      "roundabout:king_blood_splash"
+    ]
+  },
+  "blood_slice": {
+    "subtitle": "sounds.roundabout.blood_slice",
+    "sounds": [
+      "roundabout:blood_slice"
+    ]
+  },
   "oasis_mud_hit": {
     "subtitle": "sounds.roundabout.oasis_mud_hit",
     "sounds": [
@@ -279,6 +291,30 @@
     "subtitle": "sounds.roundabout.emperor_impact",
     "sounds": [
       "roundabout:emperor_impact"
+    ]
+  },
+  "emperor_squint": {
+    "subtitle": "sounds.roundabout.emperor_squint",
+    "sounds": [
+      "roundabout:emperor_squint"
+    ]
+  },
+  "emperor_headshot": {
+    "subtitle": "sounds.roundabout.emperor_headshot",
+    "sounds": [
+      "roundabout:emperor_headshot"
+    ]
+  },
+  "emperor_metal": {
+    "subtitle": "sounds.roundabout.emperor_metal",
+    "sounds": [
+      "roundabout:emperor_metal"
+    ]
+  },
+  "emperor_non_bleed": {
+    "subtitle": "sounds.roundabout.emperor_non_bleed",
+    "sounds": [
+      "roundabout:emperor_non_bleed"
     ]
   },
   "bone_chomp": {

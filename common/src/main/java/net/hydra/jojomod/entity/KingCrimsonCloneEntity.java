@@ -79,7 +79,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         if (hurt && !level().isClientSide && runaway && isAlive()) {
             hitsTaken++;
 
-            if (hitsTaken >= 2) {
+            if (hitsTaken >= 2 && !runawayTrue) {
                 runaway = false;
                 addBehaviourGoals();
             }
@@ -256,7 +256,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             if (onGround()){
                 onGroundTime++;
             }
-            if (player == null) {
+            if (player == null || !player.isAlive()) {
                 discardStand();
                 discard();
 
@@ -284,6 +284,29 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             super.defineSynchedData();
             this.entityData.define(JUMPING, false);
         }
+    }
+
+    private void redirectAggroBackToPlayer() {
+        if (level().isClientSide() || this.getPlayer() == null) {
+            return;
+        }
+
+        AABB search = getBoundingBox().inflate(64.0);
+
+        for (Mob mob : level().getEntitiesOfClass(Mob.class, search)) {
+            if (mob.getTarget() == this || (mob.getTarget() != null && mob.getTarget().getId() == this.getId())) {
+                if (mob.distanceTo(this.getPlayer()) < 25 && !(mob instanceof Monster) &&
+                mob.hasLineOfSight(this.getPlayer())){
+                    ((StandUser) mob).roundabout$aggressivelyEnforceAggro(player);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void remove(Entity.RemovalReason $$0) {
+        redirectAggroBackToPlayer();
+        super.remove($$0);
     }
 
     @Override

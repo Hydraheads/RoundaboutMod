@@ -62,7 +62,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             DEPARTURE = 7,
             PHANTOM = 8,
             SWEET = 9,
-            SACTHOTH = 10;
+            OCULUS = 10,
+            SACTHOTH = 11;
 
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
@@ -174,7 +175,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if (this.getUser() != null) {
             if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && pb.moveMode == 2) {
                 Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                Position pn = this.getUser().getEyePosition().add(lvec.scale(-1F));
+                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.9F));
                 positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.35), pn.z());
             }
         }

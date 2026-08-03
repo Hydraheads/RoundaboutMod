@@ -176,6 +176,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FAKE_ITEM.get(), FakeItemEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_PROJECTION.get(), HologramCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MODIFIED_NPC.get(), PlayerModifiedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombieRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeletonRenderer::new);
@@ -322,6 +323,7 @@ public class ClientForgeEvents {
         ModStrayModels.ANUBIS = new AnubisModel();
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
+        ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();

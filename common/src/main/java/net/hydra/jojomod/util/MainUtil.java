@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -157,7 +158,16 @@ public class MainUtil {
                     blockmt, 0.2, 0.2, 0.2, 0.3);
         }
     }
+    public static boolean isGravityNormal(Entity entity){
+        if (entity != null){
+            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN){
+                return false;
+            }
+        }
 
+        return true;
+    }
 
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;
@@ -343,6 +353,8 @@ public class MainUtil {
         if (ent == null)
             return false;
         if (ent instanceof FallenMob)
+            return true;
+        if (ent instanceof KingCrimsonProjectionEntity)
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null && fleshBudMobBlacklist.contains(rl.toString())){
@@ -2006,6 +2018,7 @@ public class MainUtil {
                     || blk instanceof FrogspawnBlock
                     || blk instanceof CauldronBlock
                     || blk instanceof BellBlock
+                    || blk instanceof ChessPieceBlock
                     || blk instanceof SnowLayerBlock
                     || blk instanceof TurtleEggBlock
                     || blk instanceof CarpetBlock

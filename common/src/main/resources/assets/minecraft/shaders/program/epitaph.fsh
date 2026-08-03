@@ -8,6 +8,9 @@ in vec2 oneTexel;
 uniform vec2 InSize;
 uniform float GameTime;
 uniform float GameTimeStart;
+uniform float RedValue;
+uniform float GreenValue;
+uniform float BlueValue;
 uniform float PartialTick;
 
 const vec4 Zero = vec4(0.0);
@@ -89,7 +92,7 @@ if (outside > threshold)
 
     // -- Color Compression (increasing the floor of the signal without affecting the ceiling) --
     ScanlineTexel = Floor + (One.xyz - Floor) * ScanlineTexel;
-    vec3 redTint = vec3(1.0, 0.0, 1.0);
+    vec3 redTint = vec3(RedValue, GreenValue, BlueValue);
     ScanlineTexel = mix(ScanlineTexel, redTint, 0.1);
 
     // Pulsing
