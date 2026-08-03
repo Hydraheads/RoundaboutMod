@@ -901,6 +901,8 @@ public class Config implements Cloneable {
     public static class BlackSabbathSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableBlackSabbath;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean selectionModeUsesNightVision;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer fingerBiteCooldown;
     }

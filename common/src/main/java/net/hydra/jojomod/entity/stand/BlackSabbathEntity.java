@@ -62,7 +62,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             DEPARTURE = 7,
             PHANTOM = 8,
             SWEET = 9,
-            SACTHOTH = 10;
+            OCULUS = 10,
+            SACTHOTH = 11;
 
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
