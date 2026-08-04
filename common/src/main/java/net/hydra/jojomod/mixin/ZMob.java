@@ -254,13 +254,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
-                        !(((Mob)(Object)this) instanceof Animal) &&
-                        !(((Mob)(Object)this) instanceof WaterAnimal) &&
-                        !(((Mob)(Object)this) instanceof AbstractVillager)) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
-                            ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            if (!(((Mob)(Object)this) instanceof Animal) &&
+                                    !(((Mob)(Object)this) instanceof WaterAnimal) &&
+                                    !(((Mob)(Object)this) instanceof AbstractVillager)) {
+                                ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            }
                         }
                     }
 
