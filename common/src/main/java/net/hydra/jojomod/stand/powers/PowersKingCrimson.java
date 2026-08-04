@@ -2566,12 +2566,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void tryBloodClient(){
-        if (!onCooldown(PowerIndex.SKILL_3)) {
-            if (!hasBlock()) {
-                if (hasHandsOut())
-                    return;
-                tryPower(PowerIndex.POWER_3,true);
-                tryPowerPacket(PowerIndex.POWER_3);
+
+        if (!hasBlock()) {
+            if (!doVault()) {
+                if (!onCooldown(PowerIndex.SKILL_3)) {
+                        if (hasHandsOut())
+                            return;
+                        tryPower(PowerIndex.POWER_3,true);
+                        tryPowerPacket(PowerIndex.POWER_3);
+                }
             }
         }
     }

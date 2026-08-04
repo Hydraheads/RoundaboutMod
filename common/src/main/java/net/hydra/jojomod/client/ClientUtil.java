@@ -2089,6 +2089,11 @@ public class ClientUtil {
                 float g = 1;
                 float b = 1;
                 Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
+//                if (play.isCrouching()){
+//                    gtranslation = new Vec3(0, -0.3, -0.3);
+//                } else if (play.isSprinting()){
+//                    gtranslation = new Vec3(0, -0.4, -0.2);
+//                }
                 boolean isGuarding = ((StandUser)play).roundabout$getStandAnimation() == StandPowers.GUARD;
                 if (isGuarding){
                         gtranslation = new Vec3(0, -0.5, -0.05);

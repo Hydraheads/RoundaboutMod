@@ -686,12 +686,14 @@ public class StandPowers extends AbilityScapeBasis {
     }
     public boolean setPowerGuard() {
         if (PowerTypes.hasHandsActive(self)){
-            if (!((StandUser)this.self).roundabout$getGuardBroken()) {
-                getStandUserSelf().roundabout$setStandAnimation(GUARD);
-            } else {
-                getStandUserSelf().roundabout$setStandAnimation(NONE);
+            if (!self.level().isClientSide()) {
+                if (!((StandUser) this.self).roundabout$getGuardBroken()) {
+                    getStandUserSelf().roundabout$setStandAnimation(GUARD);
+                } else {
+                    getStandUserSelf().roundabout$setStandAnimation(NONE);
+                }
+                refreshArms();
             }
-            refreshArms();
         } else {
             if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
