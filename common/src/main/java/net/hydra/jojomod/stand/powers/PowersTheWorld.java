@@ -1850,7 +1850,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                         if (canVault()){
                             done=true;
                             setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
-                        } else if (this.getSelf().fallDistance > 3){
+                        } else if (canFallBrace()){
                             done=true;
                             setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.NO_CD);
                         }
@@ -1902,7 +1902,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 } else {
                     if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                         setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
-                    } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3) {
+                    } else if (canFallBrace()) {
                         setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.NO_CD);
                     } else {
                         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
