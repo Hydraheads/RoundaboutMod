@@ -63,7 +63,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             PHANTOM = 8,
             SWEET = 9,
             OCULUS = 10,
-            SACTHOTH = 11;
+            SACTHOTH = 11,
+            BEACH = 12;
 
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
@@ -179,10 +180,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                 positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.35), pn.z());
             }
         }
-    }
-    @Override
-    protected void defineSynchedData() {
-            super.defineSynchedData();
     }
 
     @Override

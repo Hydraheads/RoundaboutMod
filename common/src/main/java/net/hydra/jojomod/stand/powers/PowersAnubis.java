@@ -2292,9 +2292,9 @@ public class PowersAnubis extends NewDashPreset {
                 Level lv = PE.level();
                 ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
                 CompoundTag tag = disc.getTagElement("Memory");
-                if (tag != null) {
+                if (tag != null && !((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin()) {
                     if (tag.contains("AnubisSkin")) {
-
+                        ((IPlayerEntity)PE).roundabout$setUnlockedBonusSkin(true);
                         this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
                         lv.playSound(null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);

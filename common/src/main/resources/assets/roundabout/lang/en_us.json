@@ -478,6 +478,7 @@
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
   "entity.roundabout.blaze_transfer": "Blaze Transfer",
   "entity.roundabout.black_sabbath": "Black Sabbath",
+  "entity.roundabout.beach_sabbath": "Beach Sabbath",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -2504,6 +2505,7 @@
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
   "skins.roundabout.black_sabbath.oculus":  "Oculus",
   "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
+  "skins.roundabout.black_sabbath.beach": "Beach",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
