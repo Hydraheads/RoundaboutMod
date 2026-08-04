@@ -49,6 +49,8 @@ public interface StandUser {
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
     void roundabout$setHeat(int e);
     int roundabout$getHeat();
+    void roundabout$setExplosionInflation(int e);
+    int roundabout$getExplosionInflation();
 
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();

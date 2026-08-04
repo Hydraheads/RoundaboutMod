@@ -103,9 +103,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     protected Byte getSummonSound() {
-        if (hasHandsOut()){
-            return SoundIndex.NO_SOUND;
-        }
         return SoundIndex.SUMMON_SOUND;
     }
 
@@ -135,8 +132,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.DING_EVENT;
         }else if (soundChoice == DRAIN_NOISE) {
             return ModSounds.VAMPIRE_DRAIN_EVENT;
+        }else if (soundChoice == SUMMON_ARMS) {
+            return ModSounds.SUMMON_SOUND_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == SUMMON_ARMS) {
+            return 1.6F;
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
+        }
     }
 
     public static final byte EPITAPH_NOISE = 106;
@@ -146,21 +154,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte TIME_ERASE = 110;
     public static final byte DING_NOISE = 111;
     public static final byte DRAIN_NOISE = 112;
+    public static final byte SUMMON_ARMS = 113;
 
     @Override
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
     }
-    @Override
-    public boolean isMiningStand() {
-        if (hasHandsOut()){
-            return false;
-        }
-        return super.isMiningStand();
-    }
     public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
     public int ticksOfEraseLeft = 0;
-    public boolean isRenderingArms = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
@@ -175,6 +176,29 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
     @Override
+    public void retractHands(){
+        hasArmsOut = false;
+        flipArmRendering();
+    }
+    public boolean hasArmsOut = false;
+    //hands code for hiding stand
+    public boolean canSummonStandAsEntity(){
+        if (hasArmsOut){
+            return false;
+        }
+        return super.canSummonStandAsEntity();
+    }
+
+    @Override
+    public boolean rendersPlayer(){
+        return hasHandsOut();
+    }
+    @Override
+    public boolean canUseMiningStand() {
+        return super.canUseMiningStand();
+    }
+    public boolean isRenderingArms = false;
+    @Override
     public boolean hasHandsOut(){
         return hasArmsOut;
     }
@@ -184,6 +208,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public void flipArmRendering(){
+        handTicks = 0;
         isRenderingArms = false;
         saveDiscAndSync();
     }
@@ -2486,7 +2511,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
             }
-            case SKILL_3_GUARD -> {
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
                 handsActiveClient();
             }
             case SKILL_3_NORMAL -> {
@@ -2532,31 +2557,26 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(1,0,1);
     }
 
-    public boolean hasArmsOut = false;
-    //hands code for hiding stand
-    public boolean canSummonStandAsEntity(){
-        if (hasArmsOut){
-            return false;
-        }
-        return super.canSummonStandAsEntity();
-    }
 
     public void handsActiveClient(){
-        if (!onCooldown(PowerIndex.SKILL_3_GUARD)) {
+        if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             if (!hasBlock() && canAttackHeavy()) {
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
-                setCooldown(PowerIndex.SKILL_3_GUARD, 7);
+                setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
             }
         }
     }
 
     public void tryBloodClient(){
-        if (!onCooldown(PowerIndex.SKILL_3)) {
-            if (!hasBlock()) {
-                if (hasHandsOut())
-                    return;
-                tryPower(PowerIndex.POWER_3,true);
-                tryPowerPacket(PowerIndex.POWER_3);
+
+        if (!hasBlock()) {
+            if (!doVault()) {
+                if (!onCooldown(PowerIndex.SKILL_3)) {
+                        if (hasHandsOut())
+                            return;
+                        tryPower(PowerIndex.POWER_3,true);
+                        tryPowerPacket(PowerIndex.POWER_3);
+                }
             }
         }
     }
@@ -3085,7 +3105,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
-                    PowerIndex.SKILL_3_GUARD);
+                    PowerIndex.SKILL_EXTRA_2);
         } else if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);
@@ -3186,7 +3206,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             return 0.75F;
         } else {
-            return 3F;
+            return 3.4F;
         }
     }
     public boolean crossedThreshold(){
@@ -3326,6 +3346,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     stand.forceDespawn(true);
                 }
                 isRenderingArms = true;
+
+                if (!self.isCrouching()) {
+                    playStandUserOnlySoundsIfNearby(SUMMON_ARMS, 10, true, false);
+                }
             }
             hasArmsOut = !hasArmsOut;
             saveDiscAndSync();

@@ -613,6 +613,9 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     @Override
     public void onStandSummon(boolean desummon) {
+        if (!self.level().isClientSide()){
+            flipArmRendering();
+        }
         if (hasBlock()) {
             this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().generalStandSettings.objectPocketCooldown);
             if (!self.level().isClientSide()) {

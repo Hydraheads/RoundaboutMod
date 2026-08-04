@@ -254,13 +254,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
-                        !(((Mob)(Object)this) instanceof Animal) &&
-                        !(((Mob)(Object)this) instanceof WaterAnimal) &&
-                        !(((Mob)(Object)this) instanceof AbstractVillager)) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
+                    boolean isStrong = (!(((Mob)(Object)this) instanceof Animal) &&
+                            !(((Mob)(Object)this) instanceof WaterAnimal) &&
+                            !(((Mob)(Object)this) instanceof AbstractVillager));
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
-                            ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            if (isStrong) {
+                                ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            }
                         }
                     }
 
@@ -269,10 +271,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         if (this.random.nextDouble() < 0.5) {
                             this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
                         }
-                        if ($$1 > 0) {
-                            for (int i = 0; i < $$1; i++) {
-                                if (this.random.nextDouble() < 0.5) {
-                                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        if (isStrong) {
+                            if ($$1 > 0) {
+                                for (int i = 0; i < $$1; i++) {
+                                    if (this.random.nextDouble() < 0.5) {
+                                        this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                                    }
                                 }
                             }
                         }

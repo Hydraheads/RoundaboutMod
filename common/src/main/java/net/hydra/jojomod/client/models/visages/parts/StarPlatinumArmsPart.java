@@ -2,20 +2,18 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
-import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.renderers.KingCrimsonRenderer;
-import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.client.models.stand.renderers.StarPlatinumBaseRenderer;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -26,12 +24,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
+public class StarPlatinumArmsPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
    private final ModelPart base;
     private final ModelPart Root;
 
-    public KingCrimsonArmsPart() {
+    public StarPlatinumArmsPart() {
         super(RenderType::entityTranslucent);
 
         this.Root = createBodyLayer().bakeRoot();
@@ -44,25 +42,29 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
 
         PartDefinition base = partdefinition.addOrReplaceChild("base", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        PartDefinition right_arm = base.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offsetAndRotation(-5.2F, -24.25F, 0.0F, -0.513F, 0.1147F, 0.2348F));
-
-        PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(28, 69).addBox(-4.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(76, 78).addBox(-4.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.25F))
-                .texOffs(8, 93).addBox(-4.1F, 4.0F, 0.1F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(69, 16).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.02F))
-                .texOffs(0, 75).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.11F))
-                .texOffs(16, 84).addBox(-2.15F, 1.25F, -1.5F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.11F)), PartPose.offset(-2.0F, 5.5F, 0.0F));
-
-        PartDefinition left_arm = base.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offsetAndRotation(5.2F, -24.25F, 0.0F, -0.5105F, -0.1096F, -0.2382F));
+        PartDefinition left_arm = base.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offsetAndRotation(5.4F, -24.2F, 0.0F, -0.5105F, -0.1096F, -0.2382F));
 
         PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(12, 69).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
-                .texOffs(60, 74).addBox(0.0F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.25F))
-                .texOffs(8, 97).addBox(2.1F, 4.0F, 0.1F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(60, 74).addBox(0.0F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(68, 6).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.02F))
-                .texOffs(74, 36).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.11F))
-                .texOffs(18, 91).addBox(1.15F, 1.25F, -1.5F, 1.0F, 3.0F, 3.0F, new CubeDeformation(0.11F)), PartPose.offset(2.0F, 5.5F, 0.0F));
+        PartDefinition lower_right_leg_r1 = upper_left_arm.addOrReplaceChild("lower_right_leg_r1", CubeListBuilder.create().texOffs(5, 59).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 4.4F, 2.45F, 3.1416F, 0.0F, 3.1416F));
+
+        PartDefinition left_shoulder_pad = upper_left_arm.addOrReplaceChild("left_shoulder_pad", CubeListBuilder.create(), PartPose.offset(0.0F, 0.1F, 0.0F));
+
+        PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(68, 6).addBox(-2.0F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(74, 36).addBox(-2.0F, 0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(2.0F, 5.5F, 0.0F));
+
+        PartDefinition right_arm = base.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offsetAndRotation(-5.4F, -24.2F, 0.0F, -0.5105F, 0.1096F, 0.2382F));
+
+        PartDefinition upper_right_arm = right_arm.addOrReplaceChild("upper_right_arm", CubeListBuilder.create().texOffs(28, 69).addBox(-4.1932F, -0.7985F, -1.9966F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
+                .texOffs(76, 78).addBox(-4.1932F, -0.7985F, -1.9966F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F)), PartPose.offset(0.375F, 0.075F, 0.0F));
+
+        PartDefinition lower_left_leg_r1 = upper_right_arm.addOrReplaceChild("lower_left_leg_r1", CubeListBuilder.create().texOffs(5, 59).mirror().addBox(-0.8068F, -0.9485F, -0.0034F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-2.0F, 4.3F, 2.45F, 3.1416F, 0.0F, -3.1416F));
+
+        PartDefinition right_shoulder_pad = upper_right_arm.addOrReplaceChild("right_shoulder_pad", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm", CubeListBuilder.create().texOffs(69, 16).addBox(-2.1932F, -0.1985F, -1.9966F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 75).addBox(-2.1932F, 0.8015F, -1.9966F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.21F)), PartPose.offset(-1.625F, 5.475F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -89,7 +91,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE){
             bt = ((StandUser)LE).roundabout$getStandSkin();
         }
-        return KingCrimsonRenderer.getSkin(bt);
+        return StarPlatinumBaseRenderer.getSkin(bt);
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -104,7 +106,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
             return;
         if (context instanceof LivingEntity LE) {
             StandUser user = ((StandUser) LE);
-            if (user.roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+            if (user.roundabout$getStandPowers() instanceof PowersStarPlatinum pkc) {
                 this.root().getAllParts().forEach(ModelPart::resetPose);
                 if (((TimeStop) context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()) {
                     partialTicks = 0;
@@ -118,7 +120,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
                 if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
-                && PowerTypes.hasHandsActive(LE)){
+                        && PowerTypes.hasHandsActive(LE)){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {

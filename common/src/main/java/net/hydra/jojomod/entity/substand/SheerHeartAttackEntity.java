@@ -48,6 +48,7 @@ import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -580,8 +581,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
 					this.getUser() instanceof Player) {
 
-				boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
-				this.level().destroyBlock(this.blockTarget, shouldDrop);
+				BlockState info =this.level().getBlockState(this.blockTarget);
+				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
+						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+						|| !MainUtil.isDestructible(level(), this.blockTarget, info))) {
+
+					boolean shouldDrop = !info.requiresCorrectToolForDrops();
+					this.level().destroyBlock(this.blockTarget, shouldDrop);
+				}
 			}
 			this.blockTarget = null;
 			this.setTargetType(NONE);
@@ -663,6 +670,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public int getBlockWarm(BlockPos pos, Level level) {
 		BlockState info = level.getBlockState(pos);
+
+		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
+				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+				|| !MainUtil.isDestructible(level, pos, info))  {
+			return 0;
+		}
 
 		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
 

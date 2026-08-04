@@ -325,6 +325,8 @@ public class FabricEntityClient {
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
+        ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
+        ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
         ModStrayModels.ChestPart = new ChestPart();
         ModStrayModels.SmallChestPart = new SmallChestPart();
         ModStrayModels.bodySpikePart = new BodySpikePart();
