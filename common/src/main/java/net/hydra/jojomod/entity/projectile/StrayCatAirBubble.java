@@ -92,11 +92,20 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setTargetID(int t) { this.getEntityData().set(TARGET, t); }
     public Entity getTarget() {
         int id = this.getEntityData().get(TARGET);
-        if (id == -1) {
-            return null;
+        if (id == -1) { return null; }
+
+        Entity target = this.level().getEntity(id);
+
+        if (PowerTypes.isExistentiallyElsewhere(target)){
+            if (((StandUser)target).roundabout$getStandPowers() instanceof
+                    PowersKingCrimson pkc && pkc.timeEraseActive){
+                target = pkc.activeClone;
+            } else {
+                return null;
+            }
         }
 
-        return this.level().getEntity(id);
+        return target;
     }
 
     public float damageMultiplier = 1.0f;
@@ -236,7 +245,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
             }
 
-            if (this.target != null && this.target.isAlive()) {
+            if (getTarget() != null && getTarget().isAlive()) {
                 if (this.redirectCooldown <= 0) {
                     if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)
                             && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
@@ -478,16 +487,8 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 
-        Entity currentTarget = target;
-        if (PowerTypes.isExistentiallyElsewhere(currentTarget)){
-            if (((StandUser)currentTarget).roundabout$getStandPowers() instanceof
-                    PowersKingCrimson pkc && pkc.timeEraseActive){
-                currentTarget = pkc.activeClone;
-            } else {
-                return;
-            }
-        }
-
+        Entity currentTarget = getTarget();
+        if (currentTarget == null) { return; }
 
         Vec3 pos = currentTarget.getPosition(0);
         Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);

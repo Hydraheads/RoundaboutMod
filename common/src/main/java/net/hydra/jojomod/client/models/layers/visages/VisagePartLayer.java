@@ -580,7 +580,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 //dibbo
-                if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0){
+                if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0 ||
+                        (PowerTypes.hasHandsActive(entity) && ClientUtil.inPowerInventory)){
                     renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,
                             1,1,1);
                 }
@@ -674,6 +675,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().body.translateAndRotate(poseStack);
         poseStack.mulPose(Axis.XP.rotation(entity.getXRot() * Mth.DEG_TO_RAD));
         ModStrayModels.kingCrimsonArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, 1);
+        ModStrayModels.theWorldArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, 1);
+        ModStrayModels.starPlatinumArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, 1);
         ClientUtil.popPoseAndCooperate(poseStack,32);
     }

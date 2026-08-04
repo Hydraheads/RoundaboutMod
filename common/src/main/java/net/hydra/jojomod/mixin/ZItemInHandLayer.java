@@ -6,11 +6,13 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.ArmedModel;
@@ -19,8 +21,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -103,8 +103,16 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             host = jnpc.host;
         }
         if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){
-            ci.cancel();
-            return;
+            boolean bl = true;
+            if (((StandUser)host).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if (AnubisLayer.shouldShowItem(host)) {
+                    bl = false;
+                }
+            }
+            if (bl) {
+                ci.cancel();
+                return;
+            }
         }
 
         if (entity instanceof Player pl && PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)pl).roundabout$GetPos2())){

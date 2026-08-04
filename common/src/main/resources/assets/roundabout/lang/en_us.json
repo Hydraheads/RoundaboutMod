@@ -1995,6 +1995,15 @@
   "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
 
+
+
+  "ability.roundabout.arms_mode":"Arms Mode",
+  "ability.roundabout.arms_mode.desc":"Hide your stand. Replaces your attacks with up close brawling punching that disable shields like axes. You lose access to many of your abilities while this is toggled, but can use major abilities discretely.",
+
+  "ability.roundabout.mining":"Stand Mining",
+  "ability.roundabout.mining.desc":"Your stand has the capability to mine when holding attack. It is fast and clears out blocks. While sneaking, it does not destroy ore.",
+
+
   "ability.roundabout.meteor_shower":"Meteor Shower",
   "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.If shifting they will go towards your feet.",
   "ability.roundabout.big_meteor":"Big Meteor",

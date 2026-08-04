@@ -74,8 +74,6 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
         this.animate(entity.idleAnimationState2, StandAnimations.IDLE_2, animationProgress, 1f);
         this.animate(entity.idleAnimationState3, StandAnimations.FLOATY_IDLE, animationProgress, 1f);
         this.animate(entity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, animationProgress, 1f);
-        this.animate(entity.armlessAnimation, StandAnimations.ArmIdle, animationProgress, 1f);
-        this.animate(entity.armlessAnimationIdle, StandAnimations.ArmIdle2, animationProgress, 1f);
         Entity owner = entity.getUser();
         float partial = 1.4f;
         float full = 1.16666f;

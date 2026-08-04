@@ -397,7 +397,9 @@ public class AbilityScapeBasis {
     public static final byte
             PUNCH_LEFT = 30,
             PUNCH_RIGHT = 31,
-            GUARD = 32;
+            GUARD = 32,
+            VAULT = 33,
+            MINING = 34;
 
     public float guardMod(){
         return 0.2f;
@@ -551,6 +553,9 @@ public class AbilityScapeBasis {
     }
 
 
+
+    public void retractHands(){
+    }
     public boolean hasHandsOut(){
         return false;
     }
@@ -1787,7 +1792,7 @@ public class AbilityScapeBasis {
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
-                    refreshArms();
+
                     return true;
                 }
                 return true;
@@ -1898,6 +1903,9 @@ public class AbilityScapeBasis {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
+        if (hasHandsOut()){
+            return false;
+        }
         return this.getSelf().fallDistance > (3+ getStandUserSelf().roundabout$getBonusJumpHeight()) && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
 

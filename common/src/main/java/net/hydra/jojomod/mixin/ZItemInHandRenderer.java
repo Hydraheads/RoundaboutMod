@@ -244,6 +244,11 @@ public abstract class ZItemInHandRenderer {
                 standUser.roundabout$getStandPowers() instanceof PowersEmperor
                         && standUser.roundabout$getCombatMode();
 
+        if (standUser.roundabout$getStandPowers().hasHandsOut() &&
+                standUser.roundabout$getStandAnimation() == StandPowers.GUARD){
+            ci.cancel();
+            return;
+        }
         if (emperorFP ||
                 (abstractClientPlayer != null &&
                         standUser.roundabout$getEffectiveCombatMode() &&

@@ -686,12 +686,14 @@ public class StandPowers extends AbilityScapeBasis {
     }
     public boolean setPowerGuard() {
         if (PowerTypes.hasHandsActive(self)){
-            if (!((StandUser)this.self).roundabout$getGuardBroken()) {
-                getStandUserSelf().roundabout$setStandAnimation(GUARD);
-            } else {
-                getStandUserSelf().roundabout$setStandAnimation(NONE);
+            if (!self.level().isClientSide()) {
+                if (!((StandUser) this.self).roundabout$getGuardBroken()) {
+                    getStandUserSelf().roundabout$setStandAnimation(GUARD);
+                } else {
+                    getStandUserSelf().roundabout$setStandAnimation(NONE);
+                }
+                refreshArms();
             }
-            refreshArms();
         } else {
             if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
@@ -1968,7 +1970,7 @@ public class StandPowers extends AbilityScapeBasis {
             byte animationType = userSelf.roundabout$getStandAnimation();
 
             if (handTicks > 0) {
-                if (isGuarding()) {
+                if (isGuarding() || getActivePower() == PowerIndex.MINING) {
                     handTicks = getMaxHandTicks();
                 } else {
                     handTicks--;
@@ -1980,14 +1982,28 @@ public class StandPowers extends AbilityScapeBasis {
             if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
                     !userSelf.roundabout$getGuardBroken()) {
                 userSelf.roundabout$setStandAnimation(GUARD);
-            } else if (animationType == GUARD){
-                if (!isGuarding() || userSelf.roundabout$getGuardBroken()
-                || !PowerTypes.hasHandsActive(self)){
-                    userSelf.roundabout$setStandAnimation(NONE);
-                }
-            } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT){
-                if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)){
-                    userSelf.roundabout$setStandAnimation(NONE);
+            } else if (PowerTypes.hasHandsActive(self) && getActivePower() == PowerIndex.MINING
+                    && animationType != MINING) {
+                userSelf.roundabout$setStandAnimation(MINING);
+                refreshArms();
+            } else if (animationType > 0) {
+                if (animationType == GUARD) {
+                    if (!isGuarding() || userSelf.roundabout$getGuardBroken()
+                            || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
+                    if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == VAULT) {
+                    if (activePower != PowerIndex.VAULT){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == MINING) {
+                    if (activePower != PowerIndex.MINING){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 }
             }
 

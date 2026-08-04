@@ -326,6 +326,8 @@ public class ClientForgeEvents {
         ModStrayModels.MANDOM_WATCH = new WatchModel();
         ModStrayModels.MANDOM_WATCH_SMALL = new SmallWatchModel();
         ModStrayModels.kingCrimsonArmsPart = new KingCrimsonArmsPart();
+        ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
+        ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();

@@ -42,8 +42,10 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -66,12 +68,11 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -87,7 +88,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -107,6 +107,7 @@ import java.util.*;
 public class ClientUtil {
 
 
+    public static boolean inPowerInventory = false;
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
@@ -124,12 +125,19 @@ public class ClientUtil {
     public static int getClientTicker(){
         return clientTicker;
     }
+    public static int skinTicker = 10;
+    public static byte lastSkin = 0;
+
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
+        if (skinTicker < 10){
+            skinTicker++;
+        }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
+            skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                 if (PKC.isUsingTimeErase()){
@@ -224,6 +232,12 @@ public class ClientUtil {
             if (skipInterpolationFixAccidentTicks <= -1){
                 skipInterpolation = false;
             }
+        }
+    }
+    public static void skinTicker(byte a, byte b){
+        if (a != b){
+            skinTicker = 0;
+            lastSkin = b;
         }
     }
 
@@ -1991,6 +2005,41 @@ public class ClientUtil {
         if (cameraEnt instanceof Player play && ((IPowersPlayer)cameraEnt).rdbt$getPowers() instanceof PowersEmperor vf) {
 }*/
 
+    public static HumanoidModel.ArmPose getUseAnimation(AbstractClientPlayer player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemBySlot(hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+
+        if (itemStack.isEmpty()) {
+            return HumanoidModel.ArmPose.EMPTY;
+        }
+        if (player.getUsedItemHand() == hand && player.getUseItemRemainingTicks() > 0) {
+            UseAnim useAnim = itemStack.getUseAnimation();
+            if (useAnim == UseAnim.BLOCK) {
+                return HumanoidModel.ArmPose.BLOCK;
+            }
+            if (useAnim == UseAnim.BOW) {
+                return HumanoidModel.ArmPose.BOW_AND_ARROW;
+            }
+            if (useAnim == UseAnim.SPEAR) {
+                return HumanoidModel.ArmPose.THROW_SPEAR;
+            }
+            if (useAnim == UseAnim.CROSSBOW && hand == player.getUsedItemHand()) {
+                return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+            }
+            if (useAnim == UseAnim.SPYGLASS) {
+                return HumanoidModel.ArmPose.SPYGLASS;
+            }
+            if (useAnim == UseAnim.TOOT_HORN) {
+                return HumanoidModel.ArmPose.TOOT_HORN;
+            }
+            if (useAnim == UseAnim.BRUSH) {
+                return HumanoidModel.ArmPose.BRUSH;
+            }
+        } else if (!player.swinging && itemStack.getItem() instanceof CrossbowItem && CrossbowItem.isCharged(itemStack)) {
+            return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+        }
+        return HumanoidModel.ArmPose.ITEM;
+    }
+
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
         if (cameraEnt instanceof Player play) {
@@ -2039,8 +2088,13 @@ public class ClientUtil {
                 float r = 1;
                 float g = 1;
                 float b = 1;
+                byte animation = ((StandUser)play).roundabout$getStandAnimation();
+                boolean isIdle = animation == StandPowers.NONE;
                 Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
-                boolean isGuarding = ((StandUser)play).roundabout$getStandAnimation() == StandPowers.GUARD;
+                if (isIdle){
+                    gtranslation = new Vec3(0, -0.27, -0.17);
+                }
+                boolean isGuarding = animation == StandPowers.GUARD;
                 if (isGuarding){
                         gtranslation = new Vec3(0, -0.5, -0.05);
                 }
@@ -2054,9 +2108,17 @@ public class ClientUtil {
                 stack.mulPose(Axis.XP.rotationDegrees(5));
                 if (isGuarding){
                         stack.mulPose(Axis.XP.rotationDegrees(-17));
+                } else {
+                    if (isIdle) {
+                        stack.mulPose(Axis.XP.rotationDegrees(-22));
+                    }
                 }
-                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
-                        r, g, b, opacity, 0.85F);
+                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
             if (ClientUtil.rendersRipperEyes(play)) {
@@ -2189,7 +2251,7 @@ public class ClientUtil {
             StandUser standUser = (StandUser) cameraEnt;
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
             if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && (!play.getMainHandItem().is(ModItems.ANUBIS_ITEM)
-                    || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis )
+                    || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis)
                     || standUser.roundabout$isPossessed()) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {

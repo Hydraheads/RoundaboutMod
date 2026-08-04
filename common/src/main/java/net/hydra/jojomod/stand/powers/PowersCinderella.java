@@ -86,7 +86,6 @@ public class PowersCinderella extends NewDashPreset {
         $$1.add((byte) 1);
         $$1.add((byte) 2);
         $$1.add((byte) 3);
-        $$1.add((byte) 4);
         return $$1;
     }
 
