@@ -1787,7 +1787,7 @@ public class AbilityScapeBasis {
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
-                    refreshArms();
+
                     return true;
                 }
                 return true;
@@ -1898,6 +1898,9 @@ public class AbilityScapeBasis {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
+        if (hasHandsOut()){
+            return false;
+        }
         return this.getSelf().fallDistance > (3+ getStandUserSelf().roundabout$getBonusJumpHeight()) && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
 

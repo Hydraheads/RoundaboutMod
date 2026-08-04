@@ -464,6 +464,18 @@ public class StandIcons {
             "textures/gui/icons/king_crimson/stand_ledge_grab.png");
     public static final ResourceLocation KING_CRIMSON_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/hands_active.png");
+    public static final ResourceLocation STAR_PLATINUM_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/hands_active.png");
+    public static final ResourceLocation THE_WORLD_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/hands_active.png");
+    public static final ResourceLocation MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/star_platinum/mining.png");
+    public static final ResourceLocation THE_WORLD_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/the_world/mining.png");
+    public static final ResourceLocation SOFT_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/soft_and_wet/mining.png");
+    public static final ResourceLocation RED_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/magicians_red/mining.png");
     public static final ResourceLocation TIME_ERASE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/time_erase.png");
     public static final ResourceLocation HOLOGRAM = new ResourceLocation(Roundabout.MOD_ID,

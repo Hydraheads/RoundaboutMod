@@ -160,16 +160,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public SoundEvent getImpaleSound() {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
     }
-    @Override
-    public boolean canUseMiningStand() {
-        if (hasHandsOut()){
-            return false;
-        }
-        return super.canUseMiningStand();
-    }
     public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
     public int ticksOfEraseLeft = 0;
-    public boolean isRenderingArms = false;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
@@ -183,6 +175,27 @@ public class PowersKingCrimson extends BlockGrabPreset {
             $$0.putInt("timeEraseCooldown",0);
         }
     }
+    public boolean hasArmsOut = false;
+    //hands code for hiding stand
+    public boolean canSummonStandAsEntity(){
+        if (hasArmsOut){
+            return false;
+        }
+        return super.canSummonStandAsEntity();
+    }
+
+    @Override
+    public boolean rendersPlayer(){
+        return hasHandsOut();
+    }
+    @Override
+    public boolean canUseMiningStand() {
+        if (hasHandsOut()){
+            return false;
+        }
+        return super.canUseMiningStand();
+    }
+    public boolean isRenderingArms = false;
     @Override
     public boolean hasHandsOut(){
         return hasArmsOut;
@@ -193,6 +206,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     @Override
     public void flipArmRendering(){
+        handTicks = 0;
         isRenderingArms = false;
         saveDiscAndSync();
     }
@@ -2495,7 +2509,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             case SKILL_2_CROUCH -> {
                 itemGrabClient();
             }
-            case SKILL_3_GUARD -> {
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
                 handsActiveClient();
             }
             case SKILL_3_NORMAL -> {
@@ -2541,20 +2555,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(1,0,1);
     }
 
-    public boolean hasArmsOut = false;
-    //hands code for hiding stand
-    public boolean canSummonStandAsEntity(){
-        if (hasArmsOut){
-            return false;
-        }
-        return super.canSummonStandAsEntity();
-    }
 
     public void handsActiveClient(){
-        if (!onCooldown(PowerIndex.SKILL_3_GUARD)) {
+        if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             if (!hasBlock() && canAttackHeavy()) {
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
-                setCooldown(PowerIndex.SKILL_3_GUARD, 7);
+                setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
             }
         }
     }
@@ -3094,7 +3100,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (isGuarding()) {
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
-                    PowerIndex.SKILL_3_GUARD);
+                    PowerIndex.SKILL_EXTRA_2);
         } else if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);

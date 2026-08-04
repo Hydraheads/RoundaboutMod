@@ -107,6 +107,7 @@ import java.util.*;
 public class ClientUtil {
 
 
+    public static boolean inPowerInventory = false;
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
@@ -2091,6 +2092,10 @@ public class ClientUtil {
                         stack.mulPose(Axis.XP.rotationDegrees(-17));
                 }
                 ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                        r, g, b, opacity, 0.85F);
+                ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
                         r, g, b, opacity, 0.85F);
                 stack.popPose();
             }

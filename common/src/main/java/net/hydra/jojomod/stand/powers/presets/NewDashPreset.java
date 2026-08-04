@@ -139,6 +139,7 @@ public class NewDashPreset extends StandPowerRewrite {
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
+            refreshArms();
             animateStand(StandEntity.BROKEN_GUARD);
             this.poseStand(OffsetIndex.GUARD);
             if (Math.random() > 0.85){

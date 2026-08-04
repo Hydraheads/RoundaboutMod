@@ -157,6 +157,7 @@ public class PowerInventoryScreen
 
     @Override
     protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
+        ClientUtil.inPowerInventory = true;
         OptionInstance<GraphicsStatus> $$2 = Minecraft.getInstance().options.graphicsMode();
         GraphicsStatus $$3 = (GraphicsStatus)$$2.get();
         $$2.set(GraphicsStatus.FANCY);
@@ -288,6 +289,7 @@ public class PowerInventoryScreen
         }
 
         $$2.set($$3);
+        ClientUtil.inPowerInventory = false;
     }
 
     public static void renderEntityInInventoryFollowsMouse2(GuiGraphics $$0, int $$1, int $$2, int $$3, float $$4, float $$5, LivingEntity $$6) {
