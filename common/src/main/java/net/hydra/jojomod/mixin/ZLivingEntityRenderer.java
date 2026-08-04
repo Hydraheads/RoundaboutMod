@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
+import net.hydra.jojomod.client.models.layers.KillerQueenExplosionLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
@@ -153,6 +154,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
     private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
+        this.addLayer(new KillerQueenExplosionLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
         this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
         this.addLayer(new FrozenLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
     }

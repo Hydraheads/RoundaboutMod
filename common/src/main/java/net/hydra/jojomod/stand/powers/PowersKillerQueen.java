@@ -46,6 +46,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.entity.ElderGuardianRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -1574,6 +1575,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else  {
                 this.detonateTimer++;
             }
+            if (currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT) {
+                int percentInt = getDetonateWindup() - detonateTimer;
+                float percent = percentInt / (float) getDetonateWindup();
+                if (bombEntity != null) {
+                    ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
+                }
+            }
+
         }else if (this.getActivePower() == DETONATE) {
             this.setPowerNone();
         }
@@ -1918,6 +1927,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
                 }
+            }
+
+            if ((currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT) && bombEntity != null) {
+                ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
             }
     	}
     	
@@ -2749,6 +2762,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (mobPlantTicks > 0){ mobPlantTicks--; }
         if (impaleTicks > 0){ impaleTicks--; }
         if (btdTicks >= 0) { btdTicks++; }
+
+
 
         if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 6 == 0
                 && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
@@ -3586,6 +3601,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target != null) {
+                    ((StandUser)target).roundabout$setExplosionInflation(-1);
                     vPos = target.position();
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
