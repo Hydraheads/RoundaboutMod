@@ -121,7 +121,7 @@ public enum PowerTypes {
                 return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
             }
         }
-        return true;
+        return false;
     }
     public static boolean hasHandsActiveRendering(Entity ent){
         //specifically stand arms

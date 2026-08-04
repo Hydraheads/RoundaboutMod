@@ -110,12 +110,14 @@ public class TheWorldArmsPart extends PsuedoHierarchicalModel {
                 int heyTicks = user.roundabout$getArmVanishTicks();
                 boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE) &&
                         (PowerTypes.hasHandsActiveRendering(LE) || ClientUtil.inPowerInventory));
+
                 ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).roundabout$getStandSkin());
 
 
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
-                if (ClientUtil.inPowerInventory){
+                if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
+                        && PowerTypes.hasHandsActive(LE)){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {

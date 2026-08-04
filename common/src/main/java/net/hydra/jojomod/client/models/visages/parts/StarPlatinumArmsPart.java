@@ -119,7 +119,8 @@ public class StarPlatinumArmsPart extends PsuedoHierarchicalModel {
 
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
-                if (ClientUtil.inPowerInventory){
+                if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
+                        && PowerTypes.hasHandsActive(LE)){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {

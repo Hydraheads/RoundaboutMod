@@ -856,7 +856,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.75F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(3F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(3.4F));
         }
     }
     @Override

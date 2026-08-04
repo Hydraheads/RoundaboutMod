@@ -3206,7 +3206,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             return 0.75F;
         } else {
-            return 3F;
+            return 3.4F;
         }
     }
     public boolean crossedThreshold(){

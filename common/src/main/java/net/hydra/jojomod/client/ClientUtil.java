@@ -2088,13 +2088,13 @@ public class ClientUtil {
                 float r = 1;
                 float g = 1;
                 float b = 1;
+                byte animation = ((StandUser)play).roundabout$getStandAnimation();
+                boolean isIdle = animation == StandPowers.NONE;
                 Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
-//                if (play.isCrouching()){
-//                    gtranslation = new Vec3(0, -0.2, -0.5);
-//                } else if (play.isSprinting()){
-//                    gtranslation = new Vec3(0, -0.27, -0.3);
-//                }
-                boolean isGuarding = ((StandUser)play).roundabout$getStandAnimation() == StandPowers.GUARD;
+                if (isIdle){
+                    gtranslation = new Vec3(0, -0.27, -0.17);
+                }
+                boolean isGuarding = animation == StandPowers.GUARD;
                 if (isGuarding){
                         gtranslation = new Vec3(0, -0.5, -0.05);
                 }
@@ -2108,6 +2108,10 @@ public class ClientUtil {
                 stack.mulPose(Axis.XP.rotationDegrees(5));
                 if (isGuarding){
                         stack.mulPose(Axis.XP.rotationDegrees(-17));
+                } else {
+                    if (isIdle) {
+                        stack.mulPose(Axis.XP.rotationDegrees(-22));
+                    }
                 }
                 ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
