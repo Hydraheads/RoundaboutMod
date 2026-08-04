@@ -132,8 +132,19 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return ModSounds.DING_EVENT;
         }else if (soundChoice == DRAIN_NOISE) {
             return ModSounds.VAMPIRE_DRAIN_EVENT;
+        }else if (soundChoice == SUMMON_ARMS) {
+            return ModSounds.SUMMON_SOUND_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
+    }
+
+    @Override
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == SUMMON_ARMS) {
+            return 1.6F;
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
+        }
     }
 
     public static final byte EPITAPH_NOISE = 106;
@@ -143,6 +154,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public static final byte TIME_ERASE = 110;
     public static final byte DING_NOISE = 111;
     public static final byte DRAIN_NOISE = 112;
+    public static final byte SUMMON_ARMS = 113;
 
     @Override
     public SoundEvent getImpaleSound() {
@@ -3323,6 +3335,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     stand.forceDespawn(true);
                 }
                 isRenderingArms = true;
+
+                if (!self.isCrouching()) {
+                    playStandUserOnlySoundsIfNearby(SUMMON_ARMS, 10, true, false);
+                }
             }
             hasArmsOut = !hasArmsOut;
             saveDiscAndSync();
