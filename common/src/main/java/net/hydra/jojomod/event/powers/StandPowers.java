@@ -1980,14 +1980,20 @@ public class StandPowers extends AbilityScapeBasis {
             if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
                     !userSelf.roundabout$getGuardBroken()) {
                 userSelf.roundabout$setStandAnimation(GUARD);
-            } else if (animationType == GUARD){
-                if (!isGuarding() || userSelf.roundabout$getGuardBroken()
-                || !PowerTypes.hasHandsActive(self)){
-                    userSelf.roundabout$setStandAnimation(NONE);
-                }
-            } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT){
-                if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)){
-                    userSelf.roundabout$setStandAnimation(NONE);
+            } else if (animationType > 0) {
+                if (animationType == GUARD) {
+                    if (!isGuarding() || userSelf.roundabout$getGuardBroken()
+                            || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
+                    if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == VAULT) {
+                    if (activePower != PowerIndex.VAULT){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 }
             }
 

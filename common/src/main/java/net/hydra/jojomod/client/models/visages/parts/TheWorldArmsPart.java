@@ -143,7 +143,8 @@ public class TheWorldArmsPart extends PsuedoHierarchicalModel {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.left_punch, partialTicks, speed);
                     } else if (animation == StandPowers.PUNCH_RIGHT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
-                    } else {
+                    } else if (animation == StandPowers.VAULT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
                     }
 
                 }
