@@ -326,9 +326,6 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     }
     @Override
     public boolean canUseMiningStand() {
-        if (hasHandsOut()){
-            return false;
-        }
         return super.canUseMiningStand();
     }
     public boolean isRenderingArms = false;
