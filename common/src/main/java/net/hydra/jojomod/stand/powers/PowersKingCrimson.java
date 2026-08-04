@@ -103,9 +103,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     @Override
     protected Byte getSummonSound() {
-        if (hasHandsOut()){
-            return SoundIndex.NO_SOUND;
-        }
         return SoundIndex.SUMMON_SOUND;
     }
 
@@ -152,11 +149,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return ModSounds.KING_CRIMSON_IMPALE_EVENT;
     }
     @Override
-    public boolean isMiningStand() {
+    public boolean canUseMiningStand() {
         if (hasHandsOut()){
             return false;
         }
-        return super.isMiningStand();
+        return super.canUseMiningStand();
     }
     public final Set<LivingEntity> bloodSplatterHits = new HashSet<>();
     public int ticksOfEraseLeft = 0;

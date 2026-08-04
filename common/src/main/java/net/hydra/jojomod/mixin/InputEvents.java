@@ -1441,7 +1441,8 @@ public abstract class InputEvents implements IInputEvents {
                     }
 
                     if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                        if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                        if (((!isMining && !roundabout$activeMining) ||
+                                powers.hasHandsOut()) && standComp.roundabout$getInterruptCD()) {
                             if (rdbt$isInitialized(player) && !((StandUser) player).roundabout$isDazed()) {
                                 powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                             }
