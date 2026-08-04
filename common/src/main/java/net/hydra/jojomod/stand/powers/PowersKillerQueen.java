@@ -3236,7 +3236,19 @@ public class PowersKillerQueen extends NewPunchingStand {
                     return ent == target;
                 }
             }
-            return ent == this.entityTargetBuffer
+
+            Entity targetBuffer = entityTargetBuffer;
+
+            if ((PowerTypes.isExistentiallyElsewhere(targetBuffer))) {
+                if (((StandUser) targetBuffer).roundabout$getStandPowers() instanceof
+                        PowersKingCrimson pkc && pkc.timeEraseActive) {
+                    targetBuffer = pkc.activeClone;
+                }else {
+                    targetBuffer = null;
+                }
+            }
+
+            return ent == targetBuffer
                     || (this.bombBubble != null && this.bombBubble.getTarget() == ent
                     && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
                     && LE.getEffect(MobEffects.INVISIBILITY) != null)));
@@ -3253,7 +3265,18 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (this.entityTargetBuffer == ent || (this.bombBubble != null
+        Entity targetBuffer = entityTargetBuffer;
+
+        if ((PowerTypes.isExistentiallyElsewhere(targetBuffer))) {
+            if (((StandUser) targetBuffer).roundabout$getStandPowers() instanceof
+                    PowersKingCrimson pkc && pkc.timeEraseActive) {
+                targetBuffer = pkc.activeClone;
+            }else {
+                targetBuffer = null;
+            }
+        }
+
+        if (targetBuffer == ent || (this.bombBubble != null
                 && this.bombBubble.getTarget() == ent)) {
             return 0x6e44b3;
         }
