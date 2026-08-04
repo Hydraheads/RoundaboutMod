@@ -139,7 +139,7 @@ public class StepRuleEntity extends Entity {
                 }
 
                 if (getTurnedBad() && isAlive() && !isRemoved()) {
-                    AABB wallBox = this.getBoundingBox();
+                    AABB wallBox = this.getBoundingBox().move(0,-1,0).inflate(0.1F);
 
                     for (Entity mob : level().getEntitiesOfClass(
                             Entity.class,
@@ -149,14 +149,15 @@ public class StepRuleEntity extends Entity {
                             if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
                                     && mob.isAlive() && !(mob instanceof TridentsIgnoreThis)) {
                                 if (mob.getBoundingBox().intersects(wallBox)) {
-
+                                    if (!mbb.canBeSeenAsEnemy())
+                                        continue;
                                     if (LE instanceof TamableAnimal TT && TT.getOwner() != null){
                                         if (mbb instanceof TamableAnimal TA && TA.getOwner() != null &&
                                                 TT.getOwner().is(TA.getOwner())){
-                                            return;
+                                            continue;
                                         }
                                         if (mbb.is(TT.getOwner())){
-                                            return;
+                                            continue;
                                         }
                                     }
 

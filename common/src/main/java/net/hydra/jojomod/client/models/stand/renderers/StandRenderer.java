@@ -54,7 +54,10 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
 
     @Override
     public void render(T mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-
+        if (mobEntity.firstRenderFrame){
+            mobEntity.firstRenderFrame = false;
+            mobEntity.setupAnimationStates();
+        }
         LocalPlayer lp = Minecraft.getInstance().player;
         float maxfade = 100;
         LivingEntity User = mobEntity.getUser();

@@ -122,8 +122,16 @@ public class ClientConfig implements Cloneable {
         public Boolean epitaphScreenEffect;
         @BooleanOption(group = "inherit", value = false)
         public Boolean epitaphSeePresentEntitiesAndParticles;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean alternateEpitaph;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean timeEraseRedProjections;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canSeeFatedSelf;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
         public Float timeSkipOpacity;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float bitesTheDustOpacity;
     }
     public static class ConfigSettings {
 
@@ -180,6 +188,8 @@ public class ClientConfig implements Cloneable {
         public Float opacityOfOthers;
         @FloatOption(group = "inherit", value = 0.5F, min = 0, max = 1)
         public Float opacityOfPlayerBarrageArms;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float opacityOfPlayerStandArms;
 
     }
     public static class DynamicSettings {

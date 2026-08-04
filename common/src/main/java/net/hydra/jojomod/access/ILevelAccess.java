@@ -4,6 +4,7 @@ package net.hydra.jojomod.access;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface ILevelAccess {
     void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder);
@@ -18,4 +19,5 @@ public interface ILevelAccess {
     SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubbleEntity(Entity entity);
     boolean roundabout$isSoundPlunderedEntity(Entity entity);
     void roundabout$raptureBubbles(BlockPos pos);
+    void rdbt$skipTime(LivingEntity self, int ticks, int range);
 }

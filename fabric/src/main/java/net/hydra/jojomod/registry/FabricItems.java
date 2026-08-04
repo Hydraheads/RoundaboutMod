@@ -498,6 +498,9 @@ public class FabricItems {
                         entries.accept(MEMORY_KING_WHITE);
                         entries.accept(EXP_BISHOP);
 
+                        entries.accept(STRAY_CAT_ANIME);
+                        entries.accept(STRAY_CAT_MANGA);
+
                     }).build());
 
     public static final CreativeModeTab JOJO_BUILDING_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -650,9 +653,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(STRAY_CAT_ANIME);
-                        entries.accept(STRAY_CAT_MANGA);
-                        //entries.accept(STRAY_CAT_ITEM);
                         entries.accept(STAND_DISC_KING_CRIMSON);
                         entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_GREEN_DAY);

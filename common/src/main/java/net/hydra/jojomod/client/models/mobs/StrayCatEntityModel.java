@@ -21,99 +21,100 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "stray_cat_entity_model"), "main");
 
+	@Override public ModelPart root() { return this.root; }
+	@Override public ModelPart getHead() { return this.Head1; }
+	public ModelPart getPot() {return pot; }
+
+	private final ModelPart root;
 	private final ModelPart StrayCat;
-	private final ModelPart body;
+	private final ModelPart Head1;
+	private final ModelPart bone;
+	private final ModelPart EyeVar1;
+	private final ModelPart EyeVar2;
+	private final ModelPart Head2;
+	private final ModelPart shooter;
 	private final ModelPart Stem;
-	private final ModelPart Stemp1;
-	private final ModelPart Stemp2;
-	private final ModelPart left_arm;
-	private final ModelPart right_arm;
-	private final ModelPart StemP3;
-	private final ModelPart Head;
-	private final ModelPart eyes;
-	private final ModelPart right_eye;
-	private final ModelPart left_eye;
-	private final ModelPart mouth;
-	private final ModelPart turret;
+	private final ModelPart base;
+	private final ModelPart leaves;
+	private final ModelPart torso;
+	private final ModelPart top;
+	private final ModelPart leaves2;
 	private final ModelPart pot;
 
-	@Override public ModelPart root() { return this.StrayCat; }
-	@Override public ModelPart getHead() { return this.StemP3; }
-
 	public StrayCatEntityModel(ModelPart root) {
-		this.StrayCat = root.getChild("StrayCat");
-		this.body = this.StrayCat.getChild("body");
-		this.Stem = this.body.getChild("Stem");
-		this.Stemp1 = this.Stem.getChild("Stemp1");
-		this.Stemp2 = this.Stemp1.getChild("Stemp2");
-		this.left_arm = this.Stemp2.getChild("left_arm");
-		this.right_arm = this.Stemp2.getChild("right_arm");
-		this.StemP3 = this.Stemp2.getChild("StemP3");
-		this.Head = this.StemP3.getChild("Head");
-		this.eyes = this.Head.getChild("eyes");
-		this.right_eye = this.eyes.getChild("right_eye");
-		this.left_eye = this.eyes.getChild("left_eye");
-		this.mouth = this.Head.getChild("mouth");
-		this.turret = this.StemP3.getChild("turret");
-		this.pot = this.StrayCat.getChild("pot");
+		this.root = root.getChild("root");
+		this.StrayCat = this.root.getChild("StrayCat");
+		this.Head1 = this.StrayCat.getChild("Head1");
+		this.bone = this.Head1.getChild("bone");
+		this.EyeVar1 = this.bone.getChild("EyeVar1");
+		this.EyeVar2 = this.bone.getChild("EyeVar2");
+		this.Head2 = this.StrayCat.getChild("Head2");
+		this.shooter = this.Head2.getChild("shooter");
+		this.Stem = this.StrayCat.getChild("Stem");
+		this.base = this.Stem.getChild("base");
+		this.leaves = this.base.getChild("leaves");
+		this.torso = this.base.getChild("torso");
+		this.top = this.torso.getChild("top");
+		this.leaves2 = this.top.getChild("leaves2");
+		this.pot = this.root.getChild("pot");
 	}
 
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition StrayCat = partdefinition.addOrReplaceChild("StrayCat", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, -1.0F));
+		PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-		PartDefinition body = StrayCat.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition StrayCat = root.addOrReplaceChild("StrayCat", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition Stem = body.addOrReplaceChild("Stem", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -1.75F, -1.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(-0.2F))
-		.texOffs(0, 15).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition Head1 = StrayCat.addOrReplaceChild("Head1", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -5.001F, -3.0F, 6.0F, 5.0F, 6.0F, new CubeDeformation(0.03F))
+				.texOffs(0, 33).addBox(-1.0F, -0.001F, -3.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(24, 1).addBox(-3.0F, -5.001F, -3.0F, 6.0F, 5.0F, 6.0F, new CubeDeformation(-0.001F))
+				.texOffs(0, 17).addBox(-2.5F, -4.0F, 0.0F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 17).addBox(-2.5F, -4.0F, 2.0F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(8, 22).addBox(-2.0F, -4.0F, 1.0F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(8, 22).addBox(-2.0F, -4.0F, -1.0F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(34, 13).addBox(-4.0F, -5.0F, -3.0F, 1.0F, 5.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(34, 13).mirror().addBox(3.0F, -5.0F, -3.0F, 1.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, -8.0F, 0.0F));
 
-		PartDefinition Stemp1 = Stem.addOrReplaceChild("Stemp1", CubeListBuilder.create().texOffs(14, 16).addBox(-1.0F, -3.0F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 1.0F));
+		PartDefinition cube_r1 = Head1.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 18).addBox(-3.0F, -3.0F, -2.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.5F, 0.0F, 1.0F, 0.0F, -1.5708F, 0.0F));
 
-		PartDefinition cube_r1 = Stemp1.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 18).addBox(-1.0F, -3.0F, 1.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition cube_r2 = Head1.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 18).addBox(-3.0F, -3.0F, -2.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.5F, 0.0F, 1.0F, 0.0F, -1.5708F, 0.0F));
 
-		PartDefinition Stemp2 = Stemp1.addOrReplaceChild("Stemp2", CubeListBuilder.create().texOffs(4, 18).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, 0.0F));
+		PartDefinition bone = Head1.addOrReplaceChild("bone", CubeListBuilder.create(), PartPose.offset(-0.5F, 0.0F, 0.0F));
 
-		PartDefinition cube_r2 = Stemp2.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(18, 17).addBox(-1.0F, -2.0F, 1.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition EyeVar1 = bone.addOrReplaceChild("EyeVar1", CubeListBuilder.create().texOffs(0, 26).addBox(-2.0F, -4.0F, -2.0F, 5.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -0.5F, 0.0F));
 
-		PartDefinition left_arm = Stemp2.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(12, 12).addBox(0.0F, 1.0F, -3.0F, 3.0F, 0.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(14, 6).addBox(0.0F, 0.0F, -2.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -1.0F, 0.0F));
+		PartDefinition EyeVar2 = bone.addOrReplaceChild("EyeVar2", CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, -2.0F, -2.0F, 5.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, 0.0F));
 
-		PartDefinition right_arm = Stemp2.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(0, 12).addBox(-3.0F, 1.0F, -3.0F, 3.0F, 0.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(14, 9).addBox(-2.0F, 0.0F, -2.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, -1.0F, 0.0F));
+		PartDefinition Head2 = StrayCat.addOrReplaceChild("Head2", CubeListBuilder.create().texOffs(24, 42).addBox(-2.0F, -7.001F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.0F, 0.0F));
 
-		PartDefinition StemP3 = Stemp2.addOrReplaceChild("StemP3", CubeListBuilder.create().texOffs(18, 15).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 0.0F));
+		PartDefinition shooter = Head2.addOrReplaceChild("shooter", CubeListBuilder.create().texOffs(0, 37).addBox(-3.0F, -5.001F, -3.0F, 6.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r3 = StemP3.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(8, 19).addBox(-1.0F, -2.0F, 1.0F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition Stem = StrayCat.addOrReplaceChild("Stem", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition Head = StemP3.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(16, 0).addBox(-1.5F, -3.75F, -0.0408F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(8, 16).addBox(-1.5F, -3.75F, 0.9592F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 6).addBox(-2.0F, -3.5F, -1.5408F, 4.0F, 3.0F, 3.0F, new CubeDeformation(0.5F))
-		.texOffs(8, 22).addBox(-2.5F, -4.5F, 1.9542F, 5.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 22).addBox(-1.5F, -1.75F, -1.7908F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, 0.0408F));
+		PartDefinition base = Stem.addOrReplaceChild("base", CubeListBuilder.create().texOffs(16, 11).addBox(-1.0F, -3.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition eyes = Head.addOrReplaceChild("eyes", CubeListBuilder.create(), PartPose.offset(0.0F, -2.25F, -1.0408F));
+		PartDefinition leaves = base.addOrReplaceChild("leaves", CubeListBuilder.create().texOffs(24, 3).addBox(1.0F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(16, 22).addBox(-4.0F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition right_eye = eyes.addOrReplaceChild("right_eye", CubeListBuilder.create().texOffs(16, 3).addBox(-1.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 0.0F, 0.0F));
+		PartDefinition torso = base.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(18, 17).addBox(-1.0F, -3.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 0.0F));
 
-		PartDefinition left_eye = eyes.addOrReplaceChild("left_eye", CubeListBuilder.create().texOffs(20, 3).addBox(-0.5F, -1.5F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, 0.0F, 0.0F));
+		PartDefinition top = torso.addOrReplaceChild("top", CubeListBuilder.create().texOffs(10, 17).addBox(-1.0F, -4.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(22, 22).addBox(-4.0F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
+				.texOffs(24, 0).addBox(1.0F, -3.0F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 0.0F));
 
-		PartDefinition mouth = Head.addOrReplaceChild("mouth", CubeListBuilder.create().texOffs(0, 24).addBox(-1.5F, -0.75F, -1.8908F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition leaves2 = top.addOrReplaceChild("leaves2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition turret = StemP3.addOrReplaceChild("turret", CubeListBuilder.create().texOffs(0, 26).addBox(-1.5F, -1.5F, -3.5F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.5F))
-		.texOffs(18, 30).addBox(-0.5F, -0.5F, -5.226F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.225F)), PartPose.offsetAndRotation(0.0F, -1.0F, 0.0F, -1.5708F, 0.0F, 0.0F));
+		PartDefinition pot = root.addOrReplaceChild("pot", CubeListBuilder.create().texOffs(20, 28).addBox(-3.0F, -5.0F, -3.0F, 6.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition pot = StrayCat.addOrReplaceChild("pot", CubeListBuilder.create().texOffs(26, 20).addBox(-3.0F, -6.0F, -2.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(26, 32).addBox(-2.0F, -6.0F, -1.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-		return LayerDefinition.create(meshdefinition, 64, 64);
+		return LayerDefinition.create(meshdefinition, 48, 48);
 	}
 
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		StrayCat.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 
@@ -121,15 +122,18 @@ public class StrayCatEntityModel<T extends StrayCatEntity> extends HierarchicalM
 	public void setupAnim(T strayCat, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 
-		this.getHead().yRot = pNetHeadYaw * ((float)Math.PI / 180F);
-		this.getHead().xRot = pHeadPitch * ((float)Math.PI / 180F);
-
-		this.animate(strayCat.idle, StrayCatEntityAnimations.idle, pAgeInTicks, 1f);
-		this.animate(strayCat.begging, StrayCatEntityAnimations.meow, pAgeInTicks, 1f);
-		this.animate(strayCat.unpotted, StrayCatEntityAnimations.unpotted, pAgeInTicks, 1f);
+		byte anim = strayCat.getAnim();
+		if (anim != strayCat.SHOOTING) {
+			this.getHead().yRot = pNetHeadYaw * ((float) Math.PI / 180F);
+			this.getHead().xRot = pHeadPitch * ((float) Math.PI / 180F);
+		}
+		this.pot.yRot = 0;
+		this.animate(strayCat.idle, StrayCatEntityAnimations.idle_anim, pAgeInTicks, 1f);
+		this.animate(strayCat.begging, StrayCatEntityAnimations.beg, pAgeInTicks, 1f);
+		this.animate(strayCat.unpotted, StrayCatEntityAnimations.hidePot, pAgeInTicks, 1f);
 		this.animate(strayCat.potted, StrayCatEntityAnimations.potted, pAgeInTicks, 1f);
 		this.animate(strayCat.shooting, StrayCatEntityAnimations.shoot, pAgeInTicks, 1f);
-		this.animate(strayCat.sleeping, StrayCatEntityAnimations.sleeping, pAgeInTicks, 1f);
-		this.animate(strayCat.sleepingPotted, StrayCatEntityAnimations.sleeping_potted, pAgeInTicks, 1f);
+		this.animate(strayCat.sleeping, StrayCatEntityAnimations.sleep, pAgeInTicks, 0.5f);
+		//this.animate(strayCat.sleepingPotted, StrayCatEntityAnimations.sleeping_potted, pAgeInTicks, 1f);
 	}
 }

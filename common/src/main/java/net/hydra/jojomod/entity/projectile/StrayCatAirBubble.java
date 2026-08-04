@@ -6,10 +6,12 @@ import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -27,20 +29,20 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -90,18 +92,32 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setTargetID(int t) { this.getEntityData().set(TARGET, t); }
     public Entity getTarget() {
         int id = this.getEntityData().get(TARGET);
-        if (id == -1) {
-            return null;
+        if (id == -1) { return null; }
+
+        Entity target = this.level().getEntity(id);
+
+        if (PowerTypes.isExistentiallyElsewhere(target)){
+            if (((StandUser)target).roundabout$getStandPowers() instanceof
+                    PowersKingCrimson pkc && pkc.timeEraseActive){
+                target = pkc.activeClone;
+            } else {
+                return null;
+            }
         }
 
-        return this.level().getEntity(id);
+        return target;
     }
 
+    public float damageMultiplier = 1.0f;
+
+    public void setDamageMult(float v) {
+        damageMultiplier = v;
+    }
 
     static final float damagePoints = 2.5f;
 
     public float getDamagePoints() {
-        return damagePoints;
+        return damagePoints * damageMultiplier;
     }
 
     public Entity target;
@@ -150,6 +166,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public boolean followOwnerView = false;
     public void setFollowOwnerView(boolean value) {this.followOwnerView = value;}
+
+    public void setLifeSpan(int value) {
+        lifeSpan = value;
+    }
 
     @Override
     public boolean dealWithPenetration(Entity proj){
@@ -208,10 +228,27 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 popBubble();
                 return;
             }
+            if (!isRemoved()) {
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
 
-            if (this.target != null && this.target.isAlive()) {
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
+                }
+            }
+
+            if (getTarget() != null && getTarget().isAlive()) {
                 if (this.redirectCooldown <= 0) {
-                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)) {
+                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)
+                            && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
                     }
@@ -315,14 +352,17 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-            if (KQ.detonateTimer > -1) {
-                KQ.explode();
-            }else {
+        if (!this.level().isClientSide()) {
+            if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                if (KQ.detonateTimer > -1) {
+                    KQ.explode();
+                    return;
+                }
                 KQ.bubbleFailed();
-                popBubble();
             }
-        } else {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
+                    $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
+                    30, 0.2, 0.05, 0.2, 0.3);
             popBubble();
         }
     }
@@ -393,10 +433,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
                     vec3d2 = vec3d2.add(0, 0.4F, 0);
 
-                    MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
-                            vec3d2.x,
-                            vec3d2.y,
-                            vec3d2.z);
+                    double $$11 = Math.max(0.0, 1.0 - $$7.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                    Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.2 * $$11);
+                    if ($$12.lengthSqr() > 0.0) {
+                        $$7.push($$12.x, 0.1, $$12.z);
+                    }
 
                     if (user instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects($$7, user);
@@ -421,9 +462,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 SoundSource.PLAYERS, 0.6F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
 
-            this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
-                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                    0, 0, 0);
+            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    1, 0, 0, 0, 0.015);
 
         }
 
@@ -446,9 +487,12 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 
-        Vec3 pos = this.target.getPosition(0);
-        Vec3 addToPosition = new Vec3(0, this.target.getBbHeight() * 0.5f, 0);
-        Direction direction = ((IGravityEntity) this.target).roundabout$getGravityDirection();
+        Entity currentTarget = getTarget();
+        if (currentTarget == null) { return; }
+
+        Vec3 pos = currentTarget.getPosition(0);
+        Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);
+        Direction direction = ((IGravityEntity) currentTarget).roundabout$getGravityDirection();
         if (direction != Direction.DOWN) {
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
         }
@@ -464,7 +508,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         Vec3 lastDir = this.getDeltaMovement().normalize();
         Vec3 newDir = vector.normalize();
 
-        if (lastDir.distanceTo(newDir) > 0.4f) {
+        if (lastDir.distanceTo(newDir) > 0.4f && this.soundEffectCooldown <= 0) {
             SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
             if (Math.random() > 0.5) {
                 SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;

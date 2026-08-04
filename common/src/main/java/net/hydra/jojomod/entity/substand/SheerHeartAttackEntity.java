@@ -5,22 +5,31 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -32,8 +41,14 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LeadItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -150,6 +165,18 @@ public class SheerHeartAttackEntity extends StandEntity {
 		WALK = 1;
 
 	public Entity entityTarget = null;
+	public Entity getEntityTarget() {
+		if (PowerTypes.isExistentiallyElsewhere(entityTarget)) {
+			if (((StandUser)entityTarget).roundabout$getStandPowers() instanceof
+					PowersKingCrimson pkc && pkc.timeEraseActive){
+				return pkc.activeClone;
+			} else {
+				return null;
+			}
+		}
+		return entityTarget;
+	}
+
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 	public int returnTicks = 0;
@@ -248,7 +275,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					flyngTicks++;
 				}else {
 					if (this.getDeltaMovement().length() > 0.1 && this.tickCount % 18 == 0) {
-						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.5F, 1.0f);
+						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.25F, 1.0f);
 					}
 
 					flyngTicks = 0;
@@ -271,12 +298,17 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (throwStatus == THROWED) {
-					if (this.onGround() || this.onClimbable()) {
+					if (this.onGround() || this.onClimbable() || this.wasTouchingWater
+							|| this.wasInPowderSnow || this.getDeltaMovement().length() < 0.8) {
 						throwStatus = HAS_BEEN;
-					}else if (this.flyngTicks > 4){
+					}else {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
+							if (ent.getId() == user.getId() || ent instanceof StandEntity) {
+								continue;
+							}
+
 							if (ent instanceof LivingEntity LE) {
 								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
 
@@ -324,14 +356,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean hasTarget() {
 		if (this.getTargetType() == ENTITY) {
-			if (this.entityTarget == null) {
+			if (getEntityTarget() == null) {
 				this.setTargetType(NONE);
 				return false;
 			}
-			if (!this.entityTarget.isAlive()) {
+			if (!getEntityTarget().isAlive()) {
 				this.setTargetType(NONE);
 			}
-			if (this.entityTarget instanceof LivingEntity LE) {
+			if (getEntityTarget() instanceof LivingEntity LE) {
 				if (LE.isDeadOrDying()) {
 					this.setTargetType(NONE);
 				}
@@ -367,13 +399,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 				targetPosY = this.blockTarget.getY();
 				targetPosZ = this.blockTarget.getZ();
 			}
-		}else if (this.getTargetType() == ENTITY && this.entityTarget != null
-				&& this.entityTarget.isAlive()) {
-			harmest = getEntityWarm(this.entityTarget);
+		}else if (this.getTargetType() == ENTITY && getEntityTarget() != null
+				&& getEntityTarget().isAlive()) {
+			harmest = getEntityWarm(getEntityTarget());
 			if (harmest > 0) {
 				currentChoice = ENTITY;
-				harmestDistance = this.entityTarget.distanceToSqr(this.position());
-				targetEnt = this.entityTarget;
+				harmestDistance = getEntityTarget().distanceToSqr(this.position());
+				targetEnt = getEntityTarget();
 			}
 		}
 
@@ -494,7 +526,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (type == BLOCK) {
 				targetPos = this.blockTarget.getCenter();
 			}else {
-				targetPos = this.entityTarget.position();
+				targetPos = getEntityTarget().position();
 			}
 
 			return targetPos;
@@ -515,22 +547,23 @@ public class SheerHeartAttackEntity extends StandEntity {
 			StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
 
 			if (!(SP instanceof PowersKillerQueen)) { return; }
-
 			PowersKillerQueen KQ = (PowersKillerQueen)SP;
 
 			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
 					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
 			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
-			this.level().playSound(null, this.blockPosition(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			if (this.entityTarget != null) {
-				MainUtil.takeDeterminedKnockbackWithY(this, this.entityTarget, 0.6f);
 
-				if (!this.entityTarget.isAlive()) {
+			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+
+			if (getEntityTarget() != null) {
+				MainUtil.takeDeterminedKnockbackWithY(this, getEntityTarget(), 0.6f);
+
+				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;
 					this.setTargetType(NONE);
-				} else if (this.entityTarget instanceof LivingEntity LE) {
+				} else if (getEntityTarget() instanceof LivingEntity LE) {
 					if (LE.isDeadOrDying()) {
 						this.entityTarget = null;
 						this.setTargetType(NONE);
@@ -544,8 +577,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
 			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
 
-			boolean shouldDrop = !this.level().getBlockState(this.blockTarget).requiresCorrectToolForDrops();
-			this.level().destroyBlock(this.blockTarget, shouldDrop);
+			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+					this.getUser() instanceof Player) {
+
+				BlockState info =this.level().getBlockState(this.blockTarget);
+				if (!(ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
+						|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+						|| !MainUtil.isDestructible(level(), this.blockTarget, info))) {
+
+					boolean shouldDrop = !info.requiresCorrectToolForDrops();
+					this.level().destroyBlock(this.blockTarget, shouldDrop);
+				}
+			}
 			this.blockTarget = null;
 			this.setTargetType(NONE);
 		}
@@ -555,7 +599,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	 public void jump(Vec3 jumpT0Pos){
 		if (this.onGround()) {
-			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.5F, 1.0f);
+			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
 			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
@@ -599,7 +643,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (this.getHaveToReturn()) {
 				newPath = this.getNavigation().createPath(this.getUser(), 1);
 			}else if (this.getTargetType() == ENTITY) {
-				newPath = this.getNavigation().createPath(this.entityTarget, 0);
+				newPath = this.getNavigation().createPath(getEntityTarget(), 0);
 			}else if (this.getTargetType() == BLOCK) {
 				BlockState BS = this.level().getBlockState(this.blockTarget);
 				if (BS.isPathfindable(this.level(), this.blockTarget, PathComputationType.LAND)) {
@@ -627,18 +671,39 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public int getBlockWarm(BlockPos pos, Level level) {
 		BlockState info = level.getBlockState(pos);
 
-		return (int)(info.getLightEmission() * 1.5);
+		if (ExplosionUtil.isBlockBlackListed(info) || (MainUtil.confirmIsOre(info))
+				|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+				|| !MainUtil.isDestructible(level, pos, info))  {
+			return 0;
+		}
+
+		ResourceLocation key = BuiltInRegistries.BLOCK.getKey(info.getBlock());
+
+		String tag = key.toString();
+        if (MainUtil.SHA_CUSTOM_BLOCK_HEAT.containsKey(tag)) {
+            return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
+        }
+
+        return (int)(info.getLightEmission() * 1.5);
 	}
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
 
+		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
+
+		String tag = key.toString();
+		if (MainUtil.SHA_CUSTOM_ENTITY_HEAT.containsKey(tag)) {
+			return MainUtil.SHA_CUSTOM_ENTITY_HEAT.get(tag);
+		}
+
 		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
 
 		if (entity instanceof LivingEntity LE) {
-			if (LE.isDeadOrDying()) { return points; }
-			if (LE instanceof Player pl) {
-				if (pl.isCreative()) { return points; }
+			if (LE.isDeadOrDying()
+					|| (LE instanceof Player pl && pl.isCreative())
+					|| PowerTypes.isExistentiallyElsewhere(entity)) {
+				return 0;
 			}
 			points += 20;
 			points += HeatUtil.getHeat(LE);
@@ -684,7 +749,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		double rand = Math.random();
 		if (skin == KillerQueenEntity.MINESWEEPER) {
-			if (this.getTargetType() != NONE) { return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT; }
+			if (this.getTargetType() != NONE) {
+				if (rand >= 0.7) {
+					return ModSounds.KILLER_QUEEN_SHA_ALT_CRACKED_KOCCHI_EVENT;
+				}
+				return ModSounds.KILLER_QUEEN_SHA_ALT_KOCCHI_EVENT;
+			}
 
 			return ModSounds.KILLER_QUEEN_SHA_ALT_DEDE_EVENT;
 		} else if ( skin == KillerQueenEntity.CRACKED || rand >= 0.7) {
@@ -702,7 +772,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	protected float getSoundVolume() {
-		return 0.8f;
+		return 0.65f;
 	}
 
 	public float getVoicePitch() {
@@ -740,6 +810,28 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		return false;
 	}
+
+	@Override
+	protected InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+		ItemStack $$2 = $$0.getItemInHand($$1);
+
+		if (this.level().isClientSide) {
+			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0;
+			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
+		} else if ($$2.is(Items.TORCH) && this.getUser() == $$0) {
+			if (!$$0.getAbilities().instabuild) {
+				$$2.shrink(1);
+			}
+
+			// use torch
+
+			return InteractionResult.SUCCESS;
+		}
+
+		return super.mobInteract($$0, $$1);
+	}
+
+	@Override public boolean canBeLeashed(Player p_21418_) { return false;}
 	@Override public boolean isPickable() { return true;}
 	@Override public boolean isPushedByFluid() { return true;}
 	@Override public boolean hasNoPhysics() { return false;}

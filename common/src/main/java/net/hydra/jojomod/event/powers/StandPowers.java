@@ -53,6 +53,7 @@ import net.minecraft.world.phys.*;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,6 +162,16 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
+    public boolean isGravityNormal(Entity entity){
+        if (entity != null){
+            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN){
+                return false;
+            }
+        }
+
+        return true;
+    }
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
         getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
@@ -406,6 +417,8 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**When you deal damage, intercept or run code based off of it, or potentially cancel it*/
     public boolean interceptDamageDealtEvent(DamageSource $$0, float $$1, LivingEntity target){
+        return false;
+    }    public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
         return false;
     }
     /**Same as above but happens later in the damage code after a hit is already confirmed*/
@@ -660,15 +673,37 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
 
-    public boolean setPowerGuard() {
-        if (((StandUser)this.self).roundabout$getGuardBroken()) {
-            animateStand(StandEntity.BROKEN_GUARD);
+
+    public boolean lastRight = false;
+    @Override
+    public void swingStandHands(){
+        if (lastRight){
+            getStandUserSelf().roundabout$setStandAnimation(PUNCH_LEFT);
         } else {
-            animateStand(StandEntity.BLOCK);
+            getStandUserSelf().roundabout$setStandAnimation(PUNCH_RIGHT);
         }
-        this.attackTimeDuring = 0;
+        lastRight = !lastRight;
+    }
+    public boolean setPowerGuard() {
+        if (PowerTypes.hasHandsActive(self)){
+            if (!self.level().isClientSide()) {
+                if (!((StandUser) this.self).roundabout$getGuardBroken()) {
+                    getStandUserSelf().roundabout$setStandAnimation(GUARD);
+                } else {
+                    getStandUserSelf().roundabout$setStandAnimation(NONE);
+                }
+                refreshArms();
+            }
+        } else {
+            if (((StandUser)this.self).roundabout$getGuardBroken()) {
+                animateStand(StandEntity.BROKEN_GUARD);
+            } else {
+                animateStand(StandEntity.BLOCK);
+            }
+            this.poseStand(OffsetIndex.GUARD);
+        }
         this.setActivePower(PowerIndex.GUARD);
-        this.poseStand(OffsetIndex.GUARD);
+        this.attackTimeDuring = 0;
         return true;
     }
 
@@ -840,8 +875,18 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.COLT_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.TOMMY_RELOAD) {
             return ModSounds.TOMMY_RELOAD_EVENT;
+        } else if (soundChoice == TIME_ERASE_END) {
+            return ModSounds.TIME_ERASE_END_EVENT;
+        } else if (soundChoice == TIME_SKIP_1) {
+            return ModSounds.SKIP_TIME_1_EVENT;
+        } else if (soundChoice == TIME_SKIP_2) {
+            return ModSounds.SKIP_TIME_2_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE) {
             return ModSounds.TIME_STOP_STAR_PLATINUM_EVENT;
+        } else if (soundChoice == DODGE_NOISE) {
+            return ModSounds.DODGE_EVENT;
+        } else if (soundChoice == VAULT_NOISE) {
+            return ModSounds.DODGE_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_4) {
             return ModSounds.TIME_STOP_THE_WORLD_EVENT;
         } else if (soundChoice == TIME_STOP_NOISE_5) {
@@ -905,9 +950,14 @@ public class StandPowers extends AbilityScapeBasis {
     public static final byte TIME_STOP_NOISE_11 = TIME_STOP_NOISE+10;
     public static final byte TIME_STOP_NOISE_12 = TIME_STOP_NOISE+11;
     public static final byte TIME_STOP_TICKING = TIME_STOP_NOISE+16;
+    public static final byte VAULT_NOISE = 58;
+    public static final byte DODGE_NOISE = 59;
     public static final byte TIME_RESUME_NOISE = 60;
     public static final byte TIME_RESUME_NOISE_2 = 61;
     public static final byte TIME_RESUME_NOISE_3 = 62;
+    public static final byte TIME_SKIP_1 = 63;
+    public static final byte TIME_SKIP_2 = 64;
+    public static final byte TIME_ERASE_END = 65;
 
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
@@ -959,6 +1009,10 @@ public class StandPowers extends AbilityScapeBasis {
             return this.getBarrageChargePitch();
         } else if (soundChoice == SoundIndex.SWORD_UNSHEATHE){
             return 0.9F;
+        } else if (soundChoice == DODGE_NOISE) {
+            return (float) (0.98 + (Math.random() * 0.04));
+        } else if (soundChoice == VAULT_NOISE) {
+            return (float) (0.8 + (Math.random() * 0.04));
         } else {
             return 1F;
         }
@@ -984,7 +1038,13 @@ public class StandPowers extends AbilityScapeBasis {
         if (this.self.isCrouching()){
             return;
         }
-        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (self instanceof ServerPlayer sp){
+                S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), this.getSummonSound());
+            }
+        } else {
+            playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+        }
     } //Plays the Summon sound. Happens when stand is summoned with summon key.
 
     public float getBarrageChargePitch(){
@@ -1886,6 +1946,10 @@ public class StandPowers extends AbilityScapeBasis {
     public StandPowers(LivingEntity self) {
         super(self);
     }
+    public void flipArmRendering(){
+
+    }
+
 
     @Override
     public void baseTickPower(){
@@ -1901,6 +1965,48 @@ public class StandPowers extends AbilityScapeBasis {
                 }
             }
         } else {
+
+            StandUser userSelf = getStandUserSelf();
+            byte animationType = userSelf.roundabout$getStandAnimation();
+
+            if (handTicks > 0) {
+                if (isGuarding() || getActivePower() == PowerIndex.MINING) {
+                    handTicks = getMaxHandTicks();
+                } else {
+                    handTicks--;
+                    if (handTicks <= 0){
+                        flipArmRendering();
+                    }
+                }
+            }
+            if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
+                    !userSelf.roundabout$getGuardBroken()) {
+                userSelf.roundabout$setStandAnimation(GUARD);
+            } else if (PowerTypes.hasHandsActive(self) && getActivePower() == PowerIndex.MINING
+                    && animationType != MINING) {
+                userSelf.roundabout$setStandAnimation(MINING);
+                refreshArms();
+            } else if (animationType > 0) {
+                if (animationType == GUARD) {
+                    if (!isGuarding() || userSelf.roundabout$getGuardBroken()
+                            || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
+                    if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == VAULT) {
+                    if (activePower != PowerIndex.VAULT){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == MINING) {
+                    if (activePower != PowerIndex.MINING){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                }
+            }
+
             if (softenTicks > 0) {
                 softenTicks-= 2;
             }
@@ -2015,8 +2121,18 @@ public class StandPowers extends AbilityScapeBasis {
             getStandUserSelf().roundabout$setStandAnimation(NONE);
         }
     }
+    public int handTicks = 0;
     public int twirlTicks = 0;
     public void onLandingAnimatedJump(){}
+
+    public int getMaxHandTicks(){
+        return 50;
+    }
+    @Override
+    public void refreshArms(){
+        saveDiscAndSync();
+        super.refreshArms();
+    }
 
     /**Iteration through skins in the power inventory*/
     public void getSkinInDirection(boolean right, boolean sealed){
@@ -2188,20 +2304,34 @@ public class StandPowers extends AbilityScapeBasis {
         $$0.putByte("Skin",standSkin);
         $$0.putByte("Pose",idlePos);
     }
+    public void setStandSkinLight(byte skin){
+        standSkin = skin;
+
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setSkin(skin);
+        }
+    }
+    public void setIdlePosLight(byte pos){
+        idlePos = pos;
+        StandEntity stand = getStandEntity(self);
+        if (stand != null){
+            stand.setIdleAnimation(pos);
+        }
+    }
     public void readAdditionalSaveData(CompoundTag $$0) {
-        StandUser user = getStandUserSelf();
         if ($$0.contains("Skin")) {
             byte skn = ($$0.getByte("Skin"));
-            user.roundabout$setStandSkinLight(skn);
+            setStandSkinLight(skn);
         } else {
-            user.roundabout$setStandSkinLight((byte) 0);
+            setStandSkinLight((byte) 0);
         }
 
         if ($$0.contains("Pose")) {
             byte skn = ($$0.getByte("Pose"));
-            user.roundabout$setIdlePosLight(skn);
+            setIdlePosLight(skn);
         } else {
-            user.roundabout$setIdlePosLight((byte) 0);
+            setIdlePosLight((byte) 0);
         }
     }
     // run this to trigger the disc saving and syncing

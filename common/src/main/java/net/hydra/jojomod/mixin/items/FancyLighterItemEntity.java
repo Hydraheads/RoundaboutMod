@@ -49,7 +49,7 @@ public abstract class FancyLighterItemEntity extends Entity{
                             Mth.floor(box.maxY), Mth.floor(box.maxZ)
                     ).forEach(blockPos -> {
                         BlockState state = level().getBlockState(blockPos);
-                        if (rdbt$isWaterCauldron(state) && rdbt$isInsideCauldron(blockPos)) {
+                        if (rdbt$isWaterCauldron2(state) && rdbt$isInsideCauldron2(blockPos)) {
                             rdbt$transformLighter(stack);
                         }
                     });
@@ -58,11 +58,11 @@ public abstract class FancyLighterItemEntity extends Entity{
         }
     }
 
-    private boolean rdbt$isWaterCauldron(BlockState state) {
+    private boolean rdbt$isWaterCauldron2(BlockState state) {
         return state.is(Blocks.WATER_CAULDRON) && state.getValue(LayeredCauldronBlock.LEVEL) > 0;
     }
 
-    private boolean rdbt$isInsideCauldron(BlockPos blockPos) {
+    private boolean rdbt$isInsideCauldron2(BlockPos blockPos) {
         double y = getY();
         double x = getX() - blockPos.getX();
         double z = getZ() - blockPos.getZ();

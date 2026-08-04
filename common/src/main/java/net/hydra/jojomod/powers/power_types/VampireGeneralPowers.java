@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -307,19 +308,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
                     }
-
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                            0,
-                            dvec.x,
-                            dvec.y,
-                            dvec.z,
-                            0.8);
+                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                0,
+                                dvec.x,
+                                dvec.y,
+                                dvec.z,
+                                0.8);
+                    }
                 }
             }
         }
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -345,6 +347,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         return super.inputSpeedModifiers(basis);
     }
+
+    @Override
+    public float guardMod(){
+        if (self.onGround()){
+            return 0.5f;
+        } else {
+            return 1f;
+        }
+    }
     @Override
     public boolean cancelSprintJump(){
         return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||
@@ -368,8 +379,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             int spikeCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.spikeAttackCooldown;
             setCooldown(PowerIndex.GENERAL_1,spikeCooldown);
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
-                playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
-                setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
+                if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                    playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
+                    setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
+                }
             }
         }
     }
@@ -661,18 +674,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             }
 
                             if (target.hurtTime == 0) {
-                                if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                    addToCombo(target);
-                                    bleedEnt(target);
-                                } else if (target.isBlocking()) {
-                                    MainUtil.knockShieldPlusStand(target, 200);
+                                if (!((TimeStop) self.level()).CanTimeStopEntity(self)) {
                                     if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
                                         addToCombo(target);
                                         bleedEnt(target);
+                                    } else if (target.isBlocking()) {
+                                        MainUtil.knockShieldPlusStand(target, 200);
+                                        if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                            addToCombo(target);
+                                            bleedEnt(target);
+                                        }
                                     }
-                                }
-                                if (!alreadyBeamed.contains(target)) {
-                                    alreadyBeamed.add(target);
+                                    if (!alreadyBeamed.contains(target)) {
+                                        alreadyBeamed.add(target);
+                                    }
                                 }
                             }
 

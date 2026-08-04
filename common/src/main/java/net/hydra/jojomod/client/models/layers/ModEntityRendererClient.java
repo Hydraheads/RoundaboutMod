@@ -59,13 +59,16 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation PLANET_WAVES_COSMIC_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "planet_waves_cosmic"), "main");
     public static final ModelLayerLocation MANHATTAN_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "manhattan_transfer"), "main");
     public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
+    public static final ModelLayerLocation BLAZE_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "blaze_transfer"), "main");
     public static final ModelLayerLocation BLACK_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"), "main");
+    public static final ModelLayerLocation BEACH_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
     public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");
     public static final ModelLayerLocation TUSK_A2_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a2"), "main");
     public static final ModelLayerLocation TUSK_A3_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a3"), "main");
     public static final ModelLayerLocation TUSK_A4_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a4"), "main");
+    public static final ModelLayerLocation ANUBIS = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");

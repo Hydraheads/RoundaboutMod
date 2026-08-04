@@ -40,9 +40,7 @@ public class TheWorldBaseRenderer<M extends StandEntity> extends StandRenderer<T
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(TheWorldEntity entity) {
-        byte BT = entity.getSkin();
+    public static ResourceLocation getSkin(byte BT){
         if (BT == TheWorldEntity.PART_3_SKIN){
             return PART_3_SKIN;
         } else if (BT == TheWorldEntity.MANGA_SKIN){
@@ -87,6 +85,12 @@ public class TheWorldBaseRenderer<M extends StandEntity> extends StandRenderer<T
             return KING;
         }
         return PART_3_SKIN;
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TheWorldEntity entity) {
+        byte BT = entity.getSkin();
+        return getSkin(BT);
     }
 
     @Override

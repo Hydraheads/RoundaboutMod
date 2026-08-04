@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -245,7 +246,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public static boolean canSteal(Entity entity){
         if (entity instanceof LivingEntity LE){
-            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob ||
+            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob || !LE.isPickable() ||
             LE instanceof StandEntity || !entity.isAlive() ||
                     (entity instanceof Player pl && pl.isCreative())){
                 return false;
@@ -815,7 +816,16 @@ public class PowersCalifornia extends NewDashPreset {
             }
 
             if (leaded != null) {
-                if (leaded.isAlive()) {
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        setLeadTarget(pkc.activeClone);
+                    }
+                }
+            }
+            if (leaded != null) {
+                if (leaded.isAlive() && !PowerTypes.isExistentiallyElsewhere(leaded)) {
                     if (leaded instanceof Mob mb) {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
                                 leaded instanceof Aesthetician ||
@@ -884,8 +894,13 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
-            return true;
+        if (!getCapturedEntityIds().isEmpty()){
+            if (ent != null && isCapturedEntity(ent)) {
+                return true;
+            }
+            if (ent instanceof CloneEntity ce && isCapturedEntity(ce.player)){
+                return true;
+            }
         }
         if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
             if (hasStandActive(self)) {
@@ -995,7 +1010,14 @@ public class PowersCalifornia extends NewDashPreset {
                 Map.Entry<Entity, Integer> entry = it.next();
 
                 Entity entity = entry.getKey();
-
+                if (entity instanceof Player PE && ((StandUser)PE).roundabout$getStandPowers() instanceof
+                PowersKingCrimson pkc && pkc.isErasingTime()){
+                    if (pkc.activeClone != null) {
+                        entity = pkc.activeClone;
+                    } else {
+                        continue;
+                    }
+                }
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity, exp, true, -1);

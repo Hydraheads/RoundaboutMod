@@ -76,7 +76,7 @@ public class StandDiscItem extends Item {
                     }
 
                     if (!$$1.isCreative()) {
-                        ((StandUser)$$1).roundabout$setSealedTicks(
+                        ((StandUser)$$1).roundabout$sealStand(
                                 ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
                     }
                 } else {

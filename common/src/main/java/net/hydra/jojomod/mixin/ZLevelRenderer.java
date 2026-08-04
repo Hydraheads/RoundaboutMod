@@ -1,23 +1,40 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILevelRenderer;
+import net.hydra.jojomod.client.ClientEffectUtil;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.index.AnubisMemory;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.material.FogType;
 import net.zetalasis.client.shader.RPostShaderRegistry;
 import net.zetalasis.client.shader.callback.RenderCallbackRegistry;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -49,6 +66,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 @Mixin(LevelRenderer.class)
 public abstract class ZLevelRenderer implements ILevelRenderer {
@@ -87,6 +105,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Shadow @Nullable private ViewArea viewArea;
 
+    @Shadow
+    protected abstract boolean doesMobEffectBlockSky(Camera $$0);
+
     @Override
     @Unique
     public ViewArea roundabout$getViewArea(){
@@ -98,6 +119,13 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
+        if (entity instanceof CloneEntity ce){
+            if (ce.getPlayer() != null && !ce.turned &&((IEntityAndData)ce.getPlayer()).rdbt$getSharedFlag(5)){
+                ci.cancel();
+                return;
+            }
+        }
+
 
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
@@ -112,129 +140,201 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     }
                 }
             }
-        }
 
-        if (ClientUtil.isUsingEpitaph() && entity != null){
-            Player pl = ClientUtil.getPlayer();
-            if (pl != null && ((StandUser)pl).roundabout$getStandPowers()
-                    instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()){
-                TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
-                TimeSkipSnapshot renderSkip = skip;
+            if (ClientUtil.isUsingTimeErase) {
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                        ConfigManager.getClientConfig().generalSettings.timeEraseRedProjections){
+                    if (entity instanceof LivingEntity lv){
+                    Player pl = ClientUtil.getPlayer();
+                        if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                                instanceof PowersKingCrimson pkc && pl.getId() != entity.getId() &&
+                                !(((StandUser)pl).roundabout$getStand() instanceof KingCrimsonEntity kce &&
+                                kce.getId() == entity.getId()) &&
+                                !(entity instanceof KingCrimsonEntity kce2 &&
+                                        kce2.getUser() instanceof KingCrimsonCloneEntity kcce2 && kcce2.getPlayer() != null &&
+                                        kcce2.getPlayer().getId() == pl.getId())
+                                &&
+                                !((entity instanceof KingCrimsonCloneEntity kcce && kcce.getPlayer() != null &&
+                                        kcce.getPlayer().getId() == pl.getId()))
+                        ) {
+                            if (!entity.isPassenger()) {
+                                ClientUtil.setThrowFadeToTheEther(0.35F);
+                                ClientUtil.forceFade = true;
+                                ClientUtil.forceFade2 = 0.35F;
+                                Vec3 forward = entity.getForward().scale(entity.getBbWidth() * 1.5F);
+                                double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
+                                double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
+                                double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
+                                float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+                                if (entity instanceof LivingEntity LE) {
+                                    LE.hurtTime += 2;
+                                }
+                                this.entityRenderDispatcher.render(entity, ($$7 + forward.x) - cameraX,
+                                        ($$8 + forward.y) - cameraY, ($$9 + forward.z) - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                                ClientUtil.forceFade = false;
+                                ClientUtil.forceFade2 = 1F;
+                                if (entity instanceof LivingEntity LE) {
+                                    LE.hurtTime -= 2;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (ClientUtil.isUsingEpitaph()){
 
-                if (entity.isPassenger()) {
-                    Entity vehicle = entity.getVehicle();
+                boolean alternateEpitaph = false;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                        ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+                    alternateEpitaph = true;
+                }
+                if (MainUtil.isGravityNormal(entity)) {
+                    Player pl = ClientUtil.getPlayer();
+                    if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                            instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()) {
+                        TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
+                        TimeSkipSnapshot renderSkip = skip;
 
-                    if (vehicle != null) {
-                        TimeSkipSnapshot vehicleSkip = pkc.epitaph.get(vehicle.getId());
+                        if (entity.isPassenger()) {
+                            Entity vehicle = entity.getVehicle();
 
-                        if (vehicleSkip != null) {
-                            // Vehicle moved by this amount
-                            Vec3 delta = vehicleSkip.position.subtract(vehicle.position());
+                            if (vehicle != null) {
+                                TimeSkipSnapshot vehicleSkip = pkc.epitaph.get(vehicle.getId());
 
-                            // Create a synthetic snapshot for the passenger
-                            renderSkip = new TimeSkipSnapshot(
-                                    entity.getId(),
-                                    entity.position().add(delta),
-                                    entity.getXRot(),
-                                    vehicleSkip.yRot
+                                if (vehicleSkip != null) {
+                                    // Vehicle moved by this amount
+                                    Vec3 delta = vehicleSkip.position.subtract(vehicle.position());
+
+                                    // Create a synthetic snapshot for the passenger
+                                    renderSkip = new TimeSkipSnapshot(
+                                            entity.getId(),
+                                            entity.position().add(delta),
+                                            entity.getXRot(),
+                                            vehicleSkip.yRot
+                                    );
+                                }
+                            }
+                        }
+
+                        if (renderSkip != null) {
+                            float progress = Mth.clamp(
+                                    (ClientUtil.getGameTimeStart() + (partialTick % 1)) / 6.0F,
+                                    0.0F,
+                                    1.0F
                             );
+                            double $$7 = renderSkip.position.x;
+                            double $$8 = renderSkip.position.y;
+                            double $$9 = renderSkip.position.z;
+                            float renderYaw = renderSkip.yRot;
+                            if (progress < 1) {
+                                double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
+                                double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
+                                double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
+
+                                $$7 = Mth.lerp(progress, x, $$7);
+                                $$8 = Mth.lerp(progress, y, $$8);
+                                $$9 = Mth.lerp(progress, z, $$9);
+                                if (skip != null) {
+                                    renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
+                                } else {
+                                    renderYaw = Mth.rotLerp(progress, entity.yRotO, entity.getYRot());
+                                }
+                            }
+
+
+                            if (entity instanceof LivingEntity LE) {
+                                float oldBody = LE.yBodyRot;
+                                float oldBodyO = LE.yBodyRotO;
+                                float oldHead = LE.yHeadRot;
+                                float oldHeadO = LE.yHeadRotO;
+                                float oldYaw = entity.getYRot();
+                                float oldYawO = entity.yRotO;
+                                float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
+                                float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
+
+                                LE.yBodyRot = renderYaw;
+                                LE.yBodyRotO = renderYaw;
+                                LE.yHeadRot = renderYaw + headOffset;
+                                LE.yHeadRotO = renderYaw + headOffsetO;
+
+                                entity.setYRot(renderYaw);
+                                entity.yRotO = renderYaw;
+
+                                if (alternateEpitaph){
+                                    ClientUtil.setThrowFadeToTheEther(0.5F);
+                                    ClientUtil.forceFade = true;
+                                    ClientUtil.forceFade2 = 0.5F;
+                                    LE.hurtTime+=2;
+                                }
+                                this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+
+                                if (alternateEpitaph){
+                                    LE.hurtTime-=2;
+                                }
+                                LE.yBodyRot = oldBody;
+                                LE.yBodyRotO = oldBodyO;
+                                LE.yHeadRot = oldHead;
+                                LE.yHeadRotO = oldHeadO;
+                                entity.setYRot(oldYaw);
+                                entity.yRotO = oldYawO;
+                            } else {
+
+                                if (alternateEpitaph){
+                                    ClientUtil.forceFade = true;
+                                    ClientUtil.forceFade2 = 0.2F;
+                                }
+                                this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, renderYaw, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                            }
+
+                        }
+                        ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+                        if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
+                                SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
+                            if (!(entity.getPassengers() != null && entity.hasPassenger(ClientUtil.getPlayer()))) {
+                                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                                        ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles ||
+                                        alternateEpitaph) {
+                                    if (!alternateEpitaph) {
+                                        ClientUtil.setThrowFadeToTheEther(0.2F);
+                                        ClientUtil.forceFade = true;
+                                        ClientUtil.forceFade2 = 0.2F;
+                                    } else {
+                                        ClientUtil.setThrowFadeToTheEther(1F);
+                                        ClientUtil.forceFade = false;
+                                    }
+                                    double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
+                                    double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
+                                    double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
+                                    float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+                                    this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
+                                    ClientUtil.forceFade = false;
+                                    ClientUtil.forceFade2 = 1F;
+                                }
+
+                                ci.cancel();
+                                return;
+                            }
                         }
                     }
                 }
-
-                if (renderSkip != null) {
-                    float progress = Mth.clamp(
-                            (ClientUtil.getGameTimeStart() + (partialTick%1)) / 6.0F,
-                            0.0F,
-                            1.0F
-                    );
-                    double $$7 = renderSkip.position.x;
-                    double $$8 = renderSkip.position.y;
-                    double $$9 = renderSkip.position.z;
-                    float renderYaw = renderSkip.yRot;
-                    if (progress < 1){
-                        double x = Mth.lerp(partialTick, entity.xOld, entity.getX());
-                        double y = Mth.lerp(partialTick, entity.yOld, entity.getY());
-                        double z = Mth.lerp(partialTick, entity.zOld, entity.getZ());
-
-                        $$7 = Mth.lerp(progress, x, $$7);
-                        $$8 = Mth.lerp(progress, y, $$8);
-                        $$9 = Mth.lerp(progress, z, $$9);
-                        renderYaw = Mth.rotLerp(progress, entity.yRotO, skip.yRot);
-                    }
-
-
-
-                    if (entity instanceof  LivingEntity LE) {
-                        float oldBody = LE.yBodyRot;
-                        float oldBodyO = LE.yBodyRotO;
-                        float oldHead = LE.yHeadRot;
-                        float oldHeadO = LE.yHeadRotO;
-                        float oldYaw = entity.getYRot();
-                        float oldYawO = entity.yRotO;
-                        float headOffset = Mth.wrapDegrees(LE.yHeadRot - LE.yBodyRot);
-                        float headOffsetO = Mth.wrapDegrees(LE.yHeadRotO - LE.yBodyRotO);
-
-                        LE.yBodyRot = renderYaw;
-                        LE.yBodyRotO = renderYaw;
-                        LE.yHeadRot = renderYaw + headOffset;
-                        LE.yHeadRotO = renderYaw + headOffsetO;
-
-                        entity.setYRot(renderYaw);
-                        entity.yRotO = renderYaw;
-
-                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-
-                        LE.yBodyRot = oldBody;
-                        LE.yBodyRotO = oldBodyO;
-                        LE.yHeadRot = oldHead;
-                        LE.yHeadRotO = oldHeadO;
-                        entity.setYRot(oldYaw);
-                        entity.yRotO = oldYawO;
-                    } else {
-
-                        this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY,$$9 - cameraZ, renderYaw, partialTick, stack,buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-                    }
-
-                }
-                ((IEntityAndData)entity).roundabout$setExclusiveLayers(false);
-                if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
-                        SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
-                    if (!(entity.getPassengers() != null &&  entity.hasPassenger(ClientUtil.getPlayer()))) {
-                        if (ConfigManager.getClientConfig().generalSettings.epitaphSeePresentEntitiesAndParticles) {
-                            ClientUtil.setThrowFadeToTheEther(0.2F);
-                            ClientUtil.forceFade = true;
-                            ClientUtil.forceFade2 = 0.2F;
-                            double $$7 = Mth.lerp((double) partialTick, entity.xOld, entity.getX());
-                            double $$8 = Mth.lerp((double) partialTick, entity.yOld, entity.getY());
-                            double $$9 = Mth.lerp((double) partialTick, entity.zOld, entity.getZ());
-                            float $$10 = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
-                            this.entityRenderDispatcher.render(entity, $$7 - cameraX, $$8 - cameraY, $$9 - cameraZ, $$10, partialTick, stack, buffer, this.entityRenderDispatcher.getPackedLightCoords(entity, partialTick));
-                            ClientUtil.forceFade = false;
-                            ClientUtil.forceFade2 = 1F;
-                        }
-
-                        ci.cancel();
-                        return;
-                    }
-                }
             }
-        }
-        if (!roundabout$recurse) {
+            if (!roundabout$recurse) {
 
-            if (entity.level().isClientSide()) {
-                if (entity instanceof CinderellaVisageDisplayEntity pre) {
-                    ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof SurvivorEntity pre) {
-                    ClientUtil.preRenderSurvivor(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof CrossfireHurricaneEntity pre) {
-                    ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
-                } else if (entity instanceof LifeTrackerEntity pre) {
-                    ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                if (entity.level().isClientSide()) {
+                    if (entity instanceof CinderellaVisageDisplayEntity pre) {
+                        ClientUtil.preRenderCinderellaMask(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof SurvivorEntity pre) {
+                        ClientUtil.preRenderSurvivor(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof CrossfireHurricaneEntity pre) {
+                        ClientUtil.preRenderCrossfire(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if (entity instanceof LifeTrackerEntity pre) {
+                        ClientUtil.preRenderLifeTracker(pre, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    } else if(entity instanceof BlackSabbathEntity bs){
+                        ClientUtil.preRenderFloatSabbath(bs, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
+                    }
                 }
+                //ci.cancel();
+                //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
             }
-            //ci.cancel();
-            //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
@@ -243,6 +343,179 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
         if ($$0 != null){
             ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
         }
+    }
+
+    @Unique
+    public void rdbt$renderTerrainFragments(
+            PoseStack poseStack,
+            MultiBufferSource buffer,
+            Camera camera,
+            float partialTick
+    ) {
+        Player pl = Minecraft.getInstance().player;
+        if (pl != null && (((TimeStop) pl.level()).inTimeStopRange(pl))){
+            partialTick = 0;
+        }
+
+        Minecraft mc = Minecraft.getInstance();
+        BlockRenderDispatcher dispatcher = mc.getBlockRenderer();
+
+        Vec3 cam = camera.getPosition();
+
+        Iterator<TerrainFragments> it = ClientEffectUtil.terrainFragments.iterator();
+
+        while (it.hasNext()) {
+            TerrainFragments frag = it.next();
+
+            if (frag.scale <= 0) {
+                it.remove();
+                continue;
+            }
+
+            poseStack.pushPose();
+
+            // Interpolated position
+            double x = Mth.lerp(partialTick, frag.prevPos.x, frag.pos.x) - cam.x;
+            double y = Mth.lerp(partialTick, frag.prevPos.y, frag.pos.y) - cam.y;
+            double z = Mth.lerp(partialTick, frag.prevPos.z, frag.pos.z) - cam.z;
+            float scale = Mth.lerp(partialTick, frag.prevScale, frag.scale);
+
+
+            poseStack.translate(x, y, z);
+
+            // Rotate the chunk
+            float rx = Mth.lerp(partialTick, frag.prevRotX, frag.rotX);
+            float ry = Mth.lerp(partialTick, frag.prevRotY, frag.rotY);
+            float rz = Mth.lerp(partialTick, frag.prevRotZ, frag.rotZ);
+
+            poseStack.mulPose(Axis.XP.rotationDegrees(rx));
+            poseStack.mulPose(Axis.YP.rotationDegrees(ry));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(rz));
+
+            // Center rotation
+            poseStack.translate(-0.5, -0.5, -0.5);
+            poseStack.scale(scale,scale,scale);
+
+            dispatcher.renderSingleBlock(
+                    frag.state,
+                    poseStack,
+                    buffer,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY
+            );
+
+            poseStack.popPose();
+        }
+    }
+    @Inject(method = "renderClouds",
+            at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
+        if (ClientUtil.isUsingTimeErase) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "renderEndSky",
+            at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$renderEndSky(PoseStack $$0, CallbackInfo ci) {
+        if (ClientUtil.renderTimeErase()) {
+            ci.cancel();
+        }
+    }
+
+
+        @Inject(method = "renderSky",
+            at = @At(value = "RETURN"),cancellable = true)
+    private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
+
+
+        if (ClientUtil.renderTimeErase()) {
+            if (!$$4) {
+                FogType $$6 = $$3.getFluidInCamera();
+                if ($$6 != FogType.POWDER_SNOW && $$6 != FogType.LAVA && !this.doesMobEffectBlockSky($$3)) {
+
+                    float alpha = (float) ClientUtil.renderTimeEraseTime();
+                    float dblcheck = $$2 % 1;
+                    if (ClientUtil.isUsingTimeErase) {
+                        alpha = Math.min(alpha + dblcheck, ClientUtil.fadeTime);
+                    } else {
+                        alpha = Math.max(alpha - dblcheck, 0);
+                    }
+                    alpha /= (float) ClientUtil.fadeTime;
+                    alpha = Mth.clamp(alpha, 0, 1F);
+
+
+                    RenderSystem.enableBlend();
+                    RenderSystem.depthMask(false);
+                    RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+                    Tesselator tess = Tesselator.getInstance();
+                    BufferBuilder bufferBuilder = tess.getBuilder();
+                    RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+
+                    for (int integer = 0; integer < 6; ++integer) {
+                        $$0.pushPose();
+                        //Time erase rotates to the camera and then slowly drifts
+                        //float yaw = $$3.getYRot();
+                        //float spin = (ClientUtil.clientTicker + ($$2%1)) * 0.1F;
+                        //$$0.mulPose(Axis.YP.rotationDegrees(-yaw - spin));
+                        float spin = (ClientUtil.clientTicker + ($$2 % 1)) * 0.1F;
+                        $$0.mulPose(Axis.YP.rotationDegrees(spin));
+
+                        $$0.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90.0F));
+                        $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                        if (integer == 0) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[0]);
+                        }
+
+                        if (integer == 1) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[1]);
+                        }
+
+                        if (integer == 2) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[2]);
+                        }
+                        if (integer == 3) {
+                            $$0.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[3]);
+                        }
+
+                        if (integer == 4) {
+                            $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[4]);
+                        }
+
+                        if (integer == 5) {
+                            $$0.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90.0F));
+                            RenderSystem.setShaderTexture(0, StandIcons.SKYBOX[5]);
+                        }
+
+                        Matrix4f stack = $$0.last().pose();
+                        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+                        bufferBuilder.vertex(stack, -100.0F, -100.0F, -100.0F).uv(0.0F, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, -100.0F, -100.0F, 100.0F).uv(0.0F, 1).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, 100.0F, -100.0F, 100.0F).uv(1, 1).color(1F, 1F, 1F, alpha).endVertex();
+                        bufferBuilder.vertex(stack, 100.0F, -100.0F, -100.0F).uv(1, 0.0F).color(1F, 1F, 1F, alpha).endVertex();
+                        BufferUploader.drawWithShader(bufferBuilder.end());
+                        $$0.popPose();
+                    }
+
+                    RenderSystem.depthMask(true);
+                    RenderSystem.disableBlend();
+                }
+            }
+        }
+        MultiBufferSource.BufferSource buffer = this.renderBuffers.bufferSource();
+
+        rdbt$renderTerrainFragments(
+                $$0,
+                buffer,
+                $$3,
+                $$2
+        );
+
+        buffer.endBatch();
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",

@@ -177,6 +177,48 @@ public abstract class ConfigManager {
             MainUtil.standBlockExplosionBlacklist.clear();
             MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
         }
+        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeat != null)
+        {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeat) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 3) {
+                        Roundabout.LOGGER.warn("Invalid custom sheer heart attack block heat entry: {}", entry);
+                        continue;
+                    }
+
+                    String tag = split[0] + ":" + split[1];
+                    int value = Integer.parseInt(split[2]);
+
+                    MainUtil.SHA_CUSTOM_BLOCK_HEAT.put(tag, value);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse sheer heart attack custom block heat entry '{}'", entry, e);
+                }
+            }
+        }
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeat != null)
+        {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeat) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 3) {
+                        Roundabout.LOGGER.warn("Invalid custom sheer heart attack entity heat entry: {}", entry);
+                        continue;
+                    }
+
+                    String tag = split[0] + ":" + split[1];
+                    int value = Integer.parseInt(split[2]);
+
+                    MainUtil.SHA_CUSTOM_ENTITY_HEAT.put(tag, value);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse sheer heart attack custom entity heat entry '{}'", entry, e);
+                }
+            }
+        }
         if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
         {
             MainUtil.occultChargeEffectsToBanish.clear();

@@ -41,6 +41,7 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
                     //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
                     if ((itemStack3.getItem() instanceof Vanishable) && !(itemStack3.getItem() instanceof CrossbowItem)
                             && !(itemStack3.getItem() instanceof GasolineCanItem)
+                            && !(itemStack3.getItem() instanceof FishingRodItem)
                             && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
                             !(((StandUser)clientPlayerEntity2).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
                     this.minecraft.gameMode != null && this.minecraft.gameMode.isDestroying())) {

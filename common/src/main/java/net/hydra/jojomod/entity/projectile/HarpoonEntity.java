@@ -184,12 +184,26 @@ public class HarpoonEntity extends AbstractArrow {
             skyHit = false;
             $$2 = addSkyDamage($$1,$$2);
 
-            /**Harpoon Buff*/
+            /**Harpoon Buff and Nerf*/
             if (isThrown){
                 if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
-                    $$2*=1.3F;
+                    $$2*=1.2F;
                 } else {
-                    $$2*=1.3F;
+                    $$2*=1.2F;
+                }
+                if ($$1 instanceof Player){
+                    if (getOwner() != null){
+                        float dist = getOwner().distanceTo($$1);
+                        if (dist <= 3){
+                            $$2*=0.5F;
+                        } else if (dist <= 5){
+                            $$2*=0.7F;
+                        } else {
+                            $$2*=0.95F;
+                        }
+                    } else {
+                        $$2*=0.95F;
+                    }
                 }
             }
 
@@ -250,7 +264,11 @@ public class HarpoonEntity extends AbstractArrow {
             }
 
             if (!target.onGround() && !target.isInWater() && !target.isSwimming() && !target.isPassenger()){
-                damage += 3;
+                if (target instanceof Player){
+                    damage += 2;
+                } else {
+                    damage += 3;
+                }
                 skyHit = true;
             }
 

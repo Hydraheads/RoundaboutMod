@@ -170,6 +170,23 @@ public class BlockGrabPreset extends NewPunchingStand {
     }
 
 
+    public void resetItem(){
+        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+        if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
+            if (standEntity.canAcquireHeldItem) {
+                this.addItem(standEntity);
+            }
+
+            if (this.getAnimation() == StandEntity.ITEM_GRAB) {
+                animateStand(StandEntity.ITEM_RETRACT);
+            } else {
+                animateStand(StandEntity.BLOCK_RETRACT);
+            }
+
+            standEntity.setHeldItem(ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public boolean setPowerGuard(){
         if (this.getSelf() instanceof Player) {
@@ -596,6 +613,9 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     @Override
     public void onStandSummon(boolean desummon) {
+        if (!self.level().isClientSide()){
+            flipArmRendering();
+        }
         if (hasBlock()) {
             this.setCooldown(PowerIndex.SKILL_2, ConfigManager.getConfig().generalStandSettings.objectPocketCooldown);
             if (!self.level().isClientSide()) {
@@ -1004,16 +1024,7 @@ public class BlockGrabPreset extends NewPunchingStand {
 
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()) {
                 BlockState state = this.getSelf().level().getBlockState(this.grabBlock);
-                if (this.grabBlock != null && !MainUtil.isBlockBlacklisted(state)
-                        && grabBlock.distSqr(this.getSelf().getOnPos()) <= getGrabRange()
-                        && state.getBlock().isCollisionShapeFullBlock(state, this.getSelf().level(), this.grabBlock)
-                        && !state.is(Blocks.REINFORCED_DEEPSLATE)
-                        && !(state.getBlock() instanceof InfestedBlock)
-                        && !this.self.hasEffect(MobEffects.DIG_SLOWDOWN)
-                        && !(state.getBlock() instanceof SlabBlock)
-                        && !(state.getBlock() instanceof FrostedIceBlock)
-                        && !(state.getBlock() instanceof BuddingAmethystBlock)
-                        && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK) {
+                if (MainUtil.canBlockGrab(this.getSelf(),this.grabBlock)) {
 
                     if (this.getSelf().level().getBlockEntity(this.grabBlock) == null) {
                         if ((this.getSelf() instanceof ServerPlayer PE &&
@@ -1079,6 +1090,8 @@ public class BlockGrabPreset extends NewPunchingStand {
 
     public int grabInventorySlot=1;
 
+    public void onItemGrab(){
+    }
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
@@ -1091,6 +1104,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
                         ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
                     /**Boat throw*/
+                    onItemGrab();
                     if (stack.getItem() instanceof BoatItem BE
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                         Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));

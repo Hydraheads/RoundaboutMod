@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
 import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
@@ -253,13 +254,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         if (roundabout$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred &&
-                        !(((Mob)(Object)this) instanceof Animal) &&
-                        !(((Mob)(Object)this) instanceof WaterAnimal) &&
-                        !(((Mob)(Object)this) instanceof AbstractVillager)) {
+                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
+                    boolean isStrong = (!(((Mob)(Object)this) instanceof Animal) &&
+                            !(((Mob)(Object)this) instanceof WaterAnimal) &&
+                            !(((Mob)(Object)this) instanceof AbstractVillager));
                     if ($$0.getEntity() instanceof Player) {
                         if (!this.level().isClientSide()){
-                            ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            if (isStrong) {
+                                ExperienceOrb.award((ServerLevel) this.level(), this.position(), 160);
+                            }
                         }
                     }
 
@@ -268,10 +271,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         if (this.random.nextDouble() < 0.5) {
                             this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
                         }
-                        if ($$1 > 0) {
-                            for (int i = 0; i < $$1; i++) {
-                                if (this.random.nextDouble() < 0.5) {
-                                    this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                        if (isStrong) {
+                            if ($$1 > 0) {
+                                for (int i = 0; i < $$1; i++) {
+                                    if (this.random.nextDouble() < 0.5) {
+                                        this.spawnAtLocation(ModItems.METEORITE.getDefaultInstance());
+                                    }
                                 }
                             }
                         }
@@ -312,7 +317,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
         compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
+        CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
+        birthInfo.putFloat("birthX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().x());
+        birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
+        birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
+        compoundtag.put("birthInfo", birthInfo);
         $$0.put("roundabout",compoundtag);
+
         return $$0;
     }
 
@@ -326,6 +337,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (compoundtag.contains("stolenMemory")) {
             rdbt$stolen = compoundtag.getBoolean("stolenMemory");
         }
+        if (compoundtag.contains("birthInfo")) {
+            CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
+
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedBirthSpawnPos(
+                    birthInfo.getFloat("birthX"),
+                    birthInfo.getFloat("birthY"),
+                    birthInfo.getFloat("birthZ")
+            );
+        } else {
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
+        }
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
     }
 
     @Shadow
@@ -389,7 +412,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        //((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnInfo();
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(false);
 
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
@@ -825,6 +849,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
 
                 if (!(((Mob) (Object) this) instanceof Enemy)
+                        && !(((Mob) (Object) this) instanceof CloneEntity)
                         && !(((Mob) (Object) this) instanceof NeutralMob) &&
                         !(isStandUser && this.roundabout$getFightOrFlight())) {
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){

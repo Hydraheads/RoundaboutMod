@@ -22,6 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,6 +37,7 @@ public class PowersEmperor extends NewDashPreset {
     public PowersEmperor(LivingEntity self) {
         super(self);
     }
+
 
     @Override
     public boolean isStandEnabled() {
@@ -53,19 +55,30 @@ public class PowersEmperor extends NewDashPreset {
     public boolean consumeClickInput = false;
 
     @Override
+    public boolean interceptAttack() {
+        return inShootingMode();
+    }
+
+    @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
 
         if (!consumeClickInput) {
             if (keyIsDown) {
                 if (!holdDownClick) {
                     holdDownClick = true;
+
                     if (inShootingMode()) {
-                        if (confirmShot(getUseTicks())) {
+                        if (confirmShot(getHeatCost())) {
 
                             if (this.self instanceof Player PE) {
                                 IPlayerEntity ipe = ((IPlayerEntity) PE);
                                 ipe.roundabout$getBubbleShotAim().stop();
                                 ipe.roundabout$setBubbleShotAimPoints(10);
+                            }
+
+                            if (self.level().isClientSide) {
+                                takeHeat(getHeatCost());
+                                startShotCooldown();
                             }
 
                             this.tryPower(PowerIndex.POWER_4_EXTRA, true);
@@ -74,10 +87,8 @@ public class PowersEmperor extends NewDashPreset {
                     }
                 }
             } else {
-                holdDownClick = false; // reset on release
+                holdDownClick = false;
             }
-
-
         } else {
             if (!keyIsDown) {
                 consumeClickInput = false;
@@ -116,6 +127,9 @@ public class PowersEmperor extends NewDashPreset {
     @Override
     public void tickPower() {
         super.tickPower();
+        if (shotCooldown > 0) {
+            shotCooldown--;
+        }
 
         if (this.self instanceof Player PE && PE.isCreative()) {
             setShootTicks(0);
@@ -140,6 +154,21 @@ public class PowersEmperor extends NewDashPreset {
                 );
             }
         }
+
+        if (holdingRightClick && !wasHoldingRightClick) {
+            self.level().playLocalSound(
+                    self.getX(),
+                    self.getY(),
+                    self.getZ(),
+                    ModSounds.EMPEROR_SQUINT_EVENT,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    1.0F,
+                    false
+            );
+        }
+
+        wasHoldingRightClick = holdingRightClick;
 
         if (controlMode) {
             bulletList.removeIf(b -> b == null || !b.isAlive());
@@ -223,7 +252,7 @@ public class PowersEmperor extends NewDashPreset {
     private static final int POWER_INT_CONTROL = 1;
     private static final int POWER_INT_SPEED = 2;
 
-    private int speedLevel = 2;
+    private int speedLevel = 3;
 
     public int getSpeedLevel() {
         return speedLevel;
@@ -241,18 +270,9 @@ public class PowersEmperor extends NewDashPreset {
         super.updatePowerInt((byte) id, value);
 
         switch (id) {
-
-            case POWER_INT_AUTO -> {
-                autoMode = value == 1;
-            }
-
-            case POWER_INT_CONTROL -> {
-                controlMode = value == 1;
-            }
-
-            case POWER_INT_SPEED -> {
-                speedLevel = value;
-            }
+            case POWER_INT_AUTO -> autoMode = value == 1;
+            case POWER_INT_CONTROL -> controlMode = value == 1;
+            case POWER_INT_SPEED -> speedLevel = value;
         }
     }
 
@@ -283,14 +303,43 @@ public class PowersEmperor extends NewDashPreset {
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_DOWN, PowerIndex.SKILL_4_SNEAK);
+            if (speedLevel == 0) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_3DOWN, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 1) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_2DOWN, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 2) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_1DOWN, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 3) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_NDOWN, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 4) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_1ADSU, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 5) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_2ADSU, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 6) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_3ADSU, PowerIndex.SKILL_4_SNEAK);
+            }
         } else {
-            setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_UP, PowerIndex.SKILL_4);
+            if (speedLevel == 0) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_3AUSD, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 1) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_2AUSD, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 2) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_1AUSD, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 3) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_NUP, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 4) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_1UP, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 5) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_2UP, PowerIndex.SKILL_4_SNEAK);
+            } else if (speedLevel == 6) {
+                setSkillIcon(context, x, y, 4, StandIcons.EMPEROR_SPEED_3UP, PowerIndex.SKILL_4_SNEAK);
+            }
         }
     }
 
     private boolean holdingRightClick;
-    
+    private boolean wasHoldingRightClick = false;
+
     public boolean emperorZoomActive() {
         return holdingRightClick;
     }
@@ -316,7 +365,7 @@ public class PowersEmperor extends NewDashPreset {
     public boolean tryPower(int move, boolean forced) {
         switch (move) {
             case PowersEmperor.SHOOT -> {
-                if (!canShootBullet(getUseTicks())) {
+                if (!canShootBullet(getHeatCost())) {
                     return false;
                 }
             }
@@ -416,7 +465,26 @@ public class PowersEmperor extends NewDashPreset {
                 emperorSettings.emperorShootingModePower * 0.01));
     }
 
-    public int getUseTicks() {return ClientNetworking.getAppropriateConfig().emperorSettings.heatGainedPerShot;}
+    public int getHeatCost() {
+        int heat;
+
+        if (tripleShotActive()) {
+            heat = ClientNetworking.getAppropriateConfig()
+                    .emperorSettings.tripleShotHeat;
+        } else {
+            heat = ClientNetworking.getAppropriateConfig()
+                    .emperorSettings.singleShotHeat;
+        }
+
+        System.out.println(
+                "GET HEAT COST: triple="
+                        + tripleShotActive()
+                        + " value="
+                        + heat
+        );
+
+        return heat;
+    }
 
     public EmperorBulletEntity getEmperorBullet(){
         EmperorBulletEntity bullet = new EmperorBulletEntity(this.self.level(), this.self);
@@ -432,16 +500,13 @@ public class PowersEmperor extends NewDashPreset {
     }
 
     public boolean canShoot() {
-        return canShootBullet(getUseTicks());
+        return canShootBullet(getHeatCost());
     }
 
-    public boolean confirmShot(int useTicks){
-        if (canShootBullet(getUseTicks())){
-            setShootTicks((shootTicks+getUseTicks()));
-            return true;
-        }
-        return false;
+    public boolean confirmShot(int useTicks) {
+        return shotCooldown <= 0 && canShootBullet(useTicks);
     }
+
     public float getEmperorBulletStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigShooting(multiplyPowerByStandConfigPlayers(1.35F)));
@@ -450,20 +515,24 @@ public class PowersEmperor extends NewDashPreset {
         }
     }
     public int shootTicks = 0;
+    private int shotCooldown = 0;
     public int getShootTicks(){return shootTicks;}
-    public void setShootTicks(int shootTicks){this.shootTicks = Mth.clamp(shootTicks,0,getMaxShootTicks());}
-    public int getMaxShootTicks(){return 5000;}
+    public void setShootTicks(int shootTicks) {
+        this.shootTicks = Mth.clamp(shootTicks, 0, getMaxShootTicks());
+    }
+    public int getMaxShootTicks(){return ClientNetworking.getAppropriateConfig().emperorSettings.maxShootTicks;}
     public int getLowerTicks(){return ClientNetworking.getAppropriateConfig().emperorSettings.heatTickDownRate;}
 
     private float getSpeedMultiplier() {
         return switch (speedLevel) {
 
-            case 0 -> 0.1F;
-            case 1 -> 0.5F;
-            case 2 -> 1.0F;
-            case 3 -> 1.5F;
+            case 0 -> 0.01F;
+            case 1 -> 0.05F;
+            case 2 -> 0.1F;
+            case 3 -> 1.0F;
             case 4 -> 2.2F;
             case 5 -> 3.0F;
+            case 6 -> 4.0F;
 
             default -> 1.0F;
         };
@@ -486,13 +555,25 @@ public class PowersEmperor extends NewDashPreset {
         return 0.8F;
     }
 
+    public void takeHeat(int amount) {
+        setShootTicks(getShootTicks() + amount);
+    }
+
+    public void startShotCooldown() {
+        if (tripleShotActive()) {
+            shotCooldown = ClientNetworking.getAppropriateConfig()
+                    .emperorSettings.tripleShotCooldown;
+        } else {
+            shotCooldown = ClientNetworking.getAppropriateConfig()
+                    .emperorSettings.singleShotCooldown;
+        }
+    }
+
     public boolean shootEmperorBullet() {
 
         if (self.level().isClientSide) {
             return true;
         }
-
-        this.setCooldown(PowerIndex.SKILL_4, 3);
 
         this.poseStand(OffsetIndex.FOLLOW);
         this.setAttackTimeDuring(-10);
@@ -520,7 +601,10 @@ public class PowersEmperor extends NewDashPreset {
                 );
 
                 bullet.setNoGravity(true);
-                bullet.setBaseDamage(getEmperorBulletStrength(this.self) * getSpeedMultiplier());
+                bullet.setBaseDamage(
+                        getEmperorBulletStrength(this.self)
+                                * getSpeedMultiplier()
+                );
 
                 this.bulletList.add(bullet);
                 bullet.setOwner(this.self);
@@ -544,8 +628,14 @@ public class PowersEmperor extends NewDashPreset {
             );
 
             bullet.setNoGravity(true);
-            bullet.setBaseDamage(getEmperorBulletStrength(this.self) * getSpeedMultiplier());
+
+            bullet.setBaseDamage(
+                    getEmperorBulletStrength(this.self)
+                            * getSpeedMultiplier()
+            );
+
             this.bulletList.add(bullet);
+
             this.getSelf().level().addFreshEntity(bullet);
         }
 

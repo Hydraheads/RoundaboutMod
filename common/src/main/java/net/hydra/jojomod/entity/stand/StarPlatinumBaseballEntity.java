@@ -16,7 +16,6 @@ public class StarPlatinumBaseballEntity extends StarPlatinumEntity{
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
             if (this.getAnimation() == BASEBALL_CHARGE) {
                 this.baseballCharge.startIfStopped(this.tickCount);
             } else {
@@ -34,7 +33,6 @@ public class StarPlatinumBaseballEntity extends StarPlatinumEntity{
             } else {
                 this.hideBat.startIfStopped(this.tickCount);
             }
-        }
     }
     public final AnimationState baseballCharge = new AnimationState();
     public final AnimationState baseballSwing = new AnimationState();

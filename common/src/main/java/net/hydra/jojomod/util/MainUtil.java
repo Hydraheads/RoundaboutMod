@@ -15,8 +15,10 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
@@ -28,6 +30,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
@@ -44,6 +47,7 @@ import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -154,7 +158,16 @@ public class MainUtil {
                     blockmt, 0.2, 0.2, 0.2, 0.3);
         }
     }
+    public static boolean isGravityNormal(Entity entity){
+        if (entity != null){
+            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN){
+                return false;
+            }
+        }
 
+        return true;
+    }
 
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;
@@ -221,6 +234,8 @@ public class MainUtil {
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
     public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_BLOCK_HEAT = new HashMap<>();
+    public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
 
@@ -340,6 +355,8 @@ public class MainUtil {
         if (ent == null)
             return false;
         if (ent instanceof FallenMob)
+            return true;
+        if (ent instanceof KingCrimsonProjectionEntity)
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null && fleshBudMobBlacklist.contains(rl.toString())){
@@ -659,7 +676,7 @@ public class MainUtil {
 
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC || isMobStandUserBlacklisted(mob)){
+        || mob instanceof JojoNPC|| mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)){
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -680,7 +697,7 @@ public class MainUtil {
     }
     public static double getStandUserOdds(Mob mob) {
         if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof ZombieAesthetician
+                || mob instanceof JojoNPC|| mob instanceof CloneEntity || mob instanceof ZombieAesthetician
         || isMobStandUserBlacklisted(mob)){
             return 0;
         } else if (mob instanceof AbstractVillager){
@@ -1024,7 +1041,7 @@ public class MainUtil {
             return true;
 
         if (mob instanceof LivingEntity){
-            return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse) && !(mob instanceof ZombieHorse))
+            return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse || mob instanceof StrayCatEntity) && !(mob instanceof ZombieHorse))
                     || mob instanceof Villager || mob instanceof Bat || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
                     || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player || mob instanceof AbstractPiglin
                     || mob instanceof JojoNPC || mob instanceof Zoglin || mob instanceof Ravager
@@ -1317,7 +1334,7 @@ public class MainUtil {
     public static boolean canCauseRejection(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
                     return true;
                 }
             }
@@ -1331,7 +1348,7 @@ public class MainUtil {
     public static boolean canGrantStand(Entity ent){
         if (ent instanceof Mob ME){
             if (!(ME instanceof StandEntity)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty()){
+                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
                     return ((IMob)ME).roundabout$isWorthy();
                 }
             }
@@ -1934,6 +1951,7 @@ public class MainUtil {
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
+                        && !(PowerTypes.isExistentiallyElsewhere($$1))
                         && !(value instanceof FallenMob)) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
@@ -2002,6 +2020,7 @@ public class MainUtil {
                     || blk instanceof FrogspawnBlock
                     || blk instanceof CauldronBlock
                     || blk instanceof BellBlock
+                    || blk instanceof ChessPieceBlock
                     || blk instanceof SnowLayerBlock
                     || blk instanceof TurtleEggBlock
                     || blk instanceof CarpetBlock
@@ -2197,6 +2216,9 @@ public class MainUtil {
     /**Creative players should only be rewound by themselves*/
     public static boolean canRewindInTime(Entity ent, Entity rewinder){
         if (!ent.isRemoved() && ent.isAlive()) {
+            if (PowerTypes.isExistentiallyElsewhere(ent)){
+                return false;
+            }
             if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
                 return false;
             }
@@ -2853,20 +2875,6 @@ public class MainUtil {
                     cid);
             player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_BLACK_SABBATH_INVENTORY){
-            BlackSabbathPlayerInventory $$6 = ((IPlayerEntity) player).roundabout$getBlckSabbathPlayerInventory();
-            PowerTypes.initializeStandPower(player);
-
-            if (player.containerMenu != player.inventoryMenu) {
-                player.containerMenu = player.inventoryMenu;
-            }
-
-            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
-            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
-            S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_BLACK_SABBATH_INVENTORY,
-                    cid);
-         //   player.containerMenu = new BlackSabbathPlayerInventoryMenu(player.getInventory(), true, player,cid);
-            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
         }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
             ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
@@ -2996,6 +3004,18 @@ public class MainUtil {
                 if (finalATime <= 1) {
                     user.roundabout$getStandPowers().setAttackTime((attackTimeMax+1));
                     user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
+                }
+            }
+        } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isUsingEpitaph()){
+                    pkc.epitaph();
+                }
+            }
+        } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER_2) {
+            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                if (pkc.isUsingTimeErase()){
+                    pkc.timeErase();
                 }
             }
         } else if (context == PacketDataIndex.RELOAD_GUN) {
@@ -3691,6 +3711,24 @@ public class MainUtil {
         return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 entity));
+    }
+
+    public static boolean canBlockGrab(LivingEntity user, BlockPos blockPos) {
+        StandUser standUser = ((StandUser) user);
+        StandPowers standPower = standUser.roundabout$getStandPowers();
+        BlockState state = user.level().getBlockState(blockPos);
+
+        return !MainUtil.isBlockBlacklisted(state)
+                && (!(standPower instanceof BlockGrabPreset BGP) || blockPos.distSqr(user.getOnPos()) <= BGP.getGrabRange() )
+                && state.getBlock().isCollisionShapeFullBlock(state, user.level(), blockPos)
+                && !state.is(Blocks.REINFORCED_DEEPSLATE)
+                && !(state.getBlock() instanceof InfestedBlock)
+                && !user.hasEffect(MobEffects.DIG_SLOWDOWN)
+                && !(state.getBlock() instanceof SlabBlock)
+                && !(state.getBlock() instanceof FrostedIceBlock)
+                && !(state.getBlock() instanceof BuddingAmethystBlock)
+                && state.getBlock().defaultDestroyTime() >= 0 && state.getBlock() != Blocks.NETHERITE_BLOCK;
+
     }
 
 }

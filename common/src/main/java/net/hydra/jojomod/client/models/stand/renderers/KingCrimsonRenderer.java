@@ -41,9 +41,7 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
     }
 
 
-    @Override
-    public ResourceLocation getTextureLocation(KingCrimsonEntity entity) {
-        byte BT = entity.getSkin();
+    public static ResourceLocation getSkin(byte BT){
         if (BT == KingCrimsonEntity.MANGA_SKIN){
             return MANGA_SKIN;
         } else if (BT == KingCrimsonEntity.STARLESS){
@@ -80,6 +78,12 @@ public class KingCrimsonRenderer<M extends StandEntity> extends StandRenderer<Ki
             return VISION;
         }
         return RED;
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(KingCrimsonEntity entity) {
+        byte BT = entity.getSkin();
+        return getSkin(BT);
     }
 
     @Override

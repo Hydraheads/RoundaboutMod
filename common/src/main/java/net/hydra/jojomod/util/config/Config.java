@@ -110,6 +110,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public KingCrimsonSettings kingCrimsonSettings;
+    @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
@@ -454,8 +456,10 @@ public class Config implements Cloneable {
         public Integer killerQueenAttackMultOnPlayers;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
-    	@BooleanOption(group = "inherit", value = false)
+    	@BooleanOption(group = "inherit", value = true)
         public Boolean enableBitesTheDustDayMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
@@ -490,6 +494,22 @@ public class Config implements Cloneable {
         public Integer maxAirBubbleTravelDistanceBeforePopping;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer airBubbleGuardIncrease;
+        @IntOption(group = "inherit", value = 500, min = 0, max = 72000)
+        public Integer bitesTheDustPlantCooldown;
+        @IntOption(group = "inherit", value = 70, min = 0, max = 72000)
+        public Integer bitesTheDustCombatActivationCooldown;
+        @IntOption(group = "inherit", value = 160, min = 0, max = 72000)
+        public Integer bitesTheDustCombatCooldownBonus;
+        @IntOption(group = "inherit", value = 1200, min = 0, max = 72000)
+        public Integer bitesTheDustDayCooldownBonus;
+        @FloatOption(group = "inherit", value = 15.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatMobsDamage;
+        @FloatOption(group = "inherit", value = 8.5F, min = 0, max = 200F)
+        public Float bitesTheDustCombatPlayersDamage;
+        @FloatOption(group = "inherit", value = 38.5F, min = 0, max = 200F)
+        public Float bitesTheDustDayMobsDamage;
+        @FloatOption(group = "inherit", value = 17.5F, min = 0, max = 200F)
+        public Float bitesTheDustDayPlayersDamage;
     }
     
     public static class SoftAndWetSettings {
@@ -883,6 +903,8 @@ public class Config implements Cloneable {
     public static class BlackSabbathSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableBlackSabbath;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean selectionModeUsesNightVision;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer fingerBiteCooldown;
     }
@@ -1072,16 +1094,64 @@ public class Config implements Cloneable {
         public Boolean enableEmperor;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer emperorShootingModePower;
-        @IntOption(group = "inherit", value = 0, min = 0, max = 72000)
-        public Integer heatGainedPerShot;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer heatTickDownRate;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer bulletShootSpeedMultiplier;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer emperorBulletRange;
+        @IntOption(group = "inherit", value = 150, min = 0, max = 72000)
+        public Integer tripleShotHeat;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer singleShotHeat;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer singleShotCooldown;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer tripleShotCooldown;
+        @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
+        public Integer maxShootTicks;
+        @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
+        public Integer emperorBulletDamage;
     }
 
+    public static class KingCrimsonSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableKingCrimson;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableSkippingCooldowns;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableEpitaphPreSkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean predictIdles;
+        @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
+        public Integer timeSkipRange;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer timeSkipCooldown;
+        @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
+        public Integer epitaphCooldown;
+        @IntOption(group = "inherit", value = 90, min = 0, max = 72000)
+        public Integer epitaphDuration;
+        @IntOption(group = "inherit", value = 220, min = 1, max = 72000)
+        public Integer timeEraseDuration;
+        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        public Integer timeEraseMinimumCooldown;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer additionalCooldownPerSecondsUsed2;
+        @IntOption(group = "inherit", value = 1300, min = 0, max = 72000)
+        public Integer additionalCooldownFromPlayerRunning;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean cooldownSplit;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean enableDaySkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphInterrupt;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean blocksCancelEpitaph2;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean freeTimeSkip;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean skipPastDeath;
+    }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableTheWorld;

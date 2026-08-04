@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityLivingEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
@@ -620,6 +621,9 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
         ci.cancel();
+        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+            return;
+        }
         ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(false);
         Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
 

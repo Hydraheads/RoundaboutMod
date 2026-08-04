@@ -84,13 +84,15 @@ public class VampireFate extends VampiricFate {
         switch (context)
         {
             case SKILL_1_NORMAL -> {
-                hypnosis();
+                    hypnosis();
             }
             case SKILL_1_CROUCH -> {
                 hairExtendClient();
             }
             case SKILL_2_NORMAL -> {
+                if (!PowerTypes.isExistentiallyElsewhere(self)){
                 suckBlood();
+                }
             }
             case SKILL_2_CROUCH -> {
                 regenClient();
@@ -438,7 +440,7 @@ public class VampireFate extends VampiricFate {
                     }
                     self.heal(1f);
                     setCooldown(PowerIndex.FATE_EXTRA, ClientNetworking.getAppropriateConfig().vampireSettings.flowerHealCooldown);
-                    self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_CAMO_EVENT,
+                    playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_CAMO_EVENT,
                             SoundSource.PLAYERS, 1F, 1.8F);
                     setPowerNone();
                 }
@@ -463,7 +465,7 @@ public class VampireFate extends VampiricFate {
                 setPlayerPos2(PlayerPosIndex.HAIR_EXTENSION);
                 this.attackTimeDuring = 0;
 
-                self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HAIR_TOGGLE_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.HAIR_TOGGLE_EVENT, SoundSource.PLAYERS, 1F, 1F);
 
             }
         }
@@ -617,11 +619,12 @@ public class VampireFate extends VampiricFate {
                     getStandUserSelf().roundabout$setDazed((byte)0);
                     this.setCooldown(PowerIndex.FATE_2_SNEAK, ClientNetworking.getAppropriateConfig().vampireSettings.bloodRegenCooldown);
                     xTryPower(BLOOD_REGEN,true);
-                    self.level().playSound(null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
+                    playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
-                    ((ServerLevel) self.level()).sendParticles(ModParticles.MENACING,
-                            self.getX(), self.getY(), self.getZ(),
-                            10, 0, 0, 0, 0.1);
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
+                                self.getX(), self.getY(), self.getZ(),
+                                10, 0, 0, 0, 0.1);
+
                 }
                 return true;
             }
@@ -713,7 +716,7 @@ public class VampireFate extends VampiricFate {
         if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
             return 0.10F + 0.01F*getVampireData().resilienceLevel;
         }
-        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.BULLET) || source.is(ModDamageTypes.KNIFE)){
+        if (source.is(DamageTypes.ARROW) || source.is(ModDamageTypes.HARPOON) || source.is(DamageTypes.TRIDENT) || source.is(ModDamageTypes.BULLET) || source.is(ModDamageTypes.KNIFE)){
             return 0.1F + 0.02F*getVampireData().resilienceLevel;
         }
         return super.getDamageReduction(source,amt);
@@ -784,12 +787,12 @@ public class VampireFate extends VampiricFate {
                     Position pn = self.getEyePosition().add(lvec.scale(3));
                     Vec3 rev = lvec.reverse();
                     if (hypnoTicks % 18 == 0) {
-                        ((ServerLevel) this.self.level()).sendParticles(ModParticles.HYPNO_SWIRL, pn.x(),
+                        sendParticlesIfPossible(self.level(), ModParticles.HYPNO_SWIRL, pn.x(),
                                 pn.y(), pn.z(),
                                 0,
                                 rev.x, rev.y, rev.z,
                                 0.08);
-                        self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                        playSoundIfPossible(self.level(), null, self.getX(), self.getY(), self.getZ(), ModSounds.HYPNOSIS_EVENT, SoundSource.PLAYERS, 1F, 1F);
 
                     }
                     AABB aab = this.getSelf().getBoundingBox().inflate(12.0, 8.0, 12.0);

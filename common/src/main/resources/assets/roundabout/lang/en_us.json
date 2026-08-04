@@ -1,4 +1,5 @@
 {
+  "text.roundabout.time_erase": "%1$s erased their own death!",
   "text.roundabout.barrage_clash": "Clash! Hold and Release Jump!",
   "text.roundabout.launch_bubble_encased": "Encased! Use sharp object to break free!",
   "text.roundabout.riding_flying_creature": "Hold Jump to ascend, Hold Dash to descend",
@@ -422,6 +423,7 @@
   "effect.roundabout.mold": "Mold",
   "effect.roundabout.switch": "Switch",
   "effect.roundabout.singe": "Char",
+  "effect.roundabout.crippled": "Crippled",
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -437,6 +439,8 @@
   "item.roundabout.painting_mona_lisa": "Mona Lisa",
   "item.roundabout.painting_venus": "Birth of Venus",
 
+  "entity.roundabout.stray_cat_bubble": "Air Bubble",
+  "entity.roundabout.stray_cat_entity": "Stray Cat",
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.cold_twister": "Cold Twister",
@@ -444,6 +448,8 @@
   "entity.roundabout.block_wall_entity": "Block Wall",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
+  "entity.roundabout.king_crimson_clone": "Player",
+  "entity.roundabout.king_crimson_hologram": "Projection",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
@@ -470,7 +476,9 @@
   "entity.roundabout.planet_waves": "Planet Waves",
   "entity.roundabout.manhattan_transfer": "Manhattan Transfer",
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
+  "entity.roundabout.blaze_transfer": "Blaze Transfer",
   "entity.roundabout.black_sabbath": "Black Sabbath",
+  "entity.roundabout.beach_sabbath": "Beach Sabbath",
   "entity.roundabout.harpoon": "Harpoon",
   "entity.roundabout.match": "Match",
   "entity.roundabout.knife": "Knife",
@@ -724,6 +732,8 @@
   "sounds.roundabout.uv_blast": "Energy Ripples",
   "sounds.roundabout.skate_equip": "Ice forms",
   "sounds.roundabout.skate_retract": "Ice fades",
+  "sounds.roundabout.king_blood_splash": "Blood shot",
+  "sounds.roundabout.blood_slice": "Blood cuts",
   "sounds.roundabout.vsong_silent_reveries": "Silent Reveries",
   "sounds.roundabout.vsong_twisted": "Twisted",
   "sounds.roundabout.vsong_bloodcurdling_moments": "Bloodcurdling Moments",
@@ -748,11 +758,14 @@
   "sounds.roundabout.chess_piece": "Piece",
   "sounds.roundabout.chess_place": "Chess place",
   "sounds.roundabout.chess_break": "Chess remove",
+  "sounds.roundabout.hologram_end": "Blip",
+  "sounds.roundabout.king_hologram": "Projection",
 
   "sounds.roundabout.iron_ball_impact": "Iron ball impact",
   "sounds.roundabout.iron_ball_bounce": "Iron ball bounce",
   "sounds.roundabout.anubis_unsheathe": "Unsheathe",
   "sounds.roundabout.summon_oasis": "Stand summoned",
+  "sounds.roundabout.oasis_mud_hit": "Block liquefied",
   "sounds.roundabout.summon_king_crimson": "Stand summoned",
   "sounds.roundabout.summon_anubis": "Stand summoned",
   "sounds.roundabout.summon_california": "Stand summoned",
@@ -771,6 +784,8 @@
   "sounds.roundabout.king_crimson_barrage_hit": "Barrage",
   "sounds.roundabout.skip_time_1": "???",
   "sounds.roundabout.skip_time_2": "???",
+  "sounds.roundabout.time_erase_full": "Time falls apart",
+  "sounds.roundabout.time_erase_end": "???",
   "sounds.roundabout.epitaph_activate": "Future appears",
   "sounds.roundabout.epitaph_fade": "Future vanishes",
 
@@ -1031,6 +1046,7 @@
   "sounds.roundabout.manhattan_bullet_deflect":  "Manhattan Deflects Bullet",
 
   "sounds.roundabout.lighter_click":  "Lighter Click",
+  "sounds.roundabout.black_sabbath_chest_open":  "Open Black Sabbath Chest",
 
   "sounds.roundabout.planet_waves_summon":  "Stand summoned",
   "sounds.roundabout.planet_waves_meteor_shower":  "Meteors Approaching",
@@ -1191,10 +1207,12 @@
   "sounds.roundabout.anubis_uppercut": "Sword Swing",
   "sounds.roundabout.anubis_shieldbreak": "Shieldbreak Charging",
   "sounds.roundabout.anubis_extra": "Sword Clang",
+  "sounds.roundabout.anubis_empower": "Sword Clang",
 
-
-
-
+  "sounds.roundabout.tusk_saw_mine": "Sawing",
+  "sounds.roundabout.tusk_leap": "Stand Leap",
+  "sounds.roundabout.tusk_spin_throw": "Spin Throw",
+  "sounds.roundabout.tusk_shockwave": "Shockwave",
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
@@ -1248,31 +1266,51 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
+  "sounds.roundabout.kq_minesweeper_barrage": "[Shibabababa!]",
   "sounds.roundabout.killer_queen_shiba": "Shiba!",
+  "sounds.roundabout.kq_minesweeper_punch_1": "[Impact!]",
+  "sounds.roundabout.kq_minesweeper_punch_2": "[Heavy Impact!]",
+  "sounds.roundabout.kq_minesweeper_shiba": "[Shiba!]",
   "sounds.roundabout.killer_queen_shibaba": "Shibaba!",
+  "sounds.roundabout.kq_minesweeper_shibaba": "[Shibaba!]",
   "sounds.roundabout.killer_queen_punch": "Stand Punch",
   "sounds.roundabout.sha_moving": "Sheer Heart Attack Moving",
   "sounds.roundabout.sha_jump": "Sheer Heart Attack Jump",
-  "sounds.roundabout.killer_queen_bubble_launch": "Killer Queen Bubble Launch",
+  "sounds.roundabout.killer_queen_bubble_launch": "Air Bubble been created",
+  "sounds.roundabout.kq_minesweeper_bubble_send": "[Air Bubble been created]",
   "sounds.roundabout.killer_queen_explosion": "Killer Queen explosion",
   "sounds.roundabout.killer_queen_bomb_detonate": "Killer Queen detonation",
+  "sounds.roundabout.killer_queen_select": "Target Select",
+  "sounds.roundabout.kq_minesweeper_detonate": "[MINESWEEPER detonation]",
+  "sounds.roundabout.kq_minesweeper_explosion": "[MINESWEEPER explosion]",
   "sounds.roundabout.killer_queen_impale":  "Impaled",
+  "sounds.roundabout.kq_minesweeper_impale":  "[Impaled]",
   "sounds.roundabout.bites_the_dust_detonate":  "Bites the dust Detonate",
   "sounds.roundabout.bites_the_dust_planted":  "Bites the dust Planted",
+  "sounds.roundabout.kq_minesweeper_btd_plant":  "[Bites the dust Planted]",
+  "sounds.roundabout.kq_minesweeper_btd_detonate":  "[Bites the dust Detonate]",
+  "sounds.roundabout.kq_minesweeper_btd_noise":  "[Bites the dust noise...]",
   "sounds.roundabout.bites_the_dust_noise":  "Bites the dust noise...",
   "sounds.roundabout.sha_kocchi_1": "Kocchi Wo Miro!",
-  "sounds.roundabout.sha_alt_kocchi": "[ Kocchi Wo Miro! ]",
-  "sounds.roundabout.sha_alt_dede": "[ Idede! ]",
+  "sounds.roundabout.sha_alt_kocchi": "[Kocchi Wo Miro!]",
+  "sounds.roundabout.sha_alt_cracked_kocchi": "[ occhi Wo... Mi...]",
+  "sounds.roundabout.sha_alt_dede": "[Idededede]",
   "sounds.roundabout.sha_cracked_kocchi": "Kocchi Wo... Mi...",
   "sounds.roundabout.sha_cracked_dede": "Idere...",
   "sounds.roundabout.sha_dededede": "Idededede",
   "sounds.roundabout.sha_summon": "Sheer Heart Attack Summoned",
-  "sounds.roundabout.sha_kocchi_2": "Omo mo deee...",
+  "sounds.roundabout.sha_heavy": "Omo mo deee...",
   "sounds.roundabout.straycat_bubble_redirect": "Air Bubble Redirecting",
   "sounds.roundabout.straycat_bubble_sound": "Air Bubble shoot",
   "sounds.roundabout.killer_queen_heavy_punch" : "Heavy Punch",
+  "sounds.roundabout.kq_minesweeper_heavy_punch" : "[Heavy Punch]",
+  "sounds.roundabout.kq_minesweeper_kick" : "[Stand Punch]",
   "sounds.roundabout.straycat_bubble_pop": "Air Bubble pop",
+  "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
+  "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
@@ -1784,22 +1822,16 @@
   "ability.roundabout.ratt_mining.desc": "Locks Ratt to the block you are facing, causing it to automatically shoot in that direction indefinitely. In this mode, if griefing is enabled, it can melt blocks, making it gradually drill a hole.",
 
 
-  "ability.roundabout.anubis_attack": "Slash",
-  "ability.roundabout.anubis_attack.desc": "Swing Anubis, dealing a sweeping attack. Goes through walls",
-  "ability.roundabout.anubis_sneak_attack": "Crouching Slash",
-  "ability.roundabout.anubis_sneak_attack.desc": "Swipe lower, dealing more knockback and sending further. Different combinations of your first and second attack will result in a different third attack ",
-  "ability.roundabout.anubis_pogo": "Diving Slash",
-  "ability.roundabout.anubis_pogo.desc": "Dive forwards and swing your sword, breaking shield. Does not require your attacks to be off cooldown.",
-  "ability.roundabout.anubis_double_cut": "Double Cut",
-  "ability.roundabout.anubis_double_cut.desc": "Swipe twice, launching targets away. Done by using normal attack twice",
-  "ability.roundabout.anubis_uppercut": "Uppercut",
-  "ability.roundabout.anubis_uppercut.desc": "Swipe upwards, launching you and the target into the air. Holding sneak keeps you grounded. Done by using at least one crouching attack",
-  "ability.roundabout.anubis_thrust": "Thrust Cut",
-  "ability.roundabout.anubis_thrust.desc": "Stab forwards, bleeding and pulling in targets. Is more effective at the right distance. Done by using two sneak attacks.",
-  "ability.roundabout.anubis_quickdraw": "Rushing Slice",
-  "ability.roundabout.anubis_quickdraw.desc": "Wind up your sword, then lunge forwards with incredible speed, cutting everything in your path",
-  "ability.roundabout.anubis_shieldbreak": "Shield Breaker",
-  "ability.roundabout.anubis_shieldbreak.desc": "Do a brief windup, then swipe in front of you. Does moderate knockback and breaks shields for a long time.",
+  "ability.roundabout.anubis_attack": "Slash / Cleave",
+  "ability.roundabout.anubis_attack.desc": "Swing Anubis, dealing a sweeping attack. Goes through walls. When empowered, do a sweeping cut.",
+  "ability.roundabout.anubis_sneak_attack": "Uppercut / Launch",
+  "ability.roundabout.anubis_sneak_attack.desc": "Charge up a dashing uppercut. When empowered, swipe in front of you, launching any blocks in your path",
+  "ability.roundabout.anubis_pogo": "Diving Slash / Stab",
+  "ability.roundabout.anubis_pogo.desc": "Dive forwards and swing your sword, breaking shield. Does not require your attacks to be off cooldown. When empowered, launch even further and inflict bleed.",
+  "ability.roundabout.anubis_quickdraw": "Rushing Slice / Flurry",
+  "ability.roundabout.anubis_quickdraw.desc": "Wind up your sword, then lunge forwards with incredible speed, cutting everything in your path. When empowered, do a quick barrage in front of you.",
+  "ability.roundabout.anubis_shieldbreak": "Shield Breaker / Sword Spin",
+  "ability.roundabout.anubis_shieldbreak.desc": "Do a brief windup, then swipe in front of you. Does moderate knockback and breaks shields for a long time. When empowered, spin around, knocking back and bleeding enemies.",
   "ability.roundabout.anubis_alluring_light": "Alluring Light",
   "ability.roundabout.anubis_alluring_light.desc": "Hypnotize all mobs near you, causing them to follow you for a while.",
   "ability.roundabout.anubis_raging_light": "Raging Light",
@@ -1816,6 +1848,12 @@
   "ability.roundabout.anubis_exp.desc": "Due to Anubis' learning ability, you passively gain up to 50% more exp, even while Anubis is inactive",
   "ability.roundabout.anubis_speed": "Extreme Speed",
   "ability.roundabout.anubis_speed.desc": "Anubis grants incredible athletic ability, allowing you to move much faster and jump higher than before",
+  "ability.roundabout.anubis_sword_throw": "Sword Throw",
+  "ability.roundabout.anubis_sword_throw.desc": "In exchange for sealing your stand, throw Anubis forwards, phasing through walls and wounding whatever it hits",
+  "ability.roundabout.anubis_empower": "Empower",
+  "ability.roundabout.anubis_empower.desc": "Enter a stance that does a different, stronger attack depending on what button you press.",
+  "ability.roundabout.anubis_dodge": "Dash / Weave",
+  "ability.roundabout.anubis_dodge.desc": "A quick burst of speed, useful for dodging. If you time it with a jump, it travels further, but takes longer to recharge. When empowered, dodge past projectiles.",
 
 
   "ability.roundabout.blood_drink": "Blood Suck",
@@ -1947,15 +1985,24 @@
   "ability.roundabout.kq_sha_throw":"Sheer Heart Attack summon",
   "ability.roundabout.kq_sha_throw.desc":"Throws Sheer Heart Attack at the direction you are facing, it will target the hottest entity/block and explode it when contacting 'Nobody can escape Sheer Heart Attack'",
   "ability.roundabout.kq_btd_mode":"Bites The Dust plant",
-  "ability.roundabout.kq_btd_mode.desc":"Plants Bites the Dust in the Non stand user mob that you are facing, making ou unable to use killer queen afterwards",
+  "ability.roundabout.kq_btd_mode.desc":"Killer Queen shinks and floats towards and plants bites the dust if it reach a non-Stand User. Killer Queen will follow that entity and protect it from attacks. You are unable to use your stand during Bites the Dust",
   "ability.roundabout.kq_btd_day":"Bites The Dust Day mode",
-  "ability.roundabout.kq_btd_day.desc":"Detonates Bites the Dust, everything restarts from the beginning of the day, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
+  "ability.roundabout.kq_btd_day.desc":"Detonates Bites the Dust, everything restarts from the beginning of the day, the targets are fated to explode when the day reaches the moment of ignition, stand is locked until you unplant bites the dust which save the targets from explosion",
   "ability.roundabout.kq_btd_combat":"Bites The Dust Combat mode",
-  "ability.roundabout.kq_btd_combat.desc":"Detonates Bites the Dust, everything restarts from the last 20 seconds, the targets are fated to explode when the day reach the moment of ignition, stand is locked until you switch modes which save the targets from explosion",
+  "ability.roundabout.kq_btd_combat.desc":"Detonates Bites the Dust, everything restarts from the last 20 seconds, the targets are fated to explode when the day reaches the moment of ignition, stand is locked until you unplant bites the dust which save the targets from explosion",
   "ability.roundabout.add_stray_cat":"Add Stray Cat",
   "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves",
   "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
+
+
+
+  "ability.roundabout.arms_mode":"Arms Mode",
+  "ability.roundabout.arms_mode.desc":"Hide your stand. Replaces your attacks with up close brawling punching that disable shields like axes. You lose access to many of your abilities while this is toggled, but can use major abilities discretely.",
+
+  "ability.roundabout.mining":"Stand Mining",
+  "ability.roundabout.mining.desc":"Your stand has the capability to mine when holding attack. It is fast and clears out blocks. While sneaking, it does not destroy ore.",
+
 
   "ability.roundabout.meteor_shower":"Meteor Shower",
   "ability.roundabout.meteor_shower.desc":"Draws meteors from the sky towards you. They are small and cause no terrain damage but pass through blocks and hit anything in between. They inflict bleed and good damage.If shifting they will go towards your feet.",
@@ -2381,6 +2428,7 @@
   "skins.roundabout.white_album.iceologer": "Iceologer",
   "skins.roundabout.white_album.manga": "Manga",
   "skins.roundabout.white_album.yuki": "Yuki-onna",
+  "skins.roundabout.white_album.ice": "Ice",
 
   "skins.roundabout.killer_queen.anime": "Part 4",
   "skins.roundabout.killer_queen.agogo": "A-Go!Go!",
@@ -2443,6 +2491,8 @@
   "skins.roundabout.manhattan_transfer.radioactive_transfer": "Radioactive",
   "skins.roundabout.manhattan_transfer.pollination_transfer": "Pollination",
   "skins.roundabout.manhattan_transfer.ufotransfer": "UFO",
+  "skins.roundabout.manhattan_transfer.fleshy_transfer": "Jawling",
+  "skins.roundabout.manhattan_transfer.blaze_transfer": "Blaze",
 
   "skins.roundabout.black_sabbath.anime":  "Anime",
   "skins.roundabout.black_sabbath.manga":  "Manga",
@@ -2453,6 +2503,9 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.oculus":  "Oculus",
+  "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
+  "skins.roundabout.black_sabbath.beach": "Beach",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
@@ -2460,7 +2513,7 @@
   "item.roundabout.anubis_item": "Mysterious Sword",
   "roundabout.anubis_item.requires_mainhand": "Must be in Main Hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
-  "item.roundabout.anubis_item.failure" : "Nobody to kill...",
+  "item.roundabout.anubis_item.message2" : "Nobody to kill... Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
 
   "skins.roundabout.anubis.anime" : "Part 3",
@@ -2773,6 +2826,8 @@
   "text.roundabout.century_stances.redstone_stance": "Redstone Stance",
   "text.roundabout.century_stances.ground_stance": "Ground Stance",
 
+  "text.roundabout.black_sabbath_inventory": "Invisi-Vision On",
+
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
   "config_translatiors_note_2": "of everything beneath this being translated, it is a lot of work. But if you really",
   "config_translatiors_note_3": "have the time and drive to do so, you deserve a cookie. :)",
@@ -2838,6 +2893,30 @@
   "config.roundabout.enableWhiteAlbum.name": "Enable Stand",
   "config.roundabout.enableWhiteAlbum.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
 
+  "config.roundabout.enableKingCrimson.name": "Enable Stand",
+  "config.roundabout.enableKingCrimson.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+
+  "config.roundabout.enableSkippingCooldowns.name": "Item CD Skip",
+  "config.roundabout.enableSkippingCooldowns.desc": "Enable skipping item cooldowns. It's cool, but oppressive in pvp.",
+
+  "config.roundabout.timeSkipRange.name": "Time Skip Range",
+  "config.roundabout.timeSkipRange.desc": "How far entities get skipped. The effect and sounds play 25 blocks further than this as padding for people witnessing it. This could be laggy if you drastically increase the range so I would recommend avoiding that.",
+
+  "config.roundabout.enableDaySkip.name": "Day Skip",
+  "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
+
+  "config.roundabout.blocksCancelEpitaph2.name": "Blocks Stop Epitaph",
+  "config.roundabout.blocksCancelEpitaph2.desc": "By default placing blocks stops your projection so you can't skip someone into traps or hazards.",
+
+  "config.roundabout.freeTimeSkip.name": "Free Time Skip",
+  "config.roundabout.freeTimeSkip.desc": "Enable to be able to skip while using items or attacks.",
+
+
+  "config.roundabout.skipPastDeath.name": "Fake Death Skip",
+  "config.roundabout.skipPastDeath.desc": "Makes your fated self play a fake death message and potentially drop fake items based on gamerule.",
+
+
+
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
   "config.roundabout.blinkWithCamo.desc": "Turn off to make the vampire camo move not blink if it somehow makes you uncomfortable in some way.",
 
@@ -2852,6 +2931,39 @@
 
   "config.roundabout.doNotHurtMeRewindCD.name": "Cower Success CD",
   "config.roundabout.doNotHurtMeRewindCD.desc": "This cooldown appears when you restore health with your counter.",
+
+  "config.roundabout.timeSkipCooldown.name": "Time Skip CD",
+  "config.roundabout.timeSkipCooldown.desc": "This cooldown for time skip in ticks.",
+
+  "config.roundabout.enableEpitaphPreSkip.name": "Epitaph Non-Skip",
+  "config.roundabout.enableEpitaphPreSkip.desc": "Enables using epitaph even with time skip unavailable. This is visually confusing but a highly requested feature.",
+
+  "config.roundabout.predictIdles.name": "Predict Idles",
+  "config.roundabout.predictIdles.desc": "Randomizes movement between idle mobs via epitaph and time skip. This creates a more lively movement, but if you have other mods that cause conflict or only want to read the future in a purely literal sense, disable this.",
+
+  "config.roundabout.epitaphCooldown.name": "Epitaph CD",
+  "config.roundabout.epitaphCooldown.desc": "This cooldown in ticks.",
+
+  "config.roundabout.epitaphInterrupt.name": "Epitaph Interrupt",
+  "config.roundabout.epitaphInterrupt.desc": "Should being attacked interrupt epitaph? For balancing.",
+
+  "config.roundabout.epitaphDuration.name": "Epitaph Duration",
+  "config.roundabout.epitaphDuration.desc": "How long in ticks does epitaph last? (20 ticks = 1 second)",
+  "config.roundabout.timeEraseDuration.name": "Time Erase Duration",
+  "config.roundabout.timeEraseDuration.desc": "How long in ticks does max level time erase last? (20 ticks = 1 second)",
+
+  "config.roundabout.timeEraseMinimumCooldown.name": "TE Min Cooldown",
+  "config.roundabout.timeEraseMinimumCooldown.desc": "How many ticks of cooldown are guaranteed for time erase? (20 ticks = 1 second)",
+
+  "config.roundabout.additionalCooldownPerSecondsUsed2.name": "TE CD Per Sec",
+  "config.roundabout.additionalCooldownPerSecondsUsed2.desc": "How many ticks of cooldown per second spent? (20 ticks = 1 second)",
+
+  "config.roundabout.additionalCooldownFromPlayerRunning.name": "TE Player Run CD",
+  "config.roundabout.additionalCooldownFromPlayerRunning.desc": "If you run far enough in pvp during TE this cooldown is added. (20 ticks = 1 second)",
+
+  "config.roundabout.cooldownSplit.name": "Cooldown Sync",
+  "config.roundabout.cooldownSplit.desc": "Time Erase and Time Skip put each other on cooldown so they can't be chained.",
+
 
   "config.roundabout.postPunishDelay.name": "Punish Delay CD",
   "config.roundabout.postPunishDelay.desc": "How long your rules go on cooldown in general after stealing memories.",
@@ -2877,8 +2989,11 @@
   "config.roundabout.enablePickyIconRendering.name": "Enable Icon Cooldown Hiding",
   "config.roundabout.enablePickyIconRendering.desc": "Hides ability icons when all of your cooldowns are off.",
 
+  "config.roundabout.opacityOfPlayerStandArms.name": "Player Stand Arms",
+  "config.roundabout.opacityOfPlayerStandArms.desc": "The opacity of first person stand arms (as in hidden mode king crimson punches, for example).",
 
-  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Skin Barrage Arms",
+
+  "config.roundabout.opacityOfPlayerBarrageArms.name": "Player Barrage Arms",
   "config.roundabout.opacityOfPlayerBarrageArms.desc": "The opacity of first person barrage arms coming from the player (as in vampirism or hamon rushes).",
 
   "config.roundabout.spiritOutInterruption.name": "Full Spirit Interrupt",
@@ -3104,7 +3219,7 @@
   "config.roundabout.manhattanDashCooldown.name":"Manhattan Transfer Dash Cooldown",
   "config.roundabout.manhattanDashCooldown.desc":"Cooldown for Manhattan Transfer's dash move",
   "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Other Mobs Can Load Your Manhattan Transfer",
-  "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Enderpearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Ender Pearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
   "config.roundabout.windVisionUsesNightVision.name":"Wind Vision uses Potion Effect",
@@ -3112,6 +3227,8 @@
 
   "config.roundabout.fingerBiteCooldown.name":"Finger Bite Cooldown",
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
+  "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
+  "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
   "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3290,9 +3407,20 @@
   "config.roundabout.emperorShootingModePower.desc": "[PLACEHOLDER]",
   "config.roundabout.bulletShootSpeedMultiplier.name": "Speed multiplier",
   "config.roundabout.bulletShootSpeedMultiplier.desc": "[PLACEHOLDER]",
-  "config.roundabout.emperorBulletRange.name": "Bullet Range",
-  "config.roundabout.emperorBulletRange.desc": "[PLACEHOLDER]",
-
+  "config.roundabout.tripleShotHeat.name": "Triple shot heat",
+  "config.roundabout.tripleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotHeat.name": "Single shot heat",
+  "config.roundabout.singleShotHeat.desc": "[PLACEHOLDER]",
+  "config.roundabout.tripleShotCooldown.name": "Triple shot cooldown",
+  "config.roundabout.tripleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.singleShotCooldown.name": "Single shot cooldown",
+  "config.roundabout.singleShotCooldown.desc": "[PLACEHOLDER]",
+  "config.roundabout.maxShootTicks.name": "Maximum shooting ticks",
+  "config.roundabout.maxShootTicks.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorBulletDamage.name": "Bullet damage",
+  "config.roundabout.emperorBulletDamage.desc": "[PLACEHOLDER]",
+  "config.roundabout.emperorShootingModeRange.name": "Bullet range",
+  "config.roundabout.emperorShootingModeRange.desc": "[PLACEHOLDER]",
 
   "config.roundabout.meteorsEmitParticles.name": "Meteors Emit Particles",
   "config.roundabout.meteorsEmitParticles.desc": "If ancient meteors emit particles when touching an impact mound.",
@@ -3642,7 +3770,19 @@
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
 
   "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
-  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (enabled by default)",
+  "config.roundabout.bitesTheDustDayModeAffectGlobalTime.name": "Bites the dust Day Mode rewinds global time",
+  "config.roundabout.bitesTheDustDayModeAffectGlobalTime.desc": "Turn on/off if Bites the Dust Day mode can change the global time (disabled by default), when disabled, it will interpolate the sky on client side instead like how timestop does",
+  "config.roundabout.bitesTheDustPlantCooldown.name": "Bites the Dust plant cooldown",
+  "config.roundabout.bitesTheDustPlantCooldown.desc": "Set the cooldown of the Bites the Dust plant move",
+  "config.roundabout.bitesTheDustCombatActivationCooldown.name": "Bites the Dust Combat Activation cooldown",
+  "config.roundabout.bitesTheDustCombatActivationCooldown.desc": "Set the cooldown of the Bites the Dust combat, this cooldown is seted when ever you plant bites the dust on someone",
+  "config.roundabout.bitesTheDustCombatCooldownBonus.name": "Bites the Dust Combat cooldown bonus",
+  "config.roundabout.bitesTheDustCombatCooldownBonus.desc": "Cooldown bonus that is added with the activation cooldown whenever you detonates it",
+  "config.roundabout.bitesTheDustCombatMobsDamage.name": "Bites the Dust Combat mobs Damage",
+  "config.roundabout.bitesTheDustCombatMobsDamage.desc": "Set the damage amount that bites the dust combat deal to mobs",
+  "config.roundabout.bitesTheDustCombatPlayersDamage.name": "Bites the Dust Combat players Damage",
+  "config.roundabout.bitesTheDustCombatPlayersDamage.desc": "Set the damage amount that bites the dust combat deal to players (if the config of user mobs receiving reduced damage is activated, they receive this damage instead!)",
   "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
   "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
   "config.roundabout.blocksDestruction.name": "Blocks Explode",
@@ -3952,6 +4092,7 @@
   "config.roundabout.whiteAlbumSettings.name": "White Album",
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
+  "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
@@ -4073,6 +4214,15 @@
 
   "config.roundabout.epitaphScreenEffect.name": "Epitaph Effect",
   "config.roundabout.epitaphScreenEffect.desc": "If shaders are off, this renders a screen effect instead.",
+
+  "config.roundabout.timeEraseRedProjections.name": "Time Erase Red",
+  "config.roundabout.timeEraseRedProjections.desc": "Whether or not to draw red copies of entities in front of them during time erase.",
+
+  "config.roundabout.alternateEpitaph.name": "Alternate Epitaph",
+  "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",
+
+  "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
+  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",
 
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.name": "Epitaph Shows Present",
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.desc": "If turned on, renders particles and a phantom image of present locations of mobs during epitaph. The intention is to be distracted, though.",

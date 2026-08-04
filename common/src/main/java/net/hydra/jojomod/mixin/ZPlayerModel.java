@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -405,7 +406,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
 
                     if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        if (SU.roundabout$getStandAnimation() == PowersAnubis.POGO || SU.roundabout$getStandAnimation() == PowersAnubis.STAB) {
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();
@@ -415,13 +416,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
 
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(P) || SU.roundabout$getStandAnimation() == PowerIndex.POWER_4_SNEAK ) ) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
-                        this.leftArm.xRot = 0;
-                        this.leftArm.yRot = 0;
-                        this.rightArm.xRot = 0;
-                        this.rightArm.yRot = 0;
+                        if ($$0.getMainArm() == HumanoidArm.LEFT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.leftArm.xRot = 0;
+                            this.leftArm.yRot = 0;
+                        }
+                        if ($$0.getMainArm() == HumanoidArm.RIGHT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.rightArm.xRot = 0;
+                            this.rightArm.yRot = 0;
+                        }
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
                     } else {
@@ -676,6 +681,36 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     float yRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.yRot = yRot;
                     this.hat.yRot = yRot;
+
+                }
+            }
+
+        }
+        if ($$0 instanceof CloneEntity CE){
+            ItemStack visage = CE.getVisage();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI instanceof ModificationMaskItem MD){
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag != null && tag.contains("head")) {
+                            int faceSize = tag.getInt("head");
+                            float yeah = (float) (0.73F + (faceSize * 0.002));
+                            head.xScale *= yeah;
+                            head.yScale *= yeah;
+                            head.zScale *= yeah;
+                            hat.xScale *= yeah;
+                            hat.yScale *= yeah;
+                            hat.zScale *= yeah;
+                        }
+                    } else {
+                        Vector3f scale = MI.visageData.scaleHead();
+                        head.xScale *= scale.x;
+                        head.yScale *= scale.y;
+                        head.zScale *= scale.z;
+                        hat.xScale *= scale.x;
+                        hat.yScale *= scale.y;
+                        hat.zScale *= scale.z;
+                    }
 
                 }
             }

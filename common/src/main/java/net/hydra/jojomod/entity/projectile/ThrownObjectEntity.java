@@ -44,7 +44,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -53,7 +52,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -90,6 +88,11 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
     public void disableThrow(){
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+    }
+
+    public void setSuperThrowTicks(int ticks) {
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN,true);
+        superThrowTicks = ticks;
     }
 
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
@@ -136,7 +139,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             TWTHROW = 2,
             SOFTTHROW = 3,
             SPINTHROW = 4,
-            STAND_DAMAGE = 5;
+            STAND_DAMAGE = 5,
+            ANUBISTHROW = 6;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -316,15 +320,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (playSounds){
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
-            }
-        } else if (item.getItem() instanceof AnubisItem) {
-            ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
-            anubis.setPos(pos);
-            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 2F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity(anubis);
-
-            if (playSounds){
-                thrower.level().playSound(null, anubis, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else {
             boolean canPlace = getCanPlace;

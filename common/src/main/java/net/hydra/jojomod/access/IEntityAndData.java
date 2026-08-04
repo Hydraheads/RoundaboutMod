@@ -23,6 +23,7 @@ public interface IEntityAndData {
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 
+    boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 
     void roundabout$setNoAAB();
@@ -63,7 +64,13 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
-    void roundabout$setBirthSpawnInfo();
+    void roundabout$setBirthSpawnPos();
+    void roundabout$loadSavedBirthSpawnPos(float x, float y, float z);
+    Vec3 roundabout$getBirthSpawnPos();
+    Vec3 roundabout$getInitialDayPos();
+    void roundabout$setInitialDaySec(boolean updatePos);
+
+    SavedSecond roundabout$getInitialDaySec();
 
     SavedSecond roundabout$getLastSavedSecond();
     void roundabout$addSecondToQueue();

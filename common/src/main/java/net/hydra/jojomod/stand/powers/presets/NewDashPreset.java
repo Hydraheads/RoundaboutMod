@@ -7,12 +7,15 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -21,6 +24,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
@@ -135,13 +139,22 @@ public class NewDashPreset extends StandPowerRewrite {
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
+            if (hasHandsOut()) {
+                getStandUserSelf().roundabout$setStandAnimation(VAULT);
+                refreshArms();
+            }
+
+
             animateStand(StandEntity.BROKEN_GUARD);
             this.poseStand(OffsetIndex.GUARD);
             if (Math.random() > 0.85){
                 addEXP(1);
             }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
-
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.VAULT_NOISE);
+                }
+            }
         }
         return true;
     }
@@ -215,13 +228,15 @@ public class NewDashPreset extends StandPowerRewrite {
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                            0,
-                            dvec.x,
-                            dvec.y,
-                            dvec.z,
-                            0.8);
+                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                0,
+                                dvec.x,
+                                dvec.y,
+                                dvec.z,
+                                0.8);
+                    }
                 }
             }
         }
@@ -229,7 +244,11 @@ public class NewDashPreset extends StandPowerRewrite {
             if (Math.random() > 0.8){
                 addEXP(1);
             }
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), DODGE_NOISE);
+                }
+            }
         }
         return true;
     }

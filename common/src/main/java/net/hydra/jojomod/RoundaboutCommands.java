@@ -458,6 +458,8 @@ public class RoundaboutCommands {
                     ((StandUser) PE).roundabout$setHeat(0);
                     MainUtil.clearCooldowns(PE);
                     ((StandUser) PE).roundabout$updateSealedTicks(-1);
+                    ((StandUser) PE).roundabout$setMaxSealedTicks(-1);
+                    S2CPacketUtil.sendIntPowerDataPacket(PE,PacketDataIndex.S2C_INT_MAX_SEAL,-1);
                     ((IPlayerEntity) PE).rdbt$setLevelDecreaseTicks(0);
                 }
 

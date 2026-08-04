@@ -194,10 +194,8 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
 
                         if (canFreeze(targetPos)
                                 && iceState.canSurvive(level(), targetPos)) {
-                            if (MainUtil.getIsGamemodeApproriateForGrief(getOwner())) {
                                 level().setBlockAndUpdate(targetPos, iceState);
                                 level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
-                            }
                         }
                         // placement logic
                     }
@@ -208,30 +206,33 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     }
     public boolean canFreeze(BlockPos pos) {
         BlockState state = level().getBlockState(pos);
+        if (MainUtil.getIsGamemodeApproriateForGrief(getOwner()) ||
+                state.isAir() || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+            if (!state.canBeReplaced())
+                return false;
 
-        if (!state.canBeReplaced())
-            return false;
+            if (!state.getFluidState().isEmpty())
+                return false;
 
-        if (!state.getFluidState().isEmpty())
-            return false;
+            if (state.getBlock() instanceof LiquidBlockContainer)
+                return false;
 
-        if (state.getBlock() instanceof LiquidBlockContainer)
-            return false;
+            if (state.getBlock() instanceof FireBlock)
+                return false;
 
-        if (state.getBlock() instanceof FireBlock)
-            return false;
+            if (state.getBlock() instanceof StickyIceCoatingBlock)
+                return false;
 
-        if (state.getBlock() instanceof StickyIceCoatingBlock)
-            return false;
+            if (state.getBlock() instanceof StandFireBlock)
+                return false;
 
-        if (state.getBlock() instanceof StandFireBlock)
-            return false;
-
-        if (state.hasProperty(BlockStateProperties.WATERLOGGED)
-                && state.getValue(BlockStateProperties.WATERLOGGED))
-            return false;
+            if (state.hasProperty(BlockStateProperties.WATERLOGGED)
+                    && state.getValue(BlockStateProperties.WATERLOGGED))
+                return false;
 
         return true;
+        }
+        return false;
     }
     @Override
     public boolean needsStandUser(){

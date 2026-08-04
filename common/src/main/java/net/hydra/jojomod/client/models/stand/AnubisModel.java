@@ -26,12 +26,15 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
 public class AnubisModel extends PsuedoHierarchicalModel {
@@ -198,6 +201,14 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
     }
 
+    private static final Vec2[] translations = {
+            new Vec2(-1, -1),
+            new Vec2(1, -1),
+            new Vec2(-1, 1),
+            new Vec2(1, 1),
+
+    };
+
     public void renderFirstPerson(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {
         if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
         this.root().getAllParts().forEach(ModelPart::resetPose);
@@ -225,7 +236,6 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 }
             } */
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
-            alpha = alphaTicks;
             skin = user.roundabout$getStandSkin();
         } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
@@ -239,13 +249,17 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
 
 
+        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
 
         poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
-        poseStack.translate(0,-0.3,0); //  +up
+        if (renderItem || user.roundabout$isPossessed()) {
+            alphaTicks = 1;
+        }
+        poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.9) ,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
-        if (skin == (byte) 0 || skin == (byte)17 || skin == (byte)18) {
+        if (renderItem && !user.roundabout$isPossessed()) {
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
             poseStack.translate(0,0.35,0);
             poseStack.translate(0.1,0,0);
@@ -262,43 +276,26 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.Unsheath,partialTicks,1F);
             }
         } else if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            AnimationDefinition anim = switch (user.roundabout$getStandAnimation()) {
-                case PowerIndex.GUARD -> AnubisFirstPersonAnimations.Block;
-                case PowerIndex.BARRAGE -> AnubisFirstPersonAnimations.BarrageDash;
-                case PowerIndex.BARRAGE_CHARGE -> AnubisFirstPersonAnimations.BarrageCharge;
-                case PowerIndex.BARRAGE_CHARGE_2 -> AnubisFirstPersonAnimations.Shieldbreak;
-                case PowerIndex.BARRAGE_2 -> AnubisFirstPersonAnimations.ShieldbreakHit;
-                case PowersAnubis.DOUBLE -> AnubisFirstPersonAnimations.DoubleCut;
-                case PowersAnubis.UPPERCUT -> AnubisFirstPersonAnimations.Uppercut;
-                case PowersAnubis.THRUST -> AnubisFirstPersonAnimations.Thrust;
-                case PowerIndex.SNEAK_ATTACK_CHARGE -> AnubisFirstPersonAnimations.Pogo;
-
-                default -> null;
-            };
-            if (anim == null) {
-                switch (user.roundabout$getStandAnimation()) {
-                    case PowerIndex.ATTACK -> {
-                        if (PA.activePowerPhase == 1) {
-                            anim = AnubisFirstPersonAnimations.Attack;
-                        } else {
-                            anim = AnubisFirstPersonAnimations.Attack2;
-                        }
-                    }
-                    case PowerIndex.SNEAK_ATTACK -> {
-                        if (PA.activePowerPhase == 1) {
-                            anim = AnubisFirstPersonAnimations.SneakAttack;
-                        } else {
-                            anim = AnubisFirstPersonAnimations.SneakAttack2;
-                        }
-                    }
-                }
-            }
+            AnimationDefinition anim = PA.getFirstPersonAnimation((StandUser) entity);
 
             if (anim != null) {
                 user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
-                this.animate(user.roundabout$getWornStandAnimation(),anim,partialTicks,1F);
-            } else {
-                user.roundabout$getWornStandAnimation().stop();
+                this.animate(user.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
+
+                if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
+                    float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                    time -= (15/20.0F);
+                    if (time > 0 && time < (15/20.0F)) {
+                        float scaler = 0.75F * Math.min(time * 0.7F, 1);
+                        for (int i = 0; i < translations.length; i++) {
+                            Vec2 translation = translations[i];
+                            poseStack.pushPose();
+                            poseStack.translate((time * 8) % 1, translation.x * scaler * Math.cos(partialTicks * 0.5), translation.y * scaler * Math.sin(partialTicks * 0.5));
+                            render(entity, skin, poseStack, bufferSource, packedLight, alpha * (0.4F * (1 - time / 300)));
+                            poseStack.popPose();
+                        }
+                    }
+                }
             }
         }
 
@@ -311,11 +308,10 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             }
         }
 
-        if (PowerTypes.hasStandActive(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            ClientConfig.OpacitySettings opacitySettings = ConfigManager.getClientConfig().opacitySettings;
-            alpha *= (PA.getActivePower() == PowerIndex.NONE ? opacitySettings.opacityOfStand : opacitySettings.opacityWhileAttacking)/100;
+        render(entity,skin,poseStack,bufferSource,packedLight,alpha);
+    }
 
-        }
+    private void render(Entity entity, byte skin, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, float alpha) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
         root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
         StandUser SU = (StandUser) entity;

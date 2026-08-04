@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -58,6 +59,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -81,6 +83,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -211,6 +214,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.setReturnValue(false);
         }
     }
+    @Inject(
+            method = "touch",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$touch(Entity $$0, CallbackInfo ci){
+        if (PowerTypes.isExistentiallyElsewhere(this) ||
+                PowerTypes.isExistentiallyElsewhere($$0)){
+            ci.cancel();
+        }
+
+    }
+
 
     //0.00392156862
     @Unique
@@ -1263,6 +1279,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
         compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
 
+        CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
+        birthInfo.putFloat("birthX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().x());
+        birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
+        birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
+        compoundtag.put("birthInfo", birthInfo);
+
         $$0.put("roundabout",compoundtag);
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
@@ -1375,6 +1397,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("zombieFish")) {
             rdbt$setZombieFish(compoundtag2.getInt("zombieFish"));
         }
+
+        if (compoundtag2.contains("birthInfo")) {
+            CompoundTag birthInfo = compoundtag2.getCompound("birthInfo");
+
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedBirthSpawnPos(
+                    birthInfo.getFloat("birthX"),
+                    birthInfo.getFloat("birthY"),
+                    birthInfo.getFloat("birthZ")
+            );
+        } else {
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
+        }
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
 
 
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
@@ -1746,6 +1781,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
             }
         } else {
+            FishingHook hook = fishing;
+
+            if (hook != null) {
+                if (PowerTypes.isBrawling(this) || ((StandUser)this).roundabout$getEffectiveCombatMode()){
+                    hook.discard();
+                    fishing = null;
+                }
+            }
+
             PowerTypes.fixPowers(this);
             roundabout$qmessageTick();
             byte pos = roundabout$GetPos2();
@@ -1845,6 +1889,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 this.getStyleAnimation().stop();
             }
         }
+        ((StandUser)this).rdbt$synchedData($$0);
     }
     @Override
     @Unique
@@ -2007,6 +2052,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Shadow
     public abstract void resetAttackStrengthTicker();
 
+    @Shadow
+    @Nullable
+    public FishingHook fishing;
+
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$hasLineOfSight(ServerLevel $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if (((StandUser)this).roundabout$getStandPowers().onKilledEntity($$0,$$1)){
@@ -2025,6 +2074,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if(PB.active){
                 PB.active = false;
             }
+            if(PB.selecting){
+                PB.selecting = false;
+            }
+                PB.setNull();
         }
     }
 

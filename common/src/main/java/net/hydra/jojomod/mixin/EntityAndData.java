@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
@@ -12,6 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -20,13 +22,12 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,6 +47,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -57,7 +60,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -224,16 +229,49 @@ public abstract class EntityAndData implements IEntityAndData {
 
     /** Heavens Door and bites the dust related*/
     @Unique
-    public SavedSecond roundabout$birthSpawnSecond;
-    @Unique
-    public int roundabout$birthSpawnTime = 0;
+    public Vec3 spawnPosition = null;
 
     @Unique
-    public void roundabout$setBirthSpawnInfo() {
-        /// probably would be better to be just the spawn location rather the entire data of the spawn
-        //this.roundabout$birthSpawnSecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
-        this.roundabout$birthSpawnTime = (int) (((Entity) (Object) this).level().getDayTime() % 24000.0f);
+    public void roundabout$setBirthSpawnPos() {
+        if (spawnPosition == null) {
+            Vec3 pos = ((Entity) (Object) this).getPosition(1);
+            this.spawnPosition = pos;
+        }
     }
+
+    @Unique
+    public Vec3 roundabout$getBirthSpawnPos() {
+        if (spawnPosition == null) {
+            roundabout$setBirthSpawnPos();
+        }
+
+        return this.spawnPosition;
+    }
+
+    @Unique
+    public Vec3 roundabout$getInitialDayPos() {
+
+        return roundabout$getBirthSpawnPos();
+    }
+
+    @Unique
+    public void roundabout$loadSavedBirthSpawnPos(float x, float y, float z) {
+        this.spawnPosition = new Vec3(x, y, z);
+    }
+
+    SavedSecond initialDaySecond = null;;
+
+    @Unique
+    public void roundabout$setInitialDaySec(boolean updatePos) {
+        initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
+
+        if (updatePos) {
+            initialDaySecond.position = roundabout$getInitialDayPos();
+        }
+    }
+
+    @Unique
+    public SavedSecond roundabout$getInitialDaySec() { return initialDaySecond; }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -383,8 +421,32 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
     }
-    @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "lavaHurt", at = @At("HEAD"), cancellable = true)
+    public void roundabout$lavaHurt(CallbackInfo ci) {
+        if (PowerTypes.isErasingTime(((Entity)(Object) this))){
+            ci.cancel();
+        }
+    }
+    public boolean rdbt$getSharedFlag(int flag){
+        return getSharedFlag(flag);
+    }
+        @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
+        Entity ent = (Entity) (Object) this;
+        if (PowerTypes.isExistentiallyElsewhere(ent)){
+            if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
+            || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ||
+                    (ent instanceof StandEntity se &&
+                            se.getUser() instanceof KingCrimsonCloneEntity kcc2 && ClientUtil.isPlayer(kcc2.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ))) {
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
         if (roundabout$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
             if (this.level().isClientSide()){
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
@@ -633,13 +695,69 @@ public abstract class EntityAndData implements IEntityAndData {
     @SuppressWarnings("deprecation")
     @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
     protected void roundabout$spawnSprintParticle(CallbackInfo ci){
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs)){
+            ci.cancel();
+            return;
+        }
+        if (thirs instanceof LivingEntity LE) {
+            if (((StandUser) this).roundabout$getStandPowers().cancelSprintParticles()) {
+                ci.cancel();
+                return;
+            }
+            if (thirs instanceof Player pl) {
+                if (((IPowersPlayer) pl).rdbt$getPowers().cancelSprintParticles()) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         BlockPos $$0 = getOnPosLegacy();
         BlockState $$1 = this.level().getBlockState($$0);
         if ($$1.getBlock() instanceof FogBlock){
             ci.cancel();
         }
     }
+    @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "isSteppingCarefully", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$isSteppingCarefully(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            cir.setReturnValue(true);
+        }
+    }
+    @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$waterSwimSound(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
 
+        @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
@@ -753,6 +871,9 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     public boolean hasImpulse;
+
+    @Shadow
+    protected abstract boolean getSharedFlag(int i);
 
     @Override
     @Unique

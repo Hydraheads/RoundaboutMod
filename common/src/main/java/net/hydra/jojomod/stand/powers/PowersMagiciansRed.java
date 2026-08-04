@@ -1462,7 +1462,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()){
-            user.roundabout$setSealedTicks(sealTime);
+            user.roundabout$sealStand(sealTime);
         }
         user.roundabout$setActive(false);
     }
@@ -3573,6 +3573,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 "instruction.roundabout.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.self_burn",
                 "instruction.roundabout.press_skill_block", StandIcons.SELF_BURN,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.RED_MINING,0,level,bypas));
         return $$1;
     }
     //Level 7 = Firestorm
