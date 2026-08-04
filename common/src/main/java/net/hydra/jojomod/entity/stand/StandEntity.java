@@ -203,8 +203,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState brokenBlockAnimationState = new AnimationState();
     public final AnimationState standLeapAnimationState = new AnimationState();
     public final AnimationState standLeapEndAnimationState = new AnimationState();
-    public final AnimationState armlessAnimation = new AnimationState();
-    public final AnimationState armlessAnimationIdle = new AnimationState();
 
     public boolean turned = false;
     /**Override this to define animations. Above are animation states defined.*/
@@ -217,7 +215,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             } else {
                 this.idleAnimationState2.stop();
             }
-            if (animation == IDLE && idle == 0) {
+            if (animation == IDLE && (idle == 0 || idle == 4)) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
@@ -231,18 +229,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.idleAnimationState4.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState4.stop();
-            }
-            if (idle == 4) {
-                if (animation == IDLE){
-                    this.armlessAnimationIdle.startIfStopped(this.tickCount);
-                    this.armlessAnimation.stop();
-                } else {
-                    this.armlessAnimation.startIfStopped(this.tickCount);
-                    this.armlessAnimationIdle.stop();
-                }
-            } else {
-                this.armlessAnimationIdle.stop();
-                this.armlessAnimation.stop();
             }
 
             if (animation == FIRST_PUNCH)
