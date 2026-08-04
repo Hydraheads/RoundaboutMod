@@ -73,7 +73,8 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     static final byte
     CLIENT_SYNC = 100,
-    CLIENT_SYNC_TARGET = 101;
+    CLIENT_SYNC_TARGET = 101,
+    CLIENT_SYNC_TARGET_LIGHTER = 102;
 
     public int moveMode = 0;
 
@@ -85,6 +86,9 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             case PowersBlackSabbath.CLIENT_SYNC -> {
                 this.moveMode = data;
+            }
+            case PowersBlackSabbath.CLIENT_SYNC_TARGET_LIGHTER -> {
+                this.EntityTargetOne = self.level().getEntity(data);
             }
         }
         super.updatePowerInt(activePower,data);
@@ -725,6 +729,17 @@ public class PowersBlackSabbath extends NewDashPreset {
                 tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
                 tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
                 this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+            }
+        }
+    }
+
+    public void selectTargetSecond(Entity ent){
+        if(ent != null){
+            if(EntityTargetOne == null) {
+                int id = ent.getId();
+                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
+                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.CLIENT_SYNC_TARGET_LIGHTER, id);
             }
         }
     }
