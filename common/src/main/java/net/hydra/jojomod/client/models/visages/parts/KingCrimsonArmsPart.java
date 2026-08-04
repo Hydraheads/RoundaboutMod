@@ -147,6 +147,8 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == StandPowers.VAULT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
+                    }else if (animation == StandPowers.MINING) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
                     }
 
                 }

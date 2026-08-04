@@ -398,7 +398,8 @@ public class AbilityScapeBasis {
             PUNCH_LEFT = 30,
             PUNCH_RIGHT = 31,
             GUARD = 32,
-            VAULT = 33;
+            VAULT = 33,
+            MINING = 34;
 
     public float guardMod(){
         return 0.2f;

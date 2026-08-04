@@ -1970,7 +1970,7 @@ public class StandPowers extends AbilityScapeBasis {
             byte animationType = userSelf.roundabout$getStandAnimation();
 
             if (handTicks > 0) {
-                if (isGuarding()) {
+                if (isGuarding() || getActivePower() == PowerIndex.MINING) {
                     handTicks = getMaxHandTicks();
                 } else {
                     handTicks--;
@@ -1982,6 +1982,10 @@ public class StandPowers extends AbilityScapeBasis {
             if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
                     !userSelf.roundabout$getGuardBroken()) {
                 userSelf.roundabout$setStandAnimation(GUARD);
+            } else if (PowerTypes.hasHandsActive(self) && getActivePower() == PowerIndex.MINING
+                    && animationType != MINING) {
+                userSelf.roundabout$setStandAnimation(MINING);
+                refreshArms();
             } else if (animationType > 0) {
                 if (animationType == GUARD) {
                     if (!isGuarding() || userSelf.roundabout$getGuardBroken()
@@ -1994,6 +1998,10 @@ public class StandPowers extends AbilityScapeBasis {
                     }
                 } else if (animationType == VAULT) {
                     if (activePower != PowerIndex.VAULT){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
+                } else if (animationType == MINING) {
+                    if (activePower != PowerIndex.MINING){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
                 }
