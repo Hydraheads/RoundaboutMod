@@ -125,12 +125,19 @@ public class ClientUtil {
     public static int getClientTicker(){
         return clientTicker;
     }
+    public static int skinTicker = 10;
+    public static byte lastSkin = 0;
+
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
+        if (skinTicker < 10){
+            skinTicker++;
+        }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
+            skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                 if (PKC.isUsingTimeErase()){
@@ -225,6 +232,12 @@ public class ClientUtil {
             if (skipInterpolationFixAccidentTicks <= -1){
                 skipInterpolation = false;
             }
+        }
+    }
+    public static void skinTicker(byte a, byte b){
+        if (a != b){
+            skinTicker = 0;
+            lastSkin = b;
         }
     }
 
@@ -2091,12 +2104,12 @@ public class ClientUtil {
                 if (isGuarding){
                         stack.mulPose(Axis.XP.rotationDegrees(-17));
                 }
-                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
+                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
-                ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
-                        r, g, b, opacity, 0.85F);
-                ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light,
-                        r, g, b, opacity, 0.85F);
+                ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
             if (ClientUtil.rendersRipperEyes(play)) {

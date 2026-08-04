@@ -112,11 +112,14 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                 int heyTicks = user.roundabout$getArmVanishTicks();
                 boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE) &&
                         (PowerTypes.hasHandsActiveRendering(LE) || ClientUtil.inPowerInventory));
+                ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).roundabout$getStandSkin());
+
 
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
                 if (ClientUtil.inPowerInventory){
-                    heyFull = 1;
+                    heyFull = ClientUtil.skinTicker + fixedPartial;
+                    heyFull = Math.min(heyFull / 10, 1f);
                 } else {
                     if (hasHeyYaOut) {
                         heyFull = heyTicks + fixedPartial;
@@ -126,9 +129,9 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                         heyFull = Math.max(heyFull / 10, 0);
                     }
                     heyFull = Math.min(heyFull, alpha);
-                    if (heyFull <= 0) {
-                        return;
-                    }
+                }
+                if (heyFull <= 0) {
+                    return;
                 }
                 byte animation = user.roundabout$getStandAnimation();
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
