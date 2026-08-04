@@ -72,7 +72,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
 
     static final byte
-    CLIENT_SYNC = 100;
+    CLIENT_SYNC = 100,
+    CLIENT_SYNC_TARGET = 101;
 
     public int moveMode = 0;
 
@@ -174,7 +175,11 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
-        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
+        if(EntityTargetOne != null && isHoldingSneak()) {
+            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
+        }
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
@@ -203,8 +208,16 @@ public class PowersBlackSabbath extends NewDashPreset {
                     blackChestClient();
                 }
             }
-            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
+            case SKILL_2_NORMAL -> {
                 if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
+                        blackSelectClient();
+                }
+            }
+            case SKILL_2_CROUCH -> {
+                if(EntityTargetOne != null){
+                    EntityTargetOne = null;
+                    selectTargetNull();
+                } else {
                     blackSelectClient();
                 }
             }
@@ -528,6 +541,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
         }
 
+        System.out.println(EntityTargetOne + "  is Client: " + isClient());
+
         if(self instanceof Player PL) {
             if (self != null && this.getStandEntity(self) instanceof BlackSabbathEntity BSE) {
                 if(active){
@@ -548,6 +563,18 @@ public class PowersBlackSabbath extends NewDashPreset {
                         BSE.forceDespawn(true);
                     }
                 }
+            }
+        }
+
+        if(EntityTargetOne != null) {
+            DimensionType T = this.getSelf().level().dimensionType();
+            DimensionType t = this.EntityTargetOne.level().dimensionType();
+            if (EntityTargetOne.isRemoved() || !EntityTargetOne.isAlive()) {
+                EntityTargetOne = null;
+                selectTargetNull();
+            } else if(t != T){
+                EntityTargetOne = null;
+                selectTargetNull();
             }
         }
 
@@ -655,13 +682,50 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public Entity EntityTargetOne = null;
 
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int value) {
+        switch (move) {
+
+            case PowersBlackSabbath.CLIENT_SYNC_TARGET -> {
+                this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_TARGET);
+                this.setAttackTime(0);
+                Entity target = this.getSelf().level().getEntity(value);
+                if(value != 0) {
+                    if (target != null) {
+                        EntityTargetOne = target;
+                    }
+                } else {
+                    EntityTargetOne = null;
+                }
+            }
+        }
+        return super.tryIntPower(move, forced, value);
+    }
+
+    private Entity getTarget() {
+        Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
+        if (target instanceof LivingEntity LE) {
+            if (LE.isInvisible()) {
+                return null;
+            }
+        }
+        return target;
+    }
+
+    public void selectTargetNull(){
+        tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, 0);
+        tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, 0);
+    }
+
     public void selectTargetClient(){
-        Entity TE = MainUtil.getTargetEntity(this.self, 100, 10);
-        if (EntityTargetOne == null){
-                EntityTargetOne = TE;
+        Entity TE = getTarget();
+        if (TE != null) {
+            if(EntityTargetOne == null) {
+                int id = TE.getId();
+                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
+                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
                 this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
-        } else {
-            this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 1F);
+            }
         }
     }
 
@@ -822,6 +886,8 @@ public class PowersBlackSabbath extends NewDashPreset {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
                 "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.yap_yap",
+                "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_NULL,4,level,bypass));
         return $$1;
     }
 
