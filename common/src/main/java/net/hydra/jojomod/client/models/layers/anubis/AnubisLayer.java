@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -16,18 +17,21 @@ import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec2;
 import org.joml.Quaternionf;
 
@@ -65,6 +69,18 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         return false;
     } // self-explanatory
 
+    public static boolean shouldShowItem(Entity ent) {
+        boolean isArmed = false;
+        if (ent instanceof Player P) {
+            isArmed = (ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.MAIN_HAND) != HumanoidModel.ArmPose.ITEM
+                    && ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.MAIN_HAND) != HumanoidModel.ArmPose.EMPTY)
+                    || (ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.OFF_HAND) != HumanoidModel.ArmPose.ITEM
+                    && ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.OFF_HAND) != HumanoidModel.ArmPose.EMPTY);
+            isArmed = isArmed &&  ((StandUser)P).roundabout$getStandAnimation() == PowerIndex.NONE;
+        }
+        return isArmed;
+    }
+
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
@@ -75,7 +91,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (entity.isBaby()) {return;}
 
             StandUser SU = (StandUser) entity;
-            if (AnubisLayer.shouldRender(entity) != null) {
+            if (AnubisLayer.shouldRender(entity) != null && !AnubisLayer.shouldShowItem(entity)) {
                 ClientUtil.pushPoseAndCooperate(poseStack,25);
 
 

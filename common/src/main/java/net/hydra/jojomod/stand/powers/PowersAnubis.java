@@ -323,7 +323,9 @@ public class PowersAnubis extends NewDashPreset {
             }
             case SKILL_3_NORMAL -> {
                 if(isEmpowered() && this.getSelf().onGround() && !this.onCooldown(PowerIndex.GLOBAL_DASH)) {
+                    dash();
                     tryPowerPackets(PowersAnubis.WEAVE);
+                    return;
                 }
                 dash();
             }
@@ -644,8 +646,8 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.WEAVE -> {
                 this.empower = false;
                 this.iframeTicks = 15;
-                this.setCooldown(PowerIndex.SKILL_1,80);
                 this.setActivePower(PowersAnubis.WEAVE);
+                this.setCooldown(PowerIndex.SKILL_1,80);
             }
             case PowersAnubis.LAUNCH -> setPowerVariant(PowersAnubis.LAUNCH,100);
 
@@ -1014,7 +1016,7 @@ public class PowersAnubis extends NewDashPreset {
                 || $$0.is(ModDamageTypes.STAND)) && $$0.getEntity() != null ) {
 
             if (iframeTicks > 0) {
-                playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,1F);
+                playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.DODGE_EVENT,SoundSource.PLAYERS,1F,2F);
                 return true;
             }
             return false;
@@ -1109,7 +1111,6 @@ public class PowersAnubis extends NewDashPreset {
         this.setAnimation(move);
         setActivePower(move);
     }
-
 
 
     public void updateAttack() {
