@@ -1316,7 +1316,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void roundabout$setExplosionInflation(int e) {
-        roundabout$explosionInflatTimer = 20;
+        roundabout$explosionInflatTimer = PowersKillerQueen.getDetonateWindup() + 2;
         this.getEntityData().set(ROUNDABOUT$EXPLOSION_INFLATE,e);
     }
     @Unique

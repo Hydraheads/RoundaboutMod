@@ -10,7 +10,6 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
-import net.hydra.jojomod.client.models.layers.KillerQueenExplosionLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
@@ -154,7 +153,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
     private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
-        this.addLayer(new KillerQueenExplosionLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
         this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
         this.addLayer(new FrozenLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
     }
@@ -297,6 +295,16 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             }
         } else if (entity instanceof JosukePartEightNPC jp && jp.isSleeping()){
             matrices.translate(0,-0.4,0);
+        }
+        if (((StandUser)entity).roundabout$getExplosionInflation() > -1) {
+
+            float value = (((StandUser)entity).roundabout$getExplosionInflation() /18.0f);
+            float tween = 0.1f * (value * value * value);
+
+            // 0.08f * (sqrt(1 - pow(1 / value, 2)) - 1)
+
+            matrices.scale(1.0f + tween, 1.0f + tween, 1.0f + tween);
+
         }
     }
 

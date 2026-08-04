@@ -94,7 +94,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public boolean isStandEnabled(){ return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableKillerQueen; }
     @Override public boolean isWip(){return true;}
     @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
-    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.BLUE);}
+    @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
@@ -334,7 +334,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public float getBarrageDamagePlayer(){ return 8; }
 
     @Override public float getBarrageDamageMob(){ return 18;}
-    static int getDetonateWindup() {
+    public static int getDetonateWindup() {
         return ClientNetworking.getAppropriateConfig().killerQueenSettings.explosionActivationCooldown;
     }
 
@@ -627,7 +627,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (!canExecuteMoveWithLevel(getBitesTheDustLevel()) || !hasBitesTheDust) {
+        if (!canExecuteMoveWithLevel(getBitesTheDustLevel()) || !canBitesTheDust()) {
             setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
         } else if (inBitesTheDustMode()) {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.NO_CD);
@@ -1576,8 +1576,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.detonateTimer++;
             }
             if (currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT) {
-                int percentInt = getDetonateWindup() - detonateTimer;
-                float percent = percentInt / (float) getDetonateWindup();
+                float percent = detonateTimer / (float) getDetonateWindup();
                 if (bombEntity != null) {
                     ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
                 }
