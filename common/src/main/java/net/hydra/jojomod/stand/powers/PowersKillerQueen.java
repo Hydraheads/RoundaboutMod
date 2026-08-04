@@ -120,6 +120,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         ENTITY_SHA = 68,
         STRAY_CAT = 69,
         BTD_POWER = 70,
+        BTD_MAX_TICKS = 71,
 
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
@@ -235,6 +236,14 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void syncBTDMaxTicks(int ticks) {
+
+        this.updatePowerInt(PowersKillerQueen.BTD_MAX_TICKS, ticks);
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_MAX_TICKS, ticks);
+        }
+    }
+
 	public Entity bombEntity = null;
     private int bombEntityID = -1;
 
@@ -285,6 +294,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int impaleTicks = 0;
     public static final float mobPlantRange = 3.5F;
     public int btdTicks = -1;
+    public int btdTicksMax = 0;
 
     public static final float impaleRange = 3.5F;
     public static final float blockPlantRange = 3.5f;
@@ -1525,6 +1535,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombBubble = (StrayCatAirBubble) this.getSelf().level().getEntity(data);
                 this.entityTargetBuffer = null;
             }
+            case BTD_MAX_TICKS -> {btdTicksMax = data;}
 
         }
         super.updatePowerInt(activePower,data);
@@ -2003,6 +2014,29 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void updateMaxBtdTicks(boolean dayMode) {
+        int record = 0;
+        if (dayMode) {
+            dayBitedTheDustinit();
+
+            if (!dayBitedTheDust.isEmpty()) {
+                for (int v : dayBitedTheDust.values()) {
+                    if (v > record) { record = v; }
+                }
+            }
+        } else {
+            bitedTheDustInit();
+
+            if (!bitedTheDust.isEmpty()) {
+                for (int v : bitedTheDust.values()) {
+                    if (v > record) { record = v; }
+                }
+            }
+        }
+
+        syncBTDMaxTicks(record);
+    }
+
     public void tryBitesTheDustPlant(StandEntity stand, AABB bb1, AABB bb2) {
         bb1 = bb1.inflate(1.2F);
         bb2 = bb2.inflate(1.2F);
@@ -2307,7 +2341,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                             dayBitedTheDust.put(id, dayTime);
                         }
                     }else{
-                        Roundabout.LOGGER.info("checking for bited the dust... time: " + btdTicks);
                         bitedTheDustInit();
                         if (bitedTheDust.containsKey(id)) {
                             int oldTicks = bitedTheDust.get(id);
@@ -2318,6 +2351,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                             bitedTheDust.put(id, this.btdTicks);
                         }
                     }
+
+                    updateMaxBtdTicks(dayMode);
                 }
             }
         }
@@ -3363,9 +3398,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                                   boolean removeNum) {
         if (inBitesTheDustMode()) {
             int seconds = (int)(this.btdTicks / 20.0);
+            int maxSeconds = (int)(this.btdTicksMax / 20.0);
 
             renderBitesTheDustTimer(context, Minecraft.getInstance(), screenWidth, screenHeight, x,
-                    seconds, seconds,
+                    seconds, Math.max(maxSeconds, seconds),
                     StandIcons.JOJO_ICONS, 0, 70, 0xab93e0);
         }else if (this.SHA != null && !this.SHA.isRemoved()) {
             double distance = SHA.distanceTo(getSelf());
