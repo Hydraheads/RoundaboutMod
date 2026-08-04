@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.mixin.StandUserEntity;
 import net.hydra.jojomod.sound.ModSounds;
@@ -162,7 +163,9 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity(){
         byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-
+        if (skin == BlackSabbathEntity.BEACH) {
+            return ModEntities.BEACH_SABBATH.create(this.getSelf().level());
+        }
         return ModEntities.BLACK_SABBATH.create(this.getSelf().level());
     }
 
@@ -179,7 +182,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
-        if(EntityTargetOne != null && isHoldingSneak()) {
+        if(EntityTargetOne != null) {
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
         } else {
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
@@ -212,17 +215,14 @@ public class PowersBlackSabbath extends NewDashPreset {
                     blackChestClient();
                 }
             }
-            case SKILL_2_NORMAL -> {
-                if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
-                        blackSelectClient();
-                }
-            }
-            case SKILL_2_CROUCH -> {
+            case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
                 if(EntityTargetOne != null){
                     EntityTargetOne = null;
                     selectTargetNull();
                 } else {
-                    blackSelectClient();
+                    if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
+                        blackSelectClient();
+                    }
                 }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
@@ -442,14 +442,20 @@ public class PowersBlackSabbath extends NewDashPreset {
         return null;
     }
 
+    boolean checkSneak(){
+        return EntityTargetOne != null;
+    }
+
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
-        if(slot == 2 && (!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 || this.moveMode == 3 || this.securityTickDown > 1)) {
-            return  true;
+
+        if (slot == 2 && ((!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 || this.moveMode == 3 || this.securityTickDown > 1) && !checkSneak())) {
+            return true;
         }
+
         if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1)){
             return true;
         }
@@ -545,7 +551,7 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
         }
 
-        System.out.println(EntityTargetOne + "  is Client: " + isClient());
+       // System.out.println(EntityTargetOne + "  is Client: " + isClient());
 
         if(self instanceof Player PL) {
             if (self != null && this.getStandEntity(self) instanceof BlackSabbathEntity BSE) {
@@ -800,6 +806,8 @@ public class PowersBlackSabbath extends NewDashPreset {
             return Component.translatable("skins.roundabout.black_sabbath.oculus");
         } else if (skinId == BlackSabbathEntity.SACTHOTH) {
             return Component.translatable("skins.roundabout.black_sabbath.sacthoth");
+        } else if (skinId == BlackSabbathEntity.BEACH){
+            return Component.translatable("skins.roundabout.black_sabbath.beach");
         }
         return Component.translatable("skins.roundabout.black_sabbath.anime");
     }
@@ -851,23 +859,35 @@ public class PowersBlackSabbath extends NewDashPreset {
             PHANTOM_SKIN = 8,
             SWEET_SKIN = 9,
             OCULUS = 10,
-            SACTHOTH_SKIN = 11;
+            SACTHOTH_SKIN = 11,
+            BEACH = 12;
 
     @Override
     public List<Byte> getSkinList() {
-        return Arrays.asList(
-                ANIME_SKIN,
-                MANGA_SKIN,
-                BURNING_SKIN,
-                GIO_GIO_SKIN,
-                VERDANT_SABBATH_SKIN,
-                NIGHT_SKIN,
-                DEPARTURE_SKIN,
-                PHANTOM_SKIN,
-                SWEET_SKIN,
-                OCULUS,
-                SACTHOTH_SKIN
-        );
+        if (isPlaced()) {
+            if (getStandEntity(this.getSelf()) instanceof RattEntity RE) {
+                List<Byte> list = Lists.newArrayList();
+                list.add(RE.getSavedSkin());
+                return list;
+            }
+        } else {
+            List<Byte> list = Lists.newArrayList();
+            list.add(ANIME_SKIN);
+            list.add(MANGA_SKIN);
+            list.add(BURNING_SKIN);
+            list.add(GIO_GIO_SKIN);
+            list.add(VERDANT_SABBATH_SKIN);
+            list.add(NIGHT_SKIN);
+            list.add(DEPARTURE_SKIN);
+            list.add(PHANTOM_SKIN);
+            list.add(SWEET_SKIN);
+            list.add(OCULUS);
+            list.add(SACTHOTH_SKIN);
+            list.add(BEACH);
+
+            return list;
+        }
+        return null;
     }
 
     @Override
@@ -880,12 +900,12 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
-            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+            displayStand = this.getNewStandEntity();
         } else if(displayStand instanceof BlackSabbathEntity BSE){
             BSE.coat_open.start(BSE.tickCount);
         }
         if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
-            displayStand = ModEntities.BLACK_SABBATH.create(this.getSelf().level());
+            displayStand = this.getNewStandEntity();
             displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
         }
         return displayStand;
@@ -912,7 +932,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.LIGHT_PURPLE);
+        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.LIGHT_PURPLE);
     }
     @Override
     public Component ifWipListDev(){
