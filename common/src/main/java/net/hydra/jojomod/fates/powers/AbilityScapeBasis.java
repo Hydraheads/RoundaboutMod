@@ -552,6 +552,9 @@ public class AbilityScapeBasis {
     }
 
 
+
+    public void retractHands(){
+    }
     public boolean hasHandsOut(){
         return false;
     }

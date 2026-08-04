@@ -175,6 +175,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
             $$0.putInt("timeEraseCooldown",0);
         }
     }
+    @Override
+    public void retractHands(){
+        hasArmsOut = false;
+        flipArmRendering();
+    }
     public boolean hasArmsOut = false;
     //hands code for hiding stand
     public boolean canSummonStandAsEntity(){

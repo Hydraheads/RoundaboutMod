@@ -314,6 +314,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
     }
     @Override
+    public void retractHands(){
+        hasArmsOut = false;
+        flipArmRendering();
+    }
+    @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("hasArmsOut",hasArmsOut);
