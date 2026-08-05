@@ -196,13 +196,12 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
-        /*if (desummon && !isClient()) { btdDefuseServer(desummon); }
-        else */
         if (inBitesTheDustMode() && !desummon) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof FollowingStandEntity FSE) {
                 FSE.setOffsetType(OffsetIndex.LOOSE);
             }
+            animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW);
         }
     }
 
@@ -1371,7 +1370,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == BITES_THE_DUST_COMBAT) {
             return this.bitesTheDustCombatActivate();
         } else if (move == BITES_THE_DUST_DAY) {
-            return this.bitesTheDustDayActivate();
+            //return this.bitesTheDustDayActivate();
         }
     	
     	return super.setPowerOther(move,  lastMove);
@@ -1417,9 +1416,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_2_EXTRA) {
             Entity ent = this.getSelf().level().getEntity(chargeTime);
             if (this.canBubbleTarget(ent)) {
-                /*if (isClient()) {
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 0.7F,(float)(1.1+Math.random()*0.2));
-                }*/
 
                 if (this.self instanceof ServerPlayer pl) {
                     S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BUBBLE_TARGET);
