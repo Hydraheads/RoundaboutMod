@@ -322,6 +322,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
         birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
         birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
         compoundtag.put("birthInfo", birthInfo);
+        CompoundTag initialInfo = compoundtag.getCompound("initialDayInfo");
+        birthInfo.putFloat("initialX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().x());
+        birthInfo.putFloat("initialY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().y());
+        birthInfo.putFloat("initialZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().z());
+        compoundtag.put("initialDayInfo", initialInfo);
+
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -347,6 +353,17 @@ public abstract class ZMob extends LivingEntity implements IMob {
             );
         } else {
             ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
+        }
+        if (compoundtag.contains("initialDayInfo")) {
+            CompoundTag initialInfo = compoundtag.getCompound("initialDayInfo");
+
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedInitialDayPos(
+                    initialInfo.getFloat("initialX"),
+                    initialInfo.getFloat("initialY"),
+                    initialInfo.getFloat("initialZ")
+            );
+        } else {
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
         }
         ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
     }
@@ -947,17 +964,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick",
             at = @At(value = "TAIL"))
     private void roundabout$tickMob(CallbackInfo ci) {
-        if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
-            if (FateTypes.isInSunlight(this)) {
-                if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
-                    bm.goHome();
-                } else {
-                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
-                            ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
-                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+        //((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
+        if (!level().isClientSide()) {
+            if (FateTypes.takesSunlightDamage(this)) {
+                if (FateTypes.isInSunlight(this)) {
+                    if (((Mob) (Object) this) instanceof BaseMinion bm && bm.canGoHome()) {
+                        bm.goHome();
+                    } else {
+                        if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
+                                ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)) {
+                            this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                        }
                     }
                 }
             }
+
         }
     }
 

@@ -299,9 +299,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         if (((StandUser)entity).roundabout$getExplosionInflation() > -1) {
 
             float value = (((StandUser)entity).roundabout$getExplosionInflation() /18.0f);
-            float tween = 0.1f * (value * value * value);
-
-            // 0.08f * (sqrt(1 - pow(1 / value, 2)) - 1)
+            float tween = 0.2f * (value * value * value);
 
             matrices.scale(1.0f + tween, 1.0f + tween, 1.0f + tween);
 

@@ -66,9 +66,11 @@ public interface IEntityAndData {
 
     void roundabout$setBirthSpawnPos();
     void roundabout$loadSavedBirthSpawnPos(float x, float y, float z);
+    void roundabout$loadSavedInitialDayPos(float x, float y, float z);
     Vec3 roundabout$getBirthSpawnPos();
     Vec3 roundabout$getInitialDayPos();
     void roundabout$setInitialDaySec(boolean updatePos);
+    void roundabout$setInitialDayPos();
 
     SavedSecond roundabout$getInitialDaySec();
 

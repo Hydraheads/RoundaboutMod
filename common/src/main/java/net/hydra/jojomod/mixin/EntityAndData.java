@@ -232,6 +232,9 @@ public abstract class EntityAndData implements IEntityAndData {
     public Vec3 spawnPosition = null;
 
     @Unique
+    public Vec3 initialDayPosition = null;
+
+    @Unique
     public void roundabout$setBirthSpawnPos() {
         if (spawnPosition == null) {
             Vec3 pos = ((Entity) (Object) this).getPosition(1);
@@ -251,11 +254,20 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public Vec3 roundabout$getInitialDayPos() {
 
+        if (initialDayPosition != null) {
+            return initialDayPosition;
+        }
+
         return roundabout$getBirthSpawnPos();
     }
 
     @Unique
     public void roundabout$loadSavedBirthSpawnPos(float x, float y, float z) {
+        this.spawnPosition = new Vec3(x, y, z);
+    }
+
+    @Unique
+    public void roundabout$loadSavedInitialDayPos(float x, float y, float z) {
         this.spawnPosition = new Vec3(x, y, z);
     }
 
@@ -268,6 +280,11 @@ public abstract class EntityAndData implements IEntityAndData {
         if (updatePos) {
             initialDaySecond.position = roundabout$getInitialDayPos();
         }
+    }
+
+    @Unique
+    public void roundabout$setInitialDayPos() {
+        initialDayPosition = ((Entity) (Object) this).getPosition(1);
     }
 
     @Unique

@@ -75,6 +75,8 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
             new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
     public static final ResourceLocation PW_BIG_METEOR_COSMIC_TEXTURE =
             new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_cosmic.png");
+    public static final ResourceLocation PW_BIG_METEOR_GRAPE_TEXTURE =
+            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_grape.png");
 
 
 
@@ -93,6 +95,8 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
                 //return PW_METEOR_WATER_TEXTURE;
             } else if (sft == 7) {
                 return PW_BIG_METEOR_COSMIC_TEXTURE;
+            } else if (sft == 8) {
+                return PW_BIG_METEOR_GRAPE_TEXTURE;
             }
         }
         return PW_BIG_METEOR_TEXTURE;
