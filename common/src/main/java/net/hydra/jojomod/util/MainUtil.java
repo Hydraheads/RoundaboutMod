@@ -2774,6 +2774,7 @@ public class MainUtil {
                 PacketDataIndex.S2C_INT_LVL_DECREASE,
                 ((IPlayerEntity)player).rdbt$getLevelDecreaseTicks()
         );
+        ((StandUser)player).roundabout$getStandPowers().xTryPower(PowerIndex.NONE,true);
     }
 
 

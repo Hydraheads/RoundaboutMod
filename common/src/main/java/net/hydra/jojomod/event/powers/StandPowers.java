@@ -1960,6 +1960,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     @Override
     public void baseTickPower(){
+
         if (this.self.level().isClientSide()){
 
             if (this.self instanceof Player) {
