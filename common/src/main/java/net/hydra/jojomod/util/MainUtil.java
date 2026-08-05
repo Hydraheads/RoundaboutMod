@@ -2775,6 +2775,8 @@ public class MainUtil {
                 ((IPlayerEntity)player).rdbt$getLevelDecreaseTicks()
         );
         ((StandUser)player).roundabout$getStandPowers().xTryPower(PowerIndex.NONE,true);
+        ((IFatePlayer)player).rdbt$getFatePowers().xTryPower(PowerIndex.NONE,true);
+        ((IPowersPlayer)player).rdbt$getPowers().xTryPower(PowerIndex.NONE,true);
     }
 
 
