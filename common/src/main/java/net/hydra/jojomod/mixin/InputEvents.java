@@ -246,6 +246,10 @@ public abstract class InputEvents implements IInputEvents {
                 ci.setReturnValue(false);
                 return;
             }
+            if (powers.cancelAllRandomMiningThatBreaksMoves()){
+                ci.setReturnValue(false);
+                return;
+            }
             if (mainhand != null && !inTSRange) {
                 if (mainhand.getItem() instanceof ExperienceBishopItem){
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
@@ -449,11 +453,16 @@ public abstract class InputEvents implements IInputEvents {
 
     @Unique
     private void roundabout$justiceContinueAttack(boolean $$0) {
+
         if (!$$0) {
             this.missTime = 0;
         }
         StandUser standComp = ((StandUser) player);
         StandPowers powers = standComp.roundabout$getStandPowers();
+
+        if (powers.cancelAllRandomMiningThatBreaksMoves()){
+            return;
+        }
         LivingEntity piloting = powers.getPilotingStand();
         HitResult $$47 = null;
         if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){

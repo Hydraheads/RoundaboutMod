@@ -236,6 +236,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
         return false;
     }
 
+    @Override
+    public boolean cancelAllRandomMiningThatBreaksMoves(){
+        return isChargingCold() || super.cancelAllRandomMiningThatBreaksMoves();
+    }
+
     public boolean isChargingCold(){
         return (activePower == PowerIndex.EXTRA);
     }
