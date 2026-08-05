@@ -1285,6 +1285,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
         compoundtag.put("birthInfo", birthInfo);
 
+        CompoundTag initialInfo = compoundtag.getCompound("initialDayInfo");
+        birthInfo.putFloat("initialX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().x());
+        birthInfo.putFloat("initialY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().y());
+        birthInfo.putFloat("initialZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().z());
+        compoundtag.put("initialDayInfo", initialInfo);
+
+
         $$0.put("roundabout",compoundtag);
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
@@ -1409,6 +1416,18 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         } else {
             ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
         }
+        if (compoundtag2.contains("initialDayInfo")) {
+            CompoundTag initialInfo = compoundtag2.getCompound("initialDayInfo");
+
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedInitialDayPos(
+                    initialInfo.getFloat("initialX"),
+                    initialInfo.getFloat("initialY"),
+                    initialInfo.getFloat("initialZ")
+            );
+        } else {
+            ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
+        }
+
         ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
 
 
