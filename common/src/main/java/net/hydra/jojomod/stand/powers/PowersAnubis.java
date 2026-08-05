@@ -859,7 +859,12 @@ public class PowersAnubis extends NewDashPreset {
             this.getStandEntity(this.getSelf()).forceDespawn(true);
         }
 
-        if (iframeTicks > 0) {iframeTicks -= 1;}
+        if (iframeTicks > 0) {
+            iframeTicks -= 1;
+            if (iframeTicks == 0 && this.getActivePower() == PowersAnubis.WEAVE) {
+                this.setPowerNone();
+            }
+        }
 
         if (!this.isClient()) {
             // guard
