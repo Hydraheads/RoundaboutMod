@@ -7,6 +7,19 @@ import net.minecraft.client.animation.KeyframeAnimations;
 
 public class AnubisAnimations {
 
+
+/* 3P:
+    POS: -,+,+
+    ROT: +,-,-
+
+    ROTATION:
+    __,swipe,right
+-.-.+
+    POSITION:
+    forward, down, left
+-.-.+
+    tone down X */
+
     public static final AnimationDefinition Unsheathe = AnimationDefinition.Builder.withLength(2.2F)
             .addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
                     new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
