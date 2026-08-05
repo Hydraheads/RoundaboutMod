@@ -296,10 +296,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         } else if (entity instanceof JosukePartEightNPC jp && jp.isSleeping()){
             matrices.translate(0,-0.4,0);
         }
-        if (((StandUser)entity).roundabout$getExplosionInflation() > -1) {
+        if (((StandUser)entity).roundabout$getExplosionInflation() > 4) {
 
-            float value = (((StandUser)entity).roundabout$getExplosionInflation() /18.0f);
-            float tween = 0.2f * (value * value * value);
+            float value = ((((StandUser)entity).roundabout$getExplosionInflation() - 4) /14.0f);
+
+            float tween = 0.14f * (value * value * value);
 
             matrices.scale(1.0f + tween, 1.0f + tween, 1.0f + tween);
 

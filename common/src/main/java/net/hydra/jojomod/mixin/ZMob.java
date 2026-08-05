@@ -317,16 +317,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
         compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
-        CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
-        birthInfo.putFloat("birthX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().x());
-        birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
-        birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
-        compoundtag.put("birthInfo", birthInfo);
-        CompoundTag initialInfo = compoundtag.getCompound("initialDayInfo");
-        birthInfo.putFloat("initialX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().x());
-        birthInfo.putFloat("initialY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().y());
-        birthInfo.putFloat("initialZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getInitialDayPos().z());
-        compoundtag.put("initialDayInfo", initialInfo);
 
         $$0.put("roundabout",compoundtag);
 
@@ -343,29 +333,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (compoundtag.contains("stolenMemory")) {
             rdbt$stolen = compoundtag.getBoolean("stolenMemory");
         }
-        if (compoundtag.contains("birthInfo")) {
-            CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
-
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedBirthSpawnPos(
-                    birthInfo.getFloat("birthX"),
-                    birthInfo.getFloat("birthY"),
-                    birthInfo.getFloat("birthZ")
-            );
-        } else {
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
-        }
-        if (compoundtag.contains("initialDayInfo")) {
-            CompoundTag initialInfo = compoundtag.getCompound("initialDayInfo");
-
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedInitialDayPos(
-                    initialInfo.getFloat("initialX"),
-                    initialInfo.getFloat("initialY"),
-                    initialInfo.getFloat("initialZ")
-            );
-        } else {
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
-        }
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
     }
 
     @Shadow
@@ -429,8 +396,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(false);
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec();
 
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
