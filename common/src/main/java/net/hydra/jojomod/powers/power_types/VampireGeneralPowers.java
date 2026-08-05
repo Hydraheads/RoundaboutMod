@@ -125,7 +125,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     dashOrWallWalk(vp);
                 }
                 case SKILL_3_CROUCH -> {
-                    evilAuraClient();
+                    evilAuraClient(vp);
                 }
                 case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
                     clientCamo();
@@ -208,8 +208,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     }
-    public void evilAuraClient(){
-        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()){
+    public void evilAuraClient(VampiricFate vp){
+        if (vp.canLatchOntoWall() && vp.canWallWalkConfig()) {
+            vp.doWallLatchClient();
+        } else if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()
+        ){
             this.tryPower(EVIL_AURA);
         }
     }
