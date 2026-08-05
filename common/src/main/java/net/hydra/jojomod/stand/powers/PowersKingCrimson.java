@@ -1702,15 +1702,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 "instruction.roundabout.hold_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.KING_CRIMSON_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.epitaph",
                 "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_EPITAPH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, getImpaleLevel(), "ability.roundabout.impale",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_IMAPLE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.roundabout.time_skip",
                 "instruction.roundabout.press_skill", StandIcons.TIME_SKIP,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,0, "ability.roundabout.time_skip_2",
                 "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_2,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.time_skip_3",
                 "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_3,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,0, "ability.roundabout.item_grab",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
@@ -1718,18 +1718,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.blood_splash",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
                 "instruction.roundabout.press_skill_block", StandIcons.KING_CRIMSON_HANDS_ACTIVE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.time_erase",
                 "instruction.roundabout.press_skill", StandIcons.TIME_ERASE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.time_erase_clone",
                 "instruction.roundabout.passive", StandIcons.TIME_ERASE_2,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getArmsLevel(), "ability.roundabout.hologram",
                 "instruction.roundabout.press_skill_block", StandIcons.HOLOGRAM,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.mining",
-                "instruction.roundabout.hold_attack", StandIcons.MINING,0,level,bypas));
+                "instruction.roundabout.hold_attack", StandIcons.KING_CRIMSON_MINING,0,level,bypas));
 
         return $$1;
     }

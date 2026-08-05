@@ -478,6 +478,8 @@ public class StandIcons {
             "textures/gui/icons/the_world/hands_active.png");
     public static final ResourceLocation MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/mining.png");
+    public static final ResourceLocation KING_CRIMSON_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson_mining/mining.png");
     public static final ResourceLocation THE_WORLD_MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/mining.png");
     public static final ResourceLocation SOFT_MINING = new ResourceLocation(Roundabout.MOD_ID,
