@@ -581,7 +581,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 //dibbo
                 if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0 ||
-                        (PowerTypes.hasHandsActive(entity) && ClientUtil.inPowerInventory)){
+                        (((StandUser)ogEnt).roundabout$getStandPowers().hasHandsOut() && ClientUtil.inPowerInventory)){
                     renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,
                             1,1,1);
                 }
