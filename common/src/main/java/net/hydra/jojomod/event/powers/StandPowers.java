@@ -161,10 +161,13 @@ public class StandPowers extends AbilityScapeBasis {
         return 0;
     }
 
-
+    public static boolean gravNorm = false;
     public boolean isGravityNormal(Entity entity){
+        if (gravNorm){
+            return true;
+        }
         if (entity != null){
-            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
+            Direction gd = RotationUtil.getGravityDirection(entity);
             if (gd != Direction.DOWN){
                 return false;
             }
@@ -1177,6 +1180,10 @@ public class StandPowers extends AbilityScapeBasis {
         return !hasStandActive(self);
     }
 
+    public boolean cancelAllRandomMiningThatBreaksMoves(){
+        return isBarraging() || isBarrageCharging();
+    }
+
     /**if the above is true, override this to actually create a fake stand for the power inventory display.*/
     public StandEntity getStandForHUDIfFake(){
         if (displayStand == null){
@@ -1953,6 +1960,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     @Override
     public void baseTickPower(){
+
         if (this.self.level().isClientSide()){
 
             if (this.self instanceof Player) {

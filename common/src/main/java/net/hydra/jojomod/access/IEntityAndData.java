@@ -64,12 +64,8 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
-    void roundabout$setBirthSpawnPos();
-    void roundabout$loadSavedBirthSpawnPos(float x, float y, float z);
-    Vec3 roundabout$getBirthSpawnPos();
-    Vec3 roundabout$getInitialDayPos();
-    void roundabout$setInitialDaySec(boolean updatePos);
 
+    void roundabout$setInitialDaySec();
     SavedSecond roundabout$getInitialDaySec();
 
     SavedSecond roundabout$getLastSavedSecond();

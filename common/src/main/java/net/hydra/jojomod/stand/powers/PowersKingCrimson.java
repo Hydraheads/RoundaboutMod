@@ -765,6 +765,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!isGravityNormal(player)){
             return player.position();
         }
+        Direction gd = RotationUtil.getGravityDirection(player);
         boolean inTimeLockBlock = false;
 
         AABB checkBoxOG = player.getBoundingBox().inflate(-0.05);
@@ -1479,6 +1480,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!isGravityNormal(mob)){
             return mob.position();
         }
+
         if (mob.getControllingPassenger() instanceof Player pl){
             if (mob instanceof Strider str){
                 Vec3 pred = predictStrider(str,40);

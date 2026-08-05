@@ -317,11 +317,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putBoolean("vampire",roundabout$isVampire());
         compoundtag.putBoolean("stolenMemory", rdbt$getStolen());
-        CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
-        birthInfo.putFloat("birthX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().x());
-        birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
-        birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
-        compoundtag.put("birthInfo", birthInfo);
+
         $$0.put("roundabout",compoundtag);
 
         return $$0;
@@ -337,18 +333,6 @@ public abstract class ZMob extends LivingEntity implements IMob {
         if (compoundtag.contains("stolenMemory")) {
             rdbt$stolen = compoundtag.getBoolean("stolenMemory");
         }
-        if (compoundtag.contains("birthInfo")) {
-            CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
-
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedBirthSpawnPos(
-                    birthInfo.getFloat("birthX"),
-                    birthInfo.getFloat("birthY"),
-                    birthInfo.getFloat("birthZ")
-            );
-        } else {
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
-        }
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
     }
 
     @Shadow
@@ -412,8 +396,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(false);
+        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec();
 
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
@@ -947,17 +930,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "tick",
             at = @At(value = "TAIL"))
     private void roundabout$tickMob(CallbackInfo ci) {
-        if (!level().isClientSide() && FateTypes.takesSunlightDamage(this)) {
-            if (FateTypes.isInSunlight(this)) {
-                if (((Mob)(Object)this) instanceof BaseMinion bm && bm.canGoHome()){
-                    bm.goHome();
-                } else {
-                    if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
-                            ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)){
-                        this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+        //((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
+        if (!level().isClientSide()) {
+            if (FateTypes.takesSunlightDamage(this)) {
+                if (FateTypes.isInSunlight(this)) {
+                    if (((Mob) (Object) this) instanceof BaseMinion bm && bm.canGoHome()) {
+                        bm.goHome();
+                    } else {
+                        if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT), this.getMaxHealth() *
+                                ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick)) {
+                            this.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));
+                        }
                     }
                 }
             }
+
         }
     }
 

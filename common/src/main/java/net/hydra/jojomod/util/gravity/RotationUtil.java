@@ -4,14 +4,13 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-
-import javax.swing.text.html.parser.Entity;
 
 //https://github.com/qouteall/GravityChanger/tree/1.20.1-Fabric/src/main/java/gravity_changer/util
 //credit to quoteall
@@ -49,10 +48,15 @@ public abstract class RotationUtil {
         }
     }
 
+    public static Direction getGravityDirection(Entity entity){
+        if (entity == null)
+            return Direction.DOWN;
+        return ((IGravityEntity)entity).roundabout$getGravityDirection();
+    }
     public static Direction getRealFacingDirection(LivingEntity entity){
         Vec2 adjustedDir = new Vec2(entity.getYHeadRot(),entity.getXRot());
 
-        Direction gravdir = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        Direction gravdir = getGravityDirection(entity);
         if (gravdir != Direction.DOWN){
             adjustedDir = RotationUtil.rotPlayerToWorld(adjustedDir,gravdir);
         }
@@ -68,7 +72,7 @@ public abstract class RotationUtil {
     public static Direction getRealFacingDirection2(LivingEntity entity){
         Vec2 adjustedDir = new Vec2(entity.getYHeadRot(),entity.getXRot());
 
-        Direction gravdir = ((IGravityEntity)entity).roundabout$getGravityDirection();
+        Direction gravdir = getGravityDirection(entity);
         Direction realDir = Direction.DOWN;
 
         if (adjustedDir.y > 45){

@@ -1279,11 +1279,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
         compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
 
-        CompoundTag birthInfo = compoundtag.getCompound("birthInfo");
-        birthInfo.putFloat("birthX", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().x());
-        birthInfo.putFloat("birthY", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().y());
-        birthInfo.putFloat("birthZ", (float) ((IEntityAndData)((Entity) (Object) this)).roundabout$getBirthSpawnPos().z());
-        compoundtag.put("birthInfo", birthInfo);
 
         $$0.put("roundabout",compoundtag);
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
@@ -1397,19 +1392,6 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("zombieFish")) {
             rdbt$setZombieFish(compoundtag2.getInt("zombieFish"));
         }
-
-        if (compoundtag2.contains("birthInfo")) {
-            CompoundTag birthInfo = compoundtag2.getCompound("birthInfo");
-
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$loadSavedBirthSpawnPos(
-                    birthInfo.getFloat("birthX"),
-                    birthInfo.getFloat("birthY"),
-                    birthInfo.getFloat("birthZ")
-            );
-        } else {
-            ((IEntityAndData)((Entity) (Object) this)).roundabout$setBirthSpawnPos();
-        }
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec(true);
 
 
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {

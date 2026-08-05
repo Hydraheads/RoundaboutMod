@@ -103,6 +103,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(PlanetWavesEntity.GREEN_SKIN);
                 $$1.add(PlanetWavesEntity.HALLOWEEN);
             } if (Level > 2 || bypass){
+                $$1.add(PlanetWavesEntity.GRAPESODA);
                 $$1.add(PlanetWavesEntity.OCEAN_WAVES);
                 $$1.add(PlanetWavesEntity.SYMPHONY_WAVES);
             }if (Level > 3 || bypass){
@@ -147,6 +148,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             case SPARTA2  -> {return Component.translatable("skins.roundabout.planet_waves.sparta2");}
             case HALLOWEEN  -> {return Component.translatable("skins.roundabout.planet_waves.halloween");}
             case COSMIC  -> {return Component.translatable("skins.roundabout.planet_waves.cosmic");}
+            case GRAPESODA  -> {return Component.translatable("skins.roundabout.planet_waves.grapesoda");}
         }
         return Component.translatable("skins.roundabout.planet_waves.base");
 
@@ -502,22 +504,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private final List<ScheduledMeteor> meteorQueue = new java.util.ArrayList<>();
-    public void tick() {
-        if (self.level().isClientSide()) {
-            clientTickVisualYaw();
-            return;
-        }
 
-        for (int i = 0; i < meteorQueue.size(); i++) {
-            ScheduledMeteor m = meteorQueue.get(i);
-            m.delay--;
-            if (m.delay <= 0) {
-                spawnMeteor(m.spawnPos, m.targetPos);
-                meteorQueue.remove(i);
-                i--;
-            }
-        }
-    }
     private void spawnMeteor(Vec3 spawnPos, Vec3 targetPos) {
         Level level = this.self.level();
         if (level.isClientSide()) return;
@@ -663,6 +650,12 @@ public class PowersPlanetWaves extends NewDashPreset {
     public double buryDepthUp = 0.5;
     public double buryDepthDown = 0.5;
 
+    public float northFacingYaw = 180f;
+    public float southFacingYaw = 0f;
+    public float eastFacingYaw  = -90f;
+    public float westFacingYaw  = 90f;
+
+
     private float standTargetYaw = 0f;
     private float standTargetYawAligned = 0f;
     private float currentStandYawDeg = 0f;
@@ -697,12 +690,10 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (inmeteortracking()) {
             meteornottracking();
         }
-        Vec3 horizontalLook = new Vec3(lookVec.x, 0, lookVec.z);
-        this.standApproachDir = (horizontalLook.lengthSqr() > 1.0E-4)
-                ? horizontalLook.normalize()
-                : new Vec3(0, 0, 1);
-        this.standTargetYaw = (float) (Mth.atan2(-this.standApproachDir.x, this.standApproachDir.z)
-                * (180.0 / Math.PI));
+        this.standTargetYaw = this.self.getYRot();
+
+        float yawRad = this.standTargetYaw * Mth.DEG_TO_RAD;
+        this.standApproachDir = new Vec3(-Mth.sin(yawRad), 0, Mth.cos(yawRad));
 
         Vec3 blockCenter = Vec3.atLowerCornerOf(pos).add(0.5, 0.5, 0.5);
         Vec3 faceNormal  = Vec3.atLowerCornerOf(hitResult.getDirection().getNormal());
@@ -713,9 +704,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         boolean isHorizontal = hitResult.getDirection() != net.minecraft.core.Direction.UP
                 && hitResult.getDirection() != net.minecraft.core.Direction.DOWN;
 
-        this.standTargetYawAligned = isHorizontal
-                ? (float) (Mth.atan2(faceNormal.x, -faceNormal.z) * (180.0 / Math.PI))
-                : this.standTargetYaw;
+        this.standTargetYawAligned = this.standTargetYaw;
 
         Vec3 visualFaceCenter = faceCenter;
         if (isHorizontal) {
@@ -753,7 +742,6 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         StandEntity stand = this.getStandEntity(this.self);
         if (stand != null) {
-            stand.setStandRotationX(-90.0F * Mth.DEG_TO_RAD);
             setStandYaw(stand, this.standTargetYaw);
         }
         if (stand instanceof FollowingStandEntity FSE) {
@@ -774,7 +762,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     private LivingEntity restrainedEntity = null;
-    private byte restrainAnimationType = 0; // 0 = side, 1 = above, 2 = below
+    private byte restrainAnimationType = 0; // 0= side  1= above  2= below
     private int grabCooldownTicks = 0;
     private static final int GRAB_COOLDOWN = 60;
     private boolean isSinking = false;
@@ -786,6 +774,25 @@ public class PowersPlanetWaves extends NewDashPreset {
     private static final int PRE_SINK_DURATION = 10; // 0.5 segundos = 10 ticks
     private boolean isPreSinking = false;
 
+    private float currentStandPitchDeg = 0f;
+    private float preSinkStartPitchDeg = 0f;
+    private float preSinkTargetPitchDeg = 0f;
+
+    private void setStandPitch(StandEntity stand, float pitchDeg) {
+        this.currentStandPitchDeg = pitchDeg;
+        if (stand != null) {
+            stand.setStandRotationX(pitchDeg * Mth.DEG_TO_RAD);
+        }
+    }
+
+    private float getBurialPitchDeg() {
+        if (standHitDirection == null) return 0f;
+        return switch (standHitDirection) {
+            case NORTH, SOUTH, EAST, WEST -> -90.0f;
+            case DOWN  -> 180.0f;
+            default    -> 0.0f; // UP
+        };
+    }
     private void setStandYaw(StandEntity stand, float yawDeg) {
         this.currentStandYawDeg = yawDeg;
         if (stand != null) {
@@ -802,6 +809,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             float progress = 1.0f - (clientPreSinkTicks / (float) PRE_SINK_DURATION);
             float delta = Mth.wrapDegrees(syncedTargetYaw - clientPreSinkStartYaw);
             setStandYaw(stand, clientPreSinkStartYaw + delta * progress);
+            System.out.println("CLIENT-yawTick ticks=" + clientPreSinkTicks + " yaw=" + currentStandYawDeg);
         } else {
             setStandYaw(stand, syncedTargetYaw);
         }
@@ -857,12 +865,36 @@ public class PowersPlanetWaves extends NewDashPreset {
                 sound.getPitch()
         );
     }
+
     @Override
     public void tickPowerEnd() {
         super.tickPowerEnd();
-        if (self.level().isClientSide()) return;
+        if (self.level().isClientSide()) {
+            return;
+        }
+
+        for (int i = 0; i < meteorQueue.size(); i++) {
+            ScheduledMeteor m = meteorQueue.get(i);
+            m.delay--;
+            if (m.delay <= 0) {
+                spawnMeteor(m.spawnPos, m.targetPos);
+                meteorQueue.remove(i);
+                i--;
+            }
+        }
+
         if (grabCooldownTicks > 0) grabCooldownTicks--;
         StandEntity stand = this.getStandEntity(this.self);
+        if (targetingstand && this.getSelf() instanceof Player p) {
+            String side = self.level().isClientSide() ? "CLIENT" : "SERVER";
+            System.out.println(side + " travel=" + isTravelling + " preSink=" + isPreSinking + "(" + preSinkTicks + ") sinking=" + isSinking + " yaw=" + currentStandYawDeg);
+        }
+        if (targetingstand && stand != null) {
+            stand.setYRot(0f);
+            stand.setYBodyRot(0f);
+            stand.yRotO = 0f;
+            stand.yBodyRotO = 0f;
+        }
         // ── 0. CHECK IF BLOCK WAS DESTROYED ────────────────────────────────────
         if (targetingstand && !isTravelling && !isSinking && standTargetPos != null) {
             BlockPos checkPos = BlockPos.containing(standTargetPos.x, standTargetPos.y, standTargetPos.z);
@@ -877,8 +909,6 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
         // ── 1a. PHASE 1 — travel to block face ───────────────────────────────
-        // Rotation here is dynamic (faces the direction of travel). That's fine —
-        // it gets fully overridden the moment we arrive, in phase 1.5 / 1b below.
         if (isTravelling && standTravelTarget != null && stand != null) {
 
             Vec3   current = stand.position();
@@ -890,25 +920,18 @@ public class PowersPlanetWaves extends NewDashPreset {
                 isTravelling  = false;
                 isPreSinking  = true;
                 preSinkTicks  = PRE_SINK_DURATION;
-                preSinkStartYawDeg = currentStandYawDeg;
                 if (standHitDirection != null) {
                     switch (standHitDirection) {
                         case UP   -> animateStand(PlanetWavesEntity.BURY_UPWARDS);
                         case DOWN -> animateStand(PlanetWavesEntity.BURY_DOWNWARDS);
                         default   -> animateStand(PlanetWavesEntity.BURY_HORIZONTAL);
                     }
-                    applyBurialPitch(stand);
                 }
                 syncStandMode();
             } else {
                 animateStand(PlanetWavesEntity.FLOATING);
 
-                double horizLen = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-                float travelYaw   = (float) (Mth.atan2(-dir.x, dir.z) * (180.0 / Math.PI));
-                float travelPitch = (float) (-Mth.atan2(dir.y, horizLen) * (180.0 / Math.PI));
-
-                stand.setStandRotationX(travelPitch * Mth.DEG_TO_RAD);
-                setStandYaw(stand, travelYaw);
+                setStandYaw(stand, this.standTargetYaw);
 
                 double speed = Math.min(dist, 0.5);
                 Vec3   step  = dir.normalize().scale(speed);
@@ -921,18 +944,11 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
 
         // ── 1.5. PRE-SINK — align to the wall before moving inward ───────────
-        // This interpolates yaw from wherever travel left off to the fixed,
-        // approach-independent standTargetYawAligned. Once it hits 0 ticks
-        // remaining, we snap fully aligned and hand off to sinking.
+
         if (isPreSinking && stand != null) {
             if (preSinkTicks > 0) {
                 preSinkTicks--;
-                float progress = 1.0f - (preSinkTicks / (float) PRE_SINK_DURATION);
-                float delta = Mth.wrapDegrees(standTargetYawAligned - preSinkStartYawDeg);
-                setStandYaw(stand, preSinkStartYawDeg + delta * progress);
             } else {
-                setStandYaw(stand, standTargetYawAligned);
-                applyBurialPitch(stand);
                 isPreSinking = false;
                 isSinking    = true;
                 syncStandMode();
@@ -940,10 +956,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
 
         // ── 1b. PHASE 2 — sink into block, fully centered/aligned ───────────
-        // Position AND rotation are held locked to the wall-aligned values every
-        // tick here, not just once at the end — this guarantees the stand enters
-        // the block dead-center on the alignment established in pre-sink, with
-        // no drift from movement math or any outside rotation nudging it.
+
         if (isSinking && sinkTarget != null && stand != null) {
 
             applyBurialRotation(stand);
@@ -978,10 +991,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
 
         // ── 2. BURIED — keep rotation locked to the wall every tick ──────────
-        // Without this, whatever per-tick facing/AI logic FollowingStandEntity
-        // runs on its own can quietly re-rotate the stand after our snap above,
-        // making the buried angle drift toward whatever direction it was
-        // approached/traveled from.
+
         if (!isTravelling && !isSinking && !isPreSinking && targetingstand && stand != null) {
             applyBurialRotation(stand);
         }
@@ -1448,7 +1458,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             boolean wasTargeting = targetingstand;
 
-            // Always fully clear targeting state on desummon, even mid-target/mid-bury.
+
             targetingstand     = false;
             isTravelling       = false;
             isSinking          = false;
@@ -1542,16 +1552,25 @@ public class PowersPlanetWaves extends NewDashPreset {
         boolean prevPreSink = isPreSinking;
 
         targetingstand        = (integer & 1) != 0;
-        tracking              = (integer & 2) != 0;
-        isTravelling          = (integer & 4) != 0;
-        isSinking             = (integer & 8) != 0;
-        restrainAnimationType = (byte)((integer >> 4) & 0x3);
-        int dirOrdinal        = (integer >> 6) & 0x7;
-        standHitDirection     = net.minecraft.core.Direction.values()[dirOrdinal];
-        isPreSinking          = (integer & 512) != 0;
+        tracking               = (integer & 2) != 0;
+        isTravelling            = (integer & 4) != 0;
+        isSinking               = (integer & 8) != 0;
+        restrainAnimationType  = (byte)((integer >> 4) & 0x3);
+        int dirOrdinal          = (integer >> 6) & 0x7;
+        standHitDirection       = net.minecraft.core.Direction.values()[dirOrdinal];
+        isPreSinking            = (integer & 512) != 0;
 
         int yawEncoded = (integer >> 10) & 0xFFFF;
         this.syncedTargetYaw = yawEncoded / 100f;
+
+        if (isPreSinking && !prevPreSink) {
+            clientPreSinkStartYaw = currentStandYawDeg;
+            clientPreSinkTicks = PRE_SINK_DURATION;
+        }
+
+
+        System.out.println("CLIENT-packet travel=" + isTravelling + " preSink=" + isPreSinking
+                + " sinking=" + isSinking + " syncedYaw=" + syncedTargetYaw);
 
         if (isTravelling) {
             StandEntity stand = this.getStandEntity(this.self);
@@ -1560,18 +1579,13 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         if (wasTravel && !isTravelling) {
             StandEntity stand = this.getStandEntity(this.self);
+            applyBurialPitch(stand);
             byte burialAnim = switch (standHitDirection) {
                 case UP   -> PlanetWavesEntity.BURY_UPWARDS;
                 case DOWN -> PlanetWavesEntity.BURY_DOWNWARDS;
                 default   -> PlanetWavesEntity.BURY_HORIZONTAL;
             };
             animateStand(burialAnim);
-            applyBurialPitch(stand);
-        }
-
-        if (!prevPreSink && isPreSinking) {
-            clientPreSinkStartYaw = currentStandYawDeg;
-            clientPreSinkTicks = PRE_SINK_DURATION;
         }
 
         if (targetingstand && restrainAnimationType != 0) {
@@ -1618,6 +1632,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             case PlanetWavesEntity.GREEN_SKIN, PlanetWavesEntity.GREEN_ABLAZE -> StandFireType.GREEN.id;
             case PlanetWavesEntity.DREAD_SKIN, PlanetWavesEntity.DREAD_ABLAZE, PlanetWavesEntity.DREAD_BEAST_SKIN -> StandFireType.DREAD.id;
             case PlanetWavesEntity.JOJONIUM, PlanetWavesEntity.JOJONIUM_ABLAZE -> StandFireType.CREAM.id;*/
+            case PlanetWavesEntity.GRAPESODA-> 8;
             case PlanetWavesEntity.COSMIC-> 7;
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> 6;//ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN-> 5; //ModParticles.GREEN_FLAME;
@@ -1648,7 +1663,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             //case PlanetWavesEntity.SPARTA
             case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
-            case PlanetWavesEntity.PURPLE_SKIN -> ModParticles.PURPLE_FLAME;
+            case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
             case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
             default -> ModParticles.ORANGE_FLAME;

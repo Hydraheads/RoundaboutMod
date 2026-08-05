@@ -117,7 +117,7 @@ public class TheWorldArmsPart extends PsuedoHierarchicalModel {
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
                 if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
-                        && PowerTypes.hasHandsActive(LE)){
+                        && ((StandUser)LE).roundabout$getStandPowers().hasHandsOut()){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {
@@ -147,7 +147,7 @@ public class TheWorldArmsPart extends PsuedoHierarchicalModel {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == StandPowers.VAULT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
-                    }else if (animation == StandPowers.MINING) {
+                    } else if (animation == StandPowers.MINING) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
                     }
 

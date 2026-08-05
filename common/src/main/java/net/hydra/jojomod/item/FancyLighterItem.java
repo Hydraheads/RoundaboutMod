@@ -37,8 +37,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class FancyLighterItem extends BlockItem {
 
-    //TODO: maybe remove the loggers after I finished everything, rn they are vital
-
     public FancyLighterItem(Block $$0, Properties $$1) {
         super($$0, $$1);
     }
@@ -79,8 +77,10 @@ public class FancyLighterItem extends BlockItem {
         ItemStack $$3 = $$1.getItemInHand($$2);
         $$0.playSound(null, $$1.getX(), $$1.getY(), $$1.getZ(), ModSounds.TURNING_ON_LIGHTER_EVENT, SoundSource.PLAYERS, 1F, (float)(0.96F+Math.random()*0.08f));
         $$1.getCooldowns().addCooldown(this, 30);
-        if($$3.getItem() instanceof FancyLighterItem FI){
-            FI.lirOrUnlit($$0, $$1, $$3);
+        if(!$$1.isInWaterOrRain()) {
+            if ($$3.getItem() instanceof FancyLighterItem FI) {
+                FI.lirOrUnlit($$0, $$1, $$3);
+            }
         }
         InteractionResultHolder<ItemStack> placed = super.use($$0,$$1,$$2);
         return placed;
@@ -109,11 +109,11 @@ public class FancyLighterItem extends BlockItem {
                         if (compoundtag.hasUUID("StuffOther")) {
                             if(compoundtag.getUUID("StuffOther") != null) {
                                 Entity user = $$8.getEntity(compoundtag.getUUID("StuffOther"));
-                                //FLBE.setValue($$6.getTagElement("UserIdUUID").getUUID("StuffOther"));
-                                // System.out.println(FLBE.getOwner());
                                 if (user != null && $$0 != null) {
                                     if(user != $$0){
-                                      //  System.out.println("ANGRI STANDOH");
+                                        if(((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+                                            pbs.selectTargetSecond($$0);
+                                        }
                                     }
                                 }
                             }

@@ -114,9 +114,7 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
 
             if(ownerEntity instanceof ServerPlayer spl){
                        if(stepper.getUUID() != fbe.getOwner()){
-                        //   System.out.println("Black Sabbath is really angy >: <");
-                       } else {
-                       //    System.out.println("You are the owner");
+                            bs.selectTargetSecond(stepper);
                        }
             }
 

@@ -22,6 +22,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
@@ -227,46 +228,16 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     /** Heavens Door and bites the dust related*/
-    @Unique
-    public Vec3 spawnPosition = null;
 
     @Unique
-    public void roundabout$setBirthSpawnPos() {
-        if (spawnPosition == null) {
-            Vec3 pos = ((Entity) (Object) this).getPosition(1);
-            this.spawnPosition = pos;
-        }
-    }
+    public Vec3 initialDayPosition = null;
 
-    @Unique
-    public Vec3 roundabout$getBirthSpawnPos() {
-        if (spawnPosition == null) {
-            roundabout$setBirthSpawnPos();
-        }
-
-        return this.spawnPosition;
-    }
-
-    @Unique
-    public Vec3 roundabout$getInitialDayPos() {
-
-        return roundabout$getBirthSpawnPos();
-    }
-
-    @Unique
-    public void roundabout$loadSavedBirthSpawnPos(float x, float y, float z) {
-        this.spawnPosition = new Vec3(x, y, z);
-    }
 
     SavedSecond initialDaySecond = null;;
 
     @Unique
-    public void roundabout$setInitialDaySec(boolean updatePos) {
+    public void roundabout$setInitialDaySec() {
         initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
-
-        if (updatePos) {
-            initialDaySecond.position = roundabout$getInitialDayPos();
-        }
     }
 
     @Unique
