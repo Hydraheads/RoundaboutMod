@@ -1624,6 +1624,10 @@
   "ability.roundabout.phantom_corpse": "Fallen Phantom",
   "ability.roundabout.phantom_corpse.desc": "Phantom corpses can be acquired from phantoms. They can slowly move up and down to attack enemies who are at a different elevation than you, but their health is very low and they are vulnerable to harpoons. This is because their main use is as a mount. Exclusively at night time in the overworld, they can fly you around. This is because the night sky gives them power. Holding space makes you rise higher, and holding the dash ability key makes you sink lower. Healed with membranes while inactive.",
 
+  "ability.roundabout.king_chop": "Court of Crimson",
+  "ability.roundabout.king_chop.desc": "Hold and release to do a more powerful attack. At less than half charge, it is a weak hit. At half and above, it becomes a chop attack that inflicts bleed. When fully charged, it loses the bleed but gains even more power, launching opponents quite far.",
+
+
   "ability.roundabout.fog_clones": "Illusion Clones",
   "ability.roundabout.fog_clones.desc": "Create fake mirages of yourself. If you are attacked, perhaps it was one of the mirages that was attacked, not you...",
   "ability.roundabout.tactics": "Tactics Menu",

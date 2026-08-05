@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -1687,6 +1688,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
+    }
+
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        int startPos = 0;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.KING_CRIMSON_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.KING_CRIMSON_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.king_chop",
+                "instruction.roundabout.hold_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.KING_CRIMSON_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.barrage",
+                "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_EPITAPH,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, getImpaleLevel(), "ability.roundabout.impale",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_IMAPLE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,0, "ability.roundabout.barrage",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_2,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.barrage",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_3,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,0, "ability.roundabout.item_grab",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_block", StandIcons.KING_CRIMSON_HANDS_ACTIVE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.TIME_ERASE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.dodge",
+                "instruction.roundabout.passive", StandIcons.TIME_ERASE_2,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_block", StandIcons.HOLOGRAM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.MINING,0,level,bypas));
+
+        return $$1;
+    }
+
+    public int getArmsLevel(){
+        return 7;
     }
 
     public boolean isSunlightDanger(Entity entity, Vec3 pos){
