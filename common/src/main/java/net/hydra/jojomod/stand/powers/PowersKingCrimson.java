@@ -763,9 +763,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public Vec3 predictPlayer(LivingEntity player, int ticks) {
 
-        if (!isGravityNormal(player)){
-            return player.position();
-        }
         Direction gd = RotationUtil.getGravityDirection(player);
         boolean inTimeLockBlock = false;
 
@@ -814,14 +811,18 @@ public class PowersKingCrimson extends BlockGrabPreset {
             oldPos = third;
         }
         if (player.position().distanceTo(oldPos) < 0.1 && player.getId() != self.getId()){
-            return predictIdle(player,ticks);
+            if (isGravityNormal(player)) {
+                return predictIdle(player, ticks);
+            }
         }
         Vec3 baseVelocity = player.position()
                 .subtract(oldPos)
                 .normalize()
                 .scale(getSped(player) * (2.5+(Math.random()*0.5)));
-        if (baseVelocity.y > 0)
-            baseVelocity = baseVelocity.multiply(1, 0, 1);
+        baseVelocity = RotationUtil.vecWorldToPlayer(baseVelocity,gd);
+        if (baseVelocity.y > 0) {
+            baseVelocity = new Vec3(baseVelocity.x, 0, baseVelocity.z);
+        }
 
         for (int i = 0; i < ticks; i++) {
             hitWall2 = false;
@@ -832,10 +833,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             Vec3 velocity = baseVelocity;
 
-            BlockPos ft = BlockPos.containing(predicted);
+            BlockPos ft = BlockPos.containing(
+                    predicted.add(RotationUtil.vecPlayerToWorld(0, -0d, 0, gd))
+            );
             if (!player.isInWater() && !player.isFallFlying() && !MainUtil.inWater(level.getBlockState(ft))
             && !(player instanceof Player pl2 && pl2.getAbilities().flying) && !(player instanceof FlyingMob)) {
-                velocity = velocity.add(0, -1, 0);
+                if (isGravityNormal(player)) {
+                    velocity = velocity.add(0, -1, 0);
+                } else {
+                    velocity = velocity.add(0, -0.2, 0);
+                }
             }  else {
                 velocity = velocity.multiply(1,0,1);
             }
@@ -850,60 +857,66 @@ public class PowersKingCrimson extends BlockGrabPreset {
             );
 
             // ----- Try stepping up -----
-            boolean hitWall =
-                    collided.x != velocity.x ||
-                            collided.z != velocity.z;
+            if (isGravityNormal(player)) {
+                boolean hitWall =
+                        collided.x != velocity.x ||
+                                collided.z != velocity.z;
 
-            if (hitWall) {
-                i+=3;
-                double stepHeight = 1.0;
+                if (hitWall) {
+                    i += 3;
+                    double stepHeight = 1.0;
 
-                // Move upward first
-                Vec3 up = Entity.collideBoundingBox(
-                        player,
-                        new Vec3(0, stepHeight, 0),
-                        box,
-                        level,
-                        List.of()
-                );
+                    // Move upward first
+                    Vec3 up = Entity.collideBoundingBox(
+                            player,
+                            new Vec3(0, stepHeight, 0),
+                            box,
+                            level,
+                            List.of()
+                    );
 
-                AABB steppedBox = box.move(up);
+                    AABB steppedBox = box.move(up);
 
-                // Move horizontally while elevated
-                Vec3 forward = Entity.collideBoundingBox(
-                        player,
-                        new Vec3(velocity.x, 0, velocity.z),
-                        steppedBox,
-                        level,
-                        List.of()
-                );
+                    // Move horizontally while elevated
+                    Vec3 forward = Entity.collideBoundingBox(
+                            player,
+                            new Vec3(velocity.x, 0, velocity.z),
+                            steppedBox,
+                            level,
+                            List.of()
+                    );
 
-                steppedBox = steppedBox.move(forward);
+                    steppedBox = steppedBox.move(forward);
 
-                // Move back down
-                Vec3 down = Entity.collideBoundingBox(
-                        player,
-                        new Vec3(0, -stepHeight, 0),
-                        steppedBox,
-                        level,
-                        List.of()
-                );
+                    // Move back down
+                    Vec3 down = Entity.collideBoundingBox(
+                            player,
+                            new Vec3(0, -stepHeight, 0),
+                            steppedBox,
+                            level,
+                            List.of()
+                    );
 
-                Vec3 steppedMove = up.add(forward).add(down);
+                    Vec3 steppedMove = up.add(forward).add(down);
 
-                // Prefer whichever gives more horizontal travel
-                if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
-                    collided = steppedMove;
-                }
-                if (collided.y == 0){
-                    hitWall2 = true;
+                    // Prefer whichever gives more horizontal travel
+                    if (forward.horizontalDistanceSqr() > collided.horizontalDistanceSqr()) {
+                        collided = steppedMove;
+                    }
+                    if (collided.y == 0) {
+                        hitWall2 = true;
+                    }
                 }
             }
+
+
             previousPreviousSafe = previousSafe;
             previousSafe = predicted;
 
-            predicted = predicted.add(collided);
-            box = box.move(collided);
+            Vec3 worldCollided = RotationUtil.vecPlayerToWorld(collided, gd);
+
+            predicted = predicted.add(worldCollided);
+            box = box.move(worldCollided);
             if (player.getId() != self.getId()) {
                 AABB checkBox = box.inflate(-0.05);
 
@@ -982,43 +995,61 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     private boolean hasGroundWithin3Blocks(Level level, LivingEntity player, Vec3 predicted) {
-        if (player instanceof Player pl2 && pl2.getAbilities().flying){
+        if (player instanceof Player pl && pl.getAbilities().flying) {
             return true;
         }
 
+        Direction gd = RotationUtil.getGravityDirection(player);
+
+        // Work in player coordinates
+        Vec3 playerPos = RotationUtil.vecWorldToPlayer(predicted, gd);
+
         double halfWidth = player.getBbWidth() * 0.5 - 0.05;
 
-        // Check each corner of the player's feet
         double[] xs = {
-                predicted.x - halfWidth,
-                predicted.x + halfWidth
-        };
-        double[] zs = {
-                predicted.z - halfWidth,
-                predicted.z + halfWidth
+                playerPos.x - halfWidth,
+                playerPos.x + halfWidth
         };
 
-        int startY = Mth.floor(predicted.y - 0.01);
+        double[] zs = {
+                playerPos.z - halfWidth,
+                playerPos.z + halfWidth
+        };
+
+        int startY = Mth.floor(playerPos.y - 0.01);
+
+        int dist = 3;
+        if (!isGravityNormal(player)) {
+            dist = 1;
+        }
 
         for (double x : xs) {
             for (double z : zs) {
 
                 boolean supported = false;
 
-                for (int dy = 1; dy <= 3; dy++) {
-                    BlockPos pos = BlockPos.containing(x, startY - dy, z);
+                for (int dy = 1; dy <= dist; dy++) {
+
+                    // Point beneath the player in PLAYER coordinates
+                    Vec3 worldSample = RotationUtil.vecPlayerToWorld(
+                            x,
+                            startY - dy,
+                            z,
+                            gd
+                    );
+
+                    BlockPos pos = BlockPos.containing(worldSample);
 
                     BlockState state = level.getBlockState(pos);
 
                     if (!state.isAir()
                             && state.blocksMotion()
-                            && state.getCollisionShape(level, pos).isEmpty() == false) {
+                            && !state.getCollisionShape(level, pos).isEmpty()) {
                         supported = true;
                         break;
                     }
                 }
 
-                // One corner has no support within 3 blocks
                 if (!supported) {
                     return false;
                 }
@@ -1840,8 +1871,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity.isPassenger()){
             return;
         }
-        if (!isGravityNormal(entity))
-            return;
         double distance = entity.position().distanceTo(snapshot.position);
         if (distance > getSkipBonusRange()) {
             return;
@@ -2212,7 +2241,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         for (TimeSkipSnapshot snapshot : epitaph.values()) {
-            if (!skipSelf && snapshot.getEntityId() == self.getId()){
+            if (snapshot.getEntityId() == self.getId()){
+                if (!skipSelf) {
+                    continue;
+                }
+            }
+            if (!isGravityNormal(self)){
                 continue;
             }
             skipSingle(snapshot);

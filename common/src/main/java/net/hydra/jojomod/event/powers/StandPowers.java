@@ -161,11 +161,7 @@ public class StandPowers extends AbilityScapeBasis {
         return 0;
     }
 
-    public static boolean gravNorm = false;
     public boolean isGravityNormal(Entity entity){
-        if (gravNorm){
-            return true;
-        }
         if (entity != null){
             Direction gd = RotationUtil.getGravityDirection(entity);
             if (gd != Direction.DOWN){
