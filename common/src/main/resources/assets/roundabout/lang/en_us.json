@@ -1637,7 +1637,7 @@
   "ability.roundabout.time_skip_2.desc": "A variation of skip that appears while epitaph is up. Moves entities to their forecasted locations, sealing their fates. Great for strategic positioning in fights.",
 
   "ability.roundabout.time_skip_3": "Time Erase Skip (Self)",
-  "ability.roundabout.time_skip_3.desc": "A variation of skip that appears while epitaph is up. While you're blocking, you see your own fated position that is generated based on your movement input when epitaph is pressed. Skipping time puts you in that position. It's good for knowing exactly where you are traveling, and standing still and pressing epitaph can also let you create an anchor point of sorts.",
+  "ability.roundabout.time_skip_3.desc": "A variation of skip that appears while epitaph is up. While you're blocking, you see your own fated position that is generated based on your movement input when epitaph is pressed. Skipping time puts you in that position. It's good for knowing exactly where you are traveling, and standing still and pressing epitaph can also let you create an anchor point of sorts. Does not work on walls.",
 
   "ability.roundabout.blood_splash": "Blood Splash",
   "ability.roundabout.blood_splash.desc": "You cause yourself to bleed and launch the blood at great force. This skill damages opponents and temporarily blinds players. If used during time erase, it will be stored on the target. When time erase is resumed, the target will not take damage, but be confused/blinded for longer. Builds up bleed on yourself you're already bleeding, but time skip counteracts this. If you have bleed II or higher, your bleed time will not increase.",
