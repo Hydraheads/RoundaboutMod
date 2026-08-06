@@ -58,6 +58,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.ShoulderRidingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -410,7 +411,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (liv instanceof Creeper creeper && creeper.getSwelling(1) > 0){
             return predicted;
         }
-        if (liv instanceof FlyingMob){
+        if (liv instanceof FlyingMob || liv instanceof ShoulderRidingEntity ||
+                !MainUtil.isActuallyALivingEntityNoCap(liv)){
             return predicted;
         }
         if (liv instanceof WanderingTrader){
