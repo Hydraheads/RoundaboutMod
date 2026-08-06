@@ -283,7 +283,12 @@ public class ClientUtil {
     public static boolean isPlayerOrCamera(Entity ent){
         Minecraft mc = Minecraft.getInstance();
         if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
-                !(mc.player !=null && ent.is(mc.player))) {
+                !(mc.player !=null && ent.is(mc.player))
+        && !(
+                ent instanceof LivingEntity LV && ((StandUser)LV).roundabout$getStandPowers().isPiloting()
+                && ((StandUser)LV).roundabout$getStandPowers().getPilotingStand() != null &&
+                ((StandUser)LV).roundabout$getStandPowers().getPilotingStand().getUUID() == ent.getUUID())
+        ) {
             return true;
         }
         return false;
