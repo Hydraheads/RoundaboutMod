@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -239,7 +240,48 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean setPowerGuard() {
-        return super.setPowerGuard();
+        if (PowerTypes.hasHandsActive(self)){
+            if (!self.level().isClientSide()) {
+                if (!((StandUser) this.self).roundabout$getGuardBroken()) {
+                    getStandUserSelf().roundabout$setStandAnimation(GUARD);
+                } else {
+                    getStandUserSelf().roundabout$setStandAnimation(NONE);
+                }
+                refreshArms();
+            }
+        } else {
+            if (((StandUser)this.self).roundabout$getGuardBroken()) {
+                animateStand(StandEntity.BROKEN_GUARD);
+            } else {
+                animateStand(StandEntity.BLOCK);
+            }
+            this.poseStand(OffsetIndex.GUARD);
+        }
+        this.setActivePower(PowerIndex.GUARD);
+        this.attackTimeDuring = 0;
+        return true;
+    }
+
+    @Override
+    public boolean setPowerBarrageCharge() {
+        animateStand(StandEntity.BARRAGE_CHARGE);
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE_CHARGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.clashDone = false;
+        playBarrageChargeSound();
+        return true;
+    }
+
+    @Override
+    public void setPowerBarrage() {
+        this.attackTimeDuring = 0;
+        this.setActivePower(PowerIndex.BARRAGE);
+        this.poseStand(OffsetIndex.ATTACK);
+        this.setAttackTimeMax(this.getBarrageRecoilTime());
+        this.setActivePowerPhase(this.getActivePowerPhaseMax());
+        animateStand(StandEntity.BARRAGE);
+        playBarrageCrySound();
     }
 
     @Override
