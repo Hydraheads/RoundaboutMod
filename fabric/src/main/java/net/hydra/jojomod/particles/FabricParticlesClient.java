@@ -71,10 +71,10 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.RAGING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ALLURING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_HOLE, TuskHoleParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.KILLER_QUEEN_EXPLOSION, PWFireballExplosionParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_FIREBALL_EXPLOSION, PWBlastwaveExplosionParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLASTWAVE_EXPLOSION, PWMushroomExplosionParticle.Provider::new);
-        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_MUSHROOM_EXPLOSION, KQExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.KILLER_QUEEN_EXPLOSION, KQExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_FIREBALL_EXPLOSION, PWFireballExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLASTWAVE_EXPLOSION, PWBlastwaveExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_MUSHROOM_EXPLOSION, PWMushroomExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.COLD_CRACKLE, ColdCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);

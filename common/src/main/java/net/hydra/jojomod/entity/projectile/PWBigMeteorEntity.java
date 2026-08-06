@@ -528,18 +528,18 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
                 if (!slowing) {
                     //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_FIREBALL_EXPLOSION, 0.35f);
-                    /*((ServerLevel) this.level()).sendParticles(
-                            PPW.getFlameParticle(),
+                    ((ServerLevel) this.level()).sendParticles(
+                            PPW.getFireballEXPLOSIONParticle(),
                             this.getX(), this.getY(), this.getZ(),
-                            100, 0.005, 0.01, 0.005, 0.02
-                    );*/
+                            1, 0.005, 0.01, 0.005, 0.02
+                    );
                     //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_BLASTWAVE_EXPLOSION, 0.35f);
-                    /*((ServerLevel) this.level()).sendParticles(
-                            PPW.getFlameParticle(),
+                    ((ServerLevel) this.level()).sendParticles(
+                            PPW.getBlastwaveEXPLOSIONParticle(),
                             this.getX(), this.getY(), this.getZ(),
-                            100, 0.005, 0.01, 0.005, 0.02
-                    );*/
-                    ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_MUSHROOM_EXPLOSION, 1.50f);
+                            1, 0.005, 0.01, 0.005, 0.02
+                    );
+                    ExplosionUtil.explodeEffects(this.position(), this.level(),  PPW.getMushroomEXPLOSIONParticle(), 1.75f);
                 }
 
 
