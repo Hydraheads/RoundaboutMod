@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -526,17 +527,19 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 );
 
                 if (!slowing) {
-                    ((ServerLevel) this.level()).sendParticles(
+                    //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_FIREBALL_EXPLOSION, 0.35f);
+                    /*((ServerLevel) this.level()).sendParticles(
                             PPW.getFlameParticle(),
-                            this.getX(),
-                            this.getY(),
-                            this.getZ(),
-                            100,
-                            0.005,
-                            0.01,
-                            0.005,
-                            0.02
-                    );
+                            this.getX(), this.getY(), this.getZ(),
+                            100, 0.005, 0.01, 0.005, 0.02
+                    );*/
+                    //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_BLASTWAVE_EXPLOSION, 0.35f);
+                    /*((ServerLevel) this.level()).sendParticles(
+                            PPW.getFlameParticle(),
+                            this.getX(), this.getY(), this.getZ(),
+                            100, 0.005, 0.01, 0.005, 0.02
+                    );*/
+                    ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_MUSHROOM_EXPLOSION, 1.50f);
                 }
 
 

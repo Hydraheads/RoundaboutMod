@@ -102,4 +102,7 @@ public class ModParticles {
 
     public static SimpleParticleType TUSK_HOLE;
     public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
+    public static SimpleParticleType PW_FIREBALL_EXPLOSION;
+    public static SimpleParticleType PW_BLASTWAVE_EXPLOSION;
+    public static SimpleParticleType PW_MUSHROOM_EXPLOSION;
 }
