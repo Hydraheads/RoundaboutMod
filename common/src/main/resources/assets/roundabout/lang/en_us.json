@@ -1624,6 +1624,34 @@
   "ability.roundabout.phantom_corpse": "Fallen Phantom",
   "ability.roundabout.phantom_corpse.desc": "Phantom corpses can be acquired from phantoms. They can slowly move up and down to attack enemies who are at a different elevation than you, but their health is very low and they are vulnerable to harpoons. This is because their main use is as a mount. Exclusively at night time in the overworld, they can fly you around. This is because the night sky gives them power. Holding space makes you rise higher, and holding the dash ability key makes you sink lower. Healed with membranes while inactive.",
 
+  "ability.roundabout.king_chop": "Court of Crimson",
+  "ability.roundabout.king_chop.desc": "Hold and release to do a more powerful attack. At less than half charge, it is a weak hit. At half and above, it becomes a chop attack that inflicts bleed. When fully charged, it loses the bleed but gains even more power, launching opponents quite far.",
+
+  "ability.roundabout.epitaph": "Epitaph",
+  "ability.roundabout.epitaph.desc": "Shows you a forecast of the future. You see entities at their future positions, blinding yourself to the present. Skipping time then moves everything to these positions, sealing their fate.",
+
+  "ability.roundabout.time_skip": "Time Erase Skip",
+  "ability.roundabout.time_skip.desc": "Skips about 5 seconds of time. Everyone then becomes disoriented. In skipped time, all that's left is the result, with no hint of how it was reached. Since you remove yourself from fate, you alone can skip through dangers like lava and fall damage. Potion effect time is skipped as well, as are furnace cooking times. Players eating will finish eating, and others using items will stop doing so.",
+
+  "ability.roundabout.time_skip_2": "Time Erase Skip (Epitaph)",
+  "ability.roundabout.time_skip_2.desc": "A variation of skip that appears while epitaph is up. Moves entities to their forecasted locations, sealing their fates. Great for strategic positioning in fights.",
+
+  "ability.roundabout.time_skip_3": "Time Erase Skip (Self)",
+  "ability.roundabout.time_skip_3.desc": "A variation of skip that appears while epitaph is up. While you're blocking, you see your own fated position that is generated based on your movement input when epitaph is pressed. Skipping time puts you in that position. It's good for knowing exactly where you are traveling, and standing still and pressing epitaph can also let you create an anchor point of sorts. Does not work on walls.",
+
+  "ability.roundabout.blood_splash": "Blood Splash",
+  "ability.roundabout.blood_splash.desc": "You cause yourself to bleed and launch the blood at great force. This skill damages opponents and temporarily blinds players. If used during time erase, it will be stored on the target. When time erase is resumed, the target will not take damage, but be confused/blinded for longer. Builds up bleed on yourself you're already bleeding, but time skip counteracts this. If you have bleed II or higher, your bleed time will not increase.",
+
+  "ability.roundabout.time_erase": "Time Erase",
+  "ability.roundabout.time_erase.desc": "Blows away roughly a dozen seconds of time. During that erased time, things progress normally, but you are removed from fate. Thus, you can walk through mobs and take no damage from anything. Healing is paused as well, and you cannot use any items or interact with the world meaningfully. You can hover by holding jump. Mobs are distracted by your fated self. Attacking cancels it (with the sole exception of blood splash). The more time you use, the longer it takes to recharge.",
+
+  "ability.roundabout.time_erase_clone": "Fated Self",
+  "ability.roundabout.time_erase_clone.desc": "During erased time, your fated actions play out as they would have. Mobs punch at what appears to be the air, and get attacked by your fated actions. Your inputs before pressing time erase determine its actions: If you walk backwards, your fated self turns and walks away. If you sprint, your fated self will too. If you are off the ground, it will jump erratically. If you run from your current attack target, it will as well. If you stand still or sneak, it will copy those motions. Arms Mode makes it peaceful.",
+
+  "ability.roundabout.hologram": "Hologram",
+  "ability.roundabout.hologram.desc": "Epitaph is like a projector. Instead of using it on your hands, hair, etc, you use it to show a glimpse of the future to those around you. This hologram appears to every player as themselves. Mobs will attack it like a decoy if it is closer to them than you. As a result, you can manipulate their positions with time skip.",
+
+
   "ability.roundabout.fog_clones": "Illusion Clones",
   "ability.roundabout.fog_clones.desc": "Create fake mirages of yourself. If you are attacked, perhaps it was one of the mirages that was attacked, not you...",
   "ability.roundabout.tactics": "Tactics Menu",
@@ -2314,6 +2342,7 @@
   "skins.roundabout.planet_waves.sparta2": "Blue Spartan",
   "skins.roundabout.planet_waves.halloween": "Pumpkin",
   "skins.roundabout.planet_waves.cosmic": "Cosmic Waves",
+  "skins.roundabout.planet_waves.grapesoda": "Grape Soda",
 
   "skins.roundabout.ratt.anime" : "Part 4",
   "skins.roundabout.ratt.manga" : "Manga",

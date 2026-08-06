@@ -538,8 +538,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         }
         return super.setPowerOther(move,lastMove);
     }
+
     public void handsActiveClient(){
-        if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
+        if (!onCooldown(PowerIndex.SKILL_EXTRA) && canExecuteMoveWithLevel(getArmsLevel())) {
             if (!hasBlock() && canAttackHeavy()) {
                 tryPowerPacket(PowerIndex.POWER_3_BLOCK);
                 setCooldown(PowerIndex.SKILL_EXTRA, 7);

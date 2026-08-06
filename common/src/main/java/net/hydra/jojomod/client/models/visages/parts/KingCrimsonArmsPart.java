@@ -118,7 +118,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
                 if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
-                && PowerTypes.hasHandsActive(LE)){
+                        && ((StandUser)LE).roundabout$getStandPowers().hasHandsOut()){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {

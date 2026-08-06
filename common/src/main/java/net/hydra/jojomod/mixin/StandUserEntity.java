@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -810,30 +811,40 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (ClientUtil.isPlayerOrCamera(this)) {
                 if (!(this.getPassengers() != null && !this.getPassengers().isEmpty()) &&
                         (!this.isPassenger())) {
-                    ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-                    double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
-                    double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
-                    double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
+                    if (!(rdbt$this() instanceof ManhattanTransferEntity)){
+                        double lerpx = ((ILivingEntityAccess) this).roundabout$getLerpX();
+                        double lerpy = ((ILivingEntityAccess) this).roundabout$getLerpY();
+                        double lerpz = ((ILivingEntityAccess) this).roundabout$getLerpZ();
 
-                    this.xo = lerpx;
-                    this.yo = lerpy;
-                    this.zo = lerpz;
-                    this.xOld = lerpx;
-                    this.yOld = lerpy;
-                    this.zOld = lerpz;
-                    this.setPos(lerpx, lerpy, lerpz);
+                        Vec3 lerpDistance = new Vec3(lerpx,lerpy,lerpz);
+                        if (lerpDistance.distanceTo(getPosition(1))< 100) {
+
+                            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                            this.xo = lerpx;
+                            this.yo = lerpy;
+                            this.zo = lerpz;
+                            this.xOld = lerpx;
+                            this.yOld = lerpy;
+                            this.zOld = lerpz;
+                            this.setPos(lerpx, lerpy, lerpz);
+                        }
+                    }
                 }
             }
         } if (roundabout$blip && roundabout$blipVector !=null){
-            ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-            this.xo = roundabout$blipVector.x;
-            this.yo = roundabout$blipVector.y;
-            this.zo = roundabout$blipVector.z;
-            this.xOld = roundabout$blipVector.x;
-            this.yOld = roundabout$blipVector.y;
-            this.zOld = roundabout$blipVector.z;
-            ((ILivingEntityAccess) this).roundabout$setLerp(roundabout$blipVector);
-            this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
+            if (!(rdbt$this() instanceof ManhattanTransferEntity)) {
+                ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                if (new Vec3(roundabout$blipVector.x,roundabout$blipVector.y,roundabout$blipVector.z).distanceTo(getPosition(1))< 100) {
+                    this.xo = roundabout$blipVector.x;
+                    this.yo = roundabout$blipVector.y;
+                    this.zo = roundabout$blipVector.z;
+                    this.xOld = roundabout$blipVector.x;
+                    this.yOld = roundabout$blipVector.y;
+                    this.zOld = roundabout$blipVector.z;
+                    ((ILivingEntityAccess) this).roundabout$setLerp(roundabout$blipVector);
+                    this.setPos(roundabout$blipVector.x, roundabout$blipVector.y, roundabout$blipVector.z);
+                }
+            }
             this.roundabout$blip = false;
         } else {
             if (ClientUtil.getWasFrozen() && !ClientUtil.getScreenFreeze() && !ClientUtil.isPlayer(this)){
@@ -849,15 +860,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         }
                     }
                 }
-                ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
-                this.xo = this.lerpX;
-                this.yo = this.lerpY;
-                this.zo = this.lerpZ;
-                this.xOld = this.lerpX;
-                this.yOld = this.lerpY;
-                this.zOld = this.lerpZ;
-                ((ILivingEntityAccess) this).roundabout$setLerp(new Vec3(this.lerpX,this.lerpY,this.lerpZ).toVector3f());
-                this.setPos(this.lerpX, this.lerpY, this.lerpZ);
+                if (!(rdbt$this() instanceof ManhattanTransferEntity)) {
+                    if (new Vec3(lerpX,lerpY,lerpZ).distanceTo(getPosition(1))< 100) {
+                        ((ILivingEntityAccess) this).roundabout$setLerpSteps(0);
+                        this.xo = this.lerpX;
+                        this.yo = this.lerpY;
+                        this.zo = this.lerpZ;
+                        this.xOld = this.lerpX;
+                        this.yOld = this.lerpY;
+                        this.zOld = this.lerpZ;
+                        ((ILivingEntityAccess) this).roundabout$setLerp(new Vec3(this.lerpX, this.lerpY, this.lerpZ).toVector3f());
+                        this.setPos(this.lerpX, this.lerpY, this.lerpZ);
+                    }
+                }
             }
         }
     }

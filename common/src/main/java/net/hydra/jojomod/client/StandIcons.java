@@ -454,6 +454,14 @@ public class StandIcons {
     public static final ResourceLocation PLANET_WAVES_COSMIC_ICON= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/cosmic_icon.png");
 
+    public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/punch.png");
+    public static final ResourceLocation KING_CRIMSON_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/final_punch.png");
+    public static final ResourceLocation KING_CRIMSON_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/guard.png");
+    public static final ResourceLocation KING_CRIMSON_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/barrage.png");
     public static final ResourceLocation KING_CRIMSON_IMAPLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/impale.png");
     public static final ResourceLocation KING_CRIMSON_BLOOD_SPLASH = new ResourceLocation(Roundabout.MOD_ID,
@@ -470,6 +478,8 @@ public class StandIcons {
             "textures/gui/icons/the_world/hands_active.png");
     public static final ResourceLocation MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/star_platinum/mining.png");
+    public static final ResourceLocation KING_CRIMSON_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/mining.png");
     public static final ResourceLocation THE_WORLD_MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/the_world/mining.png");
     public static final ResourceLocation SOFT_MINING = new ResourceLocation(Roundabout.MOD_ID,
@@ -478,6 +488,8 @@ public class StandIcons {
             "textures/gui/icons/magicians_red/mining.png");
     public static final ResourceLocation TIME_ERASE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/time_erase.png");
+    public static final ResourceLocation TIME_ERASE_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/king_crimson/time_erase_2.png");
     public static final ResourceLocation HOLOGRAM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/hologram.png");
     public static final ResourceLocation TIME_SKIP = new ResourceLocation(Roundabout.MOD_ID,
