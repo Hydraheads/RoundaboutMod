@@ -2244,9 +2244,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (snapshot.getEntityId() == self.getId()){
                 if (!skipSelf) {
                     continue;
-                } else if (!isGravityNormal(self)){
-                    continue;
                 }
+            }
+            if (!isGravityNormal(self)){
+                continue;
             }
             skipSingle(snapshot);
         }
