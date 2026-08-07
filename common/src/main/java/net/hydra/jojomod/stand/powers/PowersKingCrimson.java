@@ -1756,6 +1756,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     @Override
+    public void tickStandRejection(MobEffectInstance effect){
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 80) {
+                timeSkip(true);
+            }
+        }
+    }
+
+    @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
@@ -2239,7 +2248,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void timeSkip(boolean skipSelf) {
-        if (!self.level().isClientSide()) {
+        if (self.level().isClientSide()) {
             return;
         }
         if (isUsingTimeErase()){
