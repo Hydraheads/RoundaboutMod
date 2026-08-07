@@ -155,6 +155,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
                 instanceof PowersKingCrimson pkc){
                     damage = pkc.getBloodSplashStrength($$0.getEntity());
+                    pkc.addEXP(4);
                 }
                 if (DamageHandler.StandDamageEntity($$0.getEntity(),damage, getOwner())){
                     if ($$0.getEntity() instanceof LivingEntity LE) {
@@ -169,6 +170,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                         instanceof PowersKingCrimson pkc && $$0.getEntity() instanceof LivingEntity jle){
                     pkc.bloodSplatterHits.add(jle);
                     if (getOwner() instanceof ServerPlayer sp){
+                        pkc.addEXP(10);
                         S2CPacketUtil.sendPlaySoundPacket(sp, sp.getId(), PowersKingCrimson.DING_NOISE);
                     }
                 }

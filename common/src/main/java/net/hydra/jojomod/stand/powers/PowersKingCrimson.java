@@ -483,6 +483,38 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return predicted;
     }
 
+    //
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1){
+            amt = 50;
+        } else {
+            amt = (100+((currentLevel-1)*100));
+        }
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
+    @Override
+    public byte getMaxLevel(){
+        return 7;
+    }
+    @Override
+    public void levelUp(){
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if ( level == 7){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable(
+                                "leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else if (level == 2 || level == 3 || level == 4 || level == 5 || level ==6){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            }
+        }
+        super.levelUp();
+    }
     public void releaseTimeSkip(){
 
     }
@@ -1745,21 +1777,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_2,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.time_skip_3",
                 "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_3,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,0, "ability.roundabout.item_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getItemThrowLevel(), "ability.roundabout.item_grab",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.blood_splash",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getBloodSplashLevel(), "ability.roundabout.blood_splash",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
                 "instruction.roundabout.press_skill_block", StandIcons.KING_CRIMSON_HANDS_ACTIVE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.time_erase",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,getTimeEraseLevel(), "ability.roundabout.time_erase",
                 "instruction.roundabout.press_skill", StandIcons.TIME_ERASE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.time_erase_clone",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,getTimeEraseLevel(), "ability.roundabout.time_erase_clone",
                 "instruction.roundabout.passive", StandIcons.TIME_ERASE_2,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getArmsLevel(), "ability.roundabout.hologram",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getHologramLevel(), "ability.roundabout.hologram",
                 "instruction.roundabout.press_skill_block", StandIcons.HOLOGRAM,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.mining",
                 "instruction.roundabout.hold_attack", StandIcons.KING_CRIMSON_MINING,0,level,bypas));
@@ -1767,7 +1799,28 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return $$1;
     }
 
+    // 2 -> Impale
+    // 3 -> Projection
+    // 4 -> Blood Splash
+    // 5 -> Arms
+    // 6 -> Item Throw
+    // 7 -> Time Erase
+    public int getImpaleLevel(){
+        return 2;
+    }
+    public int getHologramLevel(){
+        return 3;
+    }
+    public int getBloodSplashLevel(){
+        return 4;
+    }
     public int getArmsLevel(){
+        return 5;
+    }
+    public int getItemThrowLevel(){
+        return 6;
+    }
+    public int getTimeEraseLevel(){
         return 7;
     }
 
@@ -2204,7 +2257,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             setCooldown(PowerIndex.SKILL_4,
                     ClientNetworking.getAppropriateConfig().kingCrimsonSettings.timeSkipCooldown);
         }
-
+        addEXP(1);
         self.fallDistance = 0;
 
         skipBlockEntities(100);
@@ -2215,6 +2268,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             basicSkip(skipSelf);
             return;
         }
+        addEXP(1);
         List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         for (Entity entity : self.level().getEntitiesOfClass(Entity.class, area)) {
@@ -2619,7 +2673,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void itemGrabClient(){
         if (hasHandsOut())
             return;
-        super.itemGrabClient();
+        if (canExecuteMoveWithLevel(getItemThrowLevel())) {
+            super.itemGrabClient();
+        }
     }
 
     public Vec3 getEpitaphColors(){
@@ -2648,8 +2704,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void handsActiveClient(){
         if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             if (!hasBlock() && canAttackHeavy()) {
-                tryPowerPacket(PowerIndex.POWER_3_BLOCK);
-                setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
+                if (canExecuteMoveWithLevel(getArmsLevel())) {
+                    tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+                    setCooldown(PowerIndex.SKILL_EXTRA_2, 7);
+                }
             }
         }
     }
@@ -2659,10 +2717,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!hasBlock()) {
             if (!doVault()) {
                 if (!onCooldown(PowerIndex.SKILL_3)) {
+                    if (canExecuteMoveWithLevel(getBloodSplashLevel())) {
                         if (hasHandsOut())
                             return;
-                        tryPower(PowerIndex.POWER_3,true);
+                        tryPower(PowerIndex.POWER_3, true);
                         tryPowerPacket(PowerIndex.POWER_3);
+                    }
                 }
             }
         }
@@ -2689,7 +2749,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             shootBloodServer();
         }
     }
-
+    @Override
+    public void addToCombo(Entity targ) {
+        if (targ instanceof LivingEntity LV) {
+            addEXP(1, LV);
+        }
+        super.addToCombo(targ);
+    }
     public void shootBloodServer(){
         animateStand(KingCrimsonEntity.BLOOD_SPLASH_THROW);
         setAttackTimeDuring(-13);
@@ -2763,8 +2829,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!onCooldown(PowerIndex.SKILL_4_SNEAK) && !isUsingTimeErase()) {
             if (!hasBlock()) {
                 if (!isUsingEpitaph()) {
-                    ClientUtil.sendControlData();
-                    tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                    if (canExecuteMoveWithLevel(getHologramLevel())) {
+                        ClientUtil.sendControlData();
+                        tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+
+                    }
                 }
             }
         }
@@ -2889,8 +2958,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void timeEraseClient(){
         if (!onCooldown(PowerIndex.SKILL_4)) {
             if (!hasBlock() && canAttackLight()) {
-                ClientUtil.sendControlData();
-                tryPowerPacket(PowerIndex.POWER_4);
+                if (canExecuteMoveWithLevel(getTimeEraseLevel())) {
+                    ClientUtil.sendControlData();
+                    tryPowerPacket(PowerIndex.POWER_4);
+                }
             }
         }
     }
@@ -3003,6 +3074,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingEpitaph())
                 return;
             if (timeEraseActive){
+                addEXP(5);
                 timeEraseActive = false;
                 setCooldown(PowerIndex.SKILL_4,getTimeEraseCooldown());
                 if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.cooldownSplit) {
@@ -3140,9 +3212,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
 
-    public int getImpaleLevel(){
-        return 1;
-    }
     public void impaleClient(){
         if (!canImpale()){
             return;
@@ -3175,7 +3244,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         if (!isHoldingSneak() && !isUsingTimeErase()){
             if (hasBlock()){
-                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+                LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getItemThrowLevel());
 
             } else if (isUsingEpitaph()){
                 if (isGuarding()){
@@ -3187,12 +3256,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 LockedOrNot(context, x, y, 2, StandIcons.TIME_SKIP, PowerIndex.SKILL_2_SNEAK, 0);
             }
         } else {
-            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getImpaleLevel());
+            LockedOrNot(context, x, y, 2, StandIcons.KING_CRIMSON_ITEM_GRAB, PowerIndex.SKILL_2,getItemThrowLevel());
         }
 
         if (isGuarding()) {
-            setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
-                    PowerIndex.SKILL_EXTRA_2);
+            LockedOrNot(context, x, y, 3, StandIcons.KING_CRIMSON_HANDS_ACTIVE,
+                    PowerIndex.SKILL_EXTRA_2, getArmsLevel());
         } else if (canVault()){
             setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);
@@ -3200,16 +3269,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (!isHoldingSneak()){
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             } else {
-                setSkillIcon(context, x, y, 3, StandIcons.KING_CRIMSON_BLOOD_SPLASH,
-                        PowerIndex.SKILL_3);
+                LockedOrNot(context, x, y, 3, StandIcons.KING_CRIMSON_BLOOD_SPLASH,
+                        PowerIndex.SKILL_3, getBloodSplashLevel());
             }
         }
         if (isGuarding() && !isUsingTimeErase() && !isUsingEpitaph()) {
-            LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, 0);
-        } else if (!isHoldingSneak()){
-            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, 0);
+            LockedOrNot(context, x, y, 4, StandIcons.HOLOGRAM, PowerIndex.SKILL_4_SNEAK, getHologramLevel());
         } else {
-            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4,0);
+            LockedOrNot(context, x, y, 4, StandIcons.TIME_ERASE, PowerIndex.SKILL_4, getTimeEraseLevel());
         }
     }
 
