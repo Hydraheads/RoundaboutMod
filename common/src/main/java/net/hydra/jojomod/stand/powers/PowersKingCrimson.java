@@ -1167,7 +1167,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
                 boolean supported = false;
 
-                for (int dy = 1; dy <= dist; dy++) {
+                for (int dy = 0; dy <= dist; dy++) {
 
                     // Point beneath the player in PLAYER coordinates
                     Vec3 worldSample = RotationUtil.vecPlayerToWorld(
