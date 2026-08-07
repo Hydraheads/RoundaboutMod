@@ -55,10 +55,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.ShoulderRidingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -752,7 +753,108 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (self instanceof KingCrimsonCloneEntity kce){
             tickCloneAi(attackTarget, kce);
         } else {
-            super.tickMobAI(attackTarget);
+            if (self instanceof Creeper crp){
+                if (!onCooldown(PowerIndex.SKILL_2_SNEAK)
+                && attackTarget != null && attackTarget.isAlive()){
+                    timeSkip(true);
+                }
+            } else {
+                tickMobAINotClone(attackTarget);
+            }
+        }
+    }
+
+    private boolean isIncomingProjectile(Mob mob) {
+        AABB box = mob.getBoundingBox().inflate(10.0D);
+
+        List<Projectile> projectiles = mob.level().getEntitiesOfClass(
+                Projectile.class,
+                box
+        );
+
+        for (Projectile projectile : projectiles) {
+            // Ignore projectiles fired by this mob
+            if (projectile.getOwner() == mob) {
+                continue;
+            }
+
+            Vec3 velocity = projectile.getDeltaMovement();
+            if (velocity.lengthSqr() == 0) {
+                continue;
+            }
+
+            // Direction from projectile to mob
+            Vec3 toMob = mob.position().subtract(projectile.position()).normalize();
+
+            // If projectile velocity points toward the mob
+            double dot = velocity.normalize().dot(toMob);
+
+            if (dot > 0.5D) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public void tickMobAINotClone(LivingEntity attackTarget){
+        if (activePower == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            if (self instanceof Mob mb) {
+                GoalSelector gs = ((IMob)mb).roundabout$getGoalSelector();
+                if (gs != null){
+                    Set<WrappedGoal> goalSet = gs.getAvailableGoals();
+                    if (goalSet != null && !goalSet.isEmpty()){
+                        boolean hasMelee = goalSet.stream()
+                                .anyMatch(wrapped -> wrapped.getGoal() instanceof MeleeAttackGoal);
+                        if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                                && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                            timeSkip(true);
+                        } else if (hasMelee){
+                            if (attackTarget != null && attackTarget.isAlive()) {
+                                timeSkip(true);
+                            }
+                        } else {
+                            if (isIncomingProjectile(mb)) {
+                                timeSkip(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (attackTarget != null && attackTarget.isAlive()){
+            float distanceTo = attackTarget.distanceTo(this.getSelf());
+            if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE
+            || this.getActivePower() == PowerIndex.POWER_3)
+                    || distanceTo <= 5){
+                rotateMobHead(attackTarget);
+            }
+
+
+
+            if (distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3)) {
+                if (this.attackTimeDuring <= -1) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                    setCooldown(PowerIndex.SKILL_2_SNEAK,60);
+                }
+            } else {
+                Entity targetEntity = getTargetEntity(this.self, -1);
+                if (targetEntity != null && targetEntity.is(attackTarget)) {
+                    if (this.attackTimeDuring <= -1) {
+                        double RNG = Math.random();
+                        if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge) {
+                            wentForCharge = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        } else if (RNG < 0.6 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge
+                                && distanceTo <= 3){
+                            wentForCharge = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                        } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                            wentForCharge = false;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -2060,7 +2162,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 mb.getNavigation().stop();
             if (!MainUtil.blockConfusionTicks(mb)) {
-                ((IMob) mb).roundabout$setConfusionTicks(7);
+                if (entity.getId() != self.getId()) {
+                    ((IMob) mb).roundabout$setConfusionTicks(7);
+                }
             }
         }
     }

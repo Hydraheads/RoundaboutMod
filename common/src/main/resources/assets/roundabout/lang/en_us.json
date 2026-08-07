@@ -1724,7 +1724,7 @@
   "ability.roundabout.steal_memories_2.desc": "If possible, this variation of memory steal takes experience away from mobs, and using the chess piece will give it to you. This is useful for taking experience from mobs without killing them. On villagers, instead saves their workplaces. On players, saves their bed locations. Using the pieces leads you to the locations.",
 
   "ability.roundabout.step_shadow": "Step Shadow",
-  "ability.roundabout.step_shadow.desc": "If someone you stole the memory of steps into your shadow (touching you without low light levels), any memories taken are returned to them from your inventory.",
+  "ability.roundabout.step_shadow.desc": "If you step in the shadow of someone you stole the memory of (touching you without low light levels), any memories taken are returned to them from your inventory.",
 
   "ability.roundabout.forbid_rule": "Forbid Rule",
   "ability.roundabout.forbid_rule.desc": "Forbid people from stepping on the block you activate this skill on. If you step on the block, the rule is undone by a lack of fairness.",
