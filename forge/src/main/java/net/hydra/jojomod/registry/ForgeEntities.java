@@ -405,7 +405,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BlockBombEntity>> BLOCK_BOMB =
             ENTITY_TYPES.register("block_bomb", () ->
-                    EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).sized(0.75F, 0.75f).
+                    EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).sized(1.1F, 1.1f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_bomb").toString())
             );
