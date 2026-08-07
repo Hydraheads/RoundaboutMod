@@ -536,4 +536,13 @@ public class SilverChariotAnimations {
 	public static final AnimationDefinition AttackFullCombo = AnimationDefinition.Builder.withLength(0.0F)
 
 			.build();
+
+	public static final AnimationDefinition FallBrace = AnimationDefinition.Builder.withLength(0.5F).looping()
+			.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(-90.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("stand", new AnimationChannel(AnimationChannel.Targets.POSITION,
+					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, -12.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.build();
 }

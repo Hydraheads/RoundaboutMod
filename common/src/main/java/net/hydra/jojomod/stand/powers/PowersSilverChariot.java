@@ -253,7 +253,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             if (((StandUser)this.self).roundabout$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
             } else {
-                animateStand(StandEntity.BLOCK);
+                animateStand(SilverChariotEntity.BLOCK);
             }
             this.poseStand(OffsetIndex.GUARD);
         }
@@ -392,15 +392,28 @@ public class PowersSilverChariot extends NewPunchingStand {
         switch (move) {
             case PowerIndex.POWER_1_SNEAK -> {
                 rapierSlashServer();
+                return true;
             }
             case PowerIndex.POWER_1_BLOCK -> {
                 slabCuttingServer();
+                return true;
             }
             case PowerIndex.POWER_4_BLOCK -> {
                 statueCuttingServer();
+                return true;
             }
             case PowerIndex.POWER_3_SNEAK -> {
                 selfGrabServer();
+                return true;
+            }
+            case PowerIndex.EXTRA -> {
+                return this.fallBraceInit();
+            }
+            case PowerIndex.FALL_BRACE_FINISH -> {
+                return this.fallBrace();
+            }
+            case PowerIndex.VAULT -> {
+                return this.vault();
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -710,6 +723,27 @@ public class PowersSilverChariot extends NewPunchingStand {
             dash();
         }
     }
+
+    @Override
+    public boolean fallBraceInit() {
+        this.getSelf().fallDistance -= 20;
+        if (this.getSelf().fallDistance < 0){
+            this.getSelf().fallDistance = 0;
+        }
+        impactBrace = true;
+        impactAirTime = 15;
+
+        // animateStand(StandEntity.BLOCK);
+        this.setAttackTimeDuring(0);
+        this.setActivePower(PowerIndex.EXTRA);
+        this.poseStand(OffsetIndex.BENEATH);
+        animateStand(SilverChariotEntity.SC_FALL_BRACE);
+        if (!this.getSelf().level().isClientSide()) {
+            playFallBraceInitSound();
+        }
+        return true;
+    }
+
 
 
     // Control mode

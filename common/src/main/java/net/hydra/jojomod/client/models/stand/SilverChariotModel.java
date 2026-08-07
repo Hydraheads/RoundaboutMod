@@ -19,11 +19,8 @@ import net.minecraft.client.model.geom.builders.*;
 public class SilverChariotModel<T extends SilverChariotEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	// public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "unknown"), "main");
-	private final ModelPart stand;
 	private final ModelPart stand2;
-	private final ModelPart head;
 	private final ModelPart head2;
-	private final ModelPart body;
 	private final ModelPart body2;
 	private final ModelPart torso;
 	private final ModelPart upper_chest;
@@ -193,12 +190,13 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-		// defaultModifiers(pEntity);
+		defaultModifiers(pEntity);
 		// defaultAnimations(pEntity, pAgeInTicks, 1 / ((float) Power.getBarrageWindup() / 20));
 		this.animate(pEntity.scBlock, SilverChariotAnimations.Block, pAgeInTicks, 1f);
 		this.animate(pEntity.scBarrage, SilverChariotAnimations.Barrage, pAgeInTicks, 1f);
 		this.animate(pEntity.scBarrageDamage, SilverChariotAnimations.BarrageDamage, pAgeInTicks, 1f);
 		this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
+		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace, pAgeInTicks, 1f);
 	}
 
 	@Override

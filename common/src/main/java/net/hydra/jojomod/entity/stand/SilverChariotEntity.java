@@ -26,6 +26,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scBarrage = new AnimationState();
     public final AnimationState scBarrageDamage = new AnimationState();
     public final AnimationState scBlock = new AnimationState();
+    public final AnimationState scFallBrace = new AnimationState();
 
     public static final byte
             SC_ = 40,
@@ -42,8 +43,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_BLOCK_BROKEN = 51,
             SC_BARRAGE_DAMAGE = 52,
             SC_MINING = 53,
-            SC_ARMOR_SHED = 40,
-            SC_RAPIER_SHOT = 40;
+            SC_ARMOR_SHED = 54,
+            SC_RAPIER_SHOT = 55,
+            SC_FALL_BRACE = 56;
 
     @Override
     public void setupAnimationStates() {
@@ -70,6 +72,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.startIfStopped(this.tickCount);
             } else {
                 this.scBarrageDamage.stop();
+            }
+            if (animationState == SC_FALL_BRACE) {
+                this.scFallBrace.startIfStopped(this.tickCount);
+            } else {
+                this.scFallBrace.stop();
             }
         }
     }
