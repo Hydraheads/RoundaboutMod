@@ -109,7 +109,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return SoundIndex.SUMMON_SOUND;
     }
 
-
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
         return new PowersKingCrimson(entity);
@@ -2625,7 +2624,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+                kingCrimsonSettings.kingCrimsonAttackMultOnPlayers *0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.kingCrimsonAttackMultOnMobs *0.01));
     }
     @Override
     public float getImpalePunchStrength(Entity entity){

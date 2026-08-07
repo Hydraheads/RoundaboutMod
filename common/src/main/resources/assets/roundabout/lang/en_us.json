@@ -3282,6 +3282,11 @@
   "config.roundabout.whiteAlbumAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whiteAlbumAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
 
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.creamAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
