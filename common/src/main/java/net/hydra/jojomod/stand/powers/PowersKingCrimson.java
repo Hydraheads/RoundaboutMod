@@ -4023,4 +4023,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return ModSounds.KING_CRIMSON_PUNCH_2_EVENT;
     }
 
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.miningSpeedMultiplierKingCrimson *0.01));
+    }
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.getMiningTierKingCrimson;
+    }
 }

@@ -3949,6 +3949,8 @@
   "config.roundabout.starPlatinumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierKingCrimson.name": "Mining Tier",
+  "config.roundabout.getMiningTierKingCrimson.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.getMiningTierStarPlatinum.name": "Mining Tier",
   "config.roundabout.getMiningTierStarPlatinum.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.name": "Scope Uses NV Potion",
@@ -3963,6 +3965,8 @@
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
 
 
+  "config.roundabout.miningSpeedMultiplierKingCrimson.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierKingCrimson.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierWhiteAlbum.name": "Mining Tier",
