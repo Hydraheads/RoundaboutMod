@@ -1213,6 +1213,9 @@
   "sounds.roundabout.tusk_leap": "Stand Leap",
   "sounds.roundabout.tusk_spin_throw": "Spin Throw",
   "sounds.roundabout.tusk_shockwave": "Shockwave",
+  "sounds.roundabout.tusk_summon": "Stand Summon",
+  "sounds.roundabout.tusk_flatten": "Flatten",
+  "sounds.roundabout.tusk_warp": "Warp",
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
