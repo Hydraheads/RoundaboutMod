@@ -830,8 +830,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
 
 
-
-            if (distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3)) {
+            boolean upAiNow = upAi(attackTarget);
+            if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3)) {
                 if (this.attackTimeDuring <= -1) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                     setCooldown(PowerIndex.SKILL_2_SNEAK,60);
@@ -850,7 +850,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
                         } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                             wentForCharge = false;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                            if (upAiNow && RNG > 0.9){
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                            } else {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                            }
                         }
                     }
                 }
