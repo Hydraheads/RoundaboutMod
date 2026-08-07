@@ -3708,6 +3708,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$RoundaboutDamage(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
+        if ($$0.is(DamageTypes.GENERIC_KILL) || $$0.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            return;
+        }
+        LivingEntity entity = ((LivingEntity)(Object) this);
+        if (roundabout$postTSHurtTime > 0 || roundabout$extraIFrames > 0) {
+            if (!((TimeStop)entity.level()).CanTimeStopEntity(entity)) {
+                ci.setReturnValue(false);
+                return;
+            }
+        }
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
             this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
             ci.setReturnValue(false);
@@ -5106,6 +5116,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true, require = 0)
         private void roundabout$roundabouthurt(DamageSource damageSource, float $$1, CallbackInfoReturnable<Boolean> ci) {
 
+        if (damageSource.is(DamageTypes.GENERIC_KILL) || damageSource.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            return;
+        }
+            LivingEntity entity = ((LivingEntity)(Object) this);
+            if (roundabout$postTSHurtTime > 0 || roundabout$extraIFrames > 0) {
+                if (!((TimeStop)entity.level()).CanTimeStopEntity(entity)) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
+
             //Frozen deaths from vampire freeze / ice sculptures / white album
             if (damageSource.getEntity() != null && !damageSource.is(DamageTypes.THORNS) && !damageSource.is(ModDamageTypes.STAND_FIRE)){
                 if (HeatUtil.isBodyFrozen(rdbt$this()) && !level().isClientSide()){
@@ -5197,7 +5219,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        LivingEntity entity = ((LivingEntity)(Object) this);
         if (entity.level().isClientSide){
             ci.setReturnValue(false);
             return;
