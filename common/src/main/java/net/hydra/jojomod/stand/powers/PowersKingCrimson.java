@@ -2653,6 +2653,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         @Override
     public StandEntity getNewStandEntity() {
         byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (sk == KingCrimsonEntity.REAPER){
+            return ModEntities.KING_CRIMSON_REAPER.create(this.getSelf().level());
+        }
         return ModEntities.KING_CRIMSON.create(this.getSelf().level());
     }
     @Override
@@ -2694,6 +2697,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }if (skinId == KingCrimsonEntity.VISION){
             return Component.translatable(  "skins.roundabout.king_crimson.vision");
+        }if (skinId == KingCrimsonEntity.REAPER){
+            return Component.translatable(  "skins.roundabout.king_crimson.reaper");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.red");
     }
@@ -2748,11 +2753,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 $$1.add(KingCrimsonEntity.GREEN);
             } if (Level > 4 || bypass) {
                 $$1.add(KingCrimsonEntity.STARLESS);
+                $$1.add(KingCrimsonEntity.END);
+                $$1.add(KingCrimsonEntity.END_2);
                 $$1.add(KingCrimsonEntity.CONCEPT);
                 $$1.add(KingCrimsonEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
-                $$1.add(KingCrimsonEntity.END);
-                $$1.add(KingCrimsonEntity.END_2);
+                $$1.add(KingCrimsonEntity.REAPER);
             }
         }
         return $$1;
@@ -2821,6 +2827,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return new Vec3(0.2,0.5,1);
         } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
             return new Vec3(0.75,0,1.5);
+        }if (sk == KingCrimsonEntity.REAPER){
+            return new Vec3(0,0,0);
         }
         return new Vec3(1,0,1);
     }

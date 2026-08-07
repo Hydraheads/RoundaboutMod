@@ -2,19 +2,15 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
-import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
-import net.hydra.jojomod.client.models.stand.renderers.KingCrimsonRenderer;
-import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.client.models.stand.renderers.KingCrimsonBaseRenderer;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.stand.powers.PowersHeyYa;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -89,7 +85,7 @@ public class KingCrimsonArmsPart extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE){
             bt = ((StandUser)LE).roundabout$getStandSkin();
         }
-        return KingCrimsonRenderer.getSkin(bt);
+        return KingCrimsonBaseRenderer.getSkin(bt);
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

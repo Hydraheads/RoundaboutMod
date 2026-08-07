@@ -39,6 +39,7 @@ public class ModEntities {
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
     public static EntityType<KingCrimsonEntity> KING_CRIMSON;
+    public static EntityType<ReaperKingCrimsonEntity> KING_CRIMSON_REAPER;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
