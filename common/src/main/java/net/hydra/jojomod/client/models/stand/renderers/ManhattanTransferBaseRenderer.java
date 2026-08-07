@@ -15,6 +15,7 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -72,6 +73,18 @@ public class ManhattanTransferBaseRenderer extends StandRenderer<ManhattanTransf
             return BLAZE_TRANFER_SKIN;
         }
         return ANIME_SKIN;
+    }
+
+
+
+    @Override
+    public boolean shouldRender(ManhattanTransferEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        if ($$0.getUser() != null && ClientUtil.getPlayer() != null &&
+                $$0.getUser().getId() == ClientUtil.getPlayer().getId()){
+            return true;
+        }
+
+        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
     }
 
     @Override
