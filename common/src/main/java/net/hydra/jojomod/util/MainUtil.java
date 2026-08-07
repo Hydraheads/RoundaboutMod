@@ -1200,11 +1200,33 @@ public class MainUtil {
     }
 
     public static boolean isPlayerBonkingHead(LivingEntity player) {
+        if (player == null || player.isRemoved())
+            return false;
         Level level = player.level();
+        if (level == null)
+            return false;
+
         Vec3 mainVec = new Vec3(0, 0.05, 0);
         mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
         AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
-        return !level.noCollision(player, headSpace);
+        AABB box = headSpace.inflate(-1.0E-5);
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                Mth.floor(box.minX),
+                Mth.floor(box.minY),
+                Mth.floor(box.minZ),
+                Mth.floor(box.maxX),
+                Mth.floor(box.maxY),
+                Mth.floor(box.maxZ))) {
+
+            BlockState state = level.getBlockState(pos);
+
+            if (!state.getCollisionShape(level, pos).isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean isUsingMetallica(Entity ent){
