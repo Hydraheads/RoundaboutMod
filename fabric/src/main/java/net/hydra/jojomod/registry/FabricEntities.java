@@ -470,7 +470,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("block_bomb"),
                         EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).
-                                sized(0.75f, 0.75f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
+                                sized(1.1f, 1.1f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
                 );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(

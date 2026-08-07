@@ -56,6 +56,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -1895,6 +1896,17 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public void blockContacted(Entity ent) {
+        if ((this.isContactModeEnabled() || this.detonateTimer > -1) && currentBombStatus == BOMB_BLOCK) {
+            this.bombEntity = ent;
+            syncBombStatus(BLOCK_CONTACT);
+            this.bombBlock.discard();
+            if (this.detonateTimer == -1) {
+                this.detonate();
+            }
+        }
+    }
+
     public void bubbleContacted(Entity ent) {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             this.bombEntity = ent;
@@ -2757,7 +2769,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.isContactModeEnabled() && activePower != DETONATE) {
                 if (this.currentBombStatus == BOMB_BLOCK) {
                     if(Objects.nonNull(this.bombBlock) && activePower != PowerIndex.POWER_1) {
-                        Entity contact = detectContact(this.bombBlock, 0.3);
+                        Entity contact = detectContact(this.bombBlock, 0.1);
                         if (contact != null) {
                             this.syncBombStatus(BLOCK_CONTACT);
                             this.bombBlock.discard();
@@ -2895,7 +2907,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                     ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage);
                         }
 
-                        ExplosionUtil.explodeEffects(target.position(), target.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.35f);
+                        ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
                         this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
                     }
                 }else {
@@ -2941,7 +2953,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                         ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayMobsDamage);
                             }
 
-                            ExplosionUtil.explodeEffects(target.position(), target.level(), ModParticles.KILLER_QUEEN_EXPLOSION, 0.35f);
+                            ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
                             this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
                         }
                     }
@@ -3109,8 +3121,18 @@ public class PowersKillerQueen extends NewPunchingStand {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
             return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
+        }else if (skn == KillerQueenEntity.CREEPER) {
+            return SoundEvents.GENERIC_EXPLODE;
         }
         return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
+    }
+
+    public SimpleParticleType getExplosionParticle() {
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == KillerQueenEntity.CREEPER) {
+            return ParticleTypes.EXPLOSION;
+        }
+        return ModParticles.KILLER_QUEEN_EXPLOSION;
     }
 
     @Override
@@ -3529,7 +3551,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     level = target.level();
 
                     if (target instanceof LivingEntity LE) {
-                        addEXP(bStatus == BOMB_ENTITY ? 10 : 4, LE);
+                        addEXP(bStatus == BOMB_ENTITY ? 6 : 3, LE);
                     }
 
                     this.bombEntity = null;
@@ -3559,7 +3581,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (canDestroyBlocks) {
                 ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true);
             }
-            addEXP(5);
+            addEXP(3);
 
             Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 
@@ -3604,7 +3626,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
-            ExplosionUtil.explodeEffects(vPos, level, ModParticles.KILLER_QUEEN_EXPLOSION, 0.55f);
+            ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
             this.getSelf().level().playSound(null, bPos, getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
         }
 
