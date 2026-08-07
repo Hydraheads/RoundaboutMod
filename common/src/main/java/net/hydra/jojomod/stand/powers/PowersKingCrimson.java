@@ -2828,7 +2828,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
             return new Vec3(0.75,0,1.5);
         }if (sk == KingCrimsonEntity.REAPER){
-            return new Vec3(0,0,0);
+            return new Vec3(1.2,0,1.2);
         }
         return new Vec3(1,0,1);
     }
