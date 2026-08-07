@@ -645,6 +645,18 @@ public class ForgeSounds {
             register(ModSounds.TUSK_SHOCKWAVE, ModSounds.TUSK_SHOCKWAVE_ID);
     public static final RegistryObject<SoundEvent> TUSK_SPIN_THROW =
             register(ModSounds.TUSK_SPIN_THROW, ModSounds.TUSK_SPIN_THROW_ID);
+    public static final RegistryObject<SoundEvent> TUSK_1_SUMMON =
+            register(ModSounds.TUSK_1_SUMMON, ModSounds.TUSK_1_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> TUSK_2_SUMMON =
+            register(ModSounds.TUSK_2_SUMMON, ModSounds.TUSK_2_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> TUSK_3_SUMMON =
+            register(ModSounds.TUSK_3_SUMMON, ModSounds.TUSK_3_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> TUSK_FLATTEN =
+            register(ModSounds.TUSK_FLATTEN, ModSounds.TUSK_FLATTEN_ID);
+    public static final RegistryObject<SoundEvent> TUSK_WARP =
+            register(ModSounds.TUSK_WARP, ModSounds.TUSK_WARP_ID);
+    public static final RegistryObject<SoundEvent> TUSK_4_SUMMON =
+            register(ModSounds.TUSK_4_SUMMON, ModSounds.TUSK_4_SUMMON_ID);
 
 
 

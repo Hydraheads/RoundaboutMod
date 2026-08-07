@@ -330,6 +330,12 @@ public class FabricSounds {
         addSound(ModSounds.TUSK_LEAP_ID, ModSounds.TUSK_LEAP_EVENT);
         addSound(ModSounds.TUSK_SHOCKWAVE_ID, ModSounds.TUSK_SHOCKWAVE_EVENT);
         addSound(ModSounds.TUSK_SPIN_THROW_ID, ModSounds.TUSK_SPIN_THROW_EVENT);
+        addSound(ModSounds.TUSK_1_SUMMON_ID, ModSounds.TUSK_1_SUMMON_EVENT);
+        addSound(ModSounds.TUSK_2_SUMMON_ID, ModSounds.TUSK_2_SUMMON_EVENT);
+        addSound(ModSounds.TUSK_3_SUMMON_ID, ModSounds.TUSK_3_SUMMON_EVENT);
+        addSound(ModSounds.TUSK_FLATTEN_ID, ModSounds.TUSK_FLATTEN_EVENT);
+        addSound(ModSounds.TUSK_WARP_ID, ModSounds.TUSK_WARP_EVENT);
+        addSound(ModSounds.TUSK_4_SUMMON_ID, ModSounds.TUSK_4_SUMMON_EVENT);
 
 
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);

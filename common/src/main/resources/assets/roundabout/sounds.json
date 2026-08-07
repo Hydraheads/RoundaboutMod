@@ -2175,6 +2175,42 @@
       "roundabout:tusk_spin_throw"
     ]
   },
+  "tusk_1_summon": {
+    "subtitle": "sounds.roundabout.tusk_summon",
+    "sounds": [
+      "roundabout:tusk_1_summon"
+    ]
+  },
+  "tusk_2_summon": {
+    "subtitle": "sounds.roundabout.tusk_summon",
+    "sounds": [
+      "roundabout:tusk_2_summon"
+    ]
+  },
+  "tusk_3_summon": {
+    "subtitle": "sounds.roundabout.tusk_summon",
+    "sounds": [
+      "roundabout:tusk_3_summon"
+    ]
+  },
+  "tusk_flatten": {
+    "subtitle": "sounds.roundabout.tusk_flatten",
+    "sounds": [
+      "roundabout:tusk_flatten"
+    ]
+  },
+  "tusk_warp": {
+    "subtitle": "sounds.roundabout.tusk_warp",
+    "sounds": [
+      "roundabout:tusk_warp"
+    ]
+  },
+  "tusk_4_summon": {
+    "subtitle": "sounds.roundabout.tusk_summon",
+    "sounds": [
+      "roundabout:tusk_4_summon"
+    ]
+  },
 
 
 

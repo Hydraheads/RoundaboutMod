@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -113,10 +114,21 @@ public class PowersTusk extends NewDashPreset {
         SHOCKWAVE_SOUND = 3;
 
     @Override
+    protected Byte getSummonSound() {return SoundIndex.SUMMON_SOUND;}
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         switch (soundChoice) {
             case PowersTusk.MINING -> {return ModSounds.TUSK_SAW_MINE_EVENT;}
             case PowersTusk.SHOCKWAVE_SOUND -> {return ModSounds.TUSK_SHOCKWAVE_EVENT;}
+            case SoundIndex.SUMMON_SOUND -> {
+                return switch (this.getAct()) {
+                    case 2 ->  ModSounds.TUSK_2_SUMMON_EVENT;
+                    case 3 ->  ModSounds.TUSK_3_SUMMON_EVENT;
+                    case 4 ->  ModSounds.TUSK_4_SUMMON_EVENT;
+                    default ->  ModSounds.TUSK_1_SUMMON_EVENT;
+
+                };
+            }
         }
 
         return super.getSoundFromByte(soundChoice);
@@ -139,7 +151,7 @@ public class PowersTusk extends NewDashPreset {
 
     @Override public int getDisplayPowerInventoryYOffset() {return this.getAct() < 3 ? 20 : 0;}
     @Override public int getDisplayPowerInventoryScale() {return this.getAct() == 4 ? 24 : 30;}
-    @Override public boolean hasPassiveCombatMode() {return this.getActivePower() != PowerIndex.MINING && !this.isInHole() ;}
+    @Override public boolean hasPassiveCombatMode() {return true;}
     @Override public boolean hasShootingModeVisually(HumanoidArm arm) {
         if (!isGunMode() || this.getActivePower() == PowersTusk.SHOOT_MODE || isCharging()) {
             if (renderBothArms()) {
@@ -158,7 +170,7 @@ public class PowersTusk extends NewDashPreset {
     @Override public float getAxeMiningSpeed() {return this.getAct() == 1 ? 25.0F : 10.0F;}
     @Override public float getSwordMiningSpeed() {return this.getAct() == 1 ? 30.0F : 10.0F;}
     @Override public float getShovelMiningSpeed() {return this.getAct() == 1 ? 6.0F : 15.0F;}
-    @Override public float getPickMiningSpeed() {return this.getAct() == 1 ? 0.1F : 2.5F;}
+    @Override public float getPickMiningSpeed() {return this.getAct() == 1 ? 0.1F : 3F;}
 
     @Override
     public boolean canUseMiningStand() {
@@ -184,7 +196,7 @@ public class PowersTusk extends NewDashPreset {
     private void convertArrayToCD(int[] array) {
         ArrayList<CooldownInstance> ret = new ArrayList<>();
         for(int i : array) {
-            ret.add(new CooldownInstance(i,i));
+            ret.add(new CooldownInstance(i,i > ACT_ONE_CD ? ACT_TWO_CD : ACT_ONE_CD ));
         }
         this.nailCooldowns = ret;
     }
@@ -409,11 +421,13 @@ public class PowersTusk extends NewDashPreset {
                         this.getSelf().teleportTo(pos.x, pos.y, pos.z);
                     }
                     this.setPiloting(0);
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.TUSK_WARP_EVENT,SoundSource.PLAYERS,1F,1F);
                 }
             }
 
             case PowersTusk.FLATTEN -> {
                 if (this.getActivePower() != PowersTusk.FLATTEN) {
+                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.TUSK_FLATTEN_EVENT,SoundSource.PLAYERS,1F,1F);
 
                     if (isInHole()) {
                         this.setCooldown(PowerIndex.SKILL_1, 140);
@@ -447,14 +461,12 @@ public class PowersTusk extends NewDashPreset {
         }
         return super.tryPower(move, forced);
     }
-
     @Override
     public void tickPower() {
         super.tickPower();
         this.tickNails();
 
 
-       // Roundabout.LOGGER.info("CA: " + this.getActivePower() + " ATD: " + this.getAttackTimeDuring());
 
         if (this.getSelf() instanceof Player P) {
 
@@ -558,14 +570,12 @@ public class PowersTusk extends NewDashPreset {
                 if (target instanceof LivingEntity LE && target.isAttackable() && !MainUtil.isBossMob(target)) {
                     this.setPiloting(0);
                     if (!isClient()) {
-                        if (StandDamageEntityAttack(target,8,0,this.getSelf())) {
-                            if (!LE.isAlive()) {
-                                LE.setHealth(1);
-                            }
+                        if (StandDamageEntityAttack(target,LE.getHealth() <= 8 ? LE.getHealth()-1 : 8,0,this.getSelf())) {
+
                             LE.addEffect(new MobEffectInstance(ModEffects.UNBALANCED,200,2));
                             ((StandUser)LE).roundabout$setDazed((byte)10);
                             LE.setDeltaMovement(Vec3.ZERO);
-                            Vec3 pos = this.getNearbyHole().getPosition(0);
+                            Vec3 pos = this.getSelf().getPosition(0);
                             target.teleportTo(pos.x,pos.y,pos.z);
                         }
                     }
@@ -1002,6 +1012,7 @@ public class PowersTusk extends NewDashPreset {
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (isPiloting()) {return;}
         if (this.isGunMode() && (options.keyUse.isDown())) {
             if (keyIsDown) {
                 buttonInputShoot(true, options, this.getAct());
@@ -1217,13 +1228,17 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public void pilotInputAttack() {
-        if (isGunMode() && (this.getActivePower() == PowersTusk.SHOOT_MODE || this.getActivePower() == PowersTusk.FIRE_NAIL)) {
+        if ( (isGunMode() && this.getActivePower() == PowersTusk.SHOOT_MODE) || this.getActivePower() == PowersTusk.FIRE_NAIL || this.getActivePower() == PowersTusk.CHARGE_NAIL) {
             tryPower(PowersTusk.CHARGE_NAIL);
             tryPowerPacket(PowersTusk.CHARGE_NAIL);
         } else {
-            if (this.getAttackTime() > 5) {
-                this.setPiloting(0);
+            if (this.getAttackTime() >= 5) {
+                if (this.self instanceof Player PE) {
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    ipe.roundabout$setIsControlling(0);
+                }
                 this.setAttackTime(0);
+                this.setPiloting(0);
                 tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
             }
         }
@@ -1232,15 +1247,12 @@ public class PowersTusk extends NewDashPreset {
 
     @Override
     public boolean canPilotPlaceBlock(ItemStack stack) {
-        return true;
+        return false;
     }
 
     @Override
     public int getPilotPlaceRange() {
-        if (this.getPilotingStand() != null) {
-            return (int)this.getPilotingStand().distanceTo(this.getSelf()) + 10;
-        }
-        return 0;
+        return this.getPilotingStand() != null ? 3 : 0;
     }
 
     @Override
@@ -1697,8 +1709,8 @@ public class PowersTusk extends NewDashPreset {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
-                BLUE,
-                RESONANCE
+                BLUE
+          //      RESONANCE
         );
     }
     @Override public Component getSkinName(byte skinId) {
