@@ -778,12 +778,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                 }
             }
-        }
-        if (currFade < 0) {
-            if (!this.getPassengers().isEmpty()){
-                this.ejectPassengers();
+            if (currFade < 0) {
+                if (!this.getPassengers().isEmpty()){
+                    this.ejectPassengers();
+                }
+                this.discard();
             }
-            this.discard();
         }
     }
 
