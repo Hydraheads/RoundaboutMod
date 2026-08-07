@@ -2239,7 +2239,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
 
     public void timeSkip(boolean skipSelf) {
-        if (!(self instanceof ServerPlayer pl)) {
+        if (!self.level().isClientSide()) {
             return;
         }
         if (isUsingTimeErase()){
@@ -2319,11 +2319,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
             }
         }
 
-        S2CPacketUtil.sendCancelSoundPacket(pl,this.self.getId(),EPITAPH_NOISE);
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), EPITAPH_NOISE);
+        }
         playStandUserOnlySoundsIfNearby(TIME_SKIP_2, getSkipBonusRange(), true, false);
         scatterPackets();
         epitaph.clear();
-        S2CPacketUtil.clearEpitaph(pl);
+        if (self instanceof ServerPlayer pl) {
+            S2CPacketUtil.clearEpitaph(pl);
+        }
     }
 
     public void scatterPackets(){
