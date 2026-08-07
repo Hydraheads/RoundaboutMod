@@ -1121,7 +1121,8 @@ public class BlockGrabPreset extends NewPunchingStand {
                         }
                         /**Minecart Throw*/
                     } else if (stack.getItem() instanceof MinecartItem ME
-                            && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
+                            && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
+                    && !((TimeStop) this.getSelf().level()).inTimeStopRange(self)){
 
                         AbstractMinecart $$7 = AbstractMinecart.createMinecart(
                                 this.getSelf().level(), (double)this.getSelf().getX(),
