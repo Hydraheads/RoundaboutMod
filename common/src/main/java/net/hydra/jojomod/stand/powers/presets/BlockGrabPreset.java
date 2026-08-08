@@ -1120,7 +1120,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             animateStand(StandEntity.ENTITY_GRAB);
                         }
                         /**Minecart Throw*/
-                    } else if (stack.getItem() instanceof MinecartItem ME
+                    } else if (stack.getItem() instanceof MinecartItem ME && !(stack.is(Items.TNT_MINECART))
                             && !(((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
                     && !((TimeStop) this.getSelf().level()).inTimeStopRange(self)){
 
