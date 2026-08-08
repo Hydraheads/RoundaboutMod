@@ -17,11 +17,9 @@ import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
-import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -3139,7 +3137,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public SimpleParticleType getExplosionParticle() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.CREEPER) {
-            return ParticleTypes.EXPLOSION;
+            return ModParticles.SMALL_EXPLOSION;
         }
         return ModParticles.KILLER_QUEEN_EXPLOSION;
     }
@@ -3697,18 +3695,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 10, 0.5, 0.5, 0.5, 0.2);
                         ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
-                                10, 0.5, 0.5, 0.5, 0.2);
+                                10, 0.5, 0.5, 0.5, 0.01);
                         user.roundabout$setStandSkin(KillerQueenEntity.MINESWEEPER);
                         ((ServerPlayer) ipe).displayClientMessage(
                                 Component.translatable("unlock_skin.roundabout.killer_queen.minesweeper"), true);
                         user.roundabout$summonStand(self.level(), true, false);
                     }else {
-                        ((ServerLevel) self.level()).sendParticles(ParticleTypes.ASH, self.getX(),
+                        ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
-                                10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.2);
+                                10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
                         this.self.level().playSound(null, this.self.blockPosition(),
                                 ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT,
-                                SoundSource.PLAYERS, 1F, (float) (1.5F + Math.random() * 0.02));
+                                SoundSource.PLAYERS, 2.2F, (float) (1.5F + Math.random() * 0.02));
                     }
                 }
             }
