@@ -560,6 +560,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isBackingUp = isBackingUp;
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
+            fclone.setLeftHanded(PE.getMainArm() == HumanoidArm.LEFT);
             fclone.isSprinting = isSprinting;
             runaway = hasHandsOut() || isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
@@ -3102,6 +3103,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         );
 
         clone.user = player;
+        clone.setLeftHanded(player.getMainArm() == HumanoidArm.LEFT);
         clone.setYRot(self.getYRot());
         clone.setXRot(self.getXRot());
         clone.setYBodyRot(self.yBodyRot);

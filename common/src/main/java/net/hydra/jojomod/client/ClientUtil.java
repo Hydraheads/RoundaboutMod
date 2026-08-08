@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -400,6 +401,7 @@ public class ClientUtil {
                 ||ent.getType()==EntityType.HUSK
                 ||ent.getType()==EntityType.CREEPER
                 ||ent.getType()==EntityType.DROWNED
+                ||ent instanceof CloneEntity
                 ||ent.getType()==EntityType.SKELETON)));
     }
     public static boolean hideLegs(Entity ent){
