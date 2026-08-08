@@ -274,6 +274,13 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public void updateBarrageCharge() {
+        if (this.attackTimeDuring >= this.getBarrageWindup()) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
+        }
+    }
+
+    @Override
     public void setPowerBarrage() {
         this.attackTimeDuring = 0;
         this.setActivePower(PowerIndex.BARRAGE);
@@ -282,6 +289,25 @@ public class PowersSilverChariot extends NewPunchingStand {
         this.setActivePowerPhase(this.getActivePowerPhaseMax());
         animateStand(StandEntity.BARRAGE);
         playBarrageCrySound();
+    }
+
+    @Override
+    public void updateBarrage() {
+        if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
+            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+        } else {
+            if (this.attackTimeDuring > this.getBarrageLength()) {
+                this.attackTimeDuring = -20;
+            } else {
+                if (this.attackTimeDuring > 0) {
+                    this.setAttackTime((getBarrageRecoilTime() - 1) -
+                            Math.round(((float) this.attackTimeDuring / this.getBarrageLength())
+                                    * (getBarrageRecoilTime() - 1)));
+
+                    standBarrageHit();
+                }
+            }
+        }
     }
 
     @Override
@@ -426,7 +452,15 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void updateUniqueMoves() {
-        super.updateUniqueMoves();
+        // super.updateUniqueMoves();
+
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE) {
+            this.updateBarrageCharge();
+        } else if (this.getActivePower() == PowerIndex.BARRAGE) {
+            this.updateBarrage();
+        } else if (this.getActivePower() == PowerIndex.POWER_1) {
+            this.updateRapierSpin();
+        }
     }
 
     @Override
@@ -884,7 +918,13 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void rapierSpinClient() {
         if (!this.onCooldown(PowerIndex.SKILL_1) && canExecuteMoveWithLevel(getRapierSpinLevel())) {
-
+            if (this.activePower == PowerIndex.POWER_1) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                tryPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                tryPowerPacket(PowerIndex.POWER_1);
+            }
         }
     }
 
@@ -893,6 +933,10 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!self.level().isClientSide()) {
 
         }
+    }
+
+    public void updateRapierSpin() {
+
     }
 
     public void rapierSlashClient() {
@@ -963,6 +1007,17 @@ public class PowersSilverChariot extends NewPunchingStand {
                     (float) ((float) 5F * (getAttackMultOnMobs() * 0.01))
             );
         }
+    }
+
+
+
+    // Armor shed
+    public void armorShedClient() {
+
+    }
+
+    public void armorShedServer() {
+
     }
 
 
