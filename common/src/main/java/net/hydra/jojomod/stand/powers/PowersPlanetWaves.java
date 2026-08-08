@@ -1709,11 +1709,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+           /* case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_FIREBALL_EXPLOSION;
             default -> ModParticles.PW_FIREBALL_EXPLOSION;
         };
     }
@@ -1722,11 +1723,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+            /*case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION;
             default -> ModParticles.PW_BLASTWAVE_EXPLOSION;
         };
     }
@@ -1735,11 +1737,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+            /*case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
-            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+//            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_MUSHROOM_EXPLOSION;
             default -> ModParticles.PW_MUSHROOM_EXPLOSION;
         };
     }
