@@ -39,6 +39,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public KingCrimsonCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
         this.goalSelector.addGoal(1, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         ((GroundPathNavigation)this.getNavigation()).setCanPassDoors(true);
     }
