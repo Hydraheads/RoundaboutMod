@@ -8,6 +8,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.access.AccessFateFoodData;
@@ -71,6 +72,10 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            ci.cancel();
+            return;
+        }
         if (rdbt$getFatePowers() instanceof VampiricFate VP && VP.isPlantedInWall()){
             if (this.isInWater()) {
                 this.waterSwimSound();

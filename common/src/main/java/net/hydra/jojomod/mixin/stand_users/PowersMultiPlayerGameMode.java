@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode {
@@ -31,6 +32,15 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
         if (((IInputEvents)Minecraft.getInstance()).roundabout$sameKeyTwo(KeyInputRegistry.guardKey)) {
             ci.cancel();
         }
+    }
+    @Inject(method = "continueDestroyBlock", at = @At("HEAD"), cancellable = true)
+    public void roundabout$continueDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere(this.minecraft.player)){
+            this.isDestroying = false;
+            destroyDelay = 10;
+            cir.setReturnValue(false);
+        }
+
     }
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)

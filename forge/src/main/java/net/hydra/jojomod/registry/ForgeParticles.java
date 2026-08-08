@@ -274,6 +274,19 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PW_FIREBALL_EXPLOSION = PARTICLES.register(
+            "pw_fireball_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_BLASTWAVE_EXPLOSION = PARTICLES.register(
+            "pw_blastwave_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_MUSHROOM_EXPLOSION = PARTICLES.register(
+            "pw_mushroom_explosion",
+            () -> new SimpleParticleType(true)
+    );
+
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

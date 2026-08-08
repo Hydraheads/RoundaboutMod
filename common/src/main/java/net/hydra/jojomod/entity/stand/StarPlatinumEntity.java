@@ -82,7 +82,6 @@ public class StarPlatinumEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
             if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
@@ -202,7 +201,6 @@ public class StarPlatinumEntity extends FollowingStandEntity {
             } else {
                 this.phaseGrab.stop();
             }
-        }
     }
 
     public float fingerInterpolation = 1F;

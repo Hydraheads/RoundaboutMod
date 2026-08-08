@@ -5,6 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.client.models.visages.ZombieVisageBasisModel;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,8 +33,9 @@ public class ZombieAestheticianRenderer<T extends ZombieAesthetician> extends Hu
         ItemStack visage = t.getBasis();
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
-                if (MI.visageData.isCharacterVisage()) {
-                    return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
+                VisageData vd = MI.visageData.generateVisageData(t);
+                if (vd.isCharacterVisage()) {
+                    return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+vd.getSkinPath()+".png"));
                 }
             }
         }

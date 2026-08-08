@@ -59,7 +59,7 @@ public class OccultChargeItem  extends Item {
                     LV.addEffect(new MobEffectInstance(ModEffects.HEX, 7200, 1,false,false));
                     LV.addEffect(new MobEffectInstance(ModEffects.BANISH, 7200, 0,false,true));
 
-                    if (LV.getUUID() != $$1.getUUID()) {
+                    if (LV.getUUID() != $$1.getUUID() && !LV.isInvisible()) {
                         double speed = 0.2;   // how fast particles move outward
                         int points = 12;      // how many directions (density of the ring)
 

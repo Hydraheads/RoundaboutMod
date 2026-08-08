@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -13,11 +14,13 @@ import net.hydra.jojomod.stand.powers.PowersOasis;
 import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +37,16 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
     at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere($$3)){
+            if (!(ClientUtil.isPlayer($$3))) {
+                if (!($$3 instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                        && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
+
         if ($$3 instanceof Player PE) {
             if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
                     && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME

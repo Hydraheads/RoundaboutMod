@@ -18,6 +18,8 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
 
     public TuskAct1Model(ModelPart root) {
         this.stand = root.getChild("stand");
+        this.head = stand.getChild("stand2").getChild("head");
+        this.body = stand.getChild("stand2").getChild("body");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -25,8 +27,9 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition stand2 = stand.addOrReplaceChild("stand2", CubeListBuilder.create(), PartPose.offset(0.0F, 0, 0.0F));
 
-        PartDefinition arms = stand.addOrReplaceChild("arms", CubeListBuilder.create(), PartPose.offset(-3.0F, -23.0F, -1.0F));
+        PartDefinition arms = stand2.addOrReplaceChild("arms", CubeListBuilder.create(), PartPose.offset(-3.0F, -23.0F, -1.0F));
 
         PartDefinition rightArm = arms.addOrReplaceChild("rightArm", CubeListBuilder.create().texOffs(24, 6).addBox(-3.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.1F))
                 .texOffs(24, 15).addBox(-3.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -0.5F, 0.0F));
@@ -34,7 +37,7 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
         PartDefinition leftArm = arms.addOrReplaceChild("leftArm", CubeListBuilder.create().texOffs(24, 9).addBox(0.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(24, 12).addBox(0.0F, -0.5F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.1F)), PartPose.offset(5.0F, -0.5F, 0.0F));
 
-        PartDefinition torso = stand.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(0, 24).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
+        PartDefinition torso = stand2.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 24).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 35).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, -24.0F, -1.0F));
 
         PartDefinition torso2 = torso.addOrReplaceChild("torso2", CubeListBuilder.create().texOffs(24, 0).addBox(-1.5F, 0.0F, -2.0F, 3.0F, 2.0F, 4.0F, new CubeDeformation(0.0F))
@@ -60,7 +63,7 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
 
         PartDefinition cube_r5 = flapBR.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(34, 20).addBox(-2.0F, -1.0F, 0.0F, 4.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0233F, -0.2608F, -0.0903F));
 
-        PartDefinition head = stand.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
+        PartDefinition head = stand2.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 12).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.1F))
                 .texOffs(18, 52).addBox(-3.0F, -6.0F, -3.0F, 6.0F, 6.0F, 6.0F, new CubeDeformation(0.2F))
                 .texOffs(16, 27).addBox(-0.5F, -2.0F, -5.0F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -24.0F, -1.0F));
@@ -94,8 +97,10 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
         super.renderToBuffer(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 
-    //    @Override
-//    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//
-//    }
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        this.defaultModifiers(pEntity);
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+    }
+
 }

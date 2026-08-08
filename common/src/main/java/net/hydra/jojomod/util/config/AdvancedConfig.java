@@ -33,7 +33,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv5 = new HashSet<>(
+    public Set<String> standArrowPoolv6 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -42,6 +42,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:soft_and_wet_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:white_album_disc",
+                    "roundabout:king_crimson_disc",
                     "roundabout:ratt_disc"
                     //"roundabout:green_day_disc"
             )
@@ -58,7 +59,7 @@ public class AdvancedConfig implements Cloneable {
                     //"roundabout:20th_century_boy_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv8 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -69,6 +70,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:ratt_disc",
+                    "roundabout:king_crimson_disc",
                     "roundabout:white_album_disc",
                     "roundabout:manhattan_transfer_disc",
                     "roundabout:california_king_bed_disc"
@@ -184,6 +186,28 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:obsidian",
                     "minecraft:light",
                     "minecraft:barrier"
+            )
+    );
+    public Set<String> sheerHeartAttackCustomBlockHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:torch:4",
+                    "minecraft:soul_torch:3",
+                    "minecraft:redstone_torch:1",
+                    "minecraft:light_block:0",
+                    "minecraft:glow_lichen:0",
+                    "minecraft:cave_vines_plant:0",
+                    "minecraft:cave_vines:0",
+                    "minecraft:nether_portal:0",
+                    "minecraft:end_portal:0"
+            )
+    );
+    public Set<String> sheerHeartAttackCustomEntityHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:blaze:90",
+                    "minecraft:magna_cube:70",
+                    "minecraft:slime:0",
+                    "minecraft:stray:-50",
+                    "roundabout:stray_cat_entity:0"
             )
     );
     public Set<String> standDestructionBlacklist = new HashSet<>(

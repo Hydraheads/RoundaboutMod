@@ -68,7 +68,7 @@ public class StickyIceCoatingBlock
                                 if (!(pl.level().getBlockState(
                                         BlockPos.containing(pl.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
                                 ) {
-                                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.4F, (double) 0.8F, (double) 0.4F));
+                                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.46F, (double) 0.8F, (double) 0.46F));
                                 }
                             }
                         } else {

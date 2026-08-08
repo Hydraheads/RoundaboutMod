@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.WorldTickClient;
@@ -98,6 +99,9 @@ public class FollowingStandEntity extends StandEntity{
     }
 
     public final byte getOffsetType() {
+        if (PowerTypes.hasHandsActive(getUser())){
+            return OffsetIndex.FOLLOW_STYLE;
+        }
         if (this.level().isClientSide()){
             if (ClientUtil.getScreenFreeze()){
                 return this.lastOffsetType;
@@ -203,7 +207,15 @@ public class FollowingStandEntity extends StandEntity{
         }
     }
 
-
+    @Override
+    public boolean isInvisible() {
+        if (PowerTypes.isExistentiallyElsewhere(getFollowing())) {
+            if (!(this.level().isClientSide() && ClientUtil.isPlayer(getFollowing()))) {
+                return true;
+            }
+        }
+        return super.isInvisible();
+    }
 
     ///  lets you modify the values, since they're otherwise final functions
     public float getDistanceOutModified() {return getDistanceOut();}

@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -243,6 +244,18 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.bitesTheDust.startIfStopped(this.tickCount);
             } else {
                 this.bitesTheDust.stop();
+            }
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide()) {
+
+            Entity btd = getPlantedBitesTheDust();
+            if (btd != null && btd.isAlive() && !btd.isRemoved()) {
+                StandUser SU = (StandUser)btd;
+                SU.rdbt$SetBtdPlantedTicks(3);
             }
         }
     }

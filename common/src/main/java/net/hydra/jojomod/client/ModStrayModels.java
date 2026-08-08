@@ -36,9 +36,11 @@ public class ModStrayModels {
     public static ChairRattShoulderModel CHAIR_RATT_SHOULDER;
     public static MandomModel MANDOM;
     public static AnubisModel ANUBIS;
-    public static AnubisHumanoidModel ANUBIS_HUMAN;
     public static WatchModel MANDOM_WATCH;
     public static SmallWatchModel MANDOM_WATCH_SMALL;
+    public static KingCrimsonArmsPart kingCrimsonArmsPart;
+    public static StarPlatinumArmsPart starPlatinumArmsPart;
+    public static TheWorldArmsPart theWorldArmsPart;
     public static ChestPart ChestPart;
     public static SmallChestPart SmallChestPart;
     public static BodySpikePart bodySpikePart;
@@ -47,6 +49,7 @@ public class ModStrayModels {
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
+    public static DoppioHairPart DoppioHairPart;
     public static JohnnyHatPart JohnnyHatPart;
     public static DaiyaEarsPart DaiyaEarsPart;
     public static DaiyaFluffPart DaiyaFluffPart;

@@ -15,6 +15,7 @@ import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
@@ -79,6 +80,7 @@ public class ClientToServerPackets {
             Inventory("inventory"),
             ItemContext("item_context"),
             GuardCancel("guard_cancel"),
+            ControlDataKC("control_data_kc"),
             HairColor("hair_color"),
             NailColor("nail_color"),
             WarHammer("war_hammer"),
@@ -603,6 +605,25 @@ public class ClientToServerPackets {
                     byte cont = (byte)vargs[0];
                     ItemStack stack = (ItemStack)vargs[1];
                     MainUtil.handleChangeItem(sender, cont, stack);
+                }
+
+                if (message.equals(MESSAGES.ControlDataKC.value)) {
+                    boolean isBackingUp = (boolean)vargs[0];
+                    boolean isMovingForward = (boolean)vargs[1];
+                    boolean isSneaking = (boolean)vargs[2];
+                    boolean isJumping = (boolean)vargs[3];
+                    Vector3f delta = (Vector3f) vargs[4];
+                    boolean isSprinting = (boolean)vargs[5];
+                    boolean runaway = (boolean)vargs[6];
+                    if (((StandUser)sender).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                        pkc.isBackingUp = isBackingUp;
+                        pkc.isMovingForward = isMovingForward;
+                        pkc.isSneaking = isSneaking;
+                        pkc.isJumping = isJumping;
+                        pkc.isSprinting = isSprinting;
+                        pkc.runaway = runaway;
+                        pkc.delta = new Vec3(delta.x,delta.y,delta.z);
+                    }
                 }
 
                 /**Release right click to stop guarding*/

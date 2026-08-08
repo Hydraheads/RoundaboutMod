@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -48,6 +49,8 @@ public interface StandUser {
     void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
     void roundabout$setHeat(int e);
     int roundabout$getHeat();
+    void roundabout$setExplosionInflation(int e);
+    int roundabout$getExplosionInflation();
 
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
@@ -112,7 +115,7 @@ public interface StandUser {
     void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
     AnimationState roundabout$getHandLayerAnimation();
     void roundabout$setHandLayerAnimation(AnimationState layer);
-
+    AnimationState roundabout$getWornStandActiveAnimation();
     AnimationState roundabout$getWornStandIdleAnimation();
     void roundabout$setWornStandIdleAnimation(AnimationState layer);
 
@@ -121,6 +124,8 @@ public interface StandUser {
     // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     int roundabout$getHeyYaVanishTicks();
     void roundabout$setHeyYaVanishTicks(int set);
+    int roundabout$getArmVanishTicks();
+    void roundabout$setArmVanishTicks(int set);
     int roundabout$getRattShoulderVanishTicks();
     void roundabout$setRattShoulderVanishTicks(int set);
     int roundabout$getMandomVanishTicks();
@@ -158,6 +163,9 @@ public interface StandUser {
     boolean rdbt$getExperienceTaken();
     void rdbt$setExperienceTaken(boolean taken);
 
+
+    void roundabout$sealStand(int ticks);
+
     void roundabout$setSealedTicks(int ticks);
     void roundabout$setSealedTicks(int ticks, int maxticks);
     int roundabout$getSealedTicks();
@@ -187,6 +195,7 @@ public interface StandUser {
     boolean roundabout$isGuardingEffectively2();
     boolean roundabout$shieldNotDisabled();
     boolean roundabout$isDazed();
+    byte roundabout$getDazeTime();
     boolean roundabout$isRestrained();
     int roundabout$getRestrainedTicks();
     void roundabout$setRestrainedTicks(int restrain);
@@ -302,6 +311,7 @@ public interface StandUser {
     byte roundabout$getLastStandSkin();
     void roundabout$setLastStandSkin(byte lastStandSkin);
     byte roundabout$getStandAnimation();
+    void rdbt$synchedData(EntityDataAccessor<?> $$0);
     void roundabout$setStandAnimation(byte anim);
     byte roundabout$getIdlePos();
     void roundabout$setIdlePosX(byte pos);
@@ -344,7 +354,7 @@ public interface StandUser {
     Vec3 roundabout$getStoredVelocity();
     boolean roundabout$isLaunchBubbleEncased();
     void roundabout$setBubbleLaunchEncased();
-
+    void rdbt$completeUsingItem();
 
     SoundEvent roundabout$getHurtSound(DamageSource sauce);
 
@@ -373,6 +383,9 @@ public interface StandUser {
     void rdbt$SetCrawlTicks(int ticks);
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
+
+    void rdbt$SetBtdPlantedTicks(int e);
+    boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source);
 
     List<CooldownInstance> rdbt$initPowerCooldowns();
     List<CooldownInstance> rdbt$getPowerCooldowns();

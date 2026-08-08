@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
@@ -39,7 +40,7 @@ import java.util.UUID;
 
 import org.joml.Vector3f;
 
-public class BlockBombEntity extends StandEntity {
+public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
 			EntityDataSerializers.INT);
@@ -172,22 +173,14 @@ public class BlockBombEntity extends StandEntity {
 			this.blockSize = new Vec3(shape.maxX, shape.maxY, shape.maxZ);
 		}
 	}
-	
-	/*
-	public void detectInside() {
-		BlockState test = this.level().getBlockState(this.bombPos);
-		if (test.hasBlockEntity() && !test.equals(this.originalState)) {
-			BlockEntity info = this.level().getBlockEntity(this.bombPos);
-			Roundabout.LOGGER.info("Hmmmmmm?");
-			
-			if (info.getBlockState().equals(this.originalState)) {
-				this.blockInfo = info; 
-				Roundabout.LOGGER.info("Hmmmmmm");
-			}
-		}
-		
-	}*/
 
+	@Override
+    public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && this.getUser() != $$0 && !level().isClientSide()) {
+			PKQ.blockContacted($$0);
+		}
+		return  InteractionResult.PASS;
+	}
 	@Override
 	public boolean canAttack(LivingEntity le){
 		super.canAttack(le);
@@ -202,7 +195,7 @@ public class BlockBombEntity extends StandEntity {
 	}
 
 	@Override
-    public boolean isPickable() { return false;}
+    public boolean isPickable() { return true;}
 
     @Override
     public boolean isInvulnerable() { return true;}	
@@ -225,12 +218,11 @@ public class BlockBombEntity extends StandEntity {
     @Override
     public boolean canBeHitByProjectile() { return false;}
     
-    //@Override
-    //public boolean canBeHitByStands() { return false;}
+    @Override
+    public boolean canBeHitByStands() { return false;}
     
     @Override
     public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
-    
 
     //@Override
     /*public boolean forceVisualRotation(){

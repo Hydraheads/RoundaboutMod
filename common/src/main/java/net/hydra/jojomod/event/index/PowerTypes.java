@@ -2,10 +2,17 @@ package net.hydra.jojomod.event.index;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -108,6 +115,32 @@ public enum PowerTypes {
         return false;
     }
 
+    public static boolean hasHandsActive(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+            if (isUsingStand(livingEntity)) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasHandsForVisage(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+        }
+        return false;
+    }
+    public static boolean hasHandsActiveRendering(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+            if (isUsingStand(livingEntity)) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOutRendering();
+            }
+        }
+        return true;
+    }
     public static boolean isBrawling(Entity ent){
         if (ent instanceof Player pl){
             if (isUsingPower(ent)){
@@ -215,6 +248,51 @@ public enum PowerTypes {
             if (user.roundabout$getStandPowers() != null) {
                 return user.roundabout$getStandPowers().isMiningStand();
             }
+        }
+        return false;
+    }
+    //d4c parallel run + time erase + man in the mirror
+    public static boolean isExistentiallyElsewhere(Entity entity){
+        if (entity == null){
+            return false;
+        }
+        if (entity.level().isClientSide()){
+            if (entity instanceof KingCrimsonCloneEntity kcc){
+                if (ClientUtil.isPlayer(kcc.getPlayer()) && !ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf){
+                    return true;
+                }
+            }
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 2){
+                if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            if (entity instanceof BloodSplatterEntity bse && bse.getSplatterType() == 3){
+                return true;
+            }
+        }
+        if (isErasingTime(entity)){
+            return true;
+        }
+        if (entity instanceof FollowingStandEntity se) {
+            if (se.getFollowing() != null){
+
+                return isExistentiallyElsewhere(se.getFollowing());
+            }
+        } if (entity instanceof StandEntity se){
+            if (se.getUser() != null){
+                return isExistentiallyElsewhere(se.getUser());
+            }
+        }
+        return false;
+    }
+    public static boolean isErasingTime(Entity entity){
+        if (entity instanceof Player pl){
+            return ((StandUser)pl).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                    pkc.timeEraseActive;
         }
         return false;
     }

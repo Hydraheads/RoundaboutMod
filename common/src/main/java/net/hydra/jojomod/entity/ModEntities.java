@@ -39,6 +39,7 @@ public class ModEntities {
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
     public static EntityType<KingCrimsonEntity> KING_CRIMSON;
+    public static EntityType<ReaperKingCrimsonEntity> KING_CRIMSON_REAPER;
     public static EntityType<StarPlatinumEntity> STAR_PLATINUM;
     public static EntityType<JusticeEntity> JUSTICE;
     public static EntityType<MagiciansRedEntity> MAGICIANS_RED;
@@ -71,7 +72,9 @@ public class ModEntities {
     public static EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC;
     public static EntityType<ManhattanTransferEntity> MANHATTAN_TRANSFER;
     public static EntityType<PollinationTransferEntity> POLLINATION_TRANSFER;
+    public static EntityType<BlazeTransferEntity> BLAZE_TRANSFER;
     public static EntityType<BlackSabbathEntity> BLACK_SABBATH;
+    public static EntityType<BeachSabbathEntity> BEACH_SABBATH;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -79,6 +82,7 @@ public class ModEntities {
     public static EntityType<TuskEntity> TUSK_A2;
     public static EntityType<TuskEntity> TUSK_A3;
     public static EntityType<TuskEntity> TUSK_A4;
+    public static EntityType<AnubisEntity> ANUBIS;
     public static EntityType<VillagerMinion> VILLAGER_MINION;
     public static EntityType<AxolotlMinion> AXOLOTL_MINION;
     public static EntityType<ChickenMinion> CHICKEN_MINION;
@@ -107,6 +111,8 @@ public class ModEntities {
     public static EntityType<ColdBlastProjectile> COLD_BLAST_PROJECTILE;
     public static EntityType<PWMeteorEntity> PW_METEOR;
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
+    public static EntityType<FakeItemEntity> FAKE_ITEM;
+    public static EntityType<FakeExperienceOrb> FAKE_EXP;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
@@ -163,6 +169,8 @@ public class ModEntities {
     public static EntityType<PlayerAlexNPC> ALEX_NPC;
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;
     public static EntityType<FogCloneEntity> FOG_CLONE;
+    public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
+    public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;

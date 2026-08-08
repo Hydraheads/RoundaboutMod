@@ -47,65 +47,69 @@ public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRender
         this.addLayer(new StarPlatinumEyeLayer<>(this));
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(StarPlatinumEntity entity) {
-        byte BT = entity.getSkin();
-        if (BT == StarPlatinumEntity.PART_3_SKIN){
+    public static ResourceLocation getSkin(byte BT) {
+        if (BT == StarPlatinumEntity.PART_3_SKIN) {
             return PART_3_SKIN;
-        } else if (BT == StarPlatinumEntity.MANGA_SKIN){
+        } else if (BT == StarPlatinumEntity.MANGA_SKIN) {
             return PART_3_MANGA_SKIN;
-        } else if (BT == StarPlatinumEntity.MANGA_PURPLE_SKIN){
+        } else if (BT == StarPlatinumEntity.MANGA_PURPLE_SKIN) {
             return PART_3_MANGA_PURPLE_SKIN;
-        } else if (BT == StarPlatinumEntity.OVA_SKIN){
+        } else if (BT == StarPlatinumEntity.OVA_SKIN) {
             return OVA_SKIN;
-        } else if (BT == StarPlatinumEntity.GREEN_SKIN){
+        } else if (BT == StarPlatinumEntity.GREEN_SKIN) {
             return GREEN_SKIN;
-        } else if (BT == StarPlatinumEntity.GREEN_2){
+        } else if (BT == StarPlatinumEntity.GREEN_2) {
             return GREEN_2;
-        } else if (BT == StarPlatinumEntity.BASEBALL_SKIN){
+        } else if (BT == StarPlatinumEntity.BASEBALL_SKIN) {
             return BASEBALL_SKIN;
-        } else if (BT == StarPlatinumEntity.PART_4_SKIN){
+        } else if (BT == StarPlatinumEntity.PART_4_SKIN) {
             return PART_4_SKIN;
-        } else if (BT == StarPlatinumEntity.PART_6_SKIN){
+        } else if (BT == StarPlatinumEntity.PART_6_SKIN) {
             return PART_6_SKIN;
-        } else if (BT == StarPlatinumEntity.ATOMIC_SKIN){
+        } else if (BT == StarPlatinumEntity.ATOMIC_SKIN) {
             return ATOMIC_SKIN;
-        } else if (BT == StarPlatinumEntity.FIRST_SKIN){
+        } else if (BT == StarPlatinumEntity.FIRST_SKIN) {
             return MANGA_FIRST_SKIN;
-        } else if (BT == StarPlatinumEntity.JOJONIUM_SKIN){
+        } else if (BT == StarPlatinumEntity.JOJONIUM_SKIN) {
             return JOJONIUM_SKIN;
-        } else if (BT == StarPlatinumEntity.BETA){
+        } else if (BT == StarPlatinumEntity.BETA) {
             return BETA_SKIN;
-        } else if (BT == StarPlatinumEntity.ARCADE){
+        } else if (BT == StarPlatinumEntity.ARCADE) {
             return ARCADE_SKIN;
-        } else if (BT == StarPlatinumEntity.FOUR_DEE){
+        } else if (BT == StarPlatinumEntity.FOUR_DEE) {
             return FOUR_DEE_SKIN;
-        } else if (BT == StarPlatinumEntity.JOJOVELLER){
+        } else if (BT == StarPlatinumEntity.JOJOVELLER) {
             return JOJOVELLER;
-        } else if (BT == StarPlatinumEntity.CROP){
+        } else if (BT == StarPlatinumEntity.CROP) {
             return CROP;
-        } else if (BT == StarPlatinumEntity.VOLUME_39){
+        } else if (BT == StarPlatinumEntity.VOLUME_39) {
             return VOLUME_39;
-        } else if (BT == StarPlatinumEntity.JUMP_13){
+        } else if (BT == StarPlatinumEntity.JUMP_13) {
             return JUMP_13;
-        } else if (BT == StarPlatinumEntity.ARCADE_2){
+        } else if (BT == StarPlatinumEntity.ARCADE_2) {
             return ARCADE_SKIN_2;
-        } else if (BT == StarPlatinumEntity.TREE){
+        } else if (BT == StarPlatinumEntity.TREE) {
             return TREE;
-        } else if (BT == StarPlatinumEntity.NETHER){
+        } else if (BT == StarPlatinumEntity.NETHER) {
             return NETHER;
-        } else if (BT == StarPlatinumEntity.PHANTOM){
+        } else if (BT == StarPlatinumEntity.PHANTOM) {
             return PHANTOM;
-        } else if (BT == StarPlatinumEntity.LIGHT){
+        } else if (BT == StarPlatinumEntity.LIGHT) {
             return LIGHT;
-        } else if (BT == StarPlatinumEntity.FINISHER){
+        } else if (BT == StarPlatinumEntity.FINISHER) {
             return FINISHER;
-        } else if (BT == StarPlatinumEntity.PART_4_LIVE){
+        } else if (BT == StarPlatinumEntity.PART_4_LIVE) {
             return PART_4_LIVE;
-        } else if (BT == StarPlatinumEntity.KING){
+        } else if (BT == StarPlatinumEntity.KING) {
             return KING;
         }
         return PART_3_SKIN;
+    }
+    @Override
+    public ResourceLocation getTextureLocation(StarPlatinumEntity entity) {
+        byte BT = entity.getSkin();
+        return getSkin(BT);
+
     }
 
     @Override

@@ -61,7 +61,6 @@ public class TheWorldEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
             if (animation != 12) {
@@ -169,7 +168,6 @@ public class TheWorldEntity extends FollowingStandEntity {
             } else {
                 this.phaseGrab.stop();
             }
-        }
     }
 
     public int tsReleaseTime = 0;

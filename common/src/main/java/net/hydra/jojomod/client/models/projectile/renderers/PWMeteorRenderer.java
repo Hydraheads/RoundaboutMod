@@ -92,6 +92,7 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
     public static final ResourceLocation PW_METEOR_WATER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_water.png");
     public static final ResourceLocation PW_METEOR_WHITE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_white.png");
     public static final ResourceLocation PW_METEOR_COMET_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_comet.png");
+    public static final ResourceLocation PW_METEOR_GRAPE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_grape.png");
 
     @Override
     public ResourceLocation getTextureLocation(PWMeteorEntity entity) {
@@ -108,6 +109,8 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
                 return PW_METEOR_WATER_TEXTURE;
             } else if (sft == 7) {
                 return PW_METEOR_COMET_TEXTURE;
+            } else if (sft == 8) {
+                return PW_METEOR_GRAPE_TEXTURE;
             }
         }
         return PW_METEOR_TEXTURE;

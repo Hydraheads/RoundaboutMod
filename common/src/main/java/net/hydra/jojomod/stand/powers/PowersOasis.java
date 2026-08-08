@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.OasisMudBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -38,19 +39,46 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class PowersOasis extends NewDashPreset {
     public PowersOasis(LivingEntity self) {
         super(self);
     }
+
+    // TODO LIST
+
+    // TODO finish setting up BERS and fix shading/water issues
+    // TODO fix square block iterator
+
+    // TODO make it so for mud hit, blocks with blocks underneath do not convert to fbe
+    // TODO add block filter to mud hit block move, link to config file
+    // TODO get melted shield model for mud hit on entities (if that's even gonna work)
+
+    // TODO set up fixed orientation particles (look at other 2 mods for reference)
+    // TODO apply fixed orientation particles to hitting through blocks
+    // TODO add throttle to particle spawner for barraging through blocks
+
+    // TODO patch mining with brawl mode in creative bug
+    // TODO patch quick block barrage bug
+
+    // TODO add seperate head model and gate head rendering in visagepartlayer
+
+
+
+
+
+
 
     @Override
     public boolean isStandEnabled(){
@@ -80,24 +108,25 @@ public class PowersOasis extends NewDashPreset {
     public boolean interceptGuard(){
         return fistsOut;
     }
+
     public boolean isEntityInBrawlRange() {
         return fistsOut && getTargetEntityThroughWalls(this.self, 3, getBrawlPunchAngle()) != null;
     }
 
+    public boolean fistsOut = false;
+
 
     public static final byte MUD_HIT_WINDUP = PowerIndex.POWER_1_SNEAK;
-    public static final byte POWER_1_SNEAK_EXTRA = 52;
+    public static final byte KICK_IMPACT = 100;
 
 
 
-    public boolean fistsOut = false;
 
 
     public boolean renderSuit(){
         return (self instanceof Player pl || MainUtil.isHumanoid2(self)) && PowerTypes.hasStandActive(self);
     }
 
-    // stand fading for first person
     public static float getOasisAmt(Entity entity, float partialTicks){
         float heyFull = 0;
         if (entity instanceof LivingEntity LE) {
@@ -168,10 +197,22 @@ public class PowersOasis extends NewDashPreset {
             case SKILL_1_NORMAL -> {
                 toggleFistsClient();
             }
-
             case SKILL_1_CROUCH -> {
                 mudHitClient();
             }
+            case SKILL_2_NORMAL -> {
+                // submerge here
+            }
+            case SKILL_2_CROUCH -> {
+                // eat item here
+            }
+            case SKILL_3_NORMAL -> {
+                dashClient();
+            }
+            case SKILL_3_CROUCH -> {
+                blockLiquefyClient();
+            }
+
         }
     }
 
@@ -190,6 +231,9 @@ public class PowersOasis extends NewDashPreset {
             }
             case PowerIndex.EXTRA -> {
                 mudHitBlockImpact();
+            }
+            case PowerIndex.POWER_3_SNEAK -> {
+                blockLiquefy();
             }
 
 
@@ -221,13 +265,19 @@ public class PowersOasis extends NewDashPreset {
         return super.tryIntPower(move,forced,chargeTime);
     }
 
-    public BlockPos fallingBlockPos = BlockPos.ZERO;
+    public BlockPos packetBlockPos = BlockPos.ZERO;
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
-        fallingBlockPos = pos;
+        packetBlockPos = pos;
         return super.tryBlockPosPower(move, forced,pos);
     }
 
+    @Override
+    public void handleStandAttack(Player player, Entity target){
+        if (this.getActivePower() == MUD_HIT_WINDUP){
+            mudHitEntityImpact(target);
+        }
+    }
 
     @Override
     public void tickPower() {
@@ -254,6 +304,7 @@ public class PowersOasis extends NewDashPreset {
 
         if (!this.self.level().isClientSide && !fallingMudBlocks.isEmpty()) {
             fallingMudBlocks.removeIf(fallingBlock -> {
+
                 if (!fallingBlock.isAlive()) {
                     if (fallingBlock.tickCount > 2) {
                         onFallingBlockLand(fallingBlock.blockPosition(), fallingBlock.getBlockState());
@@ -261,13 +312,76 @@ public class PowersOasis extends NewDashPreset {
                         return true;
                     }
                 }
+
                 return false;
             });
         }
     }
 
 
+    public void dashClient() {
+        dash();
+    }
 
+
+
+
+
+    public void blockLiquefyClient() {
+
+        int blockReach = 7;
+        //BlockHitResult hitBlock = (BlockHitResult) this.self.pick(blockReach, 0.0f, false);
+        BlockHitResult hitBlock = this.getLookedBlock(blockReach);
+
+
+        tryBlockPosPowerPacket(PowerIndex.POWER_3_SNEAK, hitBlock.getBlockPos());
+    }
+
+    public void blockLiquefy() {
+
+        this.setActivePower(PowerIndex.NONE);
+
+        int radius = 3;
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+
+                    BlockPos blockPos = packetBlockPos.offset(x, y, z);
+                    BlockState blockState = this.self.level().getBlockState(blockPos);
+
+                    if (blockState.getBlock().isCollisionShapeFullBlock(blockState,this.self.level(),packetBlockPos)
+                            && !(blockState.getBlock() instanceof OasisMudBlock)) {
+
+                        if (this.self.level() instanceof ServerLevel serverLevel) {
+                            OasisMudBlock.replaceBlock(serverLevel, blockPos, 1000);
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+/*
+        for (int i = -1; i <= 3; i++) {
+            for (int j = -1; j <= 3; j++) {
+
+                BlockPos newBlockPos = blockPos.offset(i, 0, j);
+                BlockState newBlockState = this.self.level().getBlockState(newBlockPos);
+
+                if (newBlockState.getBlock() == Blocks.AIR) {
+                    continue;
+                }
+
+                if (this.self.level() instanceof ServerLevel serverLevel) {
+                    OasisMudBlock.replaceBlock(serverLevel, blockPos.offset(i, 0, j), 100);
+                }
+            }
+        }
+
+ */
+    }
 
 
 
@@ -307,14 +421,6 @@ public class PowersOasis extends NewDashPreset {
                 }
 
             }
-        }
-    }
-
-
-    @Override
-    public void handleStandAttack(Player player, Entity target){
-        if (this.getActivePower() == MUD_HIT_WINDUP){
-            mudHitEntityImpact(target);
         }
     }
 
@@ -363,40 +469,114 @@ public class PowersOasis extends NewDashPreset {
         }
     }
 
+
     List<FallingBlockEntity> fallingMudBlocks = new ArrayList<>();
+    List<BlockPos> fallingMudBlockHolder = new ArrayList<>();
+    List<BlockPos> fallingBlocksGrouped = new ArrayList<>();
+    HashSet<BlockPos> fallenBlocks = new HashSet<>();
+
     public void mudHitBlockImpact() {
+
+        Roundabout.LOGGER.info("mudhitblockimpact");
 
         this.setActivePower(PowerIndex.NONE);
         this.setAttackTimeDuring(-10);
 
+        this.self.level().playSound(null, packetBlockPos, ModSounds.OASIS_MUD_HIT_EVENT, SoundSource.PLAYERS, 0.9f, 1.0f);
 
-        for (int i = -1; i <= 2; i++) {
-            for (int j = -1; j <= 2; j++) {
-                BlockPos newBlockPos = fallingBlockPos.offset(i, 0, j);
-                BlockState newBlockState = this.self.level().getBlockState(newBlockPos);
+        int radius = 3;
 
-                if (newBlockState.getBlock() == Blocks.AIR) {
-                    continue;
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (x * x + y * y + z * z <= radius * radius) {
+
+                        BlockPos blockPos = packetBlockPos.offset(x, y, z);
+                        BlockState blockState = this.self.level().getBlockState(blockPos);
+
+
+                        if (!MainUtil.isBlockBlacklisted(blockState)
+                                && blockState.getBlock().isCollisionShapeFullBlock(blockState,this.self.level(),packetBlockPos)
+                                && blockState.getBlock().defaultDestroyTime() >= 0) {
+
+                            if (blockState.hasProperty(BlockStateProperties.SNOWY)) {
+                                blockState = blockState.setValue(BlockStateProperties.SNOWY, false);
+                            }
+
+                            fallingMudBlockHolder.add(blockPos);
+
+                            FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), blockPos, blockState);
+                            fallingMudBlocks.add(fallingBlock);
+
+                        }
+                    }
                 }
-
-                FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), newBlockPos, newBlockState);
-                fallingMudBlocks.add(fallingBlock);
             }
         }
 
-        BlockState state = this.self.level().getBlockState(fallingBlockPos);
-        FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), fallingBlockPos, state);
-        fallingMudBlocks.add(fallingBlock);
+        /*
+        fallingMudBlockHolder.sort((a, b) -> Integer.compare(b.getY(), a.getY()));
 
+        for (BlockPos blockPos : fallingMudBlockHolder) {
+
+            if (fallenBlocks.contains(blockPos)) {
+                continue;
+            }
+
+
+            for (int i = 1; i <= (radius*2)+1; i++) {
+                BlockPos blockBelow = blockPos.offset(0, -i, 0);
+                BlockState blockStateBelow = this.self.level().getBlockState(blockBelow);
+
+                if (!fallingMudBlockHolder.contains(blockBelow) && (blockStateBelow.isAir() || blockStateBelow.canBeReplaced())) {
+                    for (int j = 0; j < i; j ++) {
+                        BlockPos blockPos2 = blockPos.offset(0, -j, 0);
+
+                        fallenBlocks.add(blockPos2);
+                        fallingBlocksGrouped.add(blockPos2);
+                    }
+
+                    Roundabout.LOGGER.info("fall column");
+                    break;
+                }
+            }
+        }
+
+
+        fallingMudBlockHolder.clear();
+        groupFallingBlocks();
+        fallenBlocks.clear();
+
+         */
     }
+
+    public void groupFallingBlocks() {
+
+        fallingBlocksGrouped.sort((a, b) -> Integer.compare(b.getY(), a.getY()));
+        for (BlockPos blockPos : fallingBlocksGrouped) {
+            BlockState blockState = this.self.level().getBlockState(blockPos);
+
+            FallingBlockEntity fallingBlock = FallingBlockEntity.fall(this.self.level(), blockPos, blockState);
+            fallingMudBlocks.add(fallingBlock);
+        }
+
+        fallingBlocksGrouped.clear();
+    }
+
+
+
+
+
+
 
     public void onFallingBlockLand(BlockPos blockPos, BlockState blockState) {
         if (!this.self.level().isClientSide) {
             ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5, 30, 0.3, 0.1, 0.3, 0.15);
 
-            Roundabout.LOGGER.info("landed!");
+            SoundType soundType = blockState.getSoundType();
+
             float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
-            this.self.level().playSound(null, blockPos, SoundEvents.GRAVEL_FALL, SoundSource.PLAYERS, 0.9f, pitch);
+            this.self.level().playSound(null, blockPos, soundType.getBreakSound(), SoundSource.PLAYERS, 0.9f, pitch);
         }
     }
 
@@ -520,7 +700,10 @@ public class PowersOasis extends NewDashPreset {
                 if (entity.distanceTo(self) > 3) {
                     return;
                 }
-                Roundabout.LOGGER.info("reached kickImpact method");
+
+                // replace with the one from the anime when he kicks bruno (is this even necessary?)
+                playSoundsIfNearby(KICK_IMPACT, 20, false);
+
                 float pow;
                 float knockbackStrength;
                 pow = 1;
@@ -790,6 +973,28 @@ if (keyIsDown) {
             setSkillIcon(context, x, y, 1, StandIcons.OASIS_MUD_HIT, PowerIndex.SKILL_1_SNEAK);
         }
 
+        if (!isHoldingSneak()) {
+            setSkillIcon(context, x, y, 2, StandIcons.OASIS_SUBMERGE, PowerIndex.SKILL_2);
+        } else {
+            setSkillIcon(context, x, y, 2, StandIcons.OASIS_SPIT, PowerIndex.SKILL_2);
+        }
+
+        if (this.self.fallDistance > 3) {
+            setSkillIcon(context, x, y, 3, StandIcons.OASIS_DIVE, PowerIndex.SKILL_3_CROUCH_GUARD); // TODO fix this too
+        } else {
+            if (!isHoldingSneak()) {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.OASIS_LIQUEFY, PowerIndex.SKILL_3_GUARD); // TODO where is skill 3 sneak?
+            }
+        }
+
+        if (!isHoldingSneak()) {
+            setSkillIcon(context, x, y, 4, StandIcons.OASIS_MOB_GRAB, PowerIndex.SKILL_4);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.OASIS_SPIT_SPIKE, PowerIndex.SKILL_4_SNEAK);
+        }
+
     }
 
     public static final byte
@@ -850,6 +1055,9 @@ if (keyIsDown) {
         switch(soundChoice) {
             case SoundIndex.SUMMON_SOUND -> {
                 return ModSounds.SUMMON_OASIS_EVENT;
+            }
+            case KICK_IMPACT -> {
+                return ModSounds.IMPALE_HIT_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);

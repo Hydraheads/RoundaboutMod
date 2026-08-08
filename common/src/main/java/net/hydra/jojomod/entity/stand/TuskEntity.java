@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.Roundabout;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
@@ -22,6 +23,17 @@ public class TuskEntity extends FollowingStandEntity {
         return -1;
     }
 
+    public final AnimationState hideFists = new AnimationState();
+
+    @Override
+    public void setupAnimationStates() {
+        super.setupAnimationStates();
+        if (this.getAnimation() != BARRAGE) {
+            this.hideFists.startIfStopped(this.tickCount);
+        } else {
+            this.hideFists.stop();
+        }
+    }
 
     @Override
     public float getDistanceOutModified() {

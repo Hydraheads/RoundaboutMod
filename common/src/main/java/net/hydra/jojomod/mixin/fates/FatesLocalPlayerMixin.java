@@ -4,6 +4,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.util.HeatUtil;
@@ -28,6 +29,11 @@ public abstract class FatesLocalPlayerMixin extends Entity {
     @Inject(method = "canSpawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$canSpawnSprintParticle(CallbackInfoReturnable<Boolean> cir)
     {
+
+        if (PowerTypes.isExistentiallyElsewhere(this)){
+            cir.setReturnValue(false);
+            return;
+        }
 
         if (((IFatePlayer)this).rdbt$getFatePowers() instanceof VampiricFate VP
         && VP.isPlantedInWall()){

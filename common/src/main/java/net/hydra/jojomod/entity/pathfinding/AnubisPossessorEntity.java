@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.pathfinding;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -32,13 +33,15 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
             for (int i=0;i<Mob.targets.size();i++ ) {
                 LivingEntity target = Mob.targets.get(i);
                 double tDist = target.distanceTo(this.mob);
-                if (dist > tDist && this.mob.getSensing().hasLineOfSight(target) && target.isAlive()) {
+                if (dist > tDist && this.mob.getSensing().hasLineOfSight(target) && target.isAlive()
+                && !PowerTypes.isExistentiallyElsewhere(target)) {
                     dist = tDist;
                     this.target = target;
                     if (((AnubisPossessorEntity) this.mob).getUser() instanceof Player P) {
                         S2CPacketUtil.syncPossessorTarget(P,this.target.getId());
                     }
-                } else if (!this.mob.getSensing().hasLineOfSight(target) || !target.isAlive()) {
+                } else if (!this.mob.getSensing().hasLineOfSight(target) || !target.isAlive()
+                || PowerTypes.isExistentiallyElsewhere(target)) {
                     Mob.targets.remove(target);
                 }
             }
@@ -63,10 +66,11 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
     public void tick() {
         super.tick();
         if (this.getUser() != null) {
-            StandUser SU = (StandUser) this.getUser();
             if (this.targets.isEmpty() && !this.level().isClientSide()) {
-                SU.roundabout$onPossessionFinish();
-                discard();
+                this.setLifeSpan(this.getLifeSpan() - 1);
+                if (this.getLifeSpan() <= 1) {
+                    ((StandUser)this.getUser()).roundabout$onPossessionFinish();
+                }
             }
         }
     }

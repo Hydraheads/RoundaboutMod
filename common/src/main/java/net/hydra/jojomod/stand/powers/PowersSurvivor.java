@@ -555,6 +555,7 @@ public class PowersSurvivor extends NewDashPreset {
         if (this.self.level().isClientSide()){
             unloadTargets();
         }
+        System.out.println(EntityTargetOne + ", is client? " + isClient());
         super.tickPower();
     }
 
@@ -676,9 +677,9 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public static final byte
-            PLACE = 61,
-            RETRACT = 62,
-            SHOCK = 63;
+            PLACE = 71,
+            RETRACT = 72,
+            SHOCK = 73;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",

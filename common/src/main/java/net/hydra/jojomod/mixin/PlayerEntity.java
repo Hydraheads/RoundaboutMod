@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -213,6 +214,19 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cir.setReturnValue(false);
         }
     }
+    @Inject(
+            method = "touch",
+            at = @At("HEAD"),
+            cancellable = true, require = 0
+    )
+    public void rdbt$touch(Entity $$0, CallbackInfo ci){
+        if (PowerTypes.isExistentiallyElsewhere(this) ||
+                PowerTypes.isExistentiallyElsewhere($$0)){
+            ci.cancel();
+        }
+
+    }
+
 
     //0.00392156862
     @Unique
@@ -1265,6 +1279,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
         compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
 
+
         $$0.put("roundabout",compoundtag);
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
@@ -1856,6 +1871,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 this.getStyleAnimation().stop();
             }
         }
+        ((StandUser)this).rdbt$synchedData($$0);
     }
     @Override
     @Unique
@@ -2040,6 +2056,10 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             if(PB.active){
                 PB.active = false;
             }
+            if(PB.selecting){
+                PB.selecting = false;
+            }
+                PB.setNull();
         }
     }
 

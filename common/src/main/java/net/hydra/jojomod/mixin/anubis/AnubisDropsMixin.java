@@ -30,11 +30,6 @@ public abstract class AnubisDropsMixin {
 
 
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-
-                if (This instanceof Cow C) {
-                    C.spawnAtLocation(ModItems.ANUBIS_ITEM.getDefaultInstance());
-                }
-
                 if (MainUtil.isTraitorDisc(SU.roundabout$getStandDisc())) {
 
                     if ($$0.getEntity() != null && $$0.getEntity() instanceof Player P

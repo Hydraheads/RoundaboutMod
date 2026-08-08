@@ -42,7 +42,7 @@ public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
         super.dropCustomDeathLoot($$0, $$1, $$2);
     }
 
-    private static final EntityDataAccessor<Integer> SUMMONER_ID = SynchedEntityData.defineId(AnubisGuardian.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> SUMMONER_ID = SynchedEntityData.defineId(AnubisGuardian.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> CHOSEN_ACTION = SynchedEntityData.defineId(AnubisGuardian.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> HAS_POPPED = SynchedEntityData.defineId(AnubisGuardian.class, EntityDataSerializers.BOOLEAN);
 

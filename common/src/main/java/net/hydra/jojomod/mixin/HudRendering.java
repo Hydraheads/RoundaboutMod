@@ -128,7 +128,7 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
                                     "textures/misc/bites_the_dust/frame_" + ClientUtil.bitesTheDustTicker + ".png"),
-                            1F, 1F, 1F, 1F);
+                            ConfigManager.getClientConfig().generalSettings.bitesTheDustOpacity, 1F, 1F, 1F);
                 }
             }
 
@@ -682,7 +682,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$isPossessed()) {
+            } if (user.roundabout$isPossessed() && user.roundabout$getPossessor() != null && user.roundabout$getPossessor().getTarget() != null) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {
