@@ -791,6 +791,8 @@ public class Config implements Cloneable {
         public Integer meteorTrackingPower;
         @BooleanOption(group = "inherit", value = false)
         public Boolean PWCanonMovesOnly;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean trackingmessage;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
