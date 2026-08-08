@@ -2766,11 +2766,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 $$1.add(KingCrimsonEntity.AQUA);
                 $$1.add(KingCrimsonEntity.YELLOW);
                 $$1.add(KingCrimsonEntity.GREEN);
-                $$1.add(KingCrimsonEntity.NUCLEAR);
             } if (Level > 4 || bypass) {
+                $$1.add(KingCrimsonEntity.NUCLEAR);
                 $$1.add(KingCrimsonEntity.STARLESS);
+            } if (Level > 5 || bypass) {
                 $$1.add(KingCrimsonEntity.END);
                 $$1.add(KingCrimsonEntity.END_2);
+            } if (Level > 6 || bypass) {
                 $$1.add(KingCrimsonEntity.CONCEPT);
                 $$1.add(KingCrimsonEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
