@@ -3304,6 +3304,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     }
                     fakedDeath = false;
                 }
+                if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.postTESoften) {
+                    double range = getSkipBonusRange();
+                    double rangeSqr = range * range;
+                    for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
+                        if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 28;
+                        }
+                    }
+                }
             } else {
                 spawnClone();
                 timeEraseActive = true;
@@ -3620,6 +3629,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             setAttack();
             return false;
         }
+        if (isUsingTimeErase()){
+            soften = true;
+            Roundabout.LOGGER.info("yes");
+            timeErase();
+            soften = false;
+        }
+
+
         return super.setPowerAttack();
     }
 

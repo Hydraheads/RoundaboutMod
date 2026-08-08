@@ -3958,6 +3958,8 @@
   "config.roundabout.starFingerLeapCooldown.desc": "Star Finger is disabled for a short time after a leap",
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
+  "config.roundabout.postTESoften.name": "Post TE Soften",
+  "config.roundabout.postTESoften.desc": "If ending time erase makes ",
 
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
