@@ -616,20 +616,22 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_STAR_PLATINUM);
                         entries.accept(STAND_DISC_THE_WORLD);
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
-                        entries.accept(STAND_DISC_JUSTICE);
-                        entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
+                        entries.accept(STAND_DISC_JUSTICE);
+                        entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_ANUBIS);
+                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
+                        entries.accept(STAND_DISC_KING_CRIMSON);
+                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
-                        entries.accept(STAND_DISC_ANUBIS);
-                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
@@ -646,8 +648,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(STAND_DISC_KING_CRIMSON);
-                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);

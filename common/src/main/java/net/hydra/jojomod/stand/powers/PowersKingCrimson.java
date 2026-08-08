@@ -3469,18 +3469,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean fakedDeath = false;
 
     @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Hydra").withStyle(ChatFormatting.GOLD);
-    }
-    @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
@@ -4098,4 +4086,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public int getMiningLevel() {
         return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.getMiningTierKingCrimson;
     }
+
+//    public boolean isWip(){
+//        return true;
+//    }
+//    public Component ifWipListDevStatus(){
+//        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+//    }
+//    public Component ifWipListDev(){
+//        return Component.literal(  "Hydra").withStyle(ChatFormatting.GOLD);
+//    }
 }
