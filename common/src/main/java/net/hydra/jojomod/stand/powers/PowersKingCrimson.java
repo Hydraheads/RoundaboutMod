@@ -635,7 +635,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             activeCloneUser.roundabout$setLeapTicks(thisUser.roundabout$getLeapTicks());
 
             StandPowers powers = activeCloneUser.roundabout$getStandPowers();
-            powers.attackTime = attackTimeMax;
+            powers.attackTime = attackTime;
             powers.attackTimeMax = attackTimeMax;
             powers.activePowerPhase = activePowerPhase;
 
