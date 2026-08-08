@@ -1891,11 +1891,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
                         || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
-                    HeatUtil.addHeat(PL, -2);
+                    HeatUtil.addHeat(PL, -1);
                     return;
                 }
             }
+            if (!HeatUtil.isArmsFrozen(PL)){
+                HeatUtil.addHeat(PL, -4);
+            } else {
                 HeatUtil.addHeat(PL, -3);
+            }
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }

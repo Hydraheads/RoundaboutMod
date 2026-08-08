@@ -639,7 +639,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
-            if (st != null && !st.isRemoved()) {
+            if (st != null && !st.isRemoved() && !hasArmsOut) {
                 StandEntity stand = getNewStandEntity();
                 if (stand instanceof FollowingStandEntity fse && st instanceof FollowingStandEntity ste) {
                     ((StandUser)activeClone).roundabout$setStand(stand);

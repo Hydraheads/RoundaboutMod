@@ -1,6 +1,8 @@
 package net.hydra.jojomod.mixin.stand_entities;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -18,7 +20,7 @@ public abstract class StandWarden extends Monster {
 
     @Inject(method = "canTargetEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$canTargetEntity(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0x instanceof StandEntity) {
+        if ($$0x instanceof StandEntity || PowerTypes.isExistentiallyElsewhere($$0x)) {
             cir.setReturnValue(false);
         }
     }
