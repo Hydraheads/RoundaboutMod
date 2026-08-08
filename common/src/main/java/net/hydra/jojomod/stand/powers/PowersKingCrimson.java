@@ -1188,8 +1188,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     BlockState state = level.getBlockState(pos);
 
                     if (!state.isAir()
-                            && state.blocksMotion()
-                            && !state.getCollisionShape(level, pos).isEmpty()) {
+                            && ((state.blocksMotion()
+                            && !state.getCollisionShape(level, pos).isEmpty()) || state.liquid())) {
                         supported = true;
                         break;
                     }
