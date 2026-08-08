@@ -2337,6 +2337,10 @@ public class AbilityScapeBasis {
             }
         }
 
+        if (PowerTypes.isExistentiallyElsewhere(targetEntity)){
+            return null;
+        }
+
         return targetEntity;
     }
 

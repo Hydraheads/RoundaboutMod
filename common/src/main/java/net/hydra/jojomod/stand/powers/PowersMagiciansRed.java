@@ -1727,6 +1727,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
+            return;
+        }
         boolean landedLead = false;
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
