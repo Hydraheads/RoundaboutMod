@@ -1525,8 +1525,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.detonateTimer++;
             }
             if (currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT) {
-                float percent = detonateTimer / (float) getDetonateWindup();
-                if (bombEntity != null) {
+                if (bombEntity instanceof LivingEntity && bombEntity.isAlive()) {
+                    float percent = detonateTimer / (float) getDetonateWindup();
                     ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
                 }
             }
