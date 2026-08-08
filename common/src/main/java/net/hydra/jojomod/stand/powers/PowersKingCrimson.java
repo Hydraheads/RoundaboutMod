@@ -594,8 +594,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             for (MobEffectInstance effect : self.getActiveEffects()) {
                 activeClone.addEffect(new MobEffectInstance(effect));
             }
-            activeClone.setInvulnerable(self.isInvulnerable());
-            activeClone.setNoGravity(self.isNoGravity());
             activeClone.setSilent(self.isSilent());
             activeClone.setArrowCount(self.getArrowCount());
             activeClone.setStingerCount(self.getStingerCount());

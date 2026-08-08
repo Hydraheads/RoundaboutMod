@@ -31,6 +31,9 @@ import java.util.function.Predicate;
 public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity> extends TargetGoal {
 
     @Shadow
+    protected TargetingConditions targetConditions;
+
+    @Shadow
     protected abstract AABB getTargetSearchArea(double d);
 
     @Shadow
@@ -121,9 +124,12 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
                     && mob.distanceToSqr(nearestClone) <= followRangeSqr
                     && (target == null
                     || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))
-            && mob.hasLineOfSight(nearestClone)) {
-                this.target = nearestClone;
-            }
+                && mob.hasLineOfSight(nearestClone)) {
+                    if (targetConditions.test(this.mob, nearestClone) || (nearestClone.getPlayer() != null &&
+                            targetConditions.test(this.mob, nearestClone.getPlayer()))) {
+                        this.target = nearestClone;
+                    }
+                }
             }
         }
     }
