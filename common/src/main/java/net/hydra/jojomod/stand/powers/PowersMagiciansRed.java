@@ -207,8 +207,19 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
             if (leaded != null) {
-                if (!hasStandActive(this.self)){
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        leaded = pkc.activeClone;
+                    }
+                }
+                boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
+                if (!hasStandActive(this.self) || elsewhere){
                     clearLeaded();
+                    if (elsewhere){
+
+                    }
                 }
             }
         }
