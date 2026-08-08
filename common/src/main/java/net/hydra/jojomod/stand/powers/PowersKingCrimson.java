@@ -3537,12 +3537,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+
+
     @Override
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 0.75F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.75F));
         } else {
-            return 3.4F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3.4F));
         }
     }
     public boolean crossedThreshold(){
@@ -3611,6 +3613,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.refreshArms();
     }
 
+    public boolean soften = false;
     @Override
     public boolean setPowerAttack(){
         if (hasArmsOut) {
@@ -3624,7 +3627,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void setAttack(){
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){
+                soften = true;
                 timeErase();
+                soften = false;
             }
         }
         super.setAttack();
