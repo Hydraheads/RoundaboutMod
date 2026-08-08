@@ -65,10 +65,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
@@ -78,7 +76,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -136,7 +133,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHA_COOLDOWN = PowerIndex.SKILL_3,
 
     // SOUNDS ID
-        IMPALE_NOISE = 108,
+        IMPALE_NOISE = 105,
         SHIBA = 109,
         SHIBABA = 110,
         AIRBUBBLE = 111,
@@ -3247,8 +3244,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            return ent == targetBuffer
-                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent
+            return ent == targetBuffer && ent.isAlive()
+                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()
                     && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
                     && LE.getEffect(MobEffects.INVISIBILITY) != null)));
         }
