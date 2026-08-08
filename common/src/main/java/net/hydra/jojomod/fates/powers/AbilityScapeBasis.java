@@ -2337,6 +2337,10 @@ public class AbilityScapeBasis {
             }
         }
 
+        if (PowerTypes.isExistentiallyElsewhere(targetEntity)){
+            return null;
+        }
+
         return targetEntity;
     }
 
@@ -3273,6 +3277,7 @@ public class AbilityScapeBasis {
                     boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
                     if (bool && entity instanceof LivingEntity LE) {
                         LE.setLastHurtMob(entity);
+                    } else if (entity instanceof LivingEntity LE){
                         if (isUsingShield(LE)){
                             knockShield2(LE, 200);
                         }
