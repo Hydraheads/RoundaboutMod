@@ -1044,7 +1044,7 @@ public class StandHudRender {
             int r = (int) (q * 183.0f);
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 45, r, 5);
 
-            Component text = clashOp.getName();
+            Component text = clashOp.getDisplayName();
             int m = client.font.width(text);
             int n = i / 2 - m / 2;
             int o = l - 9;
