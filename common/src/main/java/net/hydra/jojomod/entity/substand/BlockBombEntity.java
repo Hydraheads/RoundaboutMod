@@ -25,8 +25,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -46,13 +48,12 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 			EntityDataSerializers.INT);
 
 
-	public Entity userEntity;
-
 	private BlockPos bombPos;
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
+	private AABB blockBB = null;
 	public int renderFadeIn = 1;
 
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
@@ -137,7 +138,10 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 				}
 				this.setYRot(0f);
 				this.setYBodyRot(0);
-            	
+				/*if (blockstate.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
+
+				}*/
+
             	//this.detectInside();
             }
 		
@@ -171,19 +175,20 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		if (!voxShape.isEmpty()) {
 			shape = voxShape.bounds();
 			this.blockSize = new Vec3(shape.maxX, shape.maxY, shape.maxZ);
+			blockBB = shape;
 		}
 	}
 
 	@Override
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && this.getUser() != $$0 && !level().isClientSide()) {
+		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled() && this.getUser() != $$0 && !level().isClientSide()) {
 			PKQ.blockContacted($$0);
 		}
-		return  InteractionResult.PASS;
+		return  InteractionResult.FAIL;
 	}
+
 	@Override
 	public boolean canAttack(LivingEntity le){
-		super.canAttack(le);
 		return false;
 	}
 	@Override
@@ -195,7 +200,9 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	}
 
 	@Override
-    public boolean isPickable() { return true;}
+    public boolean isPickable() {
+		return (getUser() != null && ((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled());
+	}
 
     @Override
     public boolean isInvulnerable() { return true;}	

@@ -22,12 +22,14 @@ import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -534,26 +536,41 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return null;
 	}
+	public SoundEvent getExplosionSound() {
+		byte skn = ((StandUser)getUser()).roundabout$getStandSkin();
+		if (skn == KillerQueenEntity.MINESWEEPER) {
+			return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
+		}else if (skn == KillerQueenEntity.CREEPER) {
+			return SoundEvents.GENERIC_EXPLODE;
+		}
+		return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
+	}
 
+	public SimpleParticleType getExplosionParticle() {
+		byte skn = ((StandUser) getUser()).roundabout$getStandSkin();
+		if (skn == KillerQueenEntity.CREEPER) {
+			return ModParticles.SMALL_EXPLOSION;
+		}
+		return ModParticles.KILLER_QUEEN_EXPLOSION;
+	}
 
 	public void attack() {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
 		this.explosions++;
 
+		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		if (!(SP instanceof PowersKillerQueen)) { return; }
+		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+
 		if (this.getTargetType() == ENTITY){
 			Vec3 pos = this.position().add(this.getForward().scale(0.3));
 			float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
-			StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
-
-			if (!(SP instanceof PowersKillerQueen)) { return; }
-			PowersKillerQueen KQ = (PowersKillerQueen)SP;
-
 			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
 					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
+			ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(0.25f, 0.25f, 0.25f), 8);
 
 
 			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
@@ -575,8 +592,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
-			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.12f, 0.12f, 0.12f), 4);
+			this.level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
 					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
@@ -728,10 +745,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-		//this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
 
-		//SoundType soundType = blockState.getSoundType();
-		//this.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15f, soundType.getPitch());
 	}
 
 	@Override
