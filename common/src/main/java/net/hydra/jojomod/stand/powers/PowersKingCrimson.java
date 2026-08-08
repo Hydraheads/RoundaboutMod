@@ -3309,7 +3309,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     double rangeSqr = range * range;
                     for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
                         if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
-                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 28;
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 48;
                         }
                     }
                 }
