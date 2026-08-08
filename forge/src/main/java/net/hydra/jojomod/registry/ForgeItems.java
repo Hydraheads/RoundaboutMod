@@ -775,8 +775,6 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null))));
     public static final RegistryObject<Item> JOTARO_6_MASK = addToTab(ITEMS.register("jotaro_6_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null))));
-    public static final RegistryObject<Item> JOHNGALLIA_MASK = addToTab(ITEMS.register("johngallia_mask",
-            () -> new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null))));
     public static final RegistryObject<Item> DIO_VAMPIRE_MASK = addToTab(ITEMS.register("dio_vampire_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null))));
     public static final RegistryObject<Item> DIO_MASK = addToTab(ITEMS.register("dio_mask",
@@ -791,6 +789,16 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null))));
     public static final RegistryObject<Item> SPEEDWAGON_FOUNDATION_MASK = addToTab(ITEMS.register("speedwagon_foundation_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null))));
+    public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null))));
+    public static final RegistryObject<Item> BOSS_MASK = addToTab(ITEMS.register("boss_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new BossVisage(null))));
+    public static final RegistryObject<Item> DIAVOLO_MASK = addToTab(ITEMS.register("diavolo_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new DiavoloVisage(null))));
+    public static final RegistryObject<Item> DOPPIO_MASK = addToTab(ITEMS.register("doppio_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new DoppioVisage(null))));
+    public static final RegistryObject<Item> JOHNGALLIA_MASK = addToTab(ITEMS.register("johngallia_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null))));
     public static final RegistryObject<Item> DIEGO_MASK = addToTab(ITEMS.register("diego_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null))));
     public static final RegistryObject<Item> LUCY_MASK = addToTab(ITEMS.register("lucy_mask",
@@ -811,8 +819,6 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new AyaVisage(null))));
     public static final RegistryObject<Item> MISTA_MASK = addToTab(ITEMS.register("mista_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
-    public static final RegistryObject<Item> GHIACCIO_MASK = addToTab(ITEMS.register("ghiaccio_mask",
-            () -> new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
     public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",

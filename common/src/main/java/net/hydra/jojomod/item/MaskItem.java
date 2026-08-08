@@ -30,6 +30,9 @@ public class MaskItem extends Item {
         return Component.translatable(this.getDescriptionId() + ".desc");
     }
     public MutableComponent getDisplayNameTag() {
+        if (visageData != null && visageData.swapName()){
+            return Component.translatable("item.roundabout."+visageData.getSkinPath() + "_mask.tag");
+        }
         return Component.translatable(this.getDescriptionId() + ".tag");
     }
     @Override

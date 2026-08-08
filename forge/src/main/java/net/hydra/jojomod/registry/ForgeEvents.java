@@ -519,6 +519,9 @@ public class ForgeEvents {
         ModItems.JOTARO_MASK = ForgeItems.JOTARO_MASK.get();
         ModItems.JOTARO_4_MASK = ForgeItems.JOTARO_4_MASK.get();
         ModItems.JOTARO_6_MASK = ForgeItems.JOTARO_6_MASK.get();
+        ModItems.DIAVOLO_MASK = ForgeItems.DIAVOLO_MASK.get();
+        ModItems.BOSS_MASK = ForgeItems.BOSS_MASK.get();
+        ModItems.DOPPIO_MASK = ForgeItems.DOPPIO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
         ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();

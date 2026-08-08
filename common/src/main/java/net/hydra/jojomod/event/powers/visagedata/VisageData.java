@@ -53,6 +53,9 @@ public class VisageData {
     public String getSkinPath(){
         return null;
     }
+    public boolean swapName(){
+        return false;
+    }
     public boolean isSlim(){
         return false;
     }
