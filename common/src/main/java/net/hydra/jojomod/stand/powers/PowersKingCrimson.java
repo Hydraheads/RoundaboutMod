@@ -560,6 +560,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isBackingUp = isBackingUp;
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
+            fclone.setLeftHanded(PE.getMainArm() == HumanoidArm.LEFT);
             fclone.isSprinting = isSprinting;
             runaway = hasHandsOut() || isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
@@ -593,8 +594,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             for (MobEffectInstance effect : self.getActiveEffects()) {
                 activeClone.addEffect(new MobEffectInstance(effect));
             }
-            activeClone.setInvulnerable(self.isInvulnerable());
-            activeClone.setNoGravity(self.isNoGravity());
             activeClone.setSilent(self.isSilent());
             activeClone.setArrowCount(self.getArrowCount());
             activeClone.setStingerCount(self.getStingerCount());
@@ -634,13 +633,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             activeCloneUser.roundabout$setLeapTicks(thisUser.roundabout$getLeapTicks());
 
             StandPowers powers = activeCloneUser.roundabout$getStandPowers();
-            powers.attackTime = attackTimeMax;
+            powers.attackTime = attackTime;
             powers.attackTimeMax = attackTimeMax;
             powers.activePowerPhase = activePowerPhase;
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
-            if (st != null && !st.isRemoved()) {
+            if (st != null && !st.isRemoved() && !hasArmsOut) {
                 StandEntity stand = getNewStandEntity();
                 if (stand instanceof FollowingStandEntity fse && st instanceof FollowingStandEntity ste) {
                     ((StandUser)activeClone).roundabout$setStand(stand);
@@ -3102,6 +3101,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         );
 
         clone.user = player;
+        clone.setLeftHanded(player.getMainArm() == HumanoidArm.LEFT);
         clone.setYRot(self.getYRot());
         clone.setXRot(self.getXRot());
         clone.setYBodyRot(self.yBodyRot);
@@ -3301,6 +3301,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         }
                     }
                     fakedDeath = false;
+                }
+                if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.postTESoften) {
+                    double range = getSkipBonusRange();
+                    double rangeSqr = range * range;
+                    for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
+                        if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 48;
+                        }
+                    }
                 }
             } else {
                 spawnClone();
@@ -3535,12 +3544,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+
+
     @Override
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 0.75F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.75F));
         } else {
-            return 3.4F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3.4F));
         }
     }
     public boolean crossedThreshold(){
@@ -3609,12 +3620,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.refreshArms();
     }
 
+    public boolean soften = false;
     @Override
     public boolean setPowerAttack(){
         if (hasArmsOut) {
             setAttack();
             return false;
         }
+        if (isUsingTimeErase()){
+            soften = true;
+            Roundabout.LOGGER.info("yes");
+            timeErase();
+            soften = false;
+        }
+
+
         return super.setPowerAttack();
     }
 
@@ -3622,7 +3642,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void setAttack(){
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){
+                soften = true;
                 timeErase();
+                soften = false;
             }
         }
         super.setAttack();

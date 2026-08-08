@@ -1143,7 +1143,7 @@ public class Config implements Cloneable {
         public Integer epitaphDuration;
         @IntOption(group = "inherit", value = 220, min = 1, max = 72000)
         public Integer timeEraseDuration;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
         public Integer timeEraseMinimumCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer additionalCooldownPerSecondsUsed2;
@@ -1161,6 +1161,8 @@ public class Config implements Cloneable {
         public Boolean freeTimeSkip;
         @BooleanOption(group = "inherit", value = true)
         public Boolean skipPastDeath;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean postTESoften;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)

@@ -180,6 +180,7 @@ public class ModItems {
     public static Item JOTARO_4_MASK;
     public static Item JOTARO_6_MASK;
     public static Item DIO_MASK;
+    public static Item SHADOW_DIO_MASK;
     public static Item DIO_VAMPIRE_MASK;
     public static Item STRAIZO_VAMPIRE_MASK;
     public static Item SPEEDWAGON_MASK;
@@ -281,6 +282,7 @@ public class ModItems {
         addToVisageStore(KAKYOIN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SPEEDWAGON_FOUNDATION_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(SHADOW_DIO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(ENYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(CHAKA_MASK,page, characterCostExp, characterCostEmerald);
         page++;
