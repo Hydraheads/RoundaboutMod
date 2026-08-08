@@ -214,11 +214,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         leaded = pkc.activeClone;
                     }
                 }
-                boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
-                if (!hasStandActive(this.self) || elsewhere){
-                    clearLeaded();
-                    if (elsewhere){
-
+                if (leaded != null) {
+                    boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
+                    if (!hasStandActive(this.self) || elsewhere) {
+                        clearLeaded();
                     }
                 }
             }
