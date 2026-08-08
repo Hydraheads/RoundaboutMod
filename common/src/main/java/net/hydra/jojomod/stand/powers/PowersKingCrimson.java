@@ -55,6 +55,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -3574,6 +3575,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if ($$0.getDirectEntity() instanceof PrimedTnt)
                 return false;
             if ($$0.getDirectEntity() instanceof MinecartTNT)
+                return false;
+            if ($$0.getDirectEntity() instanceof KingCrimsonCloneEntity)
+                return false;
+            if ($$0.getDirectEntity() instanceof Projectile)
+                return false;
+            if ($$0.is(DamageTypes.MAGIC))
+                return false;
+            if ($$0.is(DamageTypes.THORNS))
                 return false;
             timeErase();
         }

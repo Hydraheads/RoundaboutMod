@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
@@ -4974,6 +4975,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 this.setLastHurtByPlayer(PE);
                 this.getCombatTracker().recordDamage(corpseCorrect, 0);
             }
+        }
+        if ($$0.getEntity() instanceof KingCrimsonCloneEntity cl && cl.getPlayer() != null){
+            DamageSource corpseCorrect = new DamageSource($$0.typeHolder(),
+                    cl.getPlayer(), cl.getPlayer());
+                this.setLastHurtByPlayer(cl.getPlayer());
+                this.getCombatTracker().recordDamage(corpseCorrect, 0);
         }
         StandEntity stnd = roundabout$getStand();
         if (stnd != null){
