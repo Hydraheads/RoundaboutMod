@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -12,6 +13,9 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.UnburnableProjectile;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
+import net.hydra.jojomod.entity.projectile.GasolineSplatterEntity;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -27,23 +31,32 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PowersSilverChariot extends NewPunchingStand {
@@ -207,10 +220,12 @@ public class PowersSilverChariot extends NewPunchingStand {
         return getMiningTier();
     }
 
+    public boolean armored = true;
+
     @Override
     public boolean canGuard() {
         // TODO: Implement support for removing guard ability when armor shed is active
-        return true;
+        return armored;
     }
 
     @Override
@@ -325,16 +340,19 @@ public class PowersSilverChariot extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
 
         // dodge
+        /*
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        */
 
         return $$1;
     }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-
+        /*
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        */
     }
 
     @Override
@@ -416,6 +434,10 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
+            case PowerIndex.POWER_1 -> {
+                rapierSpinServer();
+                return true;
+            }
             case PowerIndex.POWER_1_SNEAK -> {
                 rapierSlashServer();
                 return true;
@@ -490,6 +512,9 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+        if (move == PowerIndex.POWER_1) {
+            this.grabBlock = blockPos;
+        }
         return super.tryBlockPosPower(move, forced, blockPos);
     }
 
@@ -928,11 +953,49 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
     }
 
+    public BlockPos grabBlock = null;
+
+    public BlockPos getGrabPos(float range) {
+        Vec3 vec3d = this.getSelf().getEyePosition(0);
+        Vec3 vec3d2 = this.getSelf().getViewVector(0);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        return new BlockPos((int) vec3d3.x, (int) vec3d3.y, (int) vec3d3.z);
+    }
+
     public void rapierSpinServer() {
         setAttackTimeDuring(-10);
         if (!self.level().isClientSide()) {
 
+            BlockPos HR = getGrabPos(10);
+            if (HR != null) {
+                tryBlockPosPowerPacket(PowerIndex.POWER_1, HR);
+            }
+
         }
+    }
+
+    public List<Entity> destroyProjectiles(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
+        List<Entity> hitEntities = new ArrayList<>(entities) {
+        };
+        Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+        for (Entity value : entities) {
+            if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball) && !(value instanceof UnburnableProjectile)
+                    && !(value instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetPickupItem() != null &&
+                    ((IAbstractArrowAccess)aa).roundabout$GetPickupItem().getItem().canBeDepleted()
+            )
+            ){
+                Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
+                if (gravD != Direction.DOWN) {
+                    lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                }
+                if (angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle){
+                    hitEntities.remove(value);
+
+                    value.discard();
+                }
+            }
+        }
+        return hitEntities;
     }
 
     public void updateRapierSpin() {
@@ -1013,7 +1076,9 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     // Armor shed
     public void armorShedClient() {
+        if (!this.onCooldown(PowerIndex.POWER_2_BLOCK) && canExecuteMoveWithLevel(getArmorShedLevel())) {
 
+        }
     }
 
     public void armorShedServer() {
@@ -1165,5 +1230,23 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         super.onActuallyHurt($$0, $$1);
+    }
+
+
+
+    // WIP dev status
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDevStatus() {
+        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+
+    @Override
+    public Component ifWipListDev() {
+        return Component.literal("SeriousGopher").withStyle(ChatFormatting.GREEN);
     }
 }
