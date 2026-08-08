@@ -635,7 +635,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             StandPowers powers = activeCloneUser.roundabout$getStandPowers();
             powers.attackTime = attackTime;
             powers.attackTimeMax = attackTimeMax;
-            powers.activePowerPhase = activePowerPhase;
+            powers.activePowerPhase = activePowerPhaseMax;
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
@@ -889,7 +889,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     && distanceTo <= 3){
                         wentForCharge = true;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                    } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                    } else if (canAttack()) {
                         wentForCharge = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
                     }
