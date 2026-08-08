@@ -900,7 +900,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } else {
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
             }
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 50);
             Level level = self.level();
 
             BlockPos checkPos = pos;
@@ -964,7 +964,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
                     ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsCooldown);
-            this.setCooldown(PowerIndex.SKILL_2, 40);
+            this.setCooldown(PowerIndex.SKILL_2, 50);
 
             Level level = self.level();
             addEXP(3);
