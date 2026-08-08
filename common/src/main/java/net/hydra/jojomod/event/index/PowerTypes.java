@@ -124,6 +124,14 @@ public enum PowerTypes {
         }
         return false;
     }
+
+    public static boolean hasHandsForVisage(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+        }
+        return false;
+    }
     public static boolean hasHandsActiveRendering(Entity ent){
         //specifically stand arms
         if (ent instanceof LivingEntity livingEntity) {

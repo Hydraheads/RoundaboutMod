@@ -19,7 +19,7 @@ public class DoppioVisage extends VisageData {
 
     @Override
     public Vec3i getHairColor(){
-        return new Vec3i(22,22,22);
+        return new Vec3i(255,132,169);
     }
 
     public VisageData generateVisageData(LivingEntity entity){
@@ -39,6 +39,10 @@ public class DoppioVisage extends VisageData {
     }
     @Override
     public boolean isSlim(){
+        return true;
+    }
+    @Override
+    public boolean rendersDoppioHair(){
         return true;
     }
     public Vector3f scaleHead(){

@@ -75,6 +75,9 @@ public class VisageData {
     public boolean rendersLucyHair(){
         return false;
     }
+    public boolean rendersDoppioHair(){
+        return false;
+    }
     public boolean rendersKakyoinHair(){
         return false;
     }

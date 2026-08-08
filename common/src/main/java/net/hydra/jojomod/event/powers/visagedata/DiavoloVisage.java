@@ -22,7 +22,10 @@ public class DiavoloVisage extends VisageData {
 
     @Override
     public Vec3i getHairColor(){
-        return new Vec3i(22,22,22);
+        if (isDisguised()){
+            return new Vec3i(255,132,169);
+        }
+        return new Vec3i(255,165,202);
     }
 
     public VisageData generateVisageData(LivingEntity entity){
@@ -30,6 +33,13 @@ public class DiavoloVisage extends VisageData {
     }
     public boolean swapName(){
         return true;
+    }
+    @Override
+    public boolean rendersDoppioHair(){
+        if (isDisguised()){
+            return true;
+        }
+        return false;
     }
     @Override
     public JojoNPC getModelNPC(LivingEntity pl){
@@ -48,7 +58,7 @@ public class DiavoloVisage extends VisageData {
         return false;
     }
     public boolean isDisguised(){
-        if (PowerTypes.hasHandsActive(self)){
+        if (PowerTypes.hasHandsForVisage(self)){
             return true;
         }
         return false;
