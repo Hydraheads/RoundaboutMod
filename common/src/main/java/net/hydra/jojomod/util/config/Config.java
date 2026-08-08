@@ -1129,6 +1129,8 @@ public class Config implements Cloneable {
         public Integer kingCrimsonAttackMultOnMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean predictIdles;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer kingCrimsonGuardPoints;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)

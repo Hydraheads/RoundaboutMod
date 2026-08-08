@@ -73,6 +73,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -1921,6 +1922,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return $$1;
     }
 
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.kingCrimsonGuardPoints;
+    }
     // 2 -> Impale
     // 3 -> Projection
     // 4 -> Blood Splash
@@ -3563,6 +3568,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
         if (timeEraseActive){
+            if (target != null && target.getId() == self.getId()){
+                return false;
+            }
+            if ($$0.getDirectEntity() instanceof PrimedTnt)
+                return false;
+            if ($$0.getDirectEntity() instanceof MinecartTNT)
+                return false;
             timeErase();
         }
         return false;

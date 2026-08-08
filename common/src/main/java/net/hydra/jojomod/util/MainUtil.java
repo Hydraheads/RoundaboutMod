@@ -3684,9 +3684,6 @@ public class MainUtil {
 
                 if(FateTypes.isZombie(player)){
                     if (FateTypes.isUndisguisedZombie(player)) {
-
-
-
                         if (visage.getItem() instanceof MaskItem MI) {
                             if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
                                 return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");

@@ -3307,6 +3307,8 @@
   "config.roundabout.creamAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
   "config.roundabout.creamGuardPoints.name": "Guard Points",
   "config.roundabout.creamGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.kingCrimsonGuardPoints.name": "Guard Points",
+  "config.roundabout.kingCrimsonGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierCream.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierCream.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierCream.name": "Mining Tier",
