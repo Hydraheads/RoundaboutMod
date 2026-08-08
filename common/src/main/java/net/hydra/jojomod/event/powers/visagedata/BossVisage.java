@@ -35,7 +35,7 @@ public class BossVisage extends VisageData {
     }
     @Override
     public Vec3 sizeModifier(){
-        return new Vec3(1.091F,1.091F,1.091F);
+        return new Vec3(1.04F,1.04F,1.04F);
     }
     @Override
     public Vector3f scale(){

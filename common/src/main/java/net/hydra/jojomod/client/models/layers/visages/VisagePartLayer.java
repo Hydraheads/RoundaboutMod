@@ -221,7 +221,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     boolean isBodyFrozen = HeatUtil.isBodyFrozen(entity);
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
-                        String path = MI.visageData.getSkinPath();
+                        String path = vd.getSkinPath();
                         if (vd.rendersBreast()) {
                             renderNormalBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -460,7 +460,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             b = pl.rdbt$getHairColorZ();
 
                             if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                                VisageData vd = ME.visageData;
+                                VisageData vd = ME.visageData.generateVisageData(play);
                                 if (vd != null && vd.isCharacterVisage()) {
                                     r = ((float) vd.getHairColor().getX()) / 255;
                                     g = ((float) vd.getHairColor().getY()) / 255;
@@ -481,7 +481,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             b = pl.rdbt$getHairColorZ();
 
                             if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                                VisageData vd = ME.visageData;
+                                VisageData vd = ME.visageData.generateVisageData(play);
                                 if (vd != null && vd.isCharacterVisage()) {
                                     r = ((float) vd.getHairColor().getX()) / 255;
                                     g = ((float) vd.getHairColor().getY()) / 255;

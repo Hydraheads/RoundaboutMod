@@ -39,6 +39,14 @@ public class DiavoloVisage extends VisageData {
         }
         return jojoNPC;
     }
+
+    @Override
+    public boolean isSlim(){
+        if (isDisguised()){
+            return true;
+        }
+        return false;
+    }
     public boolean isDisguised(){
         if (PowerTypes.hasHandsActive(self)){
             return true;
@@ -47,10 +55,16 @@ public class DiavoloVisage extends VisageData {
     }
     @Override
     public Vec3 sizeModifier(){
-        return new Vec3(1.04F,1.04F,1.4F);
+        if (isDisguised()){
+            return new Vec3(1.0F,1.0F,1.0F);
+        }
+        return new Vec3(1.04F,1.04F,1.04F);
     }
     @Override
     public Vector3f scale(){
+        if (isDisguised()){
+            return new Vector3f(0.861F, 0.861F, 0.861F);
+        }
         return new Vector3f(0.967F, 0.967F, 0.967F);
     }
     public Vector3f scaleHead(){

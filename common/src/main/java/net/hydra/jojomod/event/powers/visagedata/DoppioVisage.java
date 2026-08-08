@@ -37,6 +37,10 @@ public class DoppioVisage extends VisageData {
     public Vector3f scale(){
         return new Vector3f(0.861F, 0.861F, 0.861F);
     }
+    @Override
+    public boolean isSlim(){
+        return true;
+    }
     public Vector3f scaleHead(){
         return new Vector3f(1F, 1F, 1F);
     }

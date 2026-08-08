@@ -2065,7 +2065,8 @@ public class ClientUtil {
 
                     ItemStack visage = pl.roundabout$getMaskSlot();
                     if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                        VisageData vd = ME.visageData;
+
+                        VisageData vd = ME.visageData.generateVisageData(play);
                         if (vd != null && vd.isCharacterVisage()) {
                             r = ((float) vd.getHairColor().getX()) / 255;
                             g = ((float) vd.getHairColor().getY()) / 255;
@@ -2182,7 +2183,7 @@ public class ClientUtil {
 
                 ItemStack visage = pl.roundabout$getMaskSlot();
                 if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                    VisageData vd = ME.visageData;
+                    VisageData vd = ME.visageData.generateVisageData(play);
                     if (vd != null && vd.isCharacterVisage()) {
                         r = ((float) vd.getHairColor().getX()) / 255;
                         g = ((float) vd.getHairColor().getY()) / 255;

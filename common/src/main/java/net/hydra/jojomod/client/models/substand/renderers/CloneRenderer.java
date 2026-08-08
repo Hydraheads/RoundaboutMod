@@ -15,6 +15,7 @@ import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
@@ -103,12 +104,13 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             ItemStack visage = thisr.getVisage();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
+                    VisageData vd = MI.visageData.generateVisageData(thisr);
+                    if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(thisr)) {
                             // 37 67 -34
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
                         } else {
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                     } else if (visage.is(ModItems.RAT_MASK)){
@@ -229,8 +231,9 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
-                        if (MI.visageData.isSlim()){
+                    VisageData vd = MI.visageData.generateVisageData(entity);
+                    if (vd.isCharacterVisage()) {
+                        if (vd.isSlim()){
                             this.model = slim;
                         } else {
                             this.model = bulk;
@@ -337,7 +340,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                         }
                     }
                 } else {
-                    Vector3f scale = MI.visageData.scale();
+                    VisageData vd = MI.visageData.generateVisageData(entity);
+                    Vector3f scale = vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
                 return;
