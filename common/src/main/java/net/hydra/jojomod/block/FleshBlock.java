@@ -4,6 +4,7 @@ package net.hydra.jojomod.block;
 import net.hydra.jojomod.entity.projectile.FleshPileEntity;
 import net.hydra.jojomod.entity.projectile.RattDartEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersRatt;
@@ -155,7 +156,7 @@ public class FleshBlock
             Vec3 vec3 = entity.getDeltaMovement();
             if (!cond) {
                 if (!MainUtil.isBossMob(entity)) {
-                    if (entity instanceof Player pl) {
+                    if (entity instanceof Player || entity instanceof CloneEntity) {
                         entity.makeStuckInBlock($$0, new Vec3((double) 0.5F, (double) 0.1F, (double) 0.5F));
                     } else {
                         entity.makeStuckInBlock($$0, new Vec3((double) 0.75F, (double) 0.1F, (double) 0.75F));

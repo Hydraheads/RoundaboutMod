@@ -1895,11 +1895,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     return;
                 }
             }
-            if (!HeatUtil.isArmsFrozen(PL)){
-                HeatUtil.addHeat(PL, -4);
-            } else {
                 HeatUtil.addHeat(PL, -3);
-            }
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
         }
