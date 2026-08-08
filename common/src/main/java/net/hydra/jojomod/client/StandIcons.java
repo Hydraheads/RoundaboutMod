@@ -979,4 +979,16 @@ public class StandIcons {
             "textures/gui/corpse_icons/creeper.png");
     public static final ResourceLocation FALLEN_PHANTOM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/corpse_icons/phantom.png");
+
+    public static final ResourceLocation GLORY_DAYS_AUTO_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/glory_days/glory_days_auto_on.png");
+    public static final ResourceLocation GLORY_DAYS_AUTO_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/glory_days/glory_days_auto_off.png");
+    public static final ResourceLocation GLORY_DAYS_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/glory_days/glory_days_speed_up.png");
+    public static final ResourceLocation GLORY_DAYS_SPEED_DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/glory_days/glory_days_speed_down.png");
+    public static final ResourceLocation GLORY_DAYS_FRACTATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/glory_days/glory_days_fractation.png");
+
 }

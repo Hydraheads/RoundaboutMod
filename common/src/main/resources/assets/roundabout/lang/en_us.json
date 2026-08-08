@@ -190,6 +190,7 @@
   "item.roundabout.manhattan_transfer_disc": "Stand Disc",
   "item.roundabout.black_sabbath_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
+  "item.roundabout.glory_days_disc": "Stand Disc",
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.green_day_disc.desc": "Green Day",
   "item.roundabout.planet_waves_disc": "Stand Disc",
@@ -233,6 +234,7 @@
   "item.roundabout.california_king_bed_disc.desc": "California King Bed",
   "item.roundabout.california_king_bed_disc.desc.short": "CA King Bed",
   "item.roundabout.king_crimson_disc.desc": "King Crimson",
+  "item.roundabout.glory_days_disc.desc": "Glory Days",
   "item.roundabout.none_disc.desc": "None",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",

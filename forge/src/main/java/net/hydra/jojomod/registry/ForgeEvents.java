@@ -406,6 +406,7 @@ public class ForgeEvents {
         ModItems.STAND_DISC_CENTURY_BOY = ForgeItems.STAND_DISC_CENTURY_BOY.get();
         ModItems.STAND_DISC_SURVIVOR = ForgeItems.STAND_DISC_SURVIVOR.get();
         ModItems.STAND_DISC_ACHTUNG = ForgeItems.STAND_DISC_ACHTUNG.get();
+        ModItems.STAND_DISC_GLORY_DAYS = ForgeItems.STAND_DISC_GLORY_DAYS.get();
 
         ModItems.STAND_DISC_WALKING_HEART = ForgeItems.STAND_DISC_WALKING_HEART.get();
         ModItems.MAX_STAND_DISC_WALKING_HEART = ForgeItems.MAX_STAND_DISC_WALKING_HEART.get();
