@@ -20,7 +20,6 @@ import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.entity.visages.mobs.JotaroNPC;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -66,10 +65,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -80,10 +78,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
 import org.joml.Vector3f;
@@ -131,7 +133,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHA_COOLDOWN = PowerIndex.SKILL_3,
 
     // SOUNDS ID
-        IMPALE_NOISE = 108,
+        IMPALE_NOISE = 105,
         SHIBA = 109,
         SHIBABA = 110,
         AIRBUBBLE = 111,
@@ -305,6 +307,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public static final float impaleRange = 3.5F;
     public static final float blockPlantRange = 3.5f;
     public Vec3 moveVec = Vec3.ZERO;
+
+    public int tntSweeped = 0;
 
     public int getMobPlantWindup() {
         return ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantWindup;
@@ -3130,7 +3134,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public SimpleParticleType getExplosionParticle() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.CREEPER) {
-            return ParticleTypes.EXPLOSION;
+            return ModParticles.SMALL_EXPLOSION;
         }
         return ModParticles.KILLER_QUEEN_EXPLOSION;
     }
@@ -3240,8 +3244,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            return ent == targetBuffer
-                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent
+            return ent == targetBuffer && ent.isAlive()
+                    || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()
                     && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
                     && LE.getEffect(MobEffects.INVISIBILITY) != null)));
         }
@@ -3531,9 +3535,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                     vPos = bPos.getCenter();
                     level = this.bombBlock.level();
 
+                    checkForSkinUnlock(level, bPos, canDestroyBlocks);
+
                     this.bombBlock.discard();
                     this.bombBlock = null;
                     success = true;
+
                 }
             } else if (bStatus == PowersKillerQueen.BOMB_ENTITY || bStatus == PowersKillerQueen.BLOCK_CONTACT || bStatus == PowersKillerQueen.BUBBLE_CONTACT) {
                 target = getBombEntity();
@@ -3658,6 +3665,51 @@ public class PowersKillerQueen extends NewPunchingStand {
     	
     	return true;
     }
+
+    public void checkForSkinUnlock(Level level, BlockPos pos, boolean destruction) {
+        if (getSelf() instanceof Player PE) {
+            StandUser user = ((StandUser) PE);
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+
+            BlockState info = level.getBlockState(pos);
+            if (info.is(Blocks.TNT)) {
+                if (!destruction && info.getBlock() instanceof TntBlock TNT) {
+                    PrimedTnt $$3 = new PrimedTnt(level, (double)pos.getX() + (double)0.5F, (double)pos.getY(), (double)pos.getZ() + (double)0.5F, PE);
+                    level.addFreshEntity($$3);
+                    level.playSound((Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.gameEvent(PE, GameEvent.PRIME_FUSE, pos);
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+                }
+
+                if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                    tntSweeped++;
+                    if (tntSweeped > 2) {
+                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        self.level().playSound(null, self.getX(), self.getY(),
+                                self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+                        ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getX(),
+                                self.getY() + self.getEyeHeight(), self.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.2);
+                        ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                                self.getY() + self.getEyeHeight(), self.getZ(),
+                                10, 0.5, 0.5, 0.5, 0.01);
+                        user.roundabout$setStandSkin(KillerQueenEntity.MINESWEEPER);
+                        ((ServerPlayer) ipe).displayClientMessage(
+                                Component.translatable("unlock_skin.roundabout.killer_queen.minesweeper"), true);
+                        user.roundabout$summonStand(self.level(), true, false);
+                    }else {
+                        ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                                self.getY() + self.getEyeHeight(), self.getZ(),
+                                10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
+                        this.self.level().playSound(null, this.self.blockPosition(),
+                                ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT,
+                                SoundSource.PLAYERS, 2.2F, (float) (1.5F + Math.random() * 0.02));
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
 

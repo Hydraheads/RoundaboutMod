@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
@@ -735,6 +736,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
+		if (this.getUser() instanceof Player PE && ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+			return null;
+		}
 
 		if (this.soundsDelay > 0) {
 			return  null;
