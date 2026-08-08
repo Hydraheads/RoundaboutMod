@@ -189,6 +189,15 @@ public class WorldTickServer {
     @Shadow
     private void tickPassenger(Entity $$0, Entity $$1){
     }
+
+    @Shadow
+    @Final
+    private ServerLevelData serverLevelData;
+
+    @Shadow
+    @Final
+    private MinecraftServer server;
+
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true
             , require = 0)
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
@@ -285,6 +294,9 @@ public class WorldTickServer {
     private void roundabout$TickEntity3(CallbackInfo ci) {
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){
             if (((TimeStop) this).inTimeStopRange(new Vec3i((int) 0, (int) 0, (int) 0))){
+                long $$0 = this.serverLevelData.getGameTime() + 1L;
+                this.serverLevelData.setGameTime($$0);
+                this.serverLevelData.getScheduledEvents().tick(this.server, $$0);
                 ci.cancel();
             }
         }

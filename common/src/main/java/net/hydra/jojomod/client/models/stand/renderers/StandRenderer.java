@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -118,6 +119,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         if (User instanceof Player PE){
             ItemStack stack = ((IPlayerEntity)PE).roundabout$getMaskSlot();
             if (!stack.isEmpty() && stack.getItem() instanceof MaskItem mi){
+                VisageData vd = mi.visageData.generateVisageData(mobEntity);
                 Vec3 vec = mi.visageData.generateVisageData(PE).sizeModifier();
                 matrixStack.scale((float) vec.x, (float) vec.y, (float) vec.z);
             }

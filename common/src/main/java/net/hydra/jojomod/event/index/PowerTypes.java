@@ -12,6 +12,7 @@ import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -120,6 +121,14 @@ public enum PowerTypes {
             if (isUsingStand(livingEntity)) {
                 return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
             }
+        }
+        return false;
+    }
+
+    public static boolean hasHandsForVisage(Entity ent){
+        //specifically stand arms
+        if (ent instanceof LivingEntity livingEntity) {
+                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
         }
         return false;
     }
@@ -249,7 +258,7 @@ public enum PowerTypes {
         }
         if (entity.level().isClientSide()){
             if (entity instanceof KingCrimsonCloneEntity kcc){
-                if (ClientUtil.isPlayer(kcc.getPlayer())){
+                if (ClientUtil.isPlayer(kcc.getPlayer()) && !ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf){
                     return true;
                 }
             }
@@ -270,6 +279,7 @@ public enum PowerTypes {
         }
         if (entity instanceof FollowingStandEntity se) {
             if (se.getFollowing() != null){
+
                 return isExistentiallyElsewhere(se.getFollowing());
             }
         } if (entity instanceof StandEntity se){

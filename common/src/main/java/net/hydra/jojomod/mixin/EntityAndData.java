@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -530,7 +531,9 @@ public abstract class EntityAndData implements IEntityAndData {
         if (((Entity)(Object)this) instanceof Player PE){
             ItemStack stack = ((IPlayerEntity) PE).roundabout$getMaskSlot();
             if (stack !=null && !stack.isEmpty() && stack.getItem() instanceof MaskItem ME){
-                cir.setReturnValue(this.getBbHeight() + ME.visageData.getNametagHeight());
+
+                VisageData vd = ME.visageData.generateVisageData(PE);
+                cir.setReturnValue(this.getBbHeight() + vd.getNametagHeight());
             }
         }
     }

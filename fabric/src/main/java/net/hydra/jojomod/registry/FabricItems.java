@@ -265,6 +265,9 @@ public class FabricItems {
     public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
     public static Item STRAIZO_VAMPIRE_MASK = registerItem("straizo_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new StraizoVampireVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
+    public static Item DIAVOLO_MASK = registerItem("diavolo_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiavoloVisage(null)));
+    public static Item DOPPIO_MASK = registerItem("doppio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DoppioVisage(null)));
+    public static Item BOSS_MASK = registerItem("boss_mask", new MaskItem(new Item.Properties().stacksTo(1), new BossVisage(null)));
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
@@ -456,6 +459,9 @@ public class FabricItems {
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(BOSS_MASK);
+                        entries.accept(DIAVOLO_MASK);
+                        entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(JOHNGALLIA_MASK);
@@ -623,20 +629,22 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_STAR_PLATINUM);
                         entries.accept(STAND_DISC_THE_WORLD);
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
-                        entries.accept(STAND_DISC_JUSTICE);
-                        entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
+                        entries.accept(STAND_DISC_JUSTICE);
+                        entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_ANUBIS);
+                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
+                        entries.accept(STAND_DISC_KING_CRIMSON);
+                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
-                        entries.accept(STAND_DISC_ANUBIS);
-                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
@@ -653,8 +661,6 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(STAND_DISC_KING_CRIMSON);
-                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -868,6 +874,9 @@ public class FabricItems {
         ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;
         ModItems.STRAIZO_VAMPIRE_MASK = STRAIZO_VAMPIRE_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
+        ModItems.DIAVOLO_MASK = DIAVOLO_MASK;
+        ModItems.DOPPIO_MASK = DOPPIO_MASK;
+        ModItems.BOSS_MASK = BOSS_MASK;
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;

@@ -533,7 +533,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 if (piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                     MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
                     if (this.minecraft.level != null) {
-                        double d0 = 10;
+                        double d0 = powers.getPilotPlaceRange();
                         HitResult $$47 = piloting.pick(d0, $$1, false);
                         if ($$47.getType() == HitResult.Type.BLOCK) {
                             BlockPos $$48 = ((BlockHitResult) $$47).getBlockPos();

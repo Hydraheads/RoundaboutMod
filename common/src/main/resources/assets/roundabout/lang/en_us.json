@@ -292,6 +292,15 @@
   "item.roundabout.straizo_vampire_mask": "Straizo Visage",
   "item.roundabout.straizo_vampire_mask.desc": "Straizo (Vampire)",
   "item.roundabout.straizo_vampire_mask.tag": "Straizo",
+  "item.roundabout.diavolo_mask": "Diavolo Visage",
+  "item.roundabout.diavolo_mask.desc": "Diavolo",
+  "item.roundabout.diavolo_mask.tag": "Diavolo",
+  "item.roundabout.doppio_mask": "Doppio Visage",
+  "item.roundabout.doppio_mask.desc": "Vinegar Doppio",
+  "item.roundabout.doppio_mask.tag": "Doppio",
+  "item.roundabout.boss_mask": "Boss Visage",
+  "item.roundabout.boss_mask.desc": "Boss",
+  "item.roundabout.boss_mask.tag": "Boss",
   "item.roundabout.dio_mask": "DIO Visage",
   "item.roundabout.dio_mask.desc": "DIO (Part 3)",
   "item.roundabout.dio_mask.tag": "DIO",
@@ -448,8 +457,10 @@
   "entity.roundabout.block_wall_entity": "Block Wall",
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
+  "entity.roundabout.king_crimson": "King Crimson",
+  "entity.roundabout.king_crimson_reaper": "King Crimson",
   "entity.roundabout.king_crimson_clone": "Player",
-  "entity.roundabout.king_crimson_hologram": "Projection",
+  "entity.roundabout.king_crimson_projection": "Projection",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
@@ -874,6 +885,10 @@
   "death.attack.disintegration.player": "%1$s was disintegrated by %2$s",
   "death.attack.disintegration.item": "%1$s disintegrated",
   "death.attack.disintegration.player.item": "%1$s was disintegrated by %$2s",
+  "death.attack.bites_the_dust": "%1$s bites the dust",
+  "death.attack.bites_the_dust.player": "%1$s had bites the dust by %2$s",
+  "death.attack.bites_the_dust.item": "%1$s bites the dust",
+  "death.attack.bites_the_dust.player.item": "%1$s had bites the dust by %$2s",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1213,6 +1228,9 @@
   "sounds.roundabout.tusk_leap": "Stand Leap",
   "sounds.roundabout.tusk_spin_throw": "Spin Throw",
   "sounds.roundabout.tusk_shockwave": "Shockwave",
+  "sounds.roundabout.tusk_summon": "Stand Summon",
+  "sounds.roundabout.tusk_flatten": "Flatten",
+  "sounds.roundabout.tusk_warp": "Warp",
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
@@ -1720,7 +1738,7 @@
   "ability.roundabout.steal_memories_2.desc": "If possible, this variation of memory steal takes experience away from mobs, and using the chess piece will give it to you. This is useful for taking experience from mobs without killing them. On villagers, instead saves their workplaces. On players, saves their bed locations. Using the pieces leads you to the locations.",
 
   "ability.roundabout.step_shadow": "Step Shadow",
-  "ability.roundabout.step_shadow.desc": "If someone you stole the memory of steps into your shadow (touching you without low light levels), any memories taken are returned to them from your inventory.",
+  "ability.roundabout.step_shadow.desc": "If you step in the shadow of someone you stole the memory of (touching you without low light levels), any memories taken are returned to them from your inventory.",
 
   "ability.roundabout.forbid_rule": "Forbid Rule",
   "ability.roundabout.forbid_rule.desc": "Forbid people from stepping on the block you activate this skill on. If you step on the block, the rule is undone by a lack of fairness.",
@@ -2187,6 +2205,8 @@
   "skins.roundabout.king_crimson.end": "King End",
   "skins.roundabout.king_crimson.end_2": "Ender",
   "skins.roundabout.king_crimson.starless": "Starless",
+  "skins.roundabout.king_crimson.nuclear": "Irradiated",
+  "skins.roundabout.king_crimson.reaper": "Time Reaper",
   "skins.roundabout.king_crimson.agogo": "A-Go!Go!",
   "skins.roundabout.king_crimson.spine_art": "Spine Art",
   "skins.roundabout.king_crimson.heaven": "EO Heaven",
@@ -2611,6 +2631,7 @@
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
+  "unlock_skin.roundabout.king_crimson.reaper": "Blossoming Time Reaper Skin Unlocked!",
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's Dread Skin Unlocked!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
@@ -3274,6 +3295,11 @@
   "config.roundabout.whiteAlbumAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whiteAlbumAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
 
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.creamAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3281,6 +3307,8 @@
   "config.roundabout.creamAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
   "config.roundabout.creamGuardPoints.name": "Guard Points",
   "config.roundabout.creamGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.kingCrimsonGuardPoints.name": "Guard Points",
+  "config.roundabout.kingCrimsonGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierCream.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierCream.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierCream.name": "Mining Tier",
@@ -3923,7 +3951,7 @@
   "config.roundabout.timestopLeapCooldown.name": "Time Stop Leaping Cooldown",
   "config.roundabout.timestopLeapCooldown.desc": "Time stop is disabled for a short time after a leap",
   "config.roundabout.starFingerLeapCooldown.name": "Star Finger Leaping CD",
-  "config.roundabout.starFingerLeapCooldown.desc": "Time stop is disabled for a short time after a leap",
+  "config.roundabout.starFingerLeapCooldown.desc": "Star Finger is disabled for a short time after a leap",
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
 
@@ -3941,6 +3969,8 @@
   "config.roundabout.starPlatinumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierKingCrimson.name": "Mining Tier",
+  "config.roundabout.getMiningTierKingCrimson.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.getMiningTierStarPlatinum.name": "Mining Tier",
   "config.roundabout.getMiningTierStarPlatinum.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.name": "Scope Uses NV Potion",
@@ -3955,6 +3985,8 @@
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
 
 
+  "config.roundabout.miningSpeedMultiplierKingCrimson.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierKingCrimson.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierWhiteAlbum.name": "Mining Tier",
@@ -4251,7 +4283,7 @@
   "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",
 
   "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
-  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",
+  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavolo doesn't see it. But it can be useful to track in combat and debug with.",
 
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.name": "Epitaph Shows Present",
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.desc": "If turned on, renders particles and a phantom image of present locations of mobs during epitaph. The intention is to be distracted, though.",

@@ -33,6 +33,7 @@ public class KingCrimsonProjectionEntity extends CloneEntity {
         if (!this.level().isClientSide()){
             if ($$0.getEntity() != null && this.tickCount >= 10) {
                 spawnDeathParticles();
+                pkc.addEXP(7);
                 discard();
             }
         }

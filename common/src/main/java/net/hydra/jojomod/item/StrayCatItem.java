@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +38,7 @@ public class StrayCatItem extends Item {
 
     public static final String OWNER_UUID_TAG = "owner";
     public static final String SKIN_TAG = "skin";
+    public static final String HEALTH_TAG = "health";
 
     private static final float SPEED = 0.4f;
     public byte getBubbleSkin() {
@@ -56,6 +58,7 @@ public class StrayCatItem extends Item {
             tag.putUUID(OWNER_UUID_TAG, stray.getOwnerUUID());
             tag.putByte(SKIN_TAG, stray.getBreed());
         }
+        tag.putFloat(HEALTH_TAG, stray.getHealth());
 
         if (stray.hasCustomName()) {
             stack.setHoverName(stray.getCustomName());
@@ -67,29 +70,31 @@ public class StrayCatItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player P) {
+            if (!((TimeStop) P.level()).inTimeStopRange(P)) {
 
-            if (!level.isClientSide && !isSleeping(level, livingEntity)) {
-                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA,COOLDOWN);
-                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME,COOLDOWN);
+                if (!level.isClientSide && !isSleeping(level, livingEntity)) {
+                    P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA, COOLDOWN);
+                    P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME, COOLDOWN);
 
-                StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
-                if (bubble != null) {
-                    bubble.setSped(SPEED);
-                    bubble.setOwner(P);
-                    bubble.setSkin(this.getBubbleSkin());
-                    bubble.setFollowOwnerView(true);
-                    bubble.setLifeSpan(LIFE_SPAN);
+                    StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
+                    if (bubble != null) {
+                        bubble.setSped(SPEED);
+                        bubble.setOwner(P);
+                        bubble.setSkin(this.getBubbleSkin());
+                        bubble.setFollowOwnerView(true);
+                        bubble.setLifeSpan(LIFE_SPAN);
 
-                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
-                    Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
-                    if (direction != Direction.DOWN) {
-                        addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+                        Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
+                        Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
+                        if (direction != Direction.DOWN) {
+                            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+                        }
+                        Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
+                        bubble.setPos(pos.x(), pos.y(), pos.z());
+                        bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
+
+                        level.addFreshEntity(bubble);
                     }
-                    Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
-                    bubble.setPos(pos.x(), pos.y(), pos.z());
-                    bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
-
-                    level.addFreshEntity(bubble);
                 }
             }
         }
@@ -99,8 +104,14 @@ public class StrayCatItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        $$1.startUsingItem($$2);
-        return InteractionResultHolder.fail($$3);
+        if ($$1 != null){
+            if (!((TimeStop) $$1.level()).inTimeStopRange($$1) && !isSleeping($$0, $$1)) {
+                $$1.startUsingItem($$2);
+            } else {
+                return InteractionResultHolder.fail($$3);
+            }
+        }
+        return InteractionResultHolder.sidedSuccess($$3,$$0.isClientSide());
     }
 
     @Override
@@ -125,6 +136,9 @@ public class StrayCatItem extends Item {
                 if (tag.contains(OWNER_UUID_TAG)) {
                     stray.setOwnerUUID(tag.getUUID(OWNER_UUID_TAG));
                     stray.setTame(true);
+                }
+                if (tag.contains(HEALTH_TAG)) {
+                    stray.setHealth(tag.getFloat(HEALTH_TAG));
                 }
                 stray.setBreed(breed);
                 if (item.hasCustomHoverName()) {

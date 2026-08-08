@@ -71,7 +71,7 @@ public class VampiricFate extends FatePowers {
 
     public float walkDistLast = 0;
     public void wallLatch(){
-        this.setCooldown(PowerIndex.FATE_3, 10);
+        this.setCooldown(PowerIndex.FATE_3, 20);
                 //if (!isOnWrongAxis())
                 //toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection2(this.self);

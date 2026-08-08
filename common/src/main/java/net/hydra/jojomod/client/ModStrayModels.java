@@ -49,6 +49,7 @@ public class ModStrayModels {
     public static BigHairPart BigHairPart;
     public static KakyoinHairPart KakyoinHairPart;
     public static DiegoHatPart DiegoHatPart;
+    public static DoppioHairPart DoppioHairPart;
     public static JohnnyHatPart JohnnyHatPart;
     public static DaiyaEarsPart DaiyaEarsPart;
     public static DaiyaFluffPart DaiyaFluffPart;

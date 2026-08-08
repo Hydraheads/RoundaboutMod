@@ -1061,9 +1061,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
-                if (MI.visageData.isCharacterVisage()) {
-                    if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (MI.visageData.isSlim() != originalArms){
+                VisageData vd = MI.visageData.generateVisageData(player);
+                if (vd.isCharacterVisage()) {
+                    if (((IPlayerModel)this.model).roundabout$getSlim() != vd.isSlim()){
+                        if (vd.isSlim() != originalArms){
                             model = roundabout$otherModel;
                         } else {
                             model = roundabout$mainModel;
@@ -1477,7 +1478,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         }
                     }
                 } else {
-                    Vector3f scale = MI.visageData.scale();
+                    VisageData vd = MI.visageData.generateVisageData($$0);
+                    Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
                 ci.cancel();

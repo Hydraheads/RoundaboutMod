@@ -53,6 +53,9 @@ public class VisageData {
     public String getSkinPath(){
         return null;
     }
+    public boolean swapName(){
+        return false;
+    }
     public boolean isSlim(){
         return false;
     }
@@ -70,6 +73,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersLucyHair(){
+        return false;
+    }
+    public boolean rendersDoppioHair(){
         return false;
     }
     public boolean rendersKakyoinHair(){

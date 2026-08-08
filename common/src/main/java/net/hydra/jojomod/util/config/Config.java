@@ -1121,8 +1121,18 @@ public class Config implements Cloneable {
         public Boolean enableSkippingCooldowns;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableEpitaphPreSkip;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierKingCrimson;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierKingCrimson;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer kingCrimsonAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer kingCrimsonAttackMultOnMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean predictIdles;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer kingCrimsonGuardPoints;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
@@ -1264,7 +1274,7 @@ public class Config implements Cloneable {
         public Integer blockRangeNegativeOneIsInfinite;
         @BooleanOption(group = "inherit", value = true)
         public Boolean usePreciseMath;
-        @IntOption(group = "inherit", value = 19, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
         public Integer postTSiframes;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSSoften;

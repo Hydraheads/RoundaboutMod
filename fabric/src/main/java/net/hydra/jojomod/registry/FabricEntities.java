@@ -320,6 +320,13 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).
                             sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_crimson")
             );
+    public static final EntityType<ReaperKingCrimsonEntity> KING_CRIMSON_REAPER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "king_crimson_reaper"),
+                    EntityType.Builder.of(ReaperKingCrimsonEntity::new, MobCategory.MISC).
+                            sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_crimson_reaper")
+            );
 
         public static final EntityType<TheWorldEntity> THE_WORLD_ULTIMATE =
                 Registry.register(
@@ -470,7 +477,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("block_bomb"),
                         EntityType.Builder.of(BlockBombEntity::new, MobCategory.MISC).
-                                sized(0.75f, 0.75f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
+                                sized(1.1f, 1.1f).clientTrackingRange(14).build(Roundabout.MOD_ID+":block_bomb")
                 );
         public static final EntityType<CinderellaEntity> CINDERELLA =
                 Registry.register(
@@ -1033,6 +1040,7 @@ public class FabricEntities {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.KING_CRIMSON = KING_CRIMSON;
+                ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
                 ModEntities.ZOMBIEFISH = ZOMBIEFISH;
@@ -1223,6 +1231,7 @@ public class FabricEntities {
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(KING_CRIMSON_REAPER, StandEntity.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD_ULTIMATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(STAR_PLATINUM, StandEntity.createStandAttributes());

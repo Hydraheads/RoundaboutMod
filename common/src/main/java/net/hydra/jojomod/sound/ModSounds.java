@@ -1207,6 +1207,24 @@ public class ModSounds {
     public static final String TUSK_SPIN_THROW = "tusk_spin_throw";
     public static final ResourceLocation TUSK_SPIN_THROW_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_SPIN_THROW);
     public static SoundEvent TUSK_SPIN_THROW_EVENT = SoundEvent.createVariableRangeEvent(TUSK_SPIN_THROW_ID);
+    public static final String TUSK_1_SUMMON = "tusk_1_summon";
+    public static final ResourceLocation TUSK_1_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_1_SUMMON);
+    public static SoundEvent TUSK_1_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(TUSK_1_SUMMON_ID);
+    public static final String TUSK_2_SUMMON = "tusk_2_summon";
+    public static final ResourceLocation TUSK_2_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_2_SUMMON);
+    public static SoundEvent TUSK_2_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(TUSK_2_SUMMON_ID);
+    public static final String TUSK_3_SUMMON = "tusk_3_summon";
+    public static final ResourceLocation TUSK_3_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_3_SUMMON);
+    public static SoundEvent TUSK_3_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(TUSK_3_SUMMON_ID);
+    public static final String TUSK_FLATTEN = "tusk_flatten";
+    public static final ResourceLocation TUSK_FLATTEN_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_FLATTEN);
+    public static SoundEvent TUSK_FLATTEN_EVENT = SoundEvent.createVariableRangeEvent(TUSK_FLATTEN_ID);
+    public static final String TUSK_WARP = "tusk_warp";
+    public static final ResourceLocation TUSK_WARP_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_WARP);
+    public static SoundEvent TUSK_WARP_EVENT = SoundEvent.createVariableRangeEvent(TUSK_WARP_ID);
+    public static final String TUSK_4_SUMMON = "tusk_4_summon";
+    public static final ResourceLocation TUSK_4_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_4_SUMMON);
+    public static SoundEvent TUSK_4_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(TUSK_4_SUMMON_ID);
 
 
 

@@ -20,6 +20,8 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
 
     public TuskAct3Model(ModelPart root) {
         this.stand = root.getChild("stand");
+        this.head = stand.getChild("stand2").getChild("head");
+        this.body = stand.getChild("stand2").getChild("body");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -164,9 +166,10 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
         super.renderToBuffer(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 
-    //    @Override
-//    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//
-//    }
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        this.defaultModifiers(pEntity);
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+    }
 
 }
