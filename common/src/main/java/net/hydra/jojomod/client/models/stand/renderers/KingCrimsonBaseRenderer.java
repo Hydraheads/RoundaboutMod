@@ -34,6 +34,7 @@ public class KingCrimsonBaseRenderer<M extends StandEntity> extends StandRendere
     private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/blue.png");
     private static final ResourceLocation VISION = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/vision.png");
     private static final ResourceLocation REAPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/reaper.png");
+    private static final ResourceLocation NUCLEAR = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/nuclear.png");
 
     public KingCrimsonBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -77,6 +78,8 @@ public class KingCrimsonBaseRenderer<M extends StandEntity> extends StandRendere
             return VISION;
         }else if (BT == KingCrimsonEntity.REAPER){
             return REAPER;
+        }else if (BT == KingCrimsonEntity.NUCLEAR){
+            return NUCLEAR;
         }
         return RED;
     }

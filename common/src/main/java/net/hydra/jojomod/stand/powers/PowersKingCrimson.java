@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -28,6 +29,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -41,12 +43,14 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -74,6 +78,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -1728,6 +1733,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean hitWall2 = false;
 
     public void basicSkip(boolean skipSelf){
+        if (!skipSelf){
+            cherrySkip();
+        }
         hitWall2 = false;
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
@@ -2671,6 +2679,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return Component.translatable(  "skins.roundabout.king_crimson.end_2");
         } if (skinId == KingCrimsonEntity.STARLESS){
             return Component.translatable(  "skins.roundabout.king_crimson.starless");
+        } if (skinId == KingCrimsonEntity.NUCLEAR){
+            return Component.translatable(  "skins.roundabout.king_crimson.nuclear");
         } if (skinId == KingCrimsonEntity.HEAVEN){
             return Component.translatable(  "skins.roundabout.king_crimson.heaven");
         }if (skinId == KingCrimsonEntity.AGOGO){
@@ -2751,6 +2761,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 $$1.add(KingCrimsonEntity.AQUA);
                 $$1.add(KingCrimsonEntity.YELLOW);
                 $$1.add(KingCrimsonEntity.GREEN);
+                $$1.add(KingCrimsonEntity.NUCLEAR);
             } if (Level > 4 || bypass) {
                 $$1.add(KingCrimsonEntity.STARLESS);
                 $$1.add(KingCrimsonEntity.END);
@@ -2819,7 +2830,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return new Vec3(1.5,0,0);
         } if (sk == KingCrimsonEntity.DARK){
             return new Vec3(0,0,0);
-        } if (sk == KingCrimsonEntity.GREEN){
+        } if (sk == KingCrimsonEntity.GREEN || sk == KingCrimsonEntity.NUCLEAR){
             return new Vec3(0,1,0);
         } if (sk == KingCrimsonEntity.YELLOW){
             return new Vec3(1,1,0);
@@ -2828,11 +2839,53 @@ public class PowersKingCrimson extends BlockGrabPreset {
         } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
             return new Vec3(0.75,0,1.5);
         }if (sk == KingCrimsonEntity.REAPER){
-            return new Vec3(1.2,0,1.2);
+            return new Vec3(1.0,0,1.0);
         }
         return new Vec3(1,0,1);
     }
 
+
+    public int cherrySkip = 0;
+    public void cherrySkip(){
+        if (self instanceof Player PE) {
+            if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.CHERRY_GROVE)) {
+                StandUser user = ((StandUser) PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_KING_CRIMSON)) {
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                        if (!self.level().isClientSide()) {
+
+                            cherrySkip++;
+                            if (cherrySkip >= 5) {
+                                ipe.roundabout$setUnlockedBonusSkin(true);
+                                self.level().playSound(null, self.getX(), self.getY(),
+                                        self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.END_ROD, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10, 0.5, 0.5, 0.5, 0.2);
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10, 0.5, 0.5, 0.5, 0.2);
+                                user.roundabout$setStandSkin(KingCrimsonEntity.REAPER);
+                                ((ServerPlayer) ipe).displayClientMessage(
+                                        Component.translatable("unlock_skin.roundabout.king_crimson.reaper"), true);
+                                user.roundabout$summonStand(self.level(), true, false);
+                            } else {
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10+(cherrySkip * 10), 0.5, 0.5, 0.5, 0.2);
+                                this.self.level().playSound(null, this.self.blockPosition(),
+                                        SoundEvents.PORTAL_AMBIENT,
+                                        SoundSource.PLAYERS, 1F, (float) (1.5F + Math.random() * 0.02));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     public void handsActiveClient(){
         if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
