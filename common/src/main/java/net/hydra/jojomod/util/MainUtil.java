@@ -1958,7 +1958,9 @@ public class MainUtil {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
                         && !(PowerTypes.isExistentiallyElsewhere($$1))
-                        && !(value instanceof FallenMob)) {
+                        && !(value instanceof FallenMob)
+                        && (MainUtil.isActuallyALivingEntityNoCap(value))
+                ) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
                         target = (LivingEntity) value;
@@ -2289,6 +2291,9 @@ public class MainUtil {
 
     /**No Armor Stands*/
     public static boolean isActuallyALivingEntityNoCap(Entity LE){
+        if (LE instanceof KingCrimsonProjectionEntity){
+            return false;
+        }
         return LE instanceof Mob || LE instanceof Player;
     }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
