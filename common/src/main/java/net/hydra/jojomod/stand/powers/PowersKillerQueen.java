@@ -382,6 +382,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getAirBubbleDamage(Entity entity){
+        if (currentBombStatus == BUBBLE_BOMB && isContactModeEnabled()) {
+            return 0.0f;
+        }
+
         float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.StrayCatAirBubblesDamage;
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) multiplyPowerByStandConfigPlayers(damage))));
@@ -2741,7 +2745,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions + 1), 60);
 
-                    if (this.SHA.throwStatus >= 1) { shaCooldown += 120; }
+                    if (this.SHA.throwStatus >= 1) { shaCooldown += ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackThrowExtraCooldown; }
 
                     this.setCooldown(SHA_COOLDOWN, shaCooldown);
                     if (this.getSelf() instanceof Player P) {
@@ -2977,7 +2981,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 LivingEntity.class, wallBox)) {
 
             if (entity.equals(this.self) || entity.equals(((StandUser)this.self).roundabout$getStand()) || entity.equals(bomb)
-                    || entity instanceof StandEntity SE && SE.getUser() == this.self || !entity.isAlive() || entity.isDeadOrDying()
+                    || entity instanceof StandEntity || !entity.isAlive() || entity.isDeadOrDying()
                     || PowerTypes.isExistentiallyElsewhere(entity)) {
                 continue;
             }
@@ -3547,7 +3551,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target != null) {
-                    ((StandUser)target).roundabout$setExplosionInflation(-1);
+                    if (target instanceof LivingEntity) {
+                        ((StandUser) target).roundabout$setExplosionInflation(-1);
+                    }
                     vPos = target.position();
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
