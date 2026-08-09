@@ -320,6 +320,13 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).
                             sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_crimson")
             );
+    public static final EntityType<D4CEntity> D4C =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "d4c"),
+                    EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).
+                            sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":d4c")
+            );
     public static final EntityType<ReaperKingCrimsonEntity> KING_CRIMSON_REAPER =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1033,6 +1040,7 @@ public class FabricEntities {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.KING_CRIMSON = KING_CRIMSON;
+                ModEntities.D4C = D4C;
                 ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
                 ModEntities.TERRIER_DOG = TERRIER_DOG;
@@ -1223,6 +1231,7 @@ public class FabricEntities {
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON_REAPER, StandEntity.createStandAttributes());
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD_ULTIMATE, StandEntity.createStandAttributes());

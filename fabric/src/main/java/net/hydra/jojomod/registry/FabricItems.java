@@ -44,6 +44,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
 
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
@@ -656,6 +660,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                        entries.accept(STAND_DISC_D4C);
+                        entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -706,6 +712,9 @@ public class FabricItems {
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ((MaxStandDiscItem)MAX_STAND_DISC_THE_WORLD).baseDisc = ((StandDiscItem)STAND_DISC_THE_WORLD);
         ModItems.MAX_STAND_DISC_THE_WORLD = MAX_STAND_DISC_THE_WORLD;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+        ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
         ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;

@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.ReaperKingCrimsonEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -139,7 +140,7 @@ public class KingCrimsonReaperModel<T extends ReaperKingCrimsonEntity> extends S
     }
 
 
-	StandPowers Power = new PowersTheWorld(null);
+	StandPowers Power = new PowersKingCrimson(null);
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

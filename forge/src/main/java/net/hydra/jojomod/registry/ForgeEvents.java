@@ -59,6 +59,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.THE_WORLD_ULTIMATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_REAPER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StandEntity.createStandAttributes().build());
@@ -432,6 +433,10 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_TUSK = ForgeItems.MAX_STAND_DISC_TUSK.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
 
+        ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
+        ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
+
 
         ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
         ModItems.MAX_STAND_DISC_EMPEROR = ForgeItems.MAX_STAND_DISC_EMPEROR.get();
@@ -691,6 +696,7 @@ public class ForgeEvents {
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.KING_CRIMSON = ForgeEntities.KING_CRIMSON.get();
+        ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.KING_CRIMSON_REAPER = ForgeEntities.KING_CRIMSON_REAPER.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();

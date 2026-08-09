@@ -64,6 +64,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_REAPER.get(), KingCrimsonReaperRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
@@ -212,6 +213,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
 
         event.registerLayerDefinition(ModEntityRendererClient.VILLAGER_MINION_LAYER, VillagerMinionModel::createBodyLayer);
