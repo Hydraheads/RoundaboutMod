@@ -3300,6 +3300,13 @@
   "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
   "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
 
+  "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
+  "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",
+
+  "config.roundabout.KillerQueenCurrentBombConfig.name":"Bomb Config",
+  "config.roundabout.KillerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+
+
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
   "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.chessMultOnPlayers.name": "Chess Mob Dmg Mult",
