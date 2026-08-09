@@ -2895,6 +2895,15 @@
   "config.roundabout.timeSkipOpacity.name": "Time Skip Opacity",
   "config.roundabout.timeSkipOpacity.desc": "How see through is time skip's effect? Bigger number = more accurate, smaller number = less blinding. 0 to 1.0.",
 
+  "config.roundabout.nerfedGasolineSpread.name": "Nerfed Gas Spread",
+  "config.roundabout.nerfedGasolineSpread.desc": "Makes gasoline spread less.",
+
+  "config.roundabout.bitesTheDustDayMobsDamage.name":"BTD Mob Damage",
+  "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
+  "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
+  "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
+
+
 
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
@@ -2909,6 +2918,8 @@
   "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
 
 
+  "config.roundabout.enableOasis.name":"Enable Stand",
+  "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
