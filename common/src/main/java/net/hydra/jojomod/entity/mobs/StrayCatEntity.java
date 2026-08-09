@@ -349,11 +349,13 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                     }
                     StrayCatItem.saveStrayCatEntityInfo(item, this);
 
-                    $$0.addItem(item);
+                    if ($$0.addItem(item)) {
+                        this.discard();
+                        return InteractionResult.SUCCESS;
+                    }else {
+                        return InteractionResult.FAIL;
+                    }
 
-                    this.discard();
-
-                    return InteractionResult.SUCCESS;
                 } else if ($$2.is(Items.FLOWER_POT) && this.isOwnedBy($$0)) {
                     if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 
@@ -365,12 +367,12 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                     }
                     StrayCatItem.saveStrayCatEntityInfo(item, this);
 
-                    $$0.addItem(item);
-
-                    this.discard();
-
-                    return InteractionResult.SUCCESS;
-
+                    if ($$0.addItem(item)) {
+                        this.discard();
+                        return InteractionResult.SUCCESS;
+                    }else {
+                        return InteractionResult.FAIL;
+                    }
                 }
 
                 InteractionResult $$7 = super.mobInteract($$0, $$1);
