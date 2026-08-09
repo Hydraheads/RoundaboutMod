@@ -90,7 +90,7 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
                             $$0.mulPose(Axis.ZP.rotationDegrees($$19 / 2.0F));
                             $$0.mulPose(Axis.YP.rotationDegrees(180.0F - $$19 / 2.0F));
                             VertexConsumer $$21 = $$1.getBuffer(RenderType.entityTranslucent(
-                                    new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_hats/"+vd.getSkinPath()+".png")
+                                    new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
                             ));
                             this.getParentModel().renderCloak($$0, $$21, $$2, OverlayTexture.NO_OVERLAY);
                             $$0.popPose();
