@@ -327,11 +327,6 @@ public interface StandUser {
     int roundabout$getTrueInvis();
 
 
-    @Unique
-    void roundabout$setTrueInvisManhattan(int round);
-
-    @Unique
-    int roundabout$getTrueInvisManhattan();
 
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);
