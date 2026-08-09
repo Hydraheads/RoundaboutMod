@@ -579,7 +579,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (getEntityTarget() != null) {
-				MainUtil.takeDeterminedKnockbackWithY(this, getEntityTarget(), 0.6f);
+				if (getEntityTarget() instanceof LivingEntity LE) {
+					double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.12 * $$11);
+					if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.1, $$12.z); }
+				}
 
 				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;

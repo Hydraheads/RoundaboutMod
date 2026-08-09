@@ -391,8 +391,6 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
             }
 
-            super.onHitEntity($$0);
-
             DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
             float damage = getDamagePoints();
 
@@ -404,14 +402,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
             }
 
-            if (this.target != null) {
-                damage *= 0.75f;
-            }
+            if (this.target != null) { damage *= 0.75f; }
 
             if (hitTarget.hurt(dmg, damage)) {
 
                 if (user instanceof LivingEntity LE) {
-
                     if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                         if (hitTarget instanceof LivingEntity l) {
                             KQ.addEXP(4, l);
@@ -421,9 +416,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     LE.setLastHurtMob(hitTarget);
                 }
 
-                if (hitTarget.getType() == EntityType.ENDERMAN) {
-                    return;
-                }
+                if (hitTarget.getType() == EntityType.ENDERMAN) { return; }
 
                 if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
                     LivingEntity $$7;

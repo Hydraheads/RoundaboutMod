@@ -382,6 +382,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getAirBubbleDamage(Entity entity){
+        if (currentBombStatus == BUBBLE_BOMB && isContactModeEnabled()) {
+            return 0.0f;
+        }
+
         float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.StrayCatAirBubblesDamage;
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) multiplyPowerByStandConfigPlayers(damage))));
