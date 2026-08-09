@@ -1456,8 +1456,11 @@ public class ClientUtil {
             boolean isBackingUp = mc.options.keyDown.isDown();
             boolean isMovingForward = mc.options.keyUp.isDown();
             boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
-            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && getPlayer().fallDistance < 2 &&
+            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && !mc.player.isHurt() && getPlayer().fallDistance < 2 &&
                     !getPlayer().getAbilities().flying);
+            if (((StandUser)mc.player).roundabout$getBubbleEncased() > 0){
+                isJumping = false;
+            }
             boolean isSprinting = mc.player.isSprinting();
             boolean runaway = false;
 

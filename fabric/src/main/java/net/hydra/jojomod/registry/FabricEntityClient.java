@@ -64,6 +64,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD_ULTIMATE, TheWorldUltimateRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON, KingCrimsonRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_REAPER, KingCrimsonReaperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE, JusticeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE_PIRATE, JusticePirateRenderer::new);
@@ -218,6 +219,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_ULTIMATE_LAYER, TheWorldUltimateModel::getTexturedModelData);
@@ -340,6 +342,8 @@ public class FabricEntityClient {
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
+        ModStrayModels.gyroHatPart = new GyroHatPart();
+        ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();

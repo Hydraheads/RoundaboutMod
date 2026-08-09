@@ -105,6 +105,12 @@ public class VisageData {
     public boolean rendersDaiyaEars(){
         return false;
     }
+    public boolean rendersGyroHat(){
+        return false;
+    }
+    public boolean rendersSteelBalls(){
+        return false;
+    }
     public boolean rendersDaiyaFluff(){
         return false;
     }
@@ -126,6 +132,9 @@ public class VisageData {
     public boolean renderJohngalliaHair(){return false;}
     public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){
+        return false;
+    }
+    public boolean rendersCape(){
         return false;
     }
 

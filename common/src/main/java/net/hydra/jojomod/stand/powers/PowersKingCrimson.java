@@ -403,7 +403,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
-        if (!canPredictIdles() || !isGravityNormal(liv)){
+        if (!canPredictIdles() || !isGravityNormal(liv) ||
+                (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))){
             return liv.position();
         }
         //Mobs and Players that are still still need to move when idle
@@ -1541,48 +1542,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 railPos.getY() + railYOffset(endShape),
                 railPos.getZ() + 0.5
         );
-    }
-    private boolean isConnectedRail(Level level, BlockPos from, BlockPos to) {
-        BlockState fromState = level.getBlockState(from);
-        BlockState toState = level.getBlockState(to);
-
-        if (!BaseRailBlock.isRail(fromState) || !BaseRailBlock.isRail(toState)) {
-            return false;
-        }
-
-        RailShape fromShape = fromState.getValue(
-                ((BaseRailBlock) fromState.getBlock()).getShapeProperty()
-        );
-
-        RailShape toShape = toState.getValue(
-                ((BaseRailBlock) toState.getBlock()).getShapeProperty()
-        );
-
-        Direction travel = Direction.fromDelta(
-                to.getX() - from.getX(),
-                to.getY() - from.getY(),
-                to.getZ() - from.getZ()
-        );
-
-        if (travel == null) {
-            return false;
-        }
-
-        // The next rail must have an exit back toward the rail we came from
-        return switch (toShape) {
-            case NORTH_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case EAST_WEST -> travel == Direction.EAST || travel == Direction.WEST;
-
-            case ASCENDING_NORTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case ASCENDING_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case ASCENDING_EAST -> travel == Direction.EAST || travel == Direction.WEST;
-            case ASCENDING_WEST -> travel == Direction.EAST || travel == Direction.WEST;
-
-            case SOUTH_EAST -> travel == Direction.SOUTH || travel == Direction.EAST;
-            case SOUTH_WEST -> travel == Direction.SOUTH || travel == Direction.WEST;
-            case NORTH_EAST -> travel == Direction.NORTH || travel == Direction.EAST;
-            case NORTH_WEST -> travel == Direction.NORTH || travel == Direction.WEST;
-        };
     }
     public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
         Level level = cart.level();

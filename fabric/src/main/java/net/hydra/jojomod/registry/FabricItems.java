@@ -44,6 +44,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
 
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
@@ -272,6 +276,7 @@ public class FabricItems {
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item GYRO_MASK = registerItem("gyro_mask", new MaskItem(new Item.Properties().stacksTo(1), new GyroVisage(null)));
     public static Item SHADOW_DIO_MASK = registerItem("shadow_dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShadowDIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
@@ -469,6 +474,7 @@ public class FabricItems {
                         entries.accept(JOHNGALLIA_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
+                        entries.accept(GYRO_MASK);
                         entries.accept(LUCY_MASK);
                         entries.accept(DIEGO_MASK);
                         entries.accept(POCOLOCO_MASK);
@@ -663,6 +669,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                        entries.accept(STAND_DISC_D4C);
+                        entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -714,6 +722,9 @@ public class FabricItems {
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ((MaxStandDiscItem)MAX_STAND_DISC_THE_WORLD).baseDisc = ((StandDiscItem)STAND_DISC_THE_WORLD);
         ModItems.MAX_STAND_DISC_THE_WORLD = MAX_STAND_DISC_THE_WORLD;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+        ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
         ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;
@@ -882,6 +893,7 @@ public class FabricItems {
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.GYRO_MASK = GYRO_MASK;
         ModItems.SHADOW_DIO_MASK = SHADOW_DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;

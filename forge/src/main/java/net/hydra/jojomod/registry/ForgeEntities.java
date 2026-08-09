@@ -295,6 +295,12 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson").toString())
             );
+    public static final RegistryObject<EntityType<D4CEntity>> D4C =
+            ENTITY_TYPES.register("d4c", () ->
+                    EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+            );
     public static final RegistryObject<EntityType<ReaperKingCrimsonEntity>> KING_CRIMSON_REAPER =
             ENTITY_TYPES.register("king_crimson_reaper", () ->
                     EntityType.Builder.of(ReaperKingCrimsonEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
