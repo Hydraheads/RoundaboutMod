@@ -1205,28 +1205,14 @@ public class MainUtil {
         Level level = player.level();
         if (level == null)
             return false;
-
         Vec3 mainVec = new Vec3(0, 0.05, 0);
         mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
         AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
-        AABB box = headSpace.inflate(-1.0E-5);
+        boolean blocked = level.getBlockCollisions(player, headSpace)
+                .iterator()
+                .hasNext();
 
-        for (BlockPos pos : BlockPos.betweenClosed(
-                Mth.floor(box.minX),
-                Mth.floor(box.minY),
-                Mth.floor(box.minZ),
-                Mth.floor(box.maxX),
-                Mth.floor(box.maxY),
-                Mth.floor(box.maxZ))) {
-
-            BlockState state = level.getBlockState(pos);
-
-            if (!state.getCollisionShape(level, pos).isEmpty()) {
-                return true;
-            }
-        }
-
-        return false;
+        return blocked;
     }
 
     public static boolean isUsingMetallica(Entity ent){
@@ -1972,7 +1958,9 @@ public class MainUtil {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
                         && !(PowerTypes.isExistentiallyElsewhere($$1))
-                        && !(value instanceof FallenMob)) {
+                        && !(value instanceof FallenMob)
+                        && (MainUtil.isActuallyALivingEntityNoCap(value))
+                ) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
                         target = (LivingEntity) value;
@@ -2303,6 +2291,9 @@ public class MainUtil {
 
     /**No Armor Stands*/
     public static boolean isActuallyALivingEntityNoCap(Entity LE){
+        if (LE instanceof KingCrimsonProjectionEntity){
+            return false;
+        }
         return LE instanceof Mob || LE instanceof Player;
     }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {

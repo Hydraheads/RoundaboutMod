@@ -300,12 +300,18 @@
   "item.roundabout.doppio_mask": "Doppio Visage",
   "item.roundabout.doppio_mask.desc": "Vinegar Doppio",
   "item.roundabout.doppio_mask.tag": "Doppio",
+  "item.roundabout.gyro_mask": "Gyro Visage",
+  "item.roundabout.gyro_mask.desc": "Gyro Zeppeli",
+  "item.roundabout.gyro_mask.tag": "Gyro",
   "item.roundabout.boss_mask": "Boss Visage",
   "item.roundabout.boss_mask.desc": "Boss",
   "item.roundabout.boss_mask.tag": "Boss",
   "item.roundabout.dio_mask": "DIO Visage",
   "item.roundabout.dio_mask.desc": "DIO (Part 3)",
   "item.roundabout.dio_mask.tag": "DIO",
+  "item.roundabout.shadow_dio_mask": "DIO Visage",
+  "item.roundabout.shadow_dio_mask.desc": "DIO (Mysterious Shadow)",
+  "item.roundabout.shadow_dio_mask.tag": "DIO",
   "item.roundabout.enya_mask": "Enya Visage",
   "item.roundabout.enya_mask.desc": "Enya Geil",
   "item.roundabout.enya_mask.tag": "Enya",
@@ -2643,6 +2649,7 @@
   "unlock_skin.roundabout.white_album.yuki": "Yuki-onna Skin Unlocked!",
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
+  "unlock_skin.roundabout.killer_queen.minesweeper": "Killer Queen: Minesweeper Skin Unlocked",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -2890,6 +2897,15 @@
   "config.roundabout.timeSkipOpacity.name": "Time Skip Opacity",
   "config.roundabout.timeSkipOpacity.desc": "How see through is time skip's effect? Bigger number = more accurate, smaller number = less blinding. 0 to 1.0.",
 
+  "config.roundabout.nerfedGasolineSpread.name": "Nerfed Gas Spread",
+  "config.roundabout.nerfedGasolineSpread.desc": "Makes gasoline spread less.",
+
+  "config.roundabout.bitesTheDustDayMobsDamage.name":"BTD Mob Damage",
+  "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
+  "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
+  "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
+
+
 
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
@@ -2903,7 +2919,11 @@
   "config.roundabout.playerGuardDamageMultiplierMobs.name": "WA Mob Reduction",
   "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
 
+  "config.roundabout.emperorBulletRange.name":"Bullet Range",
+  "config.roundabout.emperorBulletRange.desc": "The range bullets have.",
 
+  "config.roundabout.enableOasis.name":"Enable Stand",
+  "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
@@ -3270,7 +3290,7 @@
   "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
   "config.roundabout.manhattanDashCooldown.name":"Manhattan Transfer Dash Cooldown",
   "config.roundabout.manhattanDashCooldown.desc":"Cooldown for Manhattan Transfer's dash move",
-  "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Other Mobs Can Load Your Manhattan Transfer",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Load Enemy Projectiles",
   "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Ender Pearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
@@ -3281,6 +3301,13 @@
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
   "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
   "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
+  "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",
+
+  "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
+  "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
   "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3956,6 +3983,8 @@
   "config.roundabout.starFingerLeapCooldown.desc": "Star Finger is disabled for a short time after a leap",
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
+  "config.roundabout.postTESoften.name": "Post TE Soften",
+  "config.roundabout.postTESoften.desc": "If ending time erase makes ",
 
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
@@ -4157,6 +4186,7 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
+  "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
 
@@ -4201,6 +4231,10 @@
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
   "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
   "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
+
+  "config.roundabout.trackingmessage.name": "Tracking Message",
+  "config.roundabout.trackingmessage.desc": "Whether to notify you when tracking meteors.",
+
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",

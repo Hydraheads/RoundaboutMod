@@ -59,6 +59,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.THE_WORLD.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.THE_WORLD_ULTIMATE.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.D4C.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_REAPER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.STAR_PLATINUM_BASEBALL.get(), StandEntity.createStandAttributes().build());
@@ -433,6 +434,10 @@ public class ForgeEvents {
         ModItems.MAX_STAND_DISC_TUSK = ForgeItems.MAX_STAND_DISC_TUSK.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_TUSK.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_TUSK.get());
 
+        ModItems.STAND_DISC_D4C = ForgeItems.STAND_DISC_D4C.get();
+        ModItems.MAX_STAND_DISC_D4C = ForgeItems.MAX_STAND_DISC_D4C.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_D4C.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_D4C.get());
+
 
         ModItems.STAND_DISC_EMPEROR = ForgeItems.STAND_DISC_EMPEROR.get();
         ModItems.MAX_STAND_DISC_EMPEROR = ForgeItems.MAX_STAND_DISC_EMPEROR.get();
@@ -524,6 +529,8 @@ public class ForgeEvents {
         ModItems.BOSS_MASK = ForgeItems.BOSS_MASK.get();
         ModItems.DOPPIO_MASK = ForgeItems.DOPPIO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
+        ModItems.GYRO_MASK = ForgeItems.GYRO_MASK.get();
+        ModItems.SHADOW_DIO_MASK = ForgeItems.SHADOW_DIO_MASK.get();
         ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
         ModItems.ENYA_MASK = ForgeItems.ENYA_MASK.get();
@@ -662,6 +669,9 @@ public class ForgeEvents {
         ModParticles.PW_FIREBALL_EXPLOSION = ForgeParticles.PW_FIREBALL_EXPLOSION.get();
         ModParticles.PW_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_MUSHROOM_EXPLOSION = ForgeParticles.PW_MUSHROOM_EXPLOSION.get();
+        ModParticles.PW_BLUE_FIREBALL_EXPLOSION = ForgeParticles.PW_BLUE_FIREBALL_EXPLOSION.get();
+        ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get();
+        ModParticles.PW_BLUE_MUSHROOM_EXPLOSION = ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -691,6 +701,7 @@ public class ForgeEvents {
         ModEntities.THE_WORLD = ForgeEntities.THE_WORLD.get();
         ModEntities.THE_WORLD_ULTIMATE = ForgeEntities.THE_WORLD_ULTIMATE.get();
         ModEntities.KING_CRIMSON = ForgeEntities.KING_CRIMSON.get();
+        ModEntities.D4C = ForgeEntities.D4C.get();
         ModEntities.KING_CRIMSON_REAPER = ForgeEntities.KING_CRIMSON_REAPER.get();
         ModEntities.TERRIER_DOG = ForgeEntities.TERRIER_DOG.get();
         ModEntities.ZOMBIEFISH = ForgeEntities.ZOMBIEFISH.get();

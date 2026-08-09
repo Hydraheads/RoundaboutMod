@@ -39,6 +39,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public KingCrimsonCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
         this.goalSelector.addGoal(1, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
         ((GroundPathNavigation)this.getNavigation()).setCanOpenDoors(true);
         ((GroundPathNavigation)this.getNavigation()).setCanPassDoors(true);
     }
@@ -90,10 +91,12 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     @Override
     public float getSpeed(){
         float spd = super.getSpeed();
-        if (isSneaking){
-            spd*=0.3F;
-        } else if (!isSprinting){
-            spd*=1.3F;
+        if (onGround()) {
+            if (isSneaking) {
+                spd *= 0.3F;
+            } else if (!isSprinting) {
+                spd *= 1.3F;
+            }
         }
         return spd;
     }
@@ -202,7 +205,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             }
 
             // This code basically makes it stop at ledges while sneaking
-            if (isSneaking) {
+            if (isSneaking && onGround()) {
                 float yaw = getYRot() * ((float)Math.PI / 180F);
 
                 double step = 0.5D;

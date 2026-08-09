@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -400,6 +401,7 @@ public class ClientUtil {
                 ||ent.getType()==EntityType.HUSK
                 ||ent.getType()==EntityType.CREEPER
                 ||ent.getType()==EntityType.DROWNED
+                ||ent instanceof CloneEntity
                 ||ent.getType()==EntityType.SKELETON)));
     }
     public static boolean hideLegs(Entity ent){
@@ -1454,8 +1456,11 @@ public class ClientUtil {
             boolean isBackingUp = mc.options.keyDown.isDown();
             boolean isMovingForward = mc.options.keyUp.isDown();
             boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
-            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && getPlayer().fallDistance < 2 &&
+            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && !mc.player.isHurt() && getPlayer().fallDistance < 2 &&
                     !getPlayer().getAbilities().flying);
+            if (((StandUser)mc.player).roundabout$getBubbleEncased() > 0){
+                isJumping = false;
+            }
             boolean isSprinting = mc.player.isSprinting();
             boolean runaway = false;
 

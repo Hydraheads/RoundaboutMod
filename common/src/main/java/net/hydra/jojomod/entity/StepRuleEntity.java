@@ -146,7 +146,8 @@ public class StepRuleEntity extends Entity {
                             wallBox)) {
 
                         if (mob instanceof LivingEntity mbb) {
-                            if (!(mob instanceof StandEntity se && se.getUser().getUUID() == LE.getUUID())
+                            if (!(mob instanceof StandEntity se && se.getUser() != null
+                                    && se.getUser().isAlive() && se.getUser().getUUID() == LE.getUUID())
                                     && mob.isAlive() && !(mob instanceof TridentsIgnoreThis)) {
                                 if (mob.getBoundingBox().intersects(wallBox)) {
                                     if (!mbb.canBeSeenAsEnemy())

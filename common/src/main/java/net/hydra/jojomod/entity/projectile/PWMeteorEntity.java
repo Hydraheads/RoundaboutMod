@@ -194,12 +194,15 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     private int chainSpawnDelay = 0;
     private boolean spawnedChildren = false;
     private int chainDelay = 0;
+    private static final int CHAIN_CHILD_INTERVAL = 3; //Cuanto tardan los clones en salir
+    private static final int CHAIN_CHILD_COUNT = 2;     //Cuantos son
+    private int childrenSpawnedCount = 0;
 
     public void setChain(int index, boolean starter) {
         this.chainIndex = index;
         this.isChainStarter = starter;
 
-        this.chainSpawnDelay = index * 6;
+        this.chainSpawnDelay = CHAIN_CHILD_INTERVAL;
     }
     @Override
     public void tick() {
@@ -283,54 +286,48 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
             }
         }
 
-        if (isChainStarter && !spawnedChildren) {
-
+        if (isChainStarter && childrenSpawnedCount < CHAIN_CHILD_COUNT) {
 
             if (chainSpawnDelay > 0) {
                 chainSpawnDelay--;
                 return;
             }
 
-            spawnedChildren = true;
+            childrenSpawnedCount++;
+            chainSpawnDelay = CHAIN_CHILD_INTERVAL;
 
-            Vec3 baseDir = this.getDeltaMovement().lengthSqr() > 0.0001
+            PWMeteorEntity extra = new PWMeteorEntity(this.standUser, this.level());
+
+            extra.setUser(this.standUser);
+            extra.setOwner(this.standUser);
+            extra.setTrackingUser(this.trackingUser);
+            extra.setChain(childrenSpawnedCount, false);
+
+            double angle = this.random.nextDouble() * Math.PI * 2.0;
+            double radius = 1.2 + this.random.nextDouble() * 1.5; // 1.2–2.7 block spread
+
+            double offsetX = Math.cos(angle) * radius;
+            double offsetZ = Math.sin(angle) * radius;
+
+            double offsetY = (this.random.nextDouble() - 0.5) * 0.8;
+
+            Vec3 basePos = (spawnPosition != null) ? spawnPosition : this.position();
+            Vec3 spawnOffset = basePos.add(offsetX, offsetY, offsetZ);
+
+            extra.absMoveTo(spawnOffset.x, spawnOffset.y, spawnOffset.z);
+            extra.storeVec = spawnOffset;
+            extra.setOldPosAndRot2();
+
+            Vec3 dir = this.getDeltaMovement().lengthSqr() > 0.0001
                     ? this.getDeltaMovement().normalize()
                     : new Vec3(0, -1, 0);
 
+            extra.shoot(dir.x, dir.y, dir.z, 1.8F, 0.0F);
 
-            Vec3 right = new Vec3(-baseDir.z, 0, baseDir.x);
+            this.level().addFreshEntity(extra);
 
-            for (int i = 1; i < 3; i++) {
-
-                PWMeteorEntity extra = new PWMeteorEntity(this.standUser, this.level());
-
-                extra.setUser(this.standUser);
-                extra.setOwner(this.standUser);
-                extra.setTrackingUser(this.trackingUser);
-                extra.setChain(i, false);
-
-
-                double angle = this.random.nextDouble() * Math.PI * 2.0;
-                double radius = 1.2 + this.random.nextDouble() * 1.5; // 1.2–2.7 block spread
-
-                double offsetX = Math.cos(angle) * radius;
-                double offsetZ = Math.sin(angle) * radius;
-
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.8;
-
-                Vec3 spawnOffset = this.position().add(offsetX, offsetY, offsetZ);
-
-                extra.absMoveTo(spawnOffset.x, spawnOffset.y, spawnOffset.z);
-                extra.storeVec = spawnOffset;
-                extra.setOldPosAndRot2();
-
-                Vec3 dir = this.getDeltaMovement().lengthSqr() > 0.0001
-                        ? this.getDeltaMovement().normalize()
-                        : new Vec3(0, -1, 0);
-
-                extra.shoot(dir.x, dir.y, dir.z, 1.8F, 0.0F);
-
-                this.level().addFreshEntity(extra);
+            if (childrenSpawnedCount >= CHAIN_CHILD_COUNT) {
+                spawnedChildren = true;
             }
         }
 
@@ -628,9 +625,13 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         ) * (180F / Math.PI)));
     }
     private boolean trackingUser = false;
+    private boolean wasEverTracked = false;
 
     public void setTrackingUser(boolean trackingUser) {
         this.trackingUser = trackingUser;
+        if (trackingUser) {
+            this.wasEverTracked = true;
+        }
     }
 
     public boolean isTrackingUser() {
@@ -639,6 +640,9 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
     public void getEntity(Entity gotten, PowersPlanetWaves PPW, LivingEntity user) {
         if (gotten != null && (gotten.getId() != getUserID() || punishesOwner)) {
             float dmg = PPW.getFireballDamage(gotten);
+            if (wasEverTracked) {
+                dmg = dmg / 3F;
+            }
             float strength = METEOR_HIT_KNOCKBACK;
             if (!(user instanceof Player) && !(user instanceof Monster) && !punishesOwner) {
                 if (!(gotten instanceof Monster)) {

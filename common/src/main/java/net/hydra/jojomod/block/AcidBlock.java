@@ -138,7 +138,9 @@ public class AcidBlock extends Block {
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         if (!level.isClientSide()) {
             if (entity instanceof LivingEntity LE && !FateTypes.isVampire(LE) && !FateTypes.isZombie(LE)) {
-                LE.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
+                if (!(PowerTypes.isErasingTime(entity))) {
+                    LE.addEffect(new MobEffectInstance(MobEffects.POISON, 300, 0));
+                }
             }
         }
     }

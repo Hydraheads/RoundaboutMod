@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
@@ -21,12 +22,14 @@ import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -138,9 +141,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 25;
+	static final int attackTickMax = 40;
 	int jumpTick = 0;
-	static final int jumpTickMax = 38;
+	static final int jumpTickMax = 68;
+
+	final float jumpMaxHeight = 3.0f;
+	int stunTicks = 0;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
@@ -337,8 +343,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	protected void moveToTarget() {
 		if (this.getHaveToReturn()) {
 			Vec3 pos = this.getUser().position();
-			this.shaMove(pos);
-		} else if (this.hasTarget()) {
+			shaMove(pos);
+		} else if (this.hasTarget() && stunTicks <= 0) {
 			Vec3 pos = this.getTargetPosition();
 			if (this.shouldExplode(pos)) {
 				this.attack();
@@ -533,32 +539,51 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return null;
 	}
+	public SoundEvent getExplosionSound() {
+		byte skn = ((StandUser)getUser()).roundabout$getStandSkin();
+		if (skn == KillerQueenEntity.MINESWEEPER) {
+			return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
+		}else if (skn == KillerQueenEntity.CREEPER) {
+			return SoundEvents.GENERIC_EXPLODE;
+		}
+		return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
+	}
 
+	public SimpleParticleType getExplosionParticle() {
+		byte skn = ((StandUser) getUser()).roundabout$getStandSkin();
+		if (skn == KillerQueenEntity.CREEPER) {
+			return ModParticles.SMALL_EXPLOSION;
+		}
+		return ModParticles.KILLER_QUEEN_EXPLOSION;
+	}
 
 	public void attack() {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
 
 		this.explosions++;
 
+		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		if (!(SP instanceof PowersKillerQueen)) { return; }
+		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+
 		if (this.getTargetType() == ENTITY){
 			Vec3 pos = this.position().add(this.getForward().scale(0.3));
 			float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
 
-			StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
-
-			if (!(SP instanceof PowersKillerQueen)) { return; }
-			PowersKillerQueen KQ = (PowersKillerQueen)SP;
-
 			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
 					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
 
-			ExplosionUtil.explodeEffects(pos, this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.25f, 0.25f, 0.25f), 8);
+			ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(0.25f, 0.25f, 0.25f), 8);
 
 
 			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (getEntityTarget() != null) {
-				MainUtil.takeDeterminedKnockbackWithY(this, getEntityTarget(), 0.6f);
+				if (getEntityTarget() instanceof LivingEntity LE) {
+					double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.12 * $$11);
+					if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.1, $$12.z); }
+				}
 
 				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;
@@ -574,8 +599,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			ExplosionUtil.explosionHurt(this.blockTarget.getCenter(), dmg, this.level(),
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
-			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), ModParticles.KILLER_QUEEN_EXPLOSION, new Vec3(0.12f, 0.12f, 0.12f), 4);
-			this.level().playSound(null, this.blockTarget, ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.65F, 1.0f);
+			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.12f, 0.12f, 0.12f), 4);
+			this.level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
 					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
@@ -602,7 +627,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
+			Vec3 movement = (this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.25, 0);
+			this.setDeltaMovement(movement.x(), Math.min(movement.y(), 1.2f), movement.z());
 		}
 	}
 
@@ -610,8 +636,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public boolean onClimbable() {
 		return this.isClimbing();
 	}
-
-
 
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
@@ -636,7 +660,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
-		if (ticksUntilNextPathRecalculation <= 0 ) {
+		if (ticksUntilNextPathRecalculation <= 0) {
 			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
@@ -662,7 +686,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				return;
 			}
 
-			if (!this.getNavigation().moveTo(newPath, 0.5f))
+			if (!this.getNavigation().moveTo(newPath, 0.45f))
 				ticksUntilNextPathRecalculation += 5;
 		}
 	}
@@ -727,14 +751,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-		//this.playSound(ModSounds.KILLER_QUEEN_SHA_MOVING_EVENT, 0.15f, 1.0f);
 
-		//SoundType soundType = blockState.getSoundType();
-		//this.playSound(soundType.getStepSound(), soundType.getVolume() * 0.15f, soundType.getPitch());
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
+		if (this.getUser() instanceof Player PE && ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+			return null;
+		}
 
 		if (this.soundsDelay > 0) {
 			return  null;
@@ -804,8 +828,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
     @Override public boolean hurt(DamageSource source, float amount) {
 		Entity causer = source.getEntity();
-		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()) {
-			return MainUtil.isStandDamage(source);
+		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()
+				&& MainUtil.isStandDamage(source)) {
+			stunTicks = 8;
+			if (jumpTick < 16) { jumpTick = 16; }
+			if (attackTick < 10) { jumpTick = 10; }
+
+			return true;
 		}
 
 		return false;
