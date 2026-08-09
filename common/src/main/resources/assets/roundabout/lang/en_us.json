@@ -3303,8 +3303,8 @@
   "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
   "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",
 
-  "config.roundabout.KillerQueenCurrentBombConfig.name":"Bomb Config",
-  "config.roundabout.KillerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+  "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
+  "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
 
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
