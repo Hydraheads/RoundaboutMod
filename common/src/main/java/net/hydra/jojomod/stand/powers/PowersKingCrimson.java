@@ -2616,7 +2616,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public float getBloodSplashStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (1.5F)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (2F)));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (6F * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));

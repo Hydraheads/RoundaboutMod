@@ -634,14 +634,6 @@ public class ClientUtil {
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
                     }
-                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
-                    /**Invis Psuedo Tracked Data*/
-                    int entityID = (int)vargs[0];
-                    int altered = (int)vargs[1];
-                    Entity ent = player.level().getEntity(entityID);
-                    if (ent != null){
-                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
-                    }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
                     /**Daze Packet*/
                     byte dazeTime = (byte)vargs[0];
