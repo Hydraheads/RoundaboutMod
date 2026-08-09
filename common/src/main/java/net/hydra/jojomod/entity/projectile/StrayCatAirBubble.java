@@ -205,7 +205,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
+
                 SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
+                if (getSkin() == 4) {
+                    
+                }
                 //SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
                 if (Math.random() > 0.5) {
                     SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT;

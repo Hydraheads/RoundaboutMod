@@ -3547,7 +3547,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target != null) {
-                    ((StandUser)target).roundabout$setExplosionInflation(-1);
+                    if (target instanceof LivingEntity) {
+                        ((StandUser) target).roundabout$setExplosionInflation(-1);
+                    }
                     vPos = target.position();
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
