@@ -2917,6 +2917,8 @@
   "config.roundabout.playerGuardDamageMultiplierMobs.name": "WA Mob Reduction",
   "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
 
+  "config.roundabout.emperorBulletRange.name":"Bullet Range",
+  "config.roundabout.emperorBulletRange.desc": "The range bullets have.",
 
   "config.roundabout.enableOasis.name":"Enable Stand",
   "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
@@ -4175,6 +4177,7 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
+  "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
 
