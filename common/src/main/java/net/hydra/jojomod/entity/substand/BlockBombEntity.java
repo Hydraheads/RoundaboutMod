@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -184,7 +185,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled() && this.getUser() != $$0 && !level().isClientSide()) {
 			PKQ.blockContacted($$0);
 		}
-		return  InteractionResult.FAIL;
+		return  InteractionResult.PASS;
 	}
 
 	@Override

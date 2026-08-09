@@ -44,10 +44,7 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.LeadItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -80,6 +77,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			EntityDataSerializers.BYTE);
 	private static final EntityDataAccessor<Boolean> RETURN_STATUS = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
 			EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> HAVE_TORCH = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
+			EntityDataSerializers.BOOLEAN);
 
 	@Override
 	protected void defineSynchedData() {
@@ -88,15 +87,21 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.entityData.define(DATA_FLAGS_ID, (byte)0);
 		this.entityData.define(ANIM, (byte)0);
 		this.entityData.define(RETURN_STATUS, false);
+		this.entityData.define(HAVE_TORCH, false);
 	}
 
 	public boolean getReturnStatus() {
 		return this.entityData.get(RETURN_STATUS);
 	}
-
+	public boolean getTorchStatus() {
+		return this.entityData.get(HAVE_TORCH);
+	}
 
 	public void setReturnStatus(boolean value) {
 		this.entityData.set(RETURN_STATUS, value);
+	}
+	public void setTorchStatus(boolean value) {
+		this.entityData.set(HAVE_TORCH, value);
 	}
 
 	public boolean isClimbing() {
@@ -141,9 +146,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 25;
+	static final int attackTickMax = 40;
 	int jumpTick = 0;
-	static final int jumpTickMax = 38;
+	static final int jumpTickMax = 68;
+	int explosionMiningTicks = 0;
+	static final int explosionMiningTicksMax = 35;
+
+	final float jumpMaxHeight = 3.0f;
+	int stunTicks = 0;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
@@ -199,7 +209,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean getHaveToReturn() {
 		return this.haveToReturn || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0)
-				|| this.inativeTicks >= inativeMaxTicks;
+				|| this.inativeTicks >= inativeMaxTicks && !getTorchStatus();
 	}
 
 	public void setHaveToReturn(boolean value) {
@@ -273,12 +283,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
+				if (this.explosionMiningTicks > 0) { this.explosionMiningTicks--;}
 
 				if (!this.onGround()) {
 					flyngTicks++;
 				}else {
-					if (this.getDeltaMovement().length() > 0.1 && this.tickCount % 18 == 0) {
-						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.AMBIENT, 0.25F, 1.0f);
+
+					if (new Vec3(this.getDeltaMovement().x, 0, this.getDeltaMovement().z).length() > 0.01 && this.tickCount % 18 == 0) {
+						this.level().playSound(null, this.blockPosition(), ModSounds.SHA_MOVING_EVENT, SoundSource.NEUTRAL, 0.4F, 1.0f);
 					}
 
 					flyngTicks = 0;
@@ -340,8 +352,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 	protected void moveToTarget() {
 		if (this.getHaveToReturn()) {
 			Vec3 pos = this.getUser().position();
-			this.shaMove(pos);
-		} else if (this.hasTarget()) {
+			shaMove(pos);
+		} else if (getTorchStatus()) {
+			shaMiningMove();
+
+		} else if (this.hasTarget() && stunTicks <= 0) {
 			Vec3 pos = this.getTargetPosition();
 			if (this.shouldExplode(pos)) {
 				this.attack();
@@ -536,23 +551,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return null;
 	}
-	public SoundEvent getExplosionSound() {
-		byte skn = ((StandUser)getUser()).roundabout$getStandSkin();
-		if (skn == KillerQueenEntity.MINESWEEPER) {
-			return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
-		}else if (skn == KillerQueenEntity.CREEPER) {
-			return SoundEvents.GENERIC_EXPLODE;
-		}
-		return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
-	}
-
-	public SimpleParticleType getExplosionParticle() {
-		byte skn = ((StandUser) getUser()).roundabout$getStandSkin();
-		if (skn == KillerQueenEntity.CREEPER) {
-			return ModParticles.SMALL_EXPLOSION;
-		}
-		return ModParticles.KILLER_QUEEN_EXPLOSION;
-	}
 
 	public void attack() {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
@@ -576,7 +574,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (getEntityTarget() != null) {
-				MainUtil.takeDeterminedKnockbackWithY(this, getEntityTarget(), 0.6f);
+				if (getEntityTarget() instanceof LivingEntity LE) {
+					double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.12 * $$11);
+					if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.1, $$12.z); }
+				}
 
 				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;
@@ -593,7 +595,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage, 0.3f, explosionRadius);
 
 			ExplosionUtil.explodeEffects(this.blockTarget.getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.12f, 0.12f, 0.12f), 4);
-			this.level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+			level().playSound(null, this.blockTarget, KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
 					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
@@ -620,7 +622,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
+			Vec3 movement = (this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.25, 0);
+			this.setDeltaMovement(movement.x(), Math.min(movement.y(), 1.2f), movement.z());
 		}
 	}
 
@@ -628,8 +631,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public boolean onClimbable() {
 		return this.isClimbing();
 	}
-
-
 
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
@@ -652,9 +653,37 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.getNavigation().stop();
 	}
 
+	public void shaMiningMove() {
+		if (explosionMiningTicks > 8) {
+			shaStopMove();
+			return;
+		}
+
+		Vec3 dir = getLookAngle();
+		Vec3 viewPos = getEyePosition();
+		Vec3 viewEnd = viewPos.add(dir.scale(1.4f));
+		Vec3 speed = new Vec3(dir.x, 0, dir.z).normalize().scale(0.2f);
+
+		setDeltaMovement(speed.x, getDeltaMovement().y, speed.z);
+
+		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		if (!(SP instanceof PowersKillerQueen)) { return; }
+		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+
+		BlockHitResult hitResult = this.level().clip(new ClipContext(viewPos, viewEnd,
+				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
+			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
+			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos(), level(), 1.2f, true);
+			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+			explosionMiningTicks = explosionMiningTicksMax;
+			explosions++;
+		}
+	}
+
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
-		if (ticksUntilNextPathRecalculation <= 0 ) {
+		if (ticksUntilNextPathRecalculation <= 0) {
 			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
@@ -680,7 +709,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				return;
 			}
 
-			if (!this.getNavigation().moveTo(newPath, 0.5f))
+			if (!this.getNavigation().moveTo(newPath, 0.45f))
 				ticksUntilNextPathRecalculation += 5;
 		}
 	}
@@ -822,8 +851,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
     @Override public boolean hurt(DamageSource source, float amount) {
 		Entity causer = source.getEntity();
-		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()) {
-			return MainUtil.isStandDamage(source);
+		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()
+				&& MainUtil.isStandDamage(source)) {
+			stunTicks = 8;
+			if (jumpTick < 16) { jumpTick = 16; }
+			if (attackTick < 10) { jumpTick = 10; }
+
+			return true;
 		}
 
 		return false;
@@ -836,15 +870,23 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (this.level().isClientSide) {
 			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0;
 			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
-		} else if ($$2.is(Items.TORCH) && this.getUser() == $$0) {
-			if (!$$0.getAbilities().instabuild) {
-				$$2.shrink(1);
+		} else if (this.getUser() == $$0) {
+			if ($$2.is(Items.TORCH) && !getTorchStatus()) {
+				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
+				setTorchStatus(true);
+				Vec3 dir = $$0.getLookAngle();
+
+
+
+				return InteractionResult.SUCCESS;
+			} else if(getTorchStatus()) {
+				spawnAtLocation(new ItemStack(Items.TORCH));
+				setTorchStatus(false);
+
+				return InteractionResult.SUCCESS;
 			}
-
-			// use torch
-
-			return InteractionResult.SUCCESS;
 		}
+
 
 		return super.mobInteract($$0, $$1);
 	}
