@@ -141,9 +141,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 25;
+	static final int attackTickMax = 40;
 	int jumpTick = 0;
-	static final int jumpTickMax = 38;
+	static final int jumpTickMax = 68;
+
+	final float jumpMaxHeight = 3.0f;
+	int stunTicks = 0;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
@@ -340,8 +343,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	protected void moveToTarget() {
 		if (this.getHaveToReturn()) {
 			Vec3 pos = this.getUser().position();
-			this.shaMove(pos);
-		} else if (this.hasTarget()) {
+			shaMove(pos);
+		} else if (this.hasTarget() && stunTicks <= 0) {
 			Vec3 pos = this.getTargetPosition();
 			if (this.shouldExplode(pos)) {
 				this.attack();
@@ -620,7 +623,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			this.setDeltaMovement((this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.3, 0));
+			Vec3 movement = (this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.25, 0);
+			this.setDeltaMovement(movement.x(), Math.min(movement.y(), 1.2f), movement.z());
 		}
 	}
 
@@ -628,8 +632,6 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public boolean onClimbable() {
 		return this.isClimbing();
 	}
-
-
 
 	public void shoot(Vec3 shootToPos){
 		this.throwStatus = THROWED;
@@ -654,7 +656,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
-		if (ticksUntilNextPathRecalculation <= 0 ) {
+		if (ticksUntilNextPathRecalculation <= 0) {
 			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
@@ -680,7 +682,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				return;
 			}
 
-			if (!this.getNavigation().moveTo(newPath, 0.5f))
+			if (!this.getNavigation().moveTo(newPath, 0.45f))
 				ticksUntilNextPathRecalculation += 5;
 		}
 	}
@@ -822,8 +824,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
     @Override public boolean hurt(DamageSource source, float amount) {
 		Entity causer = source.getEntity();
-		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()) {
-			return MainUtil.isStandDamage(source);
+		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()
+				&& MainUtil.isStandDamage(source)) {
+			stunTicks = 8;
+			if (jumpTick < 16) { jumpTick = 16; }
+			if (attackTick < 10) { jumpTick = 10; }
+
+			return true;
 		}
 
 		return false;
