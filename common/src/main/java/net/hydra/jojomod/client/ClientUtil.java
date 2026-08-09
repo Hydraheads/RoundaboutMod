@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -400,6 +401,7 @@ public class ClientUtil {
                 ||ent.getType()==EntityType.HUSK
                 ||ent.getType()==EntityType.CREEPER
                 ||ent.getType()==EntityType.DROWNED
+                ||ent instanceof CloneEntity
                 ||ent.getType()==EntityType.SKELETON)));
     }
     public static boolean hideLegs(Entity ent){
@@ -631,14 +633,6 @@ public class ClientUtil {
                     if (ent != null){
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
-                    }
-                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
-                    /**Invis Psuedo Tracked Data*/
-                    int entityID = (int)vargs[0];
-                    int altered = (int)vargs[1];
-                    Entity ent = player.level().getEntity(entityID);
-                    if (ent != null){
-                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
                     /**Daze Packet*/
@@ -1454,8 +1448,11 @@ public class ClientUtil {
             boolean isBackingUp = mc.options.keyDown.isDown();
             boolean isMovingForward = mc.options.keyUp.isDown();
             boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
-            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && getPlayer().fallDistance < 2 &&
+            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && !mc.player.isHurt() && getPlayer().fallDistance < 2 &&
                     !getPlayer().getAbilities().flying);
+            if (((StandUser)mc.player).roundabout$getBubbleEncased() > 0){
+                isJumping = false;
+            }
             boolean isSprinting = mc.player.isSprinting();
             boolean runaway = false;
 
@@ -2065,7 +2062,8 @@ public class ClientUtil {
 
                     ItemStack visage = pl.roundabout$getMaskSlot();
                     if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                        VisageData vd = ME.visageData;
+
+                        VisageData vd = ME.visageData.generateVisageData(play);
                         if (vd != null && vd.isCharacterVisage()) {
                             r = ((float) vd.getHairColor().getX()) / 255;
                             g = ((float) vd.getHairColor().getY()) / 255;
@@ -2182,7 +2180,7 @@ public class ClientUtil {
 
                 ItemStack visage = pl.roundabout$getMaskSlot();
                 if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                    VisageData vd = ME.visageData;
+                    VisageData vd = ME.visageData.generateVisageData(play);
                     if (vd != null && vd.isCharacterVisage()) {
                         r = ((float) vd.getHairColor().getX()) / 255;
                         g = ((float) vd.getHairColor().getY()) / 255;

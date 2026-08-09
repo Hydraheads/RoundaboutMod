@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.visages;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -56,12 +57,17 @@ public class CloneEntity extends PathfinderMob {
 
             boolean characterType = true;
             if (getVisage() != null && !getVisage().isEmpty() && getVisage().getItem() instanceof MaskItem ME) {
-                characterType = ME.visageData.isCharacterVisage();
+
+                VisageData vd = ME.visageData.generateVisageData(player);
+                characterType = vd.isCharacterVisage();
 
                 if (ClientNetworking.getAppropriateConfig() != null  && ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
                     if (characterType) {
                         if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
 
+                            if (vd.swapName()){
+                                return Component.translatable("item.roundabout."+vd.getSkinPath() + "_mask.tag");
+                            }
                             return ME.getDisplayNameTag();
                         }
                     }

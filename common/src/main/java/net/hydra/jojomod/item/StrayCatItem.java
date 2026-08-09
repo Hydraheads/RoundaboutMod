@@ -38,6 +38,7 @@ public class StrayCatItem extends Item {
 
     public static final String OWNER_UUID_TAG = "owner";
     public static final String SKIN_TAG = "skin";
+    public static final String HEALTH_TAG = "health";
 
     private static final float SPEED = 0.4f;
     public byte getBubbleSkin() {
@@ -57,6 +58,7 @@ public class StrayCatItem extends Item {
             tag.putUUID(OWNER_UUID_TAG, stray.getOwnerUUID());
             tag.putByte(SKIN_TAG, stray.getBreed());
         }
+        tag.putFloat(HEALTH_TAG, stray.getHealth());
 
         if (stray.hasCustomName()) {
             stack.setHoverName(stray.getCustomName());
@@ -134,6 +136,9 @@ public class StrayCatItem extends Item {
                 if (tag.contains(OWNER_UUID_TAG)) {
                     stray.setOwnerUUID(tag.getUUID(OWNER_UUID_TAG));
                     stray.setTame(true);
+                }
+                if (tag.contains(HEALTH_TAG)) {
+                    stray.setHealth(tag.getFloat(HEALTH_TAG));
                 }
                 stray.setBreed(breed);
                 if (item.hasCustomHoverName()) {

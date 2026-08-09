@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.PreRenderEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.RattEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -162,7 +163,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity implements PreRe
                                 if (MainUtil.canFreeze(mob)) {
                                     if (this.tickCount > 10) {
                                         int heat = HeatUtil.getHeat(mob);
-                                        if (mob instanceof Player pl) {
+                                        if (mob instanceof Player || mob instanceof CloneEntity) {
                                             if (this.tickCount > 50 && heat < -30) {
                                                 HeatUtil.addHeat(mob, -3);
                                             } else if (this.tickCount > 30 && heat < -10) {
@@ -174,7 +175,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity implements PreRe
                                             HeatUtil.addHeat(mob, -1);
                                         }
                                     } else {
-                                        if (mob instanceof Player pl) {
+                                        if (mob instanceof Player  || mob instanceof CloneEntity) {
                                             HeatUtil.addHeat(mob, -1);
                                         } else {
                                             HeatUtil.addHeat(mob, -1);

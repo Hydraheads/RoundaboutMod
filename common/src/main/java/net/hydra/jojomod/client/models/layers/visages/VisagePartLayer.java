@@ -221,7 +221,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     boolean isBodyFrozen = HeatUtil.isBodyFrozen(entity);
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
-                        String path = MI.visageData.getSkinPath();
+                        String path = vd.getSkinPath();
                         if (vd.rendersBreast()) {
                             renderNormalBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -244,6 +244,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderLucyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersDoppioHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
+                            renderDoppioHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
                                 && !hideExtraPartsWithSuit) {
                             renderKakyoinHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -252,6 +256,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
                                 && !hideExtraPartsWithSuit) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersGyroHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderGyroHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersDaiyaEars() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
@@ -312,6 +321,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if (vd.rendersLegCloakPart() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderLegCloakPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersSteelBalls() && !isBodyFrozen && !hideExtraPartsWithSuit) {
+                            renderSteelBallsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersAvdolHairPart() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
@@ -460,7 +473,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             b = pl.rdbt$getHairColorZ();
 
                             if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                                VisageData vd = ME.visageData;
+                                VisageData vd = ME.visageData.generateVisageData(play);
                                 if (vd != null && vd.isCharacterVisage()) {
                                     r = ((float) vd.getHairColor().getX()) / 255;
                                     g = ((float) vd.getHairColor().getY()) / 255;
@@ -481,7 +494,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             b = pl.rdbt$getHairColorZ();
 
                             if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                                VisageData vd = ME.visageData;
+                                VisageData vd = ME.visageData.generateVisageData(play);
                                 if (vd != null && vd.isCharacterVisage()) {
                                     r = ((float) vd.getHairColor().getX()) / 255;
                                     g = ((float) vd.getHairColor().getY()) / 255;
@@ -747,12 +760,39 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,35);
     }
+    public void renderGyroHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.gyroHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderSteelBallsPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                     float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,42);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.steelBallsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,42);
+    }
     public void renderDiegoHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                               float r, float g, float b) {
 
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.DiegoHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderDoppioHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.DoppioHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }

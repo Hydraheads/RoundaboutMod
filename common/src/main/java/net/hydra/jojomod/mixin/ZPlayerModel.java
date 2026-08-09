@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -660,7 +661,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             hat.zScale *= yeah;
                         }
                     } else {
-                        Vector3f scale = MI.visageData.scaleHead();
+                        VisageData vd = MI.visageData.generateVisageData($$0);
+                        Vector3f scale = vd.scaleHead();
                         head.xScale *= scale.x;
                         head.yScale *= scale.y;
                         head.zScale *= scale.z;
@@ -703,7 +705,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             hat.zScale *= yeah;
                         }
                     } else {
-                        Vector3f scale = MI.visageData.scaleHead();
+                        VisageData vd = MI.visageData.generateVisageData($$0);
+                        Vector3f scale = vd.scaleHead();
                         head.xScale *= scale.x;
                         head.yScale *= scale.y;
                         head.zScale *= scale.z;

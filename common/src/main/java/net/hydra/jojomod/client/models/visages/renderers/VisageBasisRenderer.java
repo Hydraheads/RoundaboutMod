@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.minecraft.client.model.HumanoidModel;
@@ -32,12 +33,13 @@ import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
 public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerModel<JojoNPC>> {
-    public void changeTheModel(ItemStack visage){
+    public void changeTheModel(ItemStack visage, LivingEntity ent){
 
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
-                if (MI.visageData.isCharacterVisage()) {
-                    if (MI.visageData.isSlim()){
+                VisageData vd = MI.visageData.generateVisageData(ent);
+                if (vd.isCharacterVisage()) {
+                    if (vd.isSlim()){
                         model = otherModel;
                         return;
                     }
@@ -77,7 +79,7 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
     }
 
     public void render(JojoNPC $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5) {
-        changeTheModel($$0.getBasis());
+        changeTheModel($$0.getBasis(), $$0);
         this.setModelProperties($$0);
         super.render($$0, $$1, $$2, $$3, $$4, $$5);
     }
@@ -118,7 +120,8 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
                     int width = visage.getOrCreateTagElement("modifications").getInt("width");
                     $$1.scale(0.798F + (((float) width)*0.001F), 0.7F+(((float) height)*0.001F), 0.798F+(((float) width)*0.001F));
                 } else {
-                    Vector3f scale = MI.visageData.scale();
+                    VisageData vd = MI.visageData.generateVisageData($$0);
+                    Vector3f scale = vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
                 return;
@@ -176,8 +179,9 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
             ItemStack visage = var1.getBasis();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
-                        return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+MI.visageData.getSkinPath()+".png"));
+                    VisageData vd = MI.visageData.generateVisageData(var1);
+                    if (vd.isCharacterVisage()) {
+                        return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+vd.getSkinPath()+".png"));
                     }
                 }
             }

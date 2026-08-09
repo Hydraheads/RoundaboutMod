@@ -207,8 +207,18 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
             if (leaded != null) {
-                if (!hasStandActive(this.self)){
-                    clearLeaded();
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        leaded = pkc.activeClone;
+                    }
+                }
+                if (leaded != null) {
+                    boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
+                    if (!hasStandActive(this.self) || elsewhere) {
+                        clearLeaded();
+                    }
                 }
             }
         }
@@ -1717,6 +1727,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
+            return;
+        }
         boolean landedLead = false;
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);

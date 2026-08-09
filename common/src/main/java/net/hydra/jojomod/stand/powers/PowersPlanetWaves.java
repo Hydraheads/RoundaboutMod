@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.stand.WalkingHeartEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Mob;
@@ -153,6 +154,11 @@ public class PowersPlanetWaves extends NewDashPreset {
         return Component.translatable("skins.roundabout.planet_waves.base");
 
     }
+    public ResourceLocation getIconYes(int slot){
+        if (slot == 4 && this.isRedicon())
+            return StandIcons.SQUARE_ICON_BLOOD;
+        return super.getIconYes(slot);
+    }
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -162,7 +168,9 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 2, StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION, PowerIndex.SKILL_2_SNEAK);
             if (canExecuteMoveWithLevel(MeteorTrackingLevel())) {
-                setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
+                //if(!inmeteortracking()){
+                    setSkillIcon(context, x, y, 4, StandIcons.PLANET_WAVES_METEOR_TRACKING, PowerIndex.SKILL_4_SNEAK);
+                //}else setSkillIcon(context, x, y, 4, StandIcons.THE_WORLD_TIME_STOP, PowerIndex.SKILL_4_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.SKILL_4_SNEAK);
             }
@@ -181,6 +189,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
     }
+    public boolean isRedicon() {return redicon;}
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (activeP == PowerIndex.SKILL_1 || activeP == PowerIndex.SKILL_2 || activeP == PowerIndex.SKILL_2_SNEAK) {
@@ -266,9 +275,10 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         super.levelUp();
     }
-
+    private boolean redicon=false;
     private boolean targetingstand = false;
     private boolean tracking = false;
+    private boolean trackingBeforeTargeting = false;
     private Vec3 standTargetPos = null;
     private Vec3 standSurfacePos = null;
     private Vec3 standTargetLook = null;
@@ -443,7 +453,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             targetPos = standTargetPos;
 
-        } else if (this.self.isShiftKeyDown()) {
+        } else if (this.isHoldingSneak()) {
 
 
             targetPos = new Vec3(
@@ -560,7 +570,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             targetPos = standTargetPos;
 
-        } else if (this.self.isShiftKeyDown()) {
+        } else if (this.isHoldingSneak()) {
 
             targetPos = new Vec3(
                     this.self.getX(),
@@ -687,6 +697,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (!state.isCollisionShapeFullBlock(this.self.level(), pos) || !state.canOcclude()) return;
         if (state.isAir()) return;
         if (eyePos.distanceTo(Vec3.atCenterOf(pos)) > 30.0) return; //  límite de 30 bloques de stand targeting
+        trackingBeforeTargeting = inmeteortracking();
         if (inmeteortracking()) {
             meteornottracking();
         }
@@ -1190,6 +1201,11 @@ public class PowersPlanetWaves extends NewDashPreset {
         standTargetPos = null;
         syncStandMode();
 
+        if (trackingBeforeTargeting) {
+            trackingBeforeTargeting = false;
+            meteortracking();
+        }
+
         if (!level.isClientSide()) {
             this.setCooldown(PowerIndex.SKILL_4,
                     ClientNetworking.getAppropriateConfig()
@@ -1210,9 +1226,12 @@ public class PowersPlanetWaves extends NewDashPreset {
                 meteor.setTrackingUser(true);
             }
         }
-        if (!isClient() && this.self instanceof ServerPlayer PE) {
+        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.trackingmessage=false) {
+            if (!isClient() && this.self instanceof ServerPlayer PE) {
                 PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
-        }
+            }
+        }else redicon=true;
+
         syncStandMode();
     }
     @Override
@@ -1264,16 +1283,16 @@ public class PowersPlanetWaves extends NewDashPreset {
                 meteor.setTrackingUser(false);
             }
         }
-
-        if (!isClient() && this.self instanceof ServerPlayer PE) {
-            PE.displayClientMessage(
-                    Component.translatable(
-                                    "text.roundabout.planet_waves.meteor_tracking_message_off")
-                            .withStyle(ChatFormatting.RED),
-                    true
-            );
-        }
-
+        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.trackingmessage=false) {
+            if (!isClient() && this.self instanceof ServerPlayer PE) {
+                PE.displayClientMessage(
+                        Component.translatable(
+                                        "text.roundabout.planet_waves.meteor_tracking_message_off")
+                                .withStyle(ChatFormatting.RED),
+                        true
+                );
+            }
+        }else redicon=false;
         syncStandMode();
     }
     private void meteorDisappearance() {
@@ -1690,11 +1709,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+           /* case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_FIREBALL_EXPLOSION;
             default -> ModParticles.PW_FIREBALL_EXPLOSION;
         };
     }
@@ -1703,11 +1723,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+            /*case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
             case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION;
             default -> ModParticles.PW_BLASTWAVE_EXPLOSION;
         };
     }
@@ -1716,11 +1737,12 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         return switch (skn) {
 
-            case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
+            /*case PlanetWavesEntity.OCEAN_WAVES,PlanetWavesEntity.SYMPHONY_WAVES -> ParticleTypes.SPLASH;
             case PlanetWavesEntity.GREEN_SKIN,PlanetWavesEntity.HALLOWEEN -> ModParticles.GREEN_FLAME;
             case PlanetWavesEntity.PURPLE_SKIN, PlanetWavesEntity.GRAPESODA -> ModParticles.PURPLE_FLAME;
-            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
-            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;
+//            case PlanetWavesEntity.BLUE_SKIN,PlanetWavesEntity.SPARTA,PlanetWavesEntity.SPARTA2 -> ModParticles.BLUE_FLAME;
+            case PlanetWavesEntity.MANGA_SKIN -> ModParticles.CREAM_FLAME;*/
+            case PlanetWavesEntity.BLUE_SKIN -> ModParticles.PW_BLUE_MUSHROOM_EXPLOSION;
             default -> ModParticles.PW_MUSHROOM_EXPLOSION;
         };
     }

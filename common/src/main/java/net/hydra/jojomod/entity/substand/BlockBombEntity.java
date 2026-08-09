@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.StepRuleEntity;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,8 +26,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,19 +43,18 @@ import java.util.UUID;
 
 import org.joml.Vector3f;
 
-public class BlockBombEntity extends StandEntity {
+public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
 			EntityDataSerializers.INT);
 
-
-	public Entity userEntity;
 
 	private BlockPos bombPos;
 	private BlockState originalState;
 	private static final int maxTickIndicator = 6;
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
+	private AABB blockBB = null;
 	public int renderFadeIn = 1;
 
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
@@ -136,7 +139,10 @@ public class BlockBombEntity extends StandEntity {
 				}
 				this.setYRot(0f);
 				this.setYBodyRot(0);
-            	
+				/*if (blockstate.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
+
+				}*/
+
             	//this.detectInside();
             }
 		
@@ -170,27 +176,20 @@ public class BlockBombEntity extends StandEntity {
 		if (!voxShape.isEmpty()) {
 			shape = voxShape.bounds();
 			this.blockSize = new Vec3(shape.maxX, shape.maxY, shape.maxZ);
+			blockBB = shape;
 		}
 	}
-	
-	/*
-	public void detectInside() {
-		BlockState test = this.level().getBlockState(this.bombPos);
-		if (test.hasBlockEntity() && !test.equals(this.originalState)) {
-			BlockEntity info = this.level().getBlockEntity(this.bombPos);
-			Roundabout.LOGGER.info("Hmmmmmm?");
-			
-			if (info.getBlockState().equals(this.originalState)) {
-				this.blockInfo = info; 
-				Roundabout.LOGGER.info("Hmmmmmm");
-			}
+
+	@Override
+    public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
+		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled() && this.getUser() != $$0 && !level().isClientSide()) {
+			PKQ.blockContacted($$0);
 		}
-		
-	}*/
+		return  InteractionResult.PASS;
+	}
 
 	@Override
 	public boolean canAttack(LivingEntity le){
-		super.canAttack(le);
 		return false;
 	}
 	@Override
@@ -202,7 +201,9 @@ public class BlockBombEntity extends StandEntity {
 	}
 
 	@Override
-    public boolean isPickable() { return false;}
+    public boolean isPickable() {
+		return (getUser() != null && ((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled());
+	}
 
     @Override
     public boolean isInvulnerable() { return true;}	
@@ -225,12 +226,11 @@ public class BlockBombEntity extends StandEntity {
     @Override
     public boolean canBeHitByProjectile() { return false;}
     
-    //@Override
-    //public boolean canBeHitByStands() { return false;}
+    @Override
+    public boolean canBeHitByStands() { return false;}
     
     @Override
     public boolean mayInteract(Level $$0, BlockPos pos) { return false;}
-    
 
     //@Override
     /*public boolean forceVisualRotation(){

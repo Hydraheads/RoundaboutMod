@@ -19,6 +19,7 @@ import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -28,6 +29,7 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -41,24 +43,28 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.ShoulderRidingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -68,11 +74,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -107,7 +115,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
-
 
     @Override
     public StandPowers generateStandPowers(LivingEntity entity) {
@@ -396,7 +403,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return new Vec3(Math.random()*1-0.5F,0,Math.random()*1-0.5F);
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
-        if (!canPredictIdles() || !isGravityNormal(liv)){
+        if (!canPredictIdles() || !isGravityNormal(liv) ||
+                (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))){
             return liv.position();
         }
         //Mobs and Players that are still still need to move when idle
@@ -553,6 +561,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             fclone.isBackingUp = isBackingUp;
             fclone.isMovingForward = isMovingForward;
             fclone.isSneaking = isSneaking;
+            fclone.setLeftHanded(PE.getMainArm() == HumanoidArm.LEFT);
             fclone.isSprinting = isSprinting;
             runaway = hasHandsOut() || isTargetBehindPlayer(PE);
             fclone.runaway = runaway;
@@ -586,8 +595,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
             for (MobEffectInstance effect : self.getActiveEffects()) {
                 activeClone.addEffect(new MobEffectInstance(effect));
             }
-            activeClone.setInvulnerable(self.isInvulnerable());
-            activeClone.setNoGravity(self.isNoGravity());
             activeClone.setSilent(self.isSilent());
             activeClone.setArrowCount(self.getArrowCount());
             activeClone.setStingerCount(self.getStingerCount());
@@ -627,13 +634,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
             activeCloneUser.roundabout$setLeapTicks(thisUser.roundabout$getLeapTicks());
 
             StandPowers powers = activeCloneUser.roundabout$getStandPowers();
-            powers.attackTime = attackTimeMax;
+            powers.attackTime = attackTime;
             powers.attackTimeMax = attackTimeMax;
-            powers.activePowerPhase = activePowerPhase;
+            powers.activePowerPhase = activePowerPhaseMax;
 
             StandEntity st = getStandEntity(self);
             ((StandUser)activeClone).roundabout$setActive(true);
-            if (st != null && !st.isRemoved()) {
+            if (st != null && !st.isRemoved() && !hasArmsOut) {
                 StandEntity stand = getNewStandEntity();
                 if (stand instanceof FollowingStandEntity fse && st instanceof FollowingStandEntity ste) {
                     ((StandUser)activeClone).roundabout$setStand(stand);
@@ -752,7 +759,112 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (self instanceof KingCrimsonCloneEntity kce){
             tickCloneAi(attackTarget, kce);
         } else {
-            super.tickMobAI(attackTarget);
+            if (self instanceof Creeper crp){
+                if (!onCooldown(PowerIndex.SKILL_2_SNEAK)
+                && attackTarget != null && attackTarget.isAlive()){
+                    timeSkip(true);
+                }
+            } else {
+                tickMobAINotClone(attackTarget);
+            }
+        }
+    }
+
+    private boolean isIncomingProjectile(Mob mob) {
+        AABB box = mob.getBoundingBox().inflate(10.0D);
+
+        List<Projectile> projectiles = mob.level().getEntitiesOfClass(
+                Projectile.class,
+                box
+        );
+
+        for (Projectile projectile : projectiles) {
+            // Ignore projectiles fired by this mob
+            if (projectile.getOwner() == mob) {
+                continue;
+            }
+
+            Vec3 velocity = projectile.getDeltaMovement();
+            if (velocity.lengthSqr() == 0) {
+                continue;
+            }
+
+            // Direction from projectile to mob
+            Vec3 toMob = mob.position().subtract(projectile.position()).normalize();
+
+            // If projectile velocity points toward the mob
+            double dot = velocity.normalize().dot(toMob);
+
+            if (dot > 0.5D) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public void tickMobAINotClone(LivingEntity attackTarget){
+        if (activePower == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
+            if (self instanceof Mob mb) {
+                GoalSelector gs = ((IMob)mb).roundabout$getGoalSelector();
+                if (gs != null){
+                    Set<WrappedGoal> goalSet = gs.getAvailableGoals();
+                    if (goalSet != null && !goalSet.isEmpty()){
+                        boolean hasMelee = goalSet.stream()
+                                .anyMatch(wrapped -> wrapped.getGoal() instanceof MeleeAttackGoal);
+                        if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
+                                && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
+                            timeSkip(true);
+                        } else if (hasMelee){
+                            if (attackTarget != null && attackTarget.isAlive()) {
+                                timeSkip(true);
+                            }
+                        } else {
+                            if (isIncomingProjectile(mb)) {
+                                timeSkip(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (attackTarget != null && attackTarget.isAlive()){
+            float distanceTo = attackTarget.distanceTo(this.getSelf());
+            if ((this.getActivePower() == PowerIndex.ATTACK || this.getActivePower() == PowerIndex.BARRAGE
+            || this.getActivePower() == PowerIndex.POWER_3)
+                    || distanceTo <= 5){
+                rotateMobHead(attackTarget);
+            }
+
+
+            boolean upAiNow = upAi(attackTarget);
+            if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3)) {
+                if (this.attackTimeDuring <= -1) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                    setCooldown(PowerIndex.SKILL_2_SNEAK,60);
+                }
+            } else {
+                Entity targetEntity = getTargetEntity(this.self, -1);
+                if (targetEntity != null && targetEntity.is(attackTarget)) {
+                    if (this.attackTimeDuring <= -1) {
+                        double RNG = Math.random();
+                        if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge) {
+                            wentForCharge = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        } else if (RNG < 0.6 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge
+                                && distanceTo <= 3){
+                            wentForCharge = true;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                        } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                            wentForCharge = false;
+                            if (upAiNow && RNG > 0.9){
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                            } else {
+                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -778,7 +890,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     && distanceTo <= 3){
                         wentForCharge = true;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                    } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
+                    } else if (canAttack()) {
                         wentForCharge = false;
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
                     }
@@ -1062,7 +1174,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
                 boolean supported = false;
 
-                for (int dy = 1; dy <= dist; dy++) {
+                for (int dy = 0; dy <= dist; dy++) {
 
                     // Point beneath the player in PLAYER coordinates
                     Vec3 worldSample = RotationUtil.vecPlayerToWorld(
@@ -1077,8 +1189,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     BlockState state = level.getBlockState(pos);
 
                     if (!state.isAir()
-                            && state.blocksMotion()
-                            && !state.getCollisionShape(level, pos).isEmpty()) {
+                            && ((state.blocksMotion()
+                            && !state.getCollisionShape(level, pos).isEmpty()) || state.liquid())) {
                         supported = true;
                         break;
                     }
@@ -1431,48 +1543,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 railPos.getZ() + 0.5
         );
     }
-    private boolean isConnectedRail(Level level, BlockPos from, BlockPos to) {
-        BlockState fromState = level.getBlockState(from);
-        BlockState toState = level.getBlockState(to);
-
-        if (!BaseRailBlock.isRail(fromState) || !BaseRailBlock.isRail(toState)) {
-            return false;
-        }
-
-        RailShape fromShape = fromState.getValue(
-                ((BaseRailBlock) fromState.getBlock()).getShapeProperty()
-        );
-
-        RailShape toShape = toState.getValue(
-                ((BaseRailBlock) toState.getBlock()).getShapeProperty()
-        );
-
-        Direction travel = Direction.fromDelta(
-                to.getX() - from.getX(),
-                to.getY() - from.getY(),
-                to.getZ() - from.getZ()
-        );
-
-        if (travel == null) {
-            return false;
-        }
-
-        // The next rail must have an exit back toward the rail we came from
-        return switch (toShape) {
-            case NORTH_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case EAST_WEST -> travel == Direction.EAST || travel == Direction.WEST;
-
-            case ASCENDING_NORTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case ASCENDING_SOUTH -> travel == Direction.NORTH || travel == Direction.SOUTH;
-            case ASCENDING_EAST -> travel == Direction.EAST || travel == Direction.WEST;
-            case ASCENDING_WEST -> travel == Direction.EAST || travel == Direction.WEST;
-
-            case SOUTH_EAST -> travel == Direction.SOUTH || travel == Direction.EAST;
-            case SOUTH_WEST -> travel == Direction.SOUTH || travel == Direction.WEST;
-            case NORTH_EAST -> travel == Direction.NORTH || travel == Direction.EAST;
-            case NORTH_WEST -> travel == Direction.NORTH || travel == Direction.WEST;
-        };
-    }
     public Vec3 predictFallingMinecart(AbstractMinecart cart, int ticks) {
         Level level = cart.level();
 
@@ -1623,6 +1693,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean hitWall2 = false;
 
     public void basicSkip(boolean skipSelf){
+        if (!skipSelf){
+            cherrySkip();
+        }
         hitWall2 = false;
         AABB area = self.getBoundingBox().inflate(getSkipRange());
         List<FallingBlockEntity> fallingBlocks = new ArrayList<>();
@@ -1808,6 +1881,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return $$1;
     }
 
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.kingCrimsonGuardPoints;
+    }
     // 2 -> Impale
     // 3 -> Projection
     // 4 -> Blood Splash
@@ -2060,7 +2137,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 mb.getNavigation().stop();
             if (!MainUtil.blockConfusionTicks(mb)) {
-                ((IMob) mb).roundabout$setConfusionTicks(7);
+                if (entity.getId() != self.getId()) {
+                    ((IMob) mb).roundabout$setConfusionTicks(7);
+                }
             }
         }
     }
@@ -2517,7 +2596,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+                kingCrimsonSettings.kingCrimsonAttackMultOnPlayers *0.01));
+    }
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.kingCrimsonAttackMultOnMobs *0.01));
     }
     @Override
     public float getImpalePunchStrength(Entity entity){
@@ -2532,7 +2616,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
     public float getBloodSplashStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (1.5F)));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((float) (2F)));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs((float) (6F * (ClientNetworking.getAppropriateConfig().
                     generalStandSettings.generalImpaleAttackMultiplier *0.01))));
@@ -2541,6 +2625,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
         @Override
     public StandEntity getNewStandEntity() {
         byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        if (sk == KingCrimsonEntity.REAPER){
+            return ModEntities.KING_CRIMSON_REAPER.create(this.getSelf().level());
+        }
         return ModEntities.KING_CRIMSON.create(this.getSelf().level());
     }
     @Override
@@ -2556,6 +2643,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return Component.translatable(  "skins.roundabout.king_crimson.end_2");
         } if (skinId == KingCrimsonEntity.STARLESS){
             return Component.translatable(  "skins.roundabout.king_crimson.starless");
+        } if (skinId == KingCrimsonEntity.NUCLEAR){
+            return Component.translatable(  "skins.roundabout.king_crimson.nuclear");
         } if (skinId == KingCrimsonEntity.HEAVEN){
             return Component.translatable(  "skins.roundabout.king_crimson.heaven");
         }if (skinId == KingCrimsonEntity.AGOGO){
@@ -2582,6 +2671,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return Component.translatable(  "skins.roundabout.king_crimson.blue");
         }if (skinId == KingCrimsonEntity.VISION){
             return Component.translatable(  "skins.roundabout.king_crimson.vision");
+        }if (skinId == KingCrimsonEntity.REAPER){
+            return Component.translatable(  "skins.roundabout.king_crimson.reaper");
         }
         return Component.translatable(  "skins.roundabout.king_crimson.red");
     }
@@ -2635,12 +2726,16 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 $$1.add(KingCrimsonEntity.YELLOW);
                 $$1.add(KingCrimsonEntity.GREEN);
             } if (Level > 4 || bypass) {
+                $$1.add(KingCrimsonEntity.NUCLEAR);
                 $$1.add(KingCrimsonEntity.STARLESS);
+            } if (Level > 5 || bypass) {
+                $$1.add(KingCrimsonEntity.END);
+                $$1.add(KingCrimsonEntity.END_2);
+            } if (Level > 6 || bypass) {
                 $$1.add(KingCrimsonEntity.CONCEPT);
                 $$1.add(KingCrimsonEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
-                $$1.add(KingCrimsonEntity.END);
-                $$1.add(KingCrimsonEntity.END_2);
+                $$1.add(KingCrimsonEntity.REAPER);
             }
         }
         return $$1;
@@ -2701,7 +2796,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return new Vec3(1.5,0,0);
         } if (sk == KingCrimsonEntity.DARK){
             return new Vec3(0,0,0);
-        } if (sk == KingCrimsonEntity.GREEN){
+        } if (sk == KingCrimsonEntity.GREEN || sk == KingCrimsonEntity.NUCLEAR){
             return new Vec3(0,1,0);
         } if (sk == KingCrimsonEntity.YELLOW){
             return new Vec3(1,1,0);
@@ -2709,10 +2804,54 @@ public class PowersKingCrimson extends BlockGrabPreset {
             return new Vec3(0.2,0.5,1);
         } if (sk == KingCrimsonEntity.END || sk == KingCrimsonEntity.END_2){
             return new Vec3(0.75,0,1.5);
+        }if (sk == KingCrimsonEntity.REAPER){
+            return new Vec3(1.0,0,1.0);
         }
         return new Vec3(1,0,1);
     }
 
+
+    public int cherrySkip = 0;
+    public void cherrySkip(){
+        if (self instanceof Player PE) {
+            if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.CHERRY_GROVE)) {
+                StandUser user = ((StandUser) PE);
+                ItemStack stack = user.roundabout$getStandDisc();
+                if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_KING_CRIMSON)) {
+                    IPlayerEntity ipe = ((IPlayerEntity) PE);
+                    if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                        if (!self.level().isClientSide()) {
+
+                            cherrySkip++;
+                            if (cherrySkip >= 5) {
+                                ipe.roundabout$setUnlockedBonusSkin(true);
+                                self.level().playSound(null, self.getX(), self.getY(),
+                                        self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.END_ROD, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10, 0.5, 0.5, 0.5, 0.2);
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10, 0.5, 0.5, 0.5, 0.2);
+                                user.roundabout$setStandSkin(KingCrimsonEntity.REAPER);
+                                ((ServerPlayer) ipe).displayClientMessage(
+                                        Component.translatable("unlock_skin.roundabout.king_crimson.reaper"), true);
+                                user.roundabout$summonStand(self.level(), true, false);
+                            } else {
+                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                        self.getY() + self.getEyeHeight(), self.getZ(),
+                                        10+(cherrySkip * 10), 0.5, 0.5, 0.5, 0.2);
+                                this.self.level().playSound(null, this.self.blockPosition(),
+                                        SoundEvents.PORTAL_AMBIENT,
+                                        SoundSource.PLAYERS, 1F, (float) (1.5F + Math.random() * 0.02));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     public void handsActiveClient(){
         if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
@@ -2923,6 +3062,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         );
 
         clone.user = player;
+        clone.setLeftHanded(player.getMainArm() == HumanoidArm.LEFT);
         clone.setYRot(self.getYRot());
         clone.setXRot(self.getXRot());
         clone.setYBodyRot(self.yBodyRot);
@@ -3123,6 +3263,15 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     }
                     fakedDeath = false;
                 }
+                if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.postTESoften) {
+                    double range = getSkipBonusRange();
+                    double rangeSqr = range * range;
+                    for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
+                        if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 48;
+                        }
+                    }
+                }
             } else {
                 spawnClone();
                 timeEraseActive = true;
@@ -3296,18 +3445,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public boolean fakedDeath = false;
 
     @Override
-    public boolean isWip(){
-        return true;
-    }
-    @Override
-    public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
-    }
-    @Override
-    public Component ifWipListDev(){
-        return Component.literal(  "Hydra").withStyle(ChatFormatting.GOLD);
-    }
-    @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
@@ -3368,12 +3505,14 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+
+
     @Override
     public float getBrawlPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return 0.75F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.75F));
         } else {
-            return 3.4F;
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3.4F));
         }
     }
     public boolean crossedThreshold(){
@@ -3402,6 +3541,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public boolean interceptDamageDealtEventTrue(DamageSource $$0, float $$1, LivingEntity target){
         if (timeEraseActive){
+            if (target != null && target.getId() == self.getId()){
+                return false;
+            }
+            if ($$0.getDirectEntity() instanceof PrimedTnt)
+                return false;
+            if ($$0.getDirectEntity() instanceof MinecartTNT)
+                return false;
+            if ($$0.getDirectEntity() instanceof KingCrimsonCloneEntity)
+                return false;
+            if ($$0.getDirectEntity() instanceof Projectile)
+                return false;
+            if ($$0.is(DamageTypes.MAGIC))
+                return false;
+            if ($$0.is(DamageTypes.THORNS))
+                return false;
             timeErase();
         }
         return false;
@@ -3427,12 +3581,21 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.refreshArms();
     }
 
+    public boolean soften = false;
     @Override
     public boolean setPowerAttack(){
         if (hasArmsOut) {
             setAttack();
             return false;
         }
+        if (isUsingTimeErase()){
+            soften = true;
+            Roundabout.LOGGER.info("yes");
+            timeErase();
+            soften = false;
+        }
+
+
         return super.setPowerAttack();
     }
 
@@ -3440,7 +3603,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public void setAttack(){
         if (!self.level().isClientSide()){
             if (isUsingTimeErase()){
+                soften = true;
                 timeErase();
+                soften = false;
             }
         }
         super.setAttack();
@@ -3915,4 +4080,24 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return ModSounds.KING_CRIMSON_PUNCH_2_EVENT;
     }
 
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                kingCrimsonSettings.miningSpeedMultiplierKingCrimson *0.01));
+    }
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.getMiningTierKingCrimson;
+    }
+
+//    public boolean isWip(){
+//        return true;
+//    }
+//    public Component ifWipListDevStatus(){
+//        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+//    }
+//    public Component ifWipListDev(){
+//        return Component.literal(  "Hydra").withStyle(ChatFormatting.GOLD);
+//    }
 }

@@ -34,7 +34,6 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
-import net.hydra.jojomod.entity.FakeItemEntity;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.SilverfishModel;
@@ -65,6 +64,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_REAPER.get(), KingCrimsonReaperRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED.get(), MagiciansRedRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MAGICIANS_RED_OVA.get(), MagiciansRedOVARenderer::new);
@@ -212,6 +213,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
 
         event.registerLayerDefinition(ModEntityRendererClient.VILLAGER_MINION_LAYER, VillagerMinionModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.AXOLOTL_MINION_LAYER, AxolotlMinionModel::createBodyLayer);
@@ -338,7 +341,10 @@ public class ClientForgeEvents {
         ModStrayModels.PonytailPart = new PonytailPart();
         ModStrayModels.BigHairPart = new BigHairPart();
         ModStrayModels.KakyoinHairPart = new KakyoinHairPart();
+        ModStrayModels.gyroHatPart = new GyroHatPart();
+        ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
@@ -505,5 +511,8 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PW_FIREBALL_EXPLOSION.get(), PWFireballExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLASTWAVE_EXPLOSION.get(), PWBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_MUSHROOM_EXPLOSION.get(), PWMushroomExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PW_BLUE_FIREBALL_EXPLOSION.get(), PWBlueFireballExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get(), PWBlueBlastwaveExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get(), PWBlueMushroomExplosionParticle.Provider::new);
     }
 }

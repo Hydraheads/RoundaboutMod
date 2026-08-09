@@ -648,6 +648,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     @Override
+    protected void pushEntities() {
+    }
+    @Override
     public void doPush(Entity $$0) {
     }
 

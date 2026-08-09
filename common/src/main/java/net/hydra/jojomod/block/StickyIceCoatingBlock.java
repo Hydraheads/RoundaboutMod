@@ -1,5 +1,6 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -51,22 +52,22 @@ public class StickyIceCoatingBlock
                     if (FateTypes.isVampire(LE)) {
                         $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
                     } else {
-                        if (LE instanceof Player pl) {
-                            if ((pl.hurtTime <= 3) ||
-                                    (((StandUser)pl).roundabout$getLogSource() == null) ||
-                                    !(((StandUser)pl).roundabout$getLogSource() != null &&
+                        if (LE instanceof Player || LE instanceof CloneEntity) {
+                            if ((LE.hurtTime <= 3) ||
+                                    (((StandUser)LE).roundabout$getLogSource() == null) ||
+                                    !(((StandUser)LE).roundabout$getLogSource() != null &&
                                             (
-                                                    ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND) ||
-                                            ((StandUser)pl).roundabout$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
-                                    ((StandUser)pl).roundabout$getLogSource().is(DamageTypes.ARROW) ||
-                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.BULLET) ||
-                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.SNIPER_BULLET)||
-                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.GASOLINE_EXPLOSION)||
-                                                            ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.KNIFE)
+                                                    ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.STAND) ||
+                                            ((StandUser)LE).roundabout$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
+                                    ((StandUser)LE).roundabout$getLogSource().is(DamageTypes.ARROW) ||
+                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.BULLET) ||
+                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.SNIPER_BULLET)||
+                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.GASOLINE_EXPLOSION)||
+                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.KNIFE)
                                     ))
                             ) {
-                                if (!(pl.level().getBlockState(
-                                        BlockPos.containing(pl.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
+                                if (!(LE.level().getBlockState(
+                                        BlockPos.containing(LE.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
                                 ) {
                                     $$3.makeStuckInBlock($$0, new Vec3((double) 0.46F, (double) 0.8F, (double) 0.46F));
                                 }

@@ -1200,11 +1200,19 @@ public class MainUtil {
     }
 
     public static boolean isPlayerBonkingHead(LivingEntity player) {
+        if (player == null || player.isRemoved())
+            return false;
         Level level = player.level();
+        if (level == null)
+            return false;
         Vec3 mainVec = new Vec3(0, 0.05, 0);
         mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
         AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
-        return !level.noCollision(player, headSpace);
+        boolean blocked = level.getBlockCollisions(player, headSpace)
+                .iterator()
+                .hasNext();
+
+        return blocked;
     }
 
     public static boolean isUsingMetallica(Entity ent){
@@ -1950,7 +1958,9 @@ public class MainUtil {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
                         && !(PowerTypes.isExistentiallyElsewhere($$1))
-                        && !(value instanceof FallenMob)) {
+                        && !(value instanceof FallenMob)
+                        && (MainUtil.isActuallyALivingEntityNoCap(value))
+                ) {
                     double distance = value.position().distanceTo($$1.position());
                     if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
                         target = (LivingEntity) value;
@@ -2281,6 +2291,9 @@ public class MainUtil {
 
     /**No Armor Stands*/
     public static boolean isActuallyALivingEntityNoCap(Entity LE){
+        if (LE instanceof KingCrimsonProjectionEntity){
+            return false;
+        }
         return LE instanceof Mob || LE instanceof Player;
     }
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
@@ -3662,9 +3675,6 @@ public class MainUtil {
 
                 if(FateTypes.isZombie(player)){
                     if (FateTypes.isUndisguisedZombie(player)) {
-
-
-
                         if (visage.getItem() instanceof MaskItem MI) {
                             if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
                                 return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");

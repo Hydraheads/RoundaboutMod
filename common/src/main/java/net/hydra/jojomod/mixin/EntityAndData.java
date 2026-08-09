@@ -17,6 +17,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -190,40 +191,26 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-    @Unique
-    @Override
-    public void roundabout$setTrueInvisibilityManhattan(int manhattanticking){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            ((StandUser)LE).roundabout$setTrueInvisManhattan(manhattanticking);
 
-            roundabout$trueInvisibilityManhattan = manhattanticking;
-            if (!this.level().isClientSide()) {
-                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
-                        ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value,
-                        getId(), manhattanticking
-                );
-            }
-        }
-    }
-
-    @Unique
-    public int roundabout$trueInvisibilityManhattan = -1;
     @Unique
     @Override
     public int roundabout$getTrueInvisibilityManhattan(){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getTrueInvisManhattan();
-        }
         return roundabout$trueInvisibilityManhattan;
     }
 
     @Unique
+    public Vec3 rdbt$lastPos = Vec3.ZERO;
+    @Unique
+    public int roundabout$trueInvisibilityManhattan = -1;
+    @Unique
     public void roundabout$tickTrueInvisibilityManhattan(){
-        if (!this.level().isClientSide()){
-            if (roundabout$getTrueInvisibilityManhattan() > -1){
-                roundabout$setTrueInvisibilityManhattan(roundabout$getTrueInvisibilityManhattan()-1);
-            }
+        Vec3 position =  getPosition(1);
+        if (rdbt$lastPos.distanceToSqr(position) > 0.01F){
+            roundabout$trueInvisibilityManhattan = 80;
+        } else {
+            roundabout$trueInvisibilityManhattan--;
         }
+        rdbt$lastPos = position;
     }
 
 
@@ -530,7 +517,9 @@ public abstract class EntityAndData implements IEntityAndData {
         if (((Entity)(Object)this) instanceof Player PE){
             ItemStack stack = ((IPlayerEntity) PE).roundabout$getMaskSlot();
             if (stack !=null && !stack.isEmpty() && stack.getItem() instanceof MaskItem ME){
-                cir.setReturnValue(this.getBbHeight() + ME.visageData.getNametagHeight());
+
+                VisageData vd = ME.visageData.generateVisageData(PE);
+                cir.setReturnValue(this.getBbHeight() + vd.getNametagHeight());
             }
         }
     }
@@ -951,46 +940,5 @@ public abstract class EntityAndData implements IEntityAndData {
         this.deltaMovement = ec;
     }
 
-    @Inject(method = "move", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void  WindVisionDetection(CallbackInfo info) {
-        rdbt$doWindVisionDetection();
-    }
 
-    private double previousYposManhattan = 0.0;
-    private double previousXposManhattan = 0.0;
-    private double previousZposManhattan = 0.0;
-
-    @Unique
-    @Override
-    public void rdbt$doWindVisionDetection() {
-        if (!this.level().isClientSide) {
-            if(((Entity) (Object) this) instanceof StandEntity){
-                IEntityAndData entityAndData = ((IEntityAndData) this);
-                entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-            }
-            if ((((Entity) (Object) this) instanceof Mob ME) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
-                IEntityAndData entityAndData = ((IEntityAndData) this);
-                boolean down = previousYposManhattan > this.getY();
-                boolean up = previousYposManhattan < this.getY();
-                boolean movementX = previousXposManhattan != this.getX();
-                boolean movementZ = previousZposManhattan != this.getZ();
-                    if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
-                    else {
-                       if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else {
-                           if (down || up) {
-                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                           }
-                           else if (movementX || movementZ) {
-                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                           }
-                       }
-                    }
-            }
-        }
-        previousYposManhattan = this.getY();
-        previousXposManhattan = this.getX();
-        previousZposManhattan = this.getZ();
-    }
 }

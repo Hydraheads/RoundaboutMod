@@ -462,7 +462,7 @@ public class Config implements Cloneable {
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 7.0F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 5.5F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
         @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
         public Float StrayCatAirBubblesDamage;
@@ -478,6 +478,8 @@ public class Config implements Cloneable {
         public Integer kickMinimumCooldown;
         @IntOption(group = "inherit", value = 240, min = 0, max = 72000)
         public Integer sheerHeartAttackCooldown;
+        @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
+        public Integer sheerHeartAttackThrowExtraCooldown;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer sheerHeartAttackMaxExplosions;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
@@ -791,6 +793,8 @@ public class Config implements Cloneable {
         public Integer meteorTrackingPower;
         @BooleanOption(group = "inherit", value = false)
         public Boolean PWCanonMovesOnly;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean trackingmessage;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1119,8 +1123,18 @@ public class Config implements Cloneable {
         public Boolean enableSkippingCooldowns;
         @BooleanOption(group = "inherit", value = false)
         public Boolean enableEpitaphPreSkip;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierKingCrimson;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierKingCrimson;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer kingCrimsonAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer kingCrimsonAttackMultOnMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean predictIdles;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer kingCrimsonGuardPoints;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
         public Integer timeSkipRange;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
@@ -1131,7 +1145,7 @@ public class Config implements Cloneable {
         public Integer epitaphDuration;
         @IntOption(group = "inherit", value = 220, min = 1, max = 72000)
         public Integer timeEraseDuration;
-        @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 700, min = 0, max = 72000)
         public Integer timeEraseMinimumCooldown;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer additionalCooldownPerSecondsUsed2;
@@ -1149,6 +1163,8 @@ public class Config implements Cloneable {
         public Boolean freeTimeSkip;
         @BooleanOption(group = "inherit", value = true)
         public Boolean skipPastDeath;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean postTESoften;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1246,7 +1262,7 @@ public class Config implements Cloneable {
         public Integer blockRangeNegativeOneIsInfinite;
         @BooleanOption(group = "inherit", value = true)
         public Boolean usePreciseMath;
-        @IntOption(group = "inherit", value = 19, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
         public Integer postTSiframes;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTSSoften;

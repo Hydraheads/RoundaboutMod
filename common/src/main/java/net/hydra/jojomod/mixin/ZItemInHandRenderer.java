@@ -256,8 +256,10 @@ public abstract class ZItemInHandRenderer {
                 || AnubisLayer.shouldRender(abstractClientPlayer) != null
                 || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
 
-            ci.cancel();
-            return;
+            if (emperorFP) {
+                ci.cancel();
+                return;
+            }
         }
 
 

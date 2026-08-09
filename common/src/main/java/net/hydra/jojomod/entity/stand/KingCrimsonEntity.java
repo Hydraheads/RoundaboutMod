@@ -31,7 +31,9 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             CONCEPT = 15,
             PART_5_SKIN = 16,
             BLUE = 17,
-            VISION = 18;
+            VISION = 18,
+            REAPER = 19,
+            NUCLEAR = 20;
 
 
     public final AnimationState finalPunch = new AnimationState();
@@ -60,7 +62,6 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getUser() != null) {
             byte animation = getAnimation();
             if (animation != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
@@ -144,7 +145,6 @@ public class KingCrimsonEntity extends FollowingStandEntity {
             } else {
                 this.finalPunch3.stop();
             }
-        }
     }
 
     public int tsReleaseTime = 0;

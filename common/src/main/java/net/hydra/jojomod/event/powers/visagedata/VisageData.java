@@ -53,6 +53,9 @@ public class VisageData {
     public String getSkinPath(){
         return null;
     }
+    public boolean swapName(){
+        return false;
+    }
     public boolean isSlim(){
         return false;
     }
@@ -70,6 +73,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersLucyHair(){
+        return false;
+    }
+    public boolean rendersDoppioHair(){
         return false;
     }
     public boolean rendersKakyoinHair(){
@@ -99,6 +105,12 @@ public class VisageData {
     public boolean rendersDaiyaEars(){
         return false;
     }
+    public boolean rendersGyroHat(){
+        return false;
+    }
+    public boolean rendersSteelBalls(){
+        return false;
+    }
     public boolean rendersDaiyaFluff(){
         return false;
     }
@@ -120,6 +132,9 @@ public class VisageData {
     public boolean renderJohngalliaHair(){return false;}
     public boolean renderJohngalliaTie(){return false;}
     public boolean rendersArmor(){
+        return false;
+    }
+    public boolean rendersCape(){
         return false;
     }
 

@@ -15,9 +15,12 @@ import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
+import net.hydra.jojomod.stand.powers.PowersGreenDay;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidArmorModel;
@@ -103,12 +106,13 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             ItemStack visage = thisr.getVisage();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
+                    VisageData vd = MI.visageData.generateVisageData(thisr);
+                    if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(thisr)) {
                             // 37 67 -34
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
                         } else {
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                     } else if (visage.is(ModItems.RAT_MASK)){
@@ -229,8 +233,9 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
-                        if (MI.visageData.isSlim()){
+                    VisageData vd = MI.visageData.generateVisageData(entity);
+                    if (vd.isCharacterVisage()) {
+                        if (vd.isSlim()){
                             this.model = slim;
                         } else {
                             this.model = bulk;
@@ -268,6 +273,74 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             $$1.rightArmPose = $$3;
             $$1.leftArmPose = $$2;
         }
+        if ($$0 instanceof StandUser standUser) {
+            PlayerModel<T> playerModel = this.getModel();
+            if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+
+                if (PGD.legGoneTicks > 0) {
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                }
+
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.RIGHT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasMainArm && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.leftArm.visible=false;
+                    playerModel.leftSleeve.visible=false;
+                }
+                if(!PGD.HasOffHand && (PGD.self.getMainArm() ==HumanoidArm.LEFT)){
+                    playerModel.rightArm.visible=false;
+                    playerModel.rightSleeve.visible=false;
+                }
+            }
+
+
+            if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
+                    || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
+                if (ClientUtil.hasChangedArms($$0)){
+                    playerModel.rightArm.visible = false;
+                    playerModel.rightSleeve.visible = false;
+                    playerModel.leftArm.visible = false;
+                    playerModel.leftSleeve.visible = false;
+                }
+                if (ClientUtil.hasChangedLegs($$0)){
+                    playerModel.rightLeg.visible = false;
+                    playerModel.rightPants.visible = false;
+                    playerModel.leftLeg.visible = false;
+                    playerModel.leftPants.visible = false;
+                }
+                if (ClientUtil.hasChangedBody($$0)){
+                    playerModel.body.visible = false;
+                    playerModel.jacket.visible = false;
+                }
+                if (ClientUtil.hasChangedHead($$0)){
+                    playerModel.head.visible = false;
+                    playerModel.hat.visible = false;
+                }
+                if (ClientUtil.hideCapeAndEars($$0)){
+                    IPlayerModel iPlayerModel = ((IPlayerModel) playerModel);
+                    iPlayerModel.roundabout$getEar().visible = false;
+                    iPlayerModel.roundabout$getCloak().visible = false;
+                }
+            }
+
+        }
+
     }
     private static HumanoidModel.ArmPose getArmPose(LivingEntity $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
@@ -337,7 +410,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                         }
                     }
                 } else {
-                    Vector3f scale = MI.visageData.scale();
+                    VisageData vd = MI.visageData.generateVisageData(entity);
+                    Vector3f scale = vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
                 return;

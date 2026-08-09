@@ -292,9 +292,24 @@
   "item.roundabout.straizo_vampire_mask": "Straizo Visage",
   "item.roundabout.straizo_vampire_mask.desc": "Straizo (Vampire)",
   "item.roundabout.straizo_vampire_mask.tag": "Straizo",
+  "item.roundabout.diavolo_mask": "Diavolo Visage",
+  "item.roundabout.diavolo_mask.desc": "Diavolo",
+  "item.roundabout.diavolo_mask.tag": "Diavolo",
+  "item.roundabout.doppio_mask": "Doppio Visage",
+  "item.roundabout.doppio_mask.desc": "Vinegar Doppio",
+  "item.roundabout.doppio_mask.tag": "Doppio",
+  "item.roundabout.gyro_mask": "Gyro Visage",
+  "item.roundabout.gyro_mask.desc": "Gyro Zeppeli",
+  "item.roundabout.gyro_mask.tag": "Gyro",
+  "item.roundabout.boss_mask": "Boss Visage",
+  "item.roundabout.boss_mask.desc": "Boss",
+  "item.roundabout.boss_mask.tag": "Boss",
   "item.roundabout.dio_mask": "DIO Visage",
   "item.roundabout.dio_mask.desc": "DIO (Part 3)",
   "item.roundabout.dio_mask.tag": "DIO",
+  "item.roundabout.shadow_dio_mask": "DIO Visage",
+  "item.roundabout.shadow_dio_mask.desc": "DIO (Mysterious Shadow)",
+  "item.roundabout.shadow_dio_mask.tag": "DIO",
   "item.roundabout.enya_mask": "Enya Visage",
   "item.roundabout.enya_mask.desc": "Enya Geil",
   "item.roundabout.enya_mask.tag": "Enya",
@@ -449,8 +464,9 @@
   "entity.roundabout.the_world": "The World",
   "entity.roundabout.iron_ball": "Iron Ball",
   "entity.roundabout.king_crimson": "King Crimson",
+  "entity.roundabout.king_crimson_reaper": "King Crimson",
   "entity.roundabout.king_crimson_clone": "Player",
-  "entity.roundabout.king_crimson_hologram": "Projection",
+  "entity.roundabout.king_crimson_projection": "Projection",
   "entity.roundabout.the_world_ultimate": "The World",
   "entity.roundabout.survivor": "Survivor",
   "entity.roundabout.star_platinum": "Star Platinum",
@@ -875,6 +891,10 @@
   "death.attack.disintegration.player": "%1$s was disintegrated by %2$s",
   "death.attack.disintegration.item": "%1$s disintegrated",
   "death.attack.disintegration.player.item": "%1$s was disintegrated by %$2s",
+  "death.attack.bites_the_dust": "%1$s bites the dust",
+  "death.attack.bites_the_dust.player": "%1$s had bites the dust by %2$s",
+  "death.attack.bites_the_dust.item": "%1$s bites the dust",
+  "death.attack.bites_the_dust.player.item": "%1$s had bites the dust by %$2s",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1724,7 +1744,7 @@
   "ability.roundabout.steal_memories_2.desc": "If possible, this variation of memory steal takes experience away from mobs, and using the chess piece will give it to you. This is useful for taking experience from mobs without killing them. On villagers, instead saves their workplaces. On players, saves their bed locations. Using the pieces leads you to the locations.",
 
   "ability.roundabout.step_shadow": "Step Shadow",
-  "ability.roundabout.step_shadow.desc": "If someone you stole the memory of steps into your shadow (touching you without low light levels), any memories taken are returned to them from your inventory.",
+  "ability.roundabout.step_shadow.desc": "If you step in the shadow of someone you stole the memory of (touching you without low light levels), any memories taken are returned to them from your inventory.",
 
   "ability.roundabout.forbid_rule": "Forbid Rule",
   "ability.roundabout.forbid_rule.desc": "Forbid people from stepping on the block you activate this skill on. If you step on the block, the rule is undone by a lack of fairness.",
@@ -2191,6 +2211,8 @@
   "skins.roundabout.king_crimson.end": "King End",
   "skins.roundabout.king_crimson.end_2": "Ender",
   "skins.roundabout.king_crimson.starless": "Starless",
+  "skins.roundabout.king_crimson.nuclear": "Irradiated",
+  "skins.roundabout.king_crimson.reaper": "Time Reaper",
   "skins.roundabout.king_crimson.agogo": "A-Go!Go!",
   "skins.roundabout.king_crimson.spine_art": "Spine Art",
   "skins.roundabout.king_crimson.heaven": "EO Heaven",
@@ -2615,6 +2637,7 @@
 
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
+  "unlock_skin.roundabout.king_crimson.reaper": "Blossoming Time Reaper Skin Unlocked!",
   "unlock_skin.roundabout.justice.bad_bone": "Justice: Bad to The Bone Skin Unlocked!",
   "unlock_skin.roundabout.magicians_red.chagaroth": "Magician's Dread Skin Unlocked!",
   "unlock_skin.roundabout.soft_and_wet.kira": "Killer Queen 8 Skin Unlocked!",
@@ -2624,6 +2647,7 @@
   "unlock_skin.roundabout.white_album.yuki": "Yuki-onna Skin Unlocked!",
   "unlock_skin.roundabout.green_day.silence": "Silence Skin Absorbed",
   "unlock_skin.roundabout.planet_waves_cosmic": "Cosmic Skin Unlocked",
+  "unlock_skin.roundabout.killer_queen.minesweeper": "Killer Queen: Minesweeper Skin Unlocked",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -2871,6 +2895,15 @@
   "config.roundabout.timeSkipOpacity.name": "Time Skip Opacity",
   "config.roundabout.timeSkipOpacity.desc": "How see through is time skip's effect? Bigger number = more accurate, smaller number = less blinding. 0 to 1.0.",
 
+  "config.roundabout.nerfedGasolineSpread.name": "Nerfed Gas Spread",
+  "config.roundabout.nerfedGasolineSpread.desc": "Makes gasoline spread less.",
+
+  "config.roundabout.bitesTheDustDayMobsDamage.name":"BTD Mob Damage",
+  "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
+  "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
+  "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
+
+
 
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",
@@ -2884,7 +2917,11 @@
   "config.roundabout.playerGuardDamageMultiplierMobs.name": "WA Mob Reduction",
   "config.roundabout.playerGuardDamageMultiplierMobs.desc": "The above but for mob users instead of yourself.",
 
+  "config.roundabout.emperorBulletRange.name":"Bullet Range",
+  "config.roundabout.emperorBulletRange.desc": "The range bullets have.",
 
+  "config.roundabout.enableOasis.name":"Enable Stand",
+  "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
   "config.roundabout.enableKillerQueen.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableMagiciansRed.name": "Enable Stand",
@@ -3251,7 +3288,7 @@
   "config.roundabout.getAutoSpeed.desc": "Select the velocity of the stand's automatic movement from 1 to 5. The lowest is easier to shoot the stand, the highest ones are optimal by who has mastered the stand and wants it to move faster.",
   "config.roundabout.manhattanDashCooldown.name":"Manhattan Transfer Dash Cooldown",
   "config.roundabout.manhattanDashCooldown.desc":"Cooldown for Manhattan Transfer's dash move",
-  "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Other Mobs Can Load Your Manhattan Transfer",
+  "config.roundabout.canOtherMobsLoadManhattanTransfer.name":"Load Enemy Projectiles",
   "config.roundabout.canOtherMobsLoadManhattanTransfer.desc":"Decide if other mobs can load your stand. Remember that projectiles shot by your MT become yours, so you can manipulate an another players Ender Pearl to teleport you instead of teleporting the other player. It's set to false to simulate how the stand works in the original source, but you can turn it on.",
   "config.roundabout.manhattanAutoShootingRange.name":"Automatic Shooting Mode Detection Range",
   "config.roundabout.manhattanAutoShootingRange.desc":"Select how close does the stand need to be to shoot at an entity in automatic mode",
@@ -3262,6 +3299,13 @@
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
   "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
   "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
+
+  "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
+  "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",
+
+  "config.roundabout.killerQueenCurrentBombConfig.name":"Bomb Config",
+  "config.roundabout.killerQueenCurrentBombConfig.desc":"Current Bomb Settings.",
+
 
   "config.roundabout.chessMultOnMobs.name": "Chess Player Dmg Mult",
   "config.roundabout.chessMultOnMobs.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3278,6 +3322,11 @@
   "config.roundabout.whiteAlbumAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.whiteAlbumAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
 
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.kingCrimsonAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+
 
   "config.roundabout.creamAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.creamAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -3285,6 +3334,8 @@
   "config.roundabout.creamAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
   "config.roundabout.creamGuardPoints.name": "Guard Points",
   "config.roundabout.creamGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.kingCrimsonGuardPoints.name": "Guard Points",
+  "config.roundabout.kingCrimsonGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierCream.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierCream.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierCream.name": "Mining Tier",
@@ -3930,6 +3981,8 @@
   "config.roundabout.starFingerLeapCooldown.desc": "Star Finger is disabled for a short time after a leap",
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
+  "config.roundabout.postTESoften.name": "Post TE Soften",
+  "config.roundabout.postTESoften.desc": "If ending time erase makes ",
 
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
@@ -3945,6 +3998,8 @@
   "config.roundabout.starPlatinumGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierStarPlatinum.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierKingCrimson.name": "Mining Tier",
+  "config.roundabout.getMiningTierKingCrimson.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.getMiningTierStarPlatinum.name": "Mining Tier",
   "config.roundabout.getMiningTierStarPlatinum.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
   "config.roundabout.starPlatinumScopeUsesPotionEffectForNightVision.name": "Scope Uses NV Potion",
@@ -3959,6 +4014,8 @@
   "config.roundabout.blitzAttackCooldown.desc": "Change the length in between ending impale early with the attack button and using Star Blitz.",
 
 
+  "config.roundabout.miningSpeedMultiplierKingCrimson.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierKingCrimson.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.name": "Mining Speed Multiplier",
   "config.roundabout.miningSpeedMultiplierWhiteAlbum.desc": "Adjust how fast the stand can mine.",
   "config.roundabout.getMiningTierWhiteAlbum.name": "Mining Tier",
@@ -4127,6 +4184,7 @@
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
+  "config.roundabout.oasisSettings.name": "Oasis",
   "config.roundabout.timeStopSettings.name": "Time Stop",
 
 
@@ -4171,6 +4229,10 @@
   "config.roundabout.mandomRewindAttemptsToSkipInterpolation.desc": "Turn this off if you have a mod that makes mobs invisible after using mandom. Whether or not time rewind attempts to skip interpolation, so mobs instantly blip into their new locations instead of visually sliding really fast like endermen teleports.",
   "config.roundabout.tuskUsesShootMode.name": "Tusk Gun Mode",
   "config.roundabout.tuskUsesShootMode.desc": "Whether you  need to hold right click and then press left click, or just right click",
+
+  "config.roundabout.trackingmessage.name": "Tracking Message",
+  "config.roundabout.trackingmessage.desc": "Whether to notify you when tracking meteors.",
+
 
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.name": "1st Person Fog",
   "config.roundabout.renderJusticeParticlesWhilePilotingInFirstPerson.desc": "Fog particles can be disabled for first person rendering of justice control mode.",
@@ -4255,7 +4317,7 @@
   "config.roundabout.alternateEpitaph.desc": "Shows red see through images instead of all of the other epitaph visuals for people who begged for the color red. Makes it less accurate to epitaph and more accurate to time erase's epitaph.",
 
   "config.roundabout.canSeeFatedSelf.name": "See Fated Self",
-  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavalo doesn't see it. But it can be useful to track in combat and debug with.",
+  "config.roundabout.canSeeFatedSelf.desc": "In King Crimson's time erase toggle seeing your own double or not. In canon, Diavolo doesn't see it. But it can be useful to track in combat and debug with.",
 
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.name": "Epitaph Shows Present",
   "config.roundabout.epitaphSeePresentEntitiesAndParticles.desc": "If turned on, renders particles and a phantom image of present locations of mobs during epitaph. The intention is to be distracted, though.",

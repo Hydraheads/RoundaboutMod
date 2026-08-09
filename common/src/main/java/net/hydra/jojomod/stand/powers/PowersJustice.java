@@ -47,6 +47,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -1389,6 +1390,7 @@ public class PowersJustice extends NewDashPreset {
             fclone2.setYRot(second);
             fclone.lockedYRot = first;
             fclone2.lockedYRot = second;
+            fclone2.setLeftHanded(PE.getMainArm() == HumanoidArm.LEFT);
             fclone.yRotO = first;
             fclone2.yRotO = second;
             this.getSelf().level().addFreshEntity(fclone);

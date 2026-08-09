@@ -900,7 +900,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             } else {
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
             }
-            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 40);
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, 50);
             Level level = self.level();
 
             BlockPos checkPos = pos;
@@ -964,7 +964,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
             this.setCooldown(PowerIndex.SKILL_2_SNEAK,
                     ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsCooldown);
-            this.setCooldown(PowerIndex.SKILL_2, 40);
+            this.setCooldown(PowerIndex.SKILL_2, 50);
 
             Level level = self.level();
             addEXP(3);
@@ -1891,14 +1891,19 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
                         || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
-                    HeatUtil.addHeat(PL, -2);
+                    HeatUtil.addHeat(PL, -1);
                     return;
                 }
             }
             if (!HeatUtil.isArmsFrozen(PL)){
                 HeatUtil.addHeat(PL, -4);
             } else {
-                HeatUtil.addHeat(PL, -3);
+                if (!HeatUtil.isLegsFrozen(PL)){
+                    HeatUtil.addHeat(PL, -3);
+                } else {
+                    HeatUtil.addHeat(PL, -3);
+                    //2?
+                }
             }
         } else if (targ instanceof LivingEntity LE){
             HeatUtil.addHeat(LE,-13);
