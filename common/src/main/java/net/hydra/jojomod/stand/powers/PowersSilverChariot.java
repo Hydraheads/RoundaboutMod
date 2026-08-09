@@ -65,16 +65,17 @@ public class PowersSilverChariot extends NewPunchingStand {
     public int spacedJumpTime = -1;
 
     public static final byte
-            SILVER_CHARIOT_RAPIER_SLASH = 84,
+            SILVER_CHARIOT_RAPIER_SLASH = 82,
             SILVER_CHARIOT_RAPIER_SPIN = 83,
-            SILVER_CHARIOT_OFFHAND_WEAPON = 82,
+            SILVER_CHARIOT_OFFHAND_WEAPON = 84,
             SILVER_CHARIOT_CONTROL_MODE_ONE = 85,
             SILVER_CHARIOT_ARMOR_SHED = 86,
             SILVER_CHARIOT_SELF_GRAB = 87,
-            SILVER_CHARIOT_SLAB_CUTTING = 88,
-            SILVER_CHARIOT_STATUE_CUTTING = 89,
-            SILVER_CHARIOT_RAPIER_SHOT = 90,
-            SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = 91;
+            SILVER_CHARIOT_ARM_RENDER = 88,
+            SILVER_CHARIOT_SLAB_CUTTING = 89,
+            SILVER_CHARIOT_STATUE_CUTTING = 90,
+            SILVER_CHARIOT_RAPIER_SHOT = 91,
+            SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = 92;
 
 
     // Configs
@@ -222,10 +223,18 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public boolean armored = true;
 
+    public boolean isArmored() {
+        return armored;
+    }
+
+    public void setArmored(boolean armored) {
+        this.armored = armored;
+    }
+
     @Override
     public boolean canGuard() {
         // TODO: Implement support for removing guard ability when armor shed is active
-        return armored;
+        return isArmored();
     }
 
     @Override
@@ -387,13 +396,14 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_NORMAL -> {
                 // TODO: Implement control mode ability
-                toggleControlModeClient(0);
+                // toggleControlModeClient(0);
             }
             case SKILL_2_CROUCH -> {
                 // Might implement another ability here
             }
             case SKILL_2_GUARD -> {
                 // TODO: Implement armor shed ability
+                // armorShedClient();
             }
             case SKILL_2_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -404,7 +414,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 // TODO: Implement carry self ability
                 // toggleControlModeClient((short) 1);
-                selfGrabClient();
+                // selfGrabClient();
             }
             case SKILL_3_GUARD -> {
                 // TODO: Implement Silver Chariot arm render ability
@@ -426,7 +436,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 statueCuttingClient();
             }
             case SKILL_4_CROUCH_GUARD -> {
-
+                // Might implement another ability here
             }
         }
     }
@@ -462,6 +472,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case PowerIndex.VAULT -> {
                 return this.vault();
+            }
+            case PowerIndex.POWER_2_BLOCK -> {
+                this.armorShedServer();
+                return true;
             }
         }
         return super.setPowerOther(move, lastMove);
@@ -999,7 +1013,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public void updateRapierSpin() {
+        if (!self.level().isClientSide()) {
 
+        }
     }
 
     public void rapierSlashClient() {
@@ -1076,13 +1092,51 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     // Armor shed
     public void armorShedClient() {
-        if (!this.onCooldown(PowerIndex.POWER_2_BLOCK) && canExecuteMoveWithLevel(getArmorShedLevel())) {
-
+        if (!this.onCooldown(PowerIndex.SKILL_2_GUARD) && canExecuteMoveWithLevel(getArmorShedLevel()) && isArmored()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
+            tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
     }
 
     public void armorShedServer() {
+        if (!this.self.level().isClientSide()) {
+            toggleArmorOff();
+        }
+    }
 
+    public void toggleArmorOff() {
+        this.setArmored(false);
+    }
+
+    @Override
+    public int getBarrageWindup() {
+        if (isArmored()) {
+            return super.getBarrageWindup();
+        }
+        return super.getBarrageWindup() / 2;
+    }
+
+    @Override
+    public int getBarrageRecoilTime() {
+        if (isArmored()) {
+            return super.getBarrageRecoilTime();
+        }
+        return super.getBarrageRecoilTime() / 2;
+    }
+
+    @Override
+    public boolean canSummonStand() {
+        // TODO: Make Silver Chariot not be able to be summoned while the guard meter is regenerating while armor shed is active.
+        return true;
+    }
+
+    @Override
+    public void onStandSummon(boolean desummon) {
+        super.onStandSummon(desummon);
+        if (desummon) {
+            // TODO: Implement armor shed support
+            setArmored(true);
+        }
     }
 
 
