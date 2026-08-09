@@ -206,7 +206,7 @@ public class ClientConfig implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
         @IntOption(group = "inherit", value = 2, min = 0, max = 3)
-        public Integer KillerQueenCurrentBombConfig;
+        public Integer killerQueenCurrentBombConfig;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)

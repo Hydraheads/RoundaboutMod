@@ -14,7 +14,6 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
@@ -45,7 +44,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.entity.ElderGuardianRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -76,9 +74,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -90,7 +86,6 @@ import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
 import org.joml.Vector3f;
 
-import java.time.Clock;
 import java.util.*;
 
 public class PowersKillerQueen extends NewPunchingStand {
@@ -387,6 +382,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getAirBubbleDamage(Entity entity){
+        if (currentBombStatus == BUBBLE_BOMB && isContactModeEnabled()) {
+            return 0.0f;
+        }
+
         float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.StrayCatAirBubblesDamage;
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(((float) ((float) multiplyPowerByStandConfigPlayers(damage))));
@@ -1667,7 +1666,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void bombConfigPacket() {
-        int status = ConfigManager.getClientConfig().dynamicSettings.KillerQueenCurrentBombConfig;
+        int status = ConfigManager.getClientConfig().dynamicSettings.killerQueenCurrentBombConfig;
         this.bombConfig = status;
         this.tryIntPower(PowersKillerQueen.BOMB_CONFIG, true, status);
         tryIntPowerPacket(PowersKillerQueen.BOMB_CONFIG, status);
@@ -2746,7 +2745,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions + 1), 60);
 
-                    if (this.SHA.throwStatus >= 1) { shaCooldown += 120; }
+                    if (this.SHA.throwStatus >= 1) { shaCooldown += ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackThrowExtraCooldown; }
 
                     this.setCooldown(SHA_COOLDOWN, shaCooldown);
                     if (this.getSelf() instanceof Player P) {
@@ -2982,7 +2981,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 LivingEntity.class, wallBox)) {
 
             if (entity.equals(this.self) || entity.equals(((StandUser)this.self).roundabout$getStand()) || entity.equals(bomb)
-                    || entity instanceof StandEntity SE && SE.getUser() == this.self || !entity.isAlive() || entity.isDeadOrDying()
+                    || entity instanceof StandEntity || !entity.isAlive() || entity.isDeadOrDying()
                     || PowerTypes.isExistentiallyElsewhere(entity)) {
                 continue;
             }
@@ -3552,7 +3551,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 if (target != null) {
-                    ((StandUser)target).roundabout$setExplosionInflation(-1);
+                    if (target instanceof LivingEntity) {
+                        ((StandUser) target).roundabout$setExplosionInflation(-1);
+                    }
                     vPos = target.position();
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();

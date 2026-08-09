@@ -1,11 +1,8 @@
 package net.hydra.jojomod.client.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IKeyMapping;
-import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.ModGamerules;
@@ -17,7 +14,6 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -97,7 +93,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             Player p = Minecraft.getInstance().player;
             StandUser SU = (StandUser) p;
             if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PA) {
-            	int conf = clientConfig.dynamicSettings.KillerQueenCurrentBombConfig;
+            	int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
             	if (this.context == BLOCK_DESTRUCTION) {
             		if (conf == 1 || conf == 3) {
 	                	return (invert) ? DISABLED : ENABLED;
@@ -238,7 +234,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             int conf = this.slots.get(0).getMode(this.currentlyHovered == 0);
             conf += this.slots.get(1).getMode(this.currentlyHovered == 1)*2;
             
-            clientConfig.dynamicSettings.KillerQueenCurrentBombConfig = conf;
+            clientConfig.dynamicSettings.killerQueenCurrentBombConfig = conf;
             ConfigManager.saveClientConfig();
             
         }
