@@ -8,7 +8,10 @@ public class PermanentZoneCastInstance {
     public static byte
             FOG_FIELD = 1,
             FIRESTORM = 2,
-            MOLD_FIELD = 3;
+            MOLD_FIELD = 3,
+            PURPLE_SMOKE = 4,
+            DISTORTION_SMOKE = 5;
+
     /**
      * The id component of the user.
      */

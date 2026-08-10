@@ -534,6 +534,7 @@ public class ForgeEvents {
         ModItems.DOPPIO_MASK = ForgeItems.DOPPIO_MASK.get();
         ModItems.DIO_MASK = ForgeItems.DIO_MASK.get();
         ModItems.GYRO_MASK = ForgeItems.GYRO_MASK.get();
+        ModItems.SANDMAN_MASK = ForgeItems.SANDMAN_MASK.get();
         ModItems.SHADOW_DIO_MASK = ForgeItems.SHADOW_DIO_MASK.get();
         ModItems.DIO_VAMPIRE_MASK = ForgeItems.DIO_VAMPIRE_MASK.get();
         ModItems.GUCCIO_MASK = ForgeItems.GUCCIO_MASK.get();
@@ -555,12 +556,15 @@ public class ForgeEvents {
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
         ModItems.KAKYOIN_MASK = ForgeItems.KAKYOIN_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
+        ModItems.DIEGO_2_MASK = ForgeItems.DIEGO_2_MASK.get();
+        ModItems.TIM_MASK = ForgeItems.TIM_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
         ModItems.LUCY_MASK = ForgeItems.LUCY_MASK.get();
+        ModItems.STEVEN_MASK = ForgeItems.STEVEN_MASK.get();
         ModItems.CHAKA_MASK = ForgeItems.CHAKA_MASK.get();
         ModItems.PAINTING_VAN_GOUGH = ForgeItems.PAINTING_VAN_GOUGH.get();
         ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
@@ -696,7 +700,9 @@ public class ForgeEvents {
         ModEffects.SWITCH = ForgeEffects.SWITCH.get();
         ModEffects.MOLD = ForgeEffects.MOLD.get();
         ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
-
+        ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
+        ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
+        ModEffects.VIRUS_IMMUNITY = ForgeEffects.VIRUS_IMMUNITY.get();
 
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();

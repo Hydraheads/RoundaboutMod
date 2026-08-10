@@ -11,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class JohnnyVisage extends VisageData {
-    // 180 -> 162.56
     public JohnnyVisage(LivingEntity self) {
         super(self);
     }
@@ -37,7 +36,7 @@ public class JohnnyVisage extends VisageData {
     }
     @Override
     public Vector3f scale(){
-        return new Vector3f(0.846F, 0.846F, 0.846F);
+        return new Vector3f(0.81F, 0.81F, 0.81F);
     }
     @Override
     public float getNametagHeight(){

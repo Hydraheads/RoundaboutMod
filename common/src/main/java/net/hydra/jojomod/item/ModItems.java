@@ -176,6 +176,8 @@ public class ModItems {
     public static Item DIAVOLO_MASK;
     public static Item DOPPIO_MASK;
     public static Item BOSS_MASK;
+    public static Item TIM_MASK;
+    public static Item SANDMAN_MASK;
     public static Item JOTARO_MASK;
     public static Item JOTARO_4_MASK;
     public static Item JOTARO_6_MASK;
@@ -191,6 +193,7 @@ public class ModItems {
     public static Item AVDOL_MASK;
     public static Item KAKYOIN_MASK;
     public static Item DIEGO_MASK;
+    public static Item DIEGO_2_MASK;
     public static Item VALENTINE_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
@@ -199,6 +202,7 @@ public class ModItems {
     public static Item JOHNNY_MASK;
     public static Item JOHNGALLIA_MASK;
     public static Item LUCY_MASK;
+    public static Item STEVEN_MASK;
     public static Item AESTHETICIAN_MASK_1;
     public static Item AESTHETICIAN_MASK_2;
     public static Item AESTHETICIAN_MASK_3;
@@ -302,8 +306,12 @@ public class ModItems {
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(STEVEN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIEGO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(DIEGO_2_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(SANDMAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(TIM_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);

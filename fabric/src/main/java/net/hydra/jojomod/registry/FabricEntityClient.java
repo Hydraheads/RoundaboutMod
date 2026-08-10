@@ -345,6 +345,7 @@ public class FabricEntityClient {
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.Diego2HatPart = new Diego2HatPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
@@ -354,6 +355,7 @@ public class FabricEntityClient {
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
+        ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
@@ -361,7 +363,10 @@ public class FabricEntityClient {
         ModStrayModels.ratTailPart = new RatTailPart();
         ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
         ModStrayModels.ratRightLegPart = new RatRightLegPart();
+        ModStrayModels.diegoLeftLegPart = new DiegoLeftLegPart();
+        ModStrayModels.diegoRightLegPart = new DiegoRightLegPart();
         ModStrayModels.ratHatPart = new RatHatPart();
+        ModStrayModels.timHatPart = new TimHatPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.barrageArmsPart = new BarrageArmsPart();

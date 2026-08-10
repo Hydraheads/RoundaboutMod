@@ -149,7 +149,6 @@ public interface StandUser {
 
     boolean rdbt$hasRightHandGone();
 
-    void rdbt$doWindVisionDetection();
 
     boolean roundabout$getActive();
     boolean roundabout$getMainhandOverride();
@@ -331,9 +330,6 @@ public interface StandUser {
     /**Metallica*/
     void roundabout$setMetallicaInvis(int invis);
     int roundabout$getMetallicaInvis();
-
-    void roundabout$doWindVisionDetectionOther();
-
     Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1);
 
     /**Gravity Direction*/

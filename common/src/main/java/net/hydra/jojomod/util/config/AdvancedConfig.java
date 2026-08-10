@@ -366,6 +366,13 @@ public class AdvancedConfig implements Cloneable {
                     "mowziesmobs:umvuthi"
             )
     );
+    public Set<String> dontRemoveAggroMobs = new HashSet<>(
+            Arrays.asList(
+                    "mowziesmobs:frostmaw",
+                    "mowziesmobs:ferrous_wroughtnaut",
+                    "mowziesmobs:umvuthi"
+            )
+    );
 
     public Set<String> vampireSunDamageWorlds = new HashSet<>(
             Arrays.asList(

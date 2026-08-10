@@ -72,7 +72,18 @@ public class ForgeEffects{
             POTION_EFFECTS.register("crippled", () ->
                     new Effect(MobEffectCategory.HARMFUL, 725255)
                             .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL));
-
+    public static final RegistryObject<MobEffect> HAZE_VIRUS =
+            POTION_EFFECTS.register("haze_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
+    public static final RegistryObject<MobEffect> DISTORTION_VIRUS =
+            POTION_EFFECTS.register("distortion_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
+    public static final RegistryObject<MobEffect> VIRUS_IMMUNITY =
+            POTION_EFFECTS.register("virus_immunity", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 11606258)
+            );
 
 
     public static class Effect extends MobEffect{

@@ -87,6 +87,9 @@ public class VisageData {
     public boolean rendersTasselHat(){
         return false;
     }
+    public boolean rendersTimHat(){
+        return false;
+    }
     public boolean rendersLegCloakPart(){
         return false;
     }
@@ -102,7 +105,16 @@ public class VisageData {
     public boolean rendersDiegoHat(){
         return false;
     }
+    public boolean rendersDiego2Hat(){
+        return false;
+    }
+    public boolean rendersDiegoLegs(){
+        return false;
+    }
     public boolean rendersDaiyaEars(){
+        return false;
+    }
+    public boolean rendersSandmanHair(){
         return false;
     }
     public boolean rendersGyroHat(){

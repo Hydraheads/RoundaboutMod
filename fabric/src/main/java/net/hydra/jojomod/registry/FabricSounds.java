@@ -336,6 +336,13 @@ public class FabricSounds {
         addSound(ModSounds.TUSK_FLATTEN_ID, ModSounds.TUSK_FLATTEN_EVENT);
         addSound(ModSounds.TUSK_WARP_ID, ModSounds.TUSK_WARP_EVENT);
         addSound(ModSounds.TUSK_4_SUMMON_ID, ModSounds.TUSK_4_SUMMON_EVENT);
+        addSound(ModSounds.TUSK_2_SHOOT_ID, ModSounds.TUSK_2_SHOOT_EVENT);
+        addSound(ModSounds.TUSK_2_CHARGE_ID, ModSounds.TUSK_2_CHARGE_EVENT);
+        addSound(ModSounds.TUSK_1_CHARGE_ID, ModSounds.TUSK_1_CHARGE_EVENT);
+        addSound(ModSounds.TUSK_1_SHOOT_ID, ModSounds.TUSK_1_SHOOT_EVENT);
+        addSound(ModSounds.TUSK_HOLE_MOVE_ID, ModSounds.TUSK_HOLE_MOVE_EVENT);
+        addSound(ModSounds.TUSK_GRAB_ID, ModSounds.TUSK_GRAB_EVENT);
+        addSound(ModSounds.TUSK_HOLE_IMPACT_ID, ModSounds.TUSK_HOLE_IMPACT_EVENT);
 
 
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
