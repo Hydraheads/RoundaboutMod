@@ -1225,6 +1225,27 @@ public class ModSounds {
     public static final String TUSK_4_SUMMON = "tusk_4_summon";
     public static final ResourceLocation TUSK_4_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_4_SUMMON);
     public static SoundEvent TUSK_4_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(TUSK_4_SUMMON_ID);
+    public static final String TUSK_2_SHOOT = "tusk_2_shoot";
+    public static final ResourceLocation TUSK_2_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_2_SHOOT);
+    public static SoundEvent TUSK_2_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(TUSK_2_SHOOT_ID);
+    public static final String TUSK_2_CHARGE = "tusk_2_charge";
+    public static final ResourceLocation TUSK_2_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_2_CHARGE);
+    public static SoundEvent TUSK_2_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_2_CHARGE_ID);
+    public static final String TUSK_1_CHARGE = "tusk_1_charge";
+    public static final ResourceLocation TUSK_1_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_1_CHARGE);
+    public static SoundEvent TUSK_1_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_1_CHARGE_ID);
+    public static final String TUSK_1_SHOOT = "tusk_1_shoot";
+    public static final ResourceLocation TUSK_1_SHOOT_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_1_SHOOT);
+    public static SoundEvent TUSK_1_SHOOT_EVENT = SoundEvent.createVariableRangeEvent(TUSK_1_SHOOT_ID);
+    public static final String TUSK_HOLE_MOVE = "tusk_hole_move";
+    public static final ResourceLocation TUSK_HOLE_MOVE_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_HOLE_MOVE);
+    public static SoundEvent TUSK_HOLE_MOVE_EVENT = SoundEvent.createVariableRangeEvent(TUSK_HOLE_MOVE_ID);
+    public static final String TUSK_GRAB = "tusk_grab";
+    public static final ResourceLocation TUSK_GRAB_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_GRAB);
+    public static SoundEvent TUSK_GRAB_EVENT = SoundEvent.createVariableRangeEvent(TUSK_GRAB_ID);
+    public static final String TUSK_HOLE_IMPACT = "tusk_hole_impact";
+    public static final ResourceLocation TUSK_HOLE_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID,TUSK_HOLE_IMPACT);
+    public static SoundEvent TUSK_HOLE_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(TUSK_HOLE_IMPACT_ID);
 
 
 
