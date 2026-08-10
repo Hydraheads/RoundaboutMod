@@ -104,6 +104,11 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POS_2 = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
 
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(Player.class,
+            EntityDataSerializers.BOOLEAN);
+
     @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$POSE_EMOTE = SynchedEntityData.defineId(Player.class,
             EntityDataSerializers.BYTE);
@@ -186,6 +191,28 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
     @Unique
     private float roundabout$idleYOffset = 0.1F;
 
+    @Unique
+    @Override
+    public void roundabout$setCombatMode(boolean only) {
+        if (!(this.level().isClientSide)) {
+            this.getEntityData().set(ROUNDABOUT$COMBAT_MODE, only);
+        }
+    }
+    @Unique
+    @Override
+    public boolean roundabout$getCombatMode() {
+        if (PowerTypes.isBrawling(this)){
+            return true;
+        }
+        if (PowerTypes.hasStandActive(this) && ((StandUser)this).roundabout$getStandPowers().hasPassiveCombatMode()){
+            return true;
+        }
+        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
+            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE);
+        } else {
+            return false;
+        }
+    }
     /// Zombie Fate's zombie silverfish count
     @Unique
     private int rdbt$zombieFish = 0;
@@ -1735,6 +1762,15 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
         }
     }
+
+    /**Combat mode goes down when you don't have a stand or power active NO MATTER WHAT*/
+    @Unique
+    public void roundabout$tickStandOrStandless(){
+        if (!((StandUser)this).roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this))){
+            roundabout$setCombatMode(false);
+        }
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
         if (rdbt$levelDecreaseTicks > 0){
@@ -1744,6 +1780,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (rdbt$movementHistory.size() > 10) {
             rdbt$movementHistory.removeFirst();
         }
+
+        roundabout$tickStandOrStandless();
         if (this.level().isClientSide()) {
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){
@@ -1937,6 +1975,26 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$MASK_VOICE_SLOT, stack);
     }
 
+
+    @Unique
+    @Override
+    public boolean roundabout$getEffectiveCombatMode() {
+
+        if (PowerTypes.isBrawling(this)){
+            return true;
+        }
+        StandUser user = ((StandUser) this);
+        if (PowerTypes.hasStandActive(this) && user.roundabout$getStandPowers().hasPassiveCombatMode()){
+            return true;
+        }
+        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
+            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE) && (((StandUser)this).roundabout$hasAStand() &&
+                    user.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this)));
+        } else {
+            return false;
+        }
+    }
+
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
     private void initDataTrackerRoundabout(CallbackInfo ci) {
         if (!((LivingEntity)(Object)this).getEntityData().hasItem(ROUNDABOUT$POS)) {
@@ -1945,6 +2003,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$POSE_EMOTE, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DODGE_TIME, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$CAMERA_HITS, -1);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_SLOT, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MASK_VOICE_SLOT, ItemStack.EMPTY);

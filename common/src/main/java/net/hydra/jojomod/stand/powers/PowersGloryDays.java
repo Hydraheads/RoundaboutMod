@@ -53,9 +53,9 @@ public class PowersGloryDays extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
 
-        setSkillIcon(context, x, y, 1, StandIcons.GLORY_DAYS_SPEED_UP, PowerIndex.POWER_1);
+        setSkillIcon(context, x, y, 1, StandIcons.GLORY_DAYS_SPEED_DOWN, PowerIndex.POWER_1);
 
-        setSkillIcon(context, x, y, 2, StandIcons.GLORY_DAYS_SPEED_DOWN, PowerIndex.POWER_2);
+        setSkillIcon(context, x, y, 2, StandIcons.GLORY_DAYS_SPEED_UP, PowerIndex.POWER_2);
 
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.GLORY_DAYS_FRACTATION, PowerIndex.SKILL_3);
@@ -63,7 +63,7 @@ public class PowersGloryDays extends NewDashPreset {
             setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         }
 
-        if (!autoResume()){
+        if (autoResume){
             setSkillIcon(context, x, y, 4, StandIcons.GLORY_DAYS_AUTO_MODE_OFF, PowerIndex.POWER_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.GLORY_DAYS_AUTO_MODE_ON, PowerIndex.POWER_4);
@@ -108,9 +108,15 @@ public class PowersGloryDays extends NewDashPreset {
             case SKILL_3_NORMAL -> {
                 dash();
             }
+            case SKILL_4_NORMAL -> {
+                if (!autoResume) {
+                    autoResume = true;
+                } else if (autoResume) {
+                    autoResume = false;
+                }
+
+            }
         }
     }
-    public boolean autoResume() {
-        return false;
-    }
+    public boolean autoResume = false;
 }

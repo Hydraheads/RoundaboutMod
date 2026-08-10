@@ -19,7 +19,7 @@ public class JohngalliaVisage extends VisageData{
     public JojoNPC getModelNPC(LivingEntity pl){
         JojoNPC jojoNPC = ModEntities.JOTARO.create(pl.level());
         if (jojoNPC !=null){
-            jojoNPC.setTrueBasis(ModItems.JOHNNY_MASK.getDefaultInstance());
+            jojoNPC.setTrueBasis(ModItems.JOHNGALLIA_MASK.getDefaultInstance());
         }
         return jojoNPC;
     }

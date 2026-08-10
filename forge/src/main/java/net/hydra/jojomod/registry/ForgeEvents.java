@@ -557,6 +557,7 @@ public class ForgeEvents {
         ModItems.JOHNNY_MASK = ForgeItems.JOHNNY_MASK.get();
         ModItems.JOHNGALLIA_MASK = ForgeItems.JOHNGALLIA_MASK.get();
         ModItems.LUCY_MASK = ForgeItems.LUCY_MASK.get();
+        ModItems.STEVEN_MASK = ForgeItems.STEVEN_MASK.get();
         ModItems.CHAKA_MASK = ForgeItems.CHAKA_MASK.get();
         ModItems.PAINTING_VAN_GOUGH = ForgeItems.PAINTING_VAN_GOUGH.get();
         ModItems.PAINTING_MONA_LISA = ForgeItems.PAINTING_MONA_LISA.get();
@@ -692,7 +693,9 @@ public class ForgeEvents {
         ModEffects.SWITCH = ForgeEffects.SWITCH.get();
         ModEffects.MOLD = ForgeEffects.MOLD.get();
         ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
-
+        ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
+        ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
+        ModEffects.VIRUS_IMMUNITY = ForgeEffects.VIRUS_IMMUNITY.get();
 
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
