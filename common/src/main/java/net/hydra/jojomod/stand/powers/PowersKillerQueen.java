@@ -2900,7 +2900,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     int timeToDust = bitedTheDust.get(id);
 
                     if (timeToDust == this.btdTicks) {
-                        DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
+                        DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.BITES_THE_DUST, null);;
 
                         if (MainUtil.getReducedDamage(target)) {
                             target.hurt(dmg,
@@ -2935,7 +2935,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     int timeToDust = dayBitedTheDust.get(id);
 
                     if (timeToDust == btdTicks) {
-                        DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.DISINTEGRATION, null);;
+                        DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.BITES_THE_DUST, null);;
 
                         if ((PowerTypes.isExistentiallyElsewhere(target))) {
                             if (((StandUser)target).roundabout$getStandPowers() instanceof
@@ -2965,9 +2965,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            for (int id : toRemoveFromList) {
-                bitedTheDust.remove(id);
-            }
+            for (int id : toRemoveFromList) { bitedTheDust.remove(id); }
         }
     }
 
