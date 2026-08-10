@@ -294,6 +294,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderBasicHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersSheriffHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderSheriffHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
                                 && !hideExtraPartsWithSuit) {
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -1055,6 +1060,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,37);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.BasicHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,37);
+    }
+    public void renderSheriffHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,37);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.sheriffHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,37);
     }

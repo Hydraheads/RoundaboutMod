@@ -281,6 +281,7 @@ public class FabricItems {
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
     public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
+    public static Item SHERIFF_MASK = registerItem("sheriff_mask", new MaskItem(new Item.Properties().stacksTo(1), new SheriffVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
     public static Item MISTA_MASK = registerItem("mista_mask", new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null)));
     public static Item GHIACCIO_MASK = registerItem("ghiaccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null)));
@@ -479,6 +480,7 @@ public class FabricItems {
                         entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(TIM_MASK);
+                        entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
@@ -904,6 +906,7 @@ public class FabricItems {
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;
         ModItems.STEVEN_MASK = STEVEN_MASK;
+        ModItems.SHERIFF_MASK = SHERIFF_MASK;
         ModItems.MISTA_MASK = MISTA_MASK;
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;

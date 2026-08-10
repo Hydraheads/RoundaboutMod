@@ -135,6 +135,9 @@ public class VisageData {
     public boolean rendersBasicHat(){
         return false;
     }
+    public boolean rendersSheriffHat(){
+        return false;
+    }
     public boolean rendersSmallBreast(){
         return false;
     }
