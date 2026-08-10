@@ -37,6 +37,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -135,6 +136,10 @@ public class PowersSilverChariot extends NewPunchingStand {
         return 1;
     }
 
+    public int getArmRenderLevel() {
+        return 1;
+    }
+
     public int getSlabCuttingLevel() {
         return 1;
     }
@@ -173,6 +178,10 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public int getCooldownSelfGrab() {
+        return 1;
+    }
+
+    public int getCooldownArmRender() {
         return 1;
     }
 
@@ -219,6 +228,23 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getMiningLevel() {
         return getMiningTier();
+    }
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 14F;
+    }
+    @Override
+    public float getAxeMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getSwordMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getShovelMiningSpeed() {
+        return 8F;
     }
 
     public boolean armored = true;
@@ -379,7 +405,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // Look at PowersMagiciansRed code
 
                 // TODO: Implement rapier spin ability
-                // rapierSpinClient();
+                rapierSpinClient();
 
                 // Might implement forward barrage with 3 block range
             }
@@ -396,14 +422,14 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_NORMAL -> {
                 // TODO: Implement control mode ability
-                // toggleControlModeClient(0);
+                toggleControlModeClient(0);
             }
             case SKILL_2_CROUCH -> {
                 // Might implement another ability here
             }
             case SKILL_2_GUARD -> {
                 // TODO: Implement armor shed ability
-                // armorShedClient();
+                armorShedClient();
             }
             case SKILL_2_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -414,11 +440,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 // TODO: Implement carry self ability
                 // toggleControlModeClient((short) 1);
-                // selfGrabClient();
+                selfGrabClient();
             }
             case SKILL_3_GUARD -> {
                 // TODO: Implement Silver Chariot arm render ability
-                // armRenderClient();
+                armRenderClient();
             }
             case SKILL_3_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -462,6 +488,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case PowerIndex.POWER_3_SNEAK -> {
                 selfGrabServer();
+                return true;
+            }
+            case PowerIndex.POWER_3_BLOCK -> {
+                armRenderServer();
                 return true;
             }
             case PowerIndex.EXTRA -> {
@@ -1284,6 +1314,100 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
         super.onActuallyHurt($$0, $$1);
+    }
+
+
+
+    // Arm render mode
+    public void armRenderClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_3_GUARD) && canExecuteMoveWithLevel(getArmRenderLevel())) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+            tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+        }
+    }
+
+    public void armRenderServer() {
+        if (!this.self.level().isClientSide() && this.self instanceof Player player) {
+            this.poseStand(OffsetIndex.FOLLOW);
+            animateStand(StandEntity.IDLE);
+            xTryPower(PowerIndex.NONE, true);
+            if (!hasArmsOut) {
+                StandEntity standEntity = this.getStandUserSelf().roundabout$getStand();
+                if (standEntity != null) {
+                    standEntity.forceDespawn(true);
+                }
+                isRenderingArms = true;
+
+                if (!this.self.isCrouching()) {
+                    // playStandUserOnlySoundsIfNearby(SUMMON_ARMS, 10, true, false);
+                }
+            }
+            hasArmsOut = !hasArmsOut;
+            saveDiscAndSync();
+        }
+    }
+
+    public boolean hasArmsOut = false;
+    public boolean isRenderingArms = false;
+
+    @Override
+    public boolean canSummonStandAsEntity() {
+        if (hasArmsOut) {
+            return false;
+        }
+        return super.canSummonStandAsEntity();
+    }
+
+    @Override
+    public boolean hasHandsOut(){
+        return hasArmsOut;
+    }
+    @Override
+    public boolean hasHandsOutRendering(){
+        return isRenderingArms && self instanceof Player;
+    }
+
+    @Override
+    public void flipArmRendering() {
+        handTicks = 0;
+        isRenderingArms = false;
+        saveDiscAndSync();
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("hasArmsOut",hasArmsOut);
+        $$0.putBoolean("isRenderingArms",isRenderingArms);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("hasArmsOut")) {
+            hasArmsOut = $$0.getBoolean("hasArmsOut");
+        }
+        if ($$0.contains("isRenderingArms")) {
+            isRenderingArms = $$0.getBoolean("isRenderingArms");
+        }
+    }
+
+
+
+    // Rapier shot
+    public void rapierShotClient() {
+    }
+
+    public void rapierShotServer() {
+    }
+
+
+
+    // Rapier shot platform
+    public void rapierShotPlatformClient() {
+    }
+
+    public void rapierShotPlatformServer() {
     }
 
 
