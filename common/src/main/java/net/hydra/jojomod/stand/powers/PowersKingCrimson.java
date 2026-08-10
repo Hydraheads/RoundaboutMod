@@ -21,6 +21,7 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -86,6 +87,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.*;
@@ -404,7 +406,9 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
         if (!canPredictIdles() || !isGravityNormal(liv) ||
-                (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))){
+                (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))
+        || liv instanceof FallenMob || liv instanceof BaseMinion
+        ){
             return liv.position();
         }
         //Mobs and Players that are still still need to move when idle
@@ -2016,6 +2020,13 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (distance > getSkipBonusRange()) {
             return;
         }
+
+        WorldBorder border = self.level().getWorldBorder();
+        if (!border.isWithinBounds(new BlockPos((int) snapshot.position.x,
+                                           (int) snapshot.position.y, (int) snapshot.position.z))) {
+            return;
+        }
+
         if ((entity instanceof ThrowableProjectile && !(entity instanceof GasolineCanEntity))|| entity instanceof ItemEntity) {
             entity.setDeltaMovement(entity.getDeltaMovement().scale(0));
         } else if (entity instanceof Projectile pj) {
@@ -2476,6 +2487,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             if (isUsingTimeErase()){
                 return;
             }
+            WorldBorder border = self.level().getWorldBorder();
             if (epitaph.isEmpty()) {
                 if (onCooldown(PowerIndex.SKILL_2_SNEAK) && !canUseEpitaphWithoutSkip()){
                     return;
@@ -2519,6 +2531,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 }
 
 
+                                if (!border.isWithinBounds(new BlockPos((int) predicted.x,
+                                        (int) predicted.y, (int) predicted.z))) {
+                                    predicted = entity.position();
+                                }
+
                                 epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                         id,
                                         predicted,
@@ -2535,6 +2552,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         if (bt.getControllingPassenger() instanceof Player) {
                             predicted = predictBoat(bt, 40);
                         }
+
+                        if (!border.isWithinBounds(new BlockPos((int) predicted.x,
+                                (int) predicted.y, (int) predicted.z))) {
+                            predicted = entity.position();
+                        }
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
@@ -2545,6 +2567,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     } else if (entity instanceof PrimedTnt tnt) {
                         Vec3 predicted = predictTNT(tnt, 100);
 
+
+                        if (!border.isWithinBounds(new BlockPos((int) predicted.x,
+                                (int) predicted.y, (int) predicted.z))) {
+                            predicted = entity.position();
+                        }
                         epitaph.put(
                                 entity.getId(),
                                 new TimeSkipSnapshot(
@@ -2561,6 +2588,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         float xRot = entity.getXRot();
                         float yRot = entity.getYRot();
                         predicted = predictMinecart(bt,40);
+
+                        if (!border.isWithinBounds(new BlockPos((int) predicted.x,
+                                (int) predicted.y, (int) predicted.z))) {
+                            predicted = entity.position();
+                        }
                         epitaph.put(entity.getId(), new TimeSkipSnapshot(
                                 entity.getId(),
                                 predicted,
@@ -2971,6 +3003,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         ModSounds.VAMPIRE_DRAIN_EVENT,
                         SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
             } else {
+                if (!isBigOuchie) {
+                    if (!(self instanceof Player pl && pl.isCreative())) {
+                        MainUtil.makeBleed(self, 0, bloodTime, self);
+                    }
+                }
                 if (self instanceof ServerPlayer sp){
                     S2CPacketUtil.sendPlaySoundPacket(sp, sp.getId(), PowersKingCrimson.DRAIN_NOISE);
                 }
