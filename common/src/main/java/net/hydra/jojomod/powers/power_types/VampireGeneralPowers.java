@@ -960,7 +960,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getIceStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return playerDmgMult(2F);
+                return playerDmgMult(3.5F);
             } else {
                 return mobDmgMult(2F);
             }
