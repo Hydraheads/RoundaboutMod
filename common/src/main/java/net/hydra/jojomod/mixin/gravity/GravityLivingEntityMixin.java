@@ -349,7 +349,6 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         this.calculateEntityAnimation(this instanceof FlyingAnimal);
 
         ((StandUser)this).rdbt$doMoldDetection($$0);
-        ((StandUser)this).rdbt$doWindVisionDetection();
     }
 
 
