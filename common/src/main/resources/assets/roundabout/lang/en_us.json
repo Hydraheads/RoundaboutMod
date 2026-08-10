@@ -1220,7 +1220,7 @@
   "sounds.roundabout.anubis_barrage_1": "Sword Swing",
   "sounds.roundabout.anubis_barrage_1_hit": "Sword Barrage",
   "sounds.roundabout.anubis_barrage_end": "Sword Click",
-  "sounds.roundabout.anubis_swing": "Sword Click",
+  "sounds.roundabout.anubis_swing": "Sword Cut",
   "sounds.roundabout.anubis_crouch_swing": "Sword Swing",
   "sounds.roundabout.anubis_double_cut": "Sword Swing",
   "sounds.roundabout.anubis_thrust_cut": "Sword Crit",
@@ -1237,6 +1237,13 @@
   "sounds.roundabout.tusk_summon": "Stand Summon",
   "sounds.roundabout.tusk_flatten": "Flatten",
   "sounds.roundabout.tusk_warp": "Warp",
+  "sounds.roundabout.tusk_2_charge": "Tusk Charges",
+  "sounds.roundabout.tusk_2_shoot": "Tusk Shoots",
+  "sounds.roundabout.tusk_1_charge": "Tusk Charges",
+  "sounds.roundabout.tusk_1_shoot": "Tusk Charges",
+  "sounds.roundabout.tusk_hole_move": "???",
+  "sounds.roundabout.tusk_grab": "Tusk Grabs",
+  "sounds.roundabout.tusk_hole_impact": "Hole Impact",
 
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
