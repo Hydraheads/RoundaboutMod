@@ -632,12 +632,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
-
-        if (this.goalSelector != null) {
-            this.goalSelector.getAvailableGoals().stream()
-                    .map(WrappedGoal::getGoal)
-                    .forEach(this::roundabout$removeGoalTarget);
-        }
+        if (!(getType().builtInRegistryHolder().key().location().getNamespace().equals("mutantmonsters"))) {
+            if (this.goalSelector != null) {
+                this.goalSelector.getAvailableGoals().stream()
+                        .map(WrappedGoal::getGoal)
+                        .forEach(this::roundabout$removeGoalTarget);
+            }
             if (this.targetSelector != null) {
                 this.targetSelector.getAvailableGoals().stream()
                         .map(WrappedGoal::getGoal)
@@ -646,14 +646,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
                 if ($$1 != null) {
-                    if (((LivingEntity)(Object)this) instanceof Piglin) {
+                    if (((LivingEntity) (Object) this) instanceof Piglin) {
                         brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
                         brain.eraseMemory(MemoryModuleType.AVOID_TARGET);
                         brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
                         brain.eraseMemory(MemoryModuleType.ANGRY_AT);
                         brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
                     }
-                    if (((LivingEntity)(Object)this) instanceof PiglinBrute){
+                    if (((LivingEntity) (Object) this) instanceof PiglinBrute) {
                         brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT_PIGLIN);
                         brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
                         brain.eraseMemory(MemoryModuleType.ANGRY_AT);
@@ -661,6 +661,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     }
                 }
             }
+        }
     }
 
     @Unique

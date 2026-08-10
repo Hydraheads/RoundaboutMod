@@ -2211,6 +2211,48 @@
       "roundabout:tusk_4_summon"
     ]
   },
+  "tusk_2_shoot": {
+    "subtitle": "sounds.roundabout.tusk_2_shoot",
+    "sounds": [
+      "roundabout:tusk_2_shoot"
+    ]
+  },
+  "tusk_2_charge": {
+    "subtitle": "sounds.roundabout.tusk_2_charge",
+    "sounds": [
+      "roundabout:tusk_2_charge"
+    ]
+  },
+  "tusk_1_charge": {
+    "subtitle": "sounds.roundabout.tusk_1_charge",
+    "sounds": [
+      "roundabout:tusk_1_charge"
+    ]
+  },
+  "tusk_1_shoot": {
+    "subtitle": "sounds.roundabout.tusk_1_shoot",
+    "sounds": [
+      "roundabout:tusk_1_shoot"
+    ]
+  },
+  "tusk_hole_move": {
+    "subtitle": "sounds.roundabout.tusk_hole_move",
+    "sounds": [
+      "roundabout:tusk_hole_move"
+    ]
+  },
+  "tusk_grab": {
+    "subtitle": "sounds.roundabout.tusk_grab",
+    "sounds": [
+      "roundabout:tusk_grab"
+    ]
+  },
+  "tusk_hole_impact": {
+    "subtitle": "sounds.roundabout.tusk_hole_impact",
+    "sounds": [
+      "roundabout:tusk_hole_impact"
+    ]
+  },
 
 
 

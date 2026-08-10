@@ -7,10 +7,13 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
@@ -18,9 +21,13 @@ import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -127,17 +134,27 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
         }
     }
-
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        switch (move) {
+            case PowerIndex.POWER_1 -> { // Distortion
+                attemptDistortion();
+            }
+        }
+        return super.setPowerOther(move, lastMove);
+    }
     @Override
     public void powerActivate (PowerContext context){
         switch (context) {
+            case SKILL_1_NORMAL,SKILL_1_GUARD -> {
+                this.tryPowerPacket(PowerIndex.POWER_1);
+            }
             case SKILL_3_NORMAL ->
                     tryToDashClient();
             case SKILL_3_CROUCH ->
                     tryToStandLeapClient();
         }
     }
-
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -176,7 +193,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
+    public void attemptDistortion(){
+        if(canExecuteMoveWithLevel(4)) {
+            Distortion();
+        }
+    }
+    public void Distortion(){
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 1F);
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                self.addEffect(new MobEffectInstance(
+                        ModEffects.FACELESS, 100));//will be HAZE IMMUNITY
+            }
+            this.setCooldown(PowerIndex.SKILL_1, 400);
+        }
 
+    }
     public void bigLeap(LivingEntity entity,float range, float mult){
         Vec3 vec3d = entity.getEyePosition(1);
         Vec3 vec3d2 = entity.getViewVector(1);
@@ -220,7 +253,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "Feu_Ghost").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "Feu_Ghost/Lloyd10").withStyle(ChatFormatting.YELLOW);
     }
 
 

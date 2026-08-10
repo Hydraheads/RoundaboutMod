@@ -23,6 +23,9 @@ public interface IPlayerEntity {
     float rdbt$mutualMiningSpeedFunction2(BlockState $$0, GeneralPowers powers);
     void roundabout$setModChest(byte chestType);
     void roundabout$setBlinded(boolean blinded);
+    void roundabout$setCombatMode(boolean only);
+    boolean roundabout$getCombatMode();
+    boolean roundabout$getEffectiveCombatMode();
     void roundabout$SetPos(byte Pos);
     void rdbt$setCooldownQuery2();
     Deque<Vec3> rdbt$getMovementHistory();
