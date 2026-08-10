@@ -3341,6 +3341,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+99, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
                 "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.sha_mining",
+                "instruction.roundabout.press_block", StandIcons.KILLER_QUEEN_SHA_MINE,0,level, bypas));
 
 
         return $$1;

@@ -2057,8 +2057,8 @@
   "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves",
   "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
-
-
+  "ability.roundabout.sha_mining":"Sheer heart attack mining",
+  "ability.roundabout.sha_mining.desc":"Right click sha with a torch, he will continue the direction that he is facing, and explode blocks when he collides, doesnt destroy ores.",
 
   "ability.roundabout.arms_mode":"Arms Mode",
   "ability.roundabout.arms_mode.desc":"Hide your stand. Replaces your attacks with up close brawling punching that disable shields like axes. You lose access to many of your abilities while this is toggled, but can use major abilities discretely.",
