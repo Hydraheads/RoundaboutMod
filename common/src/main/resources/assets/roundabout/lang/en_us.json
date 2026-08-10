@@ -893,10 +893,10 @@
   "death.attack.disintegration.player": "%1$s was disintegrated by %2$s",
   "death.attack.disintegration.item": "%1$s disintegrated",
   "death.attack.disintegration.player.item": "%1$s was disintegrated by %$2s",
-  "death.attack.bites_the_dust": "%1$s bites the dust",
-  "death.attack.bites_the_dust.player": "%1$s had bites the dust by %2$s",
-  "death.attack.bites_the_dust.item": "%1$s bites the dust",
-  "death.attack.bites_the_dust.player.item": "%1$s had bites the dust by %$2s",
+  "death.attack.bites_the_dust": "%1$s bit the dust",
+  "death.attack.bites_the_dust.player": "%%$2s made %1$s bite the dust",
+  "death.attack.bites_the_dust.item": "%1$s bit the dust",
+  "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -938,6 +938,7 @@
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
+  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Haze.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -2056,8 +2057,8 @@
   "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves",
   "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
-
-
+  "ability.roundabout.sha_mining":"Sheer heart attack mining",
+  "ability.roundabout.sha_mining.desc":"Right click sha with a torch, he will continue the direction that he is facing, and explode blocks when he collides, doesnt destroy ores.",
 
   "ability.roundabout.arms_mode":"Arms Mode",
   "ability.roundabout.arms_mode.desc":"Hide your stand. Replaces your attacks with up close brawling punching that disable shields like axes. You lose access to many of your abilities while this is toggled, but can use major abilities discretely.",

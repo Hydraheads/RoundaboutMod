@@ -22,4 +22,6 @@ public class ModEffects {
     public static MobEffect SWITCH;
     public static MobEffect CRIPPLED;
     public static MobEffect HAZE_VIRUS;
+    public static MobEffect DISTORTION_VIRUS;
+    public static MobEffect VIRUS_IMMUNITY;
 }
