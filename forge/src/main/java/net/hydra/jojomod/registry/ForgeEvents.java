@@ -691,7 +691,7 @@ public class ForgeEvents {
         ModEffects.SWITCH = ForgeEffects.SWITCH.get();
         ModEffects.MOLD = ForgeEffects.MOLD.get();
         ModEffects.CRIPPLED = ForgeEffects.CRIPPLED.get();
-
+        ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
 
 
         ModEntities.VAN_GOUGH_PAINTING = ForgeEntities.VAN_GOUGH_PAINTING.get();
