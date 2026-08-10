@@ -210,6 +210,9 @@ public abstract class EntityAndData implements IEntityAndData {
         } else {
             roundabout$trueInvisibilityManhattan--;
         }
+        if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {
+            roundabout$trueInvisibilityManhattan = 0;
+        }
         rdbt$lastPos = position;
     }
 

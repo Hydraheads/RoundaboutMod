@@ -6134,36 +6134,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private double previousXposManhattan = 0.0;
     private double previousZposManhattan = 0.0;
 
-    @Unique
-    @Override
-    public void roundabout$doWindVisionDetectionOther() {
-        /** May not be the best thing, but it's to fix entities potentially not showing up ex. Vexes. The one in EntityAndData was made becausemobs such ghasts and phantoms wouldn't show up as they aren't marked as living entities. I guess it should fix the problem for all entities :) */
-        /*Think of those two as a double check.*/
-        /*Last note: put every entity in the Vex check in case some other entity will need it*/
-        if (!this.level().isClientSide) {
-            IEntityAndData entityAndData = ((IEntityAndData) this);
-            boolean down = previousYposManhattan > this.getY();
-            boolean up = previousYposManhattan < this.getY();
-            boolean movementX = previousXposManhattan != this.getX();
-            boolean movementZ = previousZposManhattan != this.getZ();
-                if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
-                if (((Entity) (Object) this) instanceof Vex v) {
-                    if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    } else {
-                        if (down || up) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                        }
-                        else if (movementX || movementZ) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                        }
-                    }
-                }
-        }
-        previousYposManhattan = this.getY();
-        previousXposManhattan = this.getX();
-        previousZposManhattan = this.getZ();
-    }
-
     public final Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1) {
         float $$2 = $$0 * (float) (Math.PI / 180.0);
         float $$3 = -$$1 * (float) (Math.PI / 180.0);
@@ -6334,9 +6304,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             BtdPlantedTicks = e;
         }
     }
-
-    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void WindDetectionBackup(Vec3 mov, CallbackInfo ci){roundabout$doWindVisionDetectionOther();}
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
