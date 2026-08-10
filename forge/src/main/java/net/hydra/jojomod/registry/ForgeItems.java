@@ -819,6 +819,10 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null))));
     public static final RegistryObject<Item> DIEGO_2_MASK = addToTab(ITEMS.register("diego_2_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null))));
+    public static final RegistryObject<Item> SANDMAN_MASK = addToTab(ITEMS.register("sandman_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null))));
+    public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
     public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> RINGO_MASK = addToTab(ITEMS.register("ringo_mask",
@@ -837,8 +841,6 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null))));
     public static final RegistryObject<Item> GUCCIO_MASK = addToTab(ITEMS.register("guccio_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new GuccioVisage(null))));
-    public static final RegistryObject<Item> POCOLOCO_MASK = addToTab(ITEMS.register("pocoloco_mask",
-            () -> new MaskItem(new Item.Properties().stacksTo(1), new PocolocoVisage(null))));
     public static final RegistryObject<Item> VALENTINE_MASK = addToTab(ITEMS.register("valentine_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null))));
     public static final RegistryObject<Item> SHIZUKA_MASK = addToTab(ITEMS.register("shizuka_mask",

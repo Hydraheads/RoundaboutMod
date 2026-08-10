@@ -114,6 +114,9 @@ public class VisageData {
     public boolean rendersDaiyaEars(){
         return false;
     }
+    public boolean rendersSandmanHair(){
+        return false;
+    }
     public boolean rendersGyroHat(){
         return false;
     }
