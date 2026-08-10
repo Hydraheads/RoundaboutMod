@@ -194,7 +194,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     public void attemptDistortion(){
-        if(canExecuteMoveWithLevel(6)) {
+        if(canExecuteMoveWithLevel(4)) {
             Distortion();
         }
     }

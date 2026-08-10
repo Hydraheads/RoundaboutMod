@@ -76,6 +76,14 @@ public class ForgeEffects{
             POTION_EFFECTS.register("haze_virus", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11606258)
             );
+    public static final RegistryObject<MobEffect> DISTORTION_VIRUS =
+            POTION_EFFECTS.register("distortion_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
+    public static final RegistryObject<MobEffect> VIRUS_IMMUNITY =
+            POTION_EFFECTS.register("virus_immunity", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
 
 
     public static class Effect extends MobEffect{

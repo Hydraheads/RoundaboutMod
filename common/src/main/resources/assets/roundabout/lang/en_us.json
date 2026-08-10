@@ -938,6 +938,7 @@
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
+  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Haze.",
 
   "item.glaive.charge_power": "Charge Attack",
 
