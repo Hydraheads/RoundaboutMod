@@ -205,7 +205,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void roundabout$tickTrueInvisibilityManhattan(){
         Vec3 position =  getPosition(1);
-        if (rdbt$lastPos.distanceToSqr(position) > 0.01F){
+        if (rdbt$lastPos != null && rdbt$lastPos.distanceToSqr(position) > 0.01F){
             roundabout$trueInvisibilityManhattan = 80;
         } else {
             roundabout$trueInvisibilityManhattan--;

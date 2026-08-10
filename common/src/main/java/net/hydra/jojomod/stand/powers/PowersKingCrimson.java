@@ -3207,7 +3207,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     public int disengageTime = 0;
     public boolean isBeyondRange(){
-        if (self.level().isClientSide()){
+        if (self.level().isClientSide()) {
             disengageTarget = self.level().getEntity(disengageTargetInt);
         }
 
@@ -3310,8 +3310,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 withStyle(ChatFormatting.WHITE);
 
                         for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
-                            if (player.distanceToSqr(self) <= rangeSqr) {
-                                player.sendSystemMessage(message);
+                            if (player != null && player.isAlive()) {
+                                if (player.distanceToSqr(self) <= rangeSqr) {
+                                    player.sendSystemMessage(message);
+                                }
                             }
                         }
                     }
