@@ -6,6 +6,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
+import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -55,6 +56,11 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+    }
+
+    @Override
+    public int getDisplayPowerInventoryScale(){
+        return 27;
     }
 
     @Override
