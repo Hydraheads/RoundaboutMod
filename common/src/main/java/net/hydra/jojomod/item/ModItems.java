@@ -197,6 +197,7 @@ public class ModItems {
     public static Item JOHNNY_MASK;
     public static Item JOHNGALLIA_MASK;
     public static Item LUCY_MASK;
+    public static Item STEVEN_MASK;
     public static Item AESTHETICIAN_MASK_1;
     public static Item AESTHETICIAN_MASK_2;
     public static Item AESTHETICIAN_MASK_3;
@@ -300,6 +301,7 @@ public class ModItems {
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(STEVEN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DIEGO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);
