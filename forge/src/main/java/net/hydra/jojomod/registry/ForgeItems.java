@@ -819,6 +819,8 @@ public class ForgeItems {
             () -> new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null))));
     public static final RegistryObject<Item> DIEGO_2_MASK = addToTab(ITEMS.register("diego_2_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null))));
+    public static final RegistryObject<Item> TIM_MASK = addToTab(ITEMS.register("tim_mask",
+            () -> new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null))));
     public static final RegistryObject<Item> RINGO_MASK = addToTab(ITEMS.register("ringo_mask",
             () -> new MaskItem(new Item.Properties().stacksTo(1), new RingoVisage(null))));
     public static final RegistryObject<Item> DAIYA_MASK = addToTab(ITEMS.register("daiya_mask",

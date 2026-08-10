@@ -87,6 +87,9 @@ public class VisageData {
     public boolean rendersTasselHat(){
         return false;
     }
+    public boolean rendersTimHat(){
+        return false;
+    }
     public boolean rendersLegCloakPart(){
         return false;
     }

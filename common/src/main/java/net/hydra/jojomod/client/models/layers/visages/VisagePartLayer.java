@@ -303,7 +303,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderJosukeDecals(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDaiyaEars() && !isBodyFrozen) {
+                        if (vd.rendersDaiyaFluff() && !isBodyFrozen) {
                             if (!hideExtraPartsWithSuit) {
                                 renderDaiyaFluff(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                         r, g, b);
@@ -328,6 +328,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
                                 && !hideExtraPartsWithSuit) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersTimHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            rendersTimHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersLegCloakPart() && !isBodyFrozen && !hideExtraPartsWithSuit) {
@@ -1171,6 +1176,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,41);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.ratHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,41);
+    }
+    public void rendersTimHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,41);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.timHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,41);
     }

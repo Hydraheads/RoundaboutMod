@@ -66,6 +66,7 @@ public class ModStrayModels {
     public static JosukeDecalsPart JosukeDecalsPart;
     public static TasselHatPart TasselHatPart;
     public static RatHatPart ratHatPart;
+    public static TimHatPart timHatPart;
     public static RatRightLegPart ratRightLegPart;
     public static RatLeftLegPart ratLeftLegPart;
     public static DiegoRightLegPart diegoRightLegPart;
