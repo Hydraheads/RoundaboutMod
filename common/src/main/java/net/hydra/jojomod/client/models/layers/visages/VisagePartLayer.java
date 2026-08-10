@@ -304,6 +304,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersDotHanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderDotHanHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersSandmanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
                                 && !hideExtraPartsWithSuit) {
                             renderSandmanHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -1079,6 +1084,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,38);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.SandmanHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,38);
+    }
+    public void renderDotHanHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,38);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.dotHanHair.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,38);
     }
