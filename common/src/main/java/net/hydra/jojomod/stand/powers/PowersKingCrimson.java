@@ -29,6 +29,8 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -3288,8 +3290,23 @@ public class PowersKingCrimson extends BlockGrabPreset {
                         double range = getSkipBonusRange();
                         double rangeSqr = range * range;
 
+                        Component displayName = self.getDisplayName();
+                        if (ClientNetworking.getAppropriateConfig() != null  &&
+                                ClientNetworking.getAppropriateConfig().nameTagSettings != null) {
+                            IPlayerEntity ipe = ((IPlayerEntity) sp);
+                            ItemStack visage = ipe.roundabout$getMaskSlot();
+                            if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
+                                VisageData vd = ME.visageData.generateVisageData(self);
+                                boolean characterType = vd.isCharacterVisage();
+                                if (characterType) {
+                                    if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
+                                        displayName = ME.getDisplayNameTag();
+                                    }
+                                }
+                            }
+                        }
                         Component message = Component.translatable("text.roundabout.time_erase",
-                                self.getDisplayName()).withStyle(ChatFormatting.BOLD).
+                                        displayName).withStyle(ChatFormatting.BOLD).
                                 withStyle(ChatFormatting.WHITE);
 
                         for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
