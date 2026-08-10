@@ -275,6 +275,7 @@ public class FabricItems {
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
+    public static Item DIEGO_2_MASK = registerItem("diego_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
     public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
@@ -472,6 +473,7 @@ public class FabricItems {
                         entries.accept(LUCY_MASK);
                         entries.accept(STEVEN_MASK);
                         entries.accept(DIEGO_MASK);
+                        entries.accept(DIEGO_2_MASK);
                         entries.accept(POCOLOCO_MASK);
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
@@ -890,6 +892,7 @@ public class FabricItems {
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
+        ModItems.DIEGO_2_MASK = DIEGO_2_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;

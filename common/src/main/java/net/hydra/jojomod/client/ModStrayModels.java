@@ -51,6 +51,7 @@ public class ModStrayModels {
     public static GyroHatPart gyroHatPart;
     public static SteelBallsPart steelBallsPart;
     public static DiegoHatPart DiegoHatPart;
+    public static Diego2HatPart Diego2HatPart;
     public static DoppioHairPart DoppioHairPart;
     public static JohnnyHatPart JohnnyHatPart;
     public static DaiyaEarsPart DaiyaEarsPart;
@@ -67,6 +68,8 @@ public class ModStrayModels {
     public static RatHatPart ratHatPart;
     public static RatRightLegPart ratRightLegPart;
     public static RatLeftLegPart ratLeftLegPart;
+    public static DiegoRightLegPart diegoRightLegPart;
+    public static DiegoLeftLegPart diegoLeftLegPart;
     public static RatTailPart ratTailPart;
     public static LegCloakPart LegCloakPart;
     public static BarrageArmsPart barrageArmsPart;

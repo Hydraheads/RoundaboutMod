@@ -244,6 +244,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderLucyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersDiegoLegs() && !isBodyFrozen && !HeatUtil.isLegsFrozen(entity) && !hideExtraPartsWithSuit) {
+                            renderDiegoLeftLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                            renderDiegoRightLeg(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
                         if (vd.rendersDoppioHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderDoppioHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -256,6 +262,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
                                 && !hideExtraPartsWithSuit) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersDiego2Hat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                                && !hideExtraPartsWithSuit) {
+                            renderDiego2Hat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersGyroHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
@@ -787,6 +798,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
+    public void renderDiego2Hat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.Diego2HatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
     public void renderDoppioHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
 
@@ -1124,6 +1144,24 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,40);
         getParentModel().leftLeg.translateAndRotate(poseStack);
         ModStrayModels.ratLeftLegPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderDiegoRightLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                  float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().rightLeg.translateAndRotate(poseStack);
+        ModStrayModels.diegoRightLegPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,40);
+    }
+    public void renderDiegoLeftLeg(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                 float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,40);
+        getParentModel().leftLeg.translateAndRotate(poseStack);
+        ModStrayModels.diegoLeftLegPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,40);
     }

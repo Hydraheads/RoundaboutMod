@@ -550,6 +550,7 @@ public class ForgeEvents {
         ModItems.AVDOL_MASK = ForgeItems.AVDOL_MASK.get();
         ModItems.KAKYOIN_MASK = ForgeItems.KAKYOIN_MASK.get();
         ModItems.DIEGO_MASK = ForgeItems.DIEGO_MASK.get();
+        ModItems.DIEGO_2_MASK = ForgeItems.DIEGO_2_MASK.get();
         ModItems.RINGO_MASK = ForgeItems.RINGO_MASK.get();
         ModItems.HATO_MASK = ForgeItems.HATO_MASK.get();
         ModItems.SHIZUKA_MASK = ForgeItems.SHIZUKA_MASK.get();
