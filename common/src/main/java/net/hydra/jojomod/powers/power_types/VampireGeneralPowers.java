@@ -648,56 +648,6 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 Vec3 look = self.getLookAngle();
                 Vec3 end = start.add(look.scale(40.0D));
                 AABB beamBox = new AABB(start, end).inflate(1.5D);
-                List<LivingEntity> targets = self.level().getEntitiesOfClass(
-                        LivingEntity.class,
-                        beamBox,
-                        entity -> entity != self && entity.isAlive()
-                );
-                for (LivingEntity target : targets) {
-
-                    AABB targetBox = target.getBoundingBox().inflate(0.3D);
-
-                    Optional<Vec3> hit = targetBox.clip(start, end);
-
-                    if (hit.isPresent()&& !(target instanceof StandEntity)) {
-                        if (
-                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
-                                        ||
-                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
-                                    || MainUtil.canActuallyHitInvolved(target,self)
-                        ) {
-
-                            float pow = getRipperEyeStrength(target);
-                            pow = applyComboDamage(pow);
-                            if (alreadyBeamed.contains(target)) {
-                                pow *= 0.1F;
-                                if (MainUtil.getReducedDamage(target)) {
-                                    pow *= 0.2F;
-                                }
-                            }
-
-                            if (target.hurtTime == 0) {
-                                if (!((TimeStop) self.level()).CanTimeStopEntity(self)) {
-                                    if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                        addToCombo(target);
-                                        bleedEnt(target);
-                                    } else if (target.isBlocking()) {
-                                        MainUtil.knockShieldPlusStand(target, 200);
-                                        if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                            addToCombo(target);
-                                            bleedEnt(target);
-                                        }
-                                    }
-                                    if (!alreadyBeamed.contains(target)) {
-                                        alreadyBeamed.add(target);
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
                 ClipContext context = new ClipContext(
                         start,
                         end,
@@ -706,12 +656,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         self
                 );
 
+                double farDist = 100;
+
                 BlockHitResult blockHit = self.level().clip(context);
                 if (blockHit.getType() == HitResult.Type.BLOCK) {
 
                     Vec3 hitPos = blockHit.getLocation();
+                    farDist = self.position().distanceTo(new Vec3(hitPos.x,hitPos.y,hitPos.z));
 
-                    ((ServerLevel) self.level()).sendParticles(
+                            ((ServerLevel) self.level()).sendParticles(
                             ParticleTypes.FLAME,
                             hitPos.x,
                             hitPos.y,
@@ -730,6 +683,71 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             0.01
                     );
                 }
+
+                List<LivingEntity> targets = self.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        beamBox,
+                        entity -> entity != self && entity.isAlive()
+                );
+                for (LivingEntity target : targets) {
+
+                    boolean reduced = false;
+                    AABB targetBox = target.getBoundingBox().inflate(0.3D);
+
+                    Optional<Vec3> hit = targetBox.clip(start, end);
+                    if (hit.isPresent()&& !(target instanceof StandEntity)) {
+                        if (
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
+                                        ||
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
+                                    || MainUtil.canActuallyHitInvolved(target,self)
+                        ) {
+
+                            float pow = getRipperEyeStrength(target);
+                            pow = applyComboDamage(pow);
+                            if (alreadyBeamed.contains(target)) {
+                                pow *= 0.1F;
+                                if (MainUtil.getReducedDamage(target)) {
+                                    pow *= 0.2F;
+                                }
+                            }
+
+                            if (target.distanceTo(self) > farDist){
+                                reduced = true;
+                                pow*=0.6F;
+                            }
+
+                            if (target.hurtTime == 0) {
+                                if (!((TimeStop) self.level()).CanTimeStopEntity(self)) {
+                                    if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                        addToCombo(target);
+                                        if (!reduced){
+                                            bleedEnt(target);
+                                        } else {
+                                            bleedEnt2(target);
+                                        }
+                                    } else if (target.isBlocking()) {
+                                        MainUtil.knockShieldPlusStand(target, 200);
+                                        if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                            addToCombo(target);
+                                            if (!reduced) {
+                                                bleedEnt(target);
+                                            } else {
+                                                bleedEnt2(target);
+                                            }
+                                        }
+                                    }
+                                    if (!alreadyBeamed.contains(target)) {
+                                        alreadyBeamed.add(target);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+
 
                 if (ripperEyesLeft <= 0){
                     xTryPower(PowerIndex.NONE, true);
@@ -751,6 +769,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (entity instanceof LivingEntity LE && MainUtil.getMobBleed(LE)){
             MainUtil.makeBleed(LE,1,200,self);
             MainUtil.makeMobBleed(LE);
+        }
+    }
+    public void bleedEnt2(Entity entity){
+        if (entity instanceof LivingEntity LE && MainUtil.getMobBleed(LE)){
+            MainUtil.makeBleed(LE,0,300,self);
         }
     }
     @Override
