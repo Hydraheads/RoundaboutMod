@@ -195,6 +195,7 @@ public class ModItems {
     public static Item DIEGO_MASK;
     public static Item DIEGO_2_MASK;
     public static Item VALENTINE_MASK;
+    public static Item SHERIFF_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
@@ -312,8 +313,10 @@ public class ModItems {
         addToVisageStore(SANDMAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(POCOLOCO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(TIM_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(SHERIFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(SHERIFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(JOSUKE_PART_EIGHT_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DAIYA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DAIYA_2_MASK,page, characterCostExp, characterCostEmerald);
