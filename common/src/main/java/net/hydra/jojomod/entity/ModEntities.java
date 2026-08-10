@@ -20,6 +20,8 @@ import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
 import net.hydra.jojomod.entity.zombie_minion.*;
+import net.hydra.jojomod.entity.projectile.HallucinatoryAcidProjectile;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -38,6 +40,7 @@ public class ModEntities {
     public static EntityType<AnubisGuardian> ANUBIS_GUARDIAN;
     public static EntityType<TheWorldEntity> THE_WORLD;
     public static EntityType<TheWorldEntity> THE_WORLD_ULTIMATE;
+    public static EntityType<WhitesnakeEntity> WHITESNAKE;
     public static EntityType<D4CEntity> D4C;
     public static EntityType<KingCrimsonEntity> KING_CRIMSON;
     public static EntityType<ReaperKingCrimsonEntity> KING_CRIMSON_REAPER;
@@ -114,6 +117,7 @@ public class ModEntities {
     public static EntityType<PWBigMeteorEntity> PW_BIG_METEOR;
     public static EntityType<FakeItemEntity> FAKE_ITEM;
     public static EntityType<FakeExperienceOrb> FAKE_EXP;
+    public static EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;
@@ -147,6 +151,7 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<PucciNPC> PUCCI;
 
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
     public static EntityType<MonaLisaPainting> MONA_LISA_PAINTING;

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.hydra.jojomod.event.commands.RoundaboutDiscCommand;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -11,6 +12,9 @@ import net.minecraft.server.commands.ExperienceCommand;
 
 public class CommandRegistryFabric {
     public static void register() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+                RoundaboutDiscCommand.register(dispatcher));
+
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(dispatcher.register((((Commands.literal("heal").requires(source
                         -> source.hasPermission(2))).executes(context -> RoundaboutCommands.executeHeal((CommandSourceStack)context.getSource(),

@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -76,6 +77,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro"),
                         EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_jotaro")
+                );
+        public static final EntityType<PucciNPC> PUCCI =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_pucci"),
+                        EntityType.Builder.of(PucciNPC::new, MobCategory.MISC).
+                                sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_pucci")
                 );
         public static final EntityType<AvdolNPC> AVDOL =
                 Registry.register(
@@ -320,6 +328,16 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonEntity::new, MobCategory.MISC).
                             sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_crimson")
             );
+    public static final EntityType<WhitesnakeEntity> WHITESNAKE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE, Roundabout.location("whitesnake"),
+            EntityType.Builder.of(WhitesnakeEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.8F).clientTrackingRange(14)
+                    .build(Roundabout.MOD_ID + ":whitesnake"));
+    public static final EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE, Roundabout.location("hallucinatory_acid_projectile"),
+            EntityType.Builder.<HallucinatoryAcidProjectile>of(HallucinatoryAcidProjectile::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F).clientTrackingRange(8).updateInterval(10)
+                    .build(Roundabout.MOD_ID + ":hallucinatory_acid_projectile"));
     public static final EntityType<D4CEntity> D4C =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1040,6 +1058,8 @@ public class FabricEntities {
                 /*Common Code Bridge*/
                 ModEntities.THE_WORLD = THE_WORLD;
                 ModEntities.KING_CRIMSON = KING_CRIMSON;
+                ModEntities.WHITESNAKE = WHITESNAKE;
+                ModEntities.HALLUCINATORY_ACID_PROJECTILE = HALLUCINATORY_ACID_PROJECTILE;
                 ModEntities.D4C = D4C;
                 ModEntities.KING_CRIMSON_REAPER = KING_CRIMSON_REAPER;
                 ModEntities.THE_WORLD_ULTIMATE = THE_WORLD_ULTIMATE;
@@ -1155,6 +1175,7 @@ public class FabricEntities {
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
+                ModEntities.PUCCI = PUCCI;
                 ModEntities.AVDOL = AVDOL;
                 ModEntities.VALENTINE = VALENTINE;
                 ModEntities.DIO = DIO;
@@ -1192,6 +1213,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(PUCCI, PucciNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AVDOL, AvdolNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(VALENTINE, ValentineNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(DIO, DIONPC.createAttributes());
@@ -1231,6 +1253,7 @@ public class FabricEntities {
 
                 FabricDefaultAttributeRegistry.register(THE_WORLD, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON, StandEntity.createStandAttributes());
+        FabricDefaultAttributeRegistry.register(WHITESNAKE, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(D4C, StandEntity.createStandAttributes());
         FabricDefaultAttributeRegistry.register(KING_CRIMSON_REAPER, StandEntity.createStandAttributes());
 

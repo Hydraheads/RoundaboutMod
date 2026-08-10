@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -52,6 +53,7 @@ public class MaxStandDiscItem extends StandDiscItem{
                 $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
             }
         }
+        DiscItemData.addOwnerTooltip($$0, $$2, false);
 
     }
 }

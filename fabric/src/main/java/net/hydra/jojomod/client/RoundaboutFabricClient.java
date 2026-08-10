@@ -3,6 +3,8 @@ package net.hydra.jojomod.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.FancyLighterItem;
@@ -58,15 +60,33 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.MELON_PARFAIT);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
                 ModBlocks.COLD_AIR, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
-                ModBlocks.WHITE_ALBUM_ICE_SLAB);
+                ModBlocks.WHITE_ALBUM_ICE_SLAB, ModBlocks.HALLUCINATORY_ACID,
+                ModBlocks.HALLUCINATORY_ACID_WALL);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
+        registerWhitesnakeClient();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_MANGA, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.STRAY_CAT_ANIME, new ResourceLocation(Roundabout.MOD_ID,"anim"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((StrayCatItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack, livingEntity) : 0.0f);
         ItemProperties.register(FabricItems.FANCY_LIGHTER, new ResourceLocation(Roundabout.MOD_ID,"islit"), (itemStack, clientLevel, livingEntity, i) ->  !itemStack.isEmpty() ? ((FancyLighterItem)(itemStack.getItem())).getCurrentPredicateValue(clientLevel, itemStack) : 0.0f);
         ClientClass.init();
+    }
+
+    private static void registerWhitesnakeClient() {
+        ModelLoadingPlugin.register(context -> context.modifyModelAfterBake().register((model, modelContext) -> {
+            ResourceLocation id = modelContext.id();
+            if (model != null && id.getNamespace().equals(Roundabout.MOD_ID)
+                    && id.getPath().startsWith("hallucinatory_acid")) {
+                return new HallucinationAcidBakedModel(model);
+            }
+            return model;
+        }));
+        ColorProviderRegistry.BLOCK.register(
+                (state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
+                ModBlocks.HALLUCINATORY_ACID, ModBlocks.HALLUCINATORY_ACID_WALL);
+        ColorProviderRegistry.ITEM.register(HallucinatoryAcidColors::itemColor,
+                FabricItems.HALLUCINATORY_ACID_GLOB);
     }
 }

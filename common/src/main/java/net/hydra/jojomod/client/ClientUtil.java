@@ -1490,6 +1490,11 @@ public class ClientUtil {
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void openNailScreen(){Minecraft.getInstance().setScreen(new NailColorChangeScreen());}
+    public static void openDiscStealScreen(){Minecraft.getInstance().setScreen(new DiscStealScreen());}
+    public static void openWhitesnakeDisguiseScreen(){Minecraft.getInstance().setScreen(new WhitesnakeDisguiseScreen());}
+    public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
+        Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
+    }
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){

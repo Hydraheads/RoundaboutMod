@@ -15,6 +15,10 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.item.CommandDiscItem;
+import net.hydra.jojomod.item.HearingDiscItem;
+import net.hydra.jojomod.item.MemoryDiscItem;
+import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -78,6 +82,41 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+
+    public static final Item STAND_DISC_WHITESNAKE = registerItem("whitesnake_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
+    public static final Item MAX_STAND_DISC_WHITESNAKE = registerItem("max_whitesnake_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
+    public static final Item SIGHT_DISC = registerItem("sight_disc",
+            new SightDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item MEMORY_DISC = registerItem("memory_disc",
+            new MemoryDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item HEARING_DISC = registerItem("hearing_disc",
+            new HearingDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item JUMP_BACK_COMMAND_DISC = registerItem("jump_back_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.JUMP_BACK));
+    public static final Item ATTACK_COMMAND_DISC = registerItem("attack_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.ATTACK));
+    public static final Item FORGET_COMMAND_DISC = registerItem("forget_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
+    public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
+    public static final Item HALLUCINATORY_ACID_GLOB = registerItem("hallucinatory_acid_glob",
+            new Item(new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 2, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_3 = registerItem("hallucinatory_acid_height_3",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 3, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_4 = registerItem("hallucinatory_acid_height_4",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 4, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_WALL = registerItem("hallucinatory_acid_wall",
+            new BlockItem(FabricBlocks.HALLUCINATORY_ACID_WALL, new Item.Properties()));
+    public static final Item PUCCI_MASK = registerItem("pucci_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new PucciVisage(null)));
+    public static final Item PUCCI_MANGA_MASK = registerItem("pucci_manga_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new PucciMangaVisage(null)));
 
 
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
@@ -689,6 +728,23 @@ public class FabricItems {
                         entries.accept(FANCY_LIGHTER);
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
+                        entries.accept(STAND_DISC_WHITESNAKE);
+                        entries.accept(MAX_STAND_DISC_WHITESNAKE);
+                        entries.accept(SIGHT_DISC);
+                        entries.accept(MEMORY_DISC);
+                        entries.accept(HEARING_DISC);
+                        entries.accept(JUMP_BACK_COMMAND_DISC);
+                        entries.accept(ATTACK_COMMAND_DISC);
+                        entries.accept(FORGET_COMMAND_DISC);
+                        entries.accept(EXPLOSIVE_COMMAND_DISC);
+                        entries.accept(HALLUCINATORY_ACID_GLOB);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_1);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_2);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_3);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
+                        entries.accept(HALLUCINATORY_ACID_WALL);
+                        entries.accept(PUCCI_MASK);
+                        entries.accept(PUCCI_MANGA_MASK);
 
 
                     }).build());
@@ -742,6 +798,24 @@ public class FabricItems {
         ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
         ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
         ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
+        ModItems.STAND_DISC_WHITESNAKE = STAND_DISC_WHITESNAKE;
+        ((MaxStandDiscItem) MAX_STAND_DISC_WHITESNAKE).baseDisc = (StandDiscItem) STAND_DISC_WHITESNAKE;
+        ModItems.MAX_STAND_DISC_WHITESNAKE = MAX_STAND_DISC_WHITESNAKE;
+        ModItems.SIGHT_DISC = SIGHT_DISC;
+        ModItems.MEMORY_DISC = MEMORY_DISC;
+        ModItems.HEARING_DISC = HEARING_DISC;
+        ModItems.JUMP_BACK_COMMAND_DISC = JUMP_BACK_COMMAND_DISC;
+        ModItems.ATTACK_COMMAND_DISC = ATTACK_COMMAND_DISC;
+        ModItems.FORGET_COMMAND_DISC = FORGET_COMMAND_DISC;
+        ModItems.EXPLOSIVE_COMMAND_DISC = EXPLOSIVE_COMMAND_DISC;
+        ModItems.HALLUCINATORY_ACID_GLOB = HALLUCINATORY_ACID_GLOB;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_1 = HALLUCINATORY_ACID_HEIGHT_1;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_2 = HALLUCINATORY_ACID_HEIGHT_2;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_3 = HALLUCINATORY_ACID_HEIGHT_3;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_4 = HALLUCINATORY_ACID_HEIGHT_4;
+        ModItems.HALLUCINATORY_ACID_WALL = HALLUCINATORY_ACID_WALL;
+        ModItems.PUCCI_MASK = PUCCI_MASK;
+        ModItems.PUCCI_MANGA_MASK = PUCCI_MANGA_MASK;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;

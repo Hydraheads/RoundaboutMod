@@ -88,6 +88,8 @@ public class ModBlocks {
     public static Block BLUE_BLOOD_SPLATTER;
     public static Block ENDER_BLOOD_SPLATTER;
     public static Block ACID_PUDDLE;
+    public static HallucinatoryAcidBlock HALLUCINATORY_ACID;
+    public static HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL;
     public static Block POISON_TRAIL_MUSHROOM;
 
     public static Block WIRE_TRAP;
@@ -200,6 +202,7 @@ public class ModBlocks {
     public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
+    public static BlockEntityType<HallucinatoryAcidBlockEntity> HALLUCINATORY_ACID_BLOCK_ENTITY;
     //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
 
     public static Block WHITE_ALBUM_ICE_BLOCK_PROPERTIES =

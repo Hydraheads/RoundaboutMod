@@ -6,6 +6,37 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 
 public class StandIcons {
+    private static ResourceLocation whitesnakeIcon(String path) {
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/gui/icons/whitesnake/" + path + ".png");
+    }
+
+    public static final ResourceLocation WHITESNAKE_PUNCH = whitesnakeIcon("punch");
+    public static final ResourceLocation WHITESNAKE_GUARD = whitesnakeIcon("guard");
+    public static final ResourceLocation WHITESNAKE_CHOP = whitesnakeIcon("chop");
+    public static final ResourceLocation WHITESNAKE_BARRAGE = whitesnakeIcon("barrage");
+    public static final ResourceLocation WHITESNAKE_FORWARD_BARRAGE = whitesnakeIcon("forward_barrage");
+    public static final ResourceLocation WHITESNAKE_IMPALE = whitesnakeIcon("impale");
+    public static final ResourceLocation WHITESNAKE_DASH = whitesnakeIcon("dash");
+    public static final ResourceLocation WHITESNAKE_DISC_THROW = whitesnakeIcon("disc_throw");
+    public static final ResourceLocation WHITESNAKE_PHASE_GRAB = whitesnakeIcon("phase_grab");
+    public static final ResourceLocation WHITESNAKE_DISC_STEAL = whitesnakeIcon("disc_steal");
+    public static final ResourceLocation WHITESNAKE_SNAKE_BITE = whitesnakeIcon("snake_bite");
+    public static final ResourceLocation WHITESNAKE_ACID_TOSS = whitesnakeIcon("acid_toss");
+    public static final ResourceLocation WHITESNAKE_MELTING_MODE = whitesnakeIcon("melting_mode");
+    public static final ResourceLocation WHITESNAKE_CONTROL_MODE = whitesnakeIcon("control_mode");
+    public static final ResourceLocation WHITESNAKE_CONTROL_MODE_EXIT = whitesnakeIcon("control_mode_exit");
+    public static final ResourceLocation WHITESNAKE_AUTO_MODE = whitesnakeIcon("auto_mode");
+    public static final ResourceLocation WHITESNAKE_AUTO_MODE_MOVE = whitesnakeIcon("auto_mode_move");
+    public static final ResourceLocation WHITESNAKE_AUTO_MODE_ATTACK = whitesnakeIcon("auto_mode_attack");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATORY_DISGUISE = whitesnakeIcon("hallucinatory_disguise");
+    public static final ResourceLocation WHITESNAKE_TIME_SPARK = whitesnakeIcon("time_spark");
+    public static final ResourceLocation WHITESNAKE_INVENTORY = whitesnakeIcon("inventory");
+    public static final ResourceLocation WHITESNAKE_DISC_STEAL_MENU = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/whitesnake/disc_steal_menu.png");
+    public static final ResourceLocation[] WHITESNAKE_DISC_TYPES = {
+            whitesnakeIcon("stand_disc"), whitesnakeIcon("sight_disc"),
+            whitesnakeIcon("memory_disc"), whitesnakeIcon("hearing_disc")
+    };
     public static final Material STAND_FIRE = new Material(TextureAtlas.LOCATION_BLOCKS,
             new ResourceLocation(Roundabout.MOD_ID,"block/fire_0"));
 

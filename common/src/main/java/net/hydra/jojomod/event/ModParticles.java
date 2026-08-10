@@ -4,6 +4,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class ModParticles {
+    public static SimpleParticleType HALLUCINATORY_ACID_DRIP;
     public static SimpleParticleType HIT_IMPACT;
     public static SimpleParticleType BLOOD;
     public static SimpleParticleType BLUE_BLOOD;

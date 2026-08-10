@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.disc.MusicDiscController;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
@@ -675,6 +676,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if ($$0.getEntity().level().isClientSide()){
             return;
         }
+        if (handleDiscImpact($$0)) return;
         if (getStyle() == STAND_DAMAGE){
             if ($$0.getEntity() instanceof BlockWallEntity bwe && bwe.isWhiteAlbumWall){
                 return;
@@ -894,6 +896,56 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         }
         this.discard();
 
+    }
+
+    private boolean handleDiscImpact(EntityHitResult hit) {
+        ItemStack stack = getItem();
+        if (!(stack.getItem() instanceof AbstractBodyDiscItem)
+                && !(stack.getItem() instanceof CommandDiscItem)
+                && !(stack.getItem() instanceof RecordItem)) {
+            return false;
+        }
+
+        Entity targetEntity = hit.getEntity();
+        if (targetEntity instanceof LivingEntity target) {
+            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectile(this, hit)) {
+                discard();
+                return true;
+            }
+            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectileNoDiscard(this, hit)) {
+                return true;
+            }
+            if (target.isBlocking() && discHitsFront(target)) {
+                target.level().broadcastEntityEvent(target, (byte) 29);
+                dropItem(target.getOnPos());
+                discard();
+                return true;
+            }
+        }
+
+        boolean applied = false;
+        if (getOwner() instanceof LivingEntity thrower) {
+            if (targetEntity instanceof LivingEntity target && stack.getItem() instanceof AbstractBodyDiscItem disc) {
+                applied = disc.implantFromThrow(stack, target, thrower);
+            } else if (stack.getItem() instanceof CommandDiscItem commandDisc) {
+                applied = commandDisc.applyCommand(targetEntity, thrower);
+            } else if (targetEntity instanceof LivingEntity target && stack.getItem() instanceof RecordItem) {
+                applied = MusicDiscController.implant(stack, target, thrower);
+            }
+        }
+        if (!applied) dropItem(targetEntity.getOnPos());
+        discard();
+        return true;
+    }
+
+    private boolean discHitsFront(LivingEntity target) {
+        Vec3 horizontal = new Vec3(getDeltaMovement().x, 0.0D, getDeltaMovement().z);
+        if (horizontal.lengthSqr() < 1.0E-7D) {
+            Vec3 toTarget = position().vectorTo(target.position());
+            horizontal = new Vec3(toTarget.x, 0.0D, toTarget.z);
+        }
+        return horizontal.lengthSqr() < 1.0E-7D
+                || horizontal.normalize().dot(target.getViewVector(1.0F)) < 0.0D;
     }
 
     public boolean useBonemeal(ItemStack item, BlockHitResult pos){

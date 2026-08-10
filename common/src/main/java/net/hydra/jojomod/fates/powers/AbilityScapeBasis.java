@@ -32,12 +32,14 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -48,6 +50,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -659,7 +662,8 @@ public class AbilityScapeBasis {
         }
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            LivingEntity soundEmitter = getSoundEmitter(soundNo, onSelf);
+            Vec3 userLocation = soundEmitter.position();
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
@@ -674,12 +678,36 @@ public class AbilityScapeBasis {
                 if (blockPos.closerToCenterThan(userLocation, range)) {
                     if (onSelf) {
                         S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else if (soundEmitter != self) {
+                        SoundEvent sound = getSoundFromByte(soundNo);
+                        if (sound != null) {
+                            serverPlayerEntity.connection.send(new ClientboundSoundPacket(Holder.direct(sound),
+                                    SoundSource.NEUTRAL, userLocation.x, userLocation.y, userLocation.z,
+                                    getSoundVolumeFromByte(soundNo), getSoundPitchFromByte(soundNo),
+                                    serverWorld.random.nextLong()));
+                        }
                     } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, soundEmitter.getId(), soundNo);
                     }
                 }
             }
         }
+    }
+
+    protected LivingEntity getSoundEmitter(byte soundNo, boolean onSelf) {
+        return self;
+    }
+
+    public SoundEvent getSoundFromByte(byte soundNo) {
+        return null;
+    }
+
+    public float getSoundVolumeFromByte(byte soundNo) {
+        return 1.0F;
+    }
+
+    public float getSoundPitchFromByte(byte soundNo) {
+        return 1.0F;
     }
     /**The Sound Event to cancel when your barrage is canceled*/
 
@@ -1621,6 +1649,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1629,6 +1658,7 @@ public class AbilityScapeBasis {
         }
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1638,6 +1668,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput2(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1647,6 +1678,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput1(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1704,21 +1736,25 @@ public class AbilityScapeBasis {
     }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
             buttonInputAttack(keyIsDown, options);
         }
     }
     public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf())) {
             buttonInputUse(keyIsDown, options);
         }
     }
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf())) {
             buttonInputBarrage(keyIsDown, options);
         }
     }
     public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return false;
         if (hasStandActive(this.getSelf())) {
             return buttonInputGuard(keyIsDown, options);
         }

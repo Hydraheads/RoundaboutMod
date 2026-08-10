@@ -290,6 +290,9 @@ public class FollowingStandEntity extends StandEntity{
         }
     }
     public LivingEntity getFollowingAggressive() {
+            if (this instanceof WhitesnakeEntity whitesnake && whitesnake.isRemoteControlled()) {
+                return whitesnake;
+            }
             return (LivingEntity) this.level().getEntity(this.entityData.get(FOLLOWING_ID));
     }
 
