@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
 
-    public static final ResourceLocation DEFAULT_PURPLE_HAZE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/default_purple_haze.png");
+    public static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/anime.png");
     public static final ResourceLocation MIG_PLAGUE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/mig_plague.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
@@ -28,7 +28,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
             case (PurpleHazeEntity.MIG_PLAGUE):
                 return MIG_PLAGUE;
             default:
-                return DEFAULT_PURPLE_HAZE;
+                return ANIME;
         }
     }
 

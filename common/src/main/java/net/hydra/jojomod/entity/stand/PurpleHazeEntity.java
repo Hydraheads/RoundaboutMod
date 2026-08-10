@@ -11,7 +11,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     }
 
     public static final byte
-            DEFAULT_PURPLE_HAZE = 1,
+            ANIME = 1,
             MIG_PLAGUE = 2;
 
 

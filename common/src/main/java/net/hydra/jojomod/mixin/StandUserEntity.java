@@ -319,9 +319,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.ITEM_STACK);
 
     @Unique
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$COMBAT_MODE = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.BOOLEAN);
-    @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$HEAT = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.INT);
 
@@ -1526,7 +1523,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
 
-        roundabout$tickStandOrStandless();
         //if (StandID > -1) {
         if (!this.level().isClientSide()) {
             if (roundabout$getBoundTo() != null && (!roundabout$getBoundTo().isAlive()
@@ -1557,8 +1553,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$zappedTicks--;
             }
 
-            if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE) {
-                if (rdbt$this() instanceof Player P ) {
+            if (rdbt$this() instanceof Player P ) {
+                if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE) {
                     if (P.isCreative()) {
                         APE.discard();
                     }
@@ -2106,18 +2102,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
-    /**Combat mode goes down when you don't have a stand or power active NO MATTER WHAT*/
-    @Unique
-    public void roundabout$tickStandOrStandless(){
-        if (!this.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this))){
-            roundabout$setCombatMode(false);
-        }
-    }
     @Unique
     @Override
     public void roundabout$setCombatMode(boolean only) {
         if (!(this.level().isClientSide)) {
-            this.getEntityData().set(ROUNDABOUT$COMBAT_MODE, only);
+            if (rdbt$this() instanceof Player pl){
+                ((IPlayerEntity)pl).roundabout$setCombatMode(only);
+            }
         }
     }
 
@@ -2169,14 +2160,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$getCombatMode() {
-        if (PowerTypes.isBrawling(rdbt$this())){
-            return true;
-        }
-        if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers().hasPassiveCombatMode()){
-            return true;
-        }
-        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
-            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE);
+        if (rdbt$this() instanceof Player pl) {
+            return ((IPlayerEntity)pl).roundabout$getCombatMode();
         } else {
             return false;
         }
@@ -2184,17 +2169,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public boolean roundabout$getEffectiveCombatMode() {
-
-        if (PowerTypes.isBrawling(rdbt$this())){
-            return true;
-        }
-        if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers().hasPassiveCombatMode()){
-            return true;
-        }
-        if (getEntityData().hasItem(ROUNDABOUT$COMBAT_MODE)) {
-            return this.getEntityData().get(ROUNDABOUT$COMBAT_MODE) && (((StandUser)this).roundabout$hasAStand() &&
-                    this.roundabout$getStandPowers().hasStandActive(((LivingEntity) (Object)this)));
+        if (rdbt$this() instanceof Player pe){
+            return ((IPlayerEntity)pe).roundabout$getEffectiveCombatMode();
         } else {
+            if (PowerTypes.hasStandActive(rdbt$this()) && roundabout$getStandPowers().hasPassiveCombatMode()){
+                return true;
+            }
             return false;
         }
     }
@@ -3503,7 +3483,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     public StandEntity roundabout$getStand() {
         if (this.level().isClientSide && (((LivingEntity) (Object) this).getEntityData().hasItem(ROUNDABOUT$STAND_ID))) {
-            return (StandEntity) this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ID));
+            Entity entity = this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ID));
+            if (entity instanceof StandEntity SE){
+                return SE;
+            }
+            return null;
         } else {
             if (this.roundabout$Stand != null && this.roundabout$Stand.isRemoved()){
                 this.roundabout$setStand(null);
@@ -3608,7 +3592,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$METALLICA_INVISIBILITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ADJUSTED_GRAVITY, -1);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$ONLY_BLEEDING, true);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$COMBAT_MODE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_DISC, ItemStack.EMPTY);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
@@ -4237,12 +4220,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     @Override
     public void rdbt$adjGravTrav(){
-        roundabout$adjustGravity();
 
+        roundabout$adjustGravity();
+        if (rdbt$this() instanceof Player){
             if (MainUtil.isPlayerBonkingHead(((LivingEntity)(Object)this)) || isUsingItem()){
                 roundabout$setBigJumpCurrentProgress(0);
                 roundabout$setBigJump(false);
             }
+
             float curr = roundabout$getBigJumpCurrentProgress();
             float max = roundabout$getBonusJumpHeight();
 
@@ -4290,6 +4275,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 }
             }
+        }
     }
 
     @Inject(method = "travel", at = @At(value = "HEAD"))
@@ -5611,6 +5597,50 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
+        if (this.hasEffect(ModEffects.HAZE_VIRUS)) {
+            if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
+                        this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier() + 1);
+            }
+
+            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier();
+                List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
+                        LivingEntity.class,
+                        TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
+                        rdbt$this(),
+                        this.getBoundingBox().inflate(2.0)
+                );
+                for (LivingEntity target : nearby) {
+                    if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS)) continue;
+                    if (this.random.nextFloat() < 0.15F) {
+                        target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true), rdbt$this());
+                    }
+                }
+            }
+        }
+        if (this.hasEffect(ModEffects.DISTORTION_VIRUS)) {
+            if (this.tickCount % 25 == 0 && !this.level().isClientSide() && this.isAlive()) {
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
+                        this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
+            }
+
+            if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
+                int amplifier = this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier();
+                List<LivingEntity> nearby = ((ServerLevel) this.level()).getNearbyEntities(
+                        LivingEntity.class,
+                        TargetingConditions.forNonCombat().range(2.0).ignoreLineOfSight(),
+                        rdbt$this(),
+                        this.getBoundingBox().inflate(2.0)
+                );
+                for (LivingEntity target : nearby) {
+                    if (target == rdbt$this() || target.hasEffect(ModEffects.DISTORTION_VIRUS)) continue;
+                    if (this.random.nextFloat() < 0.15F) {
+                        target.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 200, amplifier, false, true), rdbt$this());
+                    }
+                }
+            }
+        }
     }
     @Override
     @Unique
@@ -6152,36 +6182,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private double previousXposManhattan = 0.0;
     private double previousZposManhattan = 0.0;
 
-    @Unique
-    @Override
-    public void roundabout$doWindVisionDetectionOther() {
-        /** May not be the best thing, but it's to fix entities potentially not showing up ex. Vexes. The one in EntityAndData was made becausemobs such ghasts and phantoms wouldn't show up as they aren't marked as living entities. I guess it should fix the problem for all entities :) */
-        /*Think of those two as a double check.*/
-        /*Last note: put every entity in the Vex check in case some other entity will need it*/
-        if (!this.level().isClientSide) {
-            IEntityAndData entityAndData = ((IEntityAndData) this);
-            boolean down = previousYposManhattan > this.getY();
-            boolean up = previousYposManhattan < this.getY();
-            boolean movementX = previousXposManhattan != this.getX();
-            boolean movementZ = previousZposManhattan != this.getZ();
-                if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
-                if (((Entity) (Object) this) instanceof Vex v) {
-                    if (v.isInWater()) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);
-                    } else {
-                        if (down || up) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                        }
-                        else if (movementX || movementZ) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                        }
-                    }
-                }
-        }
-        previousYposManhattan = this.getY();
-        previousXposManhattan = this.getX();
-        previousZposManhattan = this.getZ();
-    }
-
     public final Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1) {
         float $$2 = $$0 * (float) (Math.PI / 180.0);
         float $$3 = -$$1 * (float) (Math.PI / 180.0);
@@ -6229,58 +6229,61 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public void rdbt$tickCooldowns(){
         try {
-            int amt = 1;
-            boolean isDrowning = false;
+            if (rdbt$this() instanceof Player || roundabout$hasAStand()) {
+                int amt = 1;
+                boolean isDrowning = false;
 
-            // Changes how fast the cooldowns should recharge
-            if (rdbt$this() instanceof Player) {
-                isDrowning = (this.getAirSupply() <= 0);
+                // Changes how fast the cooldowns should recharge
+                if (rdbt$this() instanceof Player) {
+                    isDrowning = (this.getAirSupply() <= 0);
 
-                int idle = this.roundabout$getIdleTime();
-                if (idle > 300) {
-                    amt *= 4;
-                } else if (idle > 200) {
-                    amt *= 3;
-                } else if (idle > 40) {
-                    amt *= 2;
+                    int idle = this.roundabout$getIdleTime();
+                    if (idle > 300) {
+                        amt *= 4;
+                    } else if (idle > 200) {
+                        amt *= 3;
+                    } else if (idle > 40) {
+                        amt *= 2;
+                    }
+
+                    if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning) {
+                        amt = 0;
+                    }
                 }
 
-                if (isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning)
-                { amt = 0; }
-            }
-
-            byte cin = -1;
-            for (CooldownInstance ci : rdbt$PowerCooldowns){
-                cin++;
-                if (ci.time >= 0){
-                    if (!rdbt$canUseStillStandingRecharge(cin)){
-                        amt = 1;
-                    }
-                    ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
-
-                    boolean serverControlledCooldwon = rdbt$isServerControlledCooldown(ci, cin);
-                    if (!(this.level().isClientSide() && serverControlledCooldwon)) {
-
-                        if (!ci.isFrozen()) {
-                            ci.time -= amt;
+                byte cin = -1;
+                for (CooldownInstance ci : rdbt$PowerCooldowns) {
+                    cin++;
+                    if (ci.time >= 0) {
+                        if (!rdbt$canUseStillStandingRecharge(cin)) {
+                            amt = 1;
                         }
+                        ci.setFrozen(isDrowning && !ClientNetworking.getAppropriateConfig().generalStandSettings.canRechargeCooldownsWhileDrowning);
 
-                        if (ci.time < -1) {
-                            ci.time = -1;
-                        }
+                        boolean serverControlledCooldwon = rdbt$isServerControlledCooldown(ci, cin);
+                        if (!(this.level().isClientSide() && serverControlledCooldwon)) {
 
-                        if (rdbt$this() instanceof Player) {
-                            if ((((Player) rdbt$this()).isCreative() &&
-                                    ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
-                                ci.time = 2;
+                            if (!ci.isFrozen()) {
+                                ci.time -= amt;
                             }
-                        }
 
-                        if (serverControlledCooldwon && !this.level().isClientSide() && rdbt$this() instanceof Player) {
-                            List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
-                            };
+                            if (ci.time < -1) {
+                                ci.time = -1;
+                            }
 
-                            S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) rdbt$this()), cin, ci.time, ci.maxTime);
+                            if (rdbt$this() instanceof Player) {
+                                if ((((Player) rdbt$this()).isCreative() &&
+                                        ClientNetworking.getAppropriateConfig().generalStandSettings.creativeModeRefreshesCooldowns) && ci.time > 2) {
+                                    ci.time = 2;
+                                }
+                            }
+
+                            if (serverControlledCooldwon && !this.level().isClientSide() && rdbt$this() instanceof Player) {
+                                List<CooldownInstance> CDCopy = new ArrayList<>(rdbt$PowerCooldowns) {
+                                };
+
+                                S2CPacketUtil.sendMaxCooldownSyncPacket(((ServerPlayer) rdbt$this()), cin, ci.time, ci.maxTime);
+                            }
                         }
                     }
                 }
@@ -6349,9 +6352,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             BtdPlantedTicks = e;
         }
     }
-
-    @Inject(method = "travel", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void WindDetectionBackup(Vec3 mov, CallbackInfo ci){roundabout$doWindVisionDetectionOther();}
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
