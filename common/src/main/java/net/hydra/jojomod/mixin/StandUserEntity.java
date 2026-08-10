@@ -3483,7 +3483,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Nullable
     public StandEntity roundabout$getStand() {
         if (this.level().isClientSide && (((LivingEntity) (Object) this).getEntityData().hasItem(ROUNDABOUT$STAND_ID))) {
-            return (StandEntity) this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ID));
+            Entity entity = this.level().getEntity(((LivingEntity) (Object) this).getEntityData().get(ROUNDABOUT$STAND_ID));
+            if (entity instanceof StandEntity SE){
+                return SE;
+            }
+            return null;
         } else {
             if (this.roundabout$Stand != null && this.roundabout$Stand.isRemoved()){
                 this.roundabout$setStand(null);
