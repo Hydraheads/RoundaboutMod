@@ -6,6 +6,9 @@ import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -14,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class D4CBaseRenderer<M extends StandEntity> extends StandRenderer<D4CEntity>{
 
-    private static final ResourceLocation BASE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c/base.png");
 
     public D4CBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
@@ -22,10 +24,8 @@ public class D4CBaseRenderer<M extends StandEntity> extends StandRenderer<D4CEnt
 
 
     public static ResourceLocation getSkin(byte BT){
-        if (BT == D4CEntity.BASE){
-            return BASE;
-        }
-        return BASE;
+        String path = PowersD4C.getSkinString(BT);
+        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c/"+path+".png");
     }
 
     @Override
