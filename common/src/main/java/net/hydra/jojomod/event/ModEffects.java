@@ -21,5 +21,5 @@ public class ModEffects {
     public static MobEffect MOLD;
     public static MobEffect SWITCH;
     public static MobEffect CRIPPLED;
-
+    public static MobEffect HAZE_VIRUS;
 }

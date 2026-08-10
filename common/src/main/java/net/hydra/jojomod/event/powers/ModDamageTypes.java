@@ -60,6 +60,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> RIPPER_EYES = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"));
     public static final ResourceKey<DamageType> ULTRAVIOLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ultraviolet"));
     public static final ResourceKey<DamageType> BITES_THE_DUST = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bites_the_dust"));
+    public static final ResourceKey<DamageType> HAZE_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

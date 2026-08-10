@@ -46,6 +46,8 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect CRIPPLED = register("crippled", new FabricEffects(MobEffectCategory.HARMFUL, 725255)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL)
     );
+    public static final MobEffect HAZE_VIRUS =
+            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -73,5 +75,6 @@ public class FabricEffects extends MobEffect{
         ModEffects.UNBALANCED = UNBALANCED;
         ModEffects.MOLD = MOLD;
         ModEffects.CRIPPLED = CRIPPLED;
+        ModEffects.HAZE_VIRUS = HAZE_VIRUS;
     }
 }

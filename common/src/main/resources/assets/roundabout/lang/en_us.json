@@ -439,6 +439,8 @@
   "effect.roundabout.switch": "Switch",
   "effect.roundabout.singe": "Char",
   "effect.roundabout.crippled": "Crippled",
+  "effect.roundabout.haze_virus": "Haze Virus",
+
 
   "item.roundabout.creative_only.info": "Creative Only",
 
@@ -935,6 +937,7 @@
   "death.attack.ultraviolet.item": "%1$s saw things in a new light thanks to %2$s",
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
+  "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -3288,6 +3291,8 @@
   "config.roundabout.meteorTrackingPower.desc": "How much the meteors track you in meteor tracking mode",
   "config.roundabout.PWCanonMovesOnly.name": "Planet Waves Canon Moves Only",
   "config.roundabout.PWCanonMovesOnly.desc": "Block all non-canon moves",
+  "config.roundabout.trackingmessage.name": "Tracking Message",
+  "config.roundabout.trackingmessage.desc": "Select how you want the feedback of changing the tracking mode.True=Message,False=Icon",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",
