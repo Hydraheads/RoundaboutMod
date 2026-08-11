@@ -75,9 +75,9 @@ public final class WhitesnakeDiscUtil {
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
         return switch (type) {
-            case SIGHT -> extractSight(target, false);
-            case MEMORY -> extractMemory(target, false);
-            case HEARING -> extractHearing(target, false);
+            case SIGHT -> extractSight(target, true);
+            case MEMORY -> extractMemory(target, true);
+            case HEARING -> extractHearing(target, true);
             case STAND -> extractStand(target, false);
             default -> ItemStack.EMPTY;
         };
