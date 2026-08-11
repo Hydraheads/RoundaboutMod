@@ -6327,7 +6327,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (BtdPlantedTicks > 0 && !this.level().isClientSide()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())) {
-            if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+            if (rdbt$this().isDamageSourceBlocked(source)) {
+            /*if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                     source.is(DamageTypes.WITHER) ||
                     source.is(DamageTypes.DRAGON_BREATH) ||
                     source.is(ModDamageTypes.GO_BEYOND) ||
@@ -6337,7 +6338,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     source.is(DamageTypes.LAVA) ||
                     source.is(DamageTypes.DROWN) ||
                     source.is(ModDamageTypes.SUNLIGHT)
-            ){
+            ){*/
                 return false;
             }
 
