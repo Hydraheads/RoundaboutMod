@@ -1254,9 +1254,9 @@ public class Config implements Cloneable {
         public Boolean standDiscStealEnabled;
         @BooleanOption(group = "inherit", value = true)
         public Boolean memoryDiscStealEnabled;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean sightDiscStealEnabled;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean hearingDiscStealEnabled;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealHealthRequirementAffectsMobs;
@@ -1266,20 +1266,20 @@ public class Config implements Cloneable {
         public Boolean discSealing;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discSealingPlayersOnly;
-        @BooleanOption(group = "inherit", value = true)
+        @BooleanOption(group = "inherit", value = false)
         public Boolean discSealRequiresHallucination;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standDiscSealTime;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer memoryDiscSealTime;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer sightDiscSealTime;
         @IntOption(group = "inherit", value = 180, min = 0, max = 72000)
         public Integer hearingDiscSealTime;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 100)
+        @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer discSealHallucinationMultiplierPerLevel;
 
-        @IntOption(group = "inherit", value = 40, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
         public Integer snakeBiteHallucinationDuration;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hallucinationAppliesMelting;
@@ -1291,7 +1291,7 @@ public class Config implements Cloneable {
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 400, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
-        @FloatOption(group = "inherit", value = 1.0F, min = 0.0F, max = 64.0F)
+        @FloatOption(group = "inherit", value = 2.0F, min = 0.0F, max = 64.0F)
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)
         public Float hallucinatoryAcidDespawnPauseRange;
@@ -1299,9 +1299,9 @@ public class Config implements Cloneable {
         public Boolean hallucinatoryAcidDisappearsOnDesummon;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinatoryAcidDripsCreateBlocks;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean waterWashesAwayAcid;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean waterWashesAwayAcid;
+        @BooleanOption(group = "inherit", value = false)
         public Boolean acidGriefing;
         @FloatOption(group = "inherit", value = 0.5F, min = 0.0F, max = 100.0F)
         public Float acidDissolveSpeed;
