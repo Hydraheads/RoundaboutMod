@@ -1901,7 +1901,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (!HeatUtil.isLegsFrozen(PL)){
                     HeatUtil.addHeat(PL, -3);
                 } else {
-                    HeatUtil.addHeat(PL, -3);
+                    if (cracked){
+                        HeatUtil.addHeat(PL, -2);
+                    } else {
+                        HeatUtil.addHeat(PL, -3);
+                    }
                     //2?
                 }
             }
