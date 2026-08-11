@@ -2126,7 +2126,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
-                || sauce.is(ModDamageTypes.DISINTEGRATION)){
+                || sauce.is(ModDamageTypes.DISINTEGRATION)
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
         return false;
@@ -2153,7 +2154,7 @@ public class MainUtil {
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) ) {
             return true;
         }
         return false;

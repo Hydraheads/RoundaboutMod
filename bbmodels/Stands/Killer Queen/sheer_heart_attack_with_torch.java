@@ -1,42 +1,21 @@
-package net.hydra.jojomod.client.models.substand;
+// Made with Blockbench 5.1.6
+// Exported for Minecraft version 1.17 or later with Mojang mappings
+// Paste this class into your mod and generate all required imports
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.models.stand.StandModel;
-import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
-import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-
-public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends StandModel<T> {
+public class sheer_heart_attack<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "sheer_heart_attack_model"), "main");
-
-	public SheerHeartAttackModel(ModelPart root) {
-		this.stand = root.getChild("stand");
-		this.stand2 = this.stand.getChild("stand2");
-		this.head = this.stand2.getChild("head");
-		this.torch = this.head.getChild("torch");
-	}
-	
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "sheer_heart_attack"), "main");
 	private final ModelPart stand;
 	private final ModelPart stand2;
 	private final ModelPart head;
 	private final ModelPart torch;
 
-	@Override
-	public ModelPart root() {
-		return stand;
-	}
-
-
-	public ModelPart getStand() {
-		return stand;
+	public sheer_heart_attack(ModelPart root) {
+		this.stand = root.getChild("stand");
+		this.stand2 = this.stand.getChild("stand2");
+		this.head = this.stand2.getChild("head");
+		this.torch = this.head.getChild("torch");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -66,19 +45,13 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
-
 	@Override
-	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
-		this.animate(pEntity.moving, SheerHeartAttackAnimations.MOVING, pAgeInTicks, 0.8f);
-		this.animate(pEntity.idle, SheerHeartAttackAnimations.IDLE, pAgeInTicks, 1.0f);
-		this.animate(pEntity.hideTorch, SheerHeartAttackAnimations.hideTorch, pAgeInTicks, 1.0f);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		stand.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
-
 }
