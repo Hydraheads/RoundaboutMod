@@ -1,6 +1,5 @@
 package net.hydra.jojomod.mixin.whitesnake;
 
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
@@ -28,9 +27,9 @@ public abstract class DiscMeleeImplantMixin {
             ci.cancel();
             return;
         }
-        if (!(stack.getItem() instanceof StandDiscItem)) return;
+        if (!(stack.getItem() instanceof StandDiscItem standDisc)) return;
 
-        if (!target.level().isClientSide() && ((StandUser) target).roundabout$getStandDisc().isEmpty()) {
+        if (!target.level().isClientSide() && standDisc.canImplantInto(target)) {
             ItemStack implanted = stack.copy();
             implanted.setCount(1);
             if (StandArrowItem.grantStand(implanted, target)) {

@@ -900,9 +900,10 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     private boolean handleDiscImpact(EntityHitResult hit) {
         ItemStack stack = getItem();
+        boolean musicDisc = stack.getItem() instanceof RecordItem && canImplantMusicDisc();
         if (!(stack.getItem() instanceof AbstractBodyDiscItem)
                 && !(stack.getItem() instanceof CommandDiscItem)
-                && !(stack.getItem() instanceof RecordItem)) {
+                && !musicDisc) {
             return false;
         }
 
@@ -929,13 +930,18 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 applied = disc.implantFromThrow(stack, target, thrower);
             } else if (stack.getItem() instanceof CommandDiscItem commandDisc) {
                 applied = commandDisc.applyCommand(targetEntity, thrower);
-            } else if (targetEntity instanceof LivingEntity target && stack.getItem() instanceof RecordItem) {
+            } else if (targetEntity instanceof LivingEntity target && musicDisc) {
                 applied = MusicDiscController.implant(stack, target, thrower);
             }
         }
         if (!applied) dropItem(targetEntity.getOnPos());
         discard();
         return true;
+    }
+
+    private boolean canImplantMusicDisc() {
+        return getOwner() instanceof LivingEntity thrower
+                && ((StandUser) thrower).roundabout$getStandPowers().canImplantMusicDisc();
     }
 
     private boolean discHitsFront(LivingEntity target) {

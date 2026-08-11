@@ -935,6 +935,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 || item instanceof CommandDiscItem || item instanceof RecordItem;
     }
 
+    @Override
+    public boolean canImplantMusicDisc() {
+        return true;
+    }
+
     private void grabHeldDiscClient() {
         if (isThrowableDisc(self.getMainHandItem())) itemGrabClient();
     }
