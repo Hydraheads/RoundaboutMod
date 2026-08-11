@@ -2424,6 +2424,8 @@
   "skins.roundabout.d4c.gray": "Gray",
   "skins.roundabout.d4c.black_white": "Black+White",
   "skins.roundabout.d4c.reverse": "Reverse",
+  "skins.roundabout.d4c.inverse": "Inverse",
+  "skins.roundabout.d4c.chocolate": "Chocolate",
 
   "skins.roundabout.walking_heart.base": "Manga",
   "skins.roundabout.walking_heart.model": "Model",

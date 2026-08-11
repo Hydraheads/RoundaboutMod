@@ -295,9 +295,8 @@ public class PowersD4C extends NewPunchingStand {
                 if (entity instanceof LivingEntity LE) {
                     if (charged >= 1) {
                         addEXP(5, LE);
-                        MainUtil.makeBleed(LE, 0, 200, this.self);
                     } else if (charged > 0.5F){
-                        addEXP(2, LE);
+                        addEXP(3, LE);
                     }
                 }
                 takeDeterminedKnockbackWithY(this.self, entity, knockbackStrength);
@@ -426,6 +425,8 @@ public class PowersD4C extends NewPunchingStand {
             case D4CEntity.GRAY -> "gray";
             case D4CEntity.BLACK_WHITE -> "black_white";
             case D4CEntity.REVERSE -> "reverse";
+            case D4CEntity.CHOCOLATE -> "chocolate";
+            case D4CEntity.INVERSE -> "inverse";
             default -> "base";
         };
     }
@@ -440,6 +441,7 @@ public class PowersD4C extends NewPunchingStand {
             if (Level > 1 || bypass){
                 $$1.add(D4CEntity.COVER);
                 $$1.add(D4CEntity.SPINE);
+                $$1.add(D4CEntity.CHOCOLATE);
             } if (Level > 2 || bypass){
                 $$1.add(D4CEntity.VELLER);
                 $$1.add(D4CEntity.ROA);
@@ -461,6 +463,7 @@ public class PowersD4C extends NewPunchingStand {
                 $$1.add(D4CEntity.CURSED_CARD);
                 $$1.add(D4CEntity.ULTRA_BRAND);
             } if (Level > 6 || bypass){
+                $$1.add(D4CEntity.INVERSE);
                 $$1.add(D4CEntity.GOLDEN);
                 $$1.add(D4CEntity.GOLDEN_V2);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
