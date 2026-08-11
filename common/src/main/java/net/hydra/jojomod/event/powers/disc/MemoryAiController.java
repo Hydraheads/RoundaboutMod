@@ -91,6 +91,7 @@ public final class MemoryAiController {
         LivingEntity tameOwner = getTameOwner(mob);
         LivingEntity target = tameOwner == null ? chooseTarget(mob, personality)
                 : chooseTameTarget(mob, tameOwner);
+        if (target == mob) target = null;
         if (tameOwner != null && target == null) {
             mob.setTarget(null);
             double distance = mob.distanceToSqr(tameOwner);
@@ -214,6 +215,7 @@ public final class MemoryAiController {
         if (personality == MemoryPersonality.ZOMBIE) {
             for (Villager candidate : entity.level().getEntitiesOfClass(Villager.class,
                     entity.getBoundingBox().inflate(range), LivingEntity::isAlive)) {
+                if (candidate == entity) continue;
                 double distance = entity.distanceToSqr(candidate);
                 if (distance <= nearestDistance) {
                     nearest = candidate;

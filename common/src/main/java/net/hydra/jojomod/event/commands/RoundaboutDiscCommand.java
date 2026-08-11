@@ -49,9 +49,11 @@ public final class RoundaboutDiscCommand {
     private static final SimpleCommandExceptionType WRONG_HELD_DISC = new SimpleCommandExceptionType(
             Component.literal("Your held item does not match the requested disc type."));
     private static final SimpleCommandExceptionType TARGET_HAS_DISC = new SimpleCommandExceptionType(
-            Component.literal("That player already has that type of disc inserted."));
+            Component.literal("That target already has that type of disc inserted."));
     private static final SimpleCommandExceptionType TARGET_MISSING_DISC = new SimpleCommandExceptionType(
-            Component.literal("That player does not have that type of disc to extract."));
+            Component.literal("That target does not have that type of disc to extract."));
+    private static final SimpleCommandExceptionType TARGET_NOT_LIVING = new SimpleCommandExceptionType(
+            Component.literal("The selected target must be a living entity."));
     private static final SimpleCommandExceptionType INVALID_EXTRACT_TYPE = new SimpleCommandExceptionType(
             Component.literal("Disc type must be memory, stand, sight, or hearing."));
     private static final SimpleCommandExceptionType INVALID_MEMORY_ENTITY = new SimpleCommandExceptionType(
@@ -65,54 +67,54 @@ public final class RoundaboutDiscCommand {
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("insertdisc")
                         .then(Commands.literal("memorydisc")
-                                .then(Commands.argument("username", EntityArgument.player())
+                                .then(Commands.argument("username", EntityArgument.entity())
                                         .then(Commands.argument("value", StringArgumentType.word())
                                                 .suggests((context, builder) ->
                                                         SharedSuggestionProvider.suggest(MEMORY_TYPES, builder))
                                                 .executes(context -> insertMemory(
                                                         context.getSource(),
-                                                        EntityArgument.getPlayer(context, "username"),
+                                                        livingTarget(EntityArgument.getEntity(context, "username")),
                                                         StringArgumentType.getString(context, "value"))))))
                         .then(Commands.literal("sightdisc")
-                                .then(Commands.argument("username", EntityArgument.player())
+                                .then(Commands.argument("username", EntityArgument.entity())
                                         .then(Commands.argument("value", StringArgumentType.word())
                                                 .suggests((context, builder) ->
                                                         SharedSuggestionProvider.suggest(BODY_DISC_VALUES, builder))
                                                 .executes(context -> insertBodyDisc(
                                                         context.getSource(),
-                                                        EntityArgument.getPlayer(context, "username"),
+                                                        livingTarget(EntityArgument.getEntity(context, "username")),
                                                         WhitesnakeDiscUtil.SIGHT,
                                                         StringArgumentType.getString(context, "value"))))))
                         .then(Commands.literal("hearingdisc")
-                                .then(Commands.argument("username", EntityArgument.player())
+                                .then(Commands.argument("username", EntityArgument.entity())
                                         .then(Commands.argument("value", StringArgumentType.word())
                                                 .suggests((context, builder) ->
                                                         SharedSuggestionProvider.suggest(BODY_DISC_VALUES, builder))
                                                 .executes(context -> insertBodyDisc(
                                                         context.getSource(),
-                                                        EntityArgument.getPlayer(context, "username"),
+                                                        livingTarget(EntityArgument.getEntity(context, "username")),
                                                         WhitesnakeDiscUtil.HEARING,
                                                         StringArgumentType.getString(context, "value"))))))
                         .then(Commands.literal("standdisc")
-                                .then(Commands.argument("username", EntityArgument.player())
+                                .then(Commands.argument("username", EntityArgument.entity())
                                         .then(Commands.literal("Hand")
                                                 .executes(context -> insertHeldDisc(
                                                         context.getSource(),
-                                                        EntityArgument.getPlayer(context, "username"),
+                                                        livingTarget(EntityArgument.getEntity(context, "username")),
                                                         WhitesnakeDiscUtil.STAND)))
                                         .then(Commands.literal("hand")
                                                 .executes(context -> insertHeldDisc(
                                                         context.getSource(),
-                                                        EntityArgument.getPlayer(context, "username"),
+                                                        livingTarget(EntityArgument.getEntity(context, "username")),
                                                         WhitesnakeDiscUtil.STAND))))))
                 .then(Commands.literal("extractdisc")
-                        .then(Commands.argument("username", EntityArgument.player())
+                        .then(Commands.argument("username", EntityArgument.entity())
                                 .then(Commands.argument("disc", StringArgumentType.word())
                                         .suggests((context, builder) ->
                                                 SharedSuggestionProvider.suggest(EXTRACT_TYPES, builder))
                                         .executes(context -> extractDisc(
                                                 context.getSource(),
-                                                EntityArgument.getPlayer(context, "username"),
+                                                livingTarget(EntityArgument.getEntity(context, "username")),
                                                 StringArgumentType.getString(context, "disc"))))))
                 .then(Commands.literal("summondisc")
                         .then(Commands.literal("memorydisc")
@@ -138,6 +140,7 @@ public final class RoundaboutDiscCommand {
         if (!(created instanceof LivingEntity mob)) throw INVALID_MEMORY_ENTITY.create();
 
         ItemStack disc = new ItemStack(ModItems.MEMORY_DISC);
+        DiscItemData.setOwner(disc, mob);
         DiscItemData.setPersonality(disc, MemoryPersonality.classify(mob));
         DiscItemData.captureMemoryReading(disc, mob);
         created.discard();
@@ -165,7 +168,7 @@ public final class RoundaboutDiscCommand {
         if (!player.getInventory().add(disc) && !disc.isEmpty()) player.drop(disc, false);
     }
 
-    private static int insertMemory(CommandSourceStack source, ServerPlayer target, String value)
+    private static int insertMemory(CommandSourceStack source, LivingEntity target, String value)
             throws CommandSyntaxException {
         String type = value.toLowerCase(Locale.ROOT);
         if (type.equals("hand")) return insertHeldDisc(source, target, WhitesnakeDiscUtil.MEMORY);
@@ -179,7 +182,7 @@ public final class RoundaboutDiscCommand {
             bearer.roundabout$setMemoryTameOwnerId("");
             bearer.roundabout$setMemoryTameOwnerName("");
             bearer.roundabout$setMemoryReading(new CompoundTag());
-            source.sendSuccess(() -> Component.literal("Removed " + target.getGameProfile().getName()
+            source.sendSuccess(() -> Component.literal("Removed " + target.getName().getString()
                     + "'s memory disc."), true);
             return 1;
         }
@@ -197,11 +200,11 @@ public final class RoundaboutDiscCommand {
         bearer.roundabout$setMemoryDiscOwnerId("");
         bearer.roundabout$setMemoryDiscOwnerName("");
         source.sendSuccess(() -> Component.literal("Inserted " + MemoryPersonality.name(personality)
-                + " memory into " + target.getGameProfile().getName() + "."), true);
+                + " memory into " + target.getName().getString() + "."), true);
         return 1;
     }
 
-    private static int insertBodyDisc(CommandSourceStack source, ServerPlayer target, byte discType, String value)
+    private static int insertBodyDisc(CommandSourceStack source, LivingEntity target, byte discType, String value)
             throws CommandSyntaxException {
         String normalized = value.toLowerCase(Locale.ROOT);
         if (normalized.equals("hand")) return insertHeldDisc(source, target, discType);
@@ -220,12 +223,12 @@ public final class RoundaboutDiscCommand {
             bearer.roundabout$setHearingDiscOwnerName("");
         }
         String name = discType == WhitesnakeDiscUtil.SIGHT ? "sight" : "hearing";
-        source.sendSuccess(() -> Component.literal("Set " + target.getGameProfile().getName()
+        source.sendSuccess(() -> Component.literal("Set " + target.getName().getString()
                 + "'s " + name + " disc to " + present + "."), true);
         return 1;
     }
 
-    private static int insertHeldDisc(CommandSourceStack source, ServerPlayer target, byte discType)
+    private static int insertHeldDisc(CommandSourceStack source, LivingEntity target, byte discType)
             throws CommandSyntaxException {
         ServerPlayer actor = source.getPlayerOrException();
         ItemStack held = matchingHeldDisc(actor, discType);
@@ -247,7 +250,7 @@ public final class RoundaboutDiscCommand {
         }
         if (!inserted) throw TARGET_HAS_DISC.create();
         source.sendSuccess(() -> Component.literal("Inserted the held " + discName(discType)
-                + " disc into " + target.getGameProfile().getName() + "."), true);
+                + " disc into " + target.getName().getString() + "."), true);
         return 1;
     }
 
@@ -269,7 +272,7 @@ public final class RoundaboutDiscCommand {
         };
     }
 
-    private static int extractDisc(CommandSourceStack source, ServerPlayer target, String requestedType)
+    private static int extractDisc(CommandSourceStack source, LivingEntity target, String requestedType)
             throws CommandSyntaxException {
         ServerPlayer actor = source.getPlayerOrException();
         byte discType = switch (requestedType.toLowerCase(Locale.ROOT)) {
@@ -286,9 +289,14 @@ public final class RoundaboutDiscCommand {
                 SoundSource.PLAYERS, 1.0F, 1.0F);
         boolean stored = actor.getInventory().add(extracted);
         if (!stored && !extracted.isEmpty()) actor.drop(extracted, false);
-        source.sendSuccess(() -> Component.literal("Extracted " + target.getGameProfile().getName()
+        source.sendSuccess(() -> Component.literal("Extracted " + target.getName().getString()
                 + "'s " + discName(discType) + " disc into your inventory."), true);
         return 1;
+    }
+
+    private static LivingEntity livingTarget(Entity entity) throws CommandSyntaxException {
+        if (entity instanceof LivingEntity living) return living;
+        throw TARGET_NOT_LIVING.create();
     }
 
     private static String discName(byte discType) {
