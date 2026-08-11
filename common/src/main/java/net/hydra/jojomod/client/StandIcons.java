@@ -454,6 +454,23 @@ public class StandIcons {
     public static final ResourceLocation PLANET_WAVES_COSMIC_ICON= new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/cosmic_icon.png");
 
+    public static final ResourceLocation SILVER_CHARIOT_JAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/jab.png");
+    public static final ResourceLocation SILVER_CHARIOT_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/barrage.png");
+    public static final ResourceLocation SILVER_CHARIOT_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/guard.png");
+    public static final ResourceLocation SILVER_CHARIOT_FALL_BRACE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/fall_brace.png");
+    public static final ResourceLocation SILVER_CHARIOT_VAULT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/stand_ledge_grab.png");
+    public static final ResourceLocation SILVER_CHARIOT_SLAB_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/slab_cutting.png");
+    public static final ResourceLocation SILVER_CHARIOT_STATUE_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/statue_cutting.png");
+    public static final ResourceLocation SILVER_CHARIOT_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/mining.png");
+
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
     public static final ResourceLocation KING_CRIMSON_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
