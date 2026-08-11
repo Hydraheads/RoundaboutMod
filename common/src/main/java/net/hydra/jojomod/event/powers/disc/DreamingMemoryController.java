@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event.powers.disc;
 
 import net.hydra.jojomod.access.DiscBearer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.item.MemoryDiscItem;
 import net.minecraft.nbt.CompoundTag;
@@ -23,8 +24,11 @@ public final class DreamingMemoryController {
     }
 
     public static boolean canTemporarilyImplant(LivingEntity target) {
-        return target instanceof Mob && target.hasEffect(ModEffects.DREAMING)
-                && !((DiscBearer) target).roundabout$hasTemporaryMemoryDisc();
+        if (!(target instanceof Mob)) return false;
+        DiscBearer bearer = (DiscBearer) target;
+        return bearer.roundabout$ownsMemoryDisc()
+                && bearer.roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY) > 0
+                && !bearer.roundabout$hasTemporaryMemoryDisc();
     }
 
     public static boolean isDreamingWithoutMemory(Mob mob) {
@@ -42,11 +46,18 @@ public final class DreamingMemoryController {
     public static void tick(LivingEntity entity) {
         if (!(entity instanceof Mob) || entity.level().isClientSide()) return;
         DiscBearer bearer = (DiscBearer) entity;
-        if (!bearer.roundabout$hasTemporaryMemoryDisc()
-                || entity.hasEffect(ModEffects.DREAMING)) return;
+        if (!bearer.roundabout$hasTemporaryMemoryDisc()) return;
+
+        CompoundTag previousMemory = bearer.roundabout$getMemoryBeforeDreaming();
+        int remaining = previousMemory.getInt(SEAL_TICKS);
+        int next = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing
+                ? Math.max(0, remaining - 1) : 0;
+        previousMemory.putInt(SEAL_TICKS, next);
+        bearer.roundabout$setMemoryBeforeDreaming(previousMemory);
+        if (next > 0) return;
 
         ItemStack temporaryDisc = bearer.roundabout$getTemporaryMemoryDisc();
-        restore(bearer, bearer.roundabout$getMemoryBeforeDreaming());
+        restore(bearer, previousMemory);
         bearer.roundabout$setTemporaryMemoryDisc(ItemStack.EMPTY);
         bearer.roundabout$setMemoryBeforeDreaming(new CompoundTag());
         if (!temporaryDisc.isEmpty()) entity.spawnAtLocation(temporaryDisc, 0.35F);
