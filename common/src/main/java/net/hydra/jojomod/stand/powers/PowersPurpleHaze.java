@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -36,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -50,7 +52,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         {
             case PurpleHazeEntity.ANIME -> {return Component.translatable("skins.roundabout.purple_haze.anime");}
             //case PurpleHazeEntity.MIG_PLAGUE -> {return Component.translatable("skins.roundabout.purple_haze.mig_plague");}
-            default -> {return Component.translatable("skins.roundabout.purple_haze.default_purple_haze");}
+            default -> {return Component.translatable("skins.roundabout.purple_haze.anime");}
         }
     }
 
@@ -87,39 +89,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     @Override
-    public boolean tryPower ( int move, boolean forced){
-        StandUser SU = (StandUser) this.getSelf();
-        switch (move) {
-            case PowerIndex.SNEAK_MOVEMENT -> {
-                this.setAttackTimeDuring(0);
-                this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
-                this.setCooldown(PowerIndex.GLOBAL_DASH, 60);
-
-                if (this.getSelf() instanceof Player P) {
-                    P.getAbilities().flying = false;
-                }
-
-                Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
-                SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                SU.roundabout$setLeapIntentionally(true);
-
-                if (isPacketPlayer()) {
-                    float strength = 1F;
-                    if (this.getSelf().onGround()) {
-                        MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x, 1, look.z);
-                    } else {
-                        if (Math.abs(look.x) + Math.abs(look.z) == 0) {
-                            strength *= 0.6F;
-                        }
-                    }
-                    MainUtil.takeUnresistableKnockbackWithY(this.getSelf(), strength, look.x * 1, -1 * (this.getSelf().onGround() ? 1 : 0.8), look.z * 1);
-                }
-            }
-        }
-        return super.tryPower(move, forced);
-    }
-
-    @Override
     public StandEntity getNewStandEntity () {
         return ModEntities.PURPLE_HAZE.create(this.getSelf().level());
     }
@@ -132,11 +101,64 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     public void tryToStandLeapClient() {
-        if (!onCooldown(PowerIndex.GLOBAL_DASH)) {
-            tryPower(PowerIndex.SNEAK_MOVEMENT,true);
-            tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
+        if (vaultOrFallBraceFails()) {
+            if (this.getSelf().onGround()) {
+                boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
+                if ((jojoveinLikeKeys && !this.onCooldown(PowerIndex.SKILL_3)) ||
+                        (!jojoveinLikeKeys && !this.onCooldown(PowerIndex.GLOBAL_DASH))) {
+                    if (canExecuteMoveWithLevel(getLeapLevel())) {
+                        if (jojoveinLikeKeys) {
+                            this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                        } else {
+                            this.setCooldown(PowerIndex.GLOBAL_DASH, ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpCooldown);
+                            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 10);
+                        }
+                        bonusLeapCount = 3;
+                        bigLeap(this.getSelf(), 20, 1);
+                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
+                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                        tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
+                    }
+                }
+            }
         }
     }
+    public void applyLeapCooldowns(){
+
+    }
+
+    public void bigLeap(LivingEntity entity,float range, float mult){
+        Vec3 vec3d = entity.getEyePosition(1);
+        Vec3 vec3d2 = entity.getViewVector(1);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        double mag = this.getSelf().getPosition(1).distanceTo(
+                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+        Vec3 vec3 = new Vec3(
+                (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                (blockHit.getLocation().y - this.getSelf().getY())/mag,
+                (blockHit.getLocation().z - this.getSelf().getZ())/mag
+        );
+        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        if (gravD != Direction.DOWN){
+            vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+        }
+        vec3= new Vec3(
+                vec3.x*mult,
+                0.6+Math.max(vec3.y,0)*mult,
+                vec3.z*mult
+        );
+
+        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                vec3.x,
+                vec3.y,
+                vec3.z
+        );
+
+    }
+
     @Override
     public boolean setPowerOther(int move, int lastMove) {
         switch (move) {
@@ -258,37 +280,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
     }
-    public void bigLeap(LivingEntity entity,float range, float mult){
-        Vec3 vec3d = entity.getEyePosition(1);
-        Vec3 vec3d2 = entity.getViewVector(1);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
-        double mag = this.getSelf().getPosition(1).distanceTo(
-                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
-        Vec3 vec3 = new Vec3(
-                (blockHit.getLocation().x - this.getSelf().getX())/mag,
-                (blockHit.getLocation().y - this.getSelf().getY())/mag,
-                (blockHit.getLocation().z - this.getSelf().getZ())/mag
-        );
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-        if (gravD != Direction.DOWN){
-            vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+    @Override
+    public void tickStandRejection(MobEffectInstance effect) {
+        if (!this.getSelf().level().isClientSide()) {
+            if (effect.getDuration() == 15) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    self.addEffect(new MobEffectInstance(
+                            ModEffects.HAZE_VIRUS, 400));
+                    }
+                }
         }
-        vec3= new Vec3(
-                vec3.x*mult,
-                0.6+Math.max(vec3.y,0)*mult,
-                vec3.z*mult
-        );
-
-        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                vec3.x,
-                vec3.y,
-                vec3.z
-        );
-
     }
-
 
 
     @Override
@@ -301,7 +304,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "Feu_Ghost/Lloyd10").withStyle(ChatFormatting.YELLOW);
+        return Component.literal(  "Feu_Ghost&Lloyd10").withStyle(ChatFormatting.YELLOW);
     }
 
 

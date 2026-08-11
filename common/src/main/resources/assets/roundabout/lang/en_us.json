@@ -464,6 +464,8 @@
   "effect.roundabout.singe": "Char",
   "effect.roundabout.crippled": "Crippled",
   "effect.roundabout.haze_virus": "Haze Virus",
+  "effect.roundabout.distortion_virus": "Distortion Virus",
+  "effect.roundabout.virus_immunity": "Virus Immunity",
 
 
   "item.roundabout.creative_only.info": "Creative Only",
