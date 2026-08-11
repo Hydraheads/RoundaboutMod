@@ -246,7 +246,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
             tag.putInt("stealType",stealType);
             tag.putInt("swings",0);
             tag.putBoolean("activated",true);
-            tag.putString("vicName", victim.getName().getString());
+            tag.putString("vicName", victim.getDisplayName().getString());
             if (stealType == 14) {
                 tag.putLong("Pos", victim.getOnPos().above().asLong());
                 tag.putString("Dimension", victim.level().dimension().location().toString());
