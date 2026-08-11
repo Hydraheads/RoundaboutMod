@@ -141,6 +141,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public final AnimationState idle = new AnimationState();
 	public final AnimationState moving = new AnimationState();
+	public final AnimationState hideTorch = new AnimationState();
 
 	int tickTargetFindCount = 0;
 	static final int tickTargetFindMax = 2;
@@ -237,6 +238,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.moving.startIfStopped(this.tickCount);
 		} else {
 			this.moving.stop();
+		}
+
+		if (getTorchStatus()) {
+			hideTorch.stop();
+		}else {
+			hideTorch.startIfStopped(this.tickCount);
 		}
 
 	}
@@ -851,9 +858,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 
     @Override public boolean hurt(DamageSource source, float amount) {
 		Entity causer = source.getEntity();
-		if (causer != this.getUser() && causer instanceof StandEntity SE && SE.getUser() != this.getUser()
+		if (!(causer == this.getUser() || causer instanceof StandEntity SE && SE.getUser() == this.getUser())
 				&& MainUtil.isStandDamage(source)) {
-			stunTicks = 8;
+			stunTicks = 14;
 			if (jumpTick < 16) { jumpTick = 16; }
 			if (attackTick < 10) { jumpTick = 10; }
 

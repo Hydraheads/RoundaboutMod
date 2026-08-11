@@ -48,7 +48,7 @@ public abstract class FabricServerPlayer extends Player {
                         ItemEntity $$4 = new ItemEntity(this.level(), this.getX(), $$3, this.getZ(), stand.getHeldItem().copy());
                         $$4.setPickUpDelay(40);
                         $$4.setThrower(stand.getUUID());
-                        this.level().addFreshEntity($$4);
+                        stand.level().addFreshEntity($$4);
                         stand.setHeldItem(ItemStack.EMPTY);
                     }
                 }

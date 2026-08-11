@@ -3814,7 +3814,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         super.updateUniqueMoves();
     }
 
-    public int chargedFinal;
+    public int chargedFinal = 0;
 
     public void updateImpale(){
         if (this.attackTimeDuring > -1) {

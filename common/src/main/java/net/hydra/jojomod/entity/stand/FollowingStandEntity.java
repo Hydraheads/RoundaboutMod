@@ -1,5 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.OffsetIndex;
@@ -14,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -122,6 +125,38 @@ public class FollowingStandEntity extends StandEntity{
 
     public byte lastOffsetType = 0;
 
+    public void dangerExploitFix(byte ot){
+        if (!this.level().isClientSide()) {
+            LivingEntity user = getFollowing(); // however you retrieve your user
+
+            if (user != null && OffsetIndex.OffsetStyle(ot) != OffsetIndex.LOOSE_STYLE) {
+                boolean dis1 = (MainUtil.cheapDistanceTo2(user.getX(),user.getZ(),getX(),getZ()) > 30);
+                boolean dis2 = (user.level().dimension() != this.level().dimension());
+
+                if (dis1 || dis2) {
+                    if (this.getPassengers() != null && !this.getPassengers().isEmpty()) {
+                        for (Entity passenger : this.getPassengers()) {
+                            Vec3 originalPos = passenger.position();
+
+                            if (originalPos != null) {
+                                passenger.teleportTo(
+                                        originalPos.x,
+                                        originalPos.y,
+                                        originalPos.z
+                                );
+                            }
+
+                            passenger.stopRiding();
+                        }
+                    }
+                }
+
+                if (dis2) {
+                    this.discard();
+                }
+            }
+        }
+    }
     @Override
     public void tick() {
         validateUUID();
@@ -131,8 +166,10 @@ public class FollowingStandEntity extends StandEntity{
         if (this.lastOffsetType != ot) {
             this.lastOffsetType = ot;
         }
+        dangerExploitFix(ot);
         super.tick();
 
+        dangerExploitFix(ot);
         if (!this.level().isClientSide()) {
             if (!forceVisible) {
                 if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) {
@@ -364,7 +401,15 @@ public class FollowingStandEntity extends StandEntity{
      * with a follower.
      */
     public void tickStandOut() {
-
+        if (!this.level().isClientSide()) {
+            LivingEntity user = getFollowing(); // however you retrieve your user
+            if (user != null && user.level().dimension() != this.level().dimension() ) {
+                return;
+            }
+            if (isRemoved()){
+                return;
+            }
+        }
 
         byte ot = this.getOffsetType();
         if (lockPos()) {

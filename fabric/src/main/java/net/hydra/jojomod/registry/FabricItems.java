@@ -275,6 +275,8 @@ public class FabricItems {
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
+    public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
+    public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
     public static Item GYRO_MASK = registerItem("gyro_mask", new MaskItem(new Item.Properties().stacksTo(1), new GyroVisage(null)));
     public static Item SANDMAN_MASK = registerItem("sandman_mask", new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null)));
@@ -490,6 +492,8 @@ public class FabricItems {
                         entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
+                        entries.accept(DOT_HAN_MASK);
+                        entries.accept(AVDUL_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(DAIYA_MASK);
                         entries.accept(DAIYA_2_MASK);
@@ -922,6 +926,8 @@ public class FabricItems {
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOHNGALLIA_MASK = JOHNGALLIA_MASK;
+        ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
+        ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;

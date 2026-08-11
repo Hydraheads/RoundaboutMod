@@ -98,7 +98,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
         } else {
             matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
         }
-        if (mobEntity.getPlantedBitesTheDust() == null || ClientUtil.getPlayer() == mobEntity.getUser())super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        if (!mobEntity.getPlantedBitesTheDust()|| ClientUtil.getPlayer() == mobEntity.getUser())super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
     @Nullable
     @Override

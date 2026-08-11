@@ -1,0 +1,51 @@
+package net.hydra.jojomod.event.powers.visagedata;
+
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.item.ModItems;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+
+public class AvdulVisage extends VisageData {
+    public AvdulVisage(LivingEntity self) {
+        super(self);
+    }
+    public VisageData generateVisageData(LivingEntity entity){
+        return new AvdulVisage(entity);
+    }
+    @Override
+    public JojoNPC getModelNPC(LivingEntity pl){
+        JojoNPC jojoNPC = ModEntities.AVDOL.create(pl.level());
+        if (jojoNPC !=null){
+            jojoNPC.setTrueBasis(ModItems.AVDUL_MASK.getDefaultInstance());
+        }
+        return jojoNPC;
+    }
+    @Override
+    public Vec3 sizeModifier(){
+        return new Vec3(1.0675F,1.0675F,1.0675F);
+    }
+    @Override
+    public Vector3f scale(){
+        return new Vector3f(0.969F, 0.96F, 0.96F);
+    }
+
+    public Vector3f scaleHead(){
+        return new Vector3f(0.95F, 0.95F, 0.95F);
+    }
+
+    @Override
+    public Vec3i getHairColor(){
+        return new Vec3i(71,51,45);
+    }
+
+    @Override
+    public float getNametagHeight(){
+        return 0.54f;
+    }
+    public String getSkinPath(){
+        return "avdul";
+    }
+}
