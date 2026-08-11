@@ -112,7 +112,28 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-          setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 1, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_1,0);
+        } else {
+            LockedOrNot(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.SKILL_1_SNEAK,0);
+        }
+
+        if (!isHoldingSneak()){
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2,0);
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
+        }
+
+        if (!isHoldingSneak()) {
+            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+        } else {
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+        }
+        if (!isHoldingSneak()) {
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+        } else {
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
+        }
     }
     @Override
     public boolean cancelSprintJump(){
@@ -175,11 +196,11 @@ public class PowersD4C extends NewPunchingStand {
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
                 impaleTicks = 15;
-                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(chopRange));
             }
         } else {
             /*Caps how far out the punch goes*/
-            Entity targetEntity = getTargetEntity(this.self,impaleRange);
+            Entity targetEntity = getTargetEntity(this.self,chopRange);
             impaleImpact(targetEntity);
         }
 
@@ -353,7 +374,7 @@ public class PowersD4C extends NewPunchingStand {
         if (activePower == PowerIndex.POWER_1_SNEAK){
             this.animateStand(D4CEntity.CHOP);
             this.setAttackTimeDuring(-20);
-            if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+            if (entity != null && entity.distanceTo(self) > chopRange+0.75F) {
                 entity = null;
             }
             if (entity != null) {
@@ -368,7 +389,6 @@ public class PowersD4C extends NewPunchingStand {
                         addEXP(5, LE);
                         if (MainUtil.getMobBleed(entity)) {
                             MainUtil.makeBleed(entity, 1, 300, this.getSelf());
-                            MainUtil.makeMobBleed(entity);
                         }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
@@ -378,9 +398,9 @@ public class PowersD4C extends NewPunchingStand {
             }
 
             if (this.getSelf() instanceof Player) {
-                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
             }
-            this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
             SoundEvent SE;
             float pitch = 1F;
             if (entity != null) {
@@ -530,6 +550,7 @@ public class PowersD4C extends NewPunchingStand {
         }
         animateStand((byte) 86);
     }
+    public static final float chopRange = 4F;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -539,7 +560,7 @@ public class PowersD4C extends NewPunchingStand {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-            Entity TE = this.getTargetEntity(playerEntity, impaleRange);
+            Entity TE = this.getTargetEntity(playerEntity, chopRange);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
