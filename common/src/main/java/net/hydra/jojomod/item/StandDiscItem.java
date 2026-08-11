@@ -68,10 +68,12 @@ public class StandDiscItem extends Item {
                     continue;
                 }
 
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
-                            PacketDataIndex.S2C_DISC_ADD_INT,entid);
+                if (!(play instanceof Player pl && pl.isCreative())) {
+                    BlockPos blockPos = serverPlayerEntity.blockPosition();
+                    if (blockPos.closerToCenterThan(userLocation, range)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
+                                PacketDataIndex.S2C_DISC_ADD_INT, entid);
+                    }
                 }
             }
         }

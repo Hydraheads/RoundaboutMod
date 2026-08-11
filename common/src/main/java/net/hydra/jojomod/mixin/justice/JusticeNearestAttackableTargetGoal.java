@@ -115,19 +115,23 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
         if (this.targetType != Player.class) {
             return;
         }
-        if (this.target == null) {
-            CloneEntity nearestClone = ActiveCloneManager.getNearest(mob);
-            if (mob.getAttributes().hasAttribute(Attributes.FOLLOW_RANGE)){
-            double followRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
-            double followRangeSqr = followRange * followRange;
-            if (nearestClone != null
-                    && mob.distanceToSqr(nearestClone) <= followRangeSqr
-                    && (target == null
-                    || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))
-                && mob.hasLineOfSight(nearestClone)) {
-                    if (targetConditions.test(this.mob, nearestClone) || (nearestClone.getPlayer() != null &&
-                            targetConditions.test(this.mob, nearestClone.getPlayer()))) {
-                        this.target = nearestClone;
+        if (!(mob.getType().builtInRegistryHolder().key().location().getNamespace().contains("aquatic"))) {
+            if (this.target == null) {
+                CloneEntity nearestClone = ActiveCloneManager.getNearest(mob);
+                if (nearestClone != null) {
+                    if (mob.getAttributes().hasAttribute(Attributes.FOLLOW_RANGE)) {
+                        double followRange = mob.getAttributeValue(Attributes.FOLLOW_RANGE);
+                        double followRangeSqr = followRange * followRange;
+                        if (nearestClone != null
+                                && mob.distanceToSqr(nearestClone) <= followRangeSqr
+                                && (target == null
+                                || mob.distanceToSqr(nearestClone) < mob.distanceToSqr(target))
+                                && mob.hasLineOfSight(nearestClone)) {
+                            if (targetConditions.test(this.mob, nearestClone) || (nearestClone.getPlayer() != null &&
+                                    targetConditions.test(this.mob, nearestClone.getPlayer()))) {
+                                this.target = nearestClone;
+                            }
+                        }
                     }
                 }
             }
