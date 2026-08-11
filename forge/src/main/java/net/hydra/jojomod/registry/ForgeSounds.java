@@ -1110,6 +1110,16 @@ public class ForgeSounds {
             register(ModSounds.HAIR_SHARPEN, ModSounds.HAIR_SHARPEN_ID);
     public static final RegistryObject<SoundEvent> FULL_FREEZE =
             register(ModSounds.FULL_FREEZE, ModSounds.FULL_FREEZE_ID);
+    public static final RegistryObject<SoundEvent> SOFT_HIT_1 =
+            register(ModSounds.SOFT_HIT_1, ModSounds.SOFT_HIT_1_ID);
+    public static final RegistryObject<SoundEvent> SOFT_HIT_2 =
+            register(ModSounds.SOFT_HIT_2, ModSounds.SOFT_HIT_2_ID);
+    public static final RegistryObject<SoundEvent> SOFT_HIT_3 =
+            register(ModSounds.SOFT_HIT_3, ModSounds.SOFT_HIT_3_ID);
+    public static final RegistryObject<SoundEvent> SOFT_HIT_4 =
+            register(ModSounds.SOFT_HIT_4, ModSounds.SOFT_HIT_4_ID);
+    public static final RegistryObject<SoundEvent> STAND_BARRAGE_HIT_SOFT =
+            register(ModSounds.STAND_BARRAGE_HIT_SOFT, ModSounds.STAND_BARRAGE_HIT_SOFT_ID);
     public static final RegistryObject<SoundEvent> ICE_BREAKER =
             register(ModSounds.ICE_BREAKER, ModSounds.ICE_BREAKER_ID);
     public static final RegistryObject<SoundEvent> HALLELUJAH =

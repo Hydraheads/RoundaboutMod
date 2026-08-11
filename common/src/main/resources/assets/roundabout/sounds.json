@@ -29,6 +29,36 @@
       "roundabout:disc_remove"
     ]
   },
+  "soft_hit_1": {
+    "subtitle": "sounds.roundabout.soft_hit_1",
+    "sounds": [
+      "roundabout:soft_hit_1"
+    ]
+  },
+  "soft_hit_2": {
+    "subtitle": "sounds.roundabout.soft_hit_2",
+    "sounds": [
+      "roundabout:soft_hit_2"
+    ]
+  },
+  "soft_hit_3": {
+    "subtitle": "sounds.roundabout.soft_hit_3",
+    "sounds": [
+      "roundabout:soft_hit_3"
+    ]
+  },
+  "soft_hit_4": {
+    "subtitle": "sounds.roundabout.soft_hit_4",
+    "sounds": [
+      "roundabout:soft_hit_4"
+    ]
+  },
+  "stand_barrage_hit_soft": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit_soft",
+    "sounds": [
+      "roundabout:stand_barrage_hit_soft"
+    ]
+  },
   "king_blood_splash": {
     "subtitle": "sounds.roundabout.king_blood_splash",
     "sounds": [

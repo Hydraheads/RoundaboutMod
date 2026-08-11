@@ -574,6 +574,11 @@ public class FabricSounds {
         addSound(ModSounds.HAIR_SHARPEN_ID, ModSounds.HAIR_SHARPEN_EVENT);
         addSound(ModSounds.FULL_FREEZE_ID, ModSounds.FULL_FREEZE_EVENT);
         addSound(ModSounds.ICE_BREAKER_ID, ModSounds.ICE_BREAKER_EVENT);
+        addSound(ModSounds.SOFT_HIT_1_ID, ModSounds.SOFT_HIT_1_EVENT);
+        addSound(ModSounds.SOFT_HIT_2_ID, ModSounds.SOFT_HIT_2_EVENT);
+        addSound(ModSounds.SOFT_HIT_3_ID, ModSounds.SOFT_HIT_3_EVENT);
+        addSound(ModSounds.SOFT_HIT_4_ID, ModSounds.SOFT_HIT_4_EVENT);
+        addSound(ModSounds.STAND_BARRAGE_HIT_SOFT_ID, ModSounds.STAND_BARRAGE_HIT_SOFT_EVENT);
 
         addSound(ModSounds.GREEN_DAY_SPLIT_ID,ModSounds.GREEN_DAY_SPLIT_EVENT);
         addSound(ModSounds.GREEN_DAY_ARM_SPIN_ID,ModSounds.GREEN_DAY_ARM_SPIN_EVENT);

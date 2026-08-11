@@ -1881,6 +1881,24 @@ public class ModSounds {
     public static final ResourceLocation HAIR_SHARPEN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HAIR_SHARPEN);
     public static SoundEvent HAIR_SHARPEN_EVENT = SoundEvent.createVariableRangeEvent(HAIR_SHARPEN_ID);
 
+
+    public static final String SOFT_HIT_1 = "soft_hit_1";
+    public static final ResourceLocation SOFT_HIT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_HIT_1);
+    public static SoundEvent SOFT_HIT_1_EVENT = SoundEvent.createVariableRangeEvent(SOFT_HIT_1_ID);
+    public static final String SOFT_HIT_2 = "soft_hit_2";
+    public static final ResourceLocation SOFT_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_HIT_2);
+    public static SoundEvent SOFT_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(SOFT_HIT_2_ID);
+    public static final String SOFT_HIT_3 = "soft_hit_3";
+    public static final ResourceLocation SOFT_HIT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_HIT_3);
+    public static SoundEvent SOFT_HIT_3_EVENT = SoundEvent.createVariableRangeEvent(SOFT_HIT_3_ID);
+    public static final String SOFT_HIT_4 = "soft_hit_4";
+    public static final ResourceLocation SOFT_HIT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SOFT_HIT_4);
+    public static SoundEvent SOFT_HIT_4_EVENT = SoundEvent.createVariableRangeEvent(SOFT_HIT_4_ID);
+    public static final String STAND_BARRAGE_HIT_SOFT = "stand_barrage_hit_soft";
+    public static final ResourceLocation STAND_BARRAGE_HIT_SOFT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STAND_BARRAGE_HIT_SOFT);
+    public static SoundEvent STAND_BARRAGE_HIT_SOFT_EVENT = SoundEvent.createVariableRangeEvent(STAND_BARRAGE_HIT_SOFT_ID);
+
+
     public static final String FULL_FREEZE = "full_freeze";
     public static final ResourceLocation FULL_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+FULL_FREEZE);
     public static SoundEvent FULL_FREEZE_EVENT = SoundEvent.createVariableRangeEvent(FULL_FREEZE_ID);
