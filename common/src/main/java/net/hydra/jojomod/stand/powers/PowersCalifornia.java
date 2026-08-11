@@ -270,6 +270,9 @@ public class PowersCalifornia extends NewDashPreset {
 
     private final Set<Integer> clientEntityIds = new HashSet<>();
     public boolean isCapturedEntity(Entity entity) {
+        if (entity == null){
+            return false;
+        }
         return clientEntityIds.contains(entity.getId());
     }
 
@@ -898,7 +901,7 @@ public class PowersCalifornia extends NewDashPreset {
             if (ent != null && isCapturedEntity(ent)) {
                 return true;
             }
-            if (ent instanceof CloneEntity ce && isCapturedEntity(ce.player)){
+            if (ent instanceof CloneEntity ce && ce.player != null && isCapturedEntity(ce.player)){
                 return true;
             }
         }
