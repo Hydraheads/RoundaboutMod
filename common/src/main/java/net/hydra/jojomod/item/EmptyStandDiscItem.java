@@ -84,11 +84,12 @@ public class EmptyStandDiscItem extends Item {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
-
-                BlockPos blockPos = serverPlayerEntity.blockPosition();
-                if (blockPos.closerToCenterThan(userLocation, range)) {
-                    S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
-                            PacketDataIndex.S2C_DISC_REMOVE_INT,entid);
+                if (!(play instanceof Player pl && pl.isCreative())) {
+                    BlockPos blockPos = serverPlayerEntity.blockPosition();
+                    if (blockPos.closerToCenterThan(userLocation, range)) {
+                        S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
+                                PacketDataIndex.S2C_DISC_REMOVE_INT, entid);
+                    }
                 }
             }
         }
