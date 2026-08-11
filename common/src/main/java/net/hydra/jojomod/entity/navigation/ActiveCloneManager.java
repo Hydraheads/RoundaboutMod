@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ActiveCloneManager {
 
-    private static final Set<WeakReference<CloneEntity>> ACTIVE_CLONES =
+    public static final Set<WeakReference<CloneEntity>> ACTIVE_CLONES =
             ConcurrentHashMap.newKeySet();
 
     private ActiveCloneManager() {}
