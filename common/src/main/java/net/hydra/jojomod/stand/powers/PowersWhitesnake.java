@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -2142,6 +2143,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void handleStandAttack(Player player, Entity target) {
         if (getActivePower() == DISC_STEAL) discStealImpact(target);
+        else if (getActivePower() == PowerIndex.POWER_1_SNEAK) impaleImpact(target);
+        else if (getActivePower() == PowerIndex.SNEAK_ATTACK) finalAttackImpact(target);
         else super.handleStandAttack(player, target);
     }
 
@@ -2552,6 +2555,30 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void updateFinalAttack() {
         if (attackTimeDuring == 5) standFinalAttack();
+    }
+
+    @Override
+    public void renderAttackHud(GuiGraphics context, Player playerEntity,
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
+        boolean standOn = PowerTypes.hasStandActive(playerEntity);
+        int j = scaledHeight / 2 - 7 - 4;
+        int k = scaledWidth / 2 - 8;
+        if (standOn && getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            float charge = (float) attackTimeDuring / getMaxSuperHitTime();
+            int barWidth = Math.min(15, Math.round(charge * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 111, 15, 6);
+            if (charge >= 1.0F) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 132, barWidth, 6);
+            } else if (charge >= 0.5F) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 118, barWidth, 6);
+            } else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 125, barWidth, 6);
+            }
+        } else {
+            super.renderAttackHud(context, playerEntity, scaledWidth, scaledHeight, ticks,
+                    vehicleHeartCount, flashAlpha, otherFlashAlpha);
+        }
     }
 
     public float getFinalAttackKnockback() {

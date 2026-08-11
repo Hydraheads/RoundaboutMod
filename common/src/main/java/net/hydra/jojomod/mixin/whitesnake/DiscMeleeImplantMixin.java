@@ -5,7 +5,6 @@ import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.item.AbstractBodyDiscItem;
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,7 +33,6 @@ public abstract class DiscMeleeImplantMixin {
         if (!target.level().isClientSide() && ((StandUser) target).roundabout$getStandDisc().isEmpty()) {
             ItemStack implanted = stack.copy();
             implanted.setCount(1);
-            DiscItemData.setOwnerIfMissing(implanted, target);
             if (StandArrowItem.grantStand(implanted, target)) {
                 target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);

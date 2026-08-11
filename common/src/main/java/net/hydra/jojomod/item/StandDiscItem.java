@@ -88,7 +88,6 @@ public class StandDiscItem extends Item {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
         if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
-            DiscItemData.setOwnerIfMissing($$3, $$1);
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
                 discNearby($$1,50,sp.getId());
 
@@ -133,7 +132,6 @@ public class StandDiscItem extends Item {
         if (!target.level().isClientSide() && ((StandUser) target).roundabout$getStandDisc().isEmpty()) {
             ItemStack implanted = stack.copy();
             implanted.setCount(1);
-            DiscItemData.setOwnerIfMissing(implanted, target);
             if (StandArrowItem.grantStand(implanted, target)) {
                 target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);

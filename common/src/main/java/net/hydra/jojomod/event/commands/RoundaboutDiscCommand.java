@@ -138,7 +138,6 @@ public final class RoundaboutDiscCommand {
         if (!(created instanceof LivingEntity mob)) throw INVALID_MEMORY_ENTITY.create();
 
         ItemStack disc = new ItemStack(ModItems.MEMORY_DISC);
-        DiscItemData.setOwner(disc, mob);
         DiscItemData.setPersonality(disc, MemoryPersonality.classify(mob));
         DiscItemData.captureMemoryReading(disc, mob);
         created.discard();
@@ -153,7 +152,6 @@ public final class RoundaboutDiscCommand {
         ServerPlayer player = source.getPlayerOrException();
         ItemStack disc = new ItemStack(discType == WhitesnakeDiscUtil.SIGHT
                 ? ModItems.SIGHT_DISC : ModItems.HEARING_DISC);
-        DiscItemData.setOwner(disc, player);
         giveDisc(player, disc);
         source.sendSuccess(() -> Component.literal("Summoned your " + discName(discType) + " disc."), true);
         return 1;
@@ -196,13 +194,8 @@ public final class RoundaboutDiscCommand {
         };
         bearer.roundabout$setMemoryPersonality(personality);
         bearer.roundabout$setHasMemoryDisc(true);
-        if (personality == MemoryPersonality.PLAYER) {
-            bearer.roundabout$setMemoryDiscOwnerId(target.getUUID().toString());
-            bearer.roundabout$setMemoryDiscOwnerName(target.getGameProfile().getName());
-        } else {
-            bearer.roundabout$setMemoryDiscOwnerId("debug:" + type);
-            bearer.roundabout$setMemoryDiscOwnerName(MemoryPersonality.name(personality));
-        }
+        bearer.roundabout$setMemoryDiscOwnerId("");
+        bearer.roundabout$setMemoryDiscOwnerName("");
         source.sendSuccess(() -> Component.literal("Inserted " + MemoryPersonality.name(personality)
                 + " memory into " + target.getGameProfile().getName() + "."), true);
         return 1;
@@ -219,12 +212,12 @@ public final class RoundaboutDiscCommand {
         DiscBearer bearer = (DiscBearer) target;
         if (discType == WhitesnakeDiscUtil.SIGHT) {
             bearer.roundabout$setHasSightDisc(present);
-            bearer.roundabout$setSightDiscOwnerId(present ? target.getUUID().toString() : "");
-            bearer.roundabout$setSightDiscOwnerName(present ? target.getGameProfile().getName() : "");
+            bearer.roundabout$setSightDiscOwnerId("");
+            bearer.roundabout$setSightDiscOwnerName("");
         } else {
             bearer.roundabout$setHasHearingDisc(present);
-            bearer.roundabout$setHearingDiscOwnerId(present ? target.getUUID().toString() : "");
-            bearer.roundabout$setHearingDiscOwnerName(present ? target.getGameProfile().getName() : "");
+            bearer.roundabout$setHearingDiscOwnerId("");
+            bearer.roundabout$setHearingDiscOwnerName("");
         }
         String name = discType == WhitesnakeDiscUtil.SIGHT ? "sight" : "hearing";
         source.sendSuccess(() -> Component.literal("Set " + target.getGameProfile().getName()
@@ -243,7 +236,6 @@ public final class RoundaboutDiscCommand {
             if (!((StandUser) target).roundabout$getStandDisc().isEmpty()) throw TARGET_HAS_DISC.create();
             ItemStack implanted = held.copy();
             implanted.setCount(1);
-            DiscItemData.setOwnerIfMissing(implanted, target);
             inserted = StandArrowItem.grantStand(implanted, target);
             if (inserted && !actor.isCreative()) held.shrink(1);
             if (inserted) {
