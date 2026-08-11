@@ -85,9 +85,8 @@ public class StandDiscItem extends Item {
         } else {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
-        if (!$$0.isClientSide) {
-            DiscItemData.setOwnerIfMissing($$3, $$1);
         if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
+            DiscItemData.setOwnerIfMissing($$3, $$1);
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
                 discNearby($$1,50,sp.getId());
 
