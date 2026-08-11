@@ -2773,12 +2773,41 @@ public void unlockSkin(){
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
+    @Override
+    public float getPunchLandPitch(){
+        return 1.1F + 0.05F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 0.9F;
+    }
 
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.SOFT_HIT_1_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.SOFT_HIT_4_EVENT;
+    }
     @Override
     public void refreshCooldowns() {
         super.refreshCooldowns();
         this.setGoBeyondChargeTicks(0);
         this.setShootTicks(0);
+    }
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SOFT_HIT_4_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+        }
+    }
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_SOFT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
     }
 }
 

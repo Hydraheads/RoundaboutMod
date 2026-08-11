@@ -41,7 +41,9 @@ public class D4CEntity extends FollowingStandEntity {
             KEYHOLDER = 18,
             GRAY = 19,
             BLACK_WHITE = 20,
-            REVERSE = 21;
+            REVERSE = 21,
+            CHOCOLATE = 22,
+            INVERSE = 23;
 
 
     public final AnimationState hideFists = new AnimationState();
