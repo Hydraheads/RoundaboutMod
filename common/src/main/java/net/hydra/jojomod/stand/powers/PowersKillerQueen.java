@@ -1059,7 +1059,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.self instanceof Player){
             if (isPacketPlayer()){
                 this.setAttackTimeDuring(-20);
-                this.mobPlantTicks = 15;
+                this.impaleTicks = 15;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
             }
         } else {
