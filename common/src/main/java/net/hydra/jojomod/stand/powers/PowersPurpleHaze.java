@@ -221,7 +221,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
-            case PowerIndex.SNEAK_ATTACK_CHARGE -> attempThrowPod();
+            case PowerIndex.SNEAK_ATTACK_CHARGE -> attemptThrowPod();
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -246,18 +246,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
-        setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
-        if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NONE);
-        } else {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-        }
+        if (canExecuteMoveWithLevel(2)) {
+            setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
+        } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
+
         if (isHoldingSneak()) {
             setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.SKILL_3);
         } else {
             if (canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+            } else if (canFallBrace()) {
+                setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_FALL_CATCH, PowerIndex.GLOBAL_DASH);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
@@ -293,12 +293,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (level == 5) {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
-            } else {
-                if (level == 3) {
+            }
+            else { if (level == 4) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                        withStyle(ChatFormatting.AQUA), true);
+                }
+                else if (level == 3) {
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                             withStyle(ChatFormatting.AQUA), true);
-                } else {
-                    if (level == 2) {
+                }
+                else {if (level == 2) {
                         ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
                                 withStyle(ChatFormatting.AQUA), true);
                     }
@@ -342,7 +346,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
-    public void attempThrowPod() {
+    public void attemptThrowPod() {
 
         ThrowPod();
         //Only when pod left is at least 1(limit will be added when pod system gets done)
@@ -371,10 +375,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             this.self.level().addFreshEntity(snowball);
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
-            if (this.getSelf() instanceof ServerPlayer sp) {
-                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SNEAK_ATTACK,
-                        200);
-            }
+
         }
 
 
