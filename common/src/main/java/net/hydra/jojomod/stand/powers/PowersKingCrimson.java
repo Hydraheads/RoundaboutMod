@@ -843,7 +843,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
             boolean upAiNow = upAi(attackTarget);
-            if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3)) {
+            if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3) &&
+            MainUtil.getMobBleed(self)) {
                 if (this.attackTimeDuring <= -1) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                     setCooldown(PowerIndex.SKILL_2_SNEAK,60);
