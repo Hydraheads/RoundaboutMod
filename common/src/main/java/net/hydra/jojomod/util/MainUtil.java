@@ -1686,14 +1686,19 @@ public class MainUtil {
     }
 
     public static void ejectInFront(StandEntity stand){
-        if (stand.getFirstPassenger() != null && stand.getUser() != null){
+        if (stand.getFirstPassenger() != null){
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
-            if (entity.level().dimensionTypeId() == stand.getUser().level().dimensionTypeId()) {
-                if (entity instanceof Player ent) {
-                    ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
-                } else {
-                    entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+            LivingEntity user = stand.getUser();
+            if (user != null && !user.isRemoved()) {
+                if (entity.level().dimensionTypeId() == user.level().dimensionTypeId()) {
+                    if (user.position().distanceTo(entity.position()) < 50) {
+                        if (entity instanceof Player ent) {
+                            ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(user.getX(), user.getY(), user.getZ()));
+                        } else {
+                            entity.dismountTo(user.getX(), user.getY(), user.getZ());
+                        }
+                    }
                 }
             }
         }

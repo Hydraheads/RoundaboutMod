@@ -567,7 +567,7 @@ public abstract class EntityAndData implements IEntityAndData {
                             ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
                             $$4.setPickUpDelay(40);
                             $$4.setThrower(stand.getUUID());
-                            this.level().addFreshEntity($$4);
+                            stand.level().addFreshEntity($$4);
                             stand.setHeldItem(ItemStack.EMPTY);
                         }
                         if (!stand.getPassengers().isEmpty()){

@@ -801,6 +801,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     @javax.annotation.Nullable
     public Entity changeDimension(ServerLevel $$0) {
         if (this.level() instanceof ServerLevel && !this.isRemoved()) {
+
+            ejectPassengers();
             if (!this.getHeldItem().isEmpty()) {
                 if (this.canAcquireHeldItem) {
                     double $$3 = this.getEyeY() - 0.3F;
@@ -809,9 +811,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     this.setHeldItem(ItemStack.EMPTY);
+                    discard();
+                    return null;
                 }
-            }
-            else if(this instanceof ManhattanTransferEntity ME){
+            } else if (this instanceof FollowingStandEntity){
+                discard();
+                return null;
+            } else if(this instanceof ManhattanTransferEntity ME){
                 if(!ME.getHeldItemManhattan().isEmpty()){
                     if (this.canAcquireHeldItem) {
                         double $$3 = this.getEyeY() - 0.3F;

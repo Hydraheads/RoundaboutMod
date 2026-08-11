@@ -161,9 +161,14 @@ public class BlockGrabPreset extends NewPunchingStand {
         return false;
     }
     public boolean hasEntity(){
-        if (((StandUser) this.getSelf()).roundabout$getStand() != null){
-            if ((((StandUser) this.getSelf()).roundabout$getStand().getFirstPassenger() != null)){
-                return true;
+        StandUser sels = getUserData(self);
+        StandEntity stand = sels.roundabout$getStand();
+        if (stand != null && stand.isAlive() && !stand.isRemoved() &&
+        stand.distanceTo(self) < 50){
+            if (stand.getFirstPassenger() != null){
+                if (stand.level().dimension() == self.level().dimension()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -260,6 +265,15 @@ public class BlockGrabPreset extends NewPunchingStand {
     @Override
     public void tickPower(){
         super.tickPower();
+
+        if (!this.getSelf().level().isClientSide) {
+            if (hasEntity() && getActivePower() != PowerIndex.POWER_2_EXTRA) {
+                StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+                if (standEntity != null){
+                    standEntity.ejectPassengers();
+                }
+            }
+        }
         if (!isClient()){
             if (hardBlocker > 0){
                 hardBlocker--;
@@ -368,6 +382,10 @@ public class BlockGrabPreset extends NewPunchingStand {
                     return false;
                 } else if (standEntity.getFirstPassenger() != null){
 
+                    if (!hasEntity()){
+                        standEntity.ejectPassengers();
+                        return false;
+                    }
                     if (this.self.level().isClientSide() && self instanceof Player pl){
                         pl.resetAttackStrengthTicker();
                     }
