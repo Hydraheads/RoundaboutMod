@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -153,12 +154,14 @@ public class StepRuleEntity extends Entity {
                                     if (!mbb.canBeSeenAsEnemy())
                                         continue;
                                     if (LE instanceof TamableAnimal TT && TT.getOwner() != null){
-                                        if (mbb instanceof TamableAnimal TA && TA.getOwner() != null &&
-                                                TT.getOwner().is(TA.getOwner())){
-                                            continue;
-                                        }
-                                        if (mbb.is(TT.getOwner())){
-                                            continue;
+                                        if (mob.getUUID() != userEntity.getUUID()) {
+                                            if (mbb instanceof TamableAnimal TA && TA.getOwner() != null &&
+                                                    TT.getOwner().is(TA.getOwner())) {
+                                                continue;
+                                            }
+                                            if (mbb.is(TT.getOwner())) {
+                                                continue;
+                                            }
                                         }
                                     }
 
@@ -170,7 +173,12 @@ public class StepRuleEntity extends Entity {
                                     } else {
                                         if (!pca.hurtEntities.containsKey(mob) && PowersCalifornia.canSteal(mob)) {
                                             if (userEntity instanceof Mob mb){
-                                                if (mob instanceof Player player) {
+                                                if (mob.getId() == mb.getId()){
+                                                    pca.playUnfairSound();
+                                                    pca.clearListServer();
+                                                    discard();
+                                                    break;
+                                                } else if (mob instanceof Player player) {
                                                     player.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 1);
                                                     ((ServerLevel) mob.level()).sendParticles(ModParticles.QUESTION,
                                                             mob.getEyePosition().x, mob.getEyePosition().y + 0.5F, mob.getEyePosition().z,
@@ -192,7 +200,7 @@ public class StepRuleEntity extends Entity {
                                                     }
                                                     discard();
                                                 } else {
-                                                    mb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 3);
+                                                    mbb.hurt(ModDamageTypes.of(mob.level(), ModDamageTypes.CHESS_STRIKE, userEntity), 3);
                                                     discard();
                                                 }
 
