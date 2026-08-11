@@ -1488,6 +1488,7 @@
 
   "instruction.roundabout.press_attack": "Click Attack",
   "instruction.roundabout.press_attack_crouch": "Click Attack While Crouching",
+  "instruction.roundabout.press_attack_crouch_air": "Click Attack While Crouching in Air",
   "instruction.roundabout.hold_attack": "Hold Attack",
   "instruction.roundabout.hold_attack_crouch": "Hold Attack While Crouching",
   "instruction.roundabout.press_block": "Click Interact",

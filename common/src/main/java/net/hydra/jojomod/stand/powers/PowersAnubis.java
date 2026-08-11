@@ -97,9 +97,9 @@ public class PowersAnubis extends NewDashPreset {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.anubis_attack",
                 "instruction.roundabout.press_attack", StandIcons.ANUBIS_SLASH,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.anubis_sneak_attack",
-                "instruction.roundabout.press_attack_crouch", StandIcons.ANUBIS_UPPERCUT,0,level,bypass));
+                "instruction.roundabout.hold_attack_crouch", StandIcons.ANUBIS_UPPERCUT,0,level,bypass));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.anubis_pogo",
-                "instruction.roundabout.press_attack_crouch", StandIcons.ANUBIS_DIVE_ATTACK,0,level,bypass));
+                "instruction.roundabout.press_attack_crouch_air", StandIcons.ANUBIS_DIVE_ATTACK,0,level,bypass));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.anubis_empower",
                 "instruction.roundabout.press_skill", StandIcons.ANUBIS_EMPOWER,1,level,bypass));
