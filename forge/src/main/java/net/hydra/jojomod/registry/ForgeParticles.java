@@ -13,6 +13,8 @@ public class ForgeParticles {
     public static final RegistryObject<SimpleParticleType> HIT_IMPACT = PARTICLES.register("hit_impact",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> HALLUCINATORY_ACID_DRIP =
+            PARTICLES.register("hallucinatory_acid_drip", () -> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> MELTING = PARTICLES.register("melting",
             () -> new SimpleParticleType(true)
     );

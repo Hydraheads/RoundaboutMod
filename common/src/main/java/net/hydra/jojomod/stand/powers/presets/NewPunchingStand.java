@@ -374,7 +374,7 @@ public class NewPunchingStand extends NewDashPreset {
                 SE = getPunchLandSound();
                 pitch = getPunchLandPitch();
             } else {
-                SE = ModSounds.PUNCH_1_SOUND_EVENT;
+                SE = getPunchMissSound();
             }
         }
 
@@ -578,7 +578,7 @@ public class NewPunchingStand extends NewDashPreset {
                 }
                 pitch = 1.2F;
             } else {
-                SE = ModSounds.PUNCH_2_SOUND_EVENT;
+                SE = getImpaleMissSound();
             }
 
             if (!this.self.level().isClientSide()) {
@@ -588,6 +588,14 @@ public class NewPunchingStand extends NewDashPreset {
     }
     public void playImpaleConnectSoundExtra(){
 
+    }
+
+    public SoundEvent getPunchMissSound() {
+        return ModSounds.PUNCH_1_SOUND_EVENT;
+    }
+
+    public SoundEvent getImpaleMissSound() {
+        return ModSounds.PUNCH_2_SOUND_EVENT;
     }
 
     public static final byte IMPALE_NOISE = 105;

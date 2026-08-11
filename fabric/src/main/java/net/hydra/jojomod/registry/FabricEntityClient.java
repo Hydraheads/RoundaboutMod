@@ -22,6 +22,7 @@ import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
+import net.hydra.jojomod.block.HallucinatoryAcidBlockEntityRenderer;
 import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
@@ -64,6 +65,8 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.THE_WORLD, TheWorldRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THE_WORLD_ULTIMATE, TheWorldUltimateRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON, KingCrimsonRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.WHITESNAKE, WhitesnakeRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.HALLUCINATORY_ACID_PROJECTILE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_REAPER, KingCrimsonReaperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE, JusticeRenderer::new);
@@ -102,6 +105,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.TUSK_A4, TuskAct4Renderer::new);
         EntityRendererRegistry.register(FabricEntities.ANUBIS, AnubisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIVER_DOWN, DiverDownRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT, SilverChariotRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLOCK_WALL, BlockWallEntityRenderer::new);
@@ -150,6 +154,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, VisageBasisRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PUCCI, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AVDOL, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VALENTINE, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DIO, VisageBasisRenderer::new);
@@ -218,6 +223,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.STRAY_CAT_ENTITY_LAYER, StrayCatEntityModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WHITESNAKE_LAYER, WhitesnakeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
@@ -263,6 +269,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
@@ -306,6 +313,8 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.OASIS_MUD_BLOCK_ENTITY, OasisMudBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY,
+                HallucinatoryAcidBlockEntityRenderer::new);
 
 
         ModStrayModels.SHOOTING_ARM = new SoftAndWetShootingArmModel();

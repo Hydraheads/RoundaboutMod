@@ -237,6 +237,8 @@ public class MainUtil {
     public static final Map<String, Integer> SHA_CUSTOM_BLOCK_HEAT = new HashMap<>();
     public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
+    public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
+
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();

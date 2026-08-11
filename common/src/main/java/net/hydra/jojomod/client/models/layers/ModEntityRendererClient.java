@@ -31,6 +31,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation ANUBIS_GUARDIAN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis_guardian"), "main");
     public static final ModelLayerLocation THE_WORLD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world"), "main");
     public static final ModelLayerLocation KING_CRIMSON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "king_crimson"), "main");
+    public static final ModelLayerLocation WHITESNAKE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "whitesnake"), "main");
     public static final ModelLayerLocation D4C_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "d4c"), "main");
     public static final ModelLayerLocation KING_CRIMSON_REAPER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_reaper"), "main");
     public static final ModelLayerLocation THE_WORLD_ULTIMATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "the_world_ultimate"), "main");
@@ -72,6 +73,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation ANUBIS = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "anubis"), "main");
     public static final ModelLayerLocation STAR_PLATINUM_BASEBALL_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "star_platinum_baseball"), "main");
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
+    public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
     public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_normal"), "main");

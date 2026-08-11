@@ -70,6 +70,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro").toString())
             );
+    public static final RegistryObject<EntityType<PucciNPC>> PUCCI =
+            ENTITY_TYPES.register("jojo_npc_pucci", () ->
+                    EntityType.Builder.of(PucciNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_pucci").toString())
+            );
     public static final RegistryObject<EntityType<AvdolNPC>> AVDOL =
             ENTITY_TYPES.register("jojo_npc_avdol", () ->
                     EntityType.Builder.of(AvdolNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
@@ -295,6 +301,16 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson").toString())
             );
+    public static final RegistryObject<EntityType<WhitesnakeEntity>> WHITESNAKE = ENTITY_TYPES.register(
+            "whitesnake", () -> EntityType.Builder.of(WhitesnakeEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.8F).clientTrackingRange(14)
+                    .build(Roundabout.MOD_ID + ":whitesnake"));
+    public static final RegistryObject<EntityType<HallucinatoryAcidProjectile>> HALLUCINATORY_ACID_PROJECTILE =
+            ENTITY_TYPES.register("hallucinatory_acid_projectile", () ->
+                    EntityType.Builder.<HallucinatoryAcidProjectile>of(
+                                    HallucinatoryAcidProjectile::new, MobCategory.MISC)
+                            .sized(0.25F, 0.25F).clientTrackingRange(8).updateInterval(10)
+                            .build(Roundabout.MOD_ID + ":hallucinatory_acid_projectile"));
     public static final RegistryObject<EntityType<D4CEntity>> D4C =
             ENTITY_TYPES.register("d4c", () ->
                     EntityType.Builder.of(D4CEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
@@ -560,6 +576,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "d4c").toString())
+            );
+    public static final RegistryObject<EntityType<SilverChariotEntity>> SILVER_CHARIOT =
+            ENTITY_TYPES.register("silver_chariot", () ->
+                    EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot").toString())
             );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->

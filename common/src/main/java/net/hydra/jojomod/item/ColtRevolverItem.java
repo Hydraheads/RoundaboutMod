@@ -5,6 +5,8 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhitesnake;
+import net.hydra.jojomod.stand.powers.WhitesnakeControlInventory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -73,6 +75,9 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
     }
 
     private boolean hasColtAmmo(Player player) {
+        if (WhitesnakeControlInventory.isActive(player)) {
+            return WhitesnakeControlInventory.hasAmmo(player);
+        }
         Inventory inv = player.getInventory();
 
         for (ItemStack stack : inv.items) {
@@ -94,6 +99,9 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
     }
 
     private int consumeColtAmmo(Player player, int amount) {
+        if (WhitesnakeControlInventory.isActive(player)) {
+            return player.isCreative() ? maxAmmo : WhitesnakeControlInventory.consumeAmmo(player, amount);
+        }
         Inventory inv = player.getInventory();
         int consumed = 0;
 
@@ -158,7 +166,15 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
             }
             LivingEntity livingEntity = player;
             RoundaboutBulletEntity $$7 = new RoundaboutBulletEntity(level, livingEntity);
-            $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.5F, 1.3F);
+            LivingEntity shotSource = player;
+            if (WhitesnakeControlInventory.isActive(player)
+                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                    && powers.getPilotingStand() != null) {
+                shotSource = powers.getPilotingStand();
+                $$7.setPos(shotSource.getX(), shotSource.getEyeY() - 0.15D, shotSource.getZ());
+            }
+            $$7.shootFromRotation(shotSource, shotSource.getXRot(), shotSource.getYRot(),
+                    0.0F, 3.5F, 1.3F);
             $$7.setAmmoType(RoundaboutBulletEntity.COLT);
             level.addFreshEntity($$7);
             level.playSound(null, player, ModSounds.COLT_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, 1.0F);

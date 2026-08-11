@@ -35,12 +35,20 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.particles.*;
+import net.hydra.jojomod.client.HallucinationAcidBakedModel;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.block.HallucinatoryAcidBlockEntityRenderer;
+import net.hydra.jojomod.client.HallucinatoryAcidColors;
+import net.hydra.jojomod.particles.HallucinatoryAcidDripParticle;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,6 +61,10 @@ public class ClientForgeEvents {
     public static void onClientSetup(FMLClientSetupEvent event) {
         // This runs on client during mod loading (after registries)
         MainUtil.setClient();
+        event.enqueueWork(() -> {
+            ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
+        });
     }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -64,6 +76,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THE_WORLD.get(), TheWorldRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.WHITESNAKE.get(), WhitesnakeRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.HALLUCINATORY_ACID_PROJECTILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_REAPER.get(), KingCrimsonReaperRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
@@ -104,6 +118,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TUSK_A3.get(), TuskAct3Renderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
@@ -159,6 +174,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PUCCI.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AVDOL.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIO.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PARALLEL_DIEGO.get(), VisageBasisRenderer::new);
@@ -203,6 +219,8 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get(),
+                HallucinatoryAcidBlockEntityRenderer::new);
     }
 
     @SubscribeEvent
@@ -213,6 +231,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
 
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.WHITESNAKE_LAYER, WhitesnakeModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
 
@@ -273,6 +292,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A4_LAYER, TuskAct4Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ANUBIS, AnubisHumanoidModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
@@ -431,6 +451,8 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void registerParticleStuff(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ForgeParticles.HIT_IMPACT.get(), ExplodeParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.HALLUCINATORY_ACID_DRIP.get(),
+                HallucinatoryAcidDripParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
@@ -521,5 +543,26 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PW_BLUE_FIREBALL_EXPLOSION.get(), PWBlueFireballExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get(), PWBlueBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get(), PWBlueMushroomExplosionParticle.Provider::new);
+    }
+
+    @SubscribeEvent
+    public static void registerWhitesnakeBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
+                ForgeBlocks.HALLUCINATORY_ACID.get(), ForgeBlocks.HALLUCINATORY_ACID_WALL.get());
+    }
+
+    @SubscribeEvent
+    public static void registerWhitesnakeItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register(HallucinatoryAcidColors::itemColor, ForgeItems.HALLUCINATORY_ACID_GLOB.get());
+    }
+
+    @SubscribeEvent
+    public static void modifyWhitesnakeBakedModels(ModelEvent.ModifyBakingResult event) {
+        event.getModels().replaceAll((id, model) -> {
+            if (!id.getNamespace().equals(Roundabout.MOD_ID)) return model;
+            String path = id.getPath();
+            return path.equals("hallucinatory_acid") || path.equals("hallucinatory_acid_wall")
+                    ? new HallucinationAcidBakedModel(model) : model;
+        });
     }
 }
