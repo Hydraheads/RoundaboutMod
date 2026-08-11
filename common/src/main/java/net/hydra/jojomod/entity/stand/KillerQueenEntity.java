@@ -23,31 +23,23 @@ public class KillerQueenEntity extends FollowingStandEntity {
         super(entityType, world);
     }
 
-    protected static final EntityDataAccessor<Integer> PLANTED_BITES_THE_DUST = SynchedEntityData.defineId(FollowingStandEntity.class,
-            EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> PLANTED_BITES_THE_DUST = SynchedEntityData.defineId(FollowingStandEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(PLANTED_BITES_THE_DUST)) {
-            this.entityData.define(PLANTED_BITES_THE_DUST, -1);
+            this.entityData.define(PLANTED_BITES_THE_DUST, false);
         }
     }
 
-    public void setPlantedBitesTheDust(LivingEntity entity) {
-        if (entity == null) {
-            this.entityData.set(PLANTED_BITES_THE_DUST, -1);
-        }else {
-            int id = entity.getId();
-            this.entityData.set(PLANTED_BITES_THE_DUST, id);
-        }
+    public void setPlantedBitesTheDust(boolean value) {
+        entityData.set(PLANTED_BITES_THE_DUST, value);
     }
-    public Entity getPlantedBitesTheDust() {
-        int id = this.entityData.get(PLANTED_BITES_THE_DUST);
-        if (id != -1) {
-            return this.level().getEntity(id);
-        }
-        return null;
+
+    public boolean getPlantedBitesTheDust() {
+        return entityData.get(PLANTED_BITES_THE_DUST);
     }
 
     public static Component getSkinNameT(byte skinId) {
@@ -101,9 +93,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
-    public final AnimationState hideLeg = new AnimationState();
-    public final AnimationState kick_barrage = new AnimationState();
-    public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
@@ -143,33 +132,12 @@ public class KillerQueenEntity extends FollowingStandEntity {
         if (this.getUser() != null) {
             byte animation = this.getAnimation();
 
-            if (animation != BARRAGE) {
+            if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);
             } else {
                 this.hideFists.stop();
             }
 
-            if (animation != KICK_BARRAGE) {
-                this.hideLeg.startIfStopped(this.tickCount);
-                this.kick_barrage.stop();
-            } else {
-                this.hideLeg.stop();
-                this.kick_barrage.startIfStopped(this.tickCount);
-            }
-
-
-            if (animation == KICK_BARRAGE_WINDUP) {
-                this.kick_barrage_windup.startIfStopped(this.tickCount);
-            } else {
-                this.kick_barrage_windup.stop();
-            }
-
-            if (animation == KICK_BARRAGE_END) {
-                this.kick_barrage_end.startIfStopped(this.tickCount);
-            } else {
-                this.kick_barrage_end.stop();
-            }
-            
             if (animation == DETONATE) {
             	this.detonate.startIfStopped(this.tickCount);
             } else {
@@ -244,18 +212,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.bitesTheDust.startIfStopped(this.tickCount);
             } else {
                 this.bitesTheDust.stop();
-            }
-        }
-    }
-
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide()) {
-
-            Entity btd = getPlantedBitesTheDust();
-            if (btd != null && btd.isAlive() && !btd.isRemoved()) {
-                StandUser SU = (StandUser)btd;
-                SU.rdbt$SetBtdPlantedTicks(3);
             }
         }
     }
