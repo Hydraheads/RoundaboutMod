@@ -60,7 +60,7 @@ public class PowersD4C extends NewPunchingStand {
 
     @Override
     public int getDisplayPowerInventoryScale(){
-        return 27;
+        return 25;
     }
 
     @Override

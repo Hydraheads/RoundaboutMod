@@ -82,7 +82,7 @@ public class ForgeEffects{
             );
     public static final RegistryObject<MobEffect> VIRUS_IMMUNITY =
             POTION_EFFECTS.register("virus_immunity", () ->
-                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+                    new Effect(MobEffectCategory.BENEFICIAL, 11606258)
             );
 
 

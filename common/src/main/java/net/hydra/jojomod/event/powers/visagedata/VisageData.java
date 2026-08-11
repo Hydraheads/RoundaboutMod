@@ -78,6 +78,9 @@ public class VisageData {
     public boolean rendersDoppioHair(){
         return false;
     }
+    public boolean rendersDotHanHair(){
+        return false;
+    }
     public boolean rendersKakyoinHair(){
         return false;
     }
@@ -85,6 +88,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersTasselHat(){
+        return false;
+    }
+    public boolean rendersTimHat(){
         return false;
     }
     public boolean rendersLegCloakPart(){
@@ -102,7 +108,16 @@ public class VisageData {
     public boolean rendersDiegoHat(){
         return false;
     }
+    public boolean rendersDiego2Hat(){
+        return false;
+    }
+    public boolean rendersDiegoLegs(){
+        return false;
+    }
     public boolean rendersDaiyaEars(){
+        return false;
+    }
+    public boolean rendersSandmanHair(){
         return false;
     }
     public boolean rendersGyroHat(){
@@ -121,6 +136,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersBasicHat(){
+        return false;
+    }
+    public boolean rendersSheriffHat(){
         return false;
     }
     public boolean rendersSmallBreast(){
