@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "summon_d4c": {
+    "subtitle": "sounds.roundabout.summon_d4c",
+    "sounds": [
+      "roundabout:summon_d4c"
+    ]
+  },
   "king_blood_splash": {
     "subtitle": "sounds.roundabout.king_blood_splash",
     "sounds": [

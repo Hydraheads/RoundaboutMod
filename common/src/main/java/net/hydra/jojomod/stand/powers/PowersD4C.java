@@ -48,7 +48,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
-            return ModSounds.SUMMON_KING_CRIMSON_EVENT;
+            return ModSounds.SUMMON_D4C_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
