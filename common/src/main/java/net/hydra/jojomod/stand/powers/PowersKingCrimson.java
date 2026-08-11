@@ -3932,7 +3932,6 @@ public class PowersKingCrimson extends BlockGrabPreset {
         this.clashDone = false;
         return true;
     }
-    public static final float impaleRange = 3.5F;
     public void standImpale(){
         /*By setting this to -10, there is a delay between the stand retracting*/
 

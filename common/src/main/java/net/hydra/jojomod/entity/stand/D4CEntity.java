@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity.stand;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
@@ -45,10 +46,20 @@ public class D4CEntity extends FollowingStandEntity {
             CHOCOLATE = 22,
             INVERSE = 23;
 
+    public final AnimationState finalPunch = new AnimationState();
+    public final AnimationState finalPunch2 = new AnimationState();
+    public final AnimationState finalPunch3 = new AnimationState();
+    public final AnimationState finalPunchWindup = new AnimationState();
+    public final AnimationState chop = new AnimationState();
+    public final AnimationState impale2 = new AnimationState();
 
     public final AnimationState hideFists = new AnimationState();
 
-
+    public static final byte
+            FINAL_1 = 82,
+            FINAL_2 = 83,
+            IMPALE_2 = 50,
+            CHOP = 51;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -57,7 +68,38 @@ public class D4CEntity extends FollowingStandEntity {
         } else {
             this.hideFists.stop();
         }
+        if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
+            this.finalPunchWindup.startIfStopped(this.tickCount);
+        } else {
+            this.finalPunchWindup.stop();
+        }
+        if (this.getAnimation() == FINAL_ATTACK) {
+            this.finalPunch.startIfStopped(this.tickCount);
+        } else {
+            this.finalPunch.stop();
+        }
+        if (this.getAnimation() == FINAL_1) {
+            this.finalPunch2.startIfStopped(this.tickCount);
+        } else {
+            this.finalPunch2.stop();
+        }
+        if (this.getAnimation() == FINAL_2) {
+            this.finalPunch3.startIfStopped(this.tickCount);
+        } else {
+            this.finalPunch3.stop();
+        }
+        if (this.getAnimation() == IMPALE_2) {
+            this.impale2.startIfStopped(this.tickCount);
+        } else {
+            this.impale2.stop();
+        }
+        if (this.getAnimation() == CHOP) {
+            this.chop.startIfStopped(this.tickCount);
+        } else {
+            this.chop.stop();
+        }
     }
+
 
     @Override
     public void tick(){

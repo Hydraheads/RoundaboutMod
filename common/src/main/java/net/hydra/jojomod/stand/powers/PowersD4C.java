@@ -14,20 +14,24 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -36,6 +40,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PowersD4C extends NewPunchingStand {
     public PowersD4C(LivingEntity self) {
@@ -81,12 +86,30 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_CROUCH -> {
+                chopClient();
+            }
             case SKILL_3_NORMAL -> {
                 dash();
             }
         }
     }
-
+    public void chopClient(){
+        if (!canImpale()){
+            return;
+        }
+        if (hasHandsOut())
+            return;
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                tryPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+            }
+        }
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
           setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
@@ -119,13 +142,49 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            updateChop();
+        } if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             updateFinalAttackCharge();
         }
         super.updateUniqueMoves();
     }
+
+    public void updateChop(){
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > 13) {
+                this.standChop();
+            } else {
+                if (!this.getSelf().level().isClientSide()) {
+                    if(this.attackTimeDuring%4==0) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                                this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
+            }
+        }
+    }
+
+    public void standChop(){
+        /*By setting this to -10, there is a delay between the stand retracting*/
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.setAttackTimeDuring(-20);
+                impaleTicks = 15;
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(impaleRange));
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,impaleRange);
+            impaleImpact(targetEntity);
+        }
+
+    }
+
     public void updateFinalAttackCharge(){
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring >= 60) {
@@ -196,7 +255,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void handleStandAttack(Player player, Entity target){
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-            impaleImpact(target);
+            chopImpact(target);
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
             finalAttackImpact(target);
         }
@@ -214,8 +273,29 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_1_SNEAK){
+            return this.chopAttack();
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public boolean chopAttack(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1_SNEAK);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(D4CEntity.IMPALE_2);
+            this.poseStand(OffsetIndex.GUARD);
+
+            return true;
+        }
+        return false;
+    }
+    public SoundEvent getChopSound(){
+        return ModSounds.IMPALE_HIT_EVENT;
+
     }
     public boolean setPowerSuperHit() {
         this.attackTimeDuring = 0;
@@ -230,6 +310,93 @@ public class PowersD4C extends NewPunchingStand {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 5) {
                 this.standFinalAttack();
+            }
+        }
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigPlayers(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+    }
+
+    @Override
+    public float multiplyPowerByStandConfigMobs(float power){
+        return (float) (power*(ClientNetworking.getAppropriateConfig().
+                theWorldSettings.theWorldAttackMultOnMobs *0.01));
+    }
+    public float getChopStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers((1F )));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs((6F )));
+        }
+    }
+
+    @Override
+    public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            int cdr = 25;
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
+            return true;
+        }
+        return super.canInterruptPower(sauce,interrupter);
+    }
+    public float getChopKnockback(){
+        return 1F;
+    }
+
+    public void chopImpact(Entity entity){
+        if (activePower == PowerIndex.POWER_1_SNEAK){
+            this.animateStand(D4CEntity.CHOP);
+            this.setAttackTimeDuring(-20);
+            if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+                entity = null;
+            }
+            if (entity != null) {
+                hitParticlesCenter(entity);
+
+                float pow;
+                float knockbackStrength;
+                pow = getChopStrength(entity);
+                knockbackStrength = getChopKnockback();
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(5, LE);
+                        if (MainUtil.getMobBleed(entity)) {
+                            MainUtil.makeBleed(entity, 1, 300, this.getSelf());
+                            MainUtil.makeMobBleed(entity);
+                        }
+                    }
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                } else {
+                    knockShield2(entity, 100);
+                }
+            }
+
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            SoundEvent SE;
+            float pitch = 1F;
+            if (entity != null) {
+                playImpaleConnectSoundExtra();
+                if (airTriggered){
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                } else {
+                    SE = getImpaleSound();
+                }
+                pitch = 1.2F;
+            } else {
+                SE = getImpaleMissSound();
+            }
+
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
         }
     }
@@ -371,7 +538,12 @@ public class PowersD4C extends NewPunchingStand {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            Entity TE = this.getTargetEntity(playerEntity, impaleRange);
+            if (TE != null) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
             float zamn = ((float) attackTimeDuring / getMaxSuperHitTime());
             int ClashTime = Math.min(15,Math.round(zamn * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 213, 68, 15, 6);

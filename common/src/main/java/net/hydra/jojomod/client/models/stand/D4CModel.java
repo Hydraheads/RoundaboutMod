@@ -154,6 +154,12 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
 		defaultModifiers(pEntity);
 		defaultAnimations(pEntity, pAgeInTicks, 1/((float) Power.getBarrageWindup() /20));
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
+        this.animate(pEntity.impale2, KingCrimsonAnimations.Chop_Start, pAgeInTicks, 1.4f);
+        this.animate(pEntity.chop, KingCrimsonAnimations.Chop_Attack, pAgeInTicks, 1.7f);
+        this.animate(pEntity.finalPunchWindup, KingCrimsonAnimations.Chop_Start, pAgeInTicks, 0.8f);
+        this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
+        this.animate(pEntity.finalPunch2, KingCrimsonAnimations.Chop_Attack, pAgeInTicks, 1.0f);
+        this.animate(pEntity.finalPunch3, KingCrimsonAnimations.Chop_Charged, pAgeInTicks, 1.0f);
 	}
 
 	@Override
