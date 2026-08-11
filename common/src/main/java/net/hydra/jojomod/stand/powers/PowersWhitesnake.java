@@ -1001,9 +1001,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     // Acid Toss
     private void acidTossClient() {
+        if (getActivePower() == ACID_TOSS) {
+            tryPower(PowerIndex.NONE, true);
+            tryPowerPacket(PowerIndex.NONE);
+            return;
+        }
         if (!canExecuteMoveWithLevel(getAcidTossLevel())
                 || onCooldown(PowerIndex.SKILL_2) || !canImpale() || hasBlock() || hasEntity()
-                || isThrowableDisc(self.getMainHandItem()) || isGuarding()) return;
+                || isGuarding()) return;
         tryPower(ACID_TOSS, true);
         tryPowerPacket(ACID_TOSS);
     }
@@ -1125,6 +1130,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         setActivePower(ACID_TOSS);
         playSoundsIfNearby(ACID_CHARGE_NOISE, 27, false);
         animateStand(WhitesnakeEntity.ACID_TOSS);
+        poseStand(OffsetIndex.FOLLOW);
         return true;
     }
 
@@ -1138,8 +1144,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void launchAcidToss() {
         setAttackTimeDuring(-20);
-        int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.acidTossCooldown;
-        setCooldown(PowerIndex.SKILL_2, cooldown);
+        applyAcidTossCooldown();
         if (!self.level().isClientSide()) {
             LivingEntity origin = isPiloting() ? actionOrigin() : self;
             HallucinatoryAcidProjectile projectile = new HallucinatoryAcidProjectile(self, self.level());
@@ -1149,9 +1154,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
             self.level().playSound(null, origin.blockPosition(), ModSounds.BLOCK_THROW_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
             if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
                 S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_INT_ATD, -20);
             }
+        }
+    }
+
+    private void applyAcidTossCooldown() {
+        int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.acidTossCooldown;
+        setCooldown(PowerIndex.SKILL_2, cooldown);
+        if (self instanceof ServerPlayer player) {
+            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
         }
     }
 
@@ -1667,6 +1679,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (meltingMode && isMeltingRestrictedPower(move)) return false;
         if (getActivePower() == SNAKE_BITE && move != SNAKE_BITE) {
             stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
+        }
+        if (!self.level().isClientSide() && getActivePower() == ACID_TOSS && move != ACID_TOSS) {
+            stopSoundsIfNearby(ACID_CHARGE_NOISE, 100, false);
         }
         return super.tryPower(move, forced);
     }
