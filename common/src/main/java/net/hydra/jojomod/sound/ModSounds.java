@@ -1113,6 +1113,9 @@ public class ModSounds {
     public static final ResourceLocation PLANET_WAVES_TARGET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_TARGET);
     public static SoundEvent PLANET_WAVES_TARGET_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_TARGET_ID);
 
+    public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
+    public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
+    public static SoundEvent SILVER_CHARIOT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SUMMON_ID);
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);

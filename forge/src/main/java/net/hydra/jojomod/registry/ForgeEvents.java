@@ -99,6 +99,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.TUSK_A4.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.DIVER_DOWN.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SILVER_CHARIOT.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
@@ -419,6 +420,10 @@ public class ForgeEvents {
         /*ModItems.STAND_DISC_CREAM = ForgeItems.STAND_DISC_CREAM.get();
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_CREAM.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_CREAM.get());
         ModItems.MAX_STAND_DISC_CREAM = ForgeItems.MAX_STAND_DISC_CREAM.get(); */
+
+        ModItems.STAND_DISC_SILVER_CHARIOT  = ForgeItems.STAND_DISC_SILVER_CHARIOT.get();
+        ModItems.MAX_STAND_DISC_SILVER_CHARIOT = ForgeItems.MAX_STAND_DISC_SILVER_CHARIOT.get();
+        ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_SILVER_CHARIOT.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_SILVER_CHARIOT.get());
 
         ModItems.STAND_DISC_ANUBIS = ForgeItems.STAND_DISC_ANUBIS.get();
         ModItems.MAX_STAND_DISC_ANUBIS = ForgeItems.MAX_STAND_DISC_ANUBIS.get();
@@ -754,6 +759,7 @@ public class ForgeEvents {
         ModEntities.ANUBIS = ForgeEntities.ANUBIS.get();
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
+        ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
