@@ -5,6 +5,7 @@ import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -47,6 +48,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_RAPIER_SHOT = 55,
             SC_FALL_BRACE = 56;
 
+    public boolean isArmored = false;
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -88,7 +91,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean lockPos() {
-        return false;
+        return true;
     }
 
     @Override
@@ -120,35 +123,43 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
-        return false;
+        return super.skipAttackInteraction($$0);
     }
 
+    @Override
+    public HumanoidArm getMainArm() {
+        return super.getMainArm();
+    }
 
+    @Override
+    public ItemStack getMainHandItem() {
+        return super.getMainHandItem();
+    }
 
     @Override
     public boolean isControlledByLocalInstance() {
-        /*
         LivingEntity user = this.getUser();
-        if (user != null) {
+        if (user != null && user instanceof Player player) {
             Entity ent = this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
             if (ent != null && ent.is(this)) {
                 return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }
         }
-        */
         return super.isControlledByLocalInstance();
     }
 
     @Override
+    public boolean isRemoteControlled() {
+        return super.isRemoteControlled();
+    }
+
+    @Override
     public void travel(Vec3 vec3) {
-        /*
-        super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
                 C2SPacketUtil.updatePilot(this);
             }
         }
-         */
         super.travel(vec3);
     }
 

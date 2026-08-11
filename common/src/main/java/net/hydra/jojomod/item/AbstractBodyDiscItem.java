@@ -30,9 +30,6 @@ public abstract class AbstractBodyDiscItem extends Item {
             return false;
         }
         if (!target.level().isClientSide()) {
-            if (!DiscItemData.hasOwner(stack)) {
-                DiscItemData.setOwner(stack, user);
-            }
             implant(stack, target);
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);

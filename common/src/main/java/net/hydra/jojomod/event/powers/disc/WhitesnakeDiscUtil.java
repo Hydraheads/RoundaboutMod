@@ -58,58 +58,58 @@ public final class WhitesnakeDiscUtil {
     }
 
     private static boolean ejectSight(LivingEntity target) {
-        return dropExtracted(target, extractSight(target));
+        return dropExtracted(target, extractSight(target, true));
     }
 
     private static boolean ejectHearing(LivingEntity target) {
-        return dropExtracted(target, extractHearing(target));
+        return dropExtracted(target, extractHearing(target, true));
     }
 
     private static boolean ejectMemory(LivingEntity target) {
-        return dropExtracted(target, extractMemory(target));
+        return dropExtracted(target, extractMemory(target, true));
     }
 
     private static boolean ejectStand(LivingEntity target) {
-        return dropExtracted(target, extractStand(target));
+        return dropExtracted(target, extractStand(target, true));
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
         return switch (type) {
-            case SIGHT -> extractSight(target);
-            case MEMORY -> extractMemory(target);
-            case HEARING -> extractHearing(target);
-            case STAND -> extractStand(target);
+            case SIGHT -> extractSight(target, false);
+            case MEMORY -> extractMemory(target, false);
+            case HEARING -> extractHearing(target, false);
+            case STAND -> extractStand(target, false);
             default -> ItemStack.EMPTY;
         };
     }
 
-    private static ItemStack extractSight(LivingEntity target) {
+    private static ItemStack extractSight(LivingEntity target, boolean storeOwner) {
         DiscBearer bearer = (DiscBearer) target;
         if (!canCarrySightDisc(target) || !bearer.roundabout$hasSightDisc()) return ItemStack.EMPTY;
         ItemStack stack = new ItemStack(ModItems.SIGHT_DISC);
         setStoredOwnerOrTarget(stack, target, bearer.roundabout$getSightDiscOwnerId(),
-                bearer.roundabout$getSightDiscOwnerName());
+                bearer.roundabout$getSightDiscOwnerName(), storeOwner);
         bearer.roundabout$setHasSightDisc(false);
         ((StandUser) target).roundabout$deeplyRemoveAttackTarget();
         return stack;
     }
 
-    private static ItemStack extractHearing(LivingEntity target) {
+    private static ItemStack extractHearing(LivingEntity target, boolean storeOwner) {
         DiscBearer bearer = (DiscBearer) target;
         if (!bearer.roundabout$hasHearingDisc()) return ItemStack.EMPTY;
         ItemStack stack = new ItemStack(ModItems.HEARING_DISC);
         setStoredOwnerOrTarget(stack, target, bearer.roundabout$getHearingDiscOwnerId(),
-                bearer.roundabout$getHearingDiscOwnerName());
+                bearer.roundabout$getHearingDiscOwnerName(), storeOwner);
         bearer.roundabout$setHasHearingDisc(false);
         return stack;
     }
 
-    private static ItemStack extractMemory(LivingEntity target) {
+    private static ItemStack extractMemory(LivingEntity target, boolean storeOwner) {
         DiscBearer bearer = (DiscBearer) target;
         if (!bearer.roundabout$hasMemoryDisc()) return ItemStack.EMPTY;
         ItemStack stack = new ItemStack(ModItems.MEMORY_DISC);
         setStoredOwnerOrTarget(stack, target, bearer.roundabout$getMemoryDiscOwnerId(),
-                bearer.roundabout$getMemoryDiscOwnerName());
+                bearer.roundabout$getMemoryDiscOwnerName(), storeOwner);
         DiscItemData.setPersonality(stack, bearer.roundabout$getMemoryPersonality());
         DiscItemData.copyTameOwner(stack, target);
         String memoryOwner = bearer.roundabout$getMemoryDiscOwnerId();
@@ -130,12 +130,12 @@ public final class WhitesnakeDiscUtil {
         return stack;
     }
 
-    private static ItemStack extractStand(LivingEntity target) {
+    private static ItemStack extractStand(LivingEntity target, boolean storeOwner) {
         StandUser standUser = (StandUser) target;
         ItemStack current = standUser.roundabout$getStandDisc();
         if (current.isEmpty()) return ItemStack.EMPTY;
         ItemStack stack = MainUtil.saveToDiscData(target, current.copy());
-        DiscItemData.setOwnerIfMissing(stack, target);
+        if (storeOwner) DiscItemData.setOwnerIfMissing(stack, target);
         standUser.roundabout$getStandPowers().onStandSwitch();
         standUser.roundabout$setStand(null);
         standUser.roundabout$setActive(false);
@@ -144,11 +144,12 @@ public final class WhitesnakeDiscUtil {
         return stack;
     }
 
-    private static void setStoredOwnerOrTarget(ItemStack stack, LivingEntity target, String id, String name) {
-        if (id == null || id.isEmpty() || name == null || name.isEmpty()) {
-            DiscItemData.setOwner(stack, target);
-        } else {
+    private static void setStoredOwnerOrTarget(ItemStack stack, LivingEntity target, String id, String name,
+                                               boolean useTargetIfMissing) {
+        if (id != null && !id.isEmpty() && name != null && !name.isEmpty()) {
             DiscItemData.setOwner(stack, id, name);
+        } else if (useTargetIfMissing) {
+            DiscItemData.setOwner(stack, target);
         }
     }
 

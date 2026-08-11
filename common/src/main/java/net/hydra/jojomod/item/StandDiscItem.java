@@ -21,6 +21,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
@@ -45,6 +46,12 @@ public class StandDiscItem extends Item {
 
     public void generateStandPowerRejection(LivingEntity entity){
         ((StandUser)entity).roundabout$setRejectionStandPowers(standPowers.generateStandPowers(entity));
+    }
+
+    public boolean canImplantInto(LivingEntity target) {
+        if (!((StandUser) target).roundabout$getStandDisc().isEmpty()) return false;
+        return !(target instanceof Mob)
+                || MainUtil.canGrantStand(target) && standPowers.isWorthinessType(target);
     }
 
 
@@ -88,7 +95,6 @@ public class StandDiscItem extends Item {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
         if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
-            DiscItemData.setOwnerIfMissing($$3, $$1);
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
                 discNearby($$1,50,sp.getId());
 
@@ -130,10 +136,9 @@ public class StandDiscItem extends Item {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (!target.level().isClientSide() && ((StandUser) target).roundabout$getStandDisc().isEmpty()) {
+        if (!target.level().isClientSide() && canImplantInto(target)) {
             ItemStack implanted = stack.copy();
             implanted.setCount(1);
-            DiscItemData.setOwnerIfMissing(implanted, target);
             if (StandArrowItem.grantStand(implanted, target)) {
                 target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);

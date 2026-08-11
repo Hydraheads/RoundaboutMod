@@ -407,6 +407,10 @@ public class StandPowers extends AbilityScapeBasis {
         return false;
     }
 
+    public boolean canImplantMusicDisc(){
+        return false;
+    }
+
     public boolean surpassesFire(){
         return false;
     }

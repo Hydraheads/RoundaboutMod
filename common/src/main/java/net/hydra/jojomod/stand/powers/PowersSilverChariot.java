@@ -29,6 +29,7 @@ import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -96,6 +97,26 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public int getMiningTier() {
         return ClientNetworking.getAppropriateConfig().silverChariotSettings.getMiningTierSilverChariot;
+    }
+
+    @Override
+    public int getMaxGuardPoints() {
+        return super.getMaxGuardPoints();
+    }
+
+    @Override
+    public int getMaxPilotRange() {
+        return super.getMaxPilotRange();
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis) {
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelSprintJump() {
+        return super.cancelSprintJump();
     }
 
     // Misc
@@ -441,7 +462,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_SLAB_CUTTING,1,level,bypas));
 
         // Statue cutting
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153+startPos,topPos+80,0, "ability.roundabout.time_stop_impulse",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153+startPos,topPos+80,0, "ability.roundabout.silver_chariot_statue_cutting",
                 "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_STATUE_CUTTING,4,level,bypas));
 
         return $$1;
@@ -514,7 +535,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_NORMAL -> {
                 // TODO: Implement control mode ability
-                // toggleControlModeClient(0);
+                toggleControlModeClient(0);
             }
             case SKILL_2_CROUCH -> {
                 // Might implement another ability here
@@ -627,6 +648,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public void updatePowerInt(byte activePower, int data) {
+        super.updatePowerInt(activePower, data);
+    }
+
+    @Override
     public boolean setPowerAttack() {
         return super.setPowerAttack();
     }
@@ -696,7 +722,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
 
-        super.tickPower();
+        // super.tickPower();
 
         if(this.getStandEntity(this.getSelf()) != null && this.getSelf() != null) {
             if (MainUtil.cheapDistanceTo2(this.getStandEntity(self).getX(), this.getStandEntity(self).getZ(), this.self.getX(), this.self.getZ()) > getMaxPilotRange()) {
@@ -716,7 +742,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.self.stopUsingItem();
         }
 
-        // super.tickPower();
+        super.tickPower();
     }
 
     public boolean tryReboundLeap(){
@@ -1040,6 +1066,14 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public boolean pilotInputInteract() {
+        if (!this.self.level().isClientSide()) {
+            return true;
+        }
+        return super.preCheckButtonInputGuard(true, Minecraft.getInstance().options);
+    }
+
+    @Override
     public boolean highlightsEntity(Entity ent, Player player) {
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if (!(ent instanceof SilverChariotEntity)) {
@@ -1061,11 +1095,6 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean pilotInputInteract() {
-        return super.pilotInputInteract();
     }
 
     @Override
@@ -1245,7 +1274,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getBarrageWindup() {
         if (isArmored()) {
-            return super.getBarrageWindup();
+            return (int) (super.getBarrageWindup() * 2f/3f);
         }
         return super.getBarrageWindup() / 2;
     }
@@ -1253,7 +1282,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getBarrageRecoilTime() {
         if (isArmored()) {
-            return super.getBarrageRecoilTime();
+            return (int) (super.getBarrageRecoilTime() * (2f/3f));
         }
         return super.getBarrageRecoilTime() / 2;
     }
