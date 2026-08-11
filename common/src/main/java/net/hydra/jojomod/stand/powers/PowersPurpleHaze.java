@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -17,6 +18,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
@@ -25,6 +27,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -158,9 +161,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-
-        setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
-
+        if (isHoldingSneak()){
+        setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
+        } else {
+            if (canExecuteMoveWithLevel(4)) {
+                setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
+            }else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
+        }
         setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.SKILL_2);
 
         if (isHoldingSneak()){
@@ -180,8 +187,45 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         renderPodStock(context, x, y, 4);
     }
-
-
+    @Override
+    public byte getMaxLevel(){
+        return 5;
+    }
+    @Override
+    public int getExpForLevelUp(int currentLevel){
+        int amt;
+        if (currentLevel == 1) {
+            amt = 100;
+        } else if (currentLevel == 2){
+            amt = 200;
+        } else if (currentLevel == 3){
+            amt = 400;
+        } else amt = 500;
+        amt= (int) (amt*(getLevelMultiplier()));
+        return amt;
+    }
+    @Override
+    public void levelUp() {
+        if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
+            IPlayerEntity ipe = ((IPlayerEntity) PE);
+            byte level = ipe.roundabout$getStandLevel();
+            if (level == 5) {
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                        withStyle(ChatFormatting.AQUA), true);
+            } else {
+                if (level == 3) {
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                            withStyle(ChatFormatting.AQUA), true);
+                } else {
+                    if (level == 2) {
+                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                                withStyle(ChatFormatting.AQUA), true);
+                    }
+                }
+                super.levelUp();
+            }
+        }
+    }
     public void renderPodStock(GuiGraphics context, int x, int y, int slot){
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
@@ -200,13 +244,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     public void Distortion(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 1F);
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
             if (!(self instanceof Player pl && pl.isCreative())) {
                 self.addEffect(new MobEffectInstance(
-                        ModEffects.FACELESS, 100));//will be HAZE IMMUNITY
+                        ModEffects.VIRUS_IMMUNITY, 100));
             }
             this.setCooldown(PowerIndex.SKILL_1, 400);
+            if (this.getSelf() instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1,
+                        400);
+            }
         }
 
     }

@@ -5597,7 +5597,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
-        if (this.hasEffect(ModEffects.HAZE_VIRUS)) {
+        if (this.hasEffect(ModEffects.HAZE_VIRUS)&& !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 10 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.HAZE_VIRUS),
                         this.getEffect(ModEffects.HAZE_VIRUS).getAmplifier() + 1);
@@ -5619,7 +5619,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
             }
         }
-        if (this.hasEffect(ModEffects.DISTORTION_VIRUS)) {
+        if (this.hasEffect(ModEffects.DISTORTION_VIRUS)&& !this.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
             if (this.tickCount % 25 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
                         this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
