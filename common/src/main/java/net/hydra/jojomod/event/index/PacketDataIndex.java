@@ -128,6 +128,8 @@ public class PacketDataIndex {
     public static final byte S2C_INT_LEADED = 24;
     public static final byte S2C_INT_LVL_DECREASE = 25;
     public static final byte S2C_STAND_SPECIAL_INT = 26;
+    public static final byte S2C_DISC_ADD_INT = 27;
+    public static final byte S2C_DISC_REMOVE_INT = 28;
 
 
     /**S2C BUNDLE packets*/

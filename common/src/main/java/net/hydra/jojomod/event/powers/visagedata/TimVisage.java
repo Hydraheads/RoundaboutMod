@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class TimVisage extends VisageData {
-    // 191
+    // 173
     // steve is 185
     // Vector3f(0.9375F, 0.9375F, 0.9375F);
     //0.9375F * (173.0F / 185.0F) = 0.876F

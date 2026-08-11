@@ -122,6 +122,30 @@ public abstract class ConfigManager {
                 }
             }
         }
+
+        if (getAdvancedConfig().silverChariotBlocksToSlabs != null)
+        {
+            MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
+            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabs)
+            {
+                try
+                {
+                    String[] split = entry.split(":");
+                    if (split.length != 4)
+                    {
+                        Roundabout.LOGGER.warn("Invalid whole block to slab block entry: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse whole block to slab block entry '{}'", entry, e);
+                }
+            }
+        }
     }
     public static void loadThrownItemDestructionBlacklist()
     {

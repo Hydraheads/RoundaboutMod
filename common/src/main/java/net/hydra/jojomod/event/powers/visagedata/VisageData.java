@@ -78,6 +78,9 @@ public class VisageData {
     public boolean rendersDoppioHair(){
         return false;
     }
+    public boolean rendersDotHanHair(){
+        return false;
+    }
     public boolean rendersKakyoinHair(){
         return false;
     }
@@ -114,6 +117,9 @@ public class VisageData {
     public boolean rendersDaiyaEars(){
         return false;
     }
+    public boolean rendersSandmanHair(){
+        return false;
+    }
     public boolean rendersGyroHat(){
         return false;
     }
@@ -130,6 +136,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersBasicHat(){
+        return false;
+    }
+    public boolean rendersSheriffHat(){
         return false;
     }
     public boolean rendersSmallBreast(){

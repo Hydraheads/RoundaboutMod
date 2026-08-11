@@ -237,6 +237,8 @@ public class MainUtil {
     public static final Map<String, Integer> SHA_CUSTOM_BLOCK_HEAT = new HashMap<>();
     public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
+    public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
+
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithEnderBlood = Lists.newArrayList();
@@ -1686,14 +1688,19 @@ public class MainUtil {
     }
 
     public static void ejectInFront(StandEntity stand){
-        if (stand.getFirstPassenger() != null && stand.getUser() != null){
+        if (stand.getFirstPassenger() != null){
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
-            if (entity.level().dimensionTypeId() == stand.getUser().level().dimensionTypeId()) {
-                if (entity instanceof Player ent) {
-                    ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ()));
-                } else {
-                    entity.dismountTo(stand.getUser().getX(), stand.getUser().getY(), stand.getUser().getZ());
+            LivingEntity user = stand.getUser();
+            if (user != null && !user.isRemoved()) {
+                if (entity.level().dimensionTypeId() == user.level().dimensionTypeId()) {
+                    if (user.position().distanceTo(entity.position()) < 50) {
+                        if (entity instanceof Player ent) {
+                            ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(user.getX(), user.getY(), user.getZ()));
+                        } else {
+                            entity.dismountTo(user.getX(), user.getY(), user.getZ());
+                        }
+                    }
                 }
             }
         }
@@ -1900,11 +1907,11 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            np*=0.9f;
+                            np*=0.97f;
                             value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            np*=0.9f;
+                            np*=0.97f;
                             value.hurt($$5,np);
                         }
                     }
@@ -2121,7 +2128,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
-                || sauce.is(ModDamageTypes.DISINTEGRATION)){
+                || sauce.is(ModDamageTypes.DISINTEGRATION)
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
         return false;
@@ -2148,7 +2156,7 @@ public class MainUtil {
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
                 sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) ) {
             return true;
         }
         return false;

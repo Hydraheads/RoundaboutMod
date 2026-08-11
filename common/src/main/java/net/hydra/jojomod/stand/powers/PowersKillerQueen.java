@@ -196,8 +196,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.onStandSummon(desummon);
         if (inBitesTheDustMode() && !desummon) {
             StandEntity stand = this.getStandEntity(this.self);
-            if (stand instanceof FollowingStandEntity FSE) {
-                FSE.setOffsetType(OffsetIndex.LOOSE);
+            if (stand instanceof KillerQueenEntity KQE) {
+                KQE.setOffsetType(OffsetIndex.LOOSE);
+                KQE.setPlantedBitesTheDust(true);
             }
             animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW);
         }
@@ -1826,6 +1827,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean btdDefuseServer(boolean unsummon) {
         if (!this.isClient()) {
+
             clearEntitiesSeconds();
             clearBitedTheDust();
             clearDayBitedTheDust();
@@ -1835,7 +1837,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown);
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity KQE ){
-                    //KQE.setPlantedBitesTheDust(null);
+                    KQE.setPlantedBitesTheDust(false);
                     if (!unsummon) {
                         stand.setFadePercent(100);
                     }
@@ -2033,7 +2035,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
 
         if (target != null && stand instanceof KillerQueenEntity KQE) {
-            //KQE.setPlantedBitesTheDust(target);
+            KQE.setPlantedBitesTheDust(true);
+
             bitesTheDustPlantedEntity = target;
             saveCombatEntitiesSeconds(target.position());
             btdTicks = 0;
@@ -2108,16 +2111,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         combatSavedBTDinit();
 
-        StandEntity stand = this.getStandEntity(this.self);
-        KillerQueenEntity standKQ;
         Entity target = bitesTheDustPlantedEntity;
-        /*if (stand instanceof KillerQueenEntity KQE) {
-            standKQ = KQE;
-            target = KQE.getPlantedBitesTheDust();
-        }else {
-            btdDefuseServer();
-            return false;
-        }*/
+
         if (target == null || target.isRemoved() || !target.isAlive()) {
             btdDefuseServer();
             return false;
@@ -2736,6 +2731,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (!isClient()) {
+
+            if (bitesTheDustPlantedEntity != null && bitesTheDustPlantedEntity.isAlive() && !bitesTheDustPlantedEntity.isRemoved()) {
+                StandUser SU = (StandUser)bitesTheDustPlantedEntity;
+                SU.rdbt$SetBtdPlantedTicks(3);
+            }
+
             this.detectIfShouldDefuse();
             this.updateDetonate();
 

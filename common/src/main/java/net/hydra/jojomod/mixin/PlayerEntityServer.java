@@ -112,13 +112,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         if (p_9000_ == this.level()) {
             ((StandUser) this).roundabout$getFollowers().forEach($$0 -> {
                 for (StandEntity $$1 : ((StandUser) this).roundabout$getFollowers()) {
-                    $$1.moveTo(this.getX(),this.getY(),this.getZ());
+                    if ($$1.level().dimension() == this.level().dimension()) {
+                        $$1.moveTo(this.getX(), this.getY(), this.getZ());
+                    }
                 }
             });
             StandUser standUserData = ((StandUser) this);
             if (standUserData.roundabout$hasStandOut()  && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
-
-                standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                if (fe.level().dimension() == this.level().dimension()) {
+                    standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                }
             }
         }
     }

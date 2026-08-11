@@ -31,7 +31,7 @@ public class DiegoVisage extends VisageData {
     }
     @Override
     public Vector3f scale(){
-        return new Vector3f(0.915F, 0.915F, 0.915F);
+        return new Vector3f(0.80F, 0.81F, 0.80F);
     }
     @Override
     public float getNametagHeight(){
