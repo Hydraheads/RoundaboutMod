@@ -1,15 +1,23 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,6 +55,26 @@ public class StandDiscItem extends Item {
         }
     }
 
+    public final void discNearby(Entity play, double range, int entid) {
+        if (!play.level().isClientSide) {
+            ServerLevel serverWorld = ((ServerLevel) play.level());
+            Vec3 userLocation = new Vec3(play.getX(),  play.getY(), play.getZ());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) play.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+
+                BlockPos blockPos = serverPlayerEntity.blockPosition();
+                if (blockPos.closerToCenterThan(userLocation, range)) {
+                    S2CPacketUtil.sendGenericIntToClientPacket(serverPlayerEntity,
+                            PacketDataIndex.S2C_DISC_ADD_INT,entid);
+                }
+            }
+        }
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3;
@@ -54,8 +83,10 @@ public class StandDiscItem extends Item {
         } else {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
-        if (!$$0.isClientSide) {
+        if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
+                discNearby($$1,50,sp.getId());
+
                 ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
                 if (!currentDisc.isEmpty()) {
                     ItemStack convDisc = MainUtil.saveToDiscData($$1, currentDisc.copy());

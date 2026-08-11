@@ -46,6 +46,10 @@ public class ForgeSounds {
             register(ModSounds.WORLD_SUMMON_SOUND, ModSounds.WORLD_SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> SUMMON_D4C_EVENT =
             register(ModSounds.SUMMON_D4C, ModSounds.SUMMON_D4C_ID);
+    public static final RegistryObject<SoundEvent> DISC_INSERT_EVENT =
+            register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
+    public static final RegistryObject<SoundEvent> DISC_REMOVE_EVENT =
+            register(ModSounds.DISC_REMOVE, ModSounds.DISC_REMOVE_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =
             register(ModSounds.STAR_SUMMON_SOUND, ModSounds.STAR_SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> SUMMON_MANDOM_EVENT =

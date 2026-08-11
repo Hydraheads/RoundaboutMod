@@ -17,6 +17,18 @@
       "roundabout:summon_d4c"
     ]
   },
+  "disc_insert": {
+    "subtitle": "sounds.roundabout.disc_insert",
+    "sounds": [
+      "roundabout:disc_insert"
+    ]
+  },
+  "disc_remove": {
+    "subtitle": "sounds.roundabout.disc_remove",
+    "sounds": [
+      "roundabout:disc_remove"
+    ]
+  },
   "king_blood_splash": {
     "subtitle": "sounds.roundabout.king_blood_splash",
     "sounds": [

@@ -968,6 +968,16 @@ public class ClientUtil {
             if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
                 playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
             }
+        } else if (context == PacketDataIndex.S2C_DISC_ADD_INT){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
+                playSound(ModSounds.DISC_INSERT_EVENT,target,1,1);
+            }
+        } else if (context == PacketDataIndex.S2C_DISC_REMOVE_INT){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
+                playSound(ModSounds.DISC_REMOVE_EVENT,target,1,1);
+            }
         } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboAmt(data);
@@ -1346,10 +1356,18 @@ public class ClientUtil {
             return hasATimeStopSeeingStand();
         }
         return false;
-    }
+    }private static final Map<Integer, SoundInstance> ENTITY_SOUNDS = new HashMap<>();
+    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch) {
+        Minecraft mc = Minecraft.getInstance();
 
-    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
-        SoundInstance qSound = new EntityBoundSoundInstance(
+        SoundInstance oldSound = ENTITY_SOUNDS.get(entity.getId());
+
+        if (oldSound != null && oldSound.getLocation().equals(event.getLocation())) {
+            mc.getSoundManager().stop(oldSound);
+            ENTITY_SOUNDS.remove(entity.getId());
+        }
+
+        EntityBoundSoundInstance sound = new EntityBoundSoundInstance(
                 event,
                 SoundSource.NEUTRAL,
                 volume,
@@ -1357,8 +1375,21 @@ public class ClientUtil {
                 entity,
                 entity.level().random.nextLong()
         );
-        Minecraft.getInstance().getSoundManager().play(qSound);
+
+        ENTITY_SOUNDS.put(entity.getId(), sound);
+        mc.getSoundManager().play(sound);
     }
+//    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
+//        SoundInstance qSound = new EntityBoundSoundInstance(
+//                event,
+//                SoundSource.NEUTRAL,
+//                volume,
+//                pitch,
+//                entity,
+//                entity.level().random.nextLong()
+//        );
+//        Minecraft.getInstance().getSoundManager().play(qSound);
+//    }
 
     public static void tickHeartbeat(Entity entity){
         LocalPlayer player = Minecraft.getInstance().player;
