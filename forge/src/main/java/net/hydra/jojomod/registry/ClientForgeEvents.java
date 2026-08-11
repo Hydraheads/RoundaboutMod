@@ -344,6 +344,9 @@ public class ClientForgeEvents {
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.Diego2HatPart = new Diego2HatPart();
+        ModStrayModels.diegoLeftLegPart = new DiegoLeftLegPart();
+        ModStrayModels.diegoRightLegPart = new DiegoRightLegPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
@@ -353,12 +356,16 @@ public class ClientForgeEvents {
         ModStrayModels.SpeedwagonFoundationHatPart = new SpeedwagonFoundationHatPart();
         ModStrayModels.BasicHatPart = new BasicHatPart();
         ModStrayModels.SpikeyHairPart = new SpikeyHairPart();
+        ModStrayModels.dotHanHair = new DotHanHairPart();
+        ModStrayModels.sheriffHatPart = new SheriffHatPart();
+        ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
         ModStrayModels.ratTailPart = new RatTailPart();
         ModStrayModels.ratHatPart = new RatHatPart();
+        ModStrayModels.timHatPart = new TimHatPart();
         ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
         ModStrayModels.ratRightLegPart = new RatRightLegPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
