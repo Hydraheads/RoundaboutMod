@@ -1,0 +1,8 @@
+{
+  "multipart": [
+    { "when": { "layers": "1" }, "apply": { "model": "roundabout:block/hallucinatory_acid_1" } },
+    { "when": { "layers": "2" }, "apply": { "model": "roundabout:block/hallucinatory_acid_2" } },
+    { "when": { "layers": "3" }, "apply": { "model": "roundabout:block/hallucinatory_acid_3" } },
+    { "when": { "layers": "4" }, "apply": { "model": "roundabout:block/hallucinatory_acid_4" } }
+  ]
+}

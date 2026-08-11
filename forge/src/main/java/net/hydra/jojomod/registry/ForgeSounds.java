@@ -1116,6 +1116,60 @@ public class ForgeSounds {
             register(ModSounds.HALLELUJAH, ModSounds.HALLELUJAH_ID);
     public static final RegistryObject<SoundEvent> TORTURE_DANCE =
             register(ModSounds.TORTURE_DANCE, ModSounds.TORTURE_DANCE_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_SUMMON =
+            register(ModSounds.WHITESNAKE_SUMMON, ModSounds.WHITESNAKE_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_PUNCH_HIT =
+            register(ModSounds.WHITESNAKE_PUNCH_HIT, ModSounds.WHITESNAKE_PUNCH_HIT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_PUNCH_HIT_2 =
+            register(ModSounds.WHITESNAKE_PUNCH_HIT_2, ModSounds.WHITESNAKE_PUNCH_HIT_2_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_PUNCH_FINAL_HIT =
+            register(ModSounds.WHITESNAKE_PUNCH_FINAL_HIT, ModSounds.WHITESNAKE_PUNCH_FINAL_HIT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_BARRAGE_HIT =
+            register(ModSounds.WHITESNAKE_BARRAGE_HIT, ModSounds.WHITESNAKE_BARRAGE_HIT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_IMPALE_VOICE =
+            register(ModSounds.WHITESNAKE_IMPALE_VOICE, ModSounds.WHITESNAKE_IMPALE_VOICE_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_DISC_STEAL_CHARGE =
+            register(ModSounds.WHITESNAKE_DISC_STEAL_CHARGE, ModSounds.WHITESNAKE_DISC_STEAL_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_COMMAND_DISC_CREATE =
+            register(ModSounds.WHITESNAKE_COMMAND_DISC_CREATE, ModSounds.WHITESNAKE_COMMAND_DISC_CREATE_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_DISC_INSERT =
+            register(ModSounds.WHITESNAKE_DISC_INSERT, ModSounds.WHITESNAKE_DISC_INSERT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_DISC_EJECT =
+            register(ModSounds.WHITESNAKE_DISC_EJECT, ModSounds.WHITESNAKE_DISC_EJECT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_GOO_DRIP_1 =
+            register(ModSounds.WHITESNAKE_GOO_DRIP_1, ModSounds.WHITESNAKE_GOO_DRIP_1_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_GOO_DRIP_2 =
+            register(ModSounds.WHITESNAKE_GOO_DRIP_2, ModSounds.WHITESNAKE_GOO_DRIP_2_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_CONTROL_MODE_ENTER =
+            register(ModSounds.WHITESNAKE_CONTROL_MODE_ENTER, ModSounds.WHITESNAKE_CONTROL_MODE_ENTER_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_CONTROL_MODE_EXIT =
+            register(ModSounds.WHITESNAKE_CONTROL_MODE_EXIT, ModSounds.WHITESNAKE_CONTROL_MODE_EXIT_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_HALLUCINATION_DISGUISE =
+            register(ModSounds.WHITESNAKE_HALLUCINATION_DISGUISE, ModSounds.WHITESNAKE_HALLUCINATION_DISGUISE_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_TIME_SPARK =
+            register(ModSounds.WHITESNAKE_TIME_SPARK, ModSounds.WHITESNAKE_TIME_SPARK_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_INVENTORY_OPEN =
+            register(ModSounds.WHITESNAKE_INVENTORY_OPEN, ModSounds.WHITESNAKE_INVENTORY_OPEN_ID);
+    public static final RegistryObject<SoundEvent> WHITESNAKE_INVENTORY_CLOSE =
+            register(ModSounds.WHITESNAKE_INVENTORY_CLOSE, ModSounds.WHITESNAKE_INVENTORY_CLOSE_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_STAND_SUMMON_1 =
+            register(ModSounds.PUCCI_STAND_SUMMON_1, ModSounds.PUCCI_STAND_SUMMON_1_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_STAND_SUMMON_2 =
+            register(ModSounds.PUCCI_STAND_SUMMON_2, ModSounds.PUCCI_STAND_SUMMON_2_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_VISAGE_EQUIP_1 =
+            register(ModSounds.PUCCI_VISAGE_EQUIP_1, ModSounds.PUCCI_VISAGE_EQUIP_1_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_VISAGE_EQUIP_2 =
+            register(ModSounds.PUCCI_VISAGE_EQUIP_2, ModSounds.PUCCI_VISAGE_EQUIP_2_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_VISAGE_EQUIP_3 =
+            register(ModSounds.PUCCI_VISAGE_EQUIP_3, ModSounds.PUCCI_VISAGE_EQUIP_3_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_HURT_1 =
+            register(ModSounds.PUCCI_HURT_1, ModSounds.PUCCI_HURT_1_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_HURT_2 =
+            register(ModSounds.PUCCI_HURT_2, ModSounds.PUCCI_HURT_2_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_HURT_3 =
+            register(ModSounds.PUCCI_HURT_3, ModSounds.PUCCI_HURT_3_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_HURT_4 =
+            register(ModSounds.PUCCI_HURT_4, ModSounds.PUCCI_HURT_4_ID);
 
     public static RegistryObject<SoundEvent> register(String id, ResourceLocation id2){
         return SOUNDS.register(id, () -> SoundEvent.createVariableRangeEvent(id2));

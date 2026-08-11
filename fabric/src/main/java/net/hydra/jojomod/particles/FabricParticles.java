@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
+    public static final SimpleParticleType HALLUCINATORY_ACID_DRIP = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_MISS = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_A = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
@@ -144,6 +145,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cinderella_glow"), CINDERELLA_GLOW);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pink_smoke"), PINK_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood_mist"), BLOOD_MIST);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hallucinatory_acid_drip"), HALLUCINATORY_ACID_DRIP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soft_bubble_pop"), BUBBLE_POP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("plunder"), PLUNDER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
@@ -201,6 +203,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("scissors"), METALLICA_SCISSORS);
 
         ModParticles.MELTING = MELTING;
+        ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;

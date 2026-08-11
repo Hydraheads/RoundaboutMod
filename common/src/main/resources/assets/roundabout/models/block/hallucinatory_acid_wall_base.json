@@ -1,0 +1,46 @@
+{
+    "textures":  {
+                     "particle":  "#acid",
+                     "acid":  "#acid"
+                 },
+    "elements":  [
+                     {
+                         "from":  [
+                                      0,
+                                      0,
+                                      15
+                                  ],
+                         "to":  [
+                                    16,
+                                    16,
+                                    16
+                                ],
+                         "faces":  {
+                                       "north":  {
+                                                     "texture":  "#acid",
+                                                     "tintindex": 0
+                                                 },
+                                       "south":  {
+                                                     "texture":  "#acid",
+                                                     "tintindex": 0
+                                                 },
+                                       "west":  {
+                                                    "texture":  "#acid",
+                                                    "tintindex": 0
+                                                },
+                                       "east":  {
+                                                    "texture":  "#acid",
+                                                    "tintindex": 0
+                                                },
+                                       "up":  {
+                                                  "texture":  "#acid",
+                                                  "tintindex": 0
+                                              },
+                                       "down":  {
+                                                    "texture":  "#acid",
+                                                    "tintindex": 0
+                                                }
+                                   }
+                     }
+                 ]
+}

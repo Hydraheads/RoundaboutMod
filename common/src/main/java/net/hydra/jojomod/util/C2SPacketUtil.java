@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -372,6 +373,26 @@ public class C2SPacketUtil {
     public static void gunShot(){
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.GunShot.value
+        );
+    }
+
+    public static void whitesnakeDisguise(String name) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.WhitesnakeDisguise.value,
+                name
+        );
+    }
+
+    public static void whitesnakeGunReload() {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.WhitesnakeGunReload.value
+        );
+    }
+
+    public static void whitesnakeMemoryDiscConversion(InteractionHand hand) {
+        ModMessageEvents.sendToServer(
+                ClientToServerPackets.StandPowerPackets.MESSAGES.WhitesnakeMemoryDiscConversion.value,
+                hand == InteractionHand.OFF_HAND
         );
     }
 

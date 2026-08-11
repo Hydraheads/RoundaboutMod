@@ -13,6 +13,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +34,18 @@ import static net.hydra.jojomod.registry.ForgeItems.ITEMS;
 public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
+    public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
+            "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
+                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .pushReaction(PushReaction.BLOCK)));
+    public static final RegistryObject<HallucinatoryAcidWallBlock> HALLUCINATORY_ACID_WALL = BLOCKS.register(
+            "hallucinatory_acid_wall", () -> new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
+                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .pushReaction(PushReaction.BLOCK)));
+    public static final RegistryObject<BlockEntityType<HallucinatoryAcidBlockEntity>> HALLUCINATORY_ACID_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("hallucinatory_acid", () -> BlockEntityType.Builder.of(
+                    HallucinatoryAcidBlockEntity::new, HALLUCINATORY_ACID.get(), HALLUCINATORY_ACID_WALL.get())
+                    .build(null));
 
     public static final RegistryObject<Block> ANCIENT_METEOR = BLOCKS.register("ancient_meteor",
             () -> ModBlocks.ANCIENT_METEOR_PROPERTIES

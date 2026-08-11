@@ -1,0 +1,11 @@
+{
+  "textures": { "particle": "roundabout:block/hallucinatory_acid_0", "acid": "roundabout:block/hallucinatory_acid_0" },
+  "elements": [{ "from": [0, 0, 0], "to": [16, 8, 16], "faces": {
+    "down": { "texture": "#acid", "cullface": "down", "tintindex": 0 },
+    "up": { "texture": "#acid", "tintindex": 0 },
+    "north": { "texture": "#acid", "cullface": "north", "tintindex": 0 },
+    "south": { "texture": "#acid", "cullface": "south", "tintindex": 0 },
+    "west": { "texture": "#acid", "cullface": "west", "tintindex": 0 },
+    "east": { "texture": "#acid", "cullface": "east", "tintindex": 0 }
+  }}]
+}
