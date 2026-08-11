@@ -555,7 +555,6 @@ public class PowersSurvivor extends NewDashPreset {
         if (this.self.level().isClientSide()){
             unloadTargets();
         }
-        System.out.println(EntityTargetOne + ", is client? " + isClient());
         super.tickPower();
     }
 
