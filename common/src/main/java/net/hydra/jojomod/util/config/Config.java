@@ -1318,6 +1318,7 @@ public class Config implements Cloneable {
         public Boolean controlModeCanHover;
         @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
         public Integer meltingModeHoverDuration;
+    }
 
     public static class SilverChariotSettings {
         @BooleanOption(group = "inherit", value = true)
