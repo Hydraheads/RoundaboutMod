@@ -63,12 +63,13 @@ public class D4CEntity extends FollowingStandEntity {
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
-        if (this.getAnimation() != BARRAGE) {
+        byte anim = this.getAnimation();
+        if (anim != BARRAGE && anim != FINAL_1 && anim != FINAL_ATTACK && anim != FINAL_2) {
             this.hideFists.startIfStopped(this.tickCount);
         } else {
             this.hideFists.stop();
         }
-        if (this.getAnimation() == FINAL_ATTACK_WINDUP) {
+        if (anim == FINAL_ATTACK_WINDUP) {
             this.finalPunchWindup.startIfStopped(this.tickCount);
         } else {
             this.finalPunchWindup.stop();

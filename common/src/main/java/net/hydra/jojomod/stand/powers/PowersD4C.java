@@ -61,8 +61,18 @@ public class PowersD4C extends NewPunchingStand {
         return SoundIndex.SUMMON_SOUND;
     }
     @Override
+    public float getSoundPitchFromByte(byte soundChoice){
+        if (soundChoice == IMPALE_NOISE) {
+            return 1.6F;
+        } else {
+            return super.getSoundPitchFromByte(soundChoice);
+        }
+    }
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
-        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+        if (soundChoice == IMPALE_NOISE) {
+            return ModSounds.IMPALE_CHARGE_EVENT;
+        } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_D4C_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
@@ -315,7 +325,7 @@ public class PowersD4C extends NewPunchingStand {
         return false;
     }
     public SoundEvent getChopSound(){
-        return ModSounds.IMPALE_HIT_EVENT;
+        return ModSounds.KING_CRIMSON_PUNCH_4_EVENT;
 
     }
     public boolean setPowerSuperHit() {
@@ -408,7 +418,7 @@ public class PowersD4C extends NewPunchingStand {
                 if (airTriggered){
                     SE = ModSounds.PUNCH_4_SOUND_EVENT;
                 } else {
-                    SE = getImpaleSound();
+                    SE = getChopSound();
                 }
                 pitch = 1.2F;
             } else {
@@ -442,9 +452,9 @@ public class PowersD4C extends NewPunchingStand {
     public float getFinalAttackKnockback(){
         float charge = getChargedPercent();
         if (charge >= 1){
-            return 0.7F;
+            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3.1F);
         } else if (charge >= 0.5F){
-            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3);
+            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*2.8F);
         }
         return 0.1F;
     }
@@ -522,9 +532,7 @@ public class PowersD4C extends NewPunchingStand {
     }
     public SoundEvent getFinalAttackSound(){
         float charged = getChargedPercent();
-        if (charged >= 1F){
-            return ModSounds.KING_CRIMSON_PUNCH_4_EVENT;
-        } else if (charged >= 0.5F){
+        if (charged >= 0.5F){
             return ModSounds.KING_CRIMSON_PUNCH_5_EVENT;
         }
         return ModSounds.KING_CRIMSON_PUNCH_3_EVENT;

@@ -3,6 +3,7 @@
 // Paste this class into your mod and generate all required imports
 package net.hydra.jojomod.client.models.stand;
 
+import net.hydra.jojomod.client.models.stand.animations.D4CAnimations;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
@@ -156,10 +157,10 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
         this.animate(pEntity.impale2, KingCrimsonAnimations.Chop_Start, pAgeInTicks, 1.4f);
         this.animate(pEntity.chop, KingCrimsonAnimations.Chop_Attack, pAgeInTicks, 1.7f);
-        this.animate(pEntity.finalPunchWindup, KingCrimsonAnimations.Chop_Start, pAgeInTicks, 0.8f);
-        this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
-        this.animate(pEntity.finalPunch2, KingCrimsonAnimations.Chop_Attack, pAgeInTicks, 1.0f);
-        this.animate(pEntity.finalPunch3, KingCrimsonAnimations.Chop_Charged, pAgeInTicks, 1.0f);
+        this.animate(pEntity.finalPunchWindup, D4CAnimations.CrossPunch_WindUp, pAgeInTicks, 0.6f);
+        this.animate(pEntity.finalPunch, D4CAnimations.CrossPunch_Release_V2, pAgeInTicks, 1.4f);
+        this.animate(pEntity.finalPunch2, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
+        this.animate(pEntity.finalPunch3, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
 	}
 
 	@Override
