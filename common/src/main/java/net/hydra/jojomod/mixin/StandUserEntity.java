@@ -6139,22 +6139,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
-        if (previousYpos < this.getY()){
-            jumpImmunityTicks = 4;
-        }
-        else if(jumpImmunityTicks > -25) {
-            jumpImmunityTicks = jumpImmunityTicks - 1;
-        }
+        boolean isPacketPlayer = false;
 
-        Minecraft mc = Minecraft.getInstance();
-        boolean isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
-
+        if (this.level().clientSide()) {
+            Minecraft mc = Minecraft.getInstance();
+            isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
+        }
         if ((this.level().isClientSide && isPacketPlayer)
                 || !(rdbt$this() instanceof Player) && !this.level().isClientSide) {
 
-            if (previousYpos < this.getY()) {
+            if (previousYpos < this.getY()){
                 jumpImmunityTicks = 4;
-            } else {
+            }
+            else if(jumpImmunityTicks > -25) {
                 jumpImmunityTicks = jumpImmunityTicks - 1;
             }
             movingDown = (previousYpos-0.1 > this.getY());
