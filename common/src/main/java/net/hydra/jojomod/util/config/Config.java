@@ -78,6 +78,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public CinderellaSettings cinderellaSettings;
     @NestedOption(group = "modded")
+    public PearlJamSettings pearlJamSettings;
+    @NestedOption(group = "modded")
     public PlanetWavesSettings PlanetWavesSettings;
     @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
@@ -778,6 +780,18 @@ public class Config implements Cloneable {
         public Boolean enableJojoveinVisagesInShop;
 
     }
+
+    public static class PearlJamSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enablePearlJam;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer palmReadCooldown;
+        @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
+        public Integer palmReadEffectDuration;
+        @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
+        public Integer foodEnergizeCooldown;
+    }
+
     public static class PlanetWavesSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enablePlanetWaves;

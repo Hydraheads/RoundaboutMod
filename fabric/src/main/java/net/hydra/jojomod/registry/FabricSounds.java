@@ -348,6 +348,9 @@ public class FabricSounds {
         addSound(ModSounds.TUSK_HOLE_IMPACT_ID, ModSounds.TUSK_HOLE_IMPACT_EVENT);
 
 
+        addSound(ModSounds.SUMMON_PEARL_JAM_ID, ModSounds.SUMMON_PEARL_JAM_EVENT);
+        addSound(ModSounds.PEARL_JAM_PALM_READ_ID, ModSounds.PEARL_JAM_PALM_READ_EVENT);
+
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_BARRAGE_ID, ModSounds.KQ_MINESWEEPER_BARRAGE_EVENT);
         addSound(ModSounds.KQ_MINESWEEPER_KICK_ID, ModSounds.KQ_MINESWEEPER_KICK_EVENT);

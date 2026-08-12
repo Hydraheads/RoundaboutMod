@@ -2,9 +2,7 @@ package net.hydra.jojomod.util.config;
 
 import net.hydra.jojomod.util.config.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Groups({
         "toggles",
@@ -377,6 +375,72 @@ public class AdvancedConfig implements Cloneable {
     public Set<String> vampireSunDamageWorlds = new HashSet<>(
             Arrays.asList(
                     "overworld"
+            )
+    );
+
+    public Set<String> pearlJamFoodEffect = new HashSet<>(
+            /*
+                ! -> Adds the effect instead of removing
+                % -> Deals with stuff that isn't MobEffect related
+             */
+            Arrays.asList(
+                    "minecraft:potato:minecraft:mining_fatigue:minecraft:nausea",
+                    "minecraft:baked_potato:minecraft:mining_fatigue:minecraft:nausea",
+                    "minecraft:carrot:minecraft:mining_fatigue:minecraft:nausea",
+                    "minecraft:beetroot:minecraft:mining_fatigue:minecraft:nausea",
+                    "minecraft:beetroot_soup:minecraft:poison:minecraft:wither",
+                    "minecraft:apple:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:golden_apple:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:beef:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:cooked_beef:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:porkchop:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:cooked_porkchop:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:mutton:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:cooked_mutton:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:chicken:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:cooked_chicken:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:rabbit:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:cooked_rabbit:minecraft:hunger:minecraft:slowness:minecraft:resistance",
+                    "minecraft:mushroom_stew:minecraft:!regeneration",
+                    "minecraft:cod:%fire:%gasoline",
+                    "minecraft:cooked_cod:%fire:%gasoline",
+                    "minecraft:salmon:%fire:%gasoline",
+                    "minecraft:cooked_salmon:%fire:%gasoline",
+                    "minecraft:tropical_fish:%fire:%gasoline",
+                    "minecraft:pufferfish:%fire:%gasoline",
+                    "minecraft:potion:%insomnia",
+                    "fallback:minecraft:weakness"
+            )
+    );
+
+    public Set<String> pearlJamFoodParticles = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:potato:minecraft:dripping_water:eyes",
+                    "minecraft:baked_potato:minecraft:dripping_water:eyes",
+                    "minecraft:carrot:minecraft:dripping_water:eyes",
+                    "minecraft:beetroot:minecraft:dripping_water:eyes",
+                    "minecraft:beetroot_soup:roundabout:tooth:face",
+                    "minecraft:apple:roundabout:blood:trunk",
+                    "minecraft:golden_apple:roundabout:blood:trunk",
+                    "minecraft:beef:roundabout:blood:trunk",
+                    "minecraft:cooked_beef:roundabout:blood:trunk",
+                    "minecraft:porkchop:roundabout:blood:trunk",
+                    "minecraft:cooked_porkchop:roundabout:blood:trunk",
+                    "minecraft:mutton:roundabout:blood:trunk",
+                    "minecraft:cooked_mutton:roundabout:blood:trunk",
+                    "minecraft:chicken:roundabout:blood:trunk",
+                    "minecraft:cooked_chicken:roundabout:blood:trunk",
+                    "minecraft:rabbit:roundabout:blood:trunk",
+                    "minecraft:cooked_rabbit:roundabout:blood:trunk",
+                    "minecraft:mushroom_stew:minecraft:dripping_water:eyes",
+                    "minecraft:cod:minecraft:dripping_water:eyes",
+                    "minecraft:cooked_cod:minecraft:dripping_water:eyes",
+                    "minecraft:salmon:minecraft:dripping_water:eyes",
+                    "minecraft:cooked_salmon:minecraft:dripping_water:eyes",
+                    "minecraft:tropical_fish:minecraft:dripping_water:eyes",
+                    "minecraft:pufferfish:minecraft:dripping_water:eyes",
+                    "minecraft:potion:minecraft:falling_water:eyes",
+                    "fallback:minecraft:dripping_water:eyes"
             )
     );
 }

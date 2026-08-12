@@ -490,7 +490,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private int roundabout$gasolineIFRAMES = 0;
 
-
     @Unique
     public boolean roundabout$toggleFightOrFlight = false;
 
