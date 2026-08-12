@@ -59,8 +59,9 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public static final byte GOLD_TRIMMED_SKIN = 16;
     public static final byte CHOP_ATTACK = 82;
     public static final byte CHOP_CHARGED = 83;
-    public static final byte DISC_STEAL_CHOP = 88;
-    public static final byte ACID_TOSS = 89;
+    public static final byte DISC_STEAL_WINDUP = 88;
+    public static final byte DISC_STEAL_RELEASE = 89;
+    public static final byte ACID_TOSS = 90;
     public static final byte SNAKE_BITE = 39;
     public static final byte SNAKE_BITE_IMPACT = 40;
     private static final EntityDataAccessor<Optional<UUID>> DISGUISE_ID = SynchedEntityData.defineId(
@@ -98,7 +99,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public final AnimationState finalChopCharged = new AnimationState();
     public final AnimationState finalChopWindup = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
-    public final AnimationState discStealChop = new AnimationState();
+    public final AnimationState discStealWindup = new AnimationState();
+    public final AnimationState discStealRelease = new AnimationState();
     public final AnimationState acidToss = new AnimationState();
     public final AnimationState meltingIdle = new AnimationState();
     public final AnimationState meltingSwim = new AnimationState();
@@ -674,8 +676,10 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         else this.finalChopHalf.stop();
         if (animation == CHOP_CHARGED) this.finalChopCharged.startIfStopped(this.tickCount);
         else this.finalChopCharged.stop();
-        if (animation == DISC_STEAL_CHOP) this.discStealChop.startIfStopped(this.tickCount);
-        else this.discStealChop.stop();
+        if (animation == DISC_STEAL_WINDUP) this.discStealWindup.startIfStopped(this.tickCount);
+        else this.discStealWindup.stop();
+        if (animation == DISC_STEAL_RELEASE) this.discStealRelease.startIfStopped(this.tickCount);
+        else this.discStealRelease.stop();
         if (!melting) {
             if (animation == ACID_TOSS) this.acidToss.startIfStopped(this.tickCount);
             else this.acidToss.stop();

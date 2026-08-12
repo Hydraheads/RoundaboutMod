@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -72,7 +71,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
@@ -84,7 +82,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.LeverBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -369,13 +366,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == SNAKE_BITE) {
             stopSnakeBiteAtCurrentPosition(stand, true);
+        } else if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
+            stopPhaseGrabAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
         if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.setControlMode(entering);
         if (leavingAutoMode) setAutoMode(false);
         if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(entering ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+            following.setOffsetType(entering || autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
         }
         if (!entering) {
             clearForwardBarrageTravel();
@@ -432,10 +431,18 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void stopSnakeBiteAtCurrentPosition(StandEntity stand, boolean stopSound) {
+        if (stopSound) stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
+        stopPowerAtCurrentPosition(stand);
+    }
+
+    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
+        stopPowerAtCurrentPosition(stand);
+    }
+
+    private void stopPowerAtCurrentPosition(StandEntity stand) {
         Vec3 position = stand.position();
         float yaw = stand.getYRot();
         float pitch = stand.getXRot();
-        if (stopSound) stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
         tryPower(PowerIndex.NONE, true);
         restoreStandTransform(stand, position, yaw, pitch);
     }
@@ -1422,14 +1429,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
         this.setAttackTimeDuring(0);
         this.setActivePower(DISC_STEAL);
         playSoundsIfNearby(DISC_STEAL_CHARGE_NOISE, 27, false);
-        animateStand(WhitesnakeEntity.DISC_STEAL_CHOP);
+        animateStand(WhitesnakeEntity.DISC_STEAL_WINDUP);
         poseStand(OffsetIndex.GUARD);
         return true;
     }
 
     private void updateDiscSteal() {
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 24) {
+            if (this.attackTimeDuring == 20) {
+                animateStand(WhitesnakeEntity.DISC_STEAL_RELEASE);
+            } else if (this.attackTimeDuring > 23) {
                 launchDiscSteal();
             }
         }
@@ -1815,9 +1824,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         for (Entity entity : stand.level().getEntities(stand, searchBounds)) {
             if (!(entity instanceof ItemEntity itemEntity) || !stand.getSensing().hasLineOfSight(entity)) continue;
             ItemStack stack = itemEntity.getItem();
-            if (stack.getItem() instanceof BlockItem blockItem
-                    && (blockItem.getBlock() instanceof ShulkerBoxBlock
-                    || blockItem.getBlock() instanceof FancyLighterBlock)) continue;
+            if (!isThrowableDisc(stack)) continue;
             stand.canAcquireHeldItem = true;
             stand.setHeldItem(stack.copyWithCount(1));
             self.level().playSound(null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
@@ -2965,7 +2972,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                         isGuarding() ? StandIcons.WHITESNAKE_INVENTORY
                                 : isHoldingSneak() ? StandIcons.WHITESNAKE_DISC_TYPES[discSelection]
                                 : StandIcons.WHITESNAKE_DISC_STEAL,
-                        PowerIndex.SKILL_1);
+                        isGuarding() ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
             }
