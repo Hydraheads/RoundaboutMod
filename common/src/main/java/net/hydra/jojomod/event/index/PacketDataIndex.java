@@ -18,6 +18,7 @@ public class PacketDataIndex {
     public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
     public static final byte FLOAT_BIG_JUMP = 8;
     public static final byte FLOAT_BIG_JUMP_CANCEL = 9;
+    public static final byte FLOAT_MOLD_STARTING_Y_POS = 10;
 
 
     /**C2S Inventory*/
@@ -49,6 +50,8 @@ public class PacketDataIndex {
     public static final byte INT_GRAVITY_FLIP_4 = 18;
     public static final byte INT_VAMPIRE_SKILL_BUY = 19;
     public static final byte INT_WHITE_ALBUM_ACCELERATION = 20;
+    public static final byte INT_MOLD_JUMP_TICKS = 21;
+    public static final byte INT_MOLD_GOING_DOWN = 22;;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;

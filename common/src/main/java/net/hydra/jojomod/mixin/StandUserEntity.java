@@ -26,6 +26,7 @@ import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
+import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
@@ -38,6 +39,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -94,6 +96,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.jetbrains.annotations.Async;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -328,6 +331,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     private static final EntityDataAccessor<Float> ROUNDABOUT$METAL_METER = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
+
+    @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.INT);
+
+    @Unique
+    private static final EntityDataAccessor<Float> ROUNDABOUT$MOLD_STARTING_Y_POS = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.FLOAT);
+
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$GOING_DOWN = SynchedEntityData.defineId(LivingEntity.class,
+            EntityDataSerializers.BOOLEAN);
 
     @Unique
     private StandPowers roundabout$Powers;
@@ -3596,9 +3611,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
         }
     }
 
+
+    @Override
+    public void roundabout$setStartingYpos(float amount) {
+        this.entityData.set(ROUNDABOUT$MOLD_STARTING_Y_POS, amount);
+    }
 
     @Override
     public void roundabout$setMetalMeter(float amount) {
@@ -3614,6 +3637,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return 0f;
     }
 
+
+    @Override
+    public void roundabout$setJumpImunityTicks(int amount) {
+        this.entityData.set(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, amount);
+    }
+    @Override
+    public void roundabout$setGoingDown(boolean amount) {
+        this.entityData.set(ROUNDABOUT$GOING_DOWN, amount);
+    }
 
     @Unique
     @Override
@@ -6076,13 +6108,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public double StartingYPos = getY();
 
     @Override
-    public double getStaringYPos() {
-        return StartingYPos;
+    public float getStaringYPos() {
+        return this.getEntityData().get(ROUNDABOUT$MOLD_STARTING_Y_POS);
     }
 
     @Override
-    public int getJumpImmunityTicks(){
-        return jumpImmunityTicks;
+    public int getJumpImmunityTicks() {
+        return this.getEntityData().get(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS);
     }
 
 
@@ -6106,26 +6138,46 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                }
 
         }
+
         if (previousYpos < this.getY()){
             jumpImmunityTicks = 4;
         }
-        else if(jumpImmunityTicks > -25){
-            jumpImmunityTicks = jumpImmunityTicks -1;
+        else if(jumpImmunityTicks > -25) {
+            jumpImmunityTicks = jumpImmunityTicks - 1;
+        }
 
+        Minecraft mc = Minecraft.getInstance();
+        boolean isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
+
+        if ((this.level().isClientSide && isPacketPlayer)
+                || !(rdbt$this() instanceof Player) && !this.level().isClientSide) {
+
+            if (previousYpos < this.getY()) {
+                jumpImmunityTicks = 4;
+            } else {
+                jumpImmunityTicks = jumpImmunityTicks - 1;
+            }
+            movingDown = (previousYpos-0.1 > this.getY());
+            if(!movingDown){
+                StartingYPos = this.getY();
+            }
+            previousYpos = this.getY();
+            if (isPacketPlayer) {
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_MOLD_JUMP_TICKS, jumpImmunityTicks);
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_MOLD_GOING_DOWN, movingDown ? 1 : 0);
+                C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_MOLD_STARTING_Y_POS, (float)StartingYPos);
+            }else if (!this.level().isClientSide()) {
+                this.getEntityData().set(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, jumpImmunityTicks);
+                this.getEntityData().set(ROUNDABOUT$MOLD_STARTING_Y_POS, (float)StartingYPos);
+                this.getEntityData().set(ROUNDABOUT$GOING_DOWN, movingDown);
+            }
         }
-        movingDown = (previousYpos-0.1 > this.getY());
-        if(!movingDown){
-         StartingYPos = this.getY();
-        }
-        previousYpos = this.getY();
 
     }
     public int CrawlTicks = 0;
     boolean movingDown = false;
     @Override
-    public boolean GoingDown(){
-      return movingDown;
-    }
+    public boolean GoingDown(){ return this.getEntityData().get(ROUNDABOUT$GOING_DOWN); }
 
 
 

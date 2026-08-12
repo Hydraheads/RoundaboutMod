@@ -64,6 +64,9 @@ public interface StandUser {
     int roundabout$getBoundToID();
     int rdbt$getBoundType(Entity holder);
 
+    void roundabout$setJumpImunityTicks(int value);
+    void roundabout$setGoingDown(boolean value);
+    void roundabout$setStartingYpos(float value);
 
     void rdbt$setFleshBud(UUID bud);
     UUID rdbt$getFleshBud();
@@ -143,7 +146,7 @@ public interface StandUser {
 
     boolean rdbt$hasLeftHandGone();
 
-    double getStaringYPos();
+    float getStaringYPos();
 
     void rdbt$doMoldDetection(Vec3 movement);
 
