@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.whitesnake;
 import net.hydra.jojomod.client.ClientNetworking;
 
 import net.hydra.jojomod.access.DiscBearer;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.hydra.jojomod.event.powers.disc.DiscInventoryLimit;
 import net.hydra.jojomod.event.powers.disc.DreamingMemoryController;
@@ -288,7 +289,8 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
         StandUser standUser = (StandUser) living;
         ItemStack standDisc = standUser.roundabout$getStandDisc();
-        if (!standDisc.isEmpty() && roundabout$isForeign(DiscItemData.getOwnerId(standDisc), entityId)) {
+        if (!(living instanceof KingCrimsonCloneEntity) && !standDisc.isEmpty()
+                && roundabout$isForeign(DiscItemData.getOwnerId(standDisc), entityId)) {
             ItemStack stack = MainUtil.saveToDiscData(living, standDisc.copy());
             standUser.roundabout$getStandPowers().onStandSwitch();
             standUser.roundabout$setStand(null);
