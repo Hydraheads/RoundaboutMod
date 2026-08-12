@@ -220,10 +220,6 @@ public class SeperatedArmEntity extends StandEntity {
             this.setFadeOut((byte) 1);
             boolean client = this.level().isClientSide();
             LivingEntity user = this.getUser();
-            if (tickCount < 10) {
-                userUUID = user.getStringUUID();
-                Roundabout.LOGGER.info(userUUID);
-            }
             if (!client) {
 
                 if (user == null) {
