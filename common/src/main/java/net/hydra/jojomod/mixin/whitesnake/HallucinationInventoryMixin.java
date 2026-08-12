@@ -15,8 +15,8 @@ import java.util.List;
 
 @Mixin(EffectRenderingInventoryScreen.class)
 public abstract class HallucinationInventoryMixin {
-    @Redirect(method = "renderEffects", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
+    //Redirect(method = "renderEffects", at = @At(value = "INVOKE",
+    //        target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
     private Collection<MobEffectInstance> roundaboutWhitesnake$hideEffects(LocalPlayer player) {
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
                 && player.hasEffect(ModEffects.HALLUCINATION)) {

@@ -20,8 +20,8 @@ public abstract class WhitesnakeControlChatMixin {
     @Shadow
     public ServerPlayer player;
 
-    @Redirect(method = "broadcastChatMessage", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/network/chat/ChatType;bind(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/network/chat/ChatType$Bound;"))
+    //Redirect(method = "broadcastChatMessage", at = @At(value = "INVOKE",
+    //        target = "Lnet/minecraft/network/chat/ChatType;bind(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/network/chat/ChatType$Bound;"))
     private ChatType.Bound roundaboutWhitesnake$useControlModeName(ResourceKey<ChatType> chatType, Entity sender) {
         ChatType.Bound original = ChatType.bind(chatType, sender);
         if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)

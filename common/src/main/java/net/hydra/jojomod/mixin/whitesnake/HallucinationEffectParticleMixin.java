@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LivingEntity.class)
 public abstract class HallucinationEffectParticleMixin {
-    @Redirect(method = "tickEffects", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;addParticle("
-                    + "Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
+    //Redirect(method = "tickEffects", at = @At(value = "INVOKE",
+    //        target = "Lnet/minecraft/world/level/Level;addParticle("
+    //                + "Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
     private void roundaboutWhitesnake$offsetEffectParticle(Level level, ParticleOptions particle,
                                                             double x, double y, double z,
                                                             double red, double green, double blue) {

@@ -23,7 +23,7 @@ public abstract class MemoryMouseHandler {
         }
     }
 
-    @Redirect(method = "turnPlayer()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))
+    //Redirect(method = "turnPlayer()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))
     private void roundaboutWhitesnake$turnCamera(LocalPlayer player, double yawDelta, double pitchDelta) {
         if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isPiloting()) {
