@@ -6109,7 +6109,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (previousYpos < this.getY()){
             jumpImmunityTicks = 4;
         }
-        else{
+        else if(jumpImmunityTicks > -25){
             jumpImmunityTicks = jumpImmunityTicks -1;
 
         }
