@@ -369,13 +369,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         boolean leavingAutoMode = entering && autoMode;
         if (entering && getActivePower() == SNAKE_BITE) {
             stopSnakeBiteAtCurrentPosition(stand, true);
+        } else if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
+            stopPhaseGrabAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
         if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.setControlMode(entering);
         if (leavingAutoMode) setAutoMode(false);
         if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(entering ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+            following.setOffsetType(entering || autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
         }
         if (!entering) {
             clearForwardBarrageTravel();
@@ -432,10 +434,18 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void stopSnakeBiteAtCurrentPosition(StandEntity stand, boolean stopSound) {
+        if (stopSound) stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
+        stopPowerAtCurrentPosition(stand);
+    }
+
+    private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
+        stopPowerAtCurrentPosition(stand);
+    }
+
+    private void stopPowerAtCurrentPosition(StandEntity stand) {
         Vec3 position = stand.position();
         float yaw = stand.getYRot();
         float pitch = stand.getXRot();
-        if (stopSound) stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
         tryPower(PowerIndex.NONE, true);
         restoreStandTransform(stand, position, yaw, pitch);
     }
@@ -2965,7 +2975,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                         isGuarding() ? StandIcons.WHITESNAKE_INVENTORY
                                 : isHoldingSneak() ? StandIcons.WHITESNAKE_DISC_TYPES[discSelection]
                                 : StandIcons.WHITESNAKE_DISC_STEAL,
-                        PowerIndex.SKILL_1);
+                        isGuarding() ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
             }
