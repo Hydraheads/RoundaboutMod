@@ -169,11 +169,17 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public void streamTimeStopRemovalToClients(LivingEntity removedStoppingEntity) {
         if (!((Level) (Object) this).isClientSide) {
-            ServerLevel serverWorld = ((ServerLevel) (Object) this);
-            for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (!this.roundabout$timeStoppingEntities.isEmpty()) {
-                    ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    S2CPacketUtil.removeTSEntity(serverPlayer, removedStoppingEntity.getId());
+            ServerLevel serverWorld = (ServerLevel) (Object) this;
+
+            if (!this.roundabout$timeStoppingEntities.isEmpty()) {
+                for (ServerPlayer serverPlayer : serverWorld.getServer()
+                        .getPlayerList()
+                        .getPlayers()) {
+
+                    S2CPacketUtil.removeTSEntity(
+                            serverPlayer,
+                            removedStoppingEntity.getId()
+                    );
                 }
             }
         }
