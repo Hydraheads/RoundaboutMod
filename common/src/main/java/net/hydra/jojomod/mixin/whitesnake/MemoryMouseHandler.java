@@ -11,9 +11,8 @@ import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(MouseHandler.class)
 public abstract class MemoryMouseHandler {
@@ -25,18 +24,29 @@ public abstract class MemoryMouseHandler {
         }
     }
 
-    @ModifyArgs(method = "turnPlayer()V", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))
-    private void roundaboutWhitesnake$turnCamera(Args args) {
+    @ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 0)
+    private double roundaboutWhitesnake$turnCameraYaw(double yawDelta) {
+        Entity stand = roundaboutWhitesnake$getControlledStand();
+        if (stand == null) return yawDelta;
+        WhitesnakeControlClient.turnCamera(stand, yawDelta, 0.0D);
+        return 0.0D;
+    }
+
+    @ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 1)
+    private double roundaboutWhitesnake$turnCameraPitch(double pitchDelta) {
+        Entity stand = roundaboutWhitesnake$getControlledStand();
+        if (stand == null) return pitchDelta;
+        WhitesnakeControlClient.turnCamera(stand, 0.0D, pitchDelta);
+        return 0.0D;
+    }
+
+    private Entity roundaboutWhitesnake$getControlledStand() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null
                 || !(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
-                || !powers.isPiloting()) return;
-        Entity stand = powers.getPilotingStand();
-        if (stand == null) return;
-
-        WhitesnakeControlClient.turnCamera(stand, args.get(0), args.get(1));
-        args.set(0, 0.0D);
-        args.set(1, 0.0D);
+                || !powers.isPiloting()) return null;
+        return powers.getPilotingStand();
     }
 }
