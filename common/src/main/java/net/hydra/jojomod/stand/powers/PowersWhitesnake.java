@@ -48,6 +48,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -142,6 +143,21 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public PowersWhitesnake(LivingEntity self) {
         super(self);
+    }
+
+    @Override
+    public boolean isWip() {
+        return true;
+    }
+
+    @Override
+    public Component ifWipListDevStatus() {
+        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+    }
+
+    @Override
+    public Component ifWipListDev() {
+        return Component.literal("Olive").withStyle(ChatFormatting.AQUA);
     }
 
     @Override
