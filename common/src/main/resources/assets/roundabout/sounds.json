@@ -3342,6 +3342,13 @@
       }
     ]
   },
+  "purple_haze_summon": {
+    "subtitle": "sounds.roundabout.purple_haze_summon",
+    "sounds": [
+      "roundabout:purple_haze_summon"
+    ]
+  },
+
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [
