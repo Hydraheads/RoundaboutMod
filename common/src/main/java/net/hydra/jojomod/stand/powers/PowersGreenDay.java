@@ -149,6 +149,9 @@ public class PowersGreenDay extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.gd_mold_field",
                 "instruction.roundabout.passive", StandIcons.GREEN_DAY_MOLD_FIELD,4,level,bypas));
 
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.GREEN_DAY_MINING,0,level,bypas));
+
         return $$1;
     }
 

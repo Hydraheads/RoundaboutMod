@@ -3153,6 +3153,8 @@ public class MainUtil {
         } else if (context == PacketDataIndex.FLOAT_BIG_JUMP_CANCEL) {
             ((StandUser)player).roundabout$setBigJump(false);
             ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
+        } else if (context == PacketDataIndex.FLOAT_MOLD_STARTING_Y_POS) {
+            ((StandUser)player).roundabout$setStartingYpos(data);
         }
     }
     public static boolean isCollidingWithAnyBlock(Entity entity) {
@@ -3319,6 +3321,10 @@ public class MainUtil {
                 vf.justFlippedTicks = 5;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
+        } else if (context == PacketDataIndex.INT_MOLD_JUMP_TICKS){
+            ((StandUser)player).roundabout$setJumpImunityTicks(data);
+        } else if (context == PacketDataIndex.INT_MOLD_GOING_DOWN){
+            ((StandUser)player).roundabout$setGoingDown(data == 1);
         } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY){
             VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
             if (vdata.getPoints() > 0){

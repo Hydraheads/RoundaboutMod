@@ -534,6 +534,8 @@ public class StandIcons {
             "textures/gui/icons/soft_and_wet/mining.png");
     public static final ResourceLocation RED_MINING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/magicians_red/mining.png");
+    public static final ResourceLocation GREEN_DAY_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/green_day/mining.png");
     public static final ResourceLocation TIME_ERASE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/time_erase.png");
     public static final ResourceLocation TIME_ERASE_2 = new ResourceLocation(Roundabout.MOD_ID,
