@@ -157,6 +157,7 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
             $$1.add(soundI);
             this.roundabout$sounds = ImmutableList.copyOf($$1);
         }
+        roundabout$clientPlaySound();
     }
 
     /**This is called third by the client, it actually plays the sound.*/
@@ -295,6 +296,7 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
             $$1.add(soundID);
             this.roundabout$soundsToCancel = ImmutableList.copyOf($$1);
         }
+        roundabout$clientSoundCancel();
     }
 
     /**This is called sixth by the client, it finally cancels the sound*/
