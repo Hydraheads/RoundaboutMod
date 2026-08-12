@@ -521,6 +521,7 @@
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.green_day": "Green Day",
   "entity.roundabout.planet_waves": "Planet Waves",
+  "entity.roundabout.purple_haze": "Purple Haze",
   "entity.roundabout.manhattan_transfer": "Manhattan Transfer",
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
   "entity.roundabout.blaze_transfer": "Blaze Transfer",
@@ -974,7 +975,7 @@
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
-  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Haze.",
+  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1114,6 +1115,8 @@
   "sounds.roundabout.planet_waves_big_meteor":  "Big Meteor Approaching",
   "sounds.roundabout.planet_waves_target":  "Meteor Target Switched",
   "sounds.roundabout.planet_waves_disintegration":  "Meteor Disintegrating",
+
+  "sounds.roundabout.purple_haze_summon":  "Stand summoned",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
