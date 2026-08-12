@@ -1429,14 +1429,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
         this.setAttackTimeDuring(0);
         this.setActivePower(DISC_STEAL);
         playSoundsIfNearby(DISC_STEAL_CHARGE_NOISE, 27, false);
-        animateStand(WhitesnakeEntity.DISC_STEAL_CHOP);
+        animateStand(WhitesnakeEntity.DISC_STEAL_WINDUP);
         poseStand(OffsetIndex.GUARD);
         return true;
     }
 
     private void updateDiscSteal() {
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring > 24) {
+            if (this.attackTimeDuring == 20) {
+                animateStand(WhitesnakeEntity.DISC_STEAL_RELEASE);
+            } else if (this.attackTimeDuring > 23) {
                 launchDiscSteal();
             }
         }

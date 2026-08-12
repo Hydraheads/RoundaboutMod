@@ -219,7 +219,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         this.animate(entity.brokenBlockAnimationState, StandAnimations.BLOCKBREAK, animationProgress, 1.8F);
         this.animate(entity.standLeapAnimationState, StandAnimations.STAND_LEAP, animationProgress, 1.0F);
         this.animate(entity.standLeapEndAnimationState, StandAnimations.STAND_LEAP_END, animationProgress, 3.0F);
-        this.animate(entity.discStealChop, WhitesnakeAnimations.DISC_STEAL_CHOP, animationProgress, 1.0F);
+        this.animate(entity.discStealWindup, WhitesnakeAnimations.DISC_STEAL_WINDUP, animationProgress, 1.0F);
+        this.animate(entity.discStealRelease, WhitesnakeAnimations.DISC_STEAL_RELEASE, animationProgress, 1.0F);
         if (entity.isMeltingModeActive()) {
             float partialTick = Mth.clamp(animationProgress - entity.tickCount, 0.0F, 1.0F);
             float acidTossBlend = entity.getMeltingAcidTossBlend(partialTick);
