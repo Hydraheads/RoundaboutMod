@@ -7,11 +7,13 @@ import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(MouseHandler.class)
 public abstract class MemoryMouseHandler {
@@ -23,13 +25,18 @@ public abstract class MemoryMouseHandler {
         }
     }
 
-    //Redirect(method = "turnPlayer()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))
-    private void roundaboutWhitesnake$turnCamera(LocalPlayer player, double yawDelta, double pitchDelta) {
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
-                && powers.isPiloting()) {
-            WhitesnakeControlClient.turnCamera(powers.getPilotingStand(), yawDelta, pitchDelta);
-        } else {
-            player.turn(yawDelta, pitchDelta);
-        }
+    @ModifyArgs(method = "turnPlayer()V", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"))
+    private void roundaboutWhitesnake$turnCamera(Args args) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null
+                || !(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+                || !powers.isPiloting()) return;
+        Entity stand = powers.getPilotingStand();
+        if (stand == null) return;
+
+        WhitesnakeControlClient.turnCamera(stand, args.get(0), args.get(1));
+        args.set(0, 0.0D);
+        args.set(1, 0.0D);
     }
 }

@@ -79,9 +79,6 @@ public final class WhitesnakeControlClient {
         stand.xRotO = cameraPitch;
         if (stand instanceof LivingEntity living) {
             living.setYHeadRot(cameraYaw);
-            living.yHeadRotO = cameraYaw;
-            living.setYBodyRot(cameraYaw);
-            living.yBodyRotO = cameraYaw;
         }
     }
 
