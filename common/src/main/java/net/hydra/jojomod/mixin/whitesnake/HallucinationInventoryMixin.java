@@ -1,27 +1,25 @@
 package net.hydra.jojomod.mixin.whitesnake;
 
 import net.hydra.jojomod.client.ClientNetworking;
-
 import net.hydra.jojomod.event.ModEffects;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Collection;
-import java.util.List;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EffectRenderingInventoryScreen.class)
 public abstract class HallucinationInventoryMixin {
-    //Redirect(method = "renderEffects", at = @At(value = "INVOKE",
-    //        target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
-    private Collection<MobEffectInstance> roundaboutWhitesnake$hideEffects(LocalPlayer player) {
+    @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
+    private void roundaboutWhitesnake$hideEffects(GuiGraphics graphics, int mouseX, int mouseY,
+                                                   CallbackInfo ci) {
+        LocalPlayer player = Minecraft.getInstance().player;
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
-                && player.hasEffect(ModEffects.HALLUCINATION)) {
-            return List.of();
+                && player != null && player.hasEffect(ModEffects.HALLUCINATION)) {
+            ci.cancel();
         }
-        return player.getActiveEffects();
     }
 }
