@@ -29,6 +29,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
     private final ModelPart leftLeg;
     private final StandPowers power = new PowersWhitesnake(null);
     private final Vector3f animationVectorCache = new Vector3f();
+    private float controlHeadYaw;
+    private float controlHeadPitch;
 
     public WhitesnakeModel(ModelPart root) {
         this.stand = root.getChild("stand");
@@ -250,6 +252,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
                           float ageInTicks, float netHeadYaw, float headPitch) {
         Minecraft minecraft = Minecraft.getInstance();
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        controlHeadYaw = netHeadYaw;
+        controlHeadPitch = headPitch;
         defaultModifiers(entity);
         float windupLength = 1.0F / ((float) power.getBarrageWindup() / 20.0F);
         defaultAnimations(entity, ageInTicks, windupLength);
@@ -299,9 +303,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
             super.rotateHead(entity, head, tickDelta);
             return;
         }
-        float pitch = Mth.clamp(entity.getViewXRot(tickDelta), -90.0F, 90.0F) * Mth.DEG_TO_RAD;
-        float yaw = Mth.clamp(Mth.wrapDegrees(entity.getYHeadRot() - entity.yBodyRot), -85.0F, 85.0F)
-                * Mth.DEG_TO_RAD;
+        float pitch = Mth.clamp(controlHeadPitch, -90.0F, 90.0F) * Mth.DEG_TO_RAD;
+        float yaw = Mth.clamp(Mth.wrapDegrees(controlHeadYaw), -85.0F, 85.0F) * Mth.DEG_TO_RAD;
         setHeadRotations(pitch, yaw);
     }
 
