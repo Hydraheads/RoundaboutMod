@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
@@ -12,21 +13,22 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,6 +48,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -57,7 +61,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -185,43 +191,47 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
-    @Unique
-    @Override
-    public void roundabout$setTrueInvisibilityManhattan(int manhattanticking){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            ((StandUser)LE).roundabout$setTrueInvisManhattan(manhattanticking);
 
-            roundabout$trueInvisibilityManhattan = manhattanticking;
-            if (!this.level().isClientSide()) {
-                MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
-                        ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value,
-                        getId(), manhattanticking
-                );
-            }
-        }
-    }
-
-    @Unique
-    public int roundabout$trueInvisibilityManhattan = -1;
     @Unique
     @Override
     public int roundabout$getTrueInvisibilityManhattan(){
-        if (((Entity)(Object)this) instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getTrueInvisManhattan();
-        }
         return roundabout$trueInvisibilityManhattan;
     }
 
     @Unique
+    public Vec3 rdbt$lastPos = Vec3.ZERO;
+    @Unique
+    public int roundabout$trueInvisibilityManhattan = -1;
+    @Unique
     public void roundabout$tickTrueInvisibilityManhattan(){
-        if (!this.level().isClientSide()){
-            if (roundabout$getTrueInvisibilityManhattan() > -1){
-                roundabout$setTrueInvisibilityManhattan(roundabout$getTrueInvisibilityManhattan()-1);
-            }
+        Vec3 position =  getPosition(1);
+        if (rdbt$lastPos != null && rdbt$lastPos.distanceToSqr(position) > 0.01F){
+            roundabout$trueInvisibilityManhattan = 80;
+        } else {
+            roundabout$trueInvisibilityManhattan--;
         }
+        if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {
+            roundabout$trueInvisibilityManhattan = 0;
+        }
+        rdbt$lastPos = position;
     }
 
 
+    /** Heavens Door and bites the dust related*/
+
+    @Unique
+    public Vec3 initialDayPosition = null;
+
+
+    SavedSecond initialDaySecond = null;;
+
+    @Unique
+    public void roundabout$setInitialDaySec() {
+        initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
+    }
+
+    @Unique
+    public SavedSecond roundabout$getInitialDaySec() { return initialDaySecond; }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
@@ -371,8 +381,32 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
     }
-    @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "lavaHurt", at = @At("HEAD"), cancellable = true)
+    public void roundabout$lavaHurt(CallbackInfo ci) {
+        if (PowerTypes.isErasingTime(((Entity)(Object) this))){
+            ci.cancel();
+        }
+    }
+    public boolean rdbt$getSharedFlag(int flag){
+        return getSharedFlag(flag);
+    }
+        @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
+        Entity ent = (Entity) (Object) this;
+        if (PowerTypes.isExistentiallyElsewhere(ent)){
+            if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
+            || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ||
+                    (ent instanceof StandEntity se &&
+                            se.getUser() instanceof KingCrimsonCloneEntity kcc2 && ClientUtil.isPlayer(kcc2.getPlayer()) &&
+                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ))) {
+                cir.setReturnValue(true);
+                return;
+            }
+        }
+
         if (roundabout$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
             if (this.level().isClientSide()){
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
@@ -486,7 +520,9 @@ public abstract class EntityAndData implements IEntityAndData {
         if (((Entity)(Object)this) instanceof Player PE){
             ItemStack stack = ((IPlayerEntity) PE).roundabout$getMaskSlot();
             if (stack !=null && !stack.isEmpty() && stack.getItem() instanceof MaskItem ME){
-                cir.setReturnValue(this.getBbHeight() + ME.visageData.getNametagHeight());
+
+                VisageData vd = ME.visageData.generateVisageData(PE);
+                cir.setReturnValue(this.getBbHeight() + vd.getNametagHeight());
             }
         }
     }
@@ -531,7 +567,7 @@ public abstract class EntityAndData implements IEntityAndData {
                             ItemEntity $$4 = new ItemEntity(this.level(), stand.getX(), $$3, stand.getZ(), stand.getHeldItem().copy());
                             $$4.setPickUpDelay(40);
                             $$4.setThrower(stand.getUUID());
-                            this.level().addFreshEntity($$4);
+                            stand.level().addFreshEntity($$4);
                             stand.setHeldItem(ItemStack.EMPTY);
                         }
                         if (!stand.getPassengers().isEmpty()){
@@ -621,13 +657,69 @@ public abstract class EntityAndData implements IEntityAndData {
     @SuppressWarnings("deprecation")
     @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
     protected void roundabout$spawnSprintParticle(CallbackInfo ci){
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs)){
+            ci.cancel();
+            return;
+        }
+        if (thirs instanceof LivingEntity LE) {
+            if (((StandUser) this).roundabout$getStandPowers().cancelSprintParticles()) {
+                ci.cancel();
+                return;
+            }
+            if (thirs instanceof Player pl) {
+                if (((IPowersPlayer) pl).rdbt$getPowers().cancelSprintParticles()) {
+                    ci.cancel();
+                    return;
+                }
+            }
+        }
         BlockPos $$0 = getOnPosLegacy();
         BlockState $$1 = this.level().getBlockState($$0);
         if ($$1.getBlock() instanceof FogBlock){
             ci.cancel();
         }
     }
+    @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "isSteppingCarefully", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$isSteppingCarefully(CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            cir.setReturnValue(true);
+        }
+    }
+    @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
+    private void rdbt$waterSwimSound(CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+            ci.cancel();
+        }
+    }
+    @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
+    @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true, require = 0)
+    protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            ci.cancel();
+        }
+    }
 
+        @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
+        Entity thisEnt = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            cir.setReturnValue(true);
+        }
+    }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
@@ -742,6 +834,9 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     public boolean hasImpulse;
 
+    @Shadow
+    protected abstract boolean getSharedFlag(int i);
+
     @Override
     @Unique
     public void roundabout$universalTick(){
@@ -848,46 +943,5 @@ public abstract class EntityAndData implements IEntityAndData {
         this.deltaMovement = ec;
     }
 
-    @Inject(method = "move", at = @At(value = "TAIL"),cancellable = true, require = 0)
-    public void  WindVisionDetection(CallbackInfo info) {
-        rdbt$doWindVisionDetection();
-    }
 
-    private double previousYposManhattan = 0.0;
-    private double previousXposManhattan = 0.0;
-    private double previousZposManhattan = 0.0;
-
-    @Unique
-    @Override
-    public void rdbt$doWindVisionDetection() {
-        if (!this.level().isClientSide) {
-            if(((Entity) (Object) this) instanceof StandEntity){
-                IEntityAndData entityAndData = ((IEntityAndData) this);
-                entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-            }
-            if ((((Entity) (Object) this) instanceof Mob ME) || ((Entity) (Object) this) instanceof Player || ((Entity) (Object) this) instanceof LivingEntity) {
-                IEntityAndData entityAndData = ((IEntityAndData) this);
-                boolean down = previousYposManhattan > this.getY();
-                boolean up = previousYposManhattan < this.getY();
-                boolean movementX = previousXposManhattan != this.getX();
-                boolean movementZ = previousZposManhattan != this.getZ();
-                    if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {entityAndData.roundabout$setTrueInvisibilityManhattan(-1);}
-                    else {
-                       if (((LivingEntity) (Object) this) instanceof RoadRollerEntity) {
-                            entityAndData.roundabout$setTrueInvisibilityManhattan(10);
-                        } else {
-                           if (down || up) {
-                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                           }
-                           else if (movementX || movementZ) {
-                               entityAndData.roundabout$setTrueInvisibilityManhattan(120);
-                           }
-                       }
-                    }
-            }
-        }
-        previousYposManhattan = this.getY();
-        previousXposManhattan = this.getX();
-        previousZposManhattan = this.getZ();
-    }
 }

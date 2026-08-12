@@ -18,6 +18,9 @@
     "roundabout:sunlight",
     "roundabout:blood_drain",
     "roundabout:chess_strike",
-    "roundabout:anubis_possess"
+    "roundabout:anubis_possess",
+    "roundabout:anubis_spin",
+    "roundabout:haze_virus",
+    "roundabout:distortion_virus"
   ]
 }

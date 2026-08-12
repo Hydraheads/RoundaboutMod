@@ -519,7 +519,6 @@ public class StandHudRender {
         int max = PE.getMaxShootTicks();
         int current = Mth.clamp(PE.getShootTicks(), 0, max);
 
-        // background bar
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 151, 182, 5);
 
         if (max > 0) {
@@ -535,7 +534,6 @@ public class StandHudRender {
         int k = scaledWidth / 2 - 5;
         l = scaledHeight - 31 - 5;
 
-        // IMPORTANT: fix shoot state logic (don’t rely on ticks alone)
         if (PE.emperorZoomActive()) {
             context.blit(StandIcons.JOJO_ICONS, k, l, u, 80, 9, 9);
         } else if (PE.canShoot()) {
@@ -784,7 +782,63 @@ public class StandHudRender {
         context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
         context.drawString(renderer, $$6, $$7, $$8, y, false);
     }
+    public static void renderEpitaph(GuiGraphics context, Player playerEntity,
+                                         int scaledWidth, int scaledHeight, int x, PowersKingCrimson pkc) {
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        float maxDistance = pkc.getEpitphDuration();
+        float distance =  Math.max(maxDistance - pkc.getTicksIntoEpitaph(), 0);
+        int maxDistance2 = ((int) (distance/20)) + 1;
 
+        int blt =  (int) Math.floor(((double) 182 / maxDistance) * (distance));
+        l = scaledHeight - 32 + 3;
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 97, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 102, blt, 5);
+        }
+
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = maxDistance2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
+    public static void renderTimeErase(GuiGraphics context, Player playerEntity,
+                                     int scaledWidth, int scaledHeight, int x, PowersKingCrimson pkc) {
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        float maxDistance = pkc.timeEraseMaxTicks();
+        float distance =  Math.max(pkc.ticksOfEraseLeft, 0);
+        int maxDistance2 = ((int) (distance/20)) + 1;
+
+        int blt =  (int) Math.floor( ((double) 182 / maxDistance) * (distance));
+        l = scaledHeight - 32 + 3;
+
+        int i = 97;
+        if (pkc.isBeyondRange()){
+            i = 107;
+        }
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, i, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, i+5, blt, 5);
+        }
+
+        int y = 16173823;
+        Font renderer = client.font;
+        String $$6 = maxDistance2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
     public static void renderCKBDistance(GuiGraphics context, Player playerEntity,
                                                  int scaledWidth, int scaledHeight, int x, int targ) {
         Minecraft client = Minecraft.getInstance();
@@ -891,7 +945,6 @@ public class StandHudRender {
 
                 int time = PA.getMaxPlayTime()-PA.playTime-sTime;
                 int maxTime = eTime-sTime;
-            //    Roundabout.LOGGER.info("{}/{}",time,maxTime);
 
                 inc = maxTime-time;
                 max = maxTime;
@@ -991,7 +1044,7 @@ public class StandHudRender {
             int r = (int) (q * 183.0f);
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 45, r, 5);
 
-            Component text = clashOp.getName();
+            Component text = clashOp.getDisplayName();
             int m = client.font.width(text);
             int n = i / 2 - m / 2;
             int o = l - 9;

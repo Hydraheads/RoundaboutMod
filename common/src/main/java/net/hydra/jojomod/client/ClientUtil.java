@@ -11,14 +11,18 @@ import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
-import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
-import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
+import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.projectile.*;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
+import net.hydra.jojomod.entity.substand.MoldSporesEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -29,6 +33,7 @@ import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.entity.TickableSoundInstances.BowlerHatFlyingSound;
+import net.hydra.jojomod.platform.ClientServices;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -38,13 +43,14 @@ import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -63,19 +69,17 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.*;
 import net.hydra.jojomod.entity.corpses.FallenMob;
-import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -85,8 +89,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -96,7 +100,6 @@ import net.zetalasis.networking.packet.api.IClientNetworking;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.*;
 
@@ -105,6 +108,7 @@ import java.util.*;
 public class ClientUtil {
 
 
+    public static boolean inPowerInventory = false;
     public static Matrix4f savedPose;
     public static int checkthis = 0;
     public static int checkthisdat = 0;
@@ -116,7 +120,145 @@ public class ClientUtil {
      * Not a perfect solution but it should help.*/
     public static int skipInterpolationFixAccidentTicks = -1;
 
+    public static int clientTicker;
+    public static int timeSkipTicker = -1;
+    public static int bitesTheDustTicker = -1;
+    public static int getClientTicker(){
+        return clientTicker;
+    }
+    public static int skinTicker = 10;
+    public static byte lastSkin = 0;
 
+
+    public static boolean isUsingTimeErase = false;
+    public static void tickClientUtilStuff(){
+        clientTicker++;
+        if (skinTicker < 10){
+            skinTicker++;
+        }
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
+            PlayerTickStart = player.tickCount;
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                if (PKC.isUsingTimeErase()){
+                    if (clientTicker % 2 == 0) {
+                        ClientEffectUtil.spawnTerrainFragment(player);
+                    }
+                    isUsingTimeErase = true;
+                    if (TimeErase < fadeTime){
+                        TimeErase++;
+                    }
+                } else {
+                    isUsingTimeErase = false;
+                    if (TimeErase > -1){
+                        TimeErase--;
+                    }
+                }
+            } else {
+                isUsingTimeErase = false;
+                if (TimeErase > -1){
+                    TimeErase--;
+                }
+            }
+        }
+        ClientEffectUtil.updateTerrainFragments();
+        if (bitesTheDustTicker > -1){
+            bitesTheDustTicker++;
+            if (bitesTheDustTicker > 8){
+                bitesTheDustTicker = -1;
+            }
+        }
+
+        if (timeSkipTicker > -1){
+            timeSkipTicker++;
+            if (timeSkipTicker > 9){
+                timeSkipTicker = -1;
+            }
+        }
+
+        if (heldSwap > 0){
+            heldSwap--;
+        }
+        if (renderBloodTicks > 0){
+            renderBloodTicks--;
+        }
+        /**
+         Minecraft mc = Minecraft.getInstance();
+         if (mc!= null && mc.player != null) {
+         markBlockAsInvisible(mc.player.getOnPos());
+         markBlockAsInvisible(mc.player.getOnPos().below());
+         }
+         **/
+        if (ClientUtil.popSounds != null){
+            ClientUtil.popSounds.popSounds();
+            ClientUtil.popSounds = null;
+        }
+
+
+        Player pl = getPlayer();
+        if (pl != null){
+            IPlayerEntity ipe = ((IPlayerEntity) pl);
+            int cont = ipe.roundabout$getControlling();
+            if (cont > 0){
+                Entity zentity = pl.level().getEntity(cont);
+                if (zentity == null ||
+                        !zentity.level().dimension().equals(pl.level().dimension())
+                        || zentity.isRemoved() || !zentity.isAlive()){
+                    ipe.roundabout$setIsControlling(0);
+                    C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
+                    ClientUtil.setCameraEntity(null);
+                }
+            }
+        }
+
+        if (roadRollerPickingRRE != null) {
+            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
+                roadRollerPickingRRE = null;
+            }
+        }
+
+        if (ClientUtil.isInCinderellaMobUI > -1){
+            if (!ClientUtil.hasCinderellaShopUI()){
+                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
+                ClientUtil.isInCinderellaMobUI = -1;
+            }
+        } if (ClientUtil.setScreenNull){
+            ClientUtil.setScreenNull = false;
+            Minecraft.getInstance().setScreen(null);
+        }
+        if (skipInterpolationFixAccidentTicks > -1){
+            skipInterpolationFixAccidentTicks--;
+        } if (skipInterpolation){
+            if (skipInterpolationFixAccidentTicks <= -1){
+                skipInterpolation = false;
+            }
+        }
+    }
+    public static void skinTicker(byte a, byte b){
+        if (a != b){
+            skinTicker = 0;
+            lastSkin = b;
+        }
+    }
+
+
+    public static final float fadeTime = 14F;
+
+    public static boolean renderTimeErase(){
+        return TimeErase > -1;
+    }
+    public static int renderTimeEraseTime(){
+        return TimeErase;
+    }
+    public static void setTimeErase(int time){
+        TimeErase = time;
+    }
+    public static void bootTimeErase(){
+        if (TimeErase < 0){
+            TimeErase = 0;
+        }
+    }
     public static void animateZombieArmsNoBob(ModelPart $$0, ModelPart $$1, boolean $$2, float $$3, float $$4) {
         float $$5 = Mth.sin($$3 * (float) Math.PI);
         float $$6 = Mth.sin((1.0F - (1.0F - $$3) * (1.0F - $$3)) * (float) Math.PI);
@@ -142,7 +284,12 @@ public class ClientUtil {
     public static boolean isPlayerOrCamera(Entity ent){
         Minecraft mc = Minecraft.getInstance();
         if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
-                !(mc.player !=null && ent.is(mc.player))) {
+                !(mc.player !=null && ent.is(mc.player))
+        && !(
+                ent instanceof LivingEntity LV && ((StandUser)LV).roundabout$getStandPowers().isPiloting()
+                && ((StandUser)LV).roundabout$getStandPowers().getPilotingStand() != null &&
+                ((StandUser)LV).roundabout$getStandPowers().getPilotingStand().getUUID() == ent.getUUID())
+        ) {
             return true;
         }
         return false;
@@ -165,6 +312,9 @@ public class ClientUtil {
         return rendersRipperEyes(ent);
     }
 
+    public static boolean renderSkyBox(){
+        return false;
+    }
     public static boolean hasChangedArms(Entity ent){
         if (cancelWithSuitStand(ent)){
             return false;
@@ -251,6 +401,7 @@ public class ClientUtil {
                 ||ent.getType()==EntityType.HUSK
                 ||ent.getType()==EntityType.CREEPER
                 ||ent.getType()==EntityType.DROWNED
+                ||ent instanceof CloneEntity
                 ||ent.getType()==EntityType.SKELETON)));
     }
     public static boolean hideLegs(Entity ent){
@@ -264,56 +415,17 @@ public class ClientUtil {
     public static int getFrozenLevel(){
         return frozenLevel;
     }
-    public static int clientTicker;
-    public static int getClientTicker(){
-        return clientTicker;
-    }
-    public static void tickClientUtilStuff(){
-        clientTicker++;
 
-        if (heldSwap > 0){
-            heldSwap--;
-        }
-        if (renderBloodTicks > 0){
-            renderBloodTicks--;
-        }
-        /**
-        Minecraft mc = Minecraft.getInstance();
-        if (mc!= null && mc.player != null) {
-            markBlockAsInvisible(mc.player.getOnPos());
-            markBlockAsInvisible(mc.player.getOnPos().below());
-        }
-         **/
-        if (ClientUtil.popSounds != null){
-            ClientUtil.popSounds.popSounds();
-            ClientUtil.popSounds = null;
-        }
-
-        if (roadRollerPickingRRE != null) {
-            if (!roadRollerPickingRRE.isAlive() && roadRollerPickingRRE.isRemoved()) {
-                roadRollerPickingRRE = null;
-            }
-        }
-
-        if (ClientUtil.isInCinderellaMobUI > -1){
-            if (!ClientUtil.hasCinderellaShopUI()){
-                C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_RELLA_CANCEL,ClientUtil.isInCinderellaMobUI);
-                ClientUtil.isInCinderellaMobUI = -1;
-            }
-        } if (ClientUtil.setScreenNull){
-            ClientUtil.setScreenNull = false;
-            Minecraft.getInstance().setScreen(null);
-        }
-        if (skipInterpolationFixAccidentTicks > -1){
-            skipInterpolationFixAccidentTicks--;
-        } if (skipInterpolation){
-            if (skipInterpolationFixAccidentTicks <= -1){
-                skipInterpolation = false;
-            }
-        }
-    }
     public static void preRenderLifeTracker(LifeTrackerEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         ent.travelAheadRender($$4);
+    }
+
+    public static void preRenderFloatSabbath(BlackSabbathEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        ent.yRotO = lerpYRot;
+        ent.setYRot(lerpYRot);
+        ent.setYBodyRot(lerpYRot);
+        ent.setYHeadRot(lerpYRot);
     }
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){
@@ -350,6 +462,7 @@ public class ClientUtil {
                 }
             }
     }
+
 
     public static void preRenderSurvivor(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
         float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
@@ -458,7 +571,13 @@ public class ClientUtil {
         instance.execute(() -> {
             if (player != null) {
                 /**Mandom's time rewind flashes on people and makes their screen interpolate*/
-                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
+
+                if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.FullBlip.value)) {
+                    if (ConfigManager.getClientConfig().mandomRewindAttemptsToSkipInterpolation) {
+                        skipInterpolation = true;
+                        skipInterpolationFixAccidentTicks = 14;
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
                     StandPowers powers = user.roundabout$getStandPowers();
                     if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
@@ -515,14 +634,6 @@ public class ClientUtil {
                         ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
 
                     }
-                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MANHATTAN_INVISIBILITY.value)) {
-                    /**Invis Psuedo Tracked Data*/
-                    int entityID = (int)vargs[0];
-                    int altered = (int)vargs[1];
-                    Entity ent = player.level().getEntity(entityID);
-                    if (ent != null){
-                        ((IEntityAndData)ent).roundabout$setTrueInvisibilityManhattan(altered);
-                    }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
                     /**Daze Packet*/
                     byte dazeTime = (byte)vargs[0];
@@ -564,6 +675,12 @@ public class ClientUtil {
                     byte activePower = (byte) vargs[1];
                     Vector3f vec = (Vector3f) vargs[2];
                     ClientUtil.handleBlipPacketS2C(data,activePower,vec);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip2.value)) {
+                    /**TS Teleport blip*/
+                    int data = (int) vargs[0];
+                    byte activePower = (byte) vargs[1];
+                    Vector3f vec = (Vector3f) vargs[2];
+                    ClientUtil.handleBlipPacket2S2C(data,activePower,vec);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncCooldown.value)) {
                     /**Syncs cooldowns for skills*/
                     byte power = (byte) vargs[0];
@@ -741,7 +858,36 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
                     }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value)) {
+                    int i = (int) vargs[0];
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+                    float xrot = (float) vargs[4];
+                    float yrot = (float) vargs[5];
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value)) {
+                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                        PKC.epitaph.clear();
+                    }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                    float data = (float) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.range = data;
+
+
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
+                    int data = (int) vargs[0];
+                    int data2 = (int) vargs[1];
+                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
+                    entity.lifetime = data;
+
+
                 }
+
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
                 //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
@@ -822,6 +968,16 @@ public class ClientUtil {
             if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
                 playSound(ModSounds.FLESH_BUD_EVENT,target,1,1);
             }
+        } else if (context == PacketDataIndex.S2C_DISC_ADD_INT){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
+                playSound(ModSounds.DISC_INSERT_EVENT,target,1,1);
+            }
+        } else if (context == PacketDataIndex.S2C_DISC_REMOVE_INT){
+            Entity target = player.level().getEntity(data);
+            if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
+                playSound(ModSounds.DISC_REMOVE_EVENT,target,1,1);
+            }
         } else if (context == PacketDataIndex.S2C_INT_COMBO_AMT){
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboAmt(data);
@@ -859,6 +1015,11 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.S2C_INT_LVL_DECREASE) {
             IPlayerEntity ipe = ((IPlayerEntity) player);
             ipe.rdbt$setLevelDecreaseTicks(data);
+        } else if (context == PacketDataIndex.S2C_STAND_SPECIAL_INT) {
+            StandUser user = ((StandUser) player);
+            if (user.roundabout$getStandPowers() instanceof PowersKingCrimson ckb){
+                ckb.disengageTargetInt = data;
+            }
         }
     }
     public static void handleDoubleIntPacketS2C(Player player, int data, int data2, byte context) {
@@ -908,6 +1069,54 @@ public class ClientUtil {
         return false;
     }
 
+    public static float getGameTimeStart(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            return player.tickCount - GameTimeStart;
+        }
+        return 0;
+    }
+    public static float GameTimeStart = 0;
+    public static float PlayerTickStart = 0;
+    public static int TimeErase = -1;
+    public static boolean isUsingEpitaph(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            PlayerTickStart = player.tickCount;
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                if (PKC.isUsingEpitaph()) {
+                    return true;
+                } else {
+                    GameTimeStart = player.tickCount;
+                    return false;
+                }
+            }
+        }
+        if (player != null){
+            GameTimeStart = player.tickCount;
+        }
+        return false;
+    }
+    public static boolean canRenderEpitaphScreen() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
+        if (isUsingEpitaph() && !ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
+            if (ConfigManager.getClientConfig().generalSettings.epitaphScreenEffect) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean canEpitaphRenderShader() {
+        if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
+            return false;
+        }
+        if (isUsingEpitaph() && ConfigManager.getClientConfig().generalSettings.advancedEpitaphShader) {
+            return true;
+        }
+        return false;
+    }
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1000,14 +1209,30 @@ public class ClientUtil {
     public static boolean getHideInvis(){
         return hideInvis;
     }
+    public static boolean forceFade = false;
+    public static float forceFade2 = 1f;
 
     public static float getThrowFadePercent(Entity ent, float delta){
+        if (forceFade){
+            return forceFade2;
+        }
         float throwFade = 1f;
         delta = delta % 1;
         IEntityAndData entityAndData = ((IEntityAndData) ent);
         if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
+
+        if (ent instanceof KingCrimsonProjectionEntity kcpe){
+            throwFade*=((Math.min(((float) kcpe.fadeInTick)+delta, (float) kcpe.maxFadeInTick)) /((float)kcpe.maxFadeInTick));
+        }
+
+        if (ent instanceof LivingEntity le && PowersMetallica.hasAnyFadeActive(le)) {
+            double dist = getCameradDistance(ent);
+            float metAlpha = PowersMetallica.getMetallicaInvisibilityAlpha(le, dist, delta);
+            throwFade = throwFade * metAlpha;
+        }
+
         if (ent instanceof Player pl){
             GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
             int interp = gp.fadeOutInterpolation;
@@ -1071,9 +1296,16 @@ public class ClientUtil {
         throwFadeToTheEther = ether;
     }
     public static float getThrowFadeToTheEther(){
+        if (forceFade){
+            return forceFade2;
+        }
         return throwFadeToTheEther;
     }
     public static int getThrowFadeToTheEtherInt(){
+
+        if (forceFade){
+            return Mth.floor(forceFade2*255);
+        }
         return Mth.floor(throwFadeToTheEther*255);
     }
     //How visible the next rendered model part will be
@@ -1122,10 +1354,18 @@ public class ClientUtil {
             return hasATimeStopSeeingStand();
         }
         return false;
-    }
+    }private static final Map<Integer, SoundInstance> ENTITY_SOUNDS = new HashMap<>();
+    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch) {
+        Minecraft mc = Minecraft.getInstance();
 
-    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
-        SoundInstance qSound = new EntityBoundSoundInstance(
+        SoundInstance oldSound = ENTITY_SOUNDS.get(entity.getId());
+
+        if (oldSound != null && oldSound.getLocation().equals(event.getLocation())) {
+            mc.getSoundManager().stop(oldSound);
+            ENTITY_SOUNDS.remove(entity.getId());
+        }
+
+        EntityBoundSoundInstance sound = new EntityBoundSoundInstance(
                 event,
                 SoundSource.NEUTRAL,
                 volume,
@@ -1133,8 +1373,21 @@ public class ClientUtil {
                 entity,
                 entity.level().random.nextLong()
         );
-        Minecraft.getInstance().getSoundManager().play(qSound);
+
+        ENTITY_SOUNDS.put(entity.getId(), sound);
+        mc.getSoundManager().play(sound);
     }
+//    public static void playSound(SoundEvent event, Entity entity, float volume, float pitch){
+//        SoundInstance qSound = new EntityBoundSoundInstance(
+//                event,
+//                SoundSource.NEUTRAL,
+//                volume,
+//                pitch,
+//                entity,
+//                entity.level().random.nextLong()
+//        );
+//        Minecraft.getInstance().getSoundManager().play(qSound);
+//    }
 
     public static void tickHeartbeat(Entity entity){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1203,6 +1456,10 @@ public class ClientUtil {
         return false;
     }
 
+    public static boolean isPlayerUUID(UUID uuid){
+        LocalPlayer player = Minecraft.getInstance().player;
+        return uuid == player.getUUID();
+    }
     public static boolean isPlayer(Entity PE){
         if (PE instanceof Player){
             LocalPlayer player = Minecraft.getInstance().player;
@@ -1212,6 +1469,29 @@ public class ClientUtil {
         }
         return false;
     }
+
+
+    public static void sendControlData(){
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            boolean isBackingUp = mc.options.keyDown.isDown();
+            boolean isMovingForward = mc.options.keyUp.isDown();
+            boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
+            boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && !mc.player.isHurt() && getPlayer().fallDistance < 2 &&
+                    !getPlayer().getAbilities().flying);
+            if (((StandUser)mc.player).roundabout$getBubbleEncased() > 0){
+                isJumping = false;
+            }
+            boolean isSprinting = mc.player.isSprinting();
+            boolean runaway = false;
+
+            Vec3 delta = mc.player.getDeltaMovement();
+            C2SPacketUtil.sendControlDataPacket(isBackingUp, isMovingForward, isSneaking, isJumping,
+                    delta,isSprinting,runaway);
+        }
+    }
+
+
     public static Player getPlayer(){
         return Minecraft.getInstance().player;
     }
@@ -1239,6 +1519,11 @@ public class ClientUtil {
     public static void openMemoryRecordScreen(boolean recording){Minecraft.getInstance().setScreen(new MemoryRecordScreen(recording));}
     public static void openTuskActScreen(){Minecraft.getInstance().setScreen(new TuskActScreen());}
     public static void openNailScreen(){Minecraft.getInstance().setScreen(new NailColorChangeScreen());}
+    public static void openDiscStealScreen(){Minecraft.getInstance().setScreen(new DiscStealScreen());}
+    public static void openWhitesnakeDisguiseScreen(){Minecraft.getInstance().setScreen(new WhitesnakeDisguiseScreen());}
+    public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
+        Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
+    }
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){
@@ -1292,11 +1577,52 @@ public class ClientUtil {
      * A generalized packet for sending ints to the client. Context is what to do with the data int
      */
     public static void handleBlipPacketS2C(LocalPlayer player, int data, byte context, Vector3f vec) {
+        if (context == 2) {
+            /*This code makes the world using mobs appear to teleport by skipping interpolation*/
+            Entity target = player.level().getEntity(data);
+            if (target != null && target.getPassengers() != null && !target.getPassengers().isEmpty() &&
+                    target.getControllingPassenger() instanceof Player pl
+                    ){
+                if (!(target instanceof Boat) || target.getPosition(1f).distanceTo(new Vec3(vec.x,vec.y,vec.z)) > 0.4F){
+                    target.setPos(vec.x,vec.y,vec.z);
+                    Player cli = ClientUtil.getPlayer();
+                    if (cli != null && cli.is(pl) && cli.isPassenger()){
+                        Entity rv = cli.getRootVehicle();
+                        if (rv != null) {
+                            target.positionRider(cli);
+                        }
+                    }
+                }
+                return;
+            }
+            if (target instanceof LivingEntity LE) {
+                if (!isPlayer(target)) {
+                    ((StandUser) target).roundabout$setBlip(vec);
+                    ((StandUser) target).roundabout$tryBlip();
+                }
+
+                StandEntity SE = ((StandUser) target).roundabout$getStand();
+                if (SE instanceof FollowingStandEntity fse && fse.getFollowing() != null && fse.getFollowing().is(target)) {
+                    byte OT = fse.getOffsetType();
+                    if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
+                        Vec3 spos = fse.getStandOffsetVector(LE);
+                        ((StandUser) SE).roundabout$setBlip(spos.toVector3f());
+                        ((StandUser) target).roundabout$tryBlip();
+                    }
+                }
+            }
+        }
+    }
+    public static void handleBlipPacketS2C2(LocalPlayer player, int data, byte context, Vector3f vec) {
         if (hasATimeStopSeeingStandAndCanBypass())
             return;
         if (context == 2) {
             /*This code makes the world using mobs appear to teleport by skipping interpolation*/
             Entity target = player.level().getEntity(data);
+            if (target != null && (target.getPassengers() != null && !target.getPassengers().isEmpty() &&
+                    target.getControllingPassenger() instanceof Player)){
+                return;
+            }
             if (target instanceof LivingEntity LE) {
                 ((StandUser) target).roundabout$setBlip(vec);
 
@@ -1304,6 +1630,7 @@ public class ClientUtil {
                 if (SE != null) {
                     ((StandUser) SE).roundabout$setBlip(vec);
                 }
+                ((StandUser) target).roundabout$tryBlip();
             }
         }
     }
@@ -1526,6 +1853,12 @@ public class ClientUtil {
              handleBlipPacketS2C(player,data,context,vec);
         }
     }
+    public static void handleBlipPacket2S2C(int data, byte context, Vector3f vec){
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null) {
+            handleBlipPacketS2C2(player,data,context,vec);
+        }
+    }
     public static void handleBundlePacketS2C(byte context, byte one, byte two){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
@@ -1623,6 +1956,10 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_RESPAWN){
             Minecraft.getInstance().player.respawn();
+        } else if (context == PacketDataIndex.TIME_SKIP){
+            timeSkipTicker = 0;
+        } else if (context == PacketDataIndex.BITES_THE_DUST){
+            bitesTheDustTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
@@ -1704,6 +2041,41 @@ public class ClientUtil {
         if (cameraEnt instanceof Player play && ((IPowersPlayer)cameraEnt).rdbt$getPowers() instanceof PowersEmperor vf) {
 }*/
 
+    public static HumanoidModel.ArmPose getUseAnimation(AbstractClientPlayer player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemBySlot(hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+
+        if (itemStack.isEmpty()) {
+            return HumanoidModel.ArmPose.EMPTY;
+        }
+        if (player.getUsedItemHand() == hand && player.getUseItemRemainingTicks() > 0) {
+            UseAnim useAnim = itemStack.getUseAnimation();
+            if (useAnim == UseAnim.BLOCK) {
+                return HumanoidModel.ArmPose.BLOCK;
+            }
+            if (useAnim == UseAnim.BOW) {
+                return HumanoidModel.ArmPose.BOW_AND_ARROW;
+            }
+            if (useAnim == UseAnim.SPEAR) {
+                return HumanoidModel.ArmPose.THROW_SPEAR;
+            }
+            if (useAnim == UseAnim.CROSSBOW && hand == player.getUsedItemHand()) {
+                return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+            }
+            if (useAnim == UseAnim.SPYGLASS) {
+                return HumanoidModel.ArmPose.SPYGLASS;
+            }
+            if (useAnim == UseAnim.TOOT_HORN) {
+                return HumanoidModel.ArmPose.TOOT_HORN;
+            }
+            if (useAnim == UseAnim.BRUSH) {
+                return HumanoidModel.ArmPose.BRUSH;
+            }
+        } else if (!player.swinging && itemStack.getItem() instanceof CrossbowItem && CrossbowItem.isCharged(itemStack)) {
+            return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+        }
+        return HumanoidModel.ArmPose.ITEM;
+    }
+
     public static<T extends LivingEntity, M extends EntityModel<T>> void renderFirstPersonModelParts(Entity cameraEnt, float $$4, PoseStack stack, MultiBufferSource source, int light){
 
         if (cameraEnt instanceof Player play) {
@@ -1724,7 +2096,8 @@ public class ClientUtil {
 
                     ItemStack visage = pl.roundabout$getMaskSlot();
                     if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                        VisageData vd = ME.visageData;
+
+                        VisageData vd = ME.visageData.generateVisageData(play);
                         if (vd != null && vd.isCharacterVisage()) {
                             r = ((float) vd.getHairColor().getX()) / 255;
                             g = ((float) vd.getHairColor().getY()) / 255;
@@ -1745,6 +2118,46 @@ public class ClientUtil {
             }
             byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
             // vampire again
+
+            if (PowerTypes.hasHandsActive(play)){
+
+                stack.pushPose();
+                float r = 1;
+                float g = 1;
+                float b = 1;
+                byte animation = ((StandUser)play).roundabout$getStandAnimation();
+                boolean isIdle = animation == StandPowers.NONE;
+                Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
+                if (isIdle){
+                    gtranslation = new Vec3(0, -0.27, -0.17);
+                }
+                boolean isGuarding = animation == StandPowers.GUARD;
+                if (isGuarding){
+                        gtranslation = new Vec3(0, -0.5, -0.05);
+                }
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+
+                float opacity = 1F;
+                if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().opacitySettings != null) {
+                    opacity = ConfigManager.getClientConfig().opacitySettings.opacityOfPlayerStandArms;
+                }
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                stack.mulPose(Axis.XP.rotationDegrees(5));
+                if (isGuarding){
+                        stack.mulPose(Axis.XP.rotationDegrees(-17));
+                } else {
+                    if (isIdle) {
+                        stack.mulPose(Axis.XP.rotationDegrees(-22));
+                    }
+                }
+                ModStrayModels.kingCrimsonArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                stack.popPose();
+            }
             if (ClientUtil.rendersRipperEyes(play)) {
                 stack.pushPose();
                 Vec3 gtranslation = new Vec3(0, -0.1, 0);
@@ -1801,7 +2214,7 @@ public class ClientUtil {
 
                 ItemStack visage = pl.roundabout$getMaskSlot();
                 if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
-                    VisageData vd = ME.visageData;
+                    VisageData vd = ME.visageData.generateVisageData(play);
                     if (vd != null && vd.isCharacterVisage()) {
                         r = ((float) vd.getHairColor().getX()) / 255;
                         g = ((float) vd.getHairColor().getY()) / 255;
@@ -1874,7 +2287,9 @@ public class ClientUtil {
 
             StandUser standUser = (StandUser) cameraEnt;
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
-            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && !play.getMainHandItem().is(ModItems.ANUBIS_ITEM) ) {
+            if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && (!play.getMainHandItem().is(ModItems.ANUBIS_ITEM)
+                    || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis)
+                    || standUser.roundabout$isPossessed()) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
                 stack.pushPose();
@@ -2084,16 +2499,33 @@ public class ClientUtil {
     }
 
     public static boolean forceEntityRendering(Entity entity){
-        if (entity instanceof Player pl){
-            if (((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
-                return true;
+        if (entity != null){
+            if (entity instanceof Player pl) {
+                if (((IPlayerEntity) pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                    return true;
+                }
             }
-        } if (entity instanceof LivingEntity LE){
-            StandUser su = ((StandUser)LE);
-            if (su.roundabout$hasStandOut()){
-                return true;
-            } else if (su.roundabout$getBoundTo() != null){
-                return true;
+            if (entity instanceof LivingEntity LE) {
+                StandUser su = ((StandUser) LE);
+                if (su.roundabout$hasStandOut()) {
+                    return true;
+                } else if (su.roundabout$getBoundTo() != null) {
+                    return true;
+                }
+            }
+            if (isUsingEpitaph()) {
+                Player pl = getPlayer();
+                if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc) {
+                    Entity root = entity.getRootVehicle();
+                    if (pkc.epitaph.containsKey(entity.getId()) ||
+                            (root != null && pkc.epitaph.containsKey(root.getId()))){
+                        return true;
+                    }
+                }
+                if (entity instanceof StandEntity){
+                    return true;
+                }
             }
         }
         return false;

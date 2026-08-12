@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,6 +33,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -50,6 +53,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public boolean invincibleState = false;
     public int staticMode = 0;
     public int mode = 1;
+    private int wardenMunches = 0;
 
     /** general definition stuff **/
     @Override
@@ -103,15 +107,15 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.changing_stance",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_SETIINGS, 1, level, bypass));
+                "instruction.roundabout.press_skill", StandIcons.SWITCH_STANCE, 1, level, bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.ground_stance",
-                "", StandIcons.GROUND_STANCE,2,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.GROUND_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.neutral_stance",
-                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,3,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.knockback_stance",
-                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.redstone_stance",
-                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,4,level,bypass));
+                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,1,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.activate_invincibility",
                 "instruction.roundabout.press_skill", StandIcons.TOGGLE_INVINCIBILITY,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
@@ -153,7 +157,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         BETA = 18,
         PUMPKIN = 19,
         EVIL_PUMPKIN = 20,
-        GHOST = 21;
+        GHOST = 21,
+        WANDERING = 22,
+
+        // dont mind me
+        CLIENT_SYNC = 100;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -177,7 +185,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 BETA,
                 PUMPKIN,
                 EVIL_PUMPKIN,
-                GHOST
+                GHOST,
+                WANDERING
 
         );
     }
@@ -205,6 +214,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             case Powers20thCenturyBoy.PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.pumpkin");
             case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.evil_pumpkin");
             case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
+            case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.roundabout.20_centuryboy.wandering");
             default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
         };
     }
@@ -255,17 +265,21 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public void switchMode(){
         if (mode == 1){
-            mode += 1;
+            mode = 2;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
         } else if (mode == 2) {
-            mode +=1;
+            mode = 3;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
         } else if (mode == 3) {
-            mode += 1;
+            mode = 4;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
         } else{
             mode = 1;
             if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
+        }
+
+        if (this.getSelf() instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),Powers20thCenturyBoy.CLIENT_SYNC, mode);
         }
     }
 
@@ -326,201 +340,207 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     private static final Map<UUID, Long> GROUND_STANCE_COOLDOWN = new HashMap<>();
     @Override
     /// this is soo shit dont use this for reference use WA or something
-    public boolean interceptIncomingHarm(DamageSource source, float amount){
-        StandUser user = getStandUserSelf();
+    public boolean interceptIncomingHarm(DamageSource source, float amount) {
+        if (invincibleState) {
+            if (source.getEntity() instanceof Warden warden && source.is(DamageTypes.MOB_ATTACK)) {
+                getEaten(warden);
+            }
+            StandUser user = getStandUserSelf();
 
-        if (ClientNetworking.getAppropriateConfig().centuryBoySettings.CBHasDurability && hasStandActive(this.getSelf())) {
-            if (amount > ClientNetworking.getAppropriateConfig().centuryBoySettings.CBDurability) {
-                user.roundabout$breakGuard();
-                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
-                if (self instanceof Player player) {player.getCooldowns().addCooldown(Items.SHIELD, 100);}
-            } else {
-                user.roundabout$damageGuard(amount);
-                if (user.roundabout$getGuardBroken()) {
+            if (ClientNetworking.getAppropriateConfig().centuryBoySettings.CBHasDurability && hasStandActive(this.getSelf())) {
+                if (amount > ClientNetworking.getAppropriateConfig().centuryBoySettings.CBDurability) {
+                    user.roundabout$breakGuard();
                     this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
-                    if (self instanceof Player player) {player.getCooldowns().addCooldown(Items.SHIELD, 100);}
-                }
-            }
-            if (user.roundabout$getGuardBroken()) {return false;}
-        }
-
-        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
-
-            if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-                    source.is(DamageTypes.WITHER) ||
-                    source.is(DamageTypes.DRAGON_BREATH) ||
-                    source.is(ModDamageTypes.GO_BEYOND) ||
-                    source.is(DamageTypes.GENERIC_KILL)
-            ) {
-                return false;
-            }
-
-            if (PCB.staticMode == 4) {
-                self.hurtMarked = true;
-                BlockPos playerPos = self.getOnPos();
-                Level level = self.level();
-
-                int range = (amount < 10) ? 2 : (amount <= 20) ? 3 : (amount > 20) ? 4 : 2;
-                BlockPos corner1 = playerPos.offset(-range, -range, -range);
-                BlockPos corner2 = playerPos.offset(range, range, range);
-
-                for (BlockPos targetPos : BlockPos.betweenClosed(corner1, corner2)) {
-                    BlockState state = level.getBlockState(targetPos);
-                    Block block = state.getBlock();
-                    if (block instanceof TntBlock tnt) {
-                        tnt.explode(level, targetPos);
-                        level.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 11);
-                    } else if (block instanceof ObserverBlock observer) {
-                        if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
-                            level.scheduleTick(targetPos, observer, 2);
-                        }
-                    } else if (block instanceof SculkSensorBlock || block instanceof CalibratedSculkSensorBlock) {
-                        if (!level.getBlockTicks().hasScheduledTick(targetPos, block)) {
-                            level.gameEvent(self, GameEvent.PROJECTILE_LAND, self.position());
-                        }
-                    } else if (block instanceof DoorBlock door) {
-                        if (state.getValue(DoorBlock.HALF) != DoubleBlockHalf.LOWER) {
-                            boolean isOpen = state.getValue(DoorBlock.OPEN);
-                            door.setOpen(null, level, state, targetPos, !isOpen);
-                        }
-                    } else if (block instanceof TrapDoorBlock) {
-                        boolean isOpen = state.getValue(DoorBlock.OPEN);
-                        level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
-                    } else if (block instanceof RedstoneLampBlock lamp) {
-                        boolean lit = state.getValue(RedstoneLampBlock.LIT);
-                        level.setBlock(targetPos, state.setValue(RedstoneLampBlock.LIT, !lit), 3);
-                        level.scheduleTick(targetPos, lamp, 50);
-                    }
-                }
-                deflect();
-                return true;
-            }
-
-            else if (PCB.staticMode == 1) {
-
-                if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance){
-                    if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
-                            source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
-                            source.is(ModDamageTypes.SUNLIGHT)){
-                        return false;
-                    }
-                }
-
-                self.hurtMarked = true;
-                Level level = self.level();
-
-                long currentTime = System.currentTimeMillis();
-                UUID playerUUID = self.getUUID();
-                long lastTriggered = GROUND_STANCE_COOLDOWN.getOrDefault(playerUUID, 0L);
-                if (currentTime - lastTriggered < 1000) {
-                    deflect();
-                    return true;
-                }
-
-                int breakstat = (amount <= 12) ? 2 : (amount <= 18) ? 3 : (amount <= 35) ? 5 : 10;
-                List<BlockPos> blocks = getClosestImpactBlock(self);
-
-                for (BlockPos pos : blocks) {
-                    BlockPos immut = pos.immutable();
-                    BlockState state = level.getBlockState(immut);
-
-                    if (state.getDestroySpeed(level, immut) < 0) continue;
-
-                    int currentDmg = BLOCK_DMG_MAP.getOrDefault(immut, 0);
-                    int newDmg = currentDmg + breakstat;
-                    int crackId = immut.hashCode();
-
-                    if (newDmg >= 10) {
-                        level.destroyBlock(immut, true);
-                        BLOCK_DMG_MAP.remove(immut);
-                        level.destroyBlockProgress(crackId, immut, -1);
-                        GROUND_STANCE_COOLDOWN.put(playerUUID, currentTime);
-                    } else {
-                        BLOCK_DMG_MAP.put(immut, newDmg);
-                        level.destroyBlockProgress(crackId, immut, newDmg);
-                    }
-                }
-                deflect();
-                return true;
-            }
-
-            else if (PCB.staticMode == 3) {
-                self.hurtMarked = true;
-                Entity entity = source.getEntity();
-
-                if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance) {
-                    if (entity != null) {
-                        deflect();
-                        this.self.setDeltaMovement(
-                                this.self.position().subtract(
-                                        source.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
+                    if (self instanceof Player player) {
+                        player.getCooldowns().addCooldown(Items.SHIELD, 100);
                     }
                 } else {
-                    if (entity != null) {
-                        double x = entity.getX() - self.getX();
-                        double z;
-                        for (z = entity.getZ() - self.getZ(); x * x + z * z < 1.0E-4; z = (Math.random() - Math.random()) * 0.01) {
-                            x = (Math.random() - Math.random()) * 0.01;
-                        }
-
-                        if (entity.getType() == EntityType.IRON_GOLEM) {
-                            self.knockback(2.8F, x * 2, z * 2);
-                        } else {
-                            self.knockback(0.8F, x * 2, z * 2);
+                    user.roundabout$damageGuard(amount);
+                    if (user.roundabout$getGuardBroken()) {
+                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
+                        if (self instanceof Player player) {
+                            player.getCooldowns().addCooldown(Items.SHIELD, 100);
                         }
                     }
                 }
-                deflect();
-                return true;
-            }
-        }
-
-        if (staticMode == 3) {
-            if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance){
-                if (source.getEntity() != null){
-                    deflect();
-                    this.self.setDeltaMovement(
-                            this.self.position().subtract(
-                                    source.getSourcePosition()).multiply(new Vec3(amount/7.5, amount/7.5, amount/7.5)));
-                    return true;
-                }
-            } else {
-                deflect();
-                return true;
-            }
-        }
-
-        if (staticMode == 4) {
-            deflect();
-            return true;
-        }
-
-        if (staticMode == 1) {
-            deflect();
-            if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance){
-                if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
-                        source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
-                        source.is(ModDamageTypes.SUNLIGHT)){
+                if (user.roundabout$getGuardBroken()) {
                     return false;
                 }
             }
-            return true;
-        }
 
-        if (invincibleState) {
-            if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-                    source.is(DamageTypes.WITHER) ||
-                    source.is(DamageTypes.DRAGON_BREATH) ||
-                    source.is(ModDamageTypes.GO_BEYOND) ||
-                    source.is(DamageTypes.GENERIC_KILL)
-            ) {
-                return false;
-            } else {
+            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+
+                if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                        source.is(DamageTypes.WITHER) ||
+                        source.is(DamageTypes.DRAGON_BREATH) ||
+                        source.is(ModDamageTypes.GO_BEYOND) ||
+                        source.is(DamageTypes.GENERIC_KILL)
+                ) {
+                    return false;
+                }
+
+                if (PCB.staticMode == 4) {
+                    self.hurtMarked = true;
+                    BlockPos playerPos = self.getOnPos();
+                    Level level = self.level();
+
+                    int range = (amount < 10) ? 2 : (amount <= 20) ? 3 : (amount > 20) ? 4 : 2;
+                    BlockPos corner1 = playerPos.offset(-range, -range, -range);
+                    BlockPos corner2 = playerPos.offset(range, range, range);
+
+                    for (BlockPos targetPos : BlockPos.betweenClosed(corner1, corner2)) {
+                        BlockState state = level.getBlockState(targetPos);
+                        Block block = state.getBlock();
+                        if (block instanceof TntBlock tnt) {
+                            tnt.explode(level, targetPos);
+                            level.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 11);
+                        } else if (block instanceof ObserverBlock observer) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, observer)) {
+                                level.scheduleTick(targetPos, observer, 2);
+                            }
+                        } else if (block instanceof SculkSensorBlock || block instanceof CalibratedSculkSensorBlock) {
+                            if (!level.getBlockTicks().hasScheduledTick(targetPos, block)) {
+                                level.gameEvent(self, GameEvent.PROJECTILE_LAND, self.position());
+                            }
+                        } else if (block instanceof DoorBlock door) {
+                            if (state.getValue(DoorBlock.HALF) != DoubleBlockHalf.LOWER) {
+                                boolean isOpen = state.getValue(DoorBlock.OPEN);
+                                door.setOpen(null, level, state, targetPos, !isOpen);
+                            }
+                        } else if (block instanceof TrapDoorBlock) {
+                            boolean isOpen = state.getValue(DoorBlock.OPEN);
+                            level.setBlock(targetPos, state.setValue(TrapDoorBlock.OPEN, !isOpen), 3);
+                        } else if (block instanceof RedstoneLampBlock lamp) {
+                            boolean lit = state.getValue(RedstoneLampBlock.LIT);
+                            level.setBlock(targetPos, state.setValue(RedstoneLampBlock.LIT, !lit), 3);
+                            level.scheduleTick(targetPos, lamp, 50);
+                        }
+                    }
+                    deflect();
+                    return true;
+                } else if (PCB.staticMode == 1) {
+
+                    if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance) {
+                        if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
+                                source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
+                                source.is(ModDamageTypes.SUNLIGHT)) {
+                            return true;
+                        }
+                    }
+
+                    self.hurtMarked = true;
+                    Level level = self.level();
+
+                    long currentTime = System.currentTimeMillis();
+                    UUID playerUUID = self.getUUID();
+                    long lastTriggered = GROUND_STANCE_COOLDOWN.getOrDefault(playerUUID, 0L);
+                    if (currentTime - lastTriggered < 1000) {
+                        deflect();
+                        return true;
+                    }
+
+                    int breakstat = (amount <= 12) ? 2 : (amount <= 18) ? 3 : (amount <= 35) ? 5 : 10;
+                    List<BlockPos> blocks = getClosestImpactBlock(self);
+
+                    for (BlockPos pos : blocks) {
+                        BlockPos immut = pos.immutable();
+                        BlockState state = level.getBlockState(immut);
+
+                        if (state.getDestroySpeed(level, immut) < 0) continue;
+
+                        int currentDmg = BLOCK_DMG_MAP.getOrDefault(immut, 0);
+                        int newDmg = currentDmg + breakstat;
+                        int crackId = immut.hashCode();
+
+                        if (newDmg >= 10) {
+                            level.destroyBlock(immut, true);
+                            BLOCK_DMG_MAP.remove(immut);
+                            level.destroyBlockProgress(crackId, immut, -1);
+                            GROUND_STANCE_COOLDOWN.put(playerUUID, currentTime);
+                        } else {
+                            BLOCK_DMG_MAP.put(immut, newDmg);
+                            level.destroyBlockProgress(crackId, immut, newDmg);
+                        }
+                    }
+                    deflect();
+                    return true;
+                } else if (PCB.staticMode == 3) {
+                    self.hurtMarked = true;
+                    Entity entity = source.getEntity();
+
+                    if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance) {
+                        if (entity != null) {
+                            deflect();
+                            this.self.setDeltaMovement(
+                                    this.self.position().subtract(
+                                            source.getSourcePosition()).multiply(new Vec3(amount / 7.5, amount / 7.5, amount / 7.5)));
+                        }
+                    } else {
+                        if (entity != null) {
+                            double x = entity.getX() - self.getX();
+                            double z;
+                            for (z = entity.getZ() - self.getZ(); x * x + z * z < 1.0E-4; z = (Math.random() - Math.random()) * 0.01) {
+                                x = (Math.random() - Math.random()) * 0.01;
+                            }
+
+                            if (entity.getType() == EntityType.IRON_GOLEM) {
+                                self.knockback(2.8F, x * 2, z * 2);
+                            } else {
+                                self.knockback(0.8F, x * 2, z * 2);
+                            }
+                        }
+                    }
+                    deflect();
+                    return true;
+                }
+            }
+
+            if (staticMode == 3) {
+                if (ClientNetworking.getAppropriateConfig().centuryBoySettings.oldKnockbackStance) {
+                    if (source.getEntity() != null) {
+                        deflect();
+                        this.self.setDeltaMovement(
+                                this.self.position().subtract(
+                                        source.getSourcePosition()).multiply(new Vec3(amount / 7.5, amount / 7.5, amount / 7.5)));
+                        return true;
+                    }
+                } else {
+                    deflect();
+                    return true;
+                }
+            }
+
+            if (staticMode == 4) {
                 deflect();
                 return true;
             }
-        }
 
+            if (staticMode == 1) {
+                deflect();
+                if (!ClientNetworking.getAppropriateConfig().centuryBoySettings.buffedGroundStance) {
+                    if (source.is(DamageTypes.STARVE) || source.is(DamageTypes.IN_FIRE) ||
+                            source.is(DamageTypes.LAVA) || source.is(DamageTypes.DROWN) ||
+                            source.is(ModDamageTypes.SUNLIGHT)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            if (invincibleState) {
+                if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
+                        source.is(DamageTypes.WITHER) ||
+                        source.is(DamageTypes.DRAGON_BREATH) ||
+                        source.is(ModDamageTypes.GO_BEYOND) ||
+                        source.is(DamageTypes.GENERIC_KILL)
+                ) {
+                    return false;
+                } else {
+                    deflect();
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -538,9 +558,74 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public void tickPower() {
         if (!hasStandActive(this.getSelf())){
-            invincibleState = false;
+            if (invincibleState){
+                this.setCooldown(PowerIndex.SKILL_2, 80);
+                invincibleState = false;
+                wardenMunches = 0;
+            }
             staticMode = 0;
         }
+    }
+
+    double gticks = 0;
+    @Override
+    public void tickMobAI(LivingEntity attackTarget) {
+        if (attackTarget != null && attackTarget.isAlive()) {
+            double dist = attackTarget.distanceTo(this.getSelf());
+            boolean isSkel = this.getSelf() instanceof Skeleton;
+
+
+            if (isSkel) {
+                staticMode = 3;
+                mode = 3;
+            } else {
+                staticMode = 2;
+                mode = 2;
+            }
+
+            if (gticks <= 0){
+            if (dist <= 6 && !invincibleState) {
+                if (!this.onCooldown(PowerIndex.POWER_2)){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);}
+                if (isSkel){
+                    ///  to do: make a target selector for the sacos
+                }
+            } else if (dist > 6 && invincibleState) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
+                gticks += 80;
+            } else if (dist <= 2 && !isSkel && invincibleState){
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, false);
+                gticks += 80;
+            }
+            }else {
+                gticks--;
+            }
+        }
+    }
+
+    @Override
+    public boolean disableMobAiAttack() {
+        return invincibleState;
+    }
+
+    public void getEaten(Warden warden){
+        if (wardenMunches < 3){
+            wardenMunches++;
+        }else {
+            this.self.level().playSound(warden, warden.getOnPos(), SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 15F, 1F);
+            this.self.hurt(this.self.level().damageSources().genericKill(), 7);
+        }
+    }
+
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        switch (activePower){
+            case Powers20thCenturyBoy.CLIENT_SYNC -> {
+                this.mode = data;
+            }
+        }
+        super.updatePowerInt(activePower,data);
+
     }
 
     /** animation thingy **/

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
+    public static final SimpleParticleType HALLUCINATORY_ACID_DRIP = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_MISS = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_A = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
@@ -84,6 +85,12 @@ public class FabricParticles {
     public static final SimpleParticleType ALLURING_LIGHT = FabricParticleTypes.simple();
     public static final SimpleParticleType TUSK_HOLE = FabricParticleTypes.simple();
     public static final SimpleParticleType KILLER_QUEEN_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_FIREBALL_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_MUSHROOM_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_BLUE_FIREBALL_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
+    public static final SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION = FabricParticleTypes.simple();
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -140,6 +147,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("cinderella_glow"), CINDERELLA_GLOW);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pink_smoke"), PINK_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood_mist"), BLOOD_MIST);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hallucinatory_acid_drip"), HALLUCINATORY_ACID_DRIP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soft_bubble_pop"), BUBBLE_POP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("plunder"), PLUNDER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
@@ -172,6 +180,12 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("magic_dust"), MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("brief_magic_dust"), BRIEF_MAGIC_DUST);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("killer_queen_explosion"), KILLER_QUEEN_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_fireball_explosion"), PW_FIREBALL_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_blastwave_explosion"), PW_BLASTWAVE_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_mushroom_explosion"), PW_MUSHROOM_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_blue_fireball_explosion"), PW_BLUE_FIREBALL_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_blue_blastwave_explosion"), PW_BLUE_BLASTWAVE_EXPLOSION);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pw_blue_mushroom_explosion"), PW_BLUE_MUSHROOM_EXPLOSION);
         
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
@@ -193,6 +207,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("tooth"), TOOTH);
 
         ModParticles.MELTING = MELTING;
+        ModParticles.HALLUCINATORY_ACID_DRIP = HALLUCINATORY_ACID_DRIP;
         ModParticles.BLOOD = BLOOD;
         ModParticles.BLUE_BLOOD = BLUE_BLOOD;
         ModParticles.ENDER_BLOOD = ENDER_BLOOD;
@@ -262,6 +277,12 @@ public class FabricParticles {
         ModParticles.ALLURING_LIGHT = ALLURING_LIGHT;
         ModParticles.TUSK_HOLE = TUSK_HOLE;
         ModParticles.KILLER_QUEEN_EXPLOSION = KILLER_QUEEN_EXPLOSION;
+        ModParticles.PW_FIREBALL_EXPLOSION = PW_FIREBALL_EXPLOSION;
+        ModParticles.PW_BLASTWAVE_EXPLOSION = PW_BLASTWAVE_EXPLOSION;
+        ModParticles.PW_MUSHROOM_EXPLOSION = PW_MUSHROOM_EXPLOSION;
+        ModParticles.PW_BLUE_FIREBALL_EXPLOSION = PW_BLUE_FIREBALL_EXPLOSION;
+        ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION = PW_BLUE_BLASTWAVE_EXPLOSION;
+        ModParticles.PW_BLUE_MUSHROOM_EXPLOSION = PW_BLUE_MUSHROOM_EXPLOSION;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;

@@ -38,55 +38,64 @@ public class ExplosionUtil {
 	public static boolean isBlockBlackListed(BlockState bs) {
 		ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
 
-		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty() && rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
+		return (MainUtil.standBlockExplosionBlacklist != null && !MainUtil.standBlockExplosionBlacklist.isEmpty()
+				&& rl != null && MainUtil.standBlockExplosionBlacklist.contains(rl.toString())) && !bs.isAir();
 	}
 	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range) {
-		explodeEffects(pos, level, particle, range, 18);
-	
+		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), 18);
+
 	}
 
     public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, float range, int amount) {
-    	
+		explodeEffects(pos, level, particle, new Vec3(range, range+0.3f, range), amount);
+	}
+
+	public static void explodeEffects(Vec3 pos, Level level, SimpleParticleType particle, Vec3 range, int amount) {
+
     	((ServerLevel) level).sendParticles(particle,
                 pos.x,
                 pos.y+1.0f,
                 pos.z,
-                amount, range, range+0.3f, range, 1.0);
-    	
+                amount, range.x, range.y, range.z, 1.0);
+                //amount, range, range+0.3f, range, 1.0);
+
     	((ServerLevel) level).sendParticles(new DustParticleOptions(new Vector3f(0.02F, 0.02F, 0.04F), 2f),
     			pos.x,
                 pos.y+1.0f,
                 pos.z,
-                (int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
-    	
+                (int)Math.floor(amount*0.66), range.x, range.y+0.6, range.z, 0.001);
+                //(int)Math.floor(amount*0.66), range, range+1.2f, range, 0.001);
+
     }
 
-	public static void explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
-		explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	public static int explosionHurtWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(false, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static void explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
-		explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
+	public static int explosionHurtSneakyWithMulti(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+		return explosionHurtBaseWithMulti(true, pos, dmgSource, level, damage, knockBack, range, mobMult, playerMult);
 	}
 
-	public static void explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
+	public static int explosionHurt(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBase(false, pos, dmgSource, level, damage, knockBack, range);
 	}
 
-	public static void explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
+	public static int explosionHurtSneaky(Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBase(true, pos, dmgSource, level, damage, knockBack, range);
 	}
-	
-	public static void explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
-		explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
+
+	public static int explosionHurtBase(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range) {
+		return explosionHurtBaseWithMulti(sneaky, pos, dmgSource, level, damage, knockBack, range, 1.0f, 1.0f);
     }
 
-	public static void explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
+	public static int explosionHurtBaseWithMulti(Boolean sneaky, Vec3 pos, DamageSource dmgSource, Level level, float damage, float knockBack, float range, float mobMult, float playerMult) {
 		List<Entity> damages = MainUtil.genHitbox(level, pos.x(), pos.y(), pos.z(), range, range, range);
 
 		Entity causer = dmgSource.getEntity();
 
 		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
+
+		int amountOfVictims = 0;
 
 		for(int j = 0;j<damages.size();j++) {
 			Entity entity = damages.get(j);
@@ -96,6 +105,8 @@ public class ExplosionUtil {
 			if (entity instanceof Player PL && (PL.isCreative() || PL.isSpectator())) {
 				continue;
 			}
+
+			if (entity instanceof LivingEntity) { amountOfVictims++; }
 
 			double dist = entity.distanceToSqr(pos);
 			float percUnhand = ((float)dist/ (range * range * range));
@@ -122,12 +133,13 @@ public class ExplosionUtil {
 				}
 			}
 
-
 			Vec3 knockbackUnhand = new Vec3(entity.getX() - pos.x(), entity.getY() - pos.y(), entity.getZ() - pos.z());
 			Vec3 knockback = knockbackUnhand.normalize().scale(Math.min(knockBack, percKnockback*knockBack));
 
 			MainUtil.takeLiteralUnresistableKnockbackWithY(entity, knockback.x, knockback.y, knockback.z);
 		}
+
+		return amountOfVictims;
 	}
 
 	public static void explodeBlocks(BlockPos location, Level level, Float range) {
@@ -148,7 +160,8 @@ public class ExplosionUtil {
 		for (BlockPos pos : BlockPos.betweenClosed(location.offset(intSize, intSize, intSize), location.offset(-intSize, -intSize, -intSize))) {
 			BlockState info = level.getBlockState(pos);
 			if (isBlockBlackListed(info) || (MainUtil.confirmIsOre(info) && ignoreOres)
-					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)) {
+					|| info.isAir() || info.is(Blocks.BARRIER) || info.is(Blocks.BEDROCK)
+					|| !MainUtil.isDestructible(level, location, info)) {
 				continue;
 			}
 

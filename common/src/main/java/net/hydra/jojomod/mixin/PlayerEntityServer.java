@@ -4,16 +4,21 @@ import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.platform.Services;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -97,6 +102,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 roundabout$invincibleTicks--;
             }
             ((IPlayerEntity) this).roundabout$getMaskInventory().update();
+            ((IPlayerEntity) this).roundabout$getBlckSabbathPlayerInventory().update();
         }
     }
 
@@ -106,13 +112,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         if (p_9000_ == this.level()) {
             ((StandUser) this).roundabout$getFollowers().forEach($$0 -> {
                 for (StandEntity $$1 : ((StandUser) this).roundabout$getFollowers()) {
-                    $$1.moveTo(this.getX(),this.getY(),this.getZ());
+                    if ($$1.level().dimension() == this.level().dimension()) {
+                        $$1.moveTo(this.getX(), this.getY(), this.getZ());
+                    }
                 }
             });
             StandUser standUserData = ((StandUser) this);
             if (standUserData.roundabout$hasStandOut()  && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
-
-                standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                if (fe.level().dimension() == this.level().dimension()) {
+                    standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                }
             }
         }
     }
@@ -132,6 +141,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         }
         IPlayerEntity ipe = ((IPlayerEntity)this);
         ipe.roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
+        ipe.roundabout$setBlckSabbathPlayerInventory(((IPlayerEntity)$$0).roundabout$getBlckSabbathPlayerInventory());
         if (!this.level().isClientSide) {
             ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
             ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
@@ -173,6 +183,17 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
             ipe.roundabout$setPower(((IPlayerEntity) $$0).roundabout$getPower());
         }
+    }
+
+    public void roundabout$openBlackSabbathInventory(BlackSabbathEntity $$0, Container $$1) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        if(this.containerMenu != this.inventoryMenu){
+            this.closeContainer();
+        }
+        this.nextContainerCounter();
+        Services.PACKET_HELPER.sendBlackSabbathChestOpenPacket((ServerPlayer) (Object) this, $$1);
+        this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), this, this.containerCounter);
+        this.initMenu(this.containerMenu);
     }
 
 }

@@ -225,8 +225,6 @@ public class MagiciansRedModel<T extends MagiciansRedEntity> extends StandModel<
         this.animate(pEntity.idleAnimationState3, StandAnimations.FLOATY_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.idleAnimationState4, StandAnimations.STAR_PLATINUM_IDLE, pAgeInTicks, 1f);
         this.animate(pEntity.blockAnimationState, StandAnimations.BLOCK, pAgeInTicks, 1f);
-        this.animate(pEntity.armlessAnimation, StandAnimations.ArmIdle, pAgeInTicks, 1f);
-        this.animate(pEntity.armlessAnimationIdle, StandAnimations.ArmIdle2, pAgeInTicks, 1f);
     }
 
     @Override

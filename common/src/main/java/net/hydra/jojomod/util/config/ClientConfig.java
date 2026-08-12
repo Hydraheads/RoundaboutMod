@@ -106,6 +106,8 @@ public class ClientConfig implements Cloneable {
     public ClientConfig.TimeStopSettings timeStopSettings;
     @NestedOption(group = "modded")
     public ClientConfig.KillerQueenSettings killerQueenSettings;
+    @NestedOption(group = "modded")
+    public ClientConfig.WhitesnakeSettings whitesnakeSettings;
   /*  @NestedOption(group = "modded")
     public ClientConfig.StandTweakSettings standTweakSettings; */
 
@@ -116,6 +118,22 @@ public class ClientConfig implements Cloneable {
     public static class GeneralSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean onlyStandUsersCanSeeStands;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean advancedEpitaphShader;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean epitaphScreenEffect;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean epitaphSeePresentEntitiesAndParticles;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean alternateEpitaph;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean timeEraseRedProjections;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean canSeeFatedSelf;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float timeSkipOpacity;
+        @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)
+        public Float bitesTheDustOpacity;
     }
     public static class ConfigSettings {
 
@@ -172,6 +190,8 @@ public class ClientConfig implements Cloneable {
         public Float opacityOfOthers;
         @FloatOption(group = "inherit", value = 0.5F, min = 0, max = 1)
         public Float opacityOfPlayerBarrageArms;
+        @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
+        public Float opacityOfPlayerStandArms;
 
     }
     public static class DynamicSettings {
@@ -188,7 +208,7 @@ public class ClientConfig implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 1, max = 8)
         public Integer currentPowerInventoryTab;
         @IntOption(group = "inherit", value = 2, min = 0, max = 3)
-        public Integer KillerQueenCurrentBombConfig;
+        public Integer killerQueenCurrentBombConfig;
     }
     public static class VanillaMCTweaks {
         @BooleanOption(group = "inherit", value = true)
@@ -211,6 +231,10 @@ public class ClientConfig implements Cloneable {
     public static class KillerQueenSettings {
     	@BooleanOption(group = "inherit", value = true)
         public Boolean bombOverlayHideOnF1;
+    }
+    public static class WhitesnakeSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean forceThirdPersonInControlMode;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

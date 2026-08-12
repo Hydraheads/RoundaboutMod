@@ -581,48 +581,51 @@ public class PowersSoftAndWet extends NewPunchingStand {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
+        int startPos = -8;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.SOFT_AND_WET_PUNCH,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.SOFT_AND_WET_GUARD,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.encasement_strike",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.encasement_strike",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.ENCASEMENT_STRIKE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.SOFT_AND_WET_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,getShootingModeLevel(), "ability.roundabout.bubble_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,getShootingModeLevel(), "ability.roundabout.bubble_barrage",
                 "instruction.roundabout.shooting_barrage", StandIcons.BUBBLE_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.bubble_selection",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118,0, "ability.roundabout.bubble_selection",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_SELECTION,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, getGoBeyondLevel(), "ability.roundabout.go_beyond",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80, getGoBeyondLevel(), "ability.roundabout.go_beyond",
                 "instruction.roundabout.press_skill_explosive_spin_mode", StandIcons.GO_BEYOND,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getSpreadLevel(), "ability.roundabout.bubble_spread",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99, getSpreadLevel(), "ability.roundabout.bubble_spread",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLUNDER_BUBBLE_FILL,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getSpreadLevel(), "ability.roundabout.bubble_spread_redirect",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,getSpreadLevel(), "ability.roundabout.bubble_spread_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.PLUNDER_BUBBLE_FILL_CONTROL,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.plunder_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,0, "ability.roundabout.plunder_bubble",
                 "instruction.roundabout.press_skill", StandIcons.PLUNDER_BUBBLE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.bubble_pop",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.bubble_pop",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLUNDER_BUBBLE_POP,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.bubble_redirect",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.bubble_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.PLUNDER_BUBBLE_CONTROL,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,getItemShootingLevel(), "ability.roundabout.item_launching_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getItemShootingLevel(), "ability.roundabout.item_launching_bubble",
                 "instruction.roundabout.press_skill_shooting_mode", StandIcons.ITEM_BUBBLE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.fall_brace",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.fall_brace",
                 "instruction.roundabout.press_skill_falling", StandIcons.SOFT_AND_WET_FALL_CATCH,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.SOFT_AND_WET_VAULT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,getScaffoldLevel(), "ability.roundabout.bubble_scaffold",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getScaffoldLevel(), "ability.roundabout.bubble_scaffold",
                 "instruction.roundabout.press_skill_crouch", StandIcons.SOFT_AND_WET_BUBBLE_SCAFFOLD,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.encasement_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.encasement_bubble",
                 "instruction.roundabout.press_skill_block", StandIcons.SOFT_AND_WET_BUBBLE_ENCASEMENT,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getShootingModeLevel(), "ability.roundabout.shooting_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+80,getShootingModeLevel(), "ability.roundabout.shooting_mode",
                 "instruction.roundabout.press_skill", StandIcons.SOFT_SHOOTING_MODE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getWaterShieldLevel(), "ability.roundabout.water_shield",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,getWaterShieldLevel(), "ability.roundabout.water_shield",
                 "instruction.roundabout.press_skill", StandIcons.WATER_SHIELD,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.plug_wound",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+118,0, "ability.roundabout.plug_wound",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PLUG_WOUND,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153+startPos,topPos+80,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.SOFT_MINING,0,level,bypas));
         return $$1;
     }
 
@@ -2770,12 +2773,41 @@ public void unlockSkin(){
             default -> Component.translatable("skins.roundabout.soft_and_wet.light");
         };
     }
+    @Override
+    public float getPunchLandPitch(){
+        return 1.1F + 0.05F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 0.9F;
+    }
 
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.SOFT_HIT_1_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.SOFT_HIT_4_EVENT;
+    }
     @Override
     public void refreshCooldowns() {
         super.refreshCooldowns();
         this.setGoBeyondChargeTicks(0);
         this.setShootTicks(0);
+    }
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SOFT_HIT_4_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+        }
+    }
+    public void playBarrageNoise(int hitNumber, Entity entity){
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 2 == 0) {
+                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_SOFT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+            }
+        }
     }
 }
 

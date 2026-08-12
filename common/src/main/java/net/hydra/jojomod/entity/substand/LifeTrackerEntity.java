@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LifeTrackerEntity extends LivingEntity {
+public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThis {
     public LifeTrackerEntity(EntityType<LifeTrackerEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -86,7 +87,6 @@ public class LifeTrackerEntity extends LivingEntity {
             Vec3 junkPos = MainUtil.getAheadVec(this.getUser(), 3).getLocation();
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             xOld = junkPos.x;
@@ -104,7 +104,6 @@ public class LifeTrackerEntity extends LivingEntity {
             Vec3 junkPos = MainUtil.getAheadVecRender(this.getUser(), 3, render).getLocation();
             if (!this.level().isClientSide()) {
                 setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             xOld = junkPos.x;

@@ -141,8 +141,10 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
 
                 boolean isFullVampire = entity instanceof Player pl && (((IFatePlayer)pl).rdbt$getFatePowers() instanceof
                         VampireFate vf && vf.getVampireData().freezeLevel > 0) &&
-                        PowerTypes.hasPowerActivelyEquipped(pl) &&
-                        ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp;
+                        (PowerTypes.hasPowerActivelyEquipped(pl) &&
+                        ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp) &&
+                                !(pl.hasEffect(ModEffects.SWITCH));
+
                 if (!isFullVampire){
                     if (DamageHandler.UVDamage(entity, power, getOwner())) {
                         lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 200, 0));

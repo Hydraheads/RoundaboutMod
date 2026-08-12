@@ -6,6 +6,8 @@ import net.minecraft.client.particle.*;
 public class FabricParticlesClient {
     public static void registerClientParticles(){
         ParticleFactoryRegistry.getInstance().register(FabricParticles.HIT_IMPACT, ExplodeParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.HALLUCINATORY_ACID_DRIP,
+                HallucinatoryAcidDripParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_MISS, PunchMissParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_A, PunchImpactParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PUNCH_IMPACT_B, PunchImpactParticle.Provider::new);
@@ -72,6 +74,12 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.ALLURING_LIGHT, AnubisLightParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.TUSK_HOLE, TuskHoleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.KILLER_QUEEN_EXPLOSION, KQExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_FIREBALL_EXPLOSION, PWFireballExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLASTWAVE_EXPLOSION, PWBlastwaveExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_MUSHROOM_EXPLOSION, PWMushroomExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_FIREBALL_EXPLOSION, PWBlueFireballExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_BLASTWAVE_EXPLOSION, PWBlueBlastwaveExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_MUSHROOM_EXPLOSION, PWBlueMushroomExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.COLD_CRACKLE, ColdCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);

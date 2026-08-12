@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.forge;
 
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
@@ -36,11 +37,14 @@ public abstract class ForgeEatingMixin {
                         this.eat((int) Math.min(props.getNutrition() * 1.5, 6), (float) Math.min(props.getSaturationModifier() * 1.5f, 1.2f));
                         ci.cancel();
                     }
-                } else if (FateTypes.hasBloodHunger(entity)){
-                    if (item.isEdible()) {
-                        this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
-                    }
-                    ci.cancel();
+                } 
+            if (PowerTypes.isErasingTime(entity)){
+                ci.cancel();
+                return;
+            }
+            if (FateTypes.hasBloodHunger(entity)){
+                if (item.isEdible()) {
+                    this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
                 }
             }
         }

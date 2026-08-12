@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static net.hydra.jojomod.block.ModBlocks.*;
@@ -240,9 +241,24 @@ public class FabricBlocks {
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
     public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
     public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
+    public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
+    public static final HallucinatoryAcidBlock HALLUCINATORY_ACID = (HallucinatoryAcidBlock) registerBlockItemless(
+            "hallucinatory_acid", new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
+                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .pushReaction(PushReaction.BLOCK)));
+    public static final HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL =
+            (HallucinatoryAcidWallBlock) registerBlockItemless("hallucinatory_acid_wall",
+                    new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
+                            .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                            .pushReaction(PushReaction.BLOCK)));
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
 
+    public static final BlockEntityType<OasisMudBlockEntity> OASIS_MUD_BLOCK_ENTITY =
+            registerBE("oasis_mud_block",BlockEntityType.Builder.of(OasisMudBlockEntity::new, OASIS_MUD_BLOCK));
+    public static final BlockEntityType<HallucinatoryAcidBlockEntity> HALLUCINATORY_ACID_BLOCK_ENTITY =
+            registerBE("hallucinatory_acid", BlockEntityType.Builder.of(HallucinatoryAcidBlockEntity::new,
+                    HALLUCINATORY_ACID, HALLUCINATORY_ACID_WALL));
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
@@ -455,6 +471,11 @@ public class FabricBlocks {
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
 
+        ModBlocks.OASIS_MUD_BLOCK = OASIS_MUD_BLOCK;
+        ModBlocks.OASIS_MUD_BLOCK_ENTITY = OASIS_MUD_BLOCK_ENTITY;
+        ModBlocks.HALLUCINATORY_ACID = HALLUCINATORY_ACID;
+        ModBlocks.HALLUCINATORY_ACID_WALL = HALLUCINATORY_ACID_WALL;
+        ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY = HALLUCINATORY_ACID_BLOCK_ENTITY;
 
         ModBlocks.CHESS_PIECE = CHESS_PIECE;
         ModBlocks.CHESS_PIECE_BLOCK_ENTITY = CHESS_PIECE_BLOCK_ENTITY;
@@ -522,4 +543,3 @@ public class FabricBlocks {
         }
     }
 }
-

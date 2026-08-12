@@ -340,9 +340,12 @@ public class RattDartEntity extends AbstractArrow {
 
         if ($$1.equals(this.getOwner())) {return;}
 
-        if ($$1 instanceof TamableAnimal TA){
-            if (this.getOwner() instanceof TamableAnimal TT && TT.getOwner() != null
-                    && TA.getOwner() != null && TT.getOwner().is(TA.getOwner())){
+        if (this.getOwner() instanceof TamableAnimal TT && TT.getOwner() != null){
+            if ($$1 instanceof TamableAnimal TA && TA.getOwner() != null &&
+                    TT.getOwner().is(TA.getOwner())){
+                return;
+            }
+            if ($$1.is(TT.getOwner())){
                 return;
             }
         }
@@ -357,9 +360,9 @@ public class RattDartEntity extends AbstractArrow {
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(this, $$1);
-        float force = 0.6F;
+        float force = 0.9F;
         if (this.getShotType() == CHARGED) {
-            force = 1.8F;
+            force = 1.4F;
         }
 
 

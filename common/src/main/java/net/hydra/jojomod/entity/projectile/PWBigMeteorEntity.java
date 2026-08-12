@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.ModGamerules;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -61,6 +62,11 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
     public LivingEntity standUser;
     public UUID standUserUUID;
 
+    private float craterMultiplier = 1.0F;
+
+    public void setCraterMultiplier(float multiplier) {
+        this.craterMultiplier = multiplier;
+    }
     public int getUserID() {
         return this.getEntityData().get(USER_ID);
     }
@@ -324,7 +330,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
         BlockPos center = this.blockPosition();
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-            int explosionRadius = 4;
+            int explosionRadius = Math.round(4 * craterMultiplier);
 
 
             for (BlockPos pos : BlockPos.betweenClosed(
@@ -349,7 +355,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
 
 
             // fire inside crater
-            int fireRadius = 5;
+            int fireRadius = Math.round(5 * craterMultiplier);
 
             for (BlockPos pos : BlockPos.betweenClosed(
                     center.offset(-fireRadius, -fireRadius, -fireRadius),
@@ -521,17 +527,19 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
                 );
 
                 if (!slowing) {
+                    //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_FIREBALL_EXPLOSION, 0.35f);
                     ((ServerLevel) this.level()).sendParticles(
-                            PPW.getFlameParticle(),
-                            this.getX(),
-                            this.getY(),
-                            this.getZ(),
-                            100,
-                            0.005,
-                            0.01,
-                            0.005,
-                            0.02
+                            PPW.getFireballEXPLOSIONParticle(),
+                            this.getX(), this.getY(), this.getZ(),
+                            1, 0.005, 0.01, 0.005, 0.02
                     );
+                    //ExplosionUtil.explodeEffects(this.position(), this.level(), ModParticles.PW_BLASTWAVE_EXPLOSION, 0.35f);
+                    ((ServerLevel) this.level()).sendParticles(
+                            PPW.getBlastwaveEXPLOSIONParticle(),
+                            this.getX(), this.getY(), this.getZ(),
+                            1, 0.005, 0.01, 0.005, 0.02
+                    );
+                    ExplosionUtil.explodeEffects(this.position(), this.level(),  PPW.getMushroomEXPLOSIONParticle(), 1.75f);
                 }
 
 

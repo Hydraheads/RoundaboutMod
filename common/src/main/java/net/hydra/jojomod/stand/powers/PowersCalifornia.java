@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.DietSavedSecond;
 import net.hydra.jojomod.event.ModParticles;
@@ -245,7 +246,7 @@ public class PowersCalifornia extends NewDashPreset {
 
     public static boolean canSteal(Entity entity){
         if (entity instanceof LivingEntity LE){
-            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob ||
+            if (MainUtil.isBossMob(LE) || LE instanceof FallenMob || !LE.isPickable() ||
             LE instanceof StandEntity || !entity.isAlive() ||
                     (entity instanceof Player pl && pl.isCreative())){
                 return false;
@@ -269,6 +270,9 @@ public class PowersCalifornia extends NewDashPreset {
 
     private final Set<Integer> clientEntityIds = new HashSet<>();
     public boolean isCapturedEntity(Entity entity) {
+        if (entity == null){
+            return false;
+        }
         return clientEntityIds.contains(entity.getId());
     }
 
@@ -420,7 +424,9 @@ public class PowersCalifornia extends NewDashPreset {
         } else if (isDoNotLeave()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                 if (targEnt != null && !self.isPassenger()){
-                    tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,targEnt.getId());
+                    if (!(self.getVehicle() instanceof StandEntity)) {
+                        tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2, targEnt.getId());
+                    }
                 } else {
                     tryIntPowerPacket(PowerIndex.SKILL_EXTRA_2,-1);
                 }
@@ -486,6 +492,18 @@ public class PowersCalifornia extends NewDashPreset {
             return Component.translatable("skins.roundabout.california_king_bed.spooky");
         } else if (skinId == CaliforniaKingBedEntity.EXPERIENCE) {
             return Component.translatable("skins.roundabout.california_king_bed.experience");
+        } else if (skinId == CaliforniaKingBedEntity.CARD_SUIT) {
+            return Component.translatable("skins.roundabout.california_king_bed.card_suit");
+        } else if (skinId == CaliforniaKingBedEntity.COVER) {
+            return Component.translatable("skins.roundabout.california_king_bed.cover");
+        } else if (skinId == CaliforniaKingBedEntity.SPINE_ART) {
+            return Component.translatable("skins.roundabout.california_king_bed.spine_art");
+        } else if (skinId == CaliforniaKingBedEntity.HEAVEN) {
+            return Component.translatable("skins.roundabout.california_king_bed.heaven");
+        } else if (skinId == CaliforniaKingBedEntity.BLUE) {
+            return Component.translatable("skins.roundabout.california_king_bed.blue");
+        } else if (skinId == CaliforniaKingBedEntity.SLEEPY) {
+            return Component.translatable("skins.roundabout.california_king_bed.sleepy");
         }
         return Component.translatable("skins.roundabout.california_king_bed.base");
     }
@@ -639,7 +657,7 @@ public class PowersCalifornia extends NewDashPreset {
     public void doTheStepRule(){
         if (!this.self.level().isClientSide()){
             if (!onCooldown(PowerIndex.SKILL_EXTRA)) {
-                setCooldown(PowerIndex.SKILL_EXTRA, 15);
+                setCooldown(PowerIndex.SKILL_EXTRA, 12);
 
                 Vector3f newVec = new Vector3f((float) (spawnPos.getX() + 0.5),
                         (float) (spawnPos.getY() + 1),
@@ -657,7 +675,7 @@ public class PowersCalifornia extends NewDashPreset {
                         ModSounds.CKB_TILE_EVENT, SoundSource.PLAYERS, 1F,
                         (float) (1.00f + Math.random() * 0.01f));
                 step.userEntity = self;
-                step.timing = 400;
+                step.timing = 440;
                 addSpawnedEntity(step);
                 self.level().addFreshEntity(step);
             }
@@ -801,7 +819,16 @@ public class PowersCalifornia extends NewDashPreset {
             }
 
             if (leaded != null) {
-                if (leaded.isAlive()) {
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        setLeadTarget(pkc.activeClone);
+                    }
+                }
+            }
+            if (leaded != null) {
+                if (leaded.isAlive() && !PowerTypes.isExistentiallyElsewhere(leaded)) {
                     if (leaded instanceof Mob mb) {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
                                 leaded instanceof Aesthetician ||
@@ -870,8 +897,13 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public boolean highlightsEntity(Entity ent,Player player){
-        if (!getCapturedEntityIds().isEmpty() && isCapturedEntity(ent)){
-            return true;
+        if (!getCapturedEntityIds().isEmpty()){
+            if (ent != null && isCapturedEntity(ent)) {
+                return true;
+            }
+            if (ent instanceof CloneEntity ce && ce.player != null && isCapturedEntity(ce.player)){
+                return true;
+            }
         }
         if (isDoNotLeave() && targEnt != null && ent != null && ent.getId() == targEnt.getId()){
             if (hasStandActive(self)) {
@@ -981,7 +1013,14 @@ public class PowersCalifornia extends NewDashPreset {
                 Map.Entry<Entity, Integer> entry = it.next();
 
                 Entity entity = entry.getKey();
-
+                if (entity instanceof Player PE && ((StandUser)PE).roundabout$getStandPowers() instanceof
+                PowersKingCrimson pkc && pkc.isErasingTime()){
+                    if (pkc.activeClone != null) {
+                        entity = pkc.activeClone;
+                    } else {
+                        continue;
+                    }
+                }
                 if (entity.isAlive()) {
                     entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity, exp, true, -1);
@@ -1456,6 +1495,12 @@ public class PowersCalifornia extends NewDashPreset {
         $$1.add(CaliforniaKingBedEntity.EGYPT);
         $$1.add(CaliforniaKingBedEntity.SPOOKY);
         $$1.add(CaliforniaKingBedEntity.EXPERIENCE);
+        $$1.add(CaliforniaKingBedEntity.CARD_SUIT);
+        $$1.add(CaliforniaKingBedEntity.SPINE_ART);
+        $$1.add(CaliforniaKingBedEntity.HEAVEN);
+        $$1.add(CaliforniaKingBedEntity.SLEEPY);
+        $$1.add(CaliforniaKingBedEntity.COVER);
+        $$1.add(CaliforniaKingBedEntity.BLUE);
         return $$1;
     }
 

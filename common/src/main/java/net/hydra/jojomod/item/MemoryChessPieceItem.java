@@ -5,7 +5,9 @@ import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -244,7 +246,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
             tag.putInt("stealType",stealType);
             tag.putInt("swings",0);
             tag.putBoolean("activated",true);
-            tag.putString("vicName", victim.getName().getString());
+            tag.putString("vicName", victim.getDisplayName().getString());
             if (stealType == 14) {
                 tag.putLong("Pos", victim.getOnPos().above().asLong());
                 tag.putString("Dimension", victim.level().dimension().location().toString());
@@ -347,6 +349,15 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
         Entity entity = serverLevel.getEntity(uuid);
 
         if (entity != null) {
+            if (entity instanceof LivingEntity living && ((StandUser)living).roundabout$getStandPowers()
+            instanceof PowersKingCrimson pkc && pkc.timeEraseActive){
+                if (pkc.activeClone != null) {
+                    entity = pkc.activeClone;
+                } else {
+                    return;
+                }
+            }
+
             if (!entity.isAlive()) {
                 if (tag.hasUUID("victim") &&
                         entity.getUUID().equals(tag.getUUID("victim"))) {
@@ -357,8 +368,8 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                 }
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg;
-                if (living instanceof Player pl){
-                    dmg = multiplyPowerByStandConfigPlayers(1.7F);
+                if (((StandUser)living).roundabout$getStandPowers().getReducedDamage(living)){
+                    dmg = multiplyPowerByStandConfigPlayers(1.85F);
                 } else {
                     dmg = multiplyPowerByStandConfigMobs(3);
                 }

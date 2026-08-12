@@ -8,13 +8,17 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.*;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
@@ -161,7 +165,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.xRot = -0.4F;
                 offsetCorrect = false;
                 change = true;
-            } else if (posByte == PlayerPosIndex.CHARGE_SHOT){
+            } else if (posByte == PlayerPosIndex.CHARGE_SHOT) {
                 this.rightArm.yRot = 0.22F;
                 this.leftArm.yRot = -0.22F;
 
@@ -174,6 +178,82 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 this.leftArm.xRot = -1F;
                 offsetCorrect = false;
                 change = true;
+
+            } else if (posByte == PlayerPosIndex.OASIS_KICK) {
+                boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
+                StandPowers gp = ((StandUser)$$0).roundabout$getStandPowers();
+                int amt = Mth.clamp(gp.attackTimeDuring,0,10);
+                if ($$9){
+                    this.rightLeg.copyFrom(one);
+                    this.rightPants.copyFrom(one);
+                    ps.pushPose();
+                    ps.translate(0.05,0,-0.1);
+
+                    ps.mulPose(Axis.XP.rotationDegrees(90-(36*amt)-(ClientUtil.getFrameTime()*36)));
+
+                    RenderType tl = RenderType.entityTranslucentCull($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightLeg.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+                    tl = RenderType.entityTranslucent($$0.getSkinTextureLocation());
+                    if (ClientUtil.hasChangedLegs($$0)){
+                        tl = RenderType.entityTranslucent(ClientUtil.getChangedLegTexture($$0));
+                    }
+                    rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
+
+
+                    byte bt = ((StandUser) $$0).roundabout$getLocacacaCurse();
+                    int muscle = ((StandUser) $$0).roundabout$getZappedToID();
+                    if (bt == LocacacaCurseIndex.RIGHT_LEG) {
+                        VertexConsumer consumerX = mb.getBuffer
+                                (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_LEG));
+                        rightPants.xScale += 0.04f;
+                        rightPants.zScale += 0.04f;
+                        rightPants.render(
+                                ps,
+                                consumerX,
+                                packedLight,
+                                OverlayTexture.NO_OVERLAY
+                        );
+                        rightPants.xScale -= 0.04f;
+                        rightPants.zScale -= 0.04f;
+                    } else {
+                        if (muscle > -1) {
+                            float scale = 1.055F;
+                            float alpha = 0.6F;
+                            float oscillation = Math.abs((($$0.tickCount % 10) + (ClientUtil.getDelta() % 1)) - 5) * 0.04F;
+                            alpha += oscillation;
+                            if ($$0.getMainArm() == HumanoidArm.RIGHT) {
+
+                                rightPants.xScale += 0.04f;
+                                rightPants.zScale += 0.04f;
+                                VertexConsumer consumerX;
+                                if (roundabout$getSlim()) {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
+                                } else {
+                                    consumerX = mb.getBuffer
+                                            (RenderType.entityTranslucent(StandIcons.MUSCLE));
+                                }
+                                rightPants.render(
+                                        ps,
+                                        consumerX,
+                                        packedLight,
+                                        OverlayTexture.NO_OVERLAY,
+                                        1, 1, 1, alpha
+                                );
+                                rightPants.xScale -= 0.04f;
+                                rightPants.zScale -= 0.04f;
+
+                            }
+                        }
+                    }
+                    ps.popPose();
+                }
+                return true;
+
+
             } else if (posByte == PlayerPosIndex.SWEEP_KICK){
                 boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                 GeneralPowers gp = ((IPowersPlayer)$$0).rdbt$getPowers();
@@ -327,7 +407,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
 
                     if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-                        if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+                        if (SU.roundabout$getStandAnimation() == PowersAnubis.POGO || SU.roundabout$getStandAnimation() == PowersAnubis.STAB) {
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();
@@ -337,13 +417,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
 
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(P)) {
+                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(P) || SU.roundabout$getStandAnimation() == PowerIndex.POWER_4_SNEAK ) ) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
-                        this.leftArm.xRot = 0;
-                        this.leftArm.yRot = 0;
-                        this.rightArm.xRot = 0;
-                        this.rightArm.yRot = 0;
+                        if ($$0.getMainArm() == HumanoidArm.LEFT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.leftArm.xRot = 0;
+                            this.leftArm.yRot = 0;
+                        }
+                        if ($$0.getMainArm() == HumanoidArm.RIGHT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                            this.rightArm.xRot = 0;
+                            this.rightArm.yRot = 0;
+                        }
                         SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
                         this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
                     } else {
@@ -448,9 +532,20 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightArm.xRot = -0F + curve;
                         this.leftArm.yRot = -0.4F;
                         this.leftArm.xRot = -0F + curve;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.OASIS_KICK) {
                         this.rightLeg.yRot = -0.1F + this.head.yRot;
                         this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
+
+                        this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
+                        this.rightLeg.xRot -= 0.2f;
+
+
+                        this.leftLeg.yRot = 0;
+                        this.leftLeg.xRot = 0;
+                        this.leftLeg.zRot = 0;
+                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                        this.rightLeg.yRot = -0.1F + this.head.yRot;
+                        this.rightLeg.xRot = (float) (-Math.toRadians(110)) + this.head.xRot;
 
                         this.rightLeg.xRot = Math.max(this.rightLeg.xRot, -2.5f);
                         this.rightLeg.xRot -= 0.2f;
@@ -504,7 +599,6 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SU = (StandUser) P;
 
-         //   Roundabout.LOGGER.info(""+ipe.roundabout$getItemAnimation().getAccumulatedTime());
 
             if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
 
@@ -567,7 +661,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             hat.zScale *= yeah;
                         }
                     } else {
-                        Vector3f scale = MI.visageData.scaleHead();
+                        VisageData vd = MI.visageData.generateVisageData($$0);
+                        Vector3f scale = vd.scaleHead();
                         head.xScale *= scale.x;
                         head.yScale *= scale.y;
                         head.zScale *= scale.z;
@@ -588,6 +683,37 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     float yRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.yRot = yRot;
                     this.hat.yRot = yRot;
+
+                }
+            }
+
+        }
+        if ($$0 instanceof CloneEntity CE){
+            ItemStack visage = CE.getVisage();
+            if (visage != null && !visage.isEmpty()) {
+                if (visage.getItem() instanceof MaskItem MI) {
+                    if (MI instanceof ModificationMaskItem MD){
+                        CompoundTag tag = visage.getOrCreateTagElement("modifications");
+                        if (tag != null && tag.contains("head")) {
+                            int faceSize = tag.getInt("head");
+                            float yeah = (float) (0.73F + (faceSize * 0.002));
+                            head.xScale *= yeah;
+                            head.yScale *= yeah;
+                            head.zScale *= yeah;
+                            hat.xScale *= yeah;
+                            hat.yScale *= yeah;
+                            hat.zScale *= yeah;
+                        }
+                    } else {
+                        VisageData vd = MI.visageData.generateVisageData($$0);
+                        Vector3f scale = vd.scaleHead();
+                        head.xScale *= scale.x;
+                        head.yScale *= scale.y;
+                        head.zScale *= scale.z;
+                        hat.xScale *= scale.x;
+                        hat.yScale *= scale.y;
+                        hat.zScale *= scale.z;
+                    }
 
                 }
             }

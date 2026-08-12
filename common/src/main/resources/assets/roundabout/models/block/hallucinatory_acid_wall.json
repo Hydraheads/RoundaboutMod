@@ -1,0 +1,6 @@
+{
+  "parent": "roundabout:block/hallucinatory_acid_wall_base",
+  "textures": {
+    "acid": "roundabout:block/hallucinatory_acid_0"
+  }
+}

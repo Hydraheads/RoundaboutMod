@@ -170,7 +170,9 @@ public class GasolineBlock extends Block {
     @Override
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
         ItemStack $$6 = $$3.getItemInHand($$4);
-        if (!$$6.is(Items.FLINT_AND_STEEL) && !$$6.is(Items.FIRE_CHARGE)) {
+        if (!($$6.is(Items.FLINT_AND_STEEL) && !$$3.getCooldowns().isOnCooldown(Items.FLINT_AND_STEEL))
+                &&
+                !($$6.is(Items.FIRE_CHARGE) && !$$3.getCooldowns().isOnCooldown(Items.FIRE_CHARGE))) {
             return super.use($$0, $$1, $$2, $$3, $$4, $$5);
         } else {
             if (!$$1.isClientSide) {

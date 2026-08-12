@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -31,14 +32,17 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
@@ -46,6 +50,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -66,11 +71,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.*;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -200,6 +207,7 @@ public class AbilityScapeBasis {
 
     public boolean getReducedDamage(Entity entity){
         return (entity instanceof Player || entity instanceof StandEntity ||
+                entity instanceof CloneEntity ||
                 ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
                         ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
         );
@@ -387,13 +395,25 @@ public class AbilityScapeBasis {
         return true;
     }
 
+
+    //Punch Mode Animations
+    public static final byte
+            PUNCH_LEFT = 30,
+            PUNCH_RIGHT = 31,
+            GUARD = 32,
+            VAULT = 33,
+            MINING = 34;
+
+    public float guardMod(){
+        return 0.2f;
+    }
     /**Stand related things that slow you down or speed you up, override and call super to make
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         if (isBrawling()){
             StandUser standUser = ((StandUser) this.getSelf());
             if (isGuarding() && this.getSelf().getVehicle() == null) {
-                basis*=0.2f;
+                basis*=guardMod();
             } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
                 basis*=0.2f;
             } else if (this.isBarrageCharging()) {
@@ -536,6 +556,16 @@ public class AbilityScapeBasis {
     }
 
 
+
+    public void retractHands(){
+    }
+    public boolean hasHandsOut(){
+        return false;
+    }
+    public boolean hasHandsOutRendering(){
+        return false;
+    }
+
     public void xTryPower(byte index, boolean forced){
         tryPower(index, forced);
         tryPowerStuff();
@@ -632,11 +662,15 @@ public class AbilityScapeBasis {
         }
         if (!this.self.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
-            Vec3 userLocation = new Vec3(this.self.getX(),  this.self.getY(), this.self.getZ());
+            LivingEntity soundEmitter = getSoundEmitter(soundNo, onSelf);
+            Vec3 userLocation = soundEmitter.position();
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
 
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
+                    continue;
+                }
+                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
                     continue;
                 }
 
@@ -644,12 +678,36 @@ public class AbilityScapeBasis {
                 if (blockPos.closerToCenterThan(userLocation, range)) {
                     if (onSelf) {
                         S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, serverPlayerEntity.getId(), soundNo);
+                    } else if (soundEmitter != self) {
+                        SoundEvent sound = getSoundFromByte(soundNo);
+                        if (sound != null) {
+                            serverPlayerEntity.connection.send(new ClientboundSoundPacket(Holder.direct(sound),
+                                    SoundSource.NEUTRAL, userLocation.x, userLocation.y, userLocation.z,
+                                    getSoundVolumeFromByte(soundNo), getSoundPitchFromByte(soundNo),
+                                    serverWorld.random.nextLong()));
+                        }
                     } else {
-                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, this.self.getId(), soundNo);
+                        S2CPacketUtil.sendPlaySoundPacket(serverPlayerEntity, soundEmitter.getId(), soundNo);
                     }
                 }
             }
         }
+    }
+
+    protected LivingEntity getSoundEmitter(byte soundNo, boolean onSelf) {
+        return self;
+    }
+
+    public SoundEvent getSoundFromByte(byte soundNo) {
+        return null;
+    }
+
+    public float getSoundVolumeFromByte(byte soundNo) {
+        return 1.0F;
+    }
+
+    public float getSoundPitchFromByte(byte soundNo) {
+        return 1.0F;
     }
     /**The Sound Event to cancel when your barrage is canceled*/
 
@@ -713,7 +771,9 @@ public class AbilityScapeBasis {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
-
+                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
+                    continue;
+                }
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range) && !((StandUser)serverPlayerEntity).roundabout$getStandDisc().isEmpty()) {
                     if (onSelf) {
@@ -812,7 +872,14 @@ public class AbilityScapeBasis {
     }
 
     /**same as above but for the standard attack packet*/
-    public void updateAttack(){
+    public void updateAttack() {
+        if (this.attackTimeDuring > -1) {
+            if (this.attackTimeDuring > this.attackTimeMax) {
+                this.attackTime = -1;
+                this.attackTimeMax = 0;
+                ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            }
+        }
     }
 
     /**Override this if you want to add or remove conditions that prevent moves from updating and shut
@@ -978,6 +1045,10 @@ public class AbilityScapeBasis {
                 int offset = x+3;
                 if (num <=9){
                     offset = x+7;
+                }
+                //If 100 or more seconds long shift to the left
+                if (num >= 100){
+                    offset = offset-3;
                 }
 
                 if (!cd.isFrozen())
@@ -1578,6 +1649,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput4(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1586,6 +1658,7 @@ public class AbilityScapeBasis {
         }
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1595,6 +1668,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput2(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1604,6 +1678,7 @@ public class AbilityScapeBasis {
     }
 
     public void preButtonInput1(boolean keyIsDown, Options options){
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1629,6 +1704,20 @@ public class AbilityScapeBasis {
         }
         return false;
     }
+    public boolean canAttackHeavy(){
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE
+                || getActivePower() == PowerIndex.GUARD) {
+            return this.attackTime >= this.attackTimeMax || attackTime < 0;
+        }
+        return false;
+    }
+    public boolean canAttackLight(){
+        if (this.attackTimeDuring <= -1 || getActivePower() == PowerIndex.NONE) {
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean canClash(){
         return false;
@@ -1647,21 +1736,25 @@ public class AbilityScapeBasis {
     }
 
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isGuarding()) {
             buttonInputAttack(keyIsDown, options);
         }
     }
     public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf())) {
             buttonInputUse(keyIsDown, options);
         }
     }
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf())) {
             buttonInputBarrage(keyIsDown, options);
         }
     }
     public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
+        if (!DiscItemData.canUseAbilities(getSelf())) return false;
         if (hasStandActive(this.getSelf())) {
             return buttonInputGuard(keyIsDown, options);
         }
@@ -1735,6 +1828,7 @@ public class AbilityScapeBasis {
                     );
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.VAULT, true);
                     tryPowerPacket(PowerIndex.VAULT);
+
                     return true;
                 }
                 return true;
@@ -1797,12 +1891,14 @@ public class AbilityScapeBasis {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
-                this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
-                30, 1, 0.05, 1, 0.4);
+        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                    this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                    50, 1.1, 0.05, 1.1, 0.4);
+            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+                    this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
+                    30, 1, 0.05, 1, 0.4);
+        }
     }
 
     public boolean vaultOrFallBraceFails(){
@@ -1843,6 +1939,9 @@ public class AbilityScapeBasis {
     public int impactAirTime = -1;
     public int impactSlowdown = -1;
     public boolean canFallBrace(){
+        if (hasHandsOut()){
+            return false;
+        }
         return this.getSelf().fallDistance > (3+ getStandUserSelf().roundabout$getBonusJumpHeight()) && impactSlowdown <= -1 && !((StandUser)this.self).roundabout$isBubbleEncased();
     }
 
@@ -1857,15 +1956,36 @@ public class AbilityScapeBasis {
         return 0;
     }
 
+    public <T extends ParticleOptions> void sendParticlesIfPossible(Level level, T $$0, double $$1, double $$2, double $$3, int $$4, double $$5, double $$6, double $$7, double $$8) {
+        if (!PowerTypes.isExistentiallyElsewhere(self) && level instanceof ServerLevel sl) {
+            sl.sendParticles($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8);
+        }
+    }
 
+    public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+            level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            return true;
+        }
+        return false;
+    }
 
+    public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
+        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+            level.playSound($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7);
+        }
+    }
     public boolean vault() {
         cancelConsumableItem(this.getSelf());
         this.setAttackTimeDuring(-7);
         this.setActivePower(PowerIndex.VAULT);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)));
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.8 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.VAULT_NOISE);
+                }
+            }
         }
         return true;
     }
@@ -1923,19 +2043,24 @@ public class AbilityScapeBasis {
                         this.setCooldown(PowerIndex.GLOBAL_DASH,
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
-
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                            0,
-                            dvec.x,
-                            dvec.y,
-                            dvec.z,
-                            0.8);
+                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                0,
+                                dvec.x,
+                                dvec.y,
+                                dvec.z,
+                                0.8);
+                    }
                 }
             }
         }
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)))){
+                if (self instanceof ServerPlayer sp){
+                    S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), StandPowers.DODGE_NOISE);
+                }
+            }
         }
         return true;
     }
@@ -2209,6 +2334,9 @@ public class AbilityScapeBasis {
         if (!(distMax >= 0)) {
             distMax = this.getDistanceOut(User, this.getReach(), false);
             distMax = Math.min(this.getDistanceOut(User, this.getReach(), false),distMax);
+        } else {
+            distMax = this.getDistanceOut(User, distMax, false);
+            distMax = Math.min(this.getDistanceOut(User, distMax, false),distMax);
         }
         Entity targetEntity = this.rayCastEntity(User,distMax);
 
@@ -2243,6 +2371,10 @@ public class AbilityScapeBasis {
             if (distSq > distMax * distMax) {
                 return null;
             }
+        }
+
+        if (PowerTypes.isExistentiallyElsewhere(targetEntity)){
+            return null;
         }
 
         return targetEntity;
@@ -2898,7 +3030,7 @@ public class AbilityScapeBasis {
 
     public static void takeDeterminedKnockback(LivingEntity user, Entity target, float knockbackStrength){
 
-        if (target instanceof LivingEntity && (knockbackStrength *= (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (target instanceof LivingEntity && (knockbackStrength * (float) (1.0 - ((LivingEntity)target).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
@@ -3141,13 +3273,33 @@ public class AbilityScapeBasis {
     }
 
 
+
+    public boolean isUsingShield(LivingEntity entity) {
+        if (entity.isUsingItem()) {
+            InteractionHand hand = entity.getUsedItemHand();
+            ItemStack item = entity.getItemInHand(hand);
+            if (item.getItem() instanceof ShieldItem) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void swingStandHands(){
+
+    }
+
     public long impactTimeStamp = 0;
     public void brawlPunchImpact(Entity entity) {
         if (!this.self.level().isClientSide()) {
             if (impactTimeStamp != self.level().getGameTime()) {
                 impactTimeStamp = self.level().getGameTime();
                 attackTargetId = 0;
-                self.swing(InteractionHand.MAIN_HAND, true);
+                if (PowerTypes.hasHandsActive(self)){
+                    refreshArms();
+                    swingStandHands();
+                } else {
+                    self.swing(InteractionHand.MAIN_HAND, true);
+                }
                 if (entity != null) {
                     if (entity.distanceTo(self) > 3.8) {
                         return;
@@ -3161,6 +3313,10 @@ public class AbilityScapeBasis {
                     boolean bool = entity.hurt(ModDamageTypes.of(entity.level(), getPunchDamageSource(), self), pow);
                     if (bool && entity instanceof LivingEntity LE) {
                         LE.setLastHurtMob(entity);
+                    } else if (entity instanceof LivingEntity LE){
+                        if (isUsingShield(LE)){
+                            knockShield2(LE, 200);
+                        }
                     }
 
                     if (bool) {
@@ -3253,6 +3409,9 @@ public class AbilityScapeBasis {
             }
 
         }
+    }
+    public void refreshArms(){
+
     }
 
     public void setAttack(){

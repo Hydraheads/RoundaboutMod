@@ -26,6 +26,9 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation DEPARTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/shadow_departure.png");
     private static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/phantom.png");
     private static final ResourceLocation SWEET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sweet.png");
+    private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
+    private static final ResourceLocation OCULUS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/oculus.png");
+    private static final ResourceLocation BEACH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/beach_sabbath.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
@@ -61,17 +64,25 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         if(BT == BlackSabbathEntity.SWEET){
             return SWEET;
         }
+        if(BT == BlackSabbathEntity.OCULUS){
+            return OCULUS;
+        }
+        if(BT == BlackSabbathEntity.SACTHOTH){
+            return SACTHOTH;
+        }
+        if(BT == BlackSabbathEntity.BEACH){
+            return BEACH;
+        }
         return ANIME;
     }
 
     @Override
     public void render(BlackSabbathEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         float factor = 1;
-        matrixStack.translate(0,0.3F,0);
-        if (mobEntity.isBaby()) {
-            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
+        if(mobEntity.isBaby()){
+            matrixStack.scale(0.60f * factor, 0.60f * factor, 0.60f * factor);
         } else {
-            matrixStack.scale(0.68f * factor, 0.68f * factor, 0.68f * factor);
+            matrixStack.scale(0.80f * factor, 0.80f * factor, 0.80f * factor);
         }
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }

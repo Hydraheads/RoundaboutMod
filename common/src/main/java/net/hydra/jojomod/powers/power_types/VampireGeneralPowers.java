@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.powers.GeneralPowers;
@@ -124,7 +125,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     dashOrWallWalk(vp);
                 }
                 case SKILL_3_CROUCH -> {
-                    evilAuraClient();
+                    evilAuraClient(vp);
                 }
                 case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
                     clientCamo();
@@ -207,8 +208,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
         }
     }
-    public void evilAuraClient(){
-        if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()){
+    public void evilAuraClient(VampiricFate vp){
+        if (vp.canLatchOntoWall() && vp.canWallWalkConfig()) {
+            vp.doWallLatchClient();
+        } else if (!onCooldown(PowerIndex.GENERAL_3_SNEAK) && !isFallingFar()
+        ){
             this.tryPower(EVIL_AURA);
         }
     }
@@ -307,19 +311,20 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
                     }
-
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
-                            this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
-                            0,
-                            dvec.x,
-                            dvec.y,
-                            dvec.z,
-                            0.8);
+                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                                this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
+                                0,
+                                dvec.x,
+                                dvec.y,
+                                dvec.z,
+                                0.8);
+                    }
                 }
             }
         }
         if (!this.getSelf().level().isClientSide()) {
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -345,6 +350,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         }
         return super.inputSpeedModifiers(basis);
     }
+
+    @Override
+    public float guardMod(){
+        if (self.onGround()){
+            return 0.5f;
+        } else {
+            return 1f;
+        }
+    }
     @Override
     public boolean cancelSprintJump(){
         return getActivePower() == POWER_SPIKE || super.cancelSprintJump() ||
@@ -368,8 +382,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             int spikeCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.spikeAttackCooldown;
             setCooldown(PowerIndex.GENERAL_1,spikeCooldown);
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
-                playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
-                setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
+                if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                    playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
+                    setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
+                }
             }
         }
     }
@@ -519,7 +535,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else {
                             self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
                         }
-                        Entity TE2 = getTargetEntity(self, 1.4F, 40);
+                        Entity TE2 = getTargetEntity(self, 1.7F, 40);
                         if (TE2 != null){
                             tryIntPowerPacket(BLOOD_CLUTCH_ATTACK,TE2.getId());
                             xTryPower(PowerIndex.NONE, true);
@@ -542,7 +558,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else {
                             self.setDeltaMovement(self.getLookAngle().scale(0.4f).add(grav));
                         }
-                        Entity TE2 = getTargetEntity(self, 1.4F, 40);
+                        Entity TE2 = getTargetEntity(self, 1.7F, 40);
                         if (TE2 != null) {
                             xTryPower(PowerIndex.NONE, true);
                             tryIntPowerPacket(ICE_CLUTCH_ATTACK, TE2.getId());
@@ -632,54 +648,6 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 Vec3 look = self.getLookAngle();
                 Vec3 end = start.add(look.scale(40.0D));
                 AABB beamBox = new AABB(start, end).inflate(1.5D);
-                List<LivingEntity> targets = self.level().getEntitiesOfClass(
-                        LivingEntity.class,
-                        beamBox,
-                        entity -> entity != self && entity.isAlive()
-                );
-                for (LivingEntity target : targets) {
-
-                    AABB targetBox = target.getBoundingBox().inflate(0.3D);
-
-                    Optional<Vec3> hit = targetBox.clip(start, end);
-
-                    if (hit.isPresent()&& !(target instanceof StandEntity)) {
-                        if (
-                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
-                                        ||
-                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
-                                    || MainUtil.canActuallyHitInvolved(target,self)
-                        ) {
-
-                            float pow = getRipperEyeStrength(target);
-                            pow = applyComboDamage(pow);
-                            if (alreadyBeamed.contains(target)) {
-                                pow *= 0.1F;
-                                if (MainUtil.getReducedDamage(target)) {
-                                    pow *= 0.2F;
-                                }
-                            }
-
-                            if (target.hurtTime == 0) {
-                                if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                    addToCombo(target);
-                                    bleedEnt(target);
-                                } else if (target.isBlocking()) {
-                                    MainUtil.knockShieldPlusStand(target, 200);
-                                    if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
-                                        addToCombo(target);
-                                        bleedEnt(target);
-                                    }
-                                }
-                                if (!alreadyBeamed.contains(target)) {
-                                    alreadyBeamed.add(target);
-                                }
-                            }
-
-                        }
-                    }
-                }
-
                 ClipContext context = new ClipContext(
                         start,
                         end,
@@ -688,12 +656,15 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         self
                 );
 
+                double farDist = 100;
+
                 BlockHitResult blockHit = self.level().clip(context);
                 if (blockHit.getType() == HitResult.Type.BLOCK) {
 
                     Vec3 hitPos = blockHit.getLocation();
+                    farDist = self.position().distanceTo(new Vec3(hitPos.x,hitPos.y,hitPos.z));
 
-                    ((ServerLevel) self.level()).sendParticles(
+                            ((ServerLevel) self.level()).sendParticles(
                             ParticleTypes.FLAME,
                             hitPos.x,
                             hitPos.y,
@@ -712,6 +683,71 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             0.01
                     );
                 }
+
+                List<LivingEntity> targets = self.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        beamBox,
+                        entity -> entity != self && entity.isAlive()
+                );
+                for (LivingEntity target : targets) {
+
+                    boolean reduced = false;
+                    AABB targetBox = target.getBoundingBox().inflate(0.3D);
+
+                    Optional<Vec3> hit = targetBox.clip(start, end);
+                    if (hit.isPresent()&& !(target instanceof StandEntity)) {
+                        if (
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes && !MainUtil.isBossMob(target))
+                                        ||
+                                (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses && MainUtil.isBossMob(target))
+                                    || MainUtil.canActuallyHitInvolved(target,self)
+                        ) {
+
+                            float pow = getRipperEyeStrength(target);
+                            pow = applyComboDamage(pow);
+                            if (alreadyBeamed.contains(target)) {
+                                pow *= 0.1F;
+                                if (MainUtil.getReducedDamage(target)) {
+                                    pow *= 0.2F;
+                                }
+                            }
+
+                            if (target.distanceTo(self) > farDist){
+                                reduced = true;
+                                pow*=0.6F;
+                            }
+
+                            if (target.hurtTime == 0) {
+                                if (!((TimeStop) self.level()).CanTimeStopEntity(self)) {
+                                    if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                        addToCombo(target);
+                                        if (!reduced){
+                                            bleedEnt(target);
+                                        } else {
+                                            bleedEnt2(target);
+                                        }
+                                    } else if (target.isBlocking()) {
+                                        MainUtil.knockShieldPlusStand(target, 200);
+                                        if (DamageHandler.RipperEyesDamage(target, pow, this.self) && !alreadyBeamed.contains(target)) {
+                                            addToCombo(target);
+                                            if (!reduced) {
+                                                bleedEnt(target);
+                                            } else {
+                                                bleedEnt2(target);
+                                            }
+                                        }
+                                    }
+                                    if (!alreadyBeamed.contains(target)) {
+                                        alreadyBeamed.add(target);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+
 
                 if (ripperEyesLeft <= 0){
                     xTryPower(PowerIndex.NONE, true);
@@ -733,6 +769,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (entity instanceof LivingEntity LE && MainUtil.getMobBleed(LE)){
             MainUtil.makeBleed(LE,1,200,self);
             MainUtil.makeMobBleed(LE);
+        }
+    }
+    public void bleedEnt2(Entity entity){
+        if (entity instanceof LivingEntity LE && MainUtil.getMobBleed(LE)){
+            MainUtil.makeBleed(LE,0,300,self);
         }
     }
     @Override
@@ -842,7 +883,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getBrawlPunchStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(0.7F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
+                return playerDmgMult(0.77F * (1+ (vp.getVampireData().strengthLevel * 0.05F)));
             } else {
                 return mobDmgMult(2.6F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
@@ -855,7 +896,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getDiveStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(1.2F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return playerDmgMult(1.25F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
                 return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
@@ -894,7 +935,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getSweepStrength(Entity entity){
         if (self instanceof Player pl && ((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)){
-                return playerDmgMult(1F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
+                return playerDmgMult(1.15F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             } else {
                 return mobDmgMult(3.7F * (1+ (vp.getVampireData().strengthLevel * 0.1F)));
             }
@@ -909,7 +950,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getBloodClutchStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return playerDmgMult(3F);
+                return playerDmgMult(4F);
             } else {
                 return mobDmgMult(5F);
             }
@@ -919,7 +960,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     public float getIceStrength(Entity entity) {
         if (self instanceof Player pl && ((IFatePlayer) pl).rdbt$getFatePowers() instanceof VampireFate vp) {
             if (this.getReducedDamage(entity)) {
-                return playerDmgMult(2F);
+                return playerDmgMult(3.5F);
             } else {
                 return mobDmgMult(2F);
             }

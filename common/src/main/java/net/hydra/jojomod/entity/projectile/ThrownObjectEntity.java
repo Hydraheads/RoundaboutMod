@@ -6,13 +6,17 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.disc.MusicDiscController;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -87,6 +91,11 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
     }
 
+    public void setSuperThrowTicks(int ticks) {
+        this.entityData.set(ROUNDABOUT$SUPER_THROWN,true);
+        superThrowTicks = ticks;
+    }
+
     public ThrownObjectEntity(Level world, double p_36862_, double p_36863_, double p_36864_, ItemStack itemStack, boolean places) {
         super(ModEntities.THROWN_OBJECT, p_36862_, p_36863_, p_36864_, world);
         this.setItem(itemStack);
@@ -130,7 +139,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             SPTHROW = 1,
             TWTHROW = 2,
             SOFTTHROW = 3,
-            SPINTHROW = 4;
+            SPINTHROW = 4,
+            STAND_DAMAGE = 5,
+            ANUBISTHROW = 6;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -310,15 +321,6 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 if (playSounds){
                     thrower.level().playSound(null, $$7, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 }
-            }
-        } else if (item.getItem() instanceof AnubisItem) {
-            ThrownAnubisEntity anubis = new ThrownAnubisEntity(thrower, thrower.level(),item);
-            anubis.setPos(pos);
-            anubis.shootFromRotation(thrower, xRot, yRot, 0.0F, 2F*mult, getShotAccuracy);
-            thrower.level().addFreshEntity(anubis);
-
-            if (playSounds){
-                thrower.level().playSound(null, anubis, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
             }
         } else {
             boolean canPlace = getCanPlace;
@@ -538,6 +540,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     }
 
+    public int heat = 0;
+    public float standDamageMob = 0;
+    public float standDamagePlayer = 0;
     public void dropItem(BlockPos pos){
         ItemEntity $$4 = new ItemEntity(this.level(), pos.getX() + 0.5F,
                 pos.getY() + 0.25F, pos.getZ() + 0.5F,
@@ -549,6 +554,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
 
     public float getDamage(Entity ent){
+        if (getStyle() == STAND_DAMAGE){
+            if (ent instanceof Player){
+                return standDamagePlayer;
+            } if (ent instanceof Mob){
+                return standDamageMob;
+            }
+        }
         float damage = 1;
         if (this.getItem().getItem() instanceof BlockItem){
             float DT =((BlockItem)this.getItem().getItem()).getBlock().defaultDestroyTime();
@@ -659,9 +671,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         }
     }
 
-
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        if ($$0.getEntity().level().isClientSide()){
+            return;
+        }
+        if (handleDiscImpact($$0)) return;
+        if (getStyle() == STAND_DAMAGE){
+            if ($$0.getEntity() instanceof BlockWallEntity bwe && bwe.isWhiteAlbumWall){
+                return;
+            }
+        }
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
             if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
@@ -703,8 +723,27 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 fire = true;
             }
         }
-
-        if (this.getItem().getItem() instanceof NameTagItem) {
+        if (getStyle() == STAND_DAMAGE && this.getOwner() != null &&
+                DamageHandler.StandDamageEntity($$1,this.getDamage($$1),this.getOwner())) {
+            if ($$1.getType() == EntityType.ENDERMAN) {
+                return;
+            }
+            if (this.getItem().getItem() instanceof BlockItem){
+                Vec3 pos = getPosition(1);
+                Block blkk = (((BlockItem) this.getItem().getItem()).getBlock());
+                this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                blockBreakParticles(blkk,
+                        new Vec3(pos.x+0.5,
+                                pos.y+0.5,
+                                pos.z+0.5));
+            }
+            if ($$1 instanceof LivingEntity LE && this.getOwner() != null) {
+                LE.setLastHurtMob(this.getOwner());
+                if (heat != 0){
+                    HeatUtil.addHeat(LE,heat);
+                }
+            }
+        } else if (this.getItem().getItem() instanceof NameTagItem) {
             if ($$1 instanceof LivingEntity && !this.useNametag(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
@@ -741,6 +780,9 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 return;
             }
 
+            if ($$1 instanceof LivingEntity LE && this.getOwner() != null) {
+                LE.setLastHurtMob(this.getOwner());
+            }
             if (!this.getItem().isEmpty()) {
 
                 if ($$1 instanceof LivingEntity L){
@@ -797,9 +839,21 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 }
                 if (!(ist.getTag() != null && ist.getTag().getBoolean("Unbreakable"))) {
-                    if (this.getItem().isDamageableItem()) {
-                        if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                    ItemStack stack = this.getItem();
+                    Item tem = stack.getItem();
+                    if (stack.isDamageableItem()
+                    ) {
+                        if (!(tem instanceof FleshBucketItem)
+                                && !(tem instanceof FishingRodItem)
+                                && !(tem instanceof LuckyLipstickItem)
+                                && !(tem instanceof MemoryChessPieceItem)
+                                && !(tem instanceof ExperienceBishopItem)
+                            ){
                             this.dropItem($$1.getOnPos());
+                        } else {
+                            if (!this.getItem().hurt(1, this.level().getRandom(), null)) {
+                                this.dropItem($$1.getOnPos());
+                            }
                         }
                     } else if (this.getItem().getItem() instanceof TieredItem) {
                         this.dropItem($$1.getOnPos());
@@ -842,6 +896,62 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         }
         this.discard();
 
+    }
+
+    private boolean handleDiscImpact(EntityHitResult hit) {
+        ItemStack stack = getItem();
+        boolean musicDisc = stack.getItem() instanceof RecordItem && canImplantMusicDisc();
+        if (!(stack.getItem() instanceof AbstractBodyDiscItem)
+                && !(stack.getItem() instanceof CommandDiscItem)
+                && !musicDisc) {
+            return false;
+        }
+
+        Entity targetEntity = hit.getEntity();
+        if (targetEntity instanceof LivingEntity target) {
+            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectile(this, hit)) {
+                discard();
+                return true;
+            }
+            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectileNoDiscard(this, hit)) {
+                return true;
+            }
+            if (target.isBlocking() && discHitsFront(target)) {
+                target.level().broadcastEntityEvent(target, (byte) 29);
+                dropItem(target.getOnPos());
+                discard();
+                return true;
+            }
+        }
+
+        boolean applied = false;
+        if (getOwner() instanceof LivingEntity thrower) {
+            if (targetEntity instanceof LivingEntity target && stack.getItem() instanceof AbstractBodyDiscItem disc) {
+                applied = disc.implantFromThrow(stack, target, thrower);
+            } else if (stack.getItem() instanceof CommandDiscItem commandDisc) {
+                applied = commandDisc.applyCommand(targetEntity, thrower);
+            } else if (targetEntity instanceof LivingEntity target && musicDisc) {
+                applied = MusicDiscController.implant(stack, target, thrower);
+            }
+        }
+        if (!applied) dropItem(targetEntity.getOnPos());
+        discard();
+        return true;
+    }
+
+    private boolean canImplantMusicDisc() {
+        return getOwner() instanceof LivingEntity thrower
+                && ((StandUser) thrower).roundabout$getStandPowers().canImplantMusicDisc();
+    }
+
+    private boolean discHitsFront(LivingEntity target) {
+        Vec3 horizontal = new Vec3(getDeltaMovement().x, 0.0D, getDeltaMovement().z);
+        if (horizontal.lengthSqr() < 1.0E-7D) {
+            Vec3 toTarget = position().vectorTo(target.position());
+            horizontal = new Vec3(toTarget.x, 0.0D, toTarget.z);
+        }
+        return horizontal.lengthSqr() < 1.0E-7D
+                || horizontal.normalize().dot(target.getViewVector(1.0F)) < 0.0D;
     }
 
     public boolean useBonemeal(ItemStack item, BlockHitResult pos){

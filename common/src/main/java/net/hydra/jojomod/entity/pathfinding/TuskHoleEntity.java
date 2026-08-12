@@ -6,6 +6,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -30,6 +32,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
     }
 
-    int lifespan = 150;
+    int lifespan = 100;
     public boolean isVortex() {return entityData.get(VORTEX);}
 
     public boolean isClinging() {return entityData.get(CLINGING) != Direction.DOWN;}
@@ -82,10 +85,10 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     @Override
     public boolean doHurtTarget(Entity target) {
         LivingEntity user = this.getUser();
-        if (user != null &&
-                ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (user != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
 
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
+                this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
                 if (MainUtil.getMobBleed(target)) {
                     MainUtil.makeBleed(target,1,180,this.getUser());
                 }
@@ -106,7 +109,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
         }
         this.discard();
-        return true;
+        return false;
     }
 
     @Override
@@ -126,6 +129,17 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             }
         }
     }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity $$0) {
+        if (this.getTarget() == null && $$0 != null) {
+            this.level().playSound(null,this.blockPosition(), ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS,1F,1F);
+            soundDelay = 0;
+        }
+        super.setTarget($$0);
+    }
+
+    private int soundDelay = 0;
 
     @Override
     public void tick() {
@@ -153,6 +167,13 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 if (PT.getAct() == 3 && !this.isVortex()) {
                     if (!this.level().isClientSide() && this.tickCount % 2 == 0) {
                         this.lifeSpan ++;
+                    }
+                } else if (PT.getAct() == 2 && !this.isVortex() && !this.level().isClientSide()) {
+                    if (soundDelay == 0 && this.getTarget() != null) {
+                        this.soundDelay = 22;
+                        this.level().playSound(null,this.blockPosition(), ModSounds.TUSK_HOLE_MOVE_EVENT, SoundSource.PLAYERS,1.75F,1F);
+                    } else if (soundDelay > 0) {
+                        soundDelay--;
                     }
                 }
             }

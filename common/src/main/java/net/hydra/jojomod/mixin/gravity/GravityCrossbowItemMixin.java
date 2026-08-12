@@ -46,13 +46,13 @@ public abstract class GravityCrossbowItemMixin extends ProjectileWeaponItem impl
     private static void roundabout$getChargeDuration(ItemStack $$0, CallbackInfoReturnable<Integer> cir) {
         if ($$0 != null && $$0.is(ModItems.IRON_BALL_CROSSBOW)){
             int $$1 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, $$0);
-            cir.setReturnValue($$1 == 0 ? 30 : 30 - 2 * $$1);
+            cir.setReturnValue($$1 == 0 ? 28 : 28 - 2 * $$1);
         }
     }
     @Inject(method = "onCrossbowShot", at = @At(value = "HEAD"), cancellable = true)
     private static void roundabout$getChargeDuration(Level $$0, LivingEntity $$1, ItemStack $$2, CallbackInfo ci) {
         if ($$1 instanceof ServerPlayer pe && !(pe.isCreative()) && $$2 != null && $$2.is(ModItems.IRON_BALL_CROSSBOW)){
-            pe.getCooldowns().addCooldown($$2.getItem(), 180);
+            pe.getCooldowns().addCooldown($$2.getItem(), 120);
         }
     }
 

@@ -9,6 +9,7 @@ import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.LivingEntity;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,7 +65,7 @@ public abstract class GravityGameRendererMixin {
                 if (animation == null) {
                     return;
                 }
-                if(((StandUser)focusedEntity).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
+                if(focusedEntity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
                     return;
                 }
                 long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);

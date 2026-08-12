@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -245,11 +246,12 @@ public class PowersMandom extends NewDashPreset {
     }
 
     public void onPowerSwitch(){
-        onStandSwitchInto();
         super.onPowerSwitch();
+        onStandSwitchInto();
     }
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (!isClient() || !ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownUsesServerLatency) {
                 if (this.getSelf() instanceof Player) {
@@ -262,7 +264,6 @@ public class PowersMandom extends NewDashPreset {
                         + ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownExtraCondition);
             }
         }
-        super.onStandSwitchInto();
     }
 
 
@@ -326,7 +327,10 @@ public class PowersMandom extends NewDashPreset {
     public int meltDodgeTicks = -1;
 
     public SimpleParticleType getParticle(Entity ent){
-        if (ent instanceof Monster || (ent instanceof Mob mb && mb.isAggressive()))
+        if (ent instanceof CloneEntity) {
+            return ModParticles.BLUE_CLOCK;
+        }
+        if ((ent instanceof Monster || (ent instanceof Mob mb && mb.isAggressive())))
             return ModParticles.RED_CLOCK;
         if (ent !=null && ent.is(this.self))
             return ModParticles.CLOCK;
@@ -358,6 +362,12 @@ public class PowersMandom extends NewDashPreset {
                     }
                     if (ent instanceof LivingEntity LE && LE.isUsingItem()){
                         LE.stopUsingItem();
+                    }
+                    if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
+                        mb.getNavigation().stop();
+                        if (!MainUtil.blockConfusionTicks(mb)) {
+                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                        }
                     }
 
                     if (!ent.is(this.self)){
@@ -476,7 +486,8 @@ public class PowersMandom extends NewDashPreset {
             MELON = 13,
             ESIDISI = 14,
             COMMAND = 15,
-            SCULK = 16;
+            SCULK = 16,
+            TV = 17;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
@@ -495,7 +506,8 @@ public class PowersMandom extends NewDashPreset {
                 MELON,
                 SCULK,
                 ESIDISI,
-                COMMAND
+                COMMAND,
+                TV
         );
     }
     @Override public Component getSkinName(byte skinId) {
@@ -516,6 +528,7 @@ public class PowersMandom extends NewDashPreset {
             case PowersMandom.ESIDISI -> Component.translatable("skins.roundabout.mandom.esidisi");
             case PowersMandom.COMMAND -> Component.translatable("skins.roundabout.mandom.command");
             case PowersMandom.SCULK -> Component.translatable("skins.roundabout.mandom.sculk");
+            case PowersMandom.TV -> Component.translatable("skins.roundabout.mandom.tv");
             default -> Component.translatable("skins.roundabout.mandom.manga");
         };
     }

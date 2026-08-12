@@ -4,6 +4,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class ModParticles {
+    public static SimpleParticleType HALLUCINATORY_ACID_DRIP;
     public static SimpleParticleType HIT_IMPACT;
     public static SimpleParticleType BLOOD;
     public static SimpleParticleType BLUE_BLOOD;
@@ -104,4 +105,11 @@ public class ModParticles {
 
     public static SimpleParticleType TUSK_HOLE;
     public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
+
+    public static SimpleParticleType PW_FIREBALL_EXPLOSION;
+    public static SimpleParticleType PW_BLASTWAVE_EXPLOSION;
+    public static SimpleParticleType PW_MUSHROOM_EXPLOSION;
+    public static SimpleParticleType PW_BLUE_FIREBALL_EXPLOSION;
+    public static SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION;
+    public static SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION;
 }

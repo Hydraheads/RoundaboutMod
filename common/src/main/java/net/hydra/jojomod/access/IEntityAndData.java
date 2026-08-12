@@ -23,6 +23,7 @@ public interface IEntityAndData {
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 
+    boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 
     void roundabout$setNoAAB();
@@ -63,6 +64,10 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
+
+    void roundabout$setInitialDaySec();
+    SavedSecond roundabout$getInitialDaySec();
+
     SavedSecond roundabout$getLastSavedSecond();
     void roundabout$addSecondToQueue();
 
@@ -73,7 +78,6 @@ public interface IEntityAndData {
     int roundabout$getTrueInvisibility();
 
     /**Manhattan Transfer*/
-    void roundabout$setTrueInvisibilityManhattan(int manhattanticking);
     int roundabout$getTrueInvisibilityManhattan();
 
     void rdbt$doWindVisionDetection();

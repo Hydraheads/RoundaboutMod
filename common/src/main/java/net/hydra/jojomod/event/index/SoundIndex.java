@@ -40,6 +40,7 @@ public class SoundIndex {
     public static final byte SUMMON_SOUND = 18;
     public static final byte SUMMON_SOUND_2 = 19;
     public static final byte SUMMON_SOUND_4 = 20;
+    public static final byte BITES_THE_DUST_DETONATE = 21;
 
     /**Sound group cancel ids, used to cancel sound events like barrages uniformly*/
     public static final byte BARRAGE_SOUND_GROUP = 100;

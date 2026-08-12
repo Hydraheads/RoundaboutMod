@@ -130,13 +130,14 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
             ItemStack visage = ple.roundabout$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
+                    VisageData vd = MI.visageData.generateVisageData(this);
+                    if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(this)) {
                             // 37 67 -34
-                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
 
                         } else {
-                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                         return;
@@ -174,12 +175,13 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
             ItemStack visage = ple.roundabout$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if (MI.visageData.isCharacterVisage()) {
+                    VisageData vd = MI.visageData.generateVisageData(this);
+                    if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(this)) {
                             // 37 67 -34
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
                         } else {
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.getSkinPath() + ".png"));
+                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                     }

@@ -45,22 +45,27 @@ public abstract class WanderingTraderMixin
 
 
 
-        /// does the same as the code below, but only check if it's a broken arrow trade
-        /// also generates the pick for the code below, this is done to give the trader a stand
-        /// the main thing is that the trades don't generate until you first click on them
+        // does the same as the code below, but only check if it's a broken arrow trade
+        // also generates the pick for the code below, this is done to give the trader a stand
+        // the main thing is that the trades don't generate until you first click on them
         WanderingTrader This = (WanderingTrader) (Object) this;
         if (!This.level().isClientSide() && (offers == null) ) {
             float WTS = VillagerTrades.WANDERING_TRADER_TRADES.get(2).length;
+        //    Roundabout.LOGGER.info("WTS: " + WTS);
             float maxChance = WTS;
             for (Pair<Float, MerchantOffer> f : WanderingTrades.TRADES) {maxChance += f.getA();}
+        //    Roundabout.LOGGER.info("maxChance: " + maxChance);
             pick = This.getRandom().nextFloat() * maxChance;
-          //  Roundabout.LOGGER.info("Pick: " + pick);
-         //   Roundabout.LOGGER.info("WTS: " + WTS);
+        //    Roundabout.LOGGER.info("pick: " + pick);
 
 
+            float pick = this.pick;
             if (pick > WTS) {
+                pick -= WTS;
+            //    Roundabout.LOGGER.info(""+pick);
                 for(int i=0;i<WanderingTrades.TRADES.size();i++) {
                     Pair<Float,MerchantOffer> pair = WanderingTrades.TRADES.get(i);
+                 //   Roundabout.LOGGER.info(pick + " - " + pair.getA());
                     if (pick < pair.getA()) {
                         if (pair.getB().equals(WanderingTrades.BROKEN_ARROW_TRADE) && ConfigManager.getConfig().wanderingTraderSettings.brokenArrowsHaveStands ) {
                             StandArrowItem.grantStand(StandArrowItem.randomizeStand().getDefaultInstance(),This);
@@ -72,7 +77,7 @@ public abstract class WanderingTraderMixin
                     }
                 }
             }
-            /// this has the potential to cause an issue by running getOffers before a player is to interact with them, but I doubt it will matter
+            // this has the potential to cause an issue by running getOffers before a player is to interact with them, but I doubt it will matter
             this.getOffers();
 
         }
@@ -89,12 +94,13 @@ public abstract class WanderingTraderMixin
         Config cf = ConfigManager.getConfig();
 
 
-        /// effectively what this does is make a number that correlates to the number of trades
-        ///  since I'm not controlling the vanilla trades it only activates if it selects a modded trade
-        ///  by changing the value it makes it more likely ex. changing it from 1 -> 2 correlates to 1/8 -> 2/9
+        // effectively what this does is make a number that correlates to the number of trades
+        // since I'm not controlling the vanilla trades it only activates if it selects a modded trade
+        // by changing the value it makes it more likely ex. changing it from 1 -> 2 correlates to 1/8 -> 2/9
 
         if (cf != null && !VillagerTrades.TRADES.isEmpty()) {
             float WTS = VillagerTrades.WANDERING_TRADER_TRADES.get(2).length;
+          //  Roundabout.LOGGER.info(pick + " - " + WTS);
             if (pick > WTS) {
                 MerchantOffer offer = null;
                 pick -= WTS;
@@ -105,7 +111,6 @@ public abstract class WanderingTraderMixin
                         break;
                     } else {
                         pick -= pair.getA();
-                        //Roundabout.LOGGER.info("attempt" + i + ": " + pick);
                     }
                 }
 
@@ -115,7 +120,6 @@ public abstract class WanderingTraderMixin
                         arrow.setDamageValue((int)(2+Math.random()*2));
                         offer = new MerchantOffer(offer.getBaseCostA(),arrow,1,1,1);
                     }
-                 //   Roundabout.LOGGER.info("offer:" + offer.toString());
                     offers.set(offers.size()-1,offer);
                 }
 

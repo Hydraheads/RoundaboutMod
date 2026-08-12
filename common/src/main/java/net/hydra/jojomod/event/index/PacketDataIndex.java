@@ -18,6 +18,7 @@ public class PacketDataIndex {
     public static final byte FLOAT_UPDATE_STAND_MOVE = 7;
     public static final byte FLOAT_BIG_JUMP = 8;
     public static final byte FLOAT_BIG_JUMP_CANCEL = 9;
+    public static final byte FLOAT_MOLD_STARTING_Y_POS = 10;
 
 
     /**C2S Inventory*/
@@ -49,6 +50,8 @@ public class PacketDataIndex {
     public static final byte INT_GRAVITY_FLIP_4 = 18;
     public static final byte INT_VAMPIRE_SKILL_BUY = 19;
     public static final byte INT_WHITE_ALBUM_ACCELERATION = 20;
+    public static final byte INT_MOLD_JUMP_TICKS = 21;
+    public static final byte INT_MOLD_GOING_DOWN = 22;;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -78,6 +81,8 @@ public class PacketDataIndex {
     public static final byte CALIFORNIA_CHESS_HURT = 40;
     public static final byte CALIFORNIA_BISHOP_USE = 41;
     public static final byte FIX_COOLDOWN_FOR_SERVER = 50;
+    public static final byte SINGLE_STAND_TRIGGER = 52;
+    public static final byte SINGLE_STAND_TRIGGER_2 = 53;
 
     /**Byte packets*/
     public static final byte BYTE_CHANGE_MORPH = 6;
@@ -97,6 +102,8 @@ public class PacketDataIndex {
     public static final byte S2C_SOFT = 6;
     public static final byte CLEAR_LEADED = 7;
     public static final byte STALL = 8;
+    public static final byte TIME_SKIP = 9;
+    public static final byte BITES_THE_DUST = 10;
 
 
     /**S2C Int packets*/
@@ -123,6 +130,9 @@ public class PacketDataIndex {
     public static final byte S2C_INT_CKB_REMOVE = 23;
     public static final byte S2C_INT_LEADED = 24;
     public static final byte S2C_INT_LVL_DECREASE = 25;
+    public static final byte S2C_STAND_SPECIAL_INT = 26;
+    public static final byte S2C_DISC_ADD_INT = 27;
+    public static final byte S2C_DISC_REMOVE_INT = 28;
 
 
     /**S2C BUNDLE packets*/

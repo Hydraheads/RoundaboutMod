@@ -1,9 +1,11 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,6 +27,12 @@ public abstract class StarPlatinumItemEntity extends Entity {
         }
     }
 
+    @Inject(method = "playerTouch", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playerTouch(Player $$0,CallbackInfo ci) {
+        if (PowerTypes.isExistentiallyElsewhere($$0)){
+            ci.cancel();
+        }
+    }
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

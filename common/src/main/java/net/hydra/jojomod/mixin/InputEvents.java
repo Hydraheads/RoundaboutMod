@@ -7,9 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
-import net.hydra.jojomod.client.gui.NoCancelInputScreen;
-import net.hydra.jojomod.client.gui.PowerInventoryMenu;
-import net.hydra.jojomod.client.gui.PowerInventoryScreen;
+import net.hydra.jojomod.client.gui.*;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -26,6 +24,7 @@ import net.hydra.jojomod.item.WarhammerItem;
 import net.hydra.jojomod.mixin.access.MinecraftAccessor;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
@@ -34,6 +33,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.main.GameConfig;
+import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.particle.ParticleEngine;
@@ -240,12 +240,17 @@ public abstract class InputEvents implements IInputEvents {
             StandPowers powers = standComp.roundabout$getStandPowers();
             ItemStack itemStack = player.getUseItem();
             ItemStack mainhand = player.getMainHandItem();
+            boolean inTSRange = ((TimeStop) player.level()).CanTimeStopEntity(player);
 
             if (standComp.roundabout$isPossessed()) {
                 ci.setReturnValue(false);
                 return;
             }
-            if (mainhand != null) {
+            if (powers.cancelAllRandomMiningThatBreaksMoves()){
+                ci.setReturnValue(false);
+                return;
+            }
+            if (mainhand != null && !inTSRange) {
                 if (mainhand.getItem() instanceof ExperienceBishopItem){
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.CALIFORNIA_BISHOP_USE);
                 } else if (mainhand.getItem() instanceof MemoryChessPieceItem && powers instanceof PowersCalifornia) {
@@ -262,6 +267,13 @@ public abstract class InputEvents implements IInputEvents {
 
             if (powers instanceof Powers20thCenturyBoy PCB) {
                 if (PCB.invincibleState) {
+                    ci.setReturnValue(false);
+                    return;
+                }
+            }
+
+            if (powers instanceof PowersOasis PO) {
+                if (PO.isBrawling() && PO.hasStandActive(PO.getSelf())) {
                     ci.setReturnValue(false);
                     return;
                 }
@@ -441,11 +453,16 @@ public abstract class InputEvents implements IInputEvents {
 
     @Unique
     private void roundabout$justiceContinueAttack(boolean $$0) {
+
         if (!$$0) {
             this.missTime = 0;
         }
         StandUser standComp = ((StandUser) player);
         StandPowers powers = standComp.roundabout$getStandPowers();
+
+        if (powers.cancelAllRandomMiningThatBreaksMoves()){
+            return;
+        }
         LivingEntity piloting = powers.getPilotingStand();
         HitResult $$47 = null;
         if (piloting != null && piloting.isAlive() && !piloting.isRemoved()){
@@ -481,7 +498,12 @@ public abstract class InputEvents implements IInputEvents {
                     ci.cancel();
                     return;
                 }
-
+                if (powers instanceof PowersOasis PO) {
+                    if (PO.isEntityInBrawlRange()) {
+                        ci.cancel();
+                        return;
+                    }
+                }
                 if(powers instanceof PowersGreenDay PGD) {
                     if ((!PGD.HasMainArm) && !(standComp.roundabout$hasStandOut())) {
                         ci.cancel();
@@ -776,6 +798,11 @@ public abstract class InputEvents implements IInputEvents {
             }
 
 
+            if (PowerTypes.isExistentiallyElsewhere(player)){
+                roundabout$TryGuard();
+                ci.cancel();
+                return;
+            }
 
             if (powers.interceptAllInteractions()) {
                 roundabout$TryGuard();
@@ -911,6 +938,56 @@ public abstract class InputEvents implements IInputEvents {
     @Unique
     private void roundabout$startUseOppositeItem() {
 
+
+
+        StandUser standComp = ((StandUser) player);
+        StandPowers powers = standComp.roundabout$getStandPowers();
+
+        if (standComp.roundabout$isPossessed()) {
+            return;
+        }
+
+        if(powers instanceof PowersGreenDay PGD){
+            if(!PGD.HasMainArm && !roundabout$TryGuard()){
+                return;
+            }
+        }
+
+        if (powers instanceof Powers20thCenturyBoy centuryBoy){
+            if (centuryBoy.invincibleState) return;
+        }
+
+
+        if (PowerTypes.isExistentiallyElsewhere(player)){
+            roundabout$TryGuard();
+            return;
+        }
+
+        if (powers.interceptAllInteractions()) {
+            roundabout$TryGuard();
+            return;
+        }
+        if (powers.isPiloting()){
+            if (!roundaboutPlaceBlock()) {
+                powers.pilotInputInteract();
+            }
+
+            return;
+        }
+
+        if (standComp.roundabout$isDazed() || ((TimeStop)player.level()).CanTimeStopEntity(player)) {
+            return;
+        } else if (PowerTypes.hasStandActive(this.player)) {
+            if (standComp.roundabout$isGuardInput() || standComp.roundabout$isBarraging() || standComp.roundabout$isClashing() || standComp.roundabout$getStandPowers().cancelItemUse()) {
+
+                return;
+            }
+        } else {
+            if (((IFatePlayer)this.player).rdbt$getFatePowers().cancelItemUse()){
+
+                return;
+            }
+        }
         if (!this.gameMode.isDestroying()) {
             this.rightClickDelay = 4;
             if (!this.player.isHandsBusy()) {
@@ -1097,20 +1174,18 @@ public abstract class InputEvents implements IInputEvents {
             if (player.isAlive()) {
                 ((StandUser) player).roundabout$getStandPowers().updateGuard(
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
-                //RoundaboutMod.LOGGER.info(""+client.options.forwardKey.isPressed());
-
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
-                if (((TimeStop)player.level()).isTimeStoppingEntity(player)) {
+                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)) {
                     if (player.getAbilities().flying && TSJumping) {
                         this.roundabout$SetTSJump(false);
                     } else {
-                        if (TSJumping && player.onGround()) {
+                        if (TSJumping && player.onGround() && !player.isInLava()) {
                             TSJumping = false;
                             this.roundabout$SetTSJump(false);
                         }
                         if (options.keyJump.isDown()) {
-                            if (player.getDeltaMovement().y <= 0 && !player.onGround()) {
+                            if (player.getDeltaMovement().y <= 0 && (!player.onGround() || player.isInLava())) {
                                 TSJumping = true;
                                 this.roundabout$SetTSJump(true);
                             }
@@ -1194,9 +1269,7 @@ public abstract class InputEvents implements IInputEvents {
                         }
                     }
                 }
-                //RoundaboutMod.LOGGER.info("px");
 
-                    //RoundaboutMod.LOGGER.info("px");
                     if (roundabout$sameKeyOne(KeyInputRegistry.summonKey)) {
                         //((IGameRenderer)this.gameRenderer).roundabout$loadEffect(new ResourceLocation("shaders/post/spider.json"));
                         KeyInputs.summonKey(player,((Minecraft) (Object) this));
@@ -1242,6 +1315,18 @@ public abstract class InputEvents implements IInputEvents {
                             player.containerMenu = powa;
                             Minecraft.getInstance().setScreen(new PowerInventoryScreen(player,powa));
                             ClientUtil.checkthis = 0;
+                            ClientUtil.checkthisdat = 0;
+                        }
+
+                        if(ClientUtil.checkthis == 2){
+                            BlackSabbathPlayerInventory $$4 = new BlackSabbathPlayerInventory(player);
+                            player.clientSideCloseContainer();
+
+                          /*  BlackSabbathPlayerInventoryMenu bsinv = new BlackSabbathPlayerInventoryMenu(player.getInventory(), !player.level().isClientSide, player,
+                                    ClientUtil.checkthisdat);
+                            player.containerMenu = bsinv;
+                            Minecraft.getInstance().setScreen(new BlackSabbathPlayerInventoryScreen(bsinv, player.getInventory(), player));
+                            ClientUtil.checkthis = 0;*/
                             ClientUtil.checkthisdat = 0;
                         }
                     }
@@ -1365,7 +1450,9 @@ public abstract class InputEvents implements IInputEvents {
                     }
 
                     if (!(player.getUseItem().getItem() instanceof FirearmItem)) {
-                        if (!isMining && !roundabout$activeMining && standComp.roundabout$getInterruptCD()) {
+                        if (((!isMining && !roundabout$activeMining) ||
+                                (powers.hasHandsOut() && !isMining && standComp.roundabout$getActivePower() != PowerIndex.MINING))
+                                && standComp.roundabout$getInterruptCD()) {
                             if (rdbt$isInitialized(player) && !((StandUser) player).roundabout$isDazed()) {
                                 powers.preCheckButtonInputAttack(this.options.keyAttack.isDown(), this.options);
                             }

@@ -238,6 +238,31 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
+        StandUser standUser = (StandUser) abstractClientPlayer;
+
+        boolean emperorFP =
+                standUser.roundabout$getStandPowers() instanceof PowersEmperor
+                        && standUser.roundabout$getCombatMode();
+
+        if (standUser.roundabout$getStandPowers().hasHandsOut() &&
+                standUser.roundabout$getStandAnimation() == StandPowers.GUARD){
+            ci.cancel();
+            return;
+        }
+        if (emperorFP ||
+                (abstractClientPlayer != null &&
+                        standUser.roundabout$getEffectiveCombatMode() &&
+                        !abstractClientPlayer.isUsingItem())
+                || AnubisLayer.shouldRender(abstractClientPlayer) != null
+                || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
+
+            if (emperorFP) {
+                ci.cancel();
+                return;
+            }
+        }
+
+
         byte posByte2 = ((IPlayerEntity) abstractClientPlayer).roundabout$GetPoseEmote();
         if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
                 AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM) ||

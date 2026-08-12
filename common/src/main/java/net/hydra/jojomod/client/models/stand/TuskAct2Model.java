@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.TuskEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -20,6 +21,8 @@ public class TuskAct2Model<T extends TuskEntity> extends StandModel<T> {
 
     public TuskAct2Model(ModelPart root) {
         this.stand = root.getChild("stand");
+        this.head = stand.getChild("stand2").getChild("head");
+        this.body = stand.getChild("stand2").getChild("body");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -112,9 +115,11 @@ public class TuskAct2Model<T extends TuskEntity> extends StandModel<T> {
         super.renderToBuffer(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 
-    //    @Override
-//    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//
-//    }
+    @Override
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+        this.defaultModifiers(pEntity);
+        super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+    }
+
 
 }

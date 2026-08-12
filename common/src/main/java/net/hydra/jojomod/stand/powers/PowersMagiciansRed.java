@@ -70,6 +70,7 @@ import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
@@ -189,14 +190,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitch(){
-        clearEverything();
         super.onStandSwitch();
+        clearEverything();
     }
 
     @Override
     public void onPowerSwitch(){
-        clearEverything();
         super.onPowerSwitch();
+        clearEverything();
     }
 
     @Override
@@ -206,8 +207,18 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
             if (leaded != null) {
-                if (!hasStandActive(this.self)){
-                    clearLeaded();
+                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                    if (pkc.timeEraseActive){
+                        clearLeaded();
+                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        leaded = pkc.activeClone;
+                    }
+                }
+                if (leaded != null) {
+                    boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
+                    if (!hasStandActive(this.self) || elsewhere) {
+                        clearLeaded();
+                    }
                 }
             }
         }
@@ -510,7 +521,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (!this.self.level().isClientSide()) {
                 value.setOldPosAndRot();
-                //Roundabout.LOGGER.info("bye");
             }
 
             Vec3 finalOffset = new Vec3(
@@ -1462,7 +1472,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()){
-            user.roundabout$setSealedTicks(sealTime);
+            user.roundabout$sealStand(sealTime);
         }
         user.roundabout$setActive(false);
     }
@@ -1717,6 +1727,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
+            return;
+        }
         boolean landedLead = false;
         if (this.activePower == PowerIndex.POWER_1) {
             this.setAttackTimeDuring(-20);
@@ -2465,7 +2478,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
         if (this.self instanceof Player){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId());
             }
@@ -2608,7 +2620,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown);
                 this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
-                groundent.setLifeSpan(240);
+                groundent.setLifeSpan(200);
                 groundent.setPos(this.self.position());
                 groundent.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
@@ -3098,7 +3110,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public void standPunch(){
 
-        if (this.self instanceof Player){
+        if (this.self instanceof Player pl){
             if (isPacketPlayer()){
                 this.attackTimeDuring = -10;
 
@@ -3118,6 +3130,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 C2SPacketUtil.standPunchPacket(listE.get(i).getId(), (byte) (this.activePowerPhase + 50));
                             }
                         }
+                    }
+                }
+                if (this.activePowerPhase >= this.activePowerPhaseMax){
+                    if (self.getMainHandItem().getItem() instanceof TieredItem
+                    ){
+                        pl.resetAttackStrengthTicker();
                     }
                 }
             }
@@ -3506,6 +3524,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     @Override
     public void onStandSwitchInto(){
+        super.onStandSwitchInto();
         if (!(this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative()))) {
             if (this.getSelf() instanceof Player) {
                 if (!isClient()) {
@@ -3516,7 +3535,6 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
             this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
         }
-        super.onStandSwitchInto();
     }
 
     public boolean isInRain() {
@@ -3568,6 +3586,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 "instruction.roundabout.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.self_burn",
                 "instruction.roundabout.press_skill_block", StandIcons.SELF_BURN,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.RED_MINING,0,level,bypas));
         return $$1;
     }
     //Level 7 = Firestorm

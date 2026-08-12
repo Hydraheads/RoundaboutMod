@@ -1,14 +1,21 @@
 package net.hydra.jojomod.entity.projectile;
 
+import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.block.BloodyStoneMaskBlock;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.StandFireBlock;
+import net.hydra.jojomod.block.StoneMaskBlock;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -20,6 +27,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -29,15 +37,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
@@ -69,31 +73,56 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         this.getEntityData().define(SPLATTER_TYPE, (byte)0);
     }
 
+    //0 = default, healing vampire blood
+    //1 = king crimson splash, damaging and blinding
+
+    public byte getSplatterType(){
+        return this.getEntityData().get(SPLATTER_TYPE);
+    }
+    public void setSplatterType(byte type){
+        this.getEntityData().set(SPLATTER_TYPE,type);
+    }
+
     public boolean isBundle = false;
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         super.onHitBlock($$0);
         if (!this.level().isClientSide) {
-
+            if (isRemoved())
+                return;
+            if (getSplatterType() != 2) {
                 ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
                         15, 0.4, 0.4, 0.25, 0.4);
                 SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
                 this.playSound($$6, 1F, 1.5F);
+
+                if (getOwner() != null){
+                    BlockState state = this.level().getBlockState($$0.getBlockPos());
+                    if (state.getBlock() instanceof StoneMaskBlock &&
+                            !(state.getBlock() instanceof BloodyStoneMaskBlock) &&
+                            MainUtil.getIsGamemodeApproriateForGrief(getOwner())){
+                        this.level().setBlockAndUpdate($$0.getBlockPos(), ModBlocks.BLOODY_STONE_MASK_BLOCK.
+                                defaultBlockState().
+                                setValue(StoneMaskBlock.FACING,state.getValue(StoneMaskBlock.FACING)).
+                                setValue(StoneMaskBlock.WATERLOGGED,state.getValue(StoneMaskBlock.WATERLOGGED))
+                        );
+                    }
+                }
+            }
             this.discard();
         }
     }
 
     @Override
     public void tick(){
-        if (this.isOnFire() && !this.level().isClientSide){
-            ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
-                    40, 0.0, 0.2, 0.0, 0.2);
-            ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
-                    1, 0.5, 0.5, 0.5, 0.2);
-            MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier()*14);
-            this.discard();
-            return;
+        if (!this.level().isClientSide){
+            if (getSplatterType() == 2){
+                if (!(getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc && pkc.isErasingTime())){
+                    discard();
+                }
+            }
         }
         super.tick();
     }
@@ -101,22 +130,70 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide) {
-            if ($$0.getEntity() != null && ownedBy($$0.getEntity()))
+            if (isRemoved() || $$0.getEntity() == null)
                 return;
-            if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
-                gwe.setBled(true);
-            }
-            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
-                    15, 0.4, 0.4, 0.25, 0.4);
-            SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
-            this.playSound($$6, 1F, 1.5F);
-            if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
-            LE instanceof Player pl || LE instanceof BaseMinion bm)) {
-                LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
-                if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
-                || (LE instanceof Player pl && FateTypes.isHuman(pl))){
-                    LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+            if (ownedBy($$0.getEntity()))
+                return;
+
+            if (getSplatterType() == 0){
+                if ($$0.getEntity() instanceof EnderMan em) {
+                    ((IEnderMan) em).roundabout$teleport();
+                    return;
                 }
+                if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
+                    gwe.setBled(true);
+                }
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                        15, 0.4, 0.4, 0.25, 0.4);
+                SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
+                this.playSound($$6, 1F, 1.5F);
+                if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
+                        LE instanceof Player pl || LE instanceof BaseMinion bm)) {
+                    LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
+                    if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
+                            || (LE instanceof Player pl && FateTypes.isHuman(pl))){
+                        LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
+                    }
+                }
+            } else if (getSplatterType() == 1) {
+                if ($$0.getEntity() instanceof EnderMan em) {
+                    ((IEnderMan) em).roundabout$teleport();
+                    return;
+                }
+                if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
+                    gwe.setBled(true);
+                }
+                ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.BLOOD_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
+                        15, 0.4, 0.4, 0.25, 0.4);
+                SoundEvent $$6 = ModSounds.BLOOD_SLICE_EVENT;
+                this.playSound($$6, 1F, 1F);
+                float damage = 1;
+                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                instanceof PowersKingCrimson pkc){
+                    damage = pkc.getBloodSplashStrength($$0.getEntity());
+                    pkc.addEXP(4);
+                }
+                if (DamageHandler.StandDamageEntity($$0.getEntity(),damage, getOwner())){
+                    if ($$0.getEntity() instanceof LivingEntity LE) {
+                        LE.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 1, false,false), getOwner());
+                    }
+                }
+            } else if (getSplatterType() == 2) {
+                if ($$0.getEntity() instanceof KingCrimsonCloneEntity){
+                    return;
+                }
+                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                        instanceof PowersKingCrimson pkc && $$0.getEntity() instanceof LivingEntity jle){
+                    pkc.bloodSplatterHits.add(jle);
+                    if (getOwner() instanceof ServerPlayer sp){
+                        pkc.addEXP(10);
+                        S2CPacketUtil.sendPlaySoundPacket(sp, sp.getId(), PowersKingCrimson.DING_NOISE);
+                    }
+                }
+            }
+
+            if (getSplatterType() != 2) {
+                MainUtil.activateStoneMask($$0.getEntity());
             }
             this.discard();
         }
@@ -127,6 +204,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         super.addAdditionalSaveData($$0);
 
         $$0.putInt("healthAmt", healthAmt);
+        $$0.putByte("bloodType", getSplatterType());
     }
 
     @Override
@@ -134,6 +212,9 @@ public class BloodSplatterEntity extends ThrowableProjectile {
         super.readAdditionalSaveData($$0);
 
         healthAmt = $$0.getInt("healthAmt");
+        if ($$0.contains("bloodType")) {
+            setSplatterType($$0.getByte("bloodType"));
+        }
     }
 
 
@@ -169,6 +250,9 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     }
     @Override
     protected float getGravity() {
+        if (getSplatterType() == 1){
+            return 0.04F;
+        }
         return 0.06F;
     }
 }

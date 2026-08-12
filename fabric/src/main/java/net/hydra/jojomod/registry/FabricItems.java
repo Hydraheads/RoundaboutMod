@@ -15,6 +15,10 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
+import net.hydra.jojomod.item.CommandDiscItem;
+import net.hydra.jojomod.item.HearingDiscItem;
+import net.hydra.jojomod.item.MemoryDiscItem;
+import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -44,6 +48,10 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersMagiciansRed(null)));
     public static Item MAX_STAND_DISC_THE_WORLD = registerItem("max_the_world_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersTheWorld(null)));
+    public static Item STAND_DISC_D4C = registerItem("d4c_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
+    public static Item MAX_STAND_DISC_D4C = registerItem("max_d4c_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
 
     public static Item STAND_DISC_JUSTICE = registerItem("justice_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersJustice(null)));
@@ -65,10 +73,50 @@ public class FabricItems {
     public static Item MAX_STAND_DISC_RATT = registerItem("max_ratt_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersRatt(null)));
 
+    public static Item STAND_DISC_PURPLE_HAZE = registerItem("purple_haze_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null)));
+    public static Item MAX_STAND_DISC_PURPLE_HAZE = registerItem("max_purple_haze_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersPurpleHaze(null)));
+
     public static Item STAND_DISC_KING_CRIMSON = registerItem("king_crimson_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
     public static Item MAX_STAND_DISC_KING_CRIMSON = registerItem("max_king_crimson_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKingCrimson(null)));
+
+    public static final Item STAND_DISC_WHITESNAKE = registerItem("whitesnake_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
+    public static final Item MAX_STAND_DISC_WHITESNAKE = registerItem("max_whitesnake_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersWhitesnake(null)));
+    public static final Item SIGHT_DISC = registerItem("sight_disc",
+            new SightDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item MEMORY_DISC = registerItem("memory_disc",
+            new MemoryDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item HEARING_DISC = registerItem("hearing_disc",
+            new HearingDiscItem(new Item.Properties().stacksTo(1)));
+    public static final Item JUMP_BACK_COMMAND_DISC = registerItem("jump_back_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.JUMP_BACK));
+    public static final Item ATTACK_COMMAND_DISC = registerItem("attack_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.ATTACK));
+    public static final Item FORGET_COMMAND_DISC = registerItem("forget_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
+    public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
+            new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
+    public static final Item HALLUCINATORY_ACID_GLOB = registerItem("hallucinatory_acid_glob",
+            new Item(new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 2, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_3 = registerItem("hallucinatory_acid_height_3",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 3, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_HEIGHT_4 = registerItem("hallucinatory_acid_height_4",
+            new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 4, new Item.Properties()));
+    public static final Item HALLUCINATORY_ACID_WALL = registerItem("hallucinatory_acid_wall",
+            new BlockItem(FabricBlocks.HALLUCINATORY_ACID_WALL, new Item.Properties()));
+    public static final Item PUCCI_MASK = registerItem("pucci_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new PucciVisage(null)));
+    public static final Item PUCCI_MANGA_MASK = registerItem("pucci_manga_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new PucciMangaVisage(null)));
 
 
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
@@ -151,6 +199,13 @@ public class FabricItems {
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
     public static Item MAX_STAND_DISC_CREAM = registerItem("max_cream_disc",
             new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))); */
+
+    public static Item STAND_DISC_SILVER_CHARIOT = registerItem("silver_chariot_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null))
+    );
+    public static Item MAX_STAND_DISC_SILVER_CHARIOT = registerItem("max_silver_chariot_disc",
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersSilverChariot(null))
+    );
 
     public static Item LUCK_UPGRADE = registerItem("luck_upgrade",
         new SmithingTemplateItem(SmithingTemplates.LUCK_UPGRADE_APPLIES_TO, SmithingTemplates.LUCK_UPGRADE_INGREDIENTS, SmithingTemplates.LUCK_UPGRADE, SmithingTemplates.LUCK_UPGRADE_BASE_SLOT_DESCRIPTION, SmithingTemplates.LUCK_UPGRADE_ADDITIONS_SLOT_DESCRIPTION, SmithingTemplates.createLuckUpgradeIconList(), SmithingTemplates.createLuckMatIconList())
@@ -256,16 +311,28 @@ public class FabricItems {
     public static Item SPEEDWAGON_FOUNDATION_MASK = registerItem("speedwagon_foundation_mask", new MaskItem(new Item.Properties().stacksTo(1), new SpeedwagonFoundationVisage(null)));
     public static Item STRAIZO_VAMPIRE_MASK = registerItem("straizo_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new StraizoVampireVisage(null)));
     public static Item JOTARO_MASK = registerItem("jotaro_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroVisage(null)));
+    public static Item DIAVOLO_MASK = registerItem("diavolo_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiavoloVisage(null)));
+    public static Item DOPPIO_MASK = registerItem("doppio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DoppioVisage(null)));
+    public static Item BOSS_MASK = registerItem("boss_mask", new MaskItem(new Item.Properties().stacksTo(1), new BossVisage(null)));
     public static Item JOTARO_4_MASK = registerItem("jotaro_4_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroFourVisage(null)));
     public static Item JOTARO_6_MASK = registerItem("jotaro_6_mask", new MaskItem(new Item.Properties().stacksTo(1), new JotaroSixVisage(null)));
     public static Item JOHNGALLIA_MASK = registerItem("johngallia_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohngalliaVisage(null)));
+    public static Item DOT_HAN_MASK = registerItem("dot_han_mask", new MaskItem(new Item.Properties().stacksTo(1), new DotHanVisage(null)));
+    public static Item AVDUL_MASK = registerItem("avdul_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdulVisage(null)));
     public static Item DIO_MASK = registerItem("dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new DIOVisage(null)));
+    public static Item GYRO_MASK = registerItem("gyro_mask", new MaskItem(new Item.Properties().stacksTo(1), new GyroVisage(null)));
+    public static Item SANDMAN_MASK = registerItem("sandman_mask", new MaskItem(new Item.Properties().stacksTo(1), new SandmanVisage(null)));
+    public static Item TIM_MASK = registerItem("tim_mask", new MaskItem(new Item.Properties().stacksTo(1), new TimVisage(null)));
+    public static Item SHADOW_DIO_MASK = registerItem("shadow_dio_mask", new MaskItem(new Item.Properties().stacksTo(1), new ShadowDIOVisage(null)));
     public static Item DIO_VAMPIRE_MASK = registerItem("dio_vampire_mask", new MaskItem(new Item.Properties().stacksTo(1), new DioVampireVisage(null)));
     public static Item AVDOL_MASK = registerItem("avdol_mask", new MaskItem(new Item.Properties().stacksTo(1), new AvdolVisage(null)));
     public static Item KAKYOIN_MASK = registerItem("kakyoin_mask", new MaskItem(new Item.Properties().stacksTo(1), new KakyoinVisage(null)));
     public static Item DIEGO_MASK = registerItem("diego_mask", new MaskItem(new Item.Properties().stacksTo(1), new DiegoVisage(null)));
+    public static Item DIEGO_2_MASK = registerItem("diego_2_mask", new MaskItem(new Item.Properties().stacksTo(1), new Diego2Visage(null)));
     public static Item VALENTINE_MASK = registerItem("valentine_mask", new MaskItem(new Item.Properties().stacksTo(1), new ValentineVisage(null)));
     public static Item LUCY_MASK = registerItem("lucy_mask", new MaskItem(new Item.Properties().stacksTo(1), new LucyVisage(null)));
+    public static Item STEVEN_MASK = registerItem("steven_mask", new MaskItem(new Item.Properties().stacksTo(1), new StevenVisage(null)));
+    public static Item SHERIFF_MASK = registerItem("sheriff_mask", new MaskItem(new Item.Properties().stacksTo(1), new SheriffVisage(null)));
     public static Item JOHNNY_MASK = registerItem("johnny_mask", new MaskItem(new Item.Properties().stacksTo(1), new JohnnyVisage(null)));
     public static Item MISTA_MASK = registerItem("mista_mask", new MaskItem(new Item.Properties().stacksTo(1), new MistaVisage(null)));
     public static Item GHIACCIO_MASK = registerItem("ghiaccio_mask", new MaskItem(new Item.Properties().stacksTo(1), new GhiaccioVisage(null)));
@@ -441,22 +508,34 @@ public class FabricItems {
                         entries.accept(AVDOL_MASK);
                         entries.accept(KAKYOIN_MASK);
                         entries.accept(SPEEDWAGON_FOUNDATION_MASK);
+                        entries.accept(SHADOW_DIO_MASK);
                         entries.accept(DIO_MASK);
                         entries.accept(ENYA_MASK);
                         entries.accept(CHAKA_MASK);
                         entries.accept(JOTARO_4_MASK);
                         entries.accept(AYA_MASK);
                         entries.accept(MISTA_MASK);
+                        entries.accept(BOSS_MASK);
+                        entries.accept(DIAVOLO_MASK);
+                        entries.accept(DOPPIO_MASK);
                         entries.accept(GHIACCIO_MASK);
                         entries.accept(JOTARO_6_MASK);
                         entries.accept(JOHNGALLIA_MASK);
                         entries.accept(GUCCIO_MASK);
                         entries.accept(JOHNNY_MASK);
+                        entries.accept(GYRO_MASK);
                         entries.accept(LUCY_MASK);
+                        entries.accept(STEVEN_MASK);
                         entries.accept(DIEGO_MASK);
+                        entries.accept(DIEGO_2_MASK);
+                        entries.accept(SANDMAN_MASK);
                         entries.accept(POCOLOCO_MASK);
+                        entries.accept(TIM_MASK);
+                        entries.accept(SHERIFF_MASK);
                         entries.accept(RINGO_MASK);
                         entries.accept(VALENTINE_MASK);
+                        entries.accept(DOT_HAN_MASK);
+                        entries.accept(AVDUL_MASK);
                         entries.accept(JOSUKE_PART_EIGHT_MASK);
                         entries.accept(DAIYA_MASK);
                         entries.accept(DAIYA_2_MASK);
@@ -488,6 +567,9 @@ public class FabricItems {
                         entries.accept(MEMORY_QUEEN_WHITE);
                         entries.accept(MEMORY_KING_WHITE);
                         entries.accept(EXP_BISHOP);
+
+                        entries.accept(STRAY_CAT_ANIME);
+                        entries.accept(STRAY_CAT_MANGA);
 
                     }).build());
 
@@ -611,20 +693,22 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_STAR_PLATINUM);
                         entries.accept(STAND_DISC_THE_WORLD);
                         entries.accept(MAX_STAND_DISC_THE_WORLD);
-                        entries.accept(STAND_DISC_JUSTICE);
-                        entries.accept(MAX_STAND_DISC_JUSTICE);
                         entries.accept(STAND_DISC_MAGICIANS_RED);
                         entries.accept(MAX_STAND_DISC_MAGICIANS_RED);
+                        entries.accept(STAND_DISC_JUSTICE);
+                        entries.accept(MAX_STAND_DISC_JUSTICE);
+                        entries.accept(STAND_DISC_ANUBIS);
+                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_RATT);
                         entries.accept(MAX_STAND_DISC_RATT);
                         entries.accept(STAND_DISC_WHITE_ALBUM);
                         entries.accept(MAX_STAND_DISC_WHITE_ALBUM);
+                        entries.accept(STAND_DISC_KING_CRIMSON);
+                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
                         entries.accept(STAND_DISC_SOFT_AND_WET);
                         entries.accept(MAX_STAND_DISC_SOFT_AND_WET);
                         entries.accept(STAND_DISC_WALKING_HEART);
                         entries.accept(MAX_STAND_DISC_WALKING_HEART);
-                        entries.accept(STAND_DISC_ANUBIS);
-                        entries.accept(MAX_STAND_DISC_ANUBIS);
                         entries.accept(STAND_DISC_CINDERELLA);
                         entries.accept(STAND_DISC_ACHTUNG);
                         entries.accept(STAND_DISC_MANHATTAN_TRANSFER);
@@ -641,11 +725,8 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
-                        entries.accept(STRAY_CAT_ANIME);
-                        entries.accept(STRAY_CAT_MANGA);
-                        //entries.accept(STRAY_CAT_ITEM);
-                        entries.accept(STAND_DISC_KING_CRIMSON);
-                        entries.accept(MAX_STAND_DISC_KING_CRIMSON);
+                        entries.accept(STAND_DISC_D4C);
+                        entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GREEN_DAY);
                         entries.accept(MAX_STAND_DISC_GREEN_DAY);
                         entries.accept(STAND_DISC_20_CENTURY_BOY);
@@ -653,6 +734,8 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_TUSK);
                         entries.accept(STAND_DISC_METALLICA);
                         entries.accept(MAX_STAND_DISC_METALLICA);
+                        entries.accept(STAND_DISC_PURPLE_HAZE);
+                        entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
                         entries.accept(STAND_DISC_EMPEROR);
@@ -665,6 +748,25 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
 
+                        entries.accept(STAND_DISC_SILVER_CHARIOT);
+                        entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
+                        entries.accept(STAND_DISC_WHITESNAKE);
+                        entries.accept(MAX_STAND_DISC_WHITESNAKE);
+                        entries.accept(SIGHT_DISC);
+                        entries.accept(MEMORY_DISC);
+                        entries.accept(HEARING_DISC);
+                        entries.accept(JUMP_BACK_COMMAND_DISC);
+                        entries.accept(ATTACK_COMMAND_DISC);
+                        entries.accept(FORGET_COMMAND_DISC);
+                        entries.accept(EXPLOSIVE_COMMAND_DISC);
+                        entries.accept(PUCCI_MASK);
+                        entries.accept(PUCCI_MANGA_MASK);
+                        entries.accept(HALLUCINATORY_ACID_GLOB);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_1);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_2);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_3);
+                        entries.accept(HALLUCINATORY_ACID_HEIGHT_4);
+                        entries.accept(HALLUCINATORY_ACID_WALL);
 
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
@@ -695,6 +797,9 @@ public class FabricItems {
         ModItems.STAND_DISC_THE_WORLD = STAND_DISC_THE_WORLD;
         ((MaxStandDiscItem)MAX_STAND_DISC_THE_WORLD).baseDisc = ((StandDiscItem)STAND_DISC_THE_WORLD);
         ModItems.MAX_STAND_DISC_THE_WORLD = MAX_STAND_DISC_THE_WORLD;
+        ModItems.STAND_DISC_D4C = STAND_DISC_D4C;
+        ((MaxStandDiscItem)MAX_STAND_DISC_D4C).baseDisc = ((StandDiscItem)STAND_DISC_D4C);
+        ModItems.MAX_STAND_DISC_D4C = MAX_STAND_DISC_D4C;
         ModItems.STAND_DISC_MAGICIANS_RED = STAND_DISC_MAGICIANS_RED;
         ((MaxStandDiscItem)MAX_STAND_DISC_MAGICIANS_RED).baseDisc = ((StandDiscItem)STAND_DISC_MAGICIANS_RED);
         ModItems.MAX_STAND_DISC_MAGICIANS_RED = MAX_STAND_DISC_MAGICIANS_RED;
@@ -708,9 +813,30 @@ public class FabricItems {
         ModItems.STAND_DISC_GREEN_DAY = STAND_DISC_GREEN_DAY;
         ((MaxStandDiscItem)MAX_STAND_DISC_GREEN_DAY).baseDisc = ((StandDiscItem)STAND_DISC_GREEN_DAY);
         ModItems.MAX_STAND_DISC_RATT = MAX_STAND_DISC_RATT;
+        ModItems.MAX_STAND_DISC_PURPLE_HAZE = MAX_STAND_DISC_PURPLE_HAZE;
+        ModItems.STAND_DISC_PURPLE_HAZE = STAND_DISC_PURPLE_HAZE;
+        ((MaxStandDiscItem)MAX_STAND_DISC_PURPLE_HAZE).baseDisc = ((StandDiscItem)STAND_DISC_PURPLE_HAZE);
         ModItems.STAND_DISC_KING_CRIMSON = STAND_DISC_KING_CRIMSON;
         ((MaxStandDiscItem)MAX_STAND_DISC_KING_CRIMSON).baseDisc = ((StandDiscItem)STAND_DISC_KING_CRIMSON);
         ModItems.MAX_STAND_DISC_KING_CRIMSON = MAX_STAND_DISC_KING_CRIMSON;
+        ModItems.STAND_DISC_WHITESNAKE = STAND_DISC_WHITESNAKE;
+        ((MaxStandDiscItem) MAX_STAND_DISC_WHITESNAKE).baseDisc = (StandDiscItem) STAND_DISC_WHITESNAKE;
+        ModItems.MAX_STAND_DISC_WHITESNAKE = MAX_STAND_DISC_WHITESNAKE;
+        ModItems.SIGHT_DISC = SIGHT_DISC;
+        ModItems.MEMORY_DISC = MEMORY_DISC;
+        ModItems.HEARING_DISC = HEARING_DISC;
+        ModItems.JUMP_BACK_COMMAND_DISC = JUMP_BACK_COMMAND_DISC;
+        ModItems.ATTACK_COMMAND_DISC = ATTACK_COMMAND_DISC;
+        ModItems.FORGET_COMMAND_DISC = FORGET_COMMAND_DISC;
+        ModItems.EXPLOSIVE_COMMAND_DISC = EXPLOSIVE_COMMAND_DISC;
+        ModItems.HALLUCINATORY_ACID_GLOB = HALLUCINATORY_ACID_GLOB;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_1 = HALLUCINATORY_ACID_HEIGHT_1;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_2 = HALLUCINATORY_ACID_HEIGHT_2;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_3 = HALLUCINATORY_ACID_HEIGHT_3;
+        ModItems.HALLUCINATORY_ACID_HEIGHT_4 = HALLUCINATORY_ACID_HEIGHT_4;
+        ModItems.HALLUCINATORY_ACID_WALL = HALLUCINATORY_ACID_WALL;
+        ModItems.PUCCI_MASK = PUCCI_MASK;
+        ModItems.PUCCI_MANGA_MASK = PUCCI_MANGA_MASK;
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
@@ -759,6 +885,9 @@ public class FabricItems {
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/
+        ModItems.STAND_DISC_SILVER_CHARIOT = STAND_DISC_SILVER_CHARIOT;
+        ModItems.MAX_STAND_DISC_SILVER_CHARIOT = MAX_STAND_DISC_SILVER_CHARIOT;
+        ((MaxStandDiscItem)MAX_STAND_DISC_SILVER_CHARIOT).baseDisc = ((StandDiscItem)STAND_DISC_SILVER_CHARIOT);
         ModItems.LUCK_UPGRADE = LUCK_UPGRADE;
         ModItems.EXECUTION_UPGRADE = EXECUTION_UPGRADE;
         ModItems.OCCULT_CHARGE = OCCULT_CHARGE;
@@ -852,21 +981,33 @@ public class FabricItems {
         ModItems.SPEEDWAGON_FOUNDATION_MASK = SPEEDWAGON_FOUNDATION_MASK;
         ModItems.STRAIZO_VAMPIRE_MASK = STRAIZO_VAMPIRE_MASK;
         ModItems.JOTARO_MASK = JOTARO_MASK;
+        ModItems.DIAVOLO_MASK = DIAVOLO_MASK;
+        ModItems.DOPPIO_MASK = DOPPIO_MASK;
+        ModItems.BOSS_MASK = BOSS_MASK;
         ModItems.JOTARO_4_MASK = JOTARO_4_MASK;
         ModItems.JOTARO_6_MASK = JOTARO_6_MASK;
         ModItems.DIO_MASK = DIO_MASK;
+        ModItems.GYRO_MASK = GYRO_MASK;
+        ModItems.SANDMAN_MASK = SANDMAN_MASK;
+        ModItems.TIM_MASK = TIM_MASK;
+        ModItems.SHADOW_DIO_MASK = SHADOW_DIO_MASK;
         ModItems.DIO_VAMPIRE_MASK = DIO_VAMPIRE_MASK;
         ModItems.AVDOL_MASK = AVDOL_MASK;
         ModItems.KAKYOIN_MASK = KAKYOIN_MASK;
         ModItems.DIEGO_MASK = DIEGO_MASK;
+        ModItems.DIEGO_2_MASK = DIEGO_2_MASK;
         ModItems.POCOLOCO_MASK = POCOLOCO_MASK;
         ModItems.RINGO_MASK = RINGO_MASK;
         ModItems.VALENTINE_MASK = VALENTINE_MASK;
         ModItems.LUCY_MASK = LUCY_MASK;
+        ModItems.STEVEN_MASK = STEVEN_MASK;
+        ModItems.SHERIFF_MASK = SHERIFF_MASK;
         ModItems.MISTA_MASK = MISTA_MASK;
         ModItems.GHIACCIO_MASK = GHIACCIO_MASK;
         ModItems.JOHNNY_MASK = JOHNNY_MASK;
         ModItems.JOHNGALLIA_MASK = JOHNGALLIA_MASK;
+        ModItems.DOT_HAN_MASK = DOT_HAN_MASK;
+        ModItems.AVDUL_MASK = AVDUL_MASK;
         ModItems.JOSUKE_PART_EIGHT_MASK = JOSUKE_PART_EIGHT_MASK;
         ModItems.GUCCIO_MASK = GUCCIO_MASK;
         ModItems.HATO_MASK = HATO_MASK;

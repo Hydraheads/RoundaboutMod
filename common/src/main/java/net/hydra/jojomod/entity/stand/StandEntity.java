@@ -1,7 +1,10 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.NoVibrationEntity;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.IronBallEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -40,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.UUID;
 
@@ -134,6 +138,20 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.setFollowing(StandSet);
     }
 
+    @Override
+    public boolean isIgnoringBlockTriggers() {
+        return true;
+    }
+
+    @Override
+    public boolean isInvisible() {
+        if (PowerTypes.isExistentiallyElsewhere(getUser())) {
+            if (!(this.level().isClientSide() && ClientUtil.isPlayer(getUser()))) {
+                return true;
+            }
+        }
+        return super.isInvisible();
+    }
     public void setFollowing(LivingEntity StandSet){
     }
 
@@ -185,12 +203,11 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public final AnimationState brokenBlockAnimationState = new AnimationState();
     public final AnimationState standLeapAnimationState = new AnimationState();
     public final AnimationState standLeapEndAnimationState = new AnimationState();
-    public final AnimationState armlessAnimation = new AnimationState();
-    public final AnimationState armlessAnimationIdle = new AnimationState();
 
+    public boolean turned = false;
     /**Override this to define animations. Above are animation states defined.*/
     public void setupAnimationStates() {
-        if (this.getUser() != null) {
+        tryHardTimeEraseRendering();
             byte idle = getIdleAnimation();
             byte animation = getAnimation();
             if (animation == IDLE && idle == 1) {
@@ -198,7 +215,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
             } else {
                 this.idleAnimationState2.stop();
             }
-            if (animation == IDLE && idle == 0) {
+            if (animation == IDLE && (idle == 0 || idle == 4)) {
                 this.idleAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState.stop();
@@ -212,18 +229,6 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.idleAnimationState4.startIfStopped(this.tickCount);
             } else {
                 this.idleAnimationState4.stop();
-            }
-            if (idle == 4) {
-                if (animation == IDLE){
-                    this.armlessAnimationIdle.startIfStopped(this.tickCount);
-                    this.armlessAnimation.stop();
-                } else {
-                    this.armlessAnimation.startIfStopped(this.tickCount);
-                    this.armlessAnimationIdle.stop();
-                }
-            } else {
-                this.armlessAnimationIdle.stop();
-                this.armlessAnimation.stop();
             }
 
             if (animation == FIRST_PUNCH)
@@ -285,8 +290,10 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                 this.standLeapEndAnimationState.startIfStopped(this.tickCount);
             else
                 this.standLeapEndAnimationState.stop();
-        }
+
     }
+
+    public boolean firstRenderFrame = true;
 
     public boolean forceVisible = false;
 
@@ -641,6 +648,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     }
 
     @Override
+    protected void pushEntities() {
+    }
+    @Override
     public void doPush(Entity $$0) {
     }
 
@@ -771,12 +781,12 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     ME.setHeldItemManhattan(ItemStack.EMPTY);
                 }
             }
-        }
-        if (currFade < 0) {
-            if (!this.getPassengers().isEmpty()){
-                this.ejectPassengers();
+            if (currFade < 0) {
+                if (!this.getPassengers().isEmpty()){
+                    this.ejectPassengers();
+                }
+                this.discard();
             }
-            this.discard();
         }
     }
 
@@ -791,6 +801,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     @javax.annotation.Nullable
     public Entity changeDimension(ServerLevel $$0) {
         if (this.level() instanceof ServerLevel && !this.isRemoved()) {
+
+            ejectPassengers();
             if (!this.getHeldItem().isEmpty()) {
                 if (this.canAcquireHeldItem) {
                     double $$3 = this.getEyeY() - 0.3F;
@@ -799,9 +811,13 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     $$4.setThrower(this.getUUID());
                     this.level().addFreshEntity($$4);
                     this.setHeldItem(ItemStack.EMPTY);
+                    discard();
+                    return null;
                 }
-            }
-            else if(this instanceof ManhattanTransferEntity ME){
+            } else if (this instanceof FollowingStandEntity){
+                discard();
+                return null;
+            } else if(this instanceof ManhattanTransferEntity ME){
                 if(!ME.getHeldItemManhattan().isEmpty()){
                     if (this.canAcquireHeldItem) {
                         double $$3 = this.getEyeY() - 0.3F;
@@ -1002,4 +1018,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         }
     }
 
+    //For people with nasa space shuttle eyes complaining about perfect rotations on stands on time erase
+    public void tryHardTimeEraseRendering(){
+
+    }
 }

@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +14,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EnderpearlItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -23,10 +25,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class StrayCatItem extends Item {
     public final byte breed;
+
     public StrayCatItem(Properties $$0) {
         super($$0);
         this.breed = 0;
     }
+
     public StrayCatItem(Properties $$0, byte variant) {
         super($$0);
         this.breed = variant;
@@ -34,17 +38,17 @@ public class StrayCatItem extends Item {
 
     public static final String OWNER_UUID_TAG = "owner";
     public static final String SKIN_TAG = "skin";
+    public static final String HEALTH_TAG = "health";
 
     private static final float SPEED = 0.4f;
     public byte getBubbleSkin() {
-        if (breed == 1) {
-            return 1;
-        }
+        if (breed == 1) { return 1; }
 
         return 0;
     }
 
-    private static final int COOLDOWN = 13;
+    private static final int COOLDOWN = 30;
+    private static final int LIFE_SPAN = 180;
 
     static public void saveStrayCatEntityInfo(ItemStack stack, StrayCatEntity stray) {
         CompoundTag tag = stack.getOrCreateTag();
@@ -54,6 +58,7 @@ public class StrayCatItem extends Item {
             tag.putUUID(OWNER_UUID_TAG, stray.getOwnerUUID());
             tag.putByte(SKIN_TAG, stray.getBreed());
         }
+        tag.putFloat(HEALTH_TAG, stray.getHealth());
 
         if (stray.hasCustomName()) {
             stack.setHoverName(stray.getCustomName());
@@ -65,29 +70,31 @@ public class StrayCatItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level level, LivingEntity livingEntity) {
         if (livingEntity instanceof Player P) {
+            if (!((TimeStop) P.level()).inTimeStopRange(P)) {
 
-            if (!level.isClientSide && !isSleeping(level)) {
-                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA,COOLDOWN);
-                P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME,COOLDOWN);
+                if (!level.isClientSide && !isSleeping(level, livingEntity)) {
+                    P.getCooldowns().addCooldown(ModItems.STRAY_CAT_MANGA, COOLDOWN);
+                    P.getCooldowns().addCooldown(ModItems.STRAY_CAT_ANIME, COOLDOWN);
 
-                StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
-                if (bubble != null) {
-                    bubble.setSped(SPEED);
-                    bubble.setOwner(P);
-                    bubble.setSkin(this.getBubbleSkin());
-                    bubble.setFollowOwnerView(true);
+                    StrayCatAirBubble bubble = ModEntities.STRAY_CAT_AIRBUBBLE.create(level);
+                    if (bubble != null) {
+                        bubble.setSped(SPEED);
+                        bubble.setOwner(P);
+                        bubble.setSkin(this.getBubbleSkin());
+                        bubble.setFollowOwnerView(true);
+                        bubble.setLifeSpan(LIFE_SPAN);
 
-                    Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
-                    Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
-                    if (direction != Direction.DOWN) {
-                        addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+                        Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
+                        Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
+                        if (direction != Direction.DOWN) {
+                            addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
+                        }
+                        Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
+                        bubble.setPos(pos.x(), pos.y(), pos.z());
+                        bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
+
+                        level.addFreshEntity(bubble);
                     }
-                    Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
-                    bubble.setPos(pos.x(), pos.y(), pos.z());
-                    bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
-                    //bubble.shootFromRotation(P, P.getXRot(), P.getYRot(), -0.5F, SPEED, 0.00f);
-
-                    level.addFreshEntity(bubble);
                 }
             }
         }
@@ -97,8 +104,14 @@ public class StrayCatItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
         ItemStack $$3 = $$1.getItemInHand($$2);
-        $$1.startUsingItem($$2);
-        return InteractionResultHolder.fail($$3);
+        if ($$1 != null){
+            if (!((TimeStop) $$1.level()).inTimeStopRange($$1) && !isSleeping($$0, $$1)) {
+                $$1.startUsingItem($$2);
+            } else {
+                return InteractionResultHolder.fail($$3);
+            }
+        }
+        return InteractionResultHolder.sidedSuccess($$3,$$0.isClientSide());
     }
 
     @Override
@@ -111,9 +124,9 @@ public class StrayCatItem extends Item {
 
         BlockPos abovePos = blockPos.above();
         BlockState aboveState = level.getBlockState(abovePos);
-        if (!aboveState.isAir() || !player.isCrouching()) return InteractionResult.FAIL;
+        if (!aboveState.isAir() || !player.isCrouching()) return InteractionResult.PASS;
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide && aboveState.isAir() && player.isCrouching()) {
             Vec3 spawnPos = Vec3.atCenterOf(abovePos);
 
             StrayCatEntity stray = ModEntities.STRAY_CAT.create(level);
@@ -123,6 +136,9 @@ public class StrayCatItem extends Item {
                 if (tag.contains(OWNER_UUID_TAG)) {
                     stray.setOwnerUUID(tag.getUUID(OWNER_UUID_TAG));
                     stray.setTame(true);
+                }
+                if (tag.contains(HEALTH_TAG)) {
+                    stray.setHealth(tag.getFloat(HEALTH_TAG));
                 }
                 stray.setBreed(breed);
                 if (item.hasCustomHoverName()) {
@@ -142,35 +158,30 @@ public class StrayCatItem extends Item {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    static boolean isSleeping(Level level) {
+    static boolean isSleeping(Level level, LivingEntity user) {
         long dayTime = level.getDayTime() % 24000;
+        boolean canSeeSun = true;
+        if (user != null) {
+            canSeeSun = level.canSeeSky(user.blockPosition());
+        }
 
-        return dayTime >= 13000 && dayTime <= 23750;
+        return dayTime >= 13000 && dayTime <= 23750 || !canSeeSun;
     }
 
 
-    public float getCurrentPredicateValue(Level level, ItemStack stack) {
+    public float getCurrentPredicateValue(Level level, ItemStack stack, LivingEntity user) {
         CompoundTag tag = stack.getOrCreateTag();
         float value = 0.0f;
 
         if (level != null) {
-            if (isSleeping(level)) {
+            if (isSleeping(level, user)) {
                 value += 0.1f;
             }
         }
 
         return value;
     }
-    /*
-    public ItemStack getDefaultInstance() {
-        ItemStack stack = new ItemStack(this);
-        CompoundTag tag = stack.getOrCreateTag();
-        //tag.putByte(SKIN_TAG, breed);
-        stack.setTag(tag);
 
-        return stack;
-    }
-    */
     @Override public int getUseDuration(ItemStack $$0) {
         return 1;
     }

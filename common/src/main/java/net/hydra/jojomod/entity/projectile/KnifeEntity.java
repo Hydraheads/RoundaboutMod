@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -191,8 +192,8 @@ public class KnifeEntity extends AbstractArrow {
         }
         float $$2;
 
-        if ($$1 instanceof Player) {
-            $$2 = (float) (2.29F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+        if ($$1 instanceof Player || $$1 instanceof CloneEntity) {
+            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
 
             if(isHattanKnife){
                 this.doBonusKnifeDamageHattan($$1);
@@ -244,7 +245,6 @@ public class KnifeEntity extends AbstractArrow {
     }
 
     protected void doBonusKnifeDamageHattan(Entity hitent){
-        Roundabout.LOGGER.info("aaaaaa");
         Entity entityShooter = this.getOwner();
         DamageSource source = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entityShooter);
         Float amount = (float) 0.75;

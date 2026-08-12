@@ -12,18 +12,22 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -32,9 +36,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NewPunchingStand extends NewDashPreset {
     public NewPunchingStand(LivingEntity self) {
@@ -239,13 +247,17 @@ public class NewPunchingStand extends NewDashPreset {
     }
 
     public int getMeltLevel(){
+        int mult = 0;
         if (self.hasEffect(ModEffects.STAND_MELTING)) {
             MobEffectInstance melt = self.getEffect(ModEffects.STAND_MELTING);
             if (melt != null) {
-                return melt.getAmplifier() + 1;
+                mult = melt.getAmplifier() + 1;
             }
         }
-        return 0;
+        if (HeatUtil.isArmsFrozen(self)){
+            mult+=2;
+        }
+        return mult;
     }
 
     @Override
@@ -352,17 +364,17 @@ public class NewPunchingStand extends NewDashPreset {
             }
 
             if (entity != null) {
-                SE = ModSounds.PUNCH_4_SOUND_EVENT;
-                pitch = 1.2F;
+                SE = getPunchLandLastSound();
+                pitch = getPunchLandLastPitch();
             } else {
                 SE = ModSounds.PUNCH_2_SOUND_EVENT;
             }
         } else {
             if (entity != null) {
-                SE = ModSounds.PUNCH_3_SOUND_EVENT;
-                pitch = 1.1F + 0.07F * activePowerPhase;
+                SE = getPunchLandSound();
+                pitch = getPunchLandPitch();
             } else {
-                SE = ModSounds.PUNCH_1_SOUND_EVENT;
+                SE = getPunchMissSound();
             }
         }
 
@@ -388,6 +400,20 @@ public class NewPunchingStand extends NewDashPreset {
         return true;
     }
 
+    public float getPunchLandPitch(){
+        return 1.1F + 0.07F * activePowerPhase;
+    }
+    public float getPunchLandLastPitch(){
+        return 1.2F;
+    }
+
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.PUNCH_3_SOUND_EVENT;
+    }
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.PUNCH_4_SOUND_EVENT;
+    }
+
     @Override
     public List<Byte> getPosList(){
         List<Byte> $$1 = Lists.newArrayList();
@@ -395,7 +421,6 @@ public class NewPunchingStand extends NewDashPreset {
         $$1.add((byte) 1);
         $$1.add((byte) 2);
         $$1.add((byte) 3);
-        $$1.add((byte) 4);
         return $$1;
     }
 
@@ -474,11 +499,16 @@ public class NewPunchingStand extends NewDashPreset {
     public void standPunch(){
         /*By setting this to -10, there is a delay between the stand retracting*/
 
-        if (this.self instanceof Player){
+        if (this.self instanceof Player pl){
             if (isPacketPlayer()){
-                //Roundabout.LOGGER.info("Time: "+this.self.getWorld().getTime()+" ATD: "+this.attackTimeDuring+" APP"+this.activePowerPhase);
                 this.attackTimeDuring = -10;
                 C2SPacketUtil.standPunchPacket(getTargetEntityId(getPunchAngle()), this.activePowerPhase);
+                if (this.activePowerPhase >= this.activePowerPhaseMax){
+                    if (self.getMainHandItem().getItem() instanceof TieredItem
+                    ){
+                        pl.resetAttackStrengthTicker();
+                    }
+                }
             }
         } else {
             /*Caps how far out the punch goes*/
@@ -491,9 +521,116 @@ public class NewPunchingStand extends NewDashPreset {
     public float getPunchAngle(){
         return ClientNetworking.getAppropriateConfig().generalStandSettings.basePunchAngle;
     }
+    public float getImpalePunchStrength(Entity entity){
+        return 0;
+    }
+    public float getImpaleKnockback(){
+        return 1.3F;
+    }
 
+    public static final float impaleRange = 3.5F;
+    public boolean airTriggered = false;
+    public void impaleImpact(Entity entity){
+        if (activePower == PowerIndex.POWER_1_SNEAK){
+            this.setAttackTimeDuring(-20);
+            if (entity != null && entity.distanceTo(self) > impaleRange+0.75F) {
+                entity = null;
+            }
+            if (entity != null) {
+                hitParticlesCenter(entity);
+
+                float pow;
+                float knockbackStrength;
+                pow = getImpalePunchStrength(entity);
+                knockbackStrength = getImpaleKnockback();
+                if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
+                    if (entity instanceof LivingEntity LE) {
+                        addEXP(5, LE);
+                        if (MainUtil.getMobBleed(entity)) {
+                            if (!airTriggered) {
+                                if ((((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity))) {
+                                    MainUtil.makeBleed(entity, 0, 200, this.getSelf());
+                                } else {
+                                    MainUtil.makeBleed(entity, 2, 200, this.getSelf());
+                                }
+                                MainUtil.makeMobBleed(entity);
+                            }
+                        }
+                    }
+                    takeDeterminedKnockback(this.self, entity, knockbackStrength);
+                } else {
+                    knockShield2(entity, 100);
+                }
+            }
+
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            }
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, ClientNetworking.getAppropriateConfig().generalStandSettings.impaleAttackCooldown);
+            SoundEvent SE;
+            float pitch = 1F;
+            if (entity != null) {
+                playImpaleConnectSoundExtra();
+                if (airTriggered){
+                    SE = ModSounds.PUNCH_4_SOUND_EVENT;
+                } else {
+                    SE = getImpaleSound();
+                }
+                pitch = 1.2F;
+            } else {
+                SE = getImpaleMissSound();
+            }
+
+            if (!this.self.level().isClientSide()) {
+                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            }
+        }
+    }
+    public void playImpaleConnectSoundExtra(){
+
+    }
+
+    public SoundEvent getPunchMissSound() {
+        return ModSounds.PUNCH_1_SOUND_EVENT;
+    }
+
+    public SoundEvent getImpaleMissSound() {
+        return ModSounds.PUNCH_2_SOUND_EVENT;
+    }
+
+    public static final byte IMPALE_NOISE = 105;
+    public boolean impale(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+
+            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_1_SNEAK);
+            playSoundsIfNearby(IMPALE_NOISE, 27, false);
+            this.animateStand(StandEntity.IMPALE);
+            this.poseStand(OffsetIndex.GUARD);
+
+            return true;
+        }
+        return false;
+    }
+    public SoundEvent getImpaleSound(){
+        return ModSounds.IMPALE_HIT_EVENT;
+
+    }
+    public int impaleTicks = 0;
+    public int ticksUntilCanImpale = 0;
+    public boolean canImpale(){
+        return ticksUntilCanImpale <= 0;
+    }
     public int meltIFrames = 0;
     public void tickPower(){
+        if (ticksUntilCanImpale > 0){
+            ticksUntilCanImpale--;
+        }
+        if (impaleTicks > 0){
+            impaleTicks--;
+        }
         if (!self.level().isClientSide()){
             if (meltIFrames > 0){
                 meltIFrames--;

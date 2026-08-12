@@ -1,0 +1,8 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "roundabout:block/hallucinatory_acid_wall" } },
+    { "when": { "facing": "east" }, "apply": { "model": "roundabout:block/hallucinatory_acid_wall", "y": 90, "uvlock": true } },
+    { "when": { "facing": "south" }, "apply": { "model": "roundabout:block/hallucinatory_acid_wall", "y": 180, "uvlock": true } },
+    { "when": { "facing": "west" }, "apply": { "model": "roundabout:block/hallucinatory_acid_wall", "y": 270, "uvlock": true } }
+  ]
+}

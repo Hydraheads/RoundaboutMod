@@ -1,6 +1,9 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.event.powers.DreamingEffect;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
+import net.hydra.jojomod.event.powers.OldEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -68,6 +71,27 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> MOLD =
             POTION_EFFECTS.register("mold", () ->
                     new Effect(MobEffectCategory.HARMFUL, 0));
+    public static final RegistryObject<MobEffect> CRIPPLED =
+            POTION_EFFECTS.register("crippled", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 725255)
+                            .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static final RegistryObject<MobEffect> HALLUCINATION =
+            POTION_EFFECTS.register("hallucination", HallucinationEffect::new);
+    public static final RegistryObject<MobEffect> OLD = POTION_EFFECTS.register("old", OldEffect::new);
+    public static final RegistryObject<MobEffect> DREAMING = POTION_EFFECTS.register("dreaming", DreamingEffect::new);
+
+    public static final RegistryObject<MobEffect> HAZE_VIRUS =
+            POTION_EFFECTS.register("haze_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
+    public static final RegistryObject<MobEffect> DISTORTION_VIRUS =
+            POTION_EFFECTS.register("distortion_virus", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 11606258)
+            );
+    public static final RegistryObject<MobEffect> VIRUS_IMMUNITY =
+            POTION_EFFECTS.register("virus_immunity", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 11606258)
+            );
 
 
     public static class Effect extends MobEffect{

@@ -1,13 +1,12 @@
 package net.hydra.jojomod.mixin.shaders;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.TimeStopInstance;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.Camera;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.client.shader.RCoreShader;
 import net.zetalasis.client.shader.RPostShaderRegistry;
@@ -91,6 +89,24 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
         if(ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             RPostShaderRegistry.WIND_VISION.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
             RPostShaderRegistry.WIND_VISION.roundabout$process(tickDelta);
+        }
+        if(ClientUtil.canEpitaphRenderShader()){
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTimeStart",(float) ClientUtil.GameTimeStart);
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("PartialTick",tickDelta%1);
+            Vec3 vec = new Vec3(1.0,0,1.0);
+
+            if (((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                vec = pkc.getEpitaphColors();
+
+            }
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("RedValue",(float)vec.x);
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GreenValue",(float)vec.y);
+            RPostShaderRegistry.EPITAPH.roundabout$setUniform("BlueValue",(float)vec.z);
+
+            RPostShaderRegistry.EPITAPH.roundabout$process(tickDelta);
         }
     }
 

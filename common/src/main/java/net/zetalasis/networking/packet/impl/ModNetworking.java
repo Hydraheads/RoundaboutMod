@@ -116,8 +116,6 @@ public class ModNetworking {
         if (con == null)
             return;
 
-        //Roundabout.LOGGER.info("Sending packet");
-
         con.send(new ServerboundCustomPayloadPacket(buildFromClassName(packetType.getClass()), createBufferFromVArgs(args)));
     }
 

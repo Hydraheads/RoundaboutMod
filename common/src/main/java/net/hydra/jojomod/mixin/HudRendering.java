@@ -30,6 +30,7 @@ import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
@@ -108,6 +109,29 @@ public abstract class HudRendering implements IHudAccess {
 
 
         if (this.minecraft.player != null) {
+            if (ClientUtil.canRenderEpitaphScreen()){
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
+                        0.25F,1F,1F,1F);
+            }
+
+            if (ClientUtil.timeSkipTicker > -1){
+                if (ClientUtil.canSeeStands(this.minecraft.player)) {
+                    RenderSystem.enableBlend();
+                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                                    "textures/misc/king_crimson/frame_" + ClientUtil.timeSkipTicker + ".png"),
+                            ConfigManager.getClientConfig().generalSettings.timeSkipOpacity, 1F, 1F, 1F);
+                }
+            }
+            if (ClientUtil.bitesTheDustTicker > -1){
+                if (ClientUtil.canSeeStands(this.minecraft.player)) {
+                    RenderSystem.enableBlend();
+                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                                    "textures/misc/bites_the_dust/frame_" + ClientUtil.bitesTheDustTicker + ".png"),
+                            ConfigManager.getClientConfig().generalSettings.bitesTheDustOpacity, 1F, 1F, 1F);
+                }
+            }
+
 
             if (ClientUtil.isBlocked){
                 RenderSystem.enableBlend();
@@ -196,8 +220,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
-
-                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 1);
+                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {
@@ -659,7 +682,7 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$isPossessed()) {
+            } if (user.roundabout$isPossessed() && user.roundabout$getPossessor() != null && user.roundabout$getPossessor().getTarget() != null) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {

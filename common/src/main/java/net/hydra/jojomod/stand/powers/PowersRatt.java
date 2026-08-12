@@ -401,6 +401,10 @@ public class PowersRatt extends NewDashPreset {
 
     }
 
+    @Override
+    public boolean negateHandPoseForcing(){
+        return true;
+    }
 
     @Override
     public void onStandSummon(boolean desummon) {
@@ -505,7 +509,8 @@ public class PowersRatt extends NewDashPreset {
 
                 if (e instanceof LivingEntity L) {
                     if (!isAuto() && !L.equals(this.getSelf()) && !L.equals(SE)) {
-                        if (!(L instanceof StandEntity) && !MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null) {
+                        if (!(L instanceof StandEntity) && !MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null
+                        && !(PowerTypes.isExistentiallyElsewhere(L))) {
                             setShootTarget(L);
                         }
                     }
@@ -515,14 +520,26 @@ public class PowersRatt extends NewDashPreset {
                     }
 
                     if (getShootTarget() != null) {
+                        if (PowerTypes.isExistentiallyElsewhere(getShootTarget())){
+                            if (((StandUser)getShootTarget()).roundabout$getStandPowers() instanceof
+                            PowersKingCrimson pkc && pkc.timeEraseActive){
+                                setShootTarget(pkc.activeClone);
+                            } else {
+                                setShootTarget(null);
+                            }
+                        }
                         if (MainUtil.getEntityIsTrulyInvisible(getShootTarget()) || getShootTarget().getEffect(MobEffects.INVISIBILITY) != null) {
                             setShootTarget(null);
                         }
+                        if (!getShootTarget().isAlive()) {
+                            setShootTarget(null);
+                        }
+                    } else {
+                        if(isAuto()) {
+                            setAuto(false);
+                        }
                     }
 
-                    if(isAuto() && getShootTarget() == null) {
-                        setAuto(false);
-                    }
 
 
                 } else if (e == null) {
@@ -815,10 +832,10 @@ public class PowersRatt extends NewDashPreset {
 
                 active = false;
                 Placement = null;
-                if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
-                }
                 if (this.getStandEntity(this.getSelf()) != null) {
+                    if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
+                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                    }
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
                 this.setCooldown(PowersRatt.SETPLACE,40);

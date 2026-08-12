@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.commands.RoundaboutCom;
 import net.hydra.jojomod.item.DispenserRegistry;
 import net.hydra.jojomod.particles.FabricParticles;

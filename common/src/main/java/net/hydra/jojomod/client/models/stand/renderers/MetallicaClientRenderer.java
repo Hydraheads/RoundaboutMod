@@ -70,6 +70,7 @@ public class MetallicaClientRenderer {
     }
 
     private static void handleMetallicaEffects(LivingEntity entity, Level level) {
+        if (PowersMetallica.hasAnyFadeActive(entity)) return;
         float partialTick = Minecraft.getInstance().getFrameTime();
         double interpX = Mth.lerp(partialTick, entity.xo, entity.getX());
         double interpY = Mth.lerp(partialTick, entity.yo, entity.getY());

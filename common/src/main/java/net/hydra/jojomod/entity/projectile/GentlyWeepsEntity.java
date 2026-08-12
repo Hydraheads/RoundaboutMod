@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -25,24 +26,23 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
-import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-import java.util.UUID;
 
 public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
     public static final float height = 3f;
     public static final float width = 3f;
+
+    protected static final EntityDataAccessor<Integer> ATTACHED = SynchedEntityData.defineId(GentlyWeepsEntity.class,
+            EntityDataSerializers.INT);
 
     public GentlyWeepsEntity(EntityType<?> $$0, Level $$1) {
         super($$0, $$1);
@@ -133,7 +133,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
             }
 
 
-                AABB wallBox = this.getBoundingBox();
+                AABB wallBox = this.getBoundingBox().inflate(0.4);
 
                 for (Entity mob : level().getEntitiesOfClass(
                         Entity.class,
@@ -146,59 +146,57 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             if (!getBled() && mob instanceof LivingEntity LE && LE.hasEffect(ModEffects.BLEED)){
                                 setBled(true);
                             }
-                            if (mob.isOnFire()){
-                                mob.setRemainingFireTicks(0);
-                            } if (mob instanceof LivingEntity lv && ((StandUser)lv).roundabout$isOnStandFire()){
-                                ((StandUser)lv).roundabout$setRemainingStandFireTicks(0);
-                            }
-                            if (MainUtil.canFreeze(mob)) {
-                                if (this.tickCount > 10) {
-                                    if (mob instanceof Player pl) {
-                                        if (pl.hurtTime > 0){
-                                            HeatUtil.addHeat(mob, -1);
-                                        } else if (this.tickCount > 50) {
-                                            HeatUtil.addHeat(mob, -3);
-                                        } else if (this.tickCount > 30) {
-                                            HeatUtil.addHeat(mob, -2);
-                                        }else {
-                                            HeatUtil.addHeat(mob, -1);
-                                        }
-                                    } else {
-                                        if (this.tickCount > 30) {
-                                            HeatUtil.addHeat(mob, -2);
+                            if (!getAttachedToEntity()){
+                                if (mob.isOnFire()){
+                                    mob.setRemainingFireTicks(0);
+                                } if (mob instanceof LivingEntity lv && ((StandUser)lv).roundabout$isOnStandFire()){
+                                    ((StandUser)lv).roundabout$setRemainingStandFireTicks(0);
+                                }
+                                if (MainUtil.canFreeze(mob)) {
+                                    if (this.tickCount > 10) {
+                                        int heat = HeatUtil.getHeat(mob);
+                                        if (mob instanceof Player || mob instanceof CloneEntity) {
+                                            if (this.tickCount > 50 && heat < -30) {
+                                                HeatUtil.addHeat(mob, -3);
+                                            } else if (this.tickCount > 30 && heat < -10) {
+                                                HeatUtil.addHeat(mob, -2);
+                                            }else {
+                                                HeatUtil.addHeat(mob, -1);
+                                            }
                                         } else {
                                             HeatUtil.addHeat(mob, -1);
                                         }
-                                    }
-                                } else {
-                                    if (mob instanceof Player pl) {
-                                        HeatUtil.addHeat(mob, -1);
                                     } else {
-                                        HeatUtil.addHeat(mob, -1);
+                                        if (mob instanceof Player  || mob instanceof CloneEntity) {
+                                            HeatUtil.addHeat(mob, -1);
+                                        } else {
+                                            HeatUtil.addHeat(mob, -1);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+            if (!getAttachedToEntity()) {
+                if (tickCount > 7) {
+                    int range = 0;
+                    if (tickCount > 12) {
+                        range = 1;
+                    }
+                    for (int y = 1; y < 4; y++) {
+                        for (int x = -range; x <= range; x++) {
+                            for (int z = -range; z <= range; z++) {
+                                BlockPos targetPos = getOnPos().offset(x, y, z);
+                                BlockState iceState = ModBlocks.COLD_AIR.defaultBlockState();
 
-            if (tickCount > 7) {
-                int range = 0;
-                if (tickCount > 12) {
-                    range = 1;
-                }
-                for (int y = 1; y < 4; y++) {
-                    for (int x = -range; x <= range; x++) {
-                        for (int z = -range; z <= range; z++) {
-                            BlockPos targetPos = getOnPos().offset(x, y, z);
-                            BlockState iceState = ModBlocks.COLD_AIR.defaultBlockState();
-
-                            if (canFreeze(targetPos)
-                                    && iceState.canSurvive(level(), targetPos)) {
-                                level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan+2));
+                                if (canFreeze(targetPos)
+                                        && iceState.canSurvive(level(), targetPos)) {
+                                        level().setBlockAndUpdate(targetPos, iceState);
+                                        level().scheduleTick(targetPos, ModBlocks.COLD_AIR, Mth.nextInt(level().getRandom(), lifeSpan, lifeSpan + 2));
+                                }
+                                // placement logic
                             }
-                            // placement logic
                         }
                     }
                 }
@@ -212,6 +210,36 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                 started = true;
                 ClientUtil.handleWeepsSound(this);
             }
+
+            if (!getAttachedToEntity()) {
+                AABB wallBox = this.getBoundingBox().inflate(0.4);
+
+                for (Player mob : level().getEntitiesOfClass(
+                        Player.class,
+                        wallBox.inflate(0.1))) {
+
+                    if (mob.getBoundingBox().intersects(wallBox)) {
+                        if (mob.isAlive()) {
+                            if (((StandUser) mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa) {
+                                pwa.gwNear = this;
+                                pwa.inGWRange = 3;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        if (getAttachedToEntity()) {
+            Entity ent = level().getEntity(getAttached());
+            if (ent != null && ent.isAlive()){
+                if (level().isClientSide()){
+                    setPos(ent.getPosition(0));
+                } else {
+                    setPos(ent.getPosition(0));
+                }
+            }
         }
         super.tick();
     }
@@ -224,16 +252,34 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
         this.entityData.set(BLED, bleed);
     }
 
+    public boolean getAttachedToEntity() {
+        return this.getEntityData().get(ATTACHED) != -1;
+    }
+    public int getAttached() {
+        return this.getEntityData().get(ATTACHED);
+    }
+
+    public void setAttached(Entity attached){
+        if (attached != null){
+            this.entityData.set(ATTACHED, attached.getId());
+        }
+    }
+    public void setAttached(int attached){
+            this.entityData.set(ATTACHED, attached);
+    }
+
     private static final EntityDataAccessor<Boolean> BLED =
             SynchedEntityData.defineId(GentlyWeepsEntity.class, EntityDataSerializers.BOOLEAN);
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("bled",getBled());
+        $$0.putInt("attached",getAttached());
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setBled($$0.getBoolean("bled"));
+        setAttached($$0.getInt("attached"));
         super.readAdditionalSaveData($$0);
     }
 
@@ -242,6 +288,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
         if (!this.entityData.hasItem(BLED)) {
             super.defineSynchedData();
             this.entityData.define(BLED, false);
+            this.entityData.define(ATTACHED, -1);
         }
     }
+
 }

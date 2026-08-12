@@ -91,6 +91,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private static InteractionHand IH;
 
 
+    @Unique
+    @Override
+    public void rdbt$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2) {
+        scale($$0,$$1,$$2);
+    }
 
         /**Stone Arms with locacaca first person*/
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
@@ -345,12 +350,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     private void setModelProperties(AbstractClientPlayer $$0) {
     }
 
-    @Override
-    @Unique
-    public void roundabout$setModelProperties(AbstractClientPlayer $$0){
-        setModelProperties($$0);
-    }
-
     @Inject(method = "getArmPose", at = @At(value = "HEAD"),cancellable = true)
     private static void roundabout$GetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
         ACP = $$0;
@@ -360,7 +359,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         StandUser SU = ((StandUser) $$0);
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
             if (SU.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActive($$0)) {
-                if (SU.roundabout$getStandPowers().getStandUserSelf().roundabout$getCombatMode()) {
+                if (SU.roundabout$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                     return;
                 }
@@ -490,51 +489,6 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
-    private void roundabout$setModelPropertiesCream(AbstractClientPlayer $$0, CallbackInfo ci) {
-        if ($$0 instanceof StandUser standUser) {
-            if (standUser.roundabout$getStandPowers() instanceof PowersCream PC) {
-                PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
-                int transformTimer = PC.getTransformTimer();
-
-                if (PC.getTransformDirection() == 1) {
-                    if (transformTimer == 10) {
-                        playerModel.head.visible = false;
-                        playerModel.hat.visible = false;
-                    } else if (transformTimer == 15) {
-                        playerModel.leftArm.visible = false;
-                        playerModel.rightArm.visible = false;
-                        playerModel.body.visible = false;
-                        playerModel.leftSleeve.visible = false;
-                        playerModel.rightSleeve.visible = false;
-                        playerModel.jacket.visible = false;
-                    } else if (transformTimer == 20) {
-                        playerModel.leftLeg.visible = false;
-                        playerModel.rightLeg.visible = false;
-                        playerModel.leftPants.visible = false;
-                        playerModel.rightPants.visible = false;
-                    }
-                } else if (PC.getTransformDirection() == 2) { ///  Note to Chlope here: the limbs are visible by default so I'm not sure why you'd have to force this to be visible and it may lead to mod incompa
-                    if (transformTimer == 10) {
-                        playerModel.leftLeg.visible = true;
-                        playerModel.rightLeg.visible = true;
-                        playerModel.leftPants.visible = true;
-                        playerModel.rightPants.visible = true;
-                    } else if (transformTimer == 15) {
-                        playerModel.leftArm.visible = true;
-                        playerModel.rightArm.visible = true;
-                        playerModel.body.visible = true;
-                        playerModel.leftSleeve.visible = true;
-                        playerModel.rightSleeve.visible = true;
-                        playerModel.jacket.visible = true;
-                    } else if (transformTimer == 20) {
-                        playerModel.head.visible = true;
-                        playerModel.hat.visible = true;
-                    }
-                }
-            }
-        }
-    }
 
 
 
@@ -1107,9 +1061,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
-                if (MI.visageData.isCharacterVisage()) {
-                    if (((IPlayerModel)this.model).roundabout$getSlim() != MI.visageData.isSlim()){
-                        if (MI.visageData.isSlim() != originalArms){
+                VisageData vd = MI.visageData.generateVisageData(player);
+                if (vd.isCharacterVisage()) {
+                    if (((IPlayerModel)this.model).roundabout$getSlim() != vd.isSlim()){
+                        if (vd.isSlim() != originalArms){
                             model = roundabout$otherModel;
                         } else {
                             model = roundabout$mainModel;
@@ -1523,7 +1478,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                         }
                     }
                 } else {
-                    Vector3f scale = MI.visageData.scale();
+                    VisageData vd = MI.visageData.generateVisageData($$0);
+                    Vector3f scale =vd.scale();
                     $$1.scale(scale.x, scale.y, scale.z);
                 }
                 ci.cancel();

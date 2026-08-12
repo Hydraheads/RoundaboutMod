@@ -129,6 +129,30 @@ public abstract class ConfigManager {
                 }
             }
         }
+
+        if (getAdvancedConfig().silverChariotBlocksToSlabs != null)
+        {
+            MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
+            for (String entry : getAdvancedConfig().silverChariotBlocksToSlabs)
+            {
+                try
+                {
+                    String[] split = entry.split(":");
+                    if (split.length != 4)
+                    {
+                        Roundabout.LOGGER.warn("Invalid whole block to slab block entry: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse whole block to slab block entry '{}'", entry, e);
+                }
+            }
+        }
     }
     public static void loadThrownItemDestructionBlacklist()
     {
@@ -159,6 +183,48 @@ public abstract class ConfigManager {
         {
             MainUtil.standBlockExplosionBlacklist.clear();
             MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
+        }
+        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeat != null)
+        {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeat) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 3) {
+                        Roundabout.LOGGER.warn("Invalid custom sheer heart attack block heat entry: {}", entry);
+                        continue;
+                    }
+
+                    String tag = split[0] + ":" + split[1];
+                    int value = Integer.parseInt(split[2]);
+
+                    MainUtil.SHA_CUSTOM_BLOCK_HEAT.put(tag, value);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse sheer heart attack custom block heat entry '{}'", entry, e);
+                }
+            }
+        }
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeat != null)
+        {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeat) {
+                try {
+                    String[] split = entry.split(":");
+
+                    if (split.length != 3) {
+                        Roundabout.LOGGER.warn("Invalid custom sheer heart attack entity heat entry: {}", entry);
+                        continue;
+                    }
+
+                    String tag = split[0] + ":" + split[1];
+                    int value = Integer.parseInt(split[2]);
+
+                    MainUtil.SHA_CUSTOM_ENTITY_HEAT.put(tag, value);
+
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse sheer heart attack custom entity heat entry '{}'", entry, e);
+                }
+            }
         }
         if (getAdvancedConfig().occultChargeEffectsToBanishv2 != null)
         {
@@ -215,9 +281,9 @@ public abstract class ConfigManager {
             MainUtil.vampireSunDamageWorlds.clear();
             MainUtil.vampireSunDamageWorlds.addAll(getAdvancedConfig().vampireSunDamageWorlds);
         }
-        if (getAdvancedConfig().foodThatGivesBloodListV5 != null)
+        if (getAdvancedConfig().foodThatGivesBloodListV6 != null)
         {
-            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV5);
+            MainUtil.foodMap = MainUtil.parseFoodList(getAdvancedConfig().foodThatGivesBloodListV6);
         }
         if (getAdvancedConfig().foodThatHasEffectsForVampiresV1 != null)
         {
@@ -228,11 +294,11 @@ public abstract class ConfigManager {
 
     public static void loadStandArrowPool()
     {
-        if (getAdvancedConfig().standArrowPoolv5 != null)
+        if (getAdvancedConfig().standArrowPoolv6 != null)
         {
             ModItems.STAND_ARROW_POOL.clear();
 
-            for (String disc : getAdvancedConfig().standArrowPoolv5)
+            for (String disc : getAdvancedConfig().standArrowPoolv6)
             {
                 String[] split = disc.split(":");
 
@@ -253,11 +319,11 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().naturalStandUserMobPoolv8 != null)
+        if (getAdvancedConfig().naturalStandUserMobPoolv9 != null)
         {
             ModItems.STAND_ARROW_POOL_FOR_MOBS.clear();
 
-            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv8)
+            for (String disc : getAdvancedConfig().naturalStandUserMobPoolv9)
             {
                 String[] split = disc.split(":");
 

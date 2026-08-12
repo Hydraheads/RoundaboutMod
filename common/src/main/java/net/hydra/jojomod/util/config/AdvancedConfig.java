@@ -31,7 +31,7 @@ public class AdvancedConfig implements Cloneable {
         SERVER_OINLY_INSTANCE = config;
     }
 
-    public Set<String> standArrowPoolv5 = new HashSet<>(
+    public Set<String> standArrowPoolv6 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -40,6 +40,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:soft_and_wet_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:white_album_disc",
+                    "roundabout:king_crimson_disc",
                     "roundabout:ratt_disc"
                     //"roundabout:green_day_disc"
             )
@@ -53,9 +54,10 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc",
                     "roundabout:manhattan_transfer_disc",
                     "roundabout:california_king_bed_disc"
+                    //"roundabout:20th_century_boy_disc"
             )
     );
-    public Set<String> naturalStandUserMobPoolv8 = new HashSet<>(
+    public Set<String> naturalStandUserMobPoolv9 = new HashSet<>(
             Arrays.asList(
                     "roundabout:star_platinum_disc",
                     "roundabout:the_world_disc",
@@ -66,6 +68,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:achtung_baby_disc",
                     "roundabout:walking_heart_disc",
                     "roundabout:ratt_disc",
+                    "roundabout:king_crimson_disc",
                     "roundabout:white_album_disc",
                     "roundabout:manhattan_transfer_disc",
                     "roundabout:california_king_bed_disc"
@@ -73,21 +76,21 @@ public class AdvancedConfig implements Cloneable {
     );
 
 
-    public Set<String> foodThatGivesBloodListV5 = new HashSet<>(
+    public Set<String> foodThatGivesBloodListV6 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:beef:3:1.4F",
-                    "roundabout:flesh_block:3:1.4F",
-                    "minecraft:chicken:2:0.9F",
-                    "minecraft:cod:2:0.9F",
-                    "minecraft:pufferfish:2:0.9F",
-                    "minecraft:tropical_fish:2:0.9F",
-                    "minecraft:cod:2:0.9F",
-                    "minecraft:mutton:2:1.4F",
-                    "minecraft:porkchop:3:1.4F",
-                    "minecraft:rabbit:3:0.9F",
-                    "minecraft:salmon:2:1.4F",
-                    "minecraft:rotten_flesh:2:0.9F",
-                    "minecraft:spider_eye:2:0.9F"
+                    "minecraft:beef:3:1.5F",
+                    "roundabout:flesh_block:3:1.5F",
+                    "minecraft:chicken:2:1F",
+                    "minecraft:cod:2:1F",
+                    "minecraft:pufferfish:2:1F",
+                    "minecraft:tropical_fish:2:1F",
+                    "minecraft:cod:2:1F",
+                    "minecraft:mutton:2:1.5F",
+                    "minecraft:porkchop:3:1.5F",
+                    "minecraft:rabbit:3:1F",
+                    "minecraft:salmon:2:1.5F",
+                    "minecraft:rotten_flesh:2:1F",
+                    "minecraft:spider_eye:2:1F"
             )
     );
 
@@ -107,6 +110,7 @@ public class AdvancedConfig implements Cloneable {
             Arrays.asList(
                     "roundabout:hey_ya_disc",
                     "roundabout:mandom_disc"
+                    //"roundabout:20th_century_boy_disc"
             )
     );
 
@@ -167,6 +171,69 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> silverChariotBlocksToSlabs = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:stone:minecraft:stone_slab",
+                    "minecraft:smooth_stone:minecraft:smooth_stone_slab",
+                    "minecraft:granite:minecraft:granite_slab",
+                    "minecraft:polished_granite:minecraft:polished_granite_slab",
+                    "minecraft:andesite:minecraft:andesite_slab",
+                    "minecraft:polished_andesite:minecraft:polished_andesite_slab",
+                    "minecraft:diorite:minecraft:diorite_slab",
+                    "minecraft:polished_diorite:minecraft:polished_diorite_slab",
+                    "minecraft:cobblestone:minecraft:cobblestone_slab",
+                    "minecraft:mossy_cobblestone:minecraft:mossy_cobblestone_slab",
+                    "minecraft:smooth_stone:minecraft:smooth_stone_slab",
+                    "minecraft:stone_bricks:minecraft:stone_brick_slab",
+                    "minecraft:mossy_stone_bricks:minecraft:mossy_stone_brick_slab",
+                    "minecraft:cobbled_deepslate:minecraft:cobbled_deepslate_slab",
+                    "minecraft:polished_deepslate:minecraft:polished_deepslate_slab",
+                    "minecraft:deepslate_bricks:minecraft:deepslate_brick_slab",
+                    "minecraft:deepslate_tiles:minecraft:deepslate_tile_slab",
+                    "minecraft:cut_copper:minecraft:cut_copper_slab",
+                    "minecraft:exposed_cut_copper:minecraft:exposed_cut_copper_slab",
+                    "minecraft:weathered_cut_copper:minecraft:weathered_cut_copper_slab",
+                    "minecraft:oxidized_cut_copper:minecraft:oxidized_cut_copper_slab",
+                    "minecraft:waxed_cut_copper:minecraft:waxed_cut_copper_slab",
+                    "minecraft:waxed_exposed_cut_copper:minecraft:waxed_exposed_cut_copper_slab",
+                    "minecraft:waxed_weathered_cut_copper:minecraft:waxed_weathered_cut_copper_slab",
+                    "minecraft:waxed_oxidized_cut_copper:minecraft:waxed_oxidized_cut_copper_slab",
+                    "minecraft:bricks:minecraft:brick_slab",
+                    "minecraft:mud_bricks:minecraft:mud_brick_slab",
+                    "minecraft:sandstone:minecraft:sandstone_slab",
+                    "minecraft:smooth_sandstone:minecraft:smooth_sandstone_slab",
+                    "minecraft:cut_sandstone:minecraft:cut_sandstone_slab",
+                    "minecraft:red_sandstone:minecraft:red_sandstone_slab",
+                    "minecraft:smooth_red_sandstone:minecraft:smooth_red_sandstone_slab",
+                    "minecraft:cut_red_sandstone:minecraft:cut_red_sandstone_slab",
+                    "minecraft:prismarine:minecraft:prismarine_slab",
+                    "minecraft:prismarine_bricks:minecraft:prismarine_brick_slab",
+                    "minecraft:dark_prismarine:minecraft:dark_prismarine_slab",
+                    "minecraft:nether_bricks:minecraft:nether_brick_slab",
+                    "minecraft:red_nether_bricks:minecraft:red_nether_brick_slab",
+                    "minecraft:blackstone:minecraft:blackstone_slab",
+                    "minecraft:end_stone_bricks:minecraft:end_stone_brick_slab",
+                    "minecraft:purpur_block:minecraft:purpur_slab",
+                    "minecraft:quartz_block:minecraft:quartz_slab",
+                    "minecraft:smooth_quartz:minecraft:smooth_quartz_slab",
+                    "minecraft:white_wool:roundabout:wool_slab_white",
+                    "minecraft:black_wool:roundabout:wool_slab_black",
+                    "minecraft:blue_wool:roundabout:wool_slab_blue",
+                    "minecraft:brown_wool:roundabout:wool_slab_brown",
+                    "minecraft:cyan_wool:roundabout:wool_slab_cyan",
+                    "minecraft:green_wool:roundabout:wool_slab_green",
+                    "minecraft:grey_wool:roundabout:wool_slab_grey",
+                    "minecraft:lime_wool:roundabout:wool_slab_lime",
+                    "minecraft:light_blue_wool:roundabout:wool_slab_light_blue",
+                    "minecraft:light_grey_wool:roundabout:wool_slab_light_grey",
+                    "minecraft:magenta_wool:roundabout:wool_slab_magenta",
+                    "minecraft:orange_wool:roundabout:wool_slab_orange",
+                    "minecraft:purple_wool:roundabout:wool_slab_purple",
+                    "minecraft:pink_wool:roundabout:wool_slab_pink",
+                    "minecraft:red_wool:roundabout:wool_slab_red",
+                    "minecraft:yellow_wool:roundabout:wool_slab_yellow"
+            )
+    );
 
     public Set<String> standBlockGrabBlacklist = new HashSet<>(
             Arrays.asList(
@@ -180,6 +247,28 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:obsidian",
                     "minecraft:light",
                     "minecraft:barrier"
+            )
+    );
+    public Set<String> sheerHeartAttackCustomBlockHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:torch:4",
+                    "minecraft:soul_torch:3",
+                    "minecraft:redstone_torch:1",
+                    "minecraft:light_block:0",
+                    "minecraft:glow_lichen:0",
+                    "minecraft:cave_vines_plant:0",
+                    "minecraft:cave_vines:0",
+                    "minecraft:nether_portal:0",
+                    "minecraft:end_portal:0"
+            )
+    );
+    public Set<String> sheerHeartAttackCustomEntityHeat = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:blaze:90",
+                    "minecraft:magna_cube:70",
+                    "minecraft:slime:0",
+                    "minecraft:stray:-50",
+                    "roundabout:stray_cat_entity:0"
             )
     );
     public Set<String> standDestructionBlacklist = new HashSet<>(
@@ -269,6 +358,13 @@ public class AdvancedConfig implements Cloneable {
     );
 
     public Set<String> powerfulMobs = new HashSet<>(
+            Arrays.asList(
+                    "mowziesmobs:frostmaw",
+                    "mowziesmobs:ferrous_wroughtnaut",
+                    "mowziesmobs:umvuthi"
+            )
+    );
+    public Set<String> dontRemoveAggroMobs = new HashSet<>(
             Arrays.asList(
                     "mowziesmobs:frostmaw",
                     "mowziesmobs:ferrous_wroughtnaut",

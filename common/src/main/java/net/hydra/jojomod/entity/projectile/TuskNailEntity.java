@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersTusk;
@@ -67,7 +68,8 @@ public class TuskNailEntity extends AbstractArrow {
     public static final byte
         NONE = (byte) 0,
         GUARD_BREAK = (byte) 1,
-        REDUCED = (byte) 2;
+        REDUCED = (byte) 2,
+        GOLDEN = (byte) 3;
 
 
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ACT = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.INT);
@@ -115,6 +117,7 @@ public class TuskNailEntity extends AbstractArrow {
             float r = PT.getNailColor().x;
             float g = PT.getNailColor().y;
             float b = PT.getNailColor().z;
+            if (this.getExtra() == GOLDEN && tickCount % 2 == 0) {r = 1; g = 1; b = 0.33F;}
             ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(r,g,b),1F),
                     this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
                     0, 0, 0, 0, 0.015);
@@ -153,6 +156,13 @@ public class TuskNailEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide() && !this.isRemoved()   ) {
+
+            if (this.getExtra() == GOLDEN) {
+                ((ServerLevel) this.level()).sendParticles(ModParticles.SMALL_EXPLOSION,
+                        this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                        0, 0, 0, 0, 0.7);
+            }
+
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
                     $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
                     30, 0.2, 0.05, 0.2, 0.3);
@@ -173,6 +183,9 @@ public class TuskNailEntity extends AbstractArrow {
         if (this.getOwner() instanceof LivingEntity LE) {
             TuskHoleEntity tuskHoleEntity = new TuskHoleEntity(this.level(), LE);
             tuskHoleEntity.setPos(pos);
+            if (this.getExtra() == GOLDEN) {
+                tuskHoleEntity.setLifeSpan(150);
+            }
             this.level().addFreshEntity(tuskHoleEntity);
             return tuskHoleEntity;
         }
@@ -197,14 +210,14 @@ public class TuskNailEntity extends AbstractArrow {
             if (!(ent instanceof TuskNailEntity)) {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
-                        float str = PT.getNailDamage(ent,this.getAct());
+                        float str = PT.getNailDamage(this,ent,this.getAct());
 
-                        if (this.getExtra() == REDUCED) {
-                            str = 0.1F;
-                        }
 
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()), str)) {
-                            float knockbackStrength = this.getAct() == 1 ? 0.1F : 0.3F;
+                            float knockbackStrength = this.getAct() == 1 ? 0.3F : 0.5F;
+                            if (this.getExtra() == GOLDEN) {
+                                knockbackStrength *= 1.5F;
+                            }
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
 
                             if (this.getAct() == 2) {

@@ -68,13 +68,13 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     int reroll = ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow;
                     if ($$1.experienceLevel >= reroll || $$1.isCreative()) {
                         if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv7.isEmpty()) {
-                             if (!$$1.isCreative()) {
-                             $$1.giveExperienceLevels(-reroll);
-                             }
-                             rollStand($$0, $$1, $$3,true);
-                             return InteractionResultHolder.consume($$3);
+                            if (!$$1.isCreative()) {
+                                $$1.giveExperienceLevels(-reroll);
+                            }
+                            rollStand($$0, $$1, $$3, true);
+                            return InteractionResultHolder.consume($$3);
                         } else {
-                            if ($$0.isClientSide()){
+                            if ($$0.isClientSide()) {
                                 ClientUtil.openStandSwitchUI($$3);
                             }
                         }
@@ -89,6 +89,12 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     }
                     return InteractionResultHolder.consume($$3);
                 }
+            } else if(((StandUser) $$1).roundabout$getStandPowers().canUseStandArrow()) {
+                $$1.startUsingItem($$2);
+                if ($$0.isClientSide()) {
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND);
+                }
+                return InteractionResultHolder.consume($$3);
             } else {
                 if (ConfigManager.getAdvancedConfig().standArrowSecondaryPoolv7.isEmpty()) {
                     if (!$$0.isClientSide) {

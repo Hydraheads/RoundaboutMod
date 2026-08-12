@@ -13,6 +13,8 @@ public class ForgeParticles {
     public static final RegistryObject<SimpleParticleType> HIT_IMPACT = PARTICLES.register("hit_impact",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> HALLUCINATORY_ACID_DRIP =
+            PARTICLES.register("hallucinatory_acid_drip", () -> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> MELTING = PARTICLES.register("melting",
             () -> new SimpleParticleType(true)
     );
@@ -274,6 +276,31 @@ public class ForgeParticles {
             "mold",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> PW_FIREBALL_EXPLOSION = PARTICLES.register(
+            "pw_fireball_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_BLASTWAVE_EXPLOSION = PARTICLES.register(
+            "pw_blastwave_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_MUSHROOM_EXPLOSION = PARTICLES.register(
+            "pw_mushroom_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_BLUE_FIREBALL_EXPLOSION = PARTICLES.register(
+            "pw_blue_fireball_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_BLUE_BLASTWAVE_EXPLOSION = PARTICLES.register(
+            "pw_blue_blastwave_explosion",
+            () -> new SimpleParticleType(true)
+    );
+    public static final RegistryObject<SimpleParticleType> PW_BLUE_MUSHROOM_EXPLOSION = PARTICLES.register(
+            "pw_blue_mushroom_explosion",
+            () -> new SimpleParticleType(true)
+    );
+
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

@@ -294,7 +294,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                     }
                 }
             } else {
-                int splashRadius = 2;
+                int splashRadius = 0;
                 if (bounces == 0) {
 
                     ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getOnPos().getX() + 0.5, this.getOnPos().getY() + 0.5, this.getOnPos().getZ() + 0.5,
@@ -324,20 +324,22 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                     setGoo(pos, -1, 0, 2);
                     setGoo(pos, 0, 1, 2);
                     setGoo(pos, 0, -1, 2);
-                    splashRadius = 1;
+                    splashRadius = 0;
                 } else if (bounces == 2) {
                     setGoo(pos, 0, 0, 2);
-                    splashRadius = 1;
+                    splashRadius = 2;
                 }
 
 
                 if (bounces != 2) {
-                    List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
-                            pos.getZ(), splashRadius, splashRadius, splashRadius));
-                    if (!entities.isEmpty()) {
-                        for (Entity value : entities) {
-                            if (value instanceof LivingEntity) {
-                                ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                    if (splashRadius > 0) {
+                        List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), pos.getX(), pos.getY(),
+                                pos.getZ(), splashRadius, splashRadius, splashRadius));
+                        if (!entities.isEmpty()) {
+                            for (Entity value : entities) {
+                                if (value instanceof LivingEntity) {
+                                    ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                                }
                             }
                         }
                     }

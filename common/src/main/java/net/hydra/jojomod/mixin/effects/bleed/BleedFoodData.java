@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.effects.bleed;
 import net.hydra.jojomod.access.IFoodData;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.world.Difficulty;
@@ -37,6 +38,10 @@ public class BleedFoodData implements IFoodData {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$foodData(Player $$0, CallbackInfo ci) {
+        if (PowerTypes.isErasingTime($$0)){
+            ci.cancel();
+            return;
+        }
 
         TimeStop timeStop = (TimeStop) $$0.level();
         if (timeStop.inTimeStopRange($$0) && ConfigManager.getConfig().timeStopSettings.timestopCancelsFood) {

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -69,7 +70,9 @@ public class PoisonTrailMushroomBlock extends BushBlock {
     }
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !FateTypes.isZombie(LE)&& !FateTypes.isVampire(LE)) {
-            LE.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+            if (!(PowerTypes.isErasingTime($$3))){
+                LE.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
+            }
         }
     }
     protected boolean mayPlaceOn(BlockState $$0, BlockGetter $$1, BlockPos $$2) {

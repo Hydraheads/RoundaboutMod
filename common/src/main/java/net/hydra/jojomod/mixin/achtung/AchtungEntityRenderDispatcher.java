@@ -3,10 +3,16 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
@@ -28,12 +34,47 @@ public class AchtungEntityRenderDispatcher {
      */
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
-        float throwFadeToTheEther = ClientUtil.getThrowFadePercent(entity,$$5);
 
-        /**Insert code for other partially visible stands here, this is mirrored across visage
-         * parts and armor rendering.*/
+        if (PowerTypes.isExistentiallyElsewhere(entity)){
+            if (!ClientUtil.isPlayer(entity)) {
+                if (entity instanceof StandEntity SE) {
+                    if (entity instanceof FollowingStandEntity fse) {
+                        if (PowerTypes.isExistentiallyElsewhere(fse.getFollowing())) {
+                            if (!ClientUtil.isPlayer(fse.getFollowing()) &&
+                                    !(fse.getFollowing() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                                            && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                                ci.cancel();
+                                return;
+                            }
+                        }
+                    }
+                    if (PowerTypes.isExistentiallyElsewhere(SE.getUser())) {
+                        if (!ClientUtil.isPlayer(SE.getUser()) &&
+                                !(SE.getUser() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                                        && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                            ci.cancel();
+                            return;
+                        }
+                    }
+                } else {
+                    if (!(entity instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                    && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                    ){
+                        ci.cancel();
+                        return;
+                    }
+                }
+            }
+        }
 
-        ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
+
+
+            float throwFadeToTheEther = ClientUtil.getThrowFadePercent(entity, $$5);
+
+            /**Insert code for other partially visible stands here, this is mirrored across visage
+             * parts and armor rendering.*/
+
+            ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
 
         //The thin ice rendering
 

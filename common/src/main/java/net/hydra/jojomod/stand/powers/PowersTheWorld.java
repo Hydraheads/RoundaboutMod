@@ -34,6 +34,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -250,7 +251,19 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
         return super.inputSpeedModifiers(basis);
     }
-
+    @Override
+    public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (hasArmsOut) {
+            if (keyIsDown) {
+                if (activePowerPhase == 0) {
+                    this.tryPower(PowerIndex.ATTACK);
+                }
+            }
+            holdDownClick = false;
+            return;
+        }
+        super.buttonInputAttack(keyIsDown,options);
+    }
 
 
     public boolean isUsingAssault(){
@@ -258,6 +271,11 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (hasHandsOut()){
+            if (slot == 1 || slot == 2){
+                return true;
+            }
+        }
         if (slot == 1){
             if (!canImpale()){
                 return true;
@@ -373,10 +391,10 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 $$1.add(TheWorldEntity.THE_NETHER);
             } if (Level > 6 || bypass){
                 $$1.add(TheWorldEntity.AQUA_SKIN);
-                $$1.add(TheWorldEntity.BETA);
                 $$1.add(TheWorldEntity.KING);
                 $$1.add(TheWorldEntity.ULTIMATE_SKIN);
                 $$1.add(TheWorldEntity.ULTIMATE_KARS_SKIN);
+                $$1.add(TheWorldEntity.BETA);
             } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
                 $$1.add(TheWorldEntity.OVER_HEAVEN);
             }
@@ -387,46 +405,51 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos,byte level,boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
+        int startPos = -8;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.THE_WORLD_PUNCH,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.THE_WORLD_GUARD,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.final_kick",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.final_kick",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.THE_WORLD_FINAL_KICK,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.THE_WORLD_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.kick_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.kick_barrage",
                 "instruction.roundabout.kick_barrage", StandIcons.THE_WORLD_KICK_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.forward_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118,0, "ability.roundabout.forward_barrage",
                 "instruction.roundabout.forward_barrage", StandIcons.THE_WORLD_TRAVEL_BARRAGE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getAssaultLevel(), "ability.roundabout.assault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,getAssaultLevel(), "ability.roundabout.assault",
                 "instruction.roundabout.press_skill", StandIcons.THE_WORLD_ASSAULT,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, getImpaleLevel(), "ability.roundabout.impale",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99, getImpaleLevel(), "ability.roundabout.impale",
                 "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_IMPALE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.air_tanks",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.air_tanks",
                 "instruction.roundabout.passive", StandIcons.THE_WORLD_AIR_TANKS,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.block_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,0, "ability.roundabout.block_grab",
                 "instruction.roundabout.press_skill", StandIcons.THE_WORLD_GRAB_BLOCK,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.item_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.item_grab",
                 "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_GRAB_ITEM,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.mob_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.mob_grab",
                 "instruction.roundabout.press_skill_near_mob", StandIcons.THE_WORLD_GRAB_MOB,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.phase_grab",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.phase_grab",
                 "instruction.roundabout.press_skill_block", StandIcons.THE_WORLD_PHASE_GRAB,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.fall_brace",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.roundabout.fall_brace",
                 "instruction.roundabout.press_skill_falling", StandIcons.THE_WORLD_FALL_CATCH,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.THE_WORLD_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,getLeapLevel(), "ability.roundabout.stand_leap",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getLeapLevel(), "ability.roundabout.stand_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_WORLD,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,getLeapLevel(), "ability.roundabout.stand_leap_rebound",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,getLeapLevel(), "ability.roundabout.stand_leap_rebound",
                 "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_WORLD,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,getTSLevel(), "ability.roundabout.time_stop",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+80,getArmsLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_block", StandIcons.THE_WORLD_HANDS_ACTIVE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,getTSLevel(), "ability.roundabout.time_stop",
                 "instruction.roundabout.press_skill", StandIcons.THE_WORLD_TIME_STOP,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getImpulseTSLevel(),"ability.roundabout.time_stop_impulse",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+118,getImpulseTSLevel(),"ability.roundabout.time_stop_impulse",
                 "instruction.roundabout.press_skill_crouch", StandIcons.THE_WORLD_TIME_STOP_IMPULSE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153+startPos,topPos+80,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.THE_WORLD_MINING,0,level,bypas));
         return $$1;
     }
 
@@ -516,6 +539,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         return super.setPowerOther(move,lastMove);
     }
 
+    public void handsActiveClient(){
+        if (!onCooldown(PowerIndex.SKILL_EXTRA) && canExecuteMoveWithLevel(getArmsLevel())) {
+            if (!hasBlock() && canAttackHeavy()) {
+                tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+                setCooldown(PowerIndex.SKILL_EXTRA, 7);
+            }
+        }
+    }
 
     @Override
     public boolean canSeeThroughFog(){
@@ -594,8 +625,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
-            if (level == 7) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
+            if ( level == 7){
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable(
+                                "leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 4){
                     ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
@@ -650,7 +682,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             Vec3 vec3d = this.getSelf().getEyePosition(0);
                             Vec3 vec3d2 = this.getSelf().getViewVector(0);
                             Vec3 vec3d3 = vec3d.add(vec3d2.x * 15, vec3d2.y * 15, vec3d2.z * 15);
-                            double mag = 0.05F;
+                            double mag = 0.1F;
 
                             if (attackTimeDuring > 10) {
                                 mag += Math.pow(Math.max(attackTimeDuring,10)-10, 1.4) / 1000;
@@ -705,7 +737,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             }
 
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
-                                    stand.position().distanceTo(this.getSelf().position()) > 10){
+                                    stand.position().distanceTo(this.getSelf().position()) > 12){
                                 stopSoundsIfNearby(ASSAULT_NOISE, 32, false);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                             }
@@ -819,6 +851,15 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
     }
+
+    @Override
+    public float getBrawlPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.75F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(3.4F));
+        }
+    }
     @Override
     public float getBarrageFinisherStrength(Entity entity){
         if (this.getReducedDamage(entity)){
@@ -920,20 +961,12 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                             addEXP(3,LE);
                         }
                         if (build >= 80) {
-                            MainUtil.makeBleed($$5, 0, 400, null);
+                            MainUtil.makeBleed($$5, 0, 400, this.self);
                             MainUtil.makeMobBleed($$5);
                         } else if (build > 50) {
-                            MainUtil.makeBleed($$5, 0, 300, null);
+                            MainUtil.makeBleed($$5, 0, 300, this.self);
                         } else if (!getAssaultEarlyTime()) {
-                            MainUtil.makeBleed($$5, 0, 200, null);
-                        } else {
-                            MainUtil.makeBleed($$5, 0, 50, null);
-                        }
-                    } else if (((LivingEntity) $$5).isBlocking()) {
-                        if (!getAssaultEarlyTime()) {
-                            MainUtil.knockShieldPlusStand($$5,40);
-                        } else {
-                            MainUtil.knockShieldPlusStand($$5,30);
+                            MainUtil.makeBleed($$5, 0, 200, this.self);
                         }
                     }
 
@@ -972,17 +1005,17 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
         } else if (attackTimeDuring > 70){
             mult =2.2F;
         } else if (attackTimeDuring > 60){
-            mult = 1.8F;
+            mult = 2.0F;
         } else if (attackTimeDuring > 45){
-            mult = 1.5F;
+            mult = 1.8F;
         } else if (attackTimeDuring > 30){
-            mult = 1.4F;
+            mult = 1.6F;
         } else if (attackTimeDuring > 25){
-            mult = 1.3F;
+            mult = 1.5F;
         } else if (attackTimeDuring >= 20){
             mult = 1.2F;
         } else if (getAssaultEarlyTime() && isReduced){
-            mult = 0.75F;
+            mult = 0.83F;
         }
 
         if (isReduced){
@@ -1027,6 +1060,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             case SKILL_3_CROUCH -> {
                 tryToStandLeapClient();
             }
+            case SKILL_3_GUARD, SKILL_3_CROUCH_GUARD -> {
+                handsActiveClient();
+            }
 
             case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
                 doTSClient();
@@ -1062,6 +1098,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     }
 
     public void assaultOrFBarrageClient(){
+
+        if (hasHandsOut())
+            return;
         if (clientForwardBarrage())
             return;
         if (hasBlock() || hasEntity())
@@ -1089,7 +1128,6 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
     @Override
     public void tickPower(){
 
-        //Roundabout.LOGGER.info("AT: "+this.attackTime+" ATD: "+this.attackTimeDuring+" kickstarted: "+this.kickStarted+" APP: "+this.getActivePowerPhase()+" MAX:"+this.getActivePowerPhaseMax());
         super.tickPower();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()) {
             if (this.getSelf().getAirSupply() < this.getSelf().getMaxAirSupply() && PowerTypes.hasStandActive(self)){
@@ -1520,7 +1558,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, 100)) {
-                    S2CPacketUtil.sendBlipPacket(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
+                    S2CPacketUtil.sendBlip2Packet(serverPlayerEntity, (byte) 2, this.getSelf().getId(),blip);
                 }
             }
         }
@@ -1634,6 +1672,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
     @Override
     public void playTSVoiceSound(){
+        if (hasHandsOut()) {
+            return;
+        }
         if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof DIOVoice DV) {
             if (!DV.inTheMiddleOfTalking()) {
                 DV.forceTalkingTicks(40);
@@ -1802,17 +1843,22 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 }
 
             } else {
-
-                if (!this.getSelf().onGround()){
-                    if (canVault()){
-                        done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
-                    } else if (this.getSelf().fallDistance > 3){
-                        done=true;
-                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                if (this.isGuarding()){
+                    done=true;
+                    LockedOrNot(context, x, y, 3, StandIcons.THE_WORLD_HANDS_ACTIVE, PowerIndex.SKILL_EXTRA,getArmsLevel());
+                } else {
+                    if (!this.getSelf().onGround()){
+                        if (canVault()){
+                            done=true;
+                            setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+                        } else if (canFallBrace()){
+                            done=true;
+                            setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.NO_CD);
+                        }
                     }
                 }
             }
+
             if (!done){
                 if (canExecuteMoveWithLevel(getLeapLevel())) {
                     boolean jojoveinLikeKeys = !ClientNetworking.getAppropriateConfig().generalStandSettings.standJumpAndDashShareCooldown;
@@ -1849,16 +1895,19 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 }
             }
 
-
-            if (((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
-                setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.NO_CD);
+            if (this.isGuarding()){
+                LockedOrNot(context, x, y, 3, StandIcons.THE_WORLD_HANDS_ACTIVE, PowerIndex.SKILL_EXTRA,getArmsLevel());
             } else {
-                if (!(((StandUser)this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
-                } else if (!this.getSelf().onGround() && this.getSelf().fallDistance > 3){
-                    setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.SKILL_EXTRA);
+                if (((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1 && !this.getSelf().onGround() && canStandRebound()) {
+                    setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_REBOUND_WORLD, PowerIndex.NO_CD);
                 } else {
-                    setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                    if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
+                    } else if (canFallBrace()) {
+                        setSkillIcon(context, x, y, 3, StandIcons.THE_WORLD_FALL_CATCH, PowerIndex.NO_CD);
+                    } else {
+                        setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+                    }
                 }
             }
         }
@@ -1881,7 +1930,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             }
         }
     }
-
+    public int getArmsLevel(){
+        return 7;
+    }
     protected void clampRotation(Entity $$0) {
         $$0.setYBodyRot(this.getSelf().getYRot());
         float $$1 = Mth.wrapDegrees($$0.getYRot() - this.getSelf().getYRot());

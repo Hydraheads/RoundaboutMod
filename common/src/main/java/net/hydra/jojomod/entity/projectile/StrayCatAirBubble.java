@@ -1,17 +1,17 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.NoVibrationEntity;
-import net.hydra.jojomod.access.PenetratableWithProjectile;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -29,24 +29,25 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile {
+public class StrayCatAirBubble extends AbstractHurtingProjectile implements UnburnableProjectile, NoVibrationEntity, PenetratableWithProjectile, NoHitboxRendering {
     public StrayCatAirBubble(EntityType<? extends StrayCatAirBubble> $$0, Level $$1) {
         super($$0, $$1);
         this.lifeSpan = 300;
@@ -57,6 +58,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     private static final EntityDataAccessor<Boolean> LAUNCHED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(StrayCatAirBubble.class, EntityDataSerializers.INT);
 
     public int lifeSpan = 300;
     public LivingEntity standUser;
@@ -87,16 +89,46 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public void setSkin(byte skin) {
         this.getEntityData().set(SKIN, skin);
     }
+    public void setTargetID(int t) { this.getEntityData().set(TARGET, t); }
+    public Entity getTarget() {
+        int id = this.getEntityData().get(TARGET);
+        if (id == -1) { return null; }
 
+        Entity target = this.level().getEntity(id);
+
+        if (PowerTypes.isExistentiallyElsewhere(target)){
+            if (((StandUser)target).roundabout$getStandPowers() instanceof
+                    PowersKingCrimson pkc && pkc.timeEraseActive){
+                target = pkc.activeClone;
+            } else {
+                return null;
+            }
+        }
+
+        return target;
+    }
+
+    public float damageMultiplier = 1.0f;
+
+    public void setDamageMult(float v) {
+        damageMultiplier = v;
+    }
 
     static final float damagePoints = 2.5f;
 
     public float getDamagePoints() {
-        return damagePoints;
+        return damagePoints * damageMultiplier;
     }
 
     public Entity target;
-    public void setTarget(Entity t) {this.target = t; }
+    public void setTarget(Entity t) {
+        this.target = t;
+        if (t == null) {
+            setTargetID(-1);
+        }else {
+            setTargetID(t.getId());
+        }
+    }
 
     private static final int redirectCooldownMax = 30;
     private int redirectCooldown = redirectCooldownMax;
@@ -135,6 +167,10 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     public boolean followOwnerView = false;
     public void setFollowOwnerView(boolean value) {this.followOwnerView = value;}
 
+    public void setLifeSpan(int value) {
+        lifeSpan = value;
+    }
+
     @Override
     public boolean dealWithPenetration(Entity proj){
         popBubble();
@@ -162,11 +198,22 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     public void tick() {
         if (!this.level().isClientSide()) {
+            if (this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved()) {
+                popBubble();
+                return;
+            }
+
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
-                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+
+                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
+                if (getSkin() == 4) {
+                    
+                }
+                //SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
                 if (Math.random() > 0.5) {
-                    SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+                    SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT;
+                 //   SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
                 }
 
                 this.level().playSound(null, this.blockPosition(), SE,
@@ -178,15 +225,34 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 this.lifeSpan--;
             }
 
-            if (this.lifeSpan <= 0 || this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner().isRemoved() ||
-                    this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops()){
+            if ((this.lifeSpan <= 0 || this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops())){
+                if (((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && isPlanted) {
+                    KQ.bubbleFailed();
+                }
                 popBubble();
                 return;
             }
+            if (!isRemoved()) {
+                Vec3 currentPos = this.position();
+                Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+                AABB sweptBox = this.getBoundingBox()
+                        .expandTowards(this.getDeltaMovement())
+                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
 
-            if (this.target != null && this.target.isAlive()) {
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                        this.level(), this, currentPos, nextPos, sweptBox,
+                        this::canHitEntity
+                );
+
+                if (entityHitResult != null) {
+                    this.onHitEntity(entityHitResult);
+                }
+            }
+
+            if (getTarget() != null && getTarget().isAlive()) {
                 if (this.redirectCooldown <= 0) {
-                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)) {
+                    if (!this.isKillerQueenBubble || ((LivingEntity) this.getOwner()).hasLineOfSight(this)
+                            && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
                     }
@@ -225,6 +291,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     }
     public void setUser(LivingEntity User) {
         standUser = User;
+        setOwner(User);
 
         this.getEntityData().set(USER_ID, User.getId());
         if (!this.level().isClientSide()){
@@ -279,7 +346,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             }
         }
 
-        MainUtil.makeBleed($$0, 1, 70, user);
+        MainUtil.makeBleed($$0, 1, 160, user);
     }
 
     @Override
@@ -289,106 +356,112 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
-        if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-            if (KQ.detonateTimer > -1) {
-                KQ.explode();
-            }else {
+        if (!this.level().isClientSide()) {
+            if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isPlanted) {
+                if (KQ.detonateTimer > -1) {
+                    KQ.explode();
+                    return;
+                }
                 KQ.bubbleFailed();
-                popBubble();
             }
-        } else {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState($$0.getBlockPos())),
+                    $$0.getLocation().x, $$0.getLocation().y, $$0.getLocation().z,
+                    30, 0.2, 0.05, 0.2, 0.3);
             popBubble();
         }
     }
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
-        Entity hitTarget = $$0.getEntity();
-        Entity user = this.getOwner();
+        if (!this.level().isClientSide()) {
+            Entity hitTarget = $$0.getEntity();
+            Entity user = this.getOwner();
 
-        if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
-            return;
-        }
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
-            if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
+            if (hitTarget instanceof EnderMan em) {
+                ((IEnderMan) em).roundabout$teleport();
                 return;
             }
-        }
 
-        super.onHitEntity($$0);
-
-        DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
-        float damage = getDamagePoints();
-
-        if (user != null) {
-            dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
-
-            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                damage = KQ.getAirBubbleDamage(hitTarget);
+            if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
+                return;
             }
-        }
+            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
+                if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
+                    return;
+                }
+            }
 
-        if (this.target != null) {
-            damage *= 0.75f;
-        }
+            DamageSource dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND);
+            float damage = getDamagePoints();
 
-        if (hitTarget.hurt(dmg,damage)) {
-
-            if (user instanceof LivingEntity LE) {
+            if (user != null) {
+                dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
 
                 if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                    if (hitTarget instanceof LivingEntity l) {
-                        KQ.addEXP(4, l);
-                    }
+                    damage = KQ.getAirBubbleDamage(hitTarget);
                 }
-
-                LE.setLastHurtMob(hitTarget);
             }
 
-            if (hitTarget.getType() == EntityType.ENDERMAN) { return; }
+            if (this.target != null) { damage *= 0.75f; }
 
-            if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
-                LivingEntity $$7;
-                if (hitTarget instanceof LivingEntity L) {
-                    $$7 = L;
-                } else {
-                    $$7 = ((EnderDragonPart) hitTarget).parentMob;
-                }
+            if (hitTarget.hurt(dmg, damage)) {
 
-                Vec3 launchVec = this.getDeltaMovement();
-                Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
-                vec3d2 = vec3d2.add(0, 0.4F, 0);
-
-                MainUtil.takeLiteralUnresistableKnockbackWithY(hitTarget,
-                        vec3d2.x,
-                        vec3d2.y,
-                        vec3d2.z);
-
-                if (user instanceof LivingEntity) {
-                    EnchantmentHelper.doPostHurtEffects($$7, user);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
-                }
-                if (user instanceof LivingEntity LE && this.isPlanted) {
-                    if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
-                        KQ.bubbleContacted(hitTarget);
+                if (user instanceof LivingEntity LE) {
+                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                        if (hitTarget instanceof LivingEntity l) {
+                            KQ.addEXP(4, l);
+                        }
                     }
+
+                    LE.setLastHurtMob(hitTarget);
                 }
 
-                this.doPostHurtEffects($$7);
+                if (hitTarget.getType() == EntityType.ENDERMAN) { return; }
+
+                if (hitTarget instanceof LivingEntity || (hitTarget instanceof EnderDragonPart)) {
+                    LivingEntity $$7;
+                    if (hitTarget instanceof LivingEntity L) {
+                        $$7 = L;
+                    } else {
+                        $$7 = ((EnderDragonPart) hitTarget).parentMob;
+                    }
+
+                    Vec3 launchVec = this.getDeltaMovement();
+                    Vec3 vec3d2 = launchVec.normalize().scale(0.6F);
+                    vec3d2 = vec3d2.add(0, 0.4F, 0);
+
+                    double $$11 = Math.max(0.0, 1.0 - $$7.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                    Vec3 $$12 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.2 * $$11);
+                    if ($$12.lengthSqr() > 0.0) {
+                        $$7.push($$12.x, 0.1, $$12.z);
+                    }
+
+                    if (user instanceof LivingEntity) {
+                        EnchantmentHelper.doPostHurtEffects($$7, user);
+                        EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
+                    }
+                    if (user instanceof LivingEntity LE && this.isPlanted) {
+                        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                            KQ.bubbleContacted(hitTarget);
+                        }
+                    }
+
+                    this.doPostHurtEffects($$7);
+                }
             }
+
+            popBubble();
         }
-
-        popBubble();
     }
 
     public void popBubble(){
-        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT,
-                SoundSource.PLAYERS, 1.3F, (float)(0.78+(Math.random()*0.04)));
+        this.level().playSound(null, this.blockPosition(), ModSounds.STRAY_CAT_BUBBLE_POP_EVENT,
+                SoundSource.PLAYERS, 0.6F, (float)(0.78+(Math.random()*0.04)));
         if (!this.level().isClientSide()){
 
-            this.level().addAlwaysVisibleParticle(ModParticles.AIR_CRACKLE, true,
-                    this.getX(), this.getY() + this.getBbHeight() / 2, this.getZ(),
-                    0, 0, 0);
+            ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                    this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
+                    1, 0, 0, 0, 0.015);
 
         }
 
@@ -403,18 +476,20 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         this.entityData.define(USER_ID, -1);
         this.entityData.define(SPEED, 1F);
         this.entityData.define(SKIN, (byte)0);
+        this.entityData.define(TARGET, -1);
     }
 
 
     public void bubbleRedirect(){
-
-
         StrayCatAirBubble value = this;
         value.setFollowOwnerView(false);
 
-        Vec3 pos = this.target.getPosition(0);
-        Vec3 addToPosition = new Vec3(0, this.target.getBbHeight() * 0.5f, 0);
-        Direction direction = ((IGravityEntity) this.target).roundabout$getGravityDirection();
+        Entity currentTarget = getTarget();
+        if (currentTarget == null) { return; }
+
+        Vec3 pos = currentTarget.getPosition(0);
+        Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);
+        Direction direction = ((IGravityEntity) currentTarget).roundabout$getGravityDirection();
         if (direction != Direction.DOWN) {
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
         }
@@ -426,6 +501,21 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 (targetPos.y() - this.getY()),
                 (targetPos.z() - this.getZ())
         ).normalize().scale(this.getSped() * 0.75);
+
+        Vec3 lastDir = this.getDeltaMovement().normalize();
+        Vec3 newDir = vector.normalize();
+
+        if (lastDir.distanceTo(newDir) > 0.4f && this.soundEffectCooldown <= 0) {
+            SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
+            if (Math.random() > 0.5) {
+                SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
+            }
+
+            this.level().playSound(null, this.blockPosition(), SE,
+                    SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
+
+            this.soundEffectCooldown = soundEffectCooldownMax + this.random.nextInt(40, 50);
+        }
 
         this.setDeltaMovement(vector);
         this.hurtMarked = true;

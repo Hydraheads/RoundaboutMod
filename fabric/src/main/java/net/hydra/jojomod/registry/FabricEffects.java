@@ -4,6 +4,9 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.DreamingEffect;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
+import net.hydra.jojomod.event.powers.OldEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +46,18 @@ public class FabricEffects extends MobEffect{
             register("unbalanced", new FabricEffects(MobEffectCategory.HARMFUL, 2738639));
     public static final MobEffect MOLD =
             register("mold", new FabricEffects(MobEffectCategory.HARMFUL, 0));
+    public static final MobEffect CRIPPLED = register("crippled", new FabricEffects(MobEffectCategory.HARMFUL, 725255)
+            .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL)
+    );
+    public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
+    public static final MobEffect OLD = register("old", new OldEffect());
+    public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
+    public static final MobEffect HAZE_VIRUS =
+            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+    public static final MobEffect DISTORTION_VIRUS =
+            register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+    public static final MobEffect VIRUS_IMMUNITY =
+            register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 8388863));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
@@ -69,5 +84,12 @@ public class FabricEffects extends MobEffect{
         ModEffects.VAMPIRE_BLOOD = VAMPIRE_BLOOD;
         ModEffects.UNBALANCED = UNBALANCED;
         ModEffects.MOLD = MOLD;
+        ModEffects.CRIPPLED = CRIPPLED;
+        ModEffects.HALLUCINATION = HALLUCINATION;
+        ModEffects.OLD = OLD;
+        ModEffects.DREAMING = DREAMING;
+        ModEffects.HAZE_VIRUS = HAZE_VIRUS;
+        ModEffects.DISTORTION_VIRUS = DISTORTION_VIRUS;
+        ModEffects.VIRUS_IMMUNITY = VIRUS_IMMUNITY;
     }
 }
