@@ -2,7 +2,9 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.block.BloodyStoneMaskBlock;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -39,6 +41,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
@@ -93,6 +96,19 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                         15, 0.4, 0.4, 0.25, 0.4);
                 SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
                 this.playSound($$6, 1F, 1.5F);
+
+                if (getOwner() != null){
+                    BlockState state = this.level().getBlockState($$0.getBlockPos());
+                    if (state.getBlock() instanceof StoneMaskBlock &&
+                            !(state.getBlock() instanceof BloodyStoneMaskBlock) &&
+                            MainUtil.getIsGamemodeApproriateForGrief(getOwner())){
+                        this.level().setBlockAndUpdate($$0.getBlockPos(), ModBlocks.BLOODY_STONE_MASK_BLOCK.
+                                defaultBlockState().
+                                setValue(StoneMaskBlock.FACING,state.getValue(StoneMaskBlock.FACING)).
+                                setValue(StoneMaskBlock.WATERLOGGED,state.getValue(StoneMaskBlock.WATERLOGGED))
+                        );
+                    }
+                }
             }
             this.discard();
         }
@@ -114,9 +130,9 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide) {
-            if (isRemoved())
+            if (isRemoved() || $$0.getEntity() == null)
                 return;
-            if ($$0.getEntity() != null && ownedBy($$0.getEntity()))
+            if (ownedBy($$0.getEntity()))
                 return;
 
             if (getSplatterType() == 0){
@@ -174,6 +190,10 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                         S2CPacketUtil.sendPlaySoundPacket(sp, sp.getId(), PowersKingCrimson.DING_NOISE);
                     }
                 }
+            }
+
+            if (getSplatterType() != 2) {
+                MainUtil.activateStoneMask($$0.getEntity());
             }
             this.discard();
         }

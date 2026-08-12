@@ -4077,7 +4077,7 @@
   "config.roundabout.timestopCancelsFood.name": "Time Stop Cancels Food",
   "config.roundabout.timestopCancelsFood.desc": "While in stopped time, you cannot gain healing from food",
   "config.roundabout.postTESoften.name": "Post TE Soften",
-  "config.roundabout.postTESoften.desc": "If ending time erase makes ",
+  "config.roundabout.postTESoften.desc": "If ending time erase makes certain damage after it ends weaker like time stop does. Good to prevent rushdown abuse.",
 
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
