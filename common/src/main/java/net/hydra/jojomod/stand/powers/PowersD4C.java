@@ -98,28 +98,22 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
-            case SKILL_1_CROUCH -> {
-                chopClient();
-            }
             case SKILL_3_GUARD -> {
-                blockSwitchClient();
+                betweenVisionClient();
             }
             case SKILL_3_NORMAL -> {
                 dashOrBlockSwitchClient();
             }
+            case SKILL_3_CROUCH -> {
+                chopClient();
+            }
         }
     }
 
-    public void blockSwitchClient(){
-        tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+    public void betweenVisionClient(){
     }
     public void dashOrBlockSwitchClient(){
-
-        if (self.isBlocking() || isGuarding()){
-            blockSwitchClient();
-        } else {
             dash();
-        }
     }
     public void chopClient(){
         if (!canImpale()){
@@ -139,10 +133,12 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (!isHoldingSneak()){
+        if (isGuarding()) {
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+        } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 1, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_1,0);
         } else {
-            LockedOrNot(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.SKILL_1_SNEAK,0);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_3);
         }
 
         if (!isHoldingSneak()){
@@ -152,17 +148,13 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         if (!isHoldingSneak()) {
-            if (isGuarding() || self.isBlocking() || self.getUseItem().getItem() instanceof ShieldItem){
-                if (canUseStandGuard){
-                    setSkillIcon(context, x, y, 3, StandIcons.D4C_SHIELD_STAND, PowerIndex.NONE);
-                } else {
-                    setSkillIcon(context, x, y, 3, StandIcons.D4C_SHIELD_SHIELD, PowerIndex.NONE);
-                }
+            if (isGuarding()){
+                setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
             } else {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         } else {
-            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+            LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_1_SNEAK,0);
         }
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
@@ -172,8 +164,7 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean interceptGuard(){
-        return canUseStandGuard || !(self.getMainHandItem().getItem() instanceof ShieldItem ||
-                self.getOffhandItem().getItem() instanceof ShieldItem);
+        return true;
     }
     @Override
     public boolean cancelSprintJump(){
@@ -336,26 +327,10 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.chopAttack();
-        } else if (move == PowerIndex.POWER_3_BLOCK){
-            switchBlock();
-            return false;
         }
         return super.setPowerOther(move,lastMove);
     }
 
-    public void switchBlock(){
-        canUseStandGuard = !canUseStandGuard;
-        saveDiscAndSync();
-
-        if (!canUseStandGuard){
-            xTryPower(PowerIndex.NONE,true);
-        } else {
-            if (self.getUseItem().getItem() instanceof ShieldItem){
-                self.stopUsingItem();
-                xTryPower(PowerIndex.GUARD,true);
-            }
-        }
-    }
 
     public boolean chopAttack(){
         StandEntity stand = getStandEntity(this.self);
@@ -751,16 +726,11 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
-        $$0.putBoolean("canUseStandGuard", this.canUseStandGuard);
     }
 
-    public boolean canUseStandGuard = true;
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
-        if ($$0.contains("canUseStandGuard")) {
-            this.canUseStandGuard = $$0.getBoolean("canUseStandGuard");
-        }
     }
     public boolean isWip(){
         return true;
