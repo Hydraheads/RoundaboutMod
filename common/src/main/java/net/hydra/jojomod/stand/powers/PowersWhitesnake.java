@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyboardPilotInput;
@@ -72,7 +71,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
@@ -84,7 +82,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.LeverBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -1825,9 +1822,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         for (Entity entity : stand.level().getEntities(stand, searchBounds)) {
             if (!(entity instanceof ItemEntity itemEntity) || !stand.getSensing().hasLineOfSight(entity)) continue;
             ItemStack stack = itemEntity.getItem();
-            if (stack.getItem() instanceof BlockItem blockItem
-                    && (blockItem.getBlock() instanceof ShulkerBoxBlock
-                    || blockItem.getBlock() instanceof FancyLighterBlock)) continue;
+            if (!isThrowableDisc(stack)) continue;
             stand.canAcquireHeldItem = true;
             stand.setHeldItem(stack.copyWithCount(1));
             self.level().playSound(null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
