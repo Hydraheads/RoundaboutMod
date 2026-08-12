@@ -25,29 +25,30 @@ public abstract class ForgeEatingMixin {
 
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),remap = false,require = 0, cancellable = true)
     protected void roundabout$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
-        if (entity != null){
-            if (stack.getOrCreateTag().contains("pearljamfood")){
+        if (entity != null) {
+            if (stack.getOrCreateTag().contains("pearljamfood")) {
                 FoodProperties props = stack.getFoodProperties(entity);
-                    if (FateTypes.hasBloodHunger(entity)){
-                        if (item.isEdible()) {
-                            this.eat((int) Math.min(MainUtil.getBloodAmount(stack) * 1.5, 6) , (float) Math.min(MainUtil.getSaturationAmount(stack) * 1.5f, 1.2f));
-                        }
-                        ci.cancel();
-                    } else if (props != null) {
-                        this.eat((int) Math.min(props.getNutrition() * 1.5, 6), (float) Math.min(props.getSaturationModifier() * 1.5f, 1.2f));
-                        ci.cancel();
+                if (FateTypes.hasBloodHunger(entity)) {
+                    if (item.isEdible()) {
+                        this.eat((int) Math.min(MainUtil.getBloodAmount(stack) * 1.5, 6), (float) Math.min(MainUtil.getSaturationAmount(stack) * 1.5f, 1.2f));
                     }
-                } 
-            if (PowerTypes.isErasingTime(entity)){
+                    ci.cancel();
+                } else if (props != null) {
+                    this.eat((int) Math.min(props.getNutrition() * 1.5, 6), (float) Math.min(props.getSaturationModifier() * 1.5f, 1.2f));
+                    ci.cancel();
+                }
+            }
+            if (PowerTypes.isErasingTime(entity)) {
                 ci.cancel();
                 return;
             }
-            if (FateTypes.hasBloodHunger(entity)){
+            if (FateTypes.hasBloodHunger(entity)) {
                 if (item.isEdible()) {
                     this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
                 }
             }
         }
+    }
     }
 
 
