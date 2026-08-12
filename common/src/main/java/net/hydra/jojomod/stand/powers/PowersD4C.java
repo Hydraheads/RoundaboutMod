@@ -25,6 +25,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,6 +37,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 
@@ -99,9 +101,24 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_1_CROUCH -> {
                 chopClient();
             }
-            case SKILL_3_NORMAL -> {
-                dash();
+            case SKILL_3_GUARD -> {
+                blockSwitchClient();
             }
+            case SKILL_3_NORMAL -> {
+                dashOrBlockSwitchClient();
+            }
+        }
+    }
+
+    public void blockSwitchClient(){
+        tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+    }
+    public void dashOrBlockSwitchClient(){
+
+        if (self.isBlocking() || isGuarding()){
+            blockSwitchClient();
+        } else {
+            dash();
         }
     }
     public void chopClient(){
@@ -135,7 +152,15 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         if (!isHoldingSneak()) {
-            setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            if (isGuarding() || self.isBlocking() || self.getUseItem().getItem() instanceof ShieldItem){
+                if (canUseStandGuard){
+                    setSkillIcon(context, x, y, 3, StandIcons.D4C_SHIELD_STAND, PowerIndex.NONE);
+                } else {
+                    setSkillIcon(context, x, y, 3, StandIcons.D4C_SHIELD_SHIELD, PowerIndex.NONE);
+                }
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
+            }
         } else {
             setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
         }
@@ -144,6 +169,11 @@ public class PowersD4C extends NewPunchingStand {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
         }
+    }
+    @Override
+    public boolean interceptGuard(){
+        return canUseStandGuard || !(self.getMainHandItem().getItem() instanceof ShieldItem ||
+                self.getOffhandItem().getItem() instanceof ShieldItem);
     }
     @Override
     public boolean cancelSprintJump(){
@@ -306,8 +336,25 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.chopAttack();
+        } else if (move == PowerIndex.POWER_3_BLOCK){
+            switchBlock();
+            return false;
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void switchBlock(){
+        canUseStandGuard = !canUseStandGuard;
+        saveDiscAndSync();
+
+        if (!canUseStandGuard){
+            xTryPower(PowerIndex.NONE,true);
+        } else {
+            if (self.getUseItem().getItem() instanceof ShieldItem){
+                self.stopUsingItem();
+                xTryPower(PowerIndex.GUARD,true);
+            }
+        }
     }
 
     public boolean chopAttack(){
@@ -701,7 +748,20 @@ public class PowersD4C extends NewPunchingStand {
         return 18;
     }
 
+    @Override
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("canUseStandGuard", this.canUseStandGuard);
+    }
 
+    public boolean canUseStandGuard = true;
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("canUseStandGuard")) {
+            this.canUseStandGuard = $$0.getBoolean("canUseStandGuard");
+        }
+    }
     public boolean isWip(){
         return true;
     }
