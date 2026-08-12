@@ -6141,7 +6141,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         boolean isPacketPlayer = false;
 
-        if (this.level().clientSide()) {
+        if (this.level().isClientSide) {
             Minecraft mc = Minecraft.getInstance();
             isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
         }
