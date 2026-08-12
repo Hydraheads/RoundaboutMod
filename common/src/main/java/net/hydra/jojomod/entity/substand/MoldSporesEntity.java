@@ -122,7 +122,11 @@ public class MoldSporesEntity extends StandEntity {
             S2CPacketUtil.sync_mold_range(range, this.getId());
         }
 
-
+        if(client){
+            Roundabout.LOGGER.info("ClientRange= " + range);
+        }else{
+            Roundabout.LOGGER.info("ServerRange= " + range);
+        }
         super.tick();
     }
 
@@ -179,7 +183,7 @@ public class MoldSporesEntity extends StandEntity {
                             }
                             entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
                             if (!entity.isAlive()) {
-                                range += 4;
+                                range += 2;
                                 if (lifetime_add > 0) {
                                     lifetime += lifetime_add;
                                     lifetime_add -= 10;
