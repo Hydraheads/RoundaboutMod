@@ -836,8 +836,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     }
                 }
             }
+            discard();
         }
-        return super.changeDimension($$0);
+        return null;
     }
 
     @Override
