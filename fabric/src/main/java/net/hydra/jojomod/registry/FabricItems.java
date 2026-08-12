@@ -114,7 +114,10 @@ public class FabricItems {
     public static Item STAND_DISC_KILLER_QUEEN = registerItem("killer_queen_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
     public static Item MAX_STAND_DISC_KILLER_QUEEN = registerItem("max_killer_queen_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))); 
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null)));
+
+    public static Item STAND_DISC_PEARL_JAM = registerItem("pearl_jam_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null)));
 
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
@@ -660,6 +663,7 @@ public class FabricItems {
                         entries.accept(FANCY_LIGHTER);
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
+                        entries.accept(STAND_DISC_PEARL_JAM);
 
 
                     }).build());
@@ -736,6 +740,7 @@ public class FabricItems {
         ModItems.STAND_DISC_CINDERELLA = STAND_DISC_CINDERELLA;
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = STAND_DISC_MANHATTAN_TRANSFER;
         ModItems.STAND_DISC_BLACK_SABBATH = STAND_DISC_BLACK_SABBATH;
+        ModItems.STAND_DISC_PEARL_JAM = STAND_DISC_PEARL_JAM;
         ModItems.STAND_DISC_HEY_YA = STAND_DISC_HEY_YA;
         ModItems.STAND_DISC_MANDOM = STAND_DISC_MANDOM;
         ModItems.STAND_DISC_SURVIVOR = STAND_DISC_SURVIVOR;

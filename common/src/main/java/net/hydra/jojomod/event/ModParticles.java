@@ -100,6 +100,8 @@ public class ModParticles {
     public static SimpleParticleType METALLICA_RAZOR;
     public static SimpleParticleType METALLICA_SCISSORS;
 
+    public static SimpleParticleType TOOTH;
+
     public static SimpleParticleType TUSK_HOLE;
     public static SimpleParticleType KILLER_QUEEN_EXPLOSION;
 }

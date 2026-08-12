@@ -4,6 +4,7 @@ import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,13 +25,25 @@ public abstract class ForgeEatingMixin {
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),remap = false,require = 0, cancellable = true)
     protected void roundabout$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
         if (entity != null){
-            if (FateTypes.hasBloodHunger(entity)){
-                if (item.isEdible()) {
-                    this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
+            if (stack.getOrCreateTag().contains("pearljamfood")){
+                FoodProperties props = stack.getFoodProperties(entity);
+                    if (FateTypes.hasBloodHunger(entity)){
+                        if (item.isEdible()) {
+                            this.eat((int) Math.min(MainUtil.getBloodAmount(stack) * 1.5, 6) , (float) Math.min(MainUtil.getSaturationAmount(stack) * 1.5f, 1.2f));
+                        }
+                        ci.cancel();
+                    } else if (props != null) {
+                        this.eat((int) Math.min(props.getNutrition() * 1.5, 6), (float) Math.min(props.getSaturationModifier() * 1.5f, 1.2f));
+                        ci.cancel();
+                    }
+                } else if (FateTypes.hasBloodHunger(entity)){
+                    if (item.isEdible()) {
+                        this.eat(MainUtil.getBloodAmount(stack), MainUtil.getSaturationAmount(stack));
+                    }
+                    ci.cancel();
                 }
-                ci.cancel();
             }
         }
     }
 
-}
+

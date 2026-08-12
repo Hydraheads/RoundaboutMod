@@ -59,6 +59,8 @@ public class RoundaboutFabric implements ModInitializer {
         Roundabout.init(false);
         ModSounds.registerSoundEvents();
         ConfigManager.loadBlacklists2();
+        ConfigManager.loadFoodClear();
+        ConfigManager.foodParticleParser();
     }
 
     

@@ -29,6 +29,12 @@
       "roundabout:summon_black_sabbath"
     ]
   },
+  "summon_pearl_jam": {
+    "subtitle": "sounds.roundabout.summon_pearl_jam",
+    "sounds": [
+      "roundabout:summon_pearl_jam"
+    ]
+  },
   "block_freeze": {
     "subtitle": "sounds.roundabout.block_freeze",
     "sounds": [
@@ -501,6 +507,12 @@
     "subtitle": "sounds.roundabout.stray_cat_shoot",
     "sounds": [
       "roundabout:stray_cat_shoot"
+    ]
+  },
+  "pearl_jam_palm_read": {
+    "subtitle": "sounds.roundabout.pearl_jam_palm_read",
+    "sounds": [
+      "roundabout:pearl_jam_palm_read"
     ]
   },
   "summon_magician": {

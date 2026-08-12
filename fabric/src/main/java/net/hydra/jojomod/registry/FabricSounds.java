@@ -311,6 +311,9 @@ public class FabricSounds {
         addSound(ModSounds.ANUBIS_SHIELDBREAK_ID, ModSounds.ANUBIS_SHIELDBREAK_EVENT);
         addSound(ModSounds.ANUBIS_EXTRA_ID, ModSounds.ANUBIS_EXTRA_EVENT);
 
+        addSound(ModSounds.SUMMON_PEARL_JAM_ID, ModSounds.SUMMON_PEARL_JAM_EVENT);
+        addSound(ModSounds.PEARL_JAM_PALM_READ_ID, ModSounds.PEARL_JAM_PALM_READ_EVENT);
+
         addSound(ModSounds.SHA_JUMP_ID, ModSounds.SHA_JUMP_EVENT);
         addSound(ModSounds.KILLER_QUEEN_IMPALE_ID, ModSounds.KILLER_QUEEN_IMPALE_EVENT);
         addSound(ModSounds.KILLER_QUEEN_PUNCH_ID, ModSounds.KILLER_QUEEN_PUNCH_EVENT);

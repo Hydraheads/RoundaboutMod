@@ -330,4 +330,7 @@ public class ForgeParticles {
             "metallica_c", () -> new SimpleParticleType(false));
     public static final RegistryObject<SimpleParticleType> METALLICA_D = PARTICLES.register(
             "metallica_d", () -> new SimpleParticleType(false));
+
+    public static final RegistryObject<SimpleParticleType> TOOTH = PARTICLES.register("tooth",
+            () -> new SimpleParticleType(true));
 }

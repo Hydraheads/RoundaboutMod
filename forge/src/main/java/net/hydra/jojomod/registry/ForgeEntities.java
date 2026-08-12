@@ -441,6 +441,14 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
             );
+    public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
+            ENTITY_TYPES.register("pearl_jam", () ->
+                    EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
+            );
+
+
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
                     EntityType.Builder.of(WalkingHeartEntity::new, MobCategory.MISC).sized(0.75F, 2.05f).

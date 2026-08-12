@@ -74,6 +74,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.BLOCK_BOMB.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CINDERELLA.get(), CinderellaEntity.createStandAttributes().build());
         event.put(ForgeEntities.CALIFORNIA_KING_BED.get(), CaliforniaKingBedEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PEARL_JAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.PLANET_WAVES.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
@@ -380,6 +381,8 @@ public class ForgeEvents {
         ((MaxStandDiscItem)ForgeItems.MAX_STAND_DISC_PLANET_WAVES.get()).baseDisc = ((StandDiscItem)ForgeItems.STAND_DISC_PLANET_WAVES.get());
         ModItems.MAX_STAND_DISC_PLANET_WAVES = ForgeItems.MAX_STAND_DISC_PLANET_WAVES.get();
 
+        ModItems.STAND_DISC_PEARL_JAM = ForgeItems.STAND_DISC_PEARL_JAM.get();
+
         ModItems.STAND_DISC_CINDERELLA = ForgeItems.STAND_DISC_CINDERELLA.get();
         ModItems.STAND_DISC_CALIFORNIA_KING_BED = ForgeItems.STAND_DISC_CALIFORNIA_KING_BED.get();
         ModItems.STAND_DISC_MANHATTAN_TRANSFER = ForgeItems.STAND_DISC_MANHATTAN_TRANSFER.get();
@@ -638,6 +641,7 @@ public class ForgeEvents {
         ModParticles.ROAD_ROLLER_SMOKE = ForgeParticles.ROAD_ROLLER_SMOKE.get();
         ModParticles.TUSK_HOLE = ForgeParticles.TUSK_HOLE.get();
         ModParticles.KILLER_QUEEN_EXPLOSION = ForgeParticles.KILLER_QUEEN_EXPLOSION.get();
+        ModParticles.TOOTH = ForgeParticles.TOOTH.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
@@ -689,6 +693,7 @@ public class ForgeEvents {
         ModEntities.SHEER_HEART_ATTACK = ForgeEntities.SHEER_HEART_ATTACK.get();
         ModEntities.CINDERELLA = ForgeEntities.CINDERELLA.get();
         ModEntities.CALIFORNIA_KING_BED = ForgeEntities.CALIFORNIA_KING_BED.get();
+        ModEntities.PEARL_JAM = ForgeEntities.PEARL_JAM.get();
         ModEntities.PLANET_WAVES = ForgeEntities.PLANET_WAVES.get();
         ModEntities.MANHATTAN_TRANSFER = ForgeEntities.MANHATTAN_TRANSFER.get();
         ModEntities.POLLINATION_TRANSFER = ForgeEntities.POLLINATION_TRANSFER.get();
@@ -795,6 +800,8 @@ public class ForgeEvents {
 
         ForgeItems.assignStupidForge();
         ConfigManager.loadBlacklists2();
+        ConfigManager.loadFoodClear();
+        ConfigManager.foodParticleParser();
     }
 
     /**

@@ -1093,8 +1093,6 @@ public class ClientUtil {
                 return 10978493;
             }
 
-
-
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
 

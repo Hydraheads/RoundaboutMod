@@ -70,6 +70,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SURVIVOR.get(), SurvivorRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KILLER_QUEEN.get(), KillerQueenRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CREAM.get(), CreamRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PEARL_JAM.get(), PearlJamRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GREEN_DAY.get(), GreenDayRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RATT.get(), RattRenderer::new);
         event.registerEntityRenderer(ForgeEntities.REDD.get(), ReddRenderer::new);
@@ -244,6 +245,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.SHEER_HEART_ATTACK_LAYER, SheerHeartAttackModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SOFT_AND_WET_KILLER_QUEEN_LAYER, SoftAndWetKillerQueenModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CINDERELLA_LAYER, CinderellaModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.PEARL_JAM_LAYER, PearlJamModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.CALIFORNIA_LAYER, CaliforniaKingBedModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_LAYER, PlanetWavesModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.PLANET_WAVES_SPARTA_LAYER, PlanetWavesSpartaModel::getTexturedModelData);
@@ -485,5 +487,6 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.ROAD_ROLLER_SMOKE.get(), RoadRollerSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.TUSK_HOLE.get(), TuskHoleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.KILLER_QUEEN_EXPLOSION.get(), KQExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.TOOTH.get(), ToothParticle.Provider::new);
     }
 }

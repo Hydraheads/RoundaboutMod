@@ -822,6 +822,11 @@ public class StandIcons {
     public static final ResourceLocation EMPEROR_SQUINT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_squint.png");
 
+    public static final ResourceLocation PEARL_JAM_PALM_READ = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/pearl_jam/palm_read.png");
+    public static final ResourceLocation PEARL_JAM_FOOD_ENERGIZE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/pearl_jam/food_energize.png");
+
     public static final ResourceLocation EERIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/eerie_shift.png");
     public static final ResourceLocation EERIE_SKIN_ALEX = new ResourceLocation(Roundabout.MOD_ID,
