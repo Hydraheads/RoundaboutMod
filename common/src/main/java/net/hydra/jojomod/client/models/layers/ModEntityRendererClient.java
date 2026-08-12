@@ -63,6 +63,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation BLAZE_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "blaze_transfer"), "main");
     public static final ModelLayerLocation BLACK_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"), "main");
+    public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation BEACH_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");

@@ -54,6 +54,7 @@ public class ModEntities {
     public static EntityType<FleshPileEntity> FLESH_PILE;
     public static EntityType<PurpleHazeEntity> PURPLE_HAZE;
     public static EntityType<CreamEntity> CREAM;
+    public static EntityType<PearlJamEntity> PEARL_JAM;
     public static EntityType<SurvivorEntity> SURVIVOR;
     public static EntityType<GreenDayEntity> GREEN_DAY;
     public static EntityType<SeperatedLegsEntity> SEPERATED_LEGS;

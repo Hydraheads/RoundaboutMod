@@ -220,10 +220,6 @@ public class SeperatedArmEntity extends StandEntity {
             this.setFadeOut((byte) 1);
             boolean client = this.level().isClientSide();
             LivingEntity user = this.getUser();
-            if (tickCount < 10) {
-                userUUID = user.getStringUUID();
-                Roundabout.LOGGER.info(userUUID);
-            }
             if (!client) {
 
                 if (user == null) {
@@ -526,10 +522,9 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                     if (flyingTicks > 2 && SpinTicks > 0) {
-                        BlockPos pos = new BlockPos(new Vec3i((int) this.getX(), (int) (this.getY() - 0.2), (int) this.getZ()));
-                        if ((level().getBlockState(new BlockPos(pos)).isAir())) {
-                            this.level().addParticle(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-                            entity.addDeltaMovement(new Vec3(0, 0.2, 0));
+
+                        if (Math.abs(this.getY()-entity.getEyeHeight()) < 4 ) {
+                            entity.addDeltaMovement(new Vec3(0, 0.1, 0));
                         }
                     }
 

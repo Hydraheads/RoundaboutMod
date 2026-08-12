@@ -3,6 +3,8 @@ package net.hydra.jojomod.util.config;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandDiscItem;
@@ -10,8 +12,12 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.zetalasis.hjson.JsonValue;
@@ -19,6 +25,7 @@ import net.zetalasis.hjson.JsonValue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 public abstract class ConfigManager {
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -390,6 +397,76 @@ public abstract class ConfigManager {
                     if (SDI.standPowers.isStandEnabled()){
                         ModItems.STAND_ARROW_SECONDARY_STAND_POOL.add(SDI);
                     }
+                }
+            }
+        }
+    }
+
+    public static void loadFoodClear(){
+        if (getAdvancedConfig().pearlJamFoodEffect != null){
+            MainUtil.foodCuresThat.clear();
+            MainUtil.foodAddsThat.clear();
+            MainUtil.specialFoodRemoves.clear();
+            MainUtil.pearlJamFallback = null;
+            for (String entry : getAdvancedConfig().pearlJamFoodEffect){
+                try {
+                    String[] split = entry.split(":");
+                    if (split[0].equals("fallback")){
+                        ResourceLocation effectId = new ResourceLocation(split[1], split[2]);
+                        MainUtil.pearlJamFallback = BuiltInRegistries.MOB_EFFECT.get(effectId);
+                    } else {
+                        ResourceLocation foodId = new ResourceLocation(split[0], split[1]);
+                        ResourceLocation effectId;
+                        Item foodItem = BuiltInRegistries.ITEM.get(foodId);
+                        List<MobEffect> cureEffects = new java.util.ArrayList<>(List.of());
+                        List<MobEffect> addEffects = new java.util.ArrayList<>(List.of());
+                        List<String> conditions = new java.util.ArrayList<>(List.of());
+                        for (int i = 2; i < split.length; ) {
+                            if (split[i].startsWith("%")) {
+                                conditions.add(split[i].substring(1));
+                                i++;
+                            } else if (split[i + 1].startsWith("!")) {
+                                effectId = new ResourceLocation(split[i], split[i + 1].substring(1));
+                                addEffects.add(BuiltInRegistries.MOB_EFFECT.get(effectId));
+                                i += 2;
+                            } else {
+                                effectId = new ResourceLocation(split[i], split[i + 1]);
+                                cureEffects.add(BuiltInRegistries.MOB_EFFECT.get(effectId));
+                                i += 2;
+                            }
+                        }
+                        if (!cureEffects.isEmpty()) {MainUtil.foodCuresThat.put(foodItem, cureEffects);}
+                        if (!addEffects.isEmpty()) {MainUtil.foodAddsThat.put(foodItem, addEffects);}
+                        if (!conditions.isEmpty()) {MainUtil.specialFoodRemoves.put(foodItem, conditions);}
+                    }
+                }catch (Exception e){
+                    Roundabout.LOGGER.error("Failed to parse pearl jam food effect entry '{}'", entry, e);
+                };
+            }
+        }
+    }
+
+    public static void foodParticleParser(){
+        if(getAdvancedConfig().pearlJamFoodParticles != null){
+            MainUtil.foodParticles.clear();
+            for (String entry : getAdvancedConfig().pearlJamFoodParticles){
+                try {
+                    String[] split = entry.split(":");
+                    if (split[0].equals("fallback")){
+                        ResourceLocation particleId = new ResourceLocation(split[1], split[2]);
+                        ParticleOptions particleOptions = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(particleId);
+                        MainUtil.foodParticleFallback = Pair.of(particleOptions, split[3]);
+                    } else {
+                        ResourceLocation foodId = new ResourceLocation(split[0], split[1]);
+                        ResourceLocation particleId = new ResourceLocation(split[2], split[3]);
+                        Item foodItem = BuiltInRegistries.ITEM.get(foodId);
+                        ParticleOptions particleOptions = (SimpleParticleType) BuiltInRegistries.PARTICLE_TYPE.get(particleId);
+                        Pair<ParticleOptions, String> pair = Pair.of(particleOptions, split[4]);
+                        MainUtil.foodParticles.put(foodItem, pair);
+                    }
+
+                } catch (Exception e){
+                    Roundabout.LOGGER.error("Failed to parse pearl jam food particle entry '{}'", entry, e);
                 }
             }
         }

@@ -1531,6 +1531,12 @@ public class ModSounds {
     public static final ResourceLocation HEEL_STOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEEL_STOMP);
     public static SoundEvent HEEL_STOMP_EVENT = SoundEvent.createVariableRangeEvent(HEEL_STOMP_ID);
 
+    public static final String SUMMON_PEARL_JAM = "summon_pearl_jam";
+    public static final ResourceLocation SUMMON_PEARL_JAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_PEARL_JAM);
+    public static SoundEvent SUMMON_PEARL_JAM_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_PEARL_JAM_ID);
+    public static final String PEARL_JAM_PALM_READ = "pearl_jam_palm_read";
+    public static final ResourceLocation PEARL_JAM_PALM_READ_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PEARL_JAM_PALM_READ);
+    public static SoundEvent PEARL_JAM_PALM_READ_EVENT = SoundEvent.createVariableRangeEvent(PEARL_JAM_PALM_READ_ID);
 
     public static final String SPIKE_HIT = "spike_hit";
     public static final ResourceLocation SPIKE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPIKE_HIT);

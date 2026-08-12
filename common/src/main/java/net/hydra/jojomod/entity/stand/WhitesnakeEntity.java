@@ -86,6 +86,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private boolean meltingDimensionsActive;
     private float controlStrafe;
     private float controlForward;
+    private float controlBodyYaw;
+    private boolean controlBodyRotationActive;
     private Vec3 meltingTrailAnchor;
     private Direction meltingTrailGravity = Direction.DOWN;
     private int meltingHoverDripTicks;
@@ -368,8 +370,35 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             tickMeltingHoverMeter(controlled);
             tickMeltingAcid(controlled);
         }
+        if (level().isClientSide() && isControlModeActive() && isControlledByLocalInstance()
+                && !melting) {
+            tickControlBodyRotation();
+        } else {
+            controlBodyRotationActive = false;
+        }
         if (isMeltingModeActive()) setSprinting(false);
         if (controlKnockbackTicks > 0) controlKnockbackTicks--;
+    }
+
+    private void tickControlBodyRotation() {
+        if (!controlBodyRotationActive) {
+            controlBodyYaw = yBodyRot;
+            controlBodyRotationActive = true;
+        }
+        double xMovement = getX() - xo;
+        double zMovement = getZ() - zo;
+        if (xMovement * xMovement + zMovement * zMovement > 0.0025D) {
+            float movementYaw = (float) (Mth.atan2(zMovement, xMovement) * Mth.RAD_TO_DEG) - 90.0F;
+            if (Math.abs(Mth.wrapDegrees(getYRot() - movementYaw)) > 95.0F) {
+                movementYaw += 180.0F;
+            }
+            controlBodyYaw = Mth.rotLerp(0.3F, controlBodyYaw, movementYaw);
+        }
+        float headDifference = Mth.wrapDegrees(getYRot() - controlBodyYaw);
+        if (Math.abs(headDifference) > 50.0F) {
+            controlBodyYaw += headDifference - Math.copySign(50.0F, headDifference);
+        }
+        setYBodyRot(controlBodyYaw);
     }
 
     private void tickPressurePlates(boolean controlled) {

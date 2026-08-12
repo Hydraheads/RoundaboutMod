@@ -679,8 +679,10 @@ public class ForgeSounds {
             register(ModSounds.TUSK_HOLE_IMPACT, ModSounds.TUSK_HOLE_IMPACT_ID);
 
 
-
-
+    public static final RegistryObject<SoundEvent> SUMMON_PEARL_JAM =
+            register(ModSounds.SUMMON_PEARL_JAM, ModSounds.SUMMON_PEARL_JAM_ID);
+    public static final RegistryObject<SoundEvent> PEARL_JAM_PALM_READ =
+            register(ModSounds.PEARL_JAM_PALM_READ, ModSounds.PEARL_JAM_PALM_READ_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =

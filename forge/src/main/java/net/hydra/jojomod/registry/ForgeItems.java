@@ -782,6 +782,9 @@ public class ForgeItems {
     public static final RegistryObject<Item> STAND_DISC_CALIFORNIA_KING_BED = addToDiscTab(ITEMS.register("california_king_bed_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCalifornia(null))));
 
+    public static final RegistryObject<Item> STAND_DISC_PEARL_JAM = addToWIPTab(ITEMS.register("pearl_jam_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null))));
+
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));
     public static final RegistryObject<Item> MAX_STAND_DISC_D4C = ITEMS.register("max_d4c_disc",

@@ -8,6 +8,7 @@
     "FabricFireBlock",
     "FabricServerPlayer",
     "LootTableMixin",
+    "FabricEnergizedFoodHungerMixin",
     "MilkBucketMixin"
   ],
   "client": [
