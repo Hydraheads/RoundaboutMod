@@ -532,6 +532,16 @@ public class FabricEntities {
                         EntityType.Builder.of(PlanetWavesSpartaEntity::new, MobCategory.MISC).
                                 sized(0.75F, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":planet_waves_sparta")
                 );
+
+        public static final EntityType<PearlJamEntity> PEARL_JAM =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("pearl_jam"),
+                        EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).
+                                sized(0.25f, 0.30f).clientTrackingRange(14).build(Roundabout.MOD_ID+":pearl_jam")
+            );
+
+
         public static final EntityType<PlanetWavesCosmicEntity> PLANET_WAVES_COSMIC =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1105,6 +1115,7 @@ public class FabricEntities {
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
                 ModEntities.BEACH_SABBATH = BEACH_SABBATH;
                 ModEntities.WALKING_HEART = WALKING_HEART;
+                ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
                 ModEntities.TUSK_A1 = TUSK_A1;
@@ -1294,6 +1305,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(ANUBIS, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CINDERELLA, CinderellaEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(CALIFORNIA_KING_BED, CaliforniaKingBedEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PEARL_JAM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_SPARTA, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(PLANET_WAVES_COSMIC, StandEntity.createStandAttributes());

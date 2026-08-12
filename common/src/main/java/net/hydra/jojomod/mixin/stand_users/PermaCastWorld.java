@@ -82,21 +82,35 @@ public class PermaCastWorld implements IPermaCasting {
 
     /**Adds an entity to the list of perma casting entities*/
     @Override
-    public void roundabout$removePermaCastingEntity(LivingEntity $$0) {
-        if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+    public void roundabout$removePermaCastingEntity(LivingEntity entity) {
+        if (((Level) (Object) this).isClientSide) {
+            return;
+        }
+
+        if (roundabout$PermaCastingEntities == null) {
+            roundabout$PermaCastingEntities = ImmutableList.of();
+            return;
+        }
+
+        if (roundabout$PermaCastingEntities.isEmpty()) {
+            return;
+        }
+
+        List<LivingEntity> updatedEntities =
+                Lists.newArrayList(roundabout$PermaCastingEntities);
+
+        boolean removed = updatedEntities.removeIf(existingEntity -> {
+            if (existingEntity.getId() == entity.getId()) {
+                roundabout$permaCastRemovalToClients(existingEntity);
+                return true;
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
-                for (int i = roundabout$PermaCastingEntities.size() - 1; i >= 0; --i) {
-                    if (roundabout$PermaCastingEntities.get(i).getId() == $$0.getId()) {
-                        roundabout$permaCastRemovalToClients(roundabout$PermaCastingEntities.get(i));
-                        $$1.remove(i);
-                    }
-                }
-                roundabout$PermaCastingEntities = ImmutableList.copyOf($$1);
-            }
+
+            return false;
+        });
+
+        if (removed) {
+            roundabout$PermaCastingEntities =
+                    ImmutableList.copyOf(updatedEntities);
         }
     }
 

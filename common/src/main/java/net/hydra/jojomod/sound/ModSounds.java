@@ -1113,6 +1113,10 @@ public class ModSounds {
     public static final ResourceLocation PLANET_WAVES_TARGET_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PLANET_WAVES_TARGET);
     public static SoundEvent PLANET_WAVES_TARGET_EVENT = SoundEvent.createVariableRangeEvent(PLANET_WAVES_TARGET_ID);
 
+    public static final String PURPLE_HAZE_SUMMON = "purple_haze_summon";
+    public static final ResourceLocation PURPLE_HAZE_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SUMMON);
+    public static SoundEvent PURPLE_HAZE_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SUMMON_ID);
+
     public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
     public static SoundEvent SILVER_CHARIOT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SUMMON_ID);
@@ -1531,6 +1535,12 @@ public class ModSounds {
     public static final ResourceLocation HEEL_STOMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+HEEL_STOMP);
     public static SoundEvent HEEL_STOMP_EVENT = SoundEvent.createVariableRangeEvent(HEEL_STOMP_ID);
 
+    public static final String SUMMON_PEARL_JAM = "summon_pearl_jam";
+    public static final ResourceLocation SUMMON_PEARL_JAM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_PEARL_JAM);
+    public static SoundEvent SUMMON_PEARL_JAM_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_PEARL_JAM_ID);
+    public static final String PEARL_JAM_PALM_READ = "pearl_jam_palm_read";
+    public static final ResourceLocation PEARL_JAM_PALM_READ_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PEARL_JAM_PALM_READ);
+    public static SoundEvent PEARL_JAM_PALM_READ_EVENT = SoundEvent.createVariableRangeEvent(PEARL_JAM_PALM_READ_ID);
 
     public static final String SPIKE_HIT = "spike_hit";
     public static final ResourceLocation SPIKE_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPIKE_HIT);

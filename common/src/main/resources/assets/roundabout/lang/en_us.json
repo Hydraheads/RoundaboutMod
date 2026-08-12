@@ -190,6 +190,7 @@
   "item.roundabout.max_20th_century_boy_disc": "Stand Disc+",
   "item.roundabout.diver_down_disc": "Stand Disc",
   "item.roundabout.manhattan_transfer_disc": "Stand Disc",
+  "item.roundabout.pearl_jam_disc": "Stand Disc",
   "item.roundabout.black_sabbath_disc": "Stand Disc",
   "item.roundabout.max_diver_down_disc": "Stand Disc+",
   "item.roundabout.d4c_disc.desc": "D4C",
@@ -215,6 +216,7 @@
   "item.roundabout.max_cream_disc.desc": "Cream",
   "item.roundabout.cream_disc.desc": "Cream",
   "item.roundabout.20th_century_boy_disc.desc": "20th Century Boy",
+  "item.roundabout.pearl_jam_disc.desc": "Pearl Jam",
   "item.roundabout.emperor_disc.desc": "Emperor",
   "item.roundabout.max_emperor_disc.desc": "Emperor",
   "item.roundabout.anubis_disc.desc": "Anubis",
@@ -519,6 +521,7 @@
   "entity.roundabout.diver_down": "Diver Down",
   "entity.roundabout.green_day": "Green Day",
   "entity.roundabout.planet_waves": "Planet Waves",
+  "entity.roundabout.purple_haze": "Purple Haze",
   "entity.roundabout.manhattan_transfer": "Manhattan Transfer",
   "entity.roundabout.pollination_transfer": "Pollination Transfer",
   "entity.roundabout.blaze_transfer": "Blaze Transfer",
@@ -972,7 +975,7 @@
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
-  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Haze.",
+  "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
 
   "item.glaive.charge_power": "Charge Attack",
 
@@ -1112,6 +1115,8 @@
   "sounds.roundabout.planet_waves_big_meteor":  "Big Meteor Approaching",
   "sounds.roundabout.planet_waves_target":  "Meteor Target Switched",
   "sounds.roundabout.planet_waves_disintegration":  "Meteor Disintegrating",
+
+  "sounds.roundabout.purple_haze_summon":  "Stand summoned",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -2199,6 +2204,11 @@
   "ability.roundabout.activate_invincibility": "Activate Invincibility",
   "ability.roundabout.activate_invincibility.desc": "Activates the chosen stance, you can't move, use items, place blocks, heal or attacks in this state",
 
+  "ability.roundabout.food_energize": "Food Energize",
+  "ability.roundabout.food_energize.desc": "Energizes the food are holding with curing powers.",
+  "ability.roundabout.palm_read": "Palm Read",
+  "ability.roundabout.palm_read.desc": "Press If near a mob, reads their palm which displays their hunger and potion effects.",
+
   "ability.roundabout.locked": "???",
   "ability.roundabout.locked.ctrl": "Locked",
   "ability.roundabout.locked.desc": "Unlock at Development Stage %1$s",
@@ -2728,6 +2738,9 @@
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
+  "skins.roundabout.pearl_jam.anime": "Anime",
+  "skins.roundabout.pearl_jam.manga": "Manga",
+
   "unlock_skin.roundabout.the_world.over_heaven": "The World: Over Heaven Skin Unlocked!",
   "unlock_skin.roundabout.star_platinum.atomic": "Star Platinum: Atomic Skin Unlocked!",
   "unlock_skin.roundabout.king_crimson.reaper": "Blossoming Time Reaper Skin Unlocked!",
@@ -2976,6 +2989,14 @@
   "text.roundabout.century_stances.redstone_stance": "Redstone Stance",
   "text.roundabout.century_stances.ground_stance": "Ground Stance",
 
+  "text.roundabout.pearl_jam.palm_read_hunger": "%1$s hunger: %2$s/20",
+  "text.roundabout.pearl_jam.cure_lore": "Cures %1$s",
+  "text.roundabout.pearl_jam.add_lore": "Adds %1$s",
+  "text.roundabout.pearl_jam.remove_lore": "Removes %1$s",
+
+  "text.roundabout.condition.gasoline": "Gasoline",
+  "text.roundabout.condition.fire": "Fire",
+  "text.roundabout.condition.insomnia": "Insomnia",
   "text.roundabout.black_sabbath_inventory": "Invisi-Vision On",
 
   "config_translatiors_note": "(Text of this string not ingame): Hello, translators of the mod! I have no expectations",
@@ -3047,6 +3068,8 @@
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
   "config.roundabout.enableCinderella.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enablePearlJam.name": "Enable Stand",
+  "config.roundabout.enablePearlJam.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableManhattanTransfer.name": "Enable Stand",
   "config.roundabout.enableManhattanTransfer.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableBlackSabbath.name": "Enable Stand",
@@ -3355,6 +3378,13 @@
   "config.roundabout.emeraldCostCharacterVisage.desc": "Any character themed visage in the Cinderella shop, default 10.",
   "config.roundabout.enableJojoveinVisagesInShop.name": "JoJovein Visages",
   "config.roundabout.enableJojoveinVisagesInShop.desc": "Whether or not visages for designs used in JoJovein (the precursor mod/server/modpack to Roundabout). For example, Shizuka from JoJo Stars, which uses an adapted fan design. This config requires a restart to load.",
+
+  "config.roundabout.palmReadCooldown.name": "Palm Read Cooldown",
+  "config.roundabout.palmReadCooldown.desc": "The cooldown of the palm read ability, by default it is 40 ticks (2 seconds).",
+  "config.roundabout.palmReadEffectDuration.name": "Palm Read Effect Display Duration",
+  "config.roundabout.palmReadEffectDuration.desc": "How long you display the effects read with the palm read ability, by default lasts for 200 ticks, or 10 seconds.",
+  "config.roundabout.foodEnergizeCooldown.name": "Food Energize Cooldown",
+  "config.roundabout.foodEnergizeCooldown.desc": "The cooldown of the food energize ability, by default it is 40 ticks (2 seconds).",
 
   "config.roundabout.enablePlanetWaves.name": "Enable Planet Waves",
   "config.roundabout.enablePlanetWaves.desc": "Enable Planet Waves",
@@ -4264,6 +4294,7 @@
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",
   "config.roundabout.cinderellaSettings.name": "Cinderella",
+  "config.roundabout.pearlJamSettings.name": "Pearl Jam",
   "config.roundabout.manhattanTransferSettings.name": "Manhattan Transfer",
   "config.roundabout.blackSabbathSettings.name": "Black Sabbath",
   "config.roundabout.centuryBoySettings.name": "20cb",
@@ -4428,6 +4459,9 @@
   "config.roundabout.walkingHeartCooldownPerHit.desc": "How many cooldown ticks per hit in heel planted/wall walking mode.",
   "config.roundabout.walkingHeartCooldownBase.name": "Cooldown Base",
   "config.roundabout.walkingHeartCooldownBase.desc": "How many cooldown ticks when hit at least once in planted/wall walking mode.",
+
+  "sounds.roundabout.summon_pearl_jam": "Stand summoned",
+  "sounds.roundabout.pearl_jam_palm_read": "Hmmmmmmmm",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",

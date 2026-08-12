@@ -679,8 +679,10 @@ public class ForgeSounds {
             register(ModSounds.TUSK_HOLE_IMPACT, ModSounds.TUSK_HOLE_IMPACT_ID);
 
 
-
-
+    public static final RegistryObject<SoundEvent> SUMMON_PEARL_JAM =
+            register(ModSounds.SUMMON_PEARL_JAM, ModSounds.SUMMON_PEARL_JAM_ID);
+    public static final RegistryObject<SoundEvent> PEARL_JAM_PALM_READ =
+            register(ModSounds.PEARL_JAM_PALM_READ, ModSounds.PEARL_JAM_PALM_READ_ID);
 
 
     public static final RegistryObject<SoundEvent> THE_WORLD_OVER_HEAVEN_EVENT =
@@ -906,6 +908,10 @@ public class ForgeSounds {
             register(ModSounds.PLANET_WAVES_DISINTEGRATION, ModSounds.PLANET_WAVES_DISINTEGRATION_ID);
     public static final RegistryObject<SoundEvent> PLANET_WAVES_TARGET=
             register(ModSounds.PLANET_WAVES_TARGET, ModSounds.PLANET_WAVES_TARGET_ID);
+
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_SUMMON =
+            register(ModSounds.PURPLE_HAZE_SUMMON, ModSounds.PURPLE_HAZE_SUMMON_ID);
+
 
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);

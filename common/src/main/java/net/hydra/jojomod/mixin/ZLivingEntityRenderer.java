@@ -21,6 +21,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
+import net.hydra.jojomod.stand.powers.PowersPearlJam;
 import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.util.MainUtil;
@@ -114,6 +115,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
         ClientUtil.setThrowFadeToTheEther(1.0F);
         MetallicaClientRenderer.renderMetalMeterBar(entity, matrixStack, buffer);
+        for (PowersPearlJam instance : PowersPearlJam.getInstances()){
+            instance.renderEffectIcons(entity, matrixStack, buffer);
+        }
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
