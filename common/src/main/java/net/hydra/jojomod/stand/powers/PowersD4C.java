@@ -452,7 +452,7 @@ public class PowersD4C extends NewPunchingStand {
     public float getFinalAttackKnockback(){
         float charge = getChargedPercent();
         if (charge >= 1){
-            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3.1F);
+            return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*3.0F);
         } else if (charge >= 0.5F){
             return (((float)this.chargedFinal /(float)getMaxSuperHitTime())*2.8F);
         }
@@ -467,9 +467,9 @@ public class PowersD4C extends NewPunchingStand {
             }
             return ret;
         } else {
-            float ret = (getChargedPercent()*punchD)+3;
+            float ret = (getChargedPercent()*punchD)+1;
             if (this.chargedFinal >= getMaxSuperHitTime()){
-                ret +=2;
+                ret +=1;
             }
             return ret;
         }
@@ -672,6 +672,36 @@ public class PowersD4C extends NewPunchingStand {
         }
         return $$1;
     }
+
+
+    @Override
+    public float getPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.31F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(4.5f));
+        }
+    }
+    @Override
+    public float getHeavyPunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.87F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5.5F));
+        }
+    }
+
+    @Override
+    public float getBarrageDamagePlayer(){
+        return 8;
+    }
+
+    @Override
+    public float getBarrageDamageMob(){
+        return 18;
+    }
+
+
     public boolean isWip(){
         return true;
     }
