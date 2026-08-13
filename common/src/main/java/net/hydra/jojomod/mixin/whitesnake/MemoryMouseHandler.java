@@ -24,8 +24,8 @@ public abstract class MemoryMouseHandler {
         }
     }
 
-    @ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 0)
+    //@ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
+    //        target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 0)
     private double roundaboutWhitesnake$turnCameraYaw(double yawDelta) {
         Entity stand = roundaboutWhitesnake$getControlledStand();
         if (stand == null) return yawDelta;
@@ -33,8 +33,8 @@ public abstract class MemoryMouseHandler {
         return 0.0D;
     }
 
-    @ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 1)
+    //@ModifyArg(method = "turnPlayer()V", at = @At(value = "INVOKE",
+    //        target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"), index = 1)
     private double roundaboutWhitesnake$turnCameraPitch(double pitchDelta) {
         Entity stand = roundaboutWhitesnake$getControlledStand();
         if (stand == null) return pitchDelta;

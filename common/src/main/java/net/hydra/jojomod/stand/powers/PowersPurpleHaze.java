@@ -18,6 +18,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -38,6 +39,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -333,10 +335,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void Distortion() {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
+            self.addEffect(new MobEffectInstance(
+                    ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
-                self.addEffect(new MobEffectInstance(
-                        ModEffects.VIRUS_IMMUNITY, 100));
+                self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
             }
             this.setCooldown(PowerIndex.SKILL_1, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
@@ -369,7 +371,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     self.getXRot(),
                     self.getYRot(),
                     0.0F,
-                    1.5F,  // velocity
+                    0.4F,  // velocity
                     0.0F   // inaccuracy( 0 cause we have great aim in this house)
             );
 
@@ -379,6 +381,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
 
+    }
+    @Override
+    public byte getPermaCastContext() {
+        if(indistortionmode) {
+            return PermanentZoneCastInstance.DISTORTION_SMOKE;
+        } else return PermanentZoneCastInstance.PURPLE_SMOKE;
     }
 
     @Override
@@ -393,6 +401,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
 
+    @Override
+    protected Byte getSummonSound() {
+        return SoundIndex.SUMMON_SOUND;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice){
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.PURPLE_HAZE_SUMMON_EVENT;
+        }
+        return super.getSoundFromByte(soundChoice);
+    }
 
     @Override
     public boolean isWip(){

@@ -129,7 +129,6 @@ public class ClientUtil {
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
 
-
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
@@ -1324,8 +1323,6 @@ public class ClientUtil {
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
                 return 10978493;
             }
-
-
 
             if (powers.highlightsEntity(entity, player))
                 return powers.highlightsEntityColor(entity,player);
@@ -2566,6 +2563,10 @@ public class ClientUtil {
                 }
             }
         }
+    }
+
+    public static boolean isRenderingFlag(Entity entity){
+         return MainUtil.isHoldingBanner(entity);
     }
 
     public static boolean hasAttributeSwapped(Minecraft m) {

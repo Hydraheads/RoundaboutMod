@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Floats;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.datafixers.util.Pair;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
@@ -57,8 +58,7 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -102,6 +102,7 @@ import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
@@ -119,6 +120,7 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import org.spongepowered.asm.mixin.Unique;
+
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -238,6 +240,13 @@ public class MainUtil {
     public static final Map<String, Integer> SHA_CUSTOM_ENTITY_HEAT = new HashMap<>();
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
+
+    public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
+    public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
+    public static final Map<Item, List<String>> specialFoodRemoves = new HashMap<>();
+    public static MobEffect pearlJamFallback;
+    public static final Map<Item, Pair<ParticleOptions, String>> foodParticles = new HashMap<>();
+    public static Pair<ParticleOptions, String> foodParticleFallback;
 
     public static ArrayList<String> addedMobsWithRedBlood = Lists.newArrayList();
     public static ArrayList<String> addedMobsWithBlueBlood = Lists.newArrayList();
@@ -1496,9 +1505,9 @@ public class MainUtil {
         return level.getEntities(null, new AABB(k, r, t, l, s, u));
     }
 
-    public static List<net.minecraft.world.entity.Entity> hitbox(List<net.minecraft.world.entity.Entity> entities){
+    public static List<Entity> hitbox(List<Entity> entities){
 
-        List<net.minecraft.world.entity.Entity> hitEntities = new ArrayList<>(entities) {
+        List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || value instanceof StandEntity){
@@ -1507,9 +1516,9 @@ public class MainUtil {
         }
         return hitEntities;
     }
-    public static List<net.minecraft.world.entity.Entity> hitboxGas(List<net.minecraft.world.entity.Entity> entities){
+    public static List<Entity> hitboxGas(List<Entity> entities){
 
-        List<net.minecraft.world.entity.Entity> hitEntities = new ArrayList<>(entities) {
+        List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
             if ((!value.showVehicleHealth() && !(value instanceof GasolineCanEntity)) || value.isInvulnerable() || !value.isAlive()){
@@ -3756,4 +3765,18 @@ public class MainUtil {
 
     }
 
+    public static boolean isHoldingBanner(Entity entity){
+        if (entity instanceof Player pl){
+            //Only works for mainhand on purpose
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4) {
+                ItemStack stack = pl.getMainHandItem();
+                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
+                    if (!pl.isUsingItem()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

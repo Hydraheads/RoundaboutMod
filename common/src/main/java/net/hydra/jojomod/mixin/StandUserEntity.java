@@ -39,7 +39,6 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -489,7 +488,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private int roundabout$extraIFrames = 0;
     @Unique
     private int roundabout$gasolineIFRAMES = 0;
-
 
     @Unique
     public boolean roundabout$toggleFightOrFlight = false;
@@ -3611,7 +3609,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ACTIVE, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$STAND_ANIMATION, (byte) 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$UNIQUE_STAND_MODE_TOGGLE, false);
-            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 4);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
         }
@@ -6103,7 +6101,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
-    public int jumpImmunityTicks = 0;
+    public int jumpImmunityTicks = 4;
 
     public double StartingYPos = getY();
 
@@ -6139,22 +6137,18 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         }
 
-        if (previousYpos < this.getY()){
-            jumpImmunityTicks = 4;
-        }
-        else if(jumpImmunityTicks > -25) {
-            jumpImmunityTicks = jumpImmunityTicks - 1;
-        }
+        boolean isPacketPlayer = false;
 
-        Minecraft mc = Minecraft.getInstance();
-        boolean isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
-
-        if ((this.level().isClientSide && isPacketPlayer)
+        if (this.level().isClientSide) {
+            isPacketPlayer = ClientUtil.isPlayer(rdbt$this());
+        }
+        if ((isPacketPlayer)
                 || !(rdbt$this() instanceof Player) && !this.level().isClientSide) {
 
-            if (previousYpos < this.getY()) {
+            if (previousYpos < this.getY()){
                 jumpImmunityTicks = 4;
-            } else {
+            }
+            else if(jumpImmunityTicks > -25) {
                 jumpImmunityTicks = jumpImmunityTicks - 1;
             }
             movingDown = (previousYpos-0.1 > this.getY());
