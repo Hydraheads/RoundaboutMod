@@ -888,6 +888,7 @@ public class ForgeEvents {
         ModEntities.MODIFIED_NPC = ForgeEntities.MODIFIED_NPC.get();
         ModEntities.FOG_CLONE = ForgeEntities.FOG_CLONE.get();
         ModEntities.FAKE_ITEM = ForgeEntities.FAKE_ITEM.get();
+        ModEntities.BOMB_PLANTED_ITEM = ForgeEntities.BOMB_PLANTED_ITEM.get();
         ModEntities.KING_CRIMSON_CLONE = ForgeEntities.KING_CRIMSON_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
 
