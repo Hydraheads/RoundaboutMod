@@ -1564,11 +1564,11 @@ public class PowersGreenDay extends NewPunchingStand {
     @Override
     public void levelUp(){
         if(Main_arm != null) {
-            Main_arm.discard();
+            Main_arm.removearm();
             Main_arm = null;
         }
         if(Off_hand_entity != null) {
-            Off_hand_entity.discard();
+            Off_hand_entity.removearm();
             Off_hand_entity = null;
         }
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){

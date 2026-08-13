@@ -30,6 +30,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -1343,6 +1344,9 @@ public class MainUtil {
 
                     entity.absMoveTo(d3, d4, d5, f, f1);
                     entity.moveTo(d3, d4, d5, f, f1);
+                    if (entity instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
+                        whitesnake.setYHeadRot(f);
+                    }
                 }
 
             }

@@ -529,7 +529,9 @@ public class SeperatedArmEntity extends StandEntity {
                     }
 
                     if(SpinTicks == 0) {
-                        this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                        if (this.getMainHandItem().isDamageableItem()) {
+                            this.getMainHandItem().setDamageValue(this.getMainHandItem().getDamageValue() + 1);
+                        }
                     }
 
                     if (item instanceof KnifeItem) {
