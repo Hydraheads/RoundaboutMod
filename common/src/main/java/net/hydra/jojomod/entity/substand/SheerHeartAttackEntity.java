@@ -295,6 +295,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (this.attackTick > 0) { this.attackTick--;}
 				if (this.jumpTick > 0) { this.jumpTick--;}
 				if (this.explosionMiningTicks > 0) { this.explosionMiningTicks--;}
+				if (this.stunTicks > 0) { this.stunTicks--;}
 
 				if (!this.onGround()) {
 					flyngTicks++;
@@ -900,6 +901,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 		return super.mobInteract($$0, $$1);
+	}
+
+	public boolean startRiding(Entity $$0) {
+		if (super.startRiding($$0)) {
+			stunTicks = 50;
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override public boolean canBeLeashed(Player p_21418_) { return false;}
