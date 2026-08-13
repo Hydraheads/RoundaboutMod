@@ -195,6 +195,17 @@ public class ForgeEntities {
                             .updateInterval(20)
                             .build(new ResourceLocation(Roundabout.MOD_ID, "fake_item").toString())
             );
+    public static final RegistryObject<EntityType<BombPlantedItemEntity>> BOMB_PLANTED_ITEM =
+            ENTITY_TYPES.register("bomb_plant_item", () ->
+                    EntityType.Builder.<BombPlantedItemEntity>of(
+                                    BombPlantedItemEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(0.25f, 0.25f)
+                            .clientTrackingRange(6)
+                            .updateInterval(20)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "bomb_plant_item").toString())
+            );
     public static final RegistryObject<EntityType<KingCrimsonCloneEntity>> KING_CRIMSON_CLONE =
             ENTITY_TYPES.register("king_crimson_clone", () ->
                     EntityType.Builder.of(KingCrimsonCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
