@@ -130,6 +130,7 @@ public class ClientUtil {
     public static byte lastSkin = 0;
 
 
+
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
@@ -2564,6 +2565,10 @@ public class ClientUtil {
                 }
             }
         }
+    }
+
+    public static boolean isRenderingFlag(Entity entity){
+         return MainUtil.isHoldingBanner(entity);
     }
 
     public static boolean hasAttributeSwapped(Minecraft m) {

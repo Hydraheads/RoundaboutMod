@@ -86,7 +86,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             boolean $$20 = minecraft.shouldEntityAppearGlowing(entity);
             boolean $$21 = this.getRenderT($$18, $$19, $$20);
             if ($$21) {
-
+                if (ClientUtil.isRenderingFlag(entity)){
+                    renderBannerFlag(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
+                            entity.getMainHandItem());
+                }
                 ItemStack visage = null;
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
@@ -1295,6 +1298,23 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.PlayerSmallChestPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1);
         ClientUtil.popPoseAndCooperate(poseStack,44);
+    }
+    public void renderBannerFlag(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         ItemStack stack) {
+        ClientUtil.pushPoseAndCooperate(poseStack,46);
+        getParentModel().body.translateAndRotate(poseStack);
+        // Move the banner attachment point upward
+
+        // Move it forward relative to the player's facing direction
+        poseStack.translate(0.0D, -0.07D, 0.0D);
+        poseStack.translate(0.0D, 0.0D, -1.25D);
+
+        // Tilt it forward
+        poseStack.mulPose(Axis.XP.rotationDegrees(-60.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        ModStrayModels.bannerFlag.roundabout$renderInSpot(stack,
+                entity.position(),entity.level(),partialTicks, poseStack, bufferSource, packedLight,OverlayTexture.NO_OVERLAY);
+        ClientUtil.popPoseAndCooperate(poseStack,46);
     }
     public void renderJohngalliaHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                          float r, float g, float b) {
