@@ -120,6 +120,7 @@ public class ModEntities {
     public static EntityType<FakeItemEntity> FAKE_ITEM;
     public static EntityType<FakeExperienceOrb> FAKE_EXP;
     public static EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE;
+    public static EntityType<BombPlantedItemEntity> BOMB_PLANTED_ITEM;
 
     public static EntityType<IceTwisterEntity> COLD_TWISTER;
     public static EntityType<GentlyWeepsEntity> GENTLY_WEEPS;

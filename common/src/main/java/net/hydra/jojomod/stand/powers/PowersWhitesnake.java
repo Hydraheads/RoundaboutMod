@@ -2906,7 +2906,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 "ability.roundabout.guard", "instruction.roundabout.hold_block",
                 StandIcons.WHITESNAKE_GUARD, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0,
-                "ability.roundabout.chop", "instruction.roundabout.hold_attack_crouch",
+                "ability.roundabout.whitesnake_chop", "instruction.roundabout.hold_attack_crouch",
                 StandIcons.WHITESNAKE_CHOP, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0,
                 "ability.roundabout.barrage", "instruction.roundabout.barrage",
@@ -2915,7 +2915,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 "ability.roundabout.forward_barrage", "instruction.roundabout.forward_barrage",
                 StandIcons.WHITESNAKE_FORWARD_BARRAGE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getMeltingModeLevel(),
-                "ability.roundabout.melting_mode", "instruction.roundabout.press_skill_guard",
+                "ability.roundabout.whitesnake_melting_mode", "instruction.roundabout.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_MELTING_MODE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, getImpaleLevel(),
                 "ability.roundabout.impale", "instruction.roundabout.press_skill_crouch",
@@ -2924,40 +2924,40 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 "ability.roundabout.dodge", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_DASH, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, getDiscStealLevel(),
-                "ability.roundabout.disc_steal", "instruction.roundabout.press_skill",
+                "ability.roundabout.whitesnake_disc_steal", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_DISC_STEAL, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, getWhitesnakeInventoryLevel(),
-                "ability.roundabout.whitesnake_inventory", "instruction.roundabout.press_skill_guard",
+                "ability.roundabout.whitesnake_inventory", "instruction.roundabout.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_INVENTORY, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0,
-                "ability.roundabout.disc_throw", "instruction.roundabout.press_skill",
+                "ability.roundabout.whitesnake_disc_throw", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_DISC_THROW, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, getAcidTossLevel(),
-                "ability.roundabout.acid_toss", "instruction.roundabout.press_skill",
+                "ability.roundabout.whitesnake_acid_toss", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_ACID_TOSS, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getSnakeBiteLevel(),
-                "ability.roundabout.snake_bite", "instruction.roundabout.press_skill",
+                "ability.roundabout.whitesnake_snake_bite", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_SNAKE_BITE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, 0,
                 "ability.roundabout.whitesnake_control_mode", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_CONTROL_MODE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, getHallucinatoryDisguiseLevel(),
-                "ability.roundabout.disguise", "instruction.roundabout.press_skill_guard",
+                "ability.roundabout.whitesnake_disguise", "instruction.roundabout.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0,
                 "ability.roundabout.phase_grab", "instruction.roundabout.press_skill_block",
                 StandIcons.WHITESNAKE_PHASE_GRAB, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0,
-                "ability.roundabout.auto_mode", "instruction.roundabout.press_skill_crouch",
+                "ability.roundabout.whitesnake_auto_mode", "instruction.roundabout.press_skill_crouch",
                 StandIcons.WHITESNAKE_AUTO_MODE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getTimeSparkLevel(),
-                "ability.roundabout.time_spark", "instruction.roundabout.press_skill_crouch",
+                "ability.roundabout.whitesnake_time_spark", "instruction.roundabout.press_skill_crouch",
                 StandIcons.WHITESNAKE_TIME_SPARK, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, 0,
-                "ability.roundabout.auto_mode_move", "instruction.roundabout.auto_mode_move",
+                "ability.roundabout.whitesnake_auto_mode_move", "instruction.roundabout.whitesnake_auto_mode_move",
                 StandIcons.WHITESNAKE_AUTO_MODE_MOVE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, 0,
-                "ability.roundabout.auto_mode_attack", "instruction.roundabout.auto_mode_attack",
+                "ability.roundabout.whitesnake_auto_mode_attack", "instruction.roundabout.whitesnake_auto_mode_attack",
                 StandIcons.WHITESNAKE_AUTO_MODE_ATTACK, 2, level, bypass));
         return icons;
     }
