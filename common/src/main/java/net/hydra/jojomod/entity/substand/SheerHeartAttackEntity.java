@@ -151,7 +151,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 40;
+	static final int attackTickMax = 15;
 	int jumpTick = 0;
 	static final int jumpTickMax = 68;
 	int explosionMiningTicks = 0;
@@ -451,7 +451,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			double dist = entity.distanceToSqr(this.position());
 
-            if (points > harmest || (points == harmest && (harmestDistance == -1 || dist < harmestDistance)))  {
+            if (points > harmest || (points == harmest && (harmestDistance == -1 || dist < harmestDistance)) || (getTargetType() == BLOCK && !(canSeeBlock(this.blockTarget))))  {
 				currentChoice = ENTITY;
                 harmest = points;
                 harmestDistance = dist;
@@ -459,6 +459,8 @@ public class SheerHeartAttackEntity extends StandEntity {
             }
         }
 		BlockPos bPos = this.getOnPos();
+
+		boolean forgiveInvisibility = currentChoice != ENTITY;
 
 		for (BlockPos pos : BlockPos.betweenClosed(
 				bPos.offset((int)viewRange, (int)viewRange, (int)viewRange),
@@ -472,7 +474,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 			points += getBlockWarm(pos, this.level());
 
-			if (points < 0 || !canSeeBlock(pos)) { continue; }
+			if (points < 0 || !(canSeeBlock(pos) || forgiveInvisibility)) { continue; }
 
 			double dist = pos.distToCenterSqr(this.position());
 
@@ -588,7 +590,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (getEntityTarget() != null) {
 				if (getEntityTarget() instanceof LivingEntity LE) {
 					double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.12 * $$11);
+					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.25 * $$11);
 					if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.1, $$12.z); }
 				}
 
@@ -626,6 +628,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.setTargetType(NONE);
 		}
 
+		stunTicks = 10;
 		this.attackTick = attackTickMax;
 	}
 
@@ -880,10 +883,15 @@ public class SheerHeartAttackEntity extends StandEntity {
 		ItemStack $$2 = $$0.getItemInHand($$1);
 
 		if (this.level().isClientSide) {
-			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0;
+			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0
+					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
+					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+					|| getTorchStatus();
+			
 			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
 		} else if (this.getUser() == $$0) {
-			if ($$2.is(Items.TORCH) && !getTorchStatus()) {
+			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
+					this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();
