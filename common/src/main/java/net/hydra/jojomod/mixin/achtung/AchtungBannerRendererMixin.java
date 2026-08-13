@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.achtung;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
@@ -15,16 +16,25 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.WallBannerBlock;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(BannerRenderer.class)

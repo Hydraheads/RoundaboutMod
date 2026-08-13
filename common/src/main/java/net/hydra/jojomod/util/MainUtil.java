@@ -3765,4 +3765,18 @@ public class MainUtil {
 
     }
 
+    public static boolean isHoldingBanner(Entity entity){
+        if (entity instanceof Player pl){
+            //Only works for mainhand on purpose
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4) {
+                ItemStack stack = pl.getMainHandItem();
+                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
+                    if (!pl.isUsingItem()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

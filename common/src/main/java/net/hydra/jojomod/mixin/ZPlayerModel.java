@@ -567,15 +567,21 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.yRot = 0.2F;
                         this.leftArm.xRot = -1.4F + curve;
                     }
-                } else if (MainUtil.isHoldingRoadRoller($$0) && FateTypes.isVampireStrong($$0)) {
+                } else if ((MainUtil.isHoldingRoadRoller($$0) && FateTypes.isVampireStrong($$0) ||
+                        ClientUtil.isRenderingFlag($$0))) {
                     boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                     if ($$9) {
                         this.rightArm.zRot = -0.175F + this.body.yRot;
                         this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
-                        this.rightArm.y = -0.1F;
+                        if ($$0.isCrouching()){
+                            this.rightArm.y = 2.15F;
+                            this.leftArm.y = 2.15F;
+                        } else {
+                            this.rightArm.y = -0.1F;
+                            this.leftArm.y = -0.1F;
+                        }
                         this.leftArm.zRot = 0.175F + this.body.yRot;
                         this.leftArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
-                        this.leftArm.y = -0.1F;
                     } else {
                         this.rightArm.zRot = -0.175F + this.body.yRot;
                         this.rightArm.xRot = (float) (-Math.PI / 1) + this.body.xRot;
