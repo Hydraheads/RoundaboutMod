@@ -39,6 +39,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -107,7 +108,7 @@ public class PowersCinderella extends NewDashPreset {
     }
 
     public void doDefaceClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && !self.isUsingItem()) {
             if (this.activePower == PowerIndex.POWER_2) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -311,7 +312,7 @@ public class PowersCinderella extends NewDashPreset {
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2 && this.attackTimeDuring > -1) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
         }if (!this.getSelf().level().isClientSide && !(this.getActivePower() != PowerIndex.POWER_1 && move == PowerIndex.POWER_1)) {
             this.stopSoundsIfNearby(VISAGE_NOISE, 100,true);
@@ -326,6 +327,9 @@ public class PowersCinderella extends NewDashPreset {
 
 
     public void tickPower() {
+        if (delayTick > 0){
+            delayTick--;
+        }
         if (this.self.level().isClientSide()) {
             if (hasUIOpen && !ClientUtil.hasCinderellaUI()){
                 hasUIOpen = false;
@@ -453,6 +457,7 @@ public class PowersCinderella extends NewDashPreset {
         }
     }
 
+    public int delayTick = 0;
     @Override
     public void tickMobAI(LivingEntity attackTarget){
         if (attackTarget != null && attackTarget.isAlive()){
@@ -461,11 +466,16 @@ public class PowersCinderella extends NewDashPreset {
                 rotateMobHead(attackTarget);
             }
 
-            Entity targetEntity = getTargetEntity(this.self, 5);
-            if (targetEntity != null && targetEntity.is(attackTarget)) {
-                if (this.getActivePower() == PowerIndex.NONE && (!this.onCooldown(PowerIndex.SKILL_2) ||
-                        this.self instanceof IronGolem)) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            if (delayTick == 0) {
+                Entity targetEntity = getTargetEntity(this.self, 5);
+                if (targetEntity != null && targetEntity.is(attackTarget)) {
+                    if (this.getActivePower() == PowerIndex.NONE && (!this.onCooldown(PowerIndex.SKILL_2) ||
+                            this.self instanceof IronGolem)) {
+                        if (!self.isUsingItem()) {
+                            delayTick = 40;
+                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                        }
+                    }
                 }
             }
         }
