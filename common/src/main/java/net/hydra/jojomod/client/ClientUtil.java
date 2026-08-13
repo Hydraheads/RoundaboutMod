@@ -129,8 +129,6 @@ public class ClientUtil {
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
 
-
-
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;

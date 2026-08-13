@@ -77,7 +77,7 @@ public class BannerFlagModel extends PsuedoHierarchicalModel {
 
     @Unique
     public void roundabout$renderInSpot(ItemStack stack, Vec3 pos, Level $$0, float $$1, PoseStack $$2,
-                                        MultiBufferSource $$3, int $$4, int $$5) {
+                                        MultiBufferSource $$3, int $$4, int $$5, float scale) {
         if (stack.getItem() instanceof BannerItem bi && bi.getBlock() instanceof BannerBlock bb) {
             long $$9 = $$9 = $$0.getGameTime();
             List<Pair<Holder<BannerPattern>, DyeColor>> $$6 = rdbt$createPatterns(bi.getColor(),
@@ -92,6 +92,8 @@ public class BannerFlagModel extends PsuedoHierarchicalModel {
             float $$16 = ((float)Math.floorMod((long)(pos.x() * 7 + pos.y() * 9 + pos.z() * 13) + $$9, 100L) + $$1) / 100.0F;
             this.flag.xRot = (-0.0125F + 0.01F * Mth.cos((float) (Math.PI * 2) * $$16)) * (float) Math.PI;
             this.flag.y = -32.0F;
+            this.flag.yScale = scale;
+
             renderPatterns($$2, $$3, $$4, $$5, this.flag, ModelBakery.BANNER_BASE, true, $$6);
             $$2.popPose();
             $$2.popPose();

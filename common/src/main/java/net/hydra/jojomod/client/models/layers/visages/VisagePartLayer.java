@@ -1306,14 +1306,21 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         // Move the banner attachment point upward
 
         // Move it forward relative to the player's facing direction
-        poseStack.translate(0.0D, -0.07D, 0.0D);
-        poseStack.translate(0.0D, 0.0D, -1.25D);
+        poseStack.translate(0.0D, -0.2D, 0.0D);
+        poseStack.translate(0.0D, 0.0D, -1.3D);
+
 
         // Tilt it forward
-        poseStack.mulPose(Axis.XP.rotationDegrees(-60.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-66.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        float scale = 1;
+        if (entity instanceof Player pl){
+            float finish = ((IPlayerEntity)pl).rdbt$getFlagTicks()+(partialTicks%1);
+            finish = Mth.clamp(finish,0,5) / 5F;
+                scale = finish;
+        }
         ModStrayModels.bannerFlag.roundabout$renderInSpot(stack,
-                entity.position(),entity.level(),partialTicks, poseStack, bufferSource, packedLight,OverlayTexture.NO_OVERLAY);
+                entity.position(),entity.level(),partialTicks, poseStack, bufferSource, packedLight,OverlayTexture.NO_OVERLAY,scale);
         ClientUtil.popPoseAndCooperate(poseStack,46);
     }
     public void renderJohngalliaHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
