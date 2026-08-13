@@ -8,6 +8,7 @@ import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -68,6 +69,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public SheerHeartAttackEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		super($$0, $$1);
 	}
+
+	@Override
+	public boolean canBeGrabed() {return true;}
 
 	protected static final EntityDataAccessor<Byte> TARGET_STATUS = SynchedEntityData.defineId(SheerHeartAttackEntity.class,
 			EntityDataSerializers.BYTE);
@@ -774,7 +778,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 
 			MobType mobType = LE.getMobType();
-			if (mobType.equals(MobType.UNDEAD)) { points -= 30;}
+			if (mobType.equals(MobType.UNDEAD) || FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
 		return points;
 	}

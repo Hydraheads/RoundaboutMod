@@ -147,6 +147,19 @@ public class FabricEntities {
                             .updateInterval(20)
                             .build(new ResourceLocation(Roundabout.MOD_ID, "fake_item").toString())
             );
+    public static final EntityType<BombPlantedItemEntity> BOMB_PLANTED_ITEM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bomb_plant_item"),
+                    EntityType.Builder.<BombPlantedItemEntity>of(
+                                    BombPlantedItemEntity::new,
+                                    MobCategory.MISC
+                            )
+                            .sized(0.25f, 0.25f)
+                            .clientTrackingRange(6)
+                            .updateInterval(20)
+                            .build(new ResourceLocation(Roundabout.MOD_ID, "bomb_plant_item").toString())
+            );
         public static final EntityType<ZombieAesthetician> ZOMBIE_AESTHETICIAN =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1203,6 +1216,7 @@ public class FabricEntities {
                 ModEntities.AYA = AYA;
                 ModEntities.AESTHETICIAN = AESTHETICIAN;
                 ModEntities.FAKE_ITEM = FAKE_ITEM;
+                ModEntities.BOMB_PLANTED_ITEM = BOMB_PLANTED_ITEM;
                 ModEntities.ZOMBIE_AESTHETICIAN = ZOMBIE_AESTHETICIAN;
                 ModEntities.POCOLOCO = POCOLOCO;
                 ModEntities.GUCCIO = GUCCIO;

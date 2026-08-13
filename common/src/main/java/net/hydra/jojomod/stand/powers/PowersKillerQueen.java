@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.BombPlantedItemEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -149,6 +150,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         BUBBLE_CONTACT = 6,
         BITES_THE_DUST = 7,
         BITES_THE_DUST_BIGGER = 8,
+        ITEM_CONTACT = 9,
 
     // Sheer Heart Attack Status things
         SHA_NONE = 0,
@@ -158,6 +160,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 	private byte currentBombStatus = BOMB_NONE;
     private byte currentShaStatus = SHA_NONE;
     private int bombConfig = 2;
+
+    public byte getCurrentBombStatus() { return currentBombStatus; }
 
     public HashMap<Integer, SavedSecond> combatSavedBTD = new HashMap<>();
     public void combatSavedBTDinit() {
@@ -262,10 +266,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
 	public BlockBombEntity bombBlock = null;
-    public ItemStack bombItemStack = null;
 	public StrayCatAirBubble bombBubble = null;
     public int bombBubbleID = -1;
     public SheerHeartAttackEntity SHA = null;
+    public BombPlantedItemEntity bombPlantedItem = null;
 
     public int detonateTimer = -1;
 
@@ -1924,6 +1928,20 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }else {
             syncBombStatus(NONE);
+        }
+    }
+
+    public void itemContacted(Entity ent) {
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
+            this.bombEntity = ent;
+            syncBombStatus(ITEM_CONTACT);
+
+            if (this.detonateTimer == -1) {
+                detonate();
+                //this.explode();
+            }
+        }else {
+            //syncBombStatus(NONE);
         }
     }
 

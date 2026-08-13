@@ -2,8 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
-import net.hydra.jojomod.client.FakeItemEntityRenderer;
-import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
@@ -35,10 +34,8 @@ import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
 import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.particles.*;
-import net.hydra.jojomod.client.HallucinationAcidBakedModel;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.block.HallucinatoryAcidBlockEntityRenderer;
-import net.hydra.jojomod.client.HallucinatoryAcidColors;
 import net.hydra.jojomod.particles.HallucinatoryAcidDripParticle;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
@@ -194,6 +191,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ALEX_NPC.get(), PlayerAlexRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FOG_CLONE.get(), FogCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FAKE_ITEM.get(), FakeItemEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ITEM.get(), BombPlantedItemEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_PROJECTION.get(), HologramCloneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MODIFIED_NPC.get(), PlayerModifiedRenderer::new);
