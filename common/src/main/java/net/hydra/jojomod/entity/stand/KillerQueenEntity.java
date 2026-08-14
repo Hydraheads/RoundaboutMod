@@ -111,8 +111,6 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState impale = new AnimationState();
     public final AnimationState bitesTheDust = new AnimationState();
 
-    public final AnimationState itemThrowAnimation = new AnimationState();
-    public final AnimationState blockThrowAnimation = new AnimationState();
 
     public static byte
 		KICK = 25,
@@ -197,22 +195,25 @@ public class KillerQueenEntity extends FollowingStandEntity {
             }
 
             if (animation == ITEM_THROW) {
-                this.itemThrowAnimation.startIfStopped(this.tickCount);
+                this.itemThrow.startIfStopped(this.tickCount);
             } else {
-                this.itemThrowAnimation.stop();
+                this.itemThrow.stop();
             }
 
+            /*
             if (animation == BLOCK_THROW) {
                 this.blockThrowAnimation.startIfStopped(this.tickCount);
             } else {
                 this.blockThrowAnimation.stop();
             }
+            */
 
             if (animation == BITES_THE_DUST_FOLLOW) {
                 this.bitesTheDust.startIfStopped(this.tickCount);
             } else {
                 this.bitesTheDust.stop();
             }
+
         }
     }
 

@@ -2446,6 +2446,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 self.level().addFreshEntity(bombPlantedItem);
                 syncBombStatus(BOMB_ITEM);
+                this.setAttackTimeDuring(-15);
+                animateStand(StandEntity.ITEM_THROW);
             }
         }
         return true;
