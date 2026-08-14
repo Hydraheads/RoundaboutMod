@@ -30,6 +30,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -1343,6 +1344,9 @@ public class MainUtil {
 
                     entity.absMoveTo(d3, d4, d5, f, f1);
                     entity.moveTo(d3, d4, d5, f, f1);
+                    if (entity instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
+                        whitesnake.setYHeadRot(f);
+                    }
                 }
 
             }
@@ -3768,7 +3772,8 @@ public class MainUtil {
     public static boolean isHoldingBanner(Entity entity){
         if (entity instanceof Player pl){
             //Only works for mainhand on purpose
-            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4) {
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4 &&
+            pd4.canHoldBanner) {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {
