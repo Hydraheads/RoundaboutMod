@@ -323,9 +323,6 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     public void roundabout$setHasSightDisc(boolean value) {
         entityData.set(ROUNDABOUT$HAS_SIGHT, value);
         roundabout$setDiscSeal(WhitesnakeDiscUtil.SIGHT, 0, 0);
-        if (value && !level().isClientSide()) {
-            ((LivingEntity) (Object) this).removeEffect(MobEffects.BLINDNESS);
-        }
     }
     @Override
     public boolean roundabout$hasMemoryDisc() {
@@ -539,9 +536,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
             int next = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing ? remaining - 1 : 0;
             roundabout$setDiscSeal(type, next, roundabout$getDiscSealMaxTicks(type));
             if (next > 0) continue;
-            if (type == WhitesnakeDiscUtil.SIGHT) {
-                living.removeEffect(MobEffects.BLINDNESS);
-            } else if (type == WhitesnakeDiscUtil.MEMORY) {
+            if (type == WhitesnakeDiscUtil.MEMORY) {
                 if (living instanceof Mob mob && mob.isNoAi()) mob.setNoAi(false);
                 if (living instanceof ServerPlayer player) MemoryAiController.clearPlayerState(player);
             }
