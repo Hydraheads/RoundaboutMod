@@ -187,10 +187,13 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
                 ? ItemStack.of(discs.getCompound("DreamingMemoryDisc")) : ItemStack.EMPTY);
         roundabout$setMemoryBeforeDreaming(discs.contains("MemoryBeforeDreaming", 10)
                 ? discs.getCompound("MemoryBeforeDreaming") : new CompoundTag());
-        roundabout$setHasSightDisc(WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this)
-                && (!discs.contains("HasSight") || discs.getBoolean("HasSight")));
-        roundabout$setHasMemoryDisc(!discs.contains("HasMemory") || discs.getBoolean("HasMemory"));
-        roundabout$setHasHearingDisc(!discs.contains("HasHearing") || discs.getBoolean("HasHearing"));
+        entityData.set(ROUNDABOUT$HAS_SIGHT,
+                WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this)
+                        && (!discs.contains("HasSight") || discs.getBoolean("HasSight")));
+        entityData.set(ROUNDABOUT$HAS_MEMORY,
+                !discs.contains("HasMemory") || discs.getBoolean("HasMemory"));
+        entityData.set(ROUNDABOUT$HAS_HEARING,
+                !discs.contains("HasHearing") || discs.getBoolean("HasHearing"));
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing) {
             roundabout$setDiscSeal(WhitesnakeDiscUtil.SIGHT, discs.getInt("SightSealTicks"),
                     discs.getInt("SightSealMaxTicks"));
