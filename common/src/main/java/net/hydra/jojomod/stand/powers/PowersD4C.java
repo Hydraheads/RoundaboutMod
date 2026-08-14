@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IItemCooldowns;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -29,6 +30,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -49,7 +51,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,9 +107,9 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isInBetweenSpace(){
         return isBetweenSpace(BlockPos.containing(
                 ((self.getEyePosition().subtract(self.getPosition(1f))).scale(0.2)).add(self.getPosition(1f))
-        ));
+        ), false);
     }
-    public boolean isBetweenSpace(BlockPos pos) {
+    public boolean isBetweenSpace(BlockPos pos, boolean move) {
         Level level = self.level();
 
         if (level.getBlockState(pos.below()).isSolid()
@@ -113,8 +117,14 @@ public class PowersD4C extends NewPunchingStand {
             return true;
         }
 
-        AABB box = self.getBoundingBox();
         Direction gravity = RotationUtil.getGravityDirection(self);
+        AABB box = self.getBoundingBox();
+        if (move){
+            box = box.move(Vec3.atCenterOf(pos).subtract(box.getCenter().subtract(
+                    RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity)
+
+            )));
+        }
 
         AABB[] slices = getFootAndEyeSlices(box, gravity);
 
@@ -140,6 +150,69 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         return false;
+    }
+
+    public static void spawnGravitySpiral(Level level, BlockPos pos, Direction gravity) {
+        Direction upDirection = gravity.getOpposite();
+
+        Vec3 start = Vec3.atCenterOf(pos).subtract(RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity));
+
+        double height = 2.0D;
+        int particles = 40;
+        double radius = 0.35D;
+        double rotations = 2.0D;
+
+        for (int i = 0; i < particles; i++) {
+            double progress = (double) i / (particles - 1);
+
+            // Position along the axis opposite gravity.
+            Vec3 axisOffset = new Vec3(
+                    upDirection.getStepX() * height * progress,
+                    upDirection.getStepY() * height * progress,
+                    upDirection.getStepZ() * height * progress
+            );
+
+            // Spiral angle.
+            double angle = progress * Math.PI * 2.0D * rotations;
+
+            double offset1 = Math.cos(angle) * radius;
+            double offset2 = Math.sin(angle) * radius;
+
+            double x = start.x + axisOffset.x;
+            double y = start.y + axisOffset.y;
+            double z = start.z + axisOffset.z;
+
+            // The two perpendicular axes depend on gravity.
+            switch (gravity.getAxis()) {
+                case Y -> {
+                    x += offset1;
+                    z += offset2;
+                }
+
+                case X -> {
+                    y += offset1;
+                    z += offset2;
+                }
+
+                case Z -> {
+                    x += offset1;
+                    y += offset2;
+                }
+            }
+
+            level.addParticle(
+                    new DustParticleOptions(
+                            new Vector3f(1.0F, 0.85F, 0.0F),
+                            1.0F
+                    ),
+                    x,
+                    y,
+                    z,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
+        }
     }
     private AABB[] getFootAndEyeSlices(AABB box, Direction gravity) {
         double thickness = 0.05D;
@@ -405,6 +478,45 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public void betweenVisionClient(){
+        BlockPos origin = self.blockPosition();
+        Direction forward = self.getDirection();
+
+        int maxDistance = 20;
+        int sideRange = 5;
+        int verticalRange = 5;
+        int maxSpots = 100;
+
+        int found = 0;
+        Direction dir = RotationUtil.getGravityDirection(self);
+
+        for (int distance = 0; distance <= maxDistance; distance++) {
+            for (int side = -sideRange; side <= sideRange; side++) {
+                for (int vertical = -verticalRange; vertical <= verticalRange; vertical++) {
+
+                    BlockPos pos = origin
+                            .relative(forward, distance)
+                            .relative(forward.getClockWise(), side)
+                            .above(vertical);
+
+                    if (!self.level().getBlockState(pos).isSolid() &&
+                            !self.level().getBlockState(pos).liquid() &&
+                            !self.level().getBlockState(pos.relative(dir.getOpposite())).isSolid() &&
+                            !self.level().getBlockState(pos.relative(dir.getOpposite())).liquid() &&
+                    isBetweenSpace(pos,true)) {
+
+                        spawnGravitySpiral(
+                                self.level(),
+                                pos,
+                                RotationUtil.getGravityDirection(self)
+                        );
+
+                        if (++found >= maxSpots) {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
     public void dashOrBlockSwitchClient(){
             dash();
