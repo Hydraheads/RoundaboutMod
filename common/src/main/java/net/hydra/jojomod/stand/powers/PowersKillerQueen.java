@@ -674,16 +674,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     	if (slot == 2){
             if(inBitesTheDustMode()) {
                 return !canBitesTheDustCombat();
-            }else if (isGuarding()) {
-                if (this.currentBombStatus == BOMB_NONE) {
-                    if (isHoldingSneak()) {
-
-                    }
+            }
+            if (this.currentBombStatus == BOMB_NONE) {
+                if (isGuarding()) {
                     return !canUseStrayCat();
                 } else if (this.currentBombStatus == BOMB_BUBBLE) {
                     Entity target = this.getTargetEntity(this.self, 30);
                     return !canBubbleTarget(target);
                 }
+                if (isHoldingSneak()) { return  !canItemPlantBomb();}
             }
     	}
     		
@@ -912,12 +911,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 	    }
 	    return false;
     }
-
-
     public boolean canItemPlantBomb() {
-        ItemStack handItem =  this.getSelf().getMainHandItem();
+        ItemStack stack = this.getSelf().getMainHandItem();
 
-        return !handItem.isEmpty();
+        return canItemPlantBomb(stack);
+    }
+
+    public boolean canItemPlantBomb(ItemStack stack) {
+        return (!stack.isEmpty() && !(MainUtil.isItemGrabBlacklisted(stack)) &&
+                !(stack.getItem() instanceof BlockItem
+                        && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
+                        ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock)));
     }
 
     public boolean canBitesTheDustPlant(Entity targetEntity) {
@@ -2395,7 +2399,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean startBiteTheDustPlant(){
-        if (this.canBitesTheDust()) {
+        if (this.canBitesTheDust() && !this.onCooldown(PowerIndex.SKILL_4)) {
             StandEntity stand = getStandEntity(this.self);
             if (Objects.nonNull(stand)) {
                 animateStand(KillerQueenEntity.BITES_THE_DUST_FOLLOW);
@@ -2426,28 +2430,22 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (!this.getSelf().level().isClientSide()) {
             ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(plantInventorySlot);
 
-            if (!stack.isEmpty() &&
-                    !(MainUtil.isItemGrabBlacklisted(stack)) &&
-                    !(stack.getItem() instanceof BlockItem
-                            && (MainUtil.isBlockBlacklisted(((BlockItem)stack.getItem()).getBlock().defaultBlockState()) ||
-                            ((BlockItem)stack.getItem()).getBlock() instanceof ShulkerBoxBlock || ((BlockItem)stack.getItem()).getBlock() instanceof FancyLighterBlock))) {
-
-                BombPlantedItemEntity item = new BombPlantedItemEntity(
+            if (canItemPlantBomb(stack)) {
+                bombPlantedItem = new BombPlantedItemEntity(
                         ModEntities.BOMB_PLANTED_ITEM,
                         self.level()
                 );
 
-                item.setItem(stack.copyWithCount(1));
+                bombPlantedItem.setItem(stack.copyWithCount(1));
                 stack.shrink(1);
 
-                item.setPos(self.getEyePosition());
-                item.setDeltaMovement(self.getViewVector(1).scale(0.6f).add(0, 0.1, 0));
+                bombPlantedItem.setPos(self.getEyePosition());
+                bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.6f).add(0, 0.1, 0));
 
-                item.host = (Player)self;
+                bombPlantedItem.host = (Player)self;
 
-                self.level().addFreshEntity(item);
+                self.level().addFreshEntity(bombPlantedItem);
                 syncBombStatus(BOMB_ITEM);
-                bombPlantedItem = item;
             }
         }
         return true;
@@ -3692,17 +3690,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), DETONATE_NOISE);
             }
 
-            if (this.currentBombStatus == BOMB_ITEM) {
-
-            }else {
-                this.detonateTimer = 0;
-                if (this.getActivePower() == PowerIndex.NONE) {
-                    this.poseStand(OffsetIndex.GUARD);
-                    this.animateStand(KillerQueenEntity.DETONATE);
-                    this.setActivePower(DETONATE);
-                }
+            this.detonateTimer = 0;
+            if (this.getActivePower() == PowerIndex.NONE) {
+                this.poseStand(OffsetIndex.GUARD);
+                this.animateStand(KillerQueenEntity.DETONATE);
+                this.setActivePower(DETONATE);
             }
-    	}
+        }
     	
     	return true;
     }
