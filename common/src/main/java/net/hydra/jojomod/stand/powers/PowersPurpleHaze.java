@@ -222,7 +222,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
-            case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode
+            case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode Change
                 attemptDistortionModeChange();
             }
 
@@ -386,6 +386,80 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
+    @Override
+    public void punchImpact(Entity entity) {
+        boolean thirdPunch = this.getActivePowerPhase() == 3;
+
+        super.punchImpact(entity);
+
+        if (thirdPunch && entity != null && !self.level().isClientSide()) {
+            activatePurpleHazeField(
+                    entity.position(),
+                    indistortionmode
+            );
+        }
+    }
+
+
+    @Override
+    public void barrageImpact(Entity entity, int hitNumber) {
+
+        super.barrageImpact(entity, hitNumber);
+
+
+        int actualHitNumber = hitNumber;
+        if (actualHitNumber > 1000) {
+            actualHitNumber -= 1000;
+        }
+
+
+        boolean lastHit = actualHitNumber >= getBarrageLength();
+
+        if (!lastHit || entity == null) {
+            return;
+        }
+
+        if (self.level().isClientSide()) {
+            return;
+        }
+
+
+        breakPurpleHazePod(entity.position());
+    }
+
+    private void breakPurpleHazePod(Vec3 position) {
+        if (self.level().isClientSide()) {
+            return;
+        }
+
+
+        if (purpleHazePod != null && !purpleHazePod.isRemoved()) {
+            purpleHazePod.discard();
+        }
+
+        purpleHazePod = null;
+
+
+        activatePurpleHazeField(
+                position,
+                purpleHazePodDistortionMode
+        );
+
+
+        if (self.level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    position.x,
+                    position.y + 1.0,
+                    position.z,
+                    35,
+                    1.0,
+                    0.8,
+                    1.0,
+                    0.02
+            );
+        }
+    }
 
 
     @Override
@@ -495,10 +569,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     public void attemptDistortion() {
-        if (canExecuteMoveWithLevel(4)) {
+        if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
             Distortion();
-
         }
+
+
     }
 
     public void Distortion() {
@@ -556,7 +631,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         purpleHazeFieldDistortionMode = distortionMode;
 
-        purpleHazeFieldTicks = PURPLE_HAZE_FIELD_DURATION;
+        purpleHazeFieldTicks = distortionMode
+                ? DISTORTION_FIELD_DURATION
+                : PURPLE_HAZE_FIELD_DURATION;
 
         if (!permaCasting.roundabout$isPermaCastingEntity(this.self)) {
             permaCasting.roundabout$addPermaCaster(this.self);
