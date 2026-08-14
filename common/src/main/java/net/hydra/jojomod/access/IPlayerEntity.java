@@ -30,6 +30,7 @@ public interface IPlayerEntity {
     void rdbt$setCooldownQuery2();
     Deque<Vec3> rdbt$getMovementHistory();
     void roundabout$SetPos2(byte Pos);
+    int rdbt$getFlagTicks();
     void rdbt$setLevelDecreaseTicks(int decreaseTicks);
     int rdbt$getLevelDecreaseTicks();
     int roundabout$getAirTime();

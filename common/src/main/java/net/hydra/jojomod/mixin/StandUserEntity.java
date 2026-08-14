@@ -39,7 +39,6 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -6141,10 +6140,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         boolean isPacketPlayer = false;
 
         if (this.level().isClientSide) {
-            Minecraft mc = Minecraft.getInstance();
-            isPacketPlayer = mc.player != null && mc.player.getId() == rdbt$this().getId();
+            isPacketPlayer = ClientUtil.isPlayer(rdbt$this());
         }
-        if ((this.level().isClientSide && isPacketPlayer)
+        if ((isPacketPlayer)
                 || !(rdbt$this() instanceof Player) && !this.level().isClientSide) {
 
             if (previousYpos < this.getY()){

@@ -310,6 +310,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
         this.entityData.set(SKIN, skin);
     }
 
+    /// if it is able to be grabed by star platinum and the world mob grab
+    public boolean canBeGrabed() {return false;}
 
     public boolean dismountOnHit(){
         return true;
@@ -836,8 +838,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
                     }
                 }
             }
+            discard();
         }
-        return super.changeDimension($$0);
+        return null;
     }
 
     @Override
@@ -1000,7 +1003,7 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     public boolean startRiding(Entity $$0) {
         if (!($$0 instanceof Boat) && !($$0 instanceof Minecart)){
-            return this.startRiding($$0, false);
+            return this.startRiding($$0, $$0 instanceof StandEntity && canBeGrabed());
         }
         return false;
     }

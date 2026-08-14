@@ -95,7 +95,8 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             LivingEntity livingEntity = (LivingEntity) entity;
             if (((StandUser) livingEntity).roundabout$getStand() instanceof FollowingStandEntity FE) {
                 StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
-                if (FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()){
+                if (FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()
+                        && !FE.getFollowing().isRemoved()){
                     if (!(stand.isRemoved() || stand.getUser() != entity)) {
                         roundabout$TickLivingEntityTS(stand);
                     }
@@ -232,7 +233,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof FollowingStandEntity SE) {
-                if (SE.getFollowing() != null && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
+                if (SE.getFollowing() != null && !SE.getFollowing().isRemoved() && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
                     ci.cancel();
                 }
             }
@@ -318,7 +319,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
     private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof FollowingStandEntity SE) {
-            if (SE.getFollowing() != null){
+            if (SE.getFollowing() != null && !SE.getFollowing().isRemoved()){
                 ci.cancel();
             }
         }
@@ -643,7 +644,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
         this.tickingEntities.forEach($$0x -> {
             if ($$0x instanceof FollowingStandEntity standEntity) {
-                if (standEntity.getFollowing() != null){
+                if (standEntity.getFollowing() != null && !standEntity.getFollowing().isRemoved()){
                     if (!standEntity.getFollowing().isRemoved()) {
                         LivingEntity LE = standEntity.getFollowing();
                         if (!((StandUser) LE).roundabout$hasFollower(standEntity)) {

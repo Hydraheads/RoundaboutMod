@@ -187,16 +187,15 @@ public final class WhitesnakeControlClient {
         LivingEntity stand = powers.getPilotingStand();
         HitResult result = stand == null ? null
                 : stand.pick(PowersWhitesnake.PILOT_INTERACTION_RANGE, 0.0F, false);
-        if (!(result instanceof BlockHitResult blockHit) || entityIsCloser(minecraft, stand, blockHit)) return null;
+        if (!(result instanceof BlockHitResult blockHit) || result.getType() != HitResult.Type.BLOCK
+                || entityIsCloser(stand, blockHit)) return null;
         return blockHit;
     }
 
-    private static boolean entityIsCloser(Minecraft minecraft, LivingEntity stand, BlockHitResult blockHit) {
-        if (minecraft.hitResult instanceof EntityHitResult crosshairHit
-                && crosshairHit.getEntity() != minecraft.player) return true;
+    private static boolean entityIsCloser(LivingEntity stand, BlockHitResult blockHit) {
         EntityHitResult entityHit = MainUtil.rayCastEntityHitResult(
                 stand, PowersWhitesnake.PILOT_INTERACTION_RANGE);
-        if (entityHit == null || entityHit.getEntity() == minecraft.player) return false;
+        if (entityHit == null || entityHit.getEntity() == Minecraft.getInstance().player) return false;
         Vec3 eye = stand.getEyePosition(0.0F);
         return eye.distanceToSqr(entityHit.getLocation()) <= eye.distanceToSqr(blockHit.getLocation());
     }

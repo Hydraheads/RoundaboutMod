@@ -129,7 +129,6 @@ public class ClientUtil {
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
 
-
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
         clientTicker++;
@@ -2158,6 +2157,39 @@ public class ClientUtil {
                         r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
+            if (ClientUtil.isRenderingFlag(play)) {
+                stack.pushPose();
+                Vec3 gtranslation = new Vec3(0, -0.1, 0);
+                stack.translate(gtranslation.x, gtranslation.y, gtranslation.z);
+                float opacity = 0.5F;
+                stack.mulPose(Axis.ZP.rotationDegrees(180f));
+                boolean yes = false;
+                    stack.pushPose();
+                    if (yes) {
+                        stack.scale(1.01F, 1.01F, 1.01F);
+                    }
+                    //gtranslation = RotationUtil.vecPlayerToWorld(gtranslation,gravityDirection);
+
+                    // Move it forward relative to the player's facing direction
+
+                    stack.translate(0.0D, -0.7D, 0.0D);
+                    stack.translate(0.0D, 0.0D, -1.3D);
+
+                    float scale = 1;
+                    float finish = ((IPlayerEntity)play).rdbt$getFlagTicks()+($$4%1);
+                    finish = Mth.clamp(finish,0,5) / 5F;
+                    scale = finish;
+
+                    // Tilt it forward
+                    stack.mulPose(Axis.XP.rotationDegrees(-71.0F));
+                    stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+                    ModStrayModels.bannerFlag.roundabout$renderInSpot(
+                            play.getMainHandItem(), play.getPosition($$4%1), play.level(), $$4,
+                            stack, source,light,
+                            LightTexture.FULL_BRIGHT,scale);
+                    stack.popPose();
+                stack.popPose();
+            }
             if (ClientUtil.rendersRipperEyes(play)) {
                 stack.pushPose();
                 Vec3 gtranslation = new Vec3(0, -0.1, 0);
@@ -2564,6 +2596,10 @@ public class ClientUtil {
                 }
             }
         }
+    }
+
+    public static boolean isRenderingFlag(Entity entity){
+         return MainUtil.isHoldingBanner(entity);
     }
 
     public static boolean hasAttributeSwapped(Minecraft m) {

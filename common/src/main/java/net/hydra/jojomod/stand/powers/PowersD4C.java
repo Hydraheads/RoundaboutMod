@@ -6,7 +6,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -14,7 +13,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -22,24 +20,37 @@ import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Objects;
@@ -80,9 +91,394 @@ public class PowersD4C extends NewPunchingStand {
         return super.getSoundFromByte(soundChoice);
     }
 
+    public void enactEligability(){
+        if (!isInBetweenSpace() && !self.isUnderWater()){
+            if (hasBanner()){
+                useUpBanner(self.getMainHandItem());
+            }
+        }
+    }
+
+    public boolean isEligable(){
+        return hasBanner() || isInBetweenSpace() || self.isUnderWater();
+    }
+    public boolean isCollidingWithDoor() {
+        AABB box = self.getBoundingBox();
+        Level level = self.level();
+
+        BlockPos min = BlockPos.containing(box.minX, box.minY, box.minZ);
+        BlockPos max = BlockPos.containing(box.maxX, box.maxY, box.maxZ);
+
+        for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
+            BlockState state = level.getBlockState(pos);
+
+            if (!(state.getBlock() instanceof DoorBlock)) {
+                continue;
+            }
+
+            VoxelShape shape = state.getCollisionShape(level, pos);
+
+            if (!shape.isEmpty()
+                    && Shapes.joinIsNotEmpty(
+                    shape.move(pos.getX(), pos.getY(), pos.getZ()),
+                    Shapes.create(box),
+                    BooleanOp.AND
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public boolean isInBetweenSpace(){
+        if (isCollidingWithDoor()){
+            return false;
+        }
+
+        return isBetweenSpace(BlockPos.containing(
+                ((self.getEyePosition().subtract(self.getPosition(1f))).scale(0.2)).add(self.getPosition(1f))
+        ), false);
+    }
+    public boolean isBetweenSpace(BlockPos pos, boolean move) {
+        Level level = self.level();
+
+        if (level.getBlockState(pos.below()).isSolid()
+                && level.isRainingAt(pos)) {
+            return true;
+        }
+
+        Direction gravity = RotationUtil.getGravityDirection(self);
+        AABB box = self.getBoundingBox();
+        if (move){
+            box = box.move(Vec3.atCenterOf(pos).subtract(box.getCenter().subtract(
+                    RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity)
+
+            )));
+        }
+
+        AABB[] slices = getFootAndEyeSlices(box, gravity);
+
+        for (Direction direction : Direction.values()) {
+
+            // Along the gravity axis, use the entire player AABB.
+            if (direction.getAxis() == gravity.getAxis()) {
+                if (isBlockedInDirection(box, direction)
+                        && isBlockedInDirection(box, direction.getOpposite())) {
+                    return true;
+                }
+            }
+
+            // Perpendicular to gravity, BOTH thin slices must be enclosed.
+            else {
+                if (isBlockedInDirection(slices[0], direction)
+                        && isBlockedInDirection(slices[0], direction.getOpposite())
+                        && isBlockedInDirection(slices[1], direction)
+                        && isBlockedInDirection(slices[1], direction.getOpposite())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static void spawnGravitySpiral(Level level, BlockPos pos, Direction gravity) {
+        Direction upDirection = gravity.getOpposite();
+
+        Vec3 start = Vec3.atCenterOf(pos).subtract(RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity));
+
+        double height = 2.0D;
+        int particles = 40;
+        double radius = 0.35D;
+        double rotations = 2.0D;
+
+        for (int i = 0; i < particles; i++) {
+            double progress = (double) i / (particles - 1);
+
+            // Position along the axis opposite gravity.
+            Vec3 axisOffset = new Vec3(
+                    upDirection.getStepX() * height * progress,
+                    upDirection.getStepY() * height * progress,
+                    upDirection.getStepZ() * height * progress
+            );
+
+            // Spiral angle.
+            double angle = progress * Math.PI * 2.0D * rotations;
+
+            double offset1 = Math.cos(angle) * radius;
+            double offset2 = Math.sin(angle) * radius;
+
+            double x = start.x + axisOffset.x;
+            double y = start.y + axisOffset.y;
+            double z = start.z + axisOffset.z;
+
+            // The two perpendicular axes depend on gravity.
+            switch (gravity.getAxis()) {
+                case Y -> {
+                    x += offset1;
+                    z += offset2;
+                }
+
+                case X -> {
+                    y += offset1;
+                    z += offset2;
+                }
+
+                case Z -> {
+                    x += offset1;
+                    y += offset2;
+                }
+            }
+            Vector3f color;
+            if (i % 2 == 0) {
+                // Light blue
+                color = new Vector3f(0.4F, 0.8F, 1.0F);
+            } else {
+                // Light purple
+                color = new Vector3f(0.8F, 0.5F, 1.0F);
+            }
+            level.addParticle(
+                    new DustParticleOptions(
+                            color,
+                            1.0F
+                    ),
+                    x,
+                    y,
+                    z,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
+        }
+    }
+    private AABB[] getFootAndEyeSlices(AABB box, Direction gravity) {
+        double thickness = 0.05D;
+
+        switch (gravity) {
+            case DOWN -> {
+                return new AABB[]{
+                        // Foot
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.minY + thickness,
+                                box.maxZ
+                        ),
+
+                        // Eye / head
+                        new AABB(
+                                box.minX,
+                                box.maxY - thickness,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        )
+                };
+            }
+
+            case UP -> {
+                return new AABB[]{
+                        // Foot (upper end because gravity points UP)
+                        new AABB(
+                                box.minX,
+                                box.maxY - thickness,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        ),
+
+                        // Eye / head
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.minY + thickness,
+                                box.maxZ
+                        )
+                };
+            }
+
+            case NORTH -> {
+                return new AABB[]{
+                        // Foot
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.minZ + thickness
+                        ),
+
+                        // Eye
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.maxZ - thickness,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        )
+                };
+            }
+
+            case SOUTH -> {
+                return new AABB[]{
+                        // Foot
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.maxZ - thickness,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        ),
+
+                        // Eye
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.minZ + thickness
+                        )
+                };
+            }
+
+            case WEST -> {
+                return new AABB[]{
+                        // Foot
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.minX + thickness,
+                                box.maxY,
+                                box.maxZ
+                        ),
+
+                        // Eye
+                        new AABB(
+                                box.maxX - thickness,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        )
+                };
+            }
+
+            case EAST -> {
+                return new AABB[]{
+                        // Foot
+                        new AABB(
+                                box.maxX - thickness,
+                                box.minY,
+                                box.minZ,
+                                box.maxX,
+                                box.maxY,
+                                box.maxZ
+                        ),
+
+                        // Eye
+                        new AABB(
+                                box.minX,
+                                box.minY,
+                                box.minZ,
+                                box.minX + thickness,
+                                box.maxY,
+                                box.maxZ
+                        )
+                };
+            }
+
+            default -> throw new IllegalStateException("Unexpected gravity: " + gravity);
+        }
+    }
+    private boolean isBlockedInDirection(AABB box, Direction direction) {
+        double checkDistance = 0.4D;
+
+        AABB checkBox;
+
+        switch (direction) {
+            case EAST -> checkBox = new AABB(
+                    box.maxX, box.minY+0.3, box.minZ,
+                    box.maxX + checkDistance, box.maxY, box.maxZ
+            );
+            case WEST -> checkBox = new AABB(
+                    box.minX - checkDistance, box.minY, box.minZ,
+                    box.minX, box.maxY, box.maxZ
+            );
+            case UP -> checkBox = new AABB(
+                    box.minX, box.maxY, box.minZ,
+                    box.maxX, box.maxY + checkDistance, box.maxZ
+            );
+            case DOWN -> checkBox = new AABB(
+                    box.minX, box.minY - checkDistance, box.minZ,
+                    box.maxX, box.minY, box.maxZ
+            );
+            case SOUTH -> checkBox = new AABB(
+                    box.minX, box.minY, box.maxZ,
+                    box.maxX, box.maxY, box.maxZ + checkDistance
+            );
+            case NORTH -> checkBox = new AABB(
+                    box.minX, box.minY, box.minZ - checkDistance,
+                    box.maxX, box.maxY, box.minZ
+            );
+            default -> throw new IllegalStateException("Unexpected direction: " + direction);
+        }
+
+        return self.level()
+                .getBlockCollisions(self, checkBox)
+                .iterator()
+                .hasNext();
+    }
+    public boolean hasBanner(){
+        return MainUtil.isHoldingBanner(self);
+    }
+
+    public int getRechargeTime(){
+        return 100;
+    }
+    public int rech = 0;
     @Override
     public void tickPower() {
         super.tickPower();
+        if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
+            if (!canHoldBanner){
+                rech++;
+                if (rech >= getRechargeTime()){
+                    canHoldBanner = true;
+                    rech = 0;
+                    saveDiscAndSync();
+                }
+            } else {
+                rech = 0;
+            }
+        }
+    }
+
+    public void spawnCloneServer(){
+        if (isEligable()){
+            enactEligability();
+        }
+    }
+    public void useUpBanner(ItemStack banner){
+        if (self instanceof ServerPlayer pl) {
+            pl.getCooldowns().addCooldown(banner.getItem(),getRechargeTime());
+            pl.level().playSound(null, pl.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER,
+                    SoundSource.PLAYERS, 1F, 1);
+            canHoldBanner = false;
+            saveDiscAndSync();
+            pl.swing(InteractionHand.MAIN_HAND,true);
+        }
     }
 
     @Override
@@ -98,6 +494,9 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_2_NORMAL -> {
+                makeCloneClient();
+            }
             case SKILL_3_GUARD -> {
                 betweenVisionClient();
             }
@@ -109,8 +508,52 @@ public class PowersD4C extends NewPunchingStand {
             }
         }
     }
+    public void makeCloneClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isEligable()) {
+                tryPowerPacket(PowerIndex.POWER_2);
+        }
+    }
 
     public void betweenVisionClient(){
+        BlockPos origin = self.blockPosition();
+        Direction forward = self.getDirection();
+
+        int maxDistance = 20;
+        int sideRange = 5;
+        int verticalRange = 5;
+        int maxSpots = 15;
+
+        int found = 0;
+        Direction dir = RotationUtil.getGravityDirection(self);
+
+        for (int distance = 0; distance <= maxDistance; distance++) {
+            for (int side = -sideRange; side <= sideRange; side++) {
+                for (int vertical = -verticalRange; vertical <= verticalRange; vertical++) {
+
+                    BlockPos pos = origin
+                            .relative(forward, distance)
+                            .relative(forward.getClockWise(), side)
+                            .above(vertical);
+
+                    if (!self.level().getBlockState(pos).isSolid() &&
+                            !self.level().getBlockState(pos).liquid() &&
+                            !self.level().getBlockState(pos.relative(dir.getOpposite())).isSolid() &&
+                            !self.level().getBlockState(pos.relative(dir.getOpposite())).liquid() &&
+                    isBetweenSpace(pos,true)) {
+
+                        spawnGravitySpiral(
+                                self.level(),
+                                pos,
+                                RotationUtil.getGravityDirection(self)
+                        );
+
+                        if (++found >= maxSpots) {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
     public void dashOrBlockSwitchClient(){
             dash();
@@ -119,8 +562,6 @@ public class PowersD4C extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
-        if (hasHandsOut())
-            return;
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (this.activePower == PowerIndex.POWER_1_SNEAK) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
@@ -161,6 +602,13 @@ public class PowersD4C extends NewPunchingStand {
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
         }
+    }
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot){
+        if (slot == 1 || slot == 2 || slot == 4){
+            return !isEligable();
+        }
+        return super.isAttackIneptVisually(activeP,slot);
     }
     @Override
     public boolean interceptGuard(){
@@ -327,6 +775,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.POWER_1_SNEAK){
             return this.chopAttack();
+        } else if (move == PowerIndex.POWER_2){
+            spawnCloneServer();
+            return false;
         }
         return super.setPowerOther(move,lastMove);
     }
@@ -723,14 +1174,22 @@ public class PowersD4C extends NewPunchingStand {
         return 18;
     }
 
+    public boolean canHoldBanner = true;
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
+        $$0.putBoolean("canHoldBanner",canHoldBanner);
+
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
+
+        if ($$0.contains("canHoldBanner")) {
+            canHoldBanner = $$0.getBoolean("canHoldBanner");
+        }
+
     }
     public boolean isWip(){
         return true;
