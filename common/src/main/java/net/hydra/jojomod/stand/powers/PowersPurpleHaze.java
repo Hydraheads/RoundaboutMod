@@ -1,22 +1,18 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
-import net.hydra.jojomod.entity.stand.GreenDayEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.substand.MoldSporesEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.ModParticles;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
-import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
@@ -28,16 +24,12 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -46,17 +38,17 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.particles.DustParticleOptions;
+import org.joml.Vector3f;
+import net.minecraft.server.level.ServerLevel;
+
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class PowersPurpleHaze extends NewPunchingStand {
     public PowersPurpleHaze(LivingEntity self) {
@@ -120,6 +112,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (vaultOrFallBraceFails()) {
             dash();
         }
+    }
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK || num == PowerIndex.SKILL_2 ){
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
     }
     public boolean holdDownClick = false;
     @Override
@@ -238,6 +237,101 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case SKILL_3_CROUCH -> tryToStandLeapClient();
         }
     }
+    @Override
+    public void tickPermaCast() {
+        if (self == null) {
+            return;
+        }
+
+        if (self.level().isClientSide) {
+            return;
+        }
+
+        if (!purpleHazeFieldActive || purpleHazeFieldPosition == null) {
+            return;
+        }
+
+        IPermaCasting permaCasting =
+                (IPermaCasting) self.level();
+
+        if (!permaCasting.roundabout$isPermaCastingEntity(self)) {
+            return;
+        }
+
+        Level level = self.level();
+        ServerLevel serverLevel = (ServerLevel) level;
+
+        purpleHazeFieldTicks--;
+
+        if (purpleHazeFieldTicks <= 0) {
+            deactivatePurpleHazeField();
+            return;
+        }
+
+
+        double x = purpleHazeFieldPosition.x;
+        double y = purpleHazeFieldPosition.y;
+        double z = purpleHazeFieldPosition.z;
+
+
+        serverLevel.sendParticles(
+                ParticleTypes.LARGE_SMOKE,
+                x,
+                y + 1.0,
+                z,
+                40,
+                PURPLE_HAZE_RANGE / 2,
+                1.5,
+                PURPLE_HAZE_RANGE / 2,
+                0.01
+        );
+
+        serverLevel.sendParticles(
+                new DustParticleOptions(
+                        new Vector3f(0.45F, 0.0F, 0.55F),
+                        1.5F
+                ),
+                x,
+                y + 1.0,
+                z,
+                60,
+                PURPLE_HAZE_RANGE / 2,
+                1.5,
+                PURPLE_HAZE_RANGE / 2,
+                0.02
+        );
+
+        if (purpleHazeFieldTicks > PURPLE_HAZE_FIELD_DURATION - 40) {
+            return;
+        }
+
+        List<Entity> entities = MainUtil.genHitbox(
+                level,
+                x,
+                y,
+                z,
+                PURPLE_HAZE_RANGE,
+                PURPLE_HAZE_RANGE,
+                PURPLE_HAZE_RANGE
+        );
+
+        for (Entity entity : entities) {
+
+            if (!(entity instanceof LivingEntity living)) {
+                continue;
+            }
+
+            living.addEffect(
+                    new MobEffectInstance(
+                            ModEffects.HAZE_VIRUS,
+                            300
+                    )
+            );
+        }
+    }
+
+
+
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
@@ -323,12 +417,26 @@ public class PowersPurpleHaze extends NewPunchingStand {
         RenderSystem.enableBlend();
         context.blit(StandIcons.PODS_STOCKS, x - 3, y - 3, 0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
     }
+    private static final float PURPLE_HAZE_RANGE = 8.0F;
 
+    private boolean purpleHazeFieldActive = false;
     private boolean indistortionmode = false;
+
+    private int purpleHazeFieldTicks = 0;
+
+    private static final int PURPLE_HAZE_FIELD_DURATION = 300;
+
+    private Snowball purpleHazePod = null;
+
+    private Vec3 purpleHazeFieldPosition = null;
+
+
+
 
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(4)) {
             Distortion();
+
         }
     }
 
@@ -347,6 +455,55 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    public void activatePurpleHazeField(Vec3 position) {
+        if (this.self == null) {
+            return;
+        }
+
+        if (this.self.level().isClientSide) {
+            return;
+        }
+
+        IPermaCasting permaCasting =
+                (IPermaCasting) this.self.level();
+
+
+        purpleHazeFieldPosition = position;
+
+
+        purpleHazeFieldTicks = PURPLE_HAZE_FIELD_DURATION;
+
+
+        if (!permaCasting.roundabout$isPermaCastingEntity(this.self)) {
+            permaCasting.roundabout$addPermaCaster(this.self);
+        }
+
+        purpleHazeFieldActive = true;
+    }
+
+
+
+    public void deactivatePurpleHazeField() {
+        if (this.self == null) {
+            return;
+        }
+
+        if (this.self.level().isClientSide) {
+            return;
+        }
+
+        IPermaCasting permaCasting =
+                (IPermaCasting) this.self.level();
+
+        if (permaCasting.roundabout$isPermaCastingEntity(this.self)) {
+            permaCasting.roundabout$removePermaCastingEntity(this.self);
+        }
+
+        purpleHazeFieldActive = false;
+        purpleHazeFieldTicks = 0;
+        purpleHazeFieldPosition = null;
+    }
+
 
     public void attemptThrowPod() {
 
@@ -376,17 +533,55 @@ public class PowersPurpleHaze extends NewPunchingStand {
             );
 
             this.self.level().addFreshEntity(snowball);
+            this.purpleHazePod = snowball;
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
 
         }
-
-
     }
+    public void tickPurpleHazePod() {
+        if (self == null) {
+            return;
+        }
+
+        if (self.level().isClientSide) {
+            return;
+        }
+
+        if (purpleHazePod == null) {
+            return;
+        }
+
+        if (purpleHazePod.onGround()
+                || purpleHazePod.horizontalCollision
+                || purpleHazePod.verticalCollision
+                || purpleHazePod.isRemoved()) {
+
+            Vec3 landingPosition = purpleHazePod.position();
+
+            activatePurpleHazeField(landingPosition);
+
+            purpleHazePod = null;
+        }
+    }
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+
+        if (self != null && !self.level().isClientSide) {
+            tickPurpleHazePod();
+        }
+    }
+
     @Override
     public byte getPermaCastContext() {
         if(indistortionmode) {
             return PermanentZoneCastInstance.DISTORTION_SMOKE;
         } else return PermanentZoneCastInstance.PURPLE_SMOKE;
+    }
+    @Override
+    public float getPermaCastRange() {
+        return PURPLE_HAZE_RANGE;
     }
 
     @Override

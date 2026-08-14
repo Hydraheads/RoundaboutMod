@@ -8,4 +8,5 @@ import java.util.Map;
 
 public interface IItemCooldowns {
     void rdbt$skipItemCooldowns(int ticks);
+
 }

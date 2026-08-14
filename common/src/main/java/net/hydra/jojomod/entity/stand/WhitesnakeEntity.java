@@ -370,8 +370,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             tickMeltingHoverMeter(controlled);
             tickMeltingAcid(controlled);
         }
-        if (level().isClientSide() && isControlModeActive() && isControlledByLocalInstance()
-                && !melting) {
+        if (level().isClientSide() && isControlModeActive() && !melting) {
             tickControlBodyRotation();
         } else {
             controlBodyRotationActive = false;

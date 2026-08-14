@@ -1694,8 +1694,10 @@ public class AbilityScapeBasis {
     }
     public void buttonInputAttack(boolean keyIsDown, Options options) {
         if (keyIsDown) { if (this.canAttack()) {
-            this.tryPower(PowerIndex.ATTACK);
-            tryPowerPacket(PowerIndex.ATTACK);
+            if (interceptAttack()) {
+                this.tryPower(PowerIndex.ATTACK);
+                tryPowerPacket(PowerIndex.ATTACK);
+            }
         }}
     }
     public boolean canAttack(){
