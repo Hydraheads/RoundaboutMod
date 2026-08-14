@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
@@ -440,6 +441,20 @@ public class RoundaboutCommands {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
         } else {
             source.sendSuccess(() -> Component.translatable(  "commands.roundabout.levelup_specific.multiple", targets.size()), true);
+        }
+        return targets.size();
+    }
+    public static int executeDaze(CommandSourceStack source, Collection<? extends Entity> targets) {
+        for (Entity entity : targets) {
+            if (entity instanceof LivingEntity LE) {
+                AbilityScapeBasis.setDazed(LE, (byte) 20);
+
+            }
+        }
+        if (targets.size() == 1) {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.single", ((Entity)targets.iterator().next()).getDisplayName()), true);
+        } else {
+            source.sendSuccess(() -> Component.translatable(  "commands.roundabout.heal.multiple", targets.size()), true);
         }
         return targets.size();
     }

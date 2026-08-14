@@ -616,6 +616,11 @@ public class AbilityScapeBasis {
             }
         }
         baseTickPower();
+
+        if (activePower == PowerIndex.NONE && attackTime > -1 && (attackTime < attackTimeMax) && !kickStarted &&
+        self.level().isClientSide()){
+            kickStarted = true;
+        }
     }
 
 
