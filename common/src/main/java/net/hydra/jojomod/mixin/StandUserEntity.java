@@ -5643,7 +5643,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 );
                 for (LivingEntity target : nearby) {
                     if (target == rdbt$this() || target.hasEffect(ModEffects.HAZE_VIRUS)) continue;
-                    if (this.random.nextFloat() < 0.15F) {
+                    if (this.random.nextFloat() < 1.5F) {
                         target.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 200, amplifier, false, true), rdbt$this());
                     }
                 }

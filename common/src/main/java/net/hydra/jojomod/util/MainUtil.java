@@ -30,6 +30,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -1316,10 +1317,12 @@ public class MainUtil {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }
     public static void handleMovePilot(double getX, double getY, double getZ, float getYRot, float getXRot,
-                                       Player player, int entityInt) {
+                                       Player player, int entityInt,
+                                       double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
         if (entity != null) {
-            if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)) {
+            if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
+                    || !Double.isFinite(velocityX) || !Double.isFinite(velocityY) || !Double.isFinite(velocityZ)) {
             } else {
                 if (entity != player) {
                     ServerLevel serverlevel = (ServerLevel) player.level();
@@ -1343,6 +1346,10 @@ public class MainUtil {
 
                     entity.absMoveTo(d3, d4, d5, f, f1);
                     entity.moveTo(d3, d4, d5, f, f1);
+                    if (entity instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
+                        whitesnake.setDeltaMovement(velocityX, velocityY, velocityZ);
+                        whitesnake.setYHeadRot(f);
+                    }
                 }
 
             }
@@ -3768,7 +3775,8 @@ public class MainUtil {
     public static boolean isHoldingBanner(Entity entity){
         if (entity instanceof Player pl){
             //Only works for mainhand on purpose
-            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4) {
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4 &&
+            pd4.canHoldBanner) {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {

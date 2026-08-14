@@ -246,6 +246,7 @@ public class C2SPacketUtil {
     }
 
     public static void updatePilot(LivingEntity pilotStand){
+        Vec3 velocity = pilotStand.getDeltaMovement();
         ModMessageEvents.sendToServer(
                 ClientToServerPackets.StandPowerPackets.MESSAGES.UpdatePilot.value,
                 (float)pilotStand.getX(),
@@ -253,7 +254,10 @@ public class C2SPacketUtil {
                 (float)pilotStand.getZ(),
                 (float)pilotStand.getYRot(),
                 (float)pilotStand.getXRot(),
-                pilotStand.getId()
+                pilotStand.getId(),
+                (float)velocity.x,
+                (float)velocity.y,
+                (float)velocity.z
         );
     }
 

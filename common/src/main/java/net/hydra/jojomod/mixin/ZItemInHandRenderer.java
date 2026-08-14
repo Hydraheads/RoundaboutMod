@@ -85,6 +85,9 @@ public abstract class ZItemInHandRenderer {
     @Shadow
     protected abstract void renderArmWithItem(AbstractClientPlayer $$0, float $$1, float $$2, InteractionHand $$3, float $$4, ItemStack $$5, float $$6, PoseStack $$7, MultiBufferSource $$8, int $$9);
 
+    @Shadow
+    private ItemStack mainHandItem;
+
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
     void roundabout$renderHandsWithItems(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
@@ -235,6 +238,22 @@ public abstract class ZItemInHandRenderer {
                                                                  MultiBufferSource multiBufferSource,
                                                                  int j, CallbackInfo ci) {
         if (abstractClientPlayer.isScoping()) {
+            return;
+        }
+
+        if (ClientUtil.isRenderingFlag(abstractClientPlayer)) {
+
+            ItemStack renderedStack = this.mainHandItem;
+
+            // Still rendering the old item.
+            // Don't cancel yet; let vanilla lower it normally.
+            if (renderedStack == null || !(renderedStack.getItem() instanceof BannerItem)) {
+                return;
+            }
+
+            // ItemInHandRenderer has finished the switch.
+            // Now suppress the first-person arms/items.
+            ci.cancel();
             return;
         }
 
