@@ -391,7 +391,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
+            if (canExecuteMoveWithLevel(4)) {
+                setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_1_SNEAK);
+            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
         } else {
             if (canExecuteMoveWithLevel(4)) {
                 setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
