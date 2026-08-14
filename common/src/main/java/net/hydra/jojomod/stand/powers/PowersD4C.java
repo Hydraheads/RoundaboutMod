@@ -1,14 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IItemCooldowns;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
-import net.hydra.jojomod.entity.stand.JusticeEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -16,7 +13,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -44,16 +40,18 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -104,7 +102,39 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isEligable(){
         return hasBanner() || isInBetweenSpace() || self.isUnderWater();
     }
+    public boolean isCollidingWithDoor() {
+        AABB box = self.getBoundingBox();
+        Level level = self.level();
+
+        BlockPos min = BlockPos.containing(box.minX, box.minY, box.minZ);
+        BlockPos max = BlockPos.containing(box.maxX, box.maxY, box.maxZ);
+
+        for (BlockPos pos : BlockPos.betweenClosed(min, max)) {
+            BlockState state = level.getBlockState(pos);
+
+            if (!(state.getBlock() instanceof DoorBlock)) {
+                continue;
+            }
+
+            VoxelShape shape = state.getCollisionShape(level, pos);
+
+            if (!shape.isEmpty()
+                    && Shapes.joinIsNotEmpty(
+                    shape.move(pos.getX(), pos.getY(), pos.getZ()),
+                    Shapes.create(box),
+                    BooleanOp.AND
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public boolean isInBetweenSpace(){
+        if (isCollidingWithDoor()){
+            return false;
+        }
+
         return isBetweenSpace(BlockPos.containing(
                 ((self.getEyePosition().subtract(self.getPosition(1f))).scale(0.2)).add(self.getPosition(1f))
         ), false);
@@ -199,10 +229,17 @@ public class PowersD4C extends NewPunchingStand {
                     y += offset2;
                 }
             }
-
+            Vector3f color;
+            if (i % 2 == 0) {
+                // Light blue
+                color = new Vector3f(0.4F, 0.8F, 1.0F);
+            } else {
+                // Light purple
+                color = new Vector3f(0.8F, 0.5F, 1.0F);
+            }
             level.addParticle(
                     new DustParticleOptions(
-                            new Vector3f(1.0F, 0.85F, 0.0F),
+                            color,
                             1.0F
                     ),
                     x,
@@ -484,7 +521,7 @@ public class PowersD4C extends NewPunchingStand {
         int maxDistance = 20;
         int sideRange = 5;
         int verticalRange = 5;
-        int maxSpots = 100;
+        int maxSpots = 15;
 
         int found = 0;
         Direction dir = RotationUtil.getGravityDirection(self);
