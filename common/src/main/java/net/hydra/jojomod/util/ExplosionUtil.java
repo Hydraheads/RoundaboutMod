@@ -93,7 +93,7 @@ public class ExplosionUtil {
 
 		Entity causer = dmgSource.getEntity();
 
-		DamageSource notSeenDamage =  ModDamageTypes.of(level, DamageTypes.EXPLOSION, null);
+		DamageSource notSeenDamage =  ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, null);
 
 		int amountOfVictims = 0;
 

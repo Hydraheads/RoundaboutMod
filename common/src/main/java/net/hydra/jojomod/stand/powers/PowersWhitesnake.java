@@ -388,7 +388,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (entering) prepareStandForRemoteControl(stand);
         ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
         if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.setControlMode(entering);
-        if (leavingAutoMode) setAutoMode(false);
+        if (leavingAutoMode) {
+            setAutoMode(false);
+            if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.clearAutoModeMovement();
+        }
         if (stand instanceof FollowingStandEntity following) {
             following.setOffsetType(entering || autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
         }
