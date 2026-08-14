@@ -156,6 +156,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int jumpTickMax = 68;
 	int explosionMiningTicks = 0;
 	static final int explosionMiningTicksMax = 35;
+	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
+	static final int explosionMiningIntervalTicksMax = 45;
 
 	final float jumpMaxHeight = 3.0f;
 	int stunTicks = 0;
@@ -264,14 +266,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (!client) {
 			if(user == null){
-				this.discard();
+				unsummon();
 			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())
 			|| MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 100){
-				this.discard();
+				unsummon();
 			}else {
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
 					if (this != PKQ.SHA) {
-						this.discard();
+						unsummon();
 						return;
 					}
 				}
@@ -669,7 +671,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void shaMiningMove() {
-		if (explosionMiningTicks > 8) {
+		if (explosionMiningTicks > 12) {
 			shaStopMove();
 			return;
 		}
@@ -693,6 +695,16 @@ public class SheerHeartAttackEntity extends StandEntity {
 			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 			explosionMiningTicks = explosionMiningTicksMax;
 			explosions++;
+			explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
+		}else{
+			explosionMiningIntervalTicks--;
+			if (explosionMiningIntervalTicks <= 0) {
+				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
+				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos(), level(), 1.2f, true);
+				level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+				explosions++;
+				explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
+			}
 		}
 	}
 
@@ -887,7 +899,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
 					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
 					|| getTorchStatus();
-			
+
 			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
 		} else if (this.getUser() == $$0) {
 			if ($$2.is(Items.TORCH) && !getTorchStatus() && ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
@@ -909,6 +921,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 
 		return super.mobInteract($$0, $$1);
+	}
+
+	public void unsummon() {
+		if (getTorchStatus()) {
+			spawnAtLocation(new ItemStack(Items.TORCH));
+		}
+		discard();
 	}
 
 	public boolean startRiding(Entity $$0) {
