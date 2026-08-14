@@ -1620,14 +1620,14 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBitesTheDustCombat() {
-        if (canBitesTheDustCombat()) {
+        if (canBitesTheDustCombat() && !onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             ((StandUser) this.getSelf()).roundabout$tryPower(BITES_THE_DUST_COMBAT, true);
             tryPowerPacket(BITES_THE_DUST_COMBAT);
         }
     }
 
     public void tryBitesTheDustDay() {
-        if (canBitesTheDustDay()) {
+        if (canBitesTheDustDay() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
             ((StandUser) this.getSelf()).roundabout$tryPower(BITES_THE_DUST_DAY, true);
             tryPowerPacket(BITES_THE_DUST_DAY);
         }
