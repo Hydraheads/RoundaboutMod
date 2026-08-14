@@ -222,6 +222,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
+            case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode
+                attemptDistortionModeChange();
+            }
+
             case PowerIndex.SNEAK_ATTACK_CHARGE -> attemptThrowPod();
         }
         return super.setPowerOther(move, lastMove);
@@ -232,6 +236,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_1);
+            }
+            case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
+                this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
             }
             case SKILL_3_NORMAL -> tryToDashClient();
             case SKILL_3_CROUCH -> tryToStandLeapClient();
@@ -273,35 +280,75 @@ public class PowersPurpleHaze extends NewPunchingStand {
         double y = purpleHazeFieldPosition.y;
         double z = purpleHazeFieldPosition.z;
 
+        if (purpleHazeFieldDistortionMode) {
 
-        serverLevel.sendParticles(
-                ParticleTypes.LARGE_SMOKE,
-                x,
-                y + 1.0,
-                z,
-                40,
-                PURPLE_HAZE_RANGE / 2,
-                1.5,
-                PURPLE_HAZE_RANGE / 2,
-                0.01
-        );
+            serverLevel.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    x,
+                    y + 1.0,
+                    z,
+                    40,
+                    PURPLE_HAZE_RANGE / 2,
+                    1.5,
+                    PURPLE_HAZE_RANGE / 2,
+                    0.01
+            );
 
-        serverLevel.sendParticles(
-                new DustParticleOptions(
-                        new Vector3f(0.45F, 0.0F, 0.55F),
-                        1.5F
-                ),
-                x,
-                y + 1.0,
-                z,
-                60,
-                PURPLE_HAZE_RANGE / 2,
-                1.5,
-                PURPLE_HAZE_RANGE / 2,
-                0.02
-        );
+            serverLevel.sendParticles(
+                    new DustParticleOptions(
+                            new Vector3f(0.0F, 0.0F, 0.0F),
+                            1.5F
+                    ),
+                    x,
+                    y + 1.0,
+                    z,
+                    60,
+                    PURPLE_HAZE_RANGE / 2,
+                    1.5,
+                    PURPLE_HAZE_RANGE / 2,
+                    0.02
+            );
 
-        if (purpleHazeFieldTicks > PURPLE_HAZE_FIELD_DURATION - 40) {
+        } else {
+
+            serverLevel.sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    x,
+                    y + 1.0,
+                    z,
+                    40,
+                    PURPLE_HAZE_RANGE / 2,
+                    1.5,
+                    PURPLE_HAZE_RANGE / 2,
+                    0.01
+            );
+
+
+            serverLevel.sendParticles(
+                    new DustParticleOptions(
+                            new Vector3f(0.45F, 0.0F, 0.55F),
+                            1.5F
+                    ),
+                    x,
+                    y + 1.0,
+                    z,
+                    60,
+                    PURPLE_HAZE_RANGE / 2,
+                    1.5,
+                    PURPLE_HAZE_RANGE / 2,
+                    0.02
+            );
+        }
+
+        int startupDelay;
+
+        if (purpleHazeFieldDistortionMode) {
+            startupDelay = DISTORTION_FIELD_DURATION - 40;
+        } else {
+            startupDelay = PURPLE_HAZE_FIELD_DURATION - 40;
+        }
+
+        if (purpleHazeFieldTicks > startupDelay) {
             return;
         }
 
@@ -320,13 +367,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!(entity instanceof LivingEntity living)) {
                 continue;
             }
-
-            living.addEffect(
-                    new MobEffectInstance(
-                            ModEffects.HAZE_VIRUS,
-                            300
-                    )
-            );
+            if(purpleHazeFieldDistortionMode){
+                living.addEffect(
+                        new MobEffectInstance(
+                                ModEffects.DISTORTION_VIRUS,
+                                300
+                        )
+                );
+            }else if(!purpleHazeFieldDistortionMode) {
+                living.addEffect(
+                        new MobEffectInstance(
+                                ModEffects.HAZE_VIRUS,
+                                300
+                        )
+                );
+            }
         }
     }
 
@@ -424,12 +479,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     private int purpleHazeFieldTicks = 0;
 
-    private static final int PURPLE_HAZE_FIELD_DURATION = 300;
+    private static final int PURPLE_HAZE_FIELD_DURATION = 400;
+    private static final int DISTORTION_FIELD_DURATION = 200;
+
 
     private Snowball purpleHazePod = null;
-
+    private boolean purpleHazePodDistortionMode = false;
     private Vec3 purpleHazeFieldPosition = null;
 
+
+    private boolean purpleHazeFieldDistortionMode = false;
 
 
 
@@ -455,7 +514,30 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
-    public void activatePurpleHazeField(Vec3 position) {
+    public void attemptDistortionModeChange() {
+        if (canExecuteMoveWithLevel(4)) {
+            DistortionModeChange();
+
+        }
+    }
+    public void DistortionModeChange() {
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            if(indistortionmode){
+               indistortionmode=false;
+            } else indistortionmode=true;
+
+            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
+            if (this.getSelf() instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK,
+                        400);
+            }
+        }
+    }
+    public void activatePurpleHazeField(
+            Vec3 position,
+            boolean distortionMode
+    ) {
         if (this.self == null) {
             return;
         }
@@ -467,12 +549,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         IPermaCasting permaCasting =
                 (IPermaCasting) this.self.level();
 
-
         purpleHazeFieldPosition = position;
 
 
-        purpleHazeFieldTicks = PURPLE_HAZE_FIELD_DURATION;
+        purpleHazeFieldDistortionMode = distortionMode;
 
+        purpleHazeFieldTicks = PURPLE_HAZE_FIELD_DURATION;
 
         if (!permaCasting.roundabout$isPermaCastingEntity(this.self)) {
             permaCasting.roundabout$addPermaCaster(this.self);
@@ -480,6 +562,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         purpleHazeFieldActive = true;
     }
+
+
 
 
 
@@ -513,7 +597,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void ThrowPod() {
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAR_FINGER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            this.self.level().playSound(
+                    null,
+                    this.self.blockPosition(),
+                    ModSounds.STAR_FINGER_EVENT,
+                    SoundSource.PLAYERS,
+                    1.0F,
+                    1.0F
+            );
 
             Snowball snowball = new Snowball(this.self.level(), self);
 
@@ -528,16 +619,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     self.getXRot(),
                     self.getYRot(),
                     0.0F,
-                    0.4F,  // velocity
-                    0.0F   // inaccuracy( 0 cause we have great aim in this house)
+                    0.4F,
+                    0.0F
             );
 
-            this.self.level().addFreshEntity(snowball);
-            this.purpleHazePod = snowball;
-            this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
+            purpleHazePodDistortionMode = indistortionmode;
 
+            this.self.level().addFreshEntity(snowball);
+
+            this.purpleHazePod = snowball;
+
+            this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
         }
     }
+
+
     public void tickPurpleHazePod() {
         if (self == null) {
             return;
@@ -558,11 +654,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             Vec3 landingPosition = purpleHazePod.position();
 
-            activatePurpleHazeField(landingPosition);
+
+            activatePurpleHazeField(
+                    landingPosition,
+                    purpleHazePodDistortionMode
+            );
 
             purpleHazePod = null;
         }
     }
+
 
     @Override
     public void tickPower() {
