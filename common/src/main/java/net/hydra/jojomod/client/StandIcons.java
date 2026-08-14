@@ -503,6 +503,8 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/mining.png");
     public static final ResourceLocation SILVER_CHARIOT_ARM_SUMMON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/arm_summon.png");
+    public static final ResourceLocation SILVER_CHARIOT_OFFHAND_WEAPON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/offhand_weapon.png");
 
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
