@@ -64,6 +64,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -394,16 +395,19 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
         Entity ent = (Entity) (Object) this;
         if (PowerTypes.isExistentiallyElsewhere(ent)){
-            if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
-            || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
-                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
-                    ||
-                    (ent instanceof StandEntity se &&
-                            se.getUser() instanceof KingCrimsonCloneEntity kcc2 && ClientUtil.isPlayer(kcc2.getPlayer()) &&
-                    ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
-                    ))) {
-                cir.setReturnValue(true);
-                return;
+            if (!(this.level().isClientSide() &&
+                    !PowerTypes.isInADifferentExistence(ent,ClientUtil.getPlayer()))){
+                if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
+                || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
+                        ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                        ||
+                        (ent instanceof StandEntity se &&
+                                se.getUser() instanceof KingCrimsonCloneEntity kcc2 && ClientUtil.isPlayer(kcc2.getPlayer()) &&
+                        ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)
+                        ))) {
+                    cir.setReturnValue(true);
+                    return;
+                }
             }
         }
 
@@ -658,7 +662,9 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
     protected void roundabout$spawnSprintParticle(CallbackInfo ci){
         Entity thirs = ((Entity)(Object)this);
-        if (PowerTypes.isExistentiallyElsewhere(thirs)){
+        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
+                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
             ci.cancel();
             return;
         }
@@ -682,26 +688,35 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
+                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
             ci.cancel();
         }
     }
     @Inject(method = "isSteppingCarefully", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$isSteppingCarefully(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this) &&
+                !PowerTypes.canInteractInExistence((Entity)(Object)this)) {
             cir.setReturnValue(true);
         }
     }
     @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$waterSwimSound(CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere((Entity)(Object)this)) {
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
+                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
             ci.cancel();
         }
     }
     @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
-        Entity thisEnt = ((Entity) (Object) this);
-        if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+        Entity thirs = ((Entity)(Object)this);
+        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
+                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
             ci.cancel();
         }
     }
@@ -709,6 +724,25 @@ public abstract class EntityAndData implements IEntityAndData {
     protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
         if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
+            if (!PowerTypes.isErasingTime(thisEnt)) {
+                    if ($$1) {
+                        if (this.fallDistance > 0.0F) {
+                            $$2.getBlock().fallOn(this.level(), $$2, $$3, thisEnt, this.fallDistance);
+                            if (PowerTypes.canInteractInExistence((Entity) (Object) this)) {
+                                this.level()
+                                        .gameEvent(
+                                                GameEvent.HIT_GROUND,
+                                                this.position,
+                                                GameEvent.Context.of(thisEnt, this.mainSupportingBlockPos.<BlockState>map($$0x -> this.level().getBlockState($$0x)).orElse($$2))
+                                        );
+                            }
+                        }
+
+                        this.resetFallDistance();
+                    } else if ($$0 < 0.0) {
+                        this.fallDistance -= (float) $$0;
+                    }
+            }
             ci.cancel();
         }
     }
@@ -717,7 +751,9 @@ public abstract class EntityAndData implements IEntityAndData {
     protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
         Entity thisEnt = ((Entity) (Object) this);
         if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
-            cir.setReturnValue(true);
+            if (!PowerTypes.canInteractInExistence((Entity) (Object) this)) {
+                cir.setReturnValue(true);
+            }
         }
     }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
@@ -836,6 +872,18 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     protected abstract boolean getSharedFlag(int i);
+
+    @Shadow
+    public abstract void resetFallDistance();
+
+    @Shadow
+    public float fallDistance;
+
+    @Shadow
+    private Vec3 position;
+
+    @Shadow
+    public Optional<BlockPos> mainSupportingBlockPos;
 
     @Override
     @Unique

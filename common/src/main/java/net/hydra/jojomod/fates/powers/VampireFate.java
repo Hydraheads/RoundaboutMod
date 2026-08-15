@@ -90,8 +90,8 @@ public class VampireFate extends VampiricFate {
                 hairExtendClient();
             }
             case SKILL_2_NORMAL -> {
-                if (!PowerTypes.isExistentiallyElsewhere(self)){
-                suckBlood();
+                if (!PowerTypes.isErasingTime(self)){
+                    suckBlood();
                 }
             }
             case SKILL_2_CROUCH -> {
