@@ -79,6 +79,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                                 }
                             }
                         } else {
+                            HeatUtil.makeAngryAtFreeze(mob,user);
                             if (this.tickCount%2==0 || HeatUtil.getHeat(mob) > -33) {
                                 if (HeatUtil.getHeat(mob)> -102 && this.tickCount > 4) {
                                     HeatUtil.addHeat(mob, -1);
