@@ -16,4 +16,7 @@ public interface IGravityEntity {
     void rdbdt$setTaggedForFlip(boolean flip);
     int roundabout$getSuffocationTicks();
 
+    void roundabout$setExistPlane(byte adj);
+    byte roundabout$getExistPlane();
+
 }

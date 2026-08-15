@@ -54,6 +54,9 @@ public interface StandUser {
     void roundabout$setExplosionInflation(int e);
     int roundabout$getExplosionInflation();
 
+    void roundabout$setExistPlane(byte adj);
+    byte roundabout$getExistPlane();
+    
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
 

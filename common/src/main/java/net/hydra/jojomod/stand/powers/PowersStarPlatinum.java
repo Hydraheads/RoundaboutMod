@@ -687,7 +687,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             Direction gravD = ((IGravityEntity)self).roundabout$getGravityDirection();
 
             for (Entity value : listEnt) {
-                if (PowerTypes.isExistentiallyElsewhere(value)){
+                if ((PowerTypes.isExistentiallyElsewhere(value) || PowerTypes.isExistentiallyElsewhere(self))
+                && !PowerTypes.isExistentiallyElsewhereTogether(self,value)){
                     return;
                 }
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));

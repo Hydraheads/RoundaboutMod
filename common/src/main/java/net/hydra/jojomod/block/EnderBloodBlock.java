@@ -21,7 +21,7 @@ public class EnderBloodBlock extends BloodBlock{
     @Override
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity && !MainUtil.hasEnderBlood($$3) &&
-        !PowerTypes.isExistentiallyElsewhere($$3)){
+                !(PowerTypes.isExistentiallyElsewhere($$3) && !PowerTypes.canInteractInExistence($$3))){
             MainUtil.randomChorusTeleport((LivingEntity) $$3);
             $$1.removeBlock($$2, false);
         }
