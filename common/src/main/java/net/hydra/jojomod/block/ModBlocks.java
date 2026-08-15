@@ -772,12 +772,12 @@ public class ModBlocks {
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
-            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
+            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).sound(SoundType.EMPTY));
 
-    public static InvisiBlock D4C_PORTAL_PROPERTIES = new InvisiBlock(
-            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
-                return 1;
-            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
+    public static D4CPortalBlock D4C_PORTAL_PROPERTIES = new D4CPortalBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+                return 10;
+            }).noParticlesOnBreak().noCollission().pushReaction(PushReaction.IGNORE).sound(SoundType.EMPTY));
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).

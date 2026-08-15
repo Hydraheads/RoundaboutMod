@@ -828,7 +828,7 @@ public class PowersCalifornia extends NewDashPreset {
                 }
             }
             if (leaded != null) {
-                if (leaded.isAlive() && !PowerTypes.isExistentiallyElsewhere(leaded)) {
+                if (leaded.isAlive() && !PowerTypes.isInADifferentExistence(leaded,self)) {
                     if (leaded instanceof Mob mb) {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
                                 leaded instanceof Aesthetician ||

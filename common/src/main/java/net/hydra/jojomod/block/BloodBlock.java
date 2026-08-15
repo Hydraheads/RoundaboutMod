@@ -139,7 +139,7 @@ public class BloodBlock extends Block {
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         if (!entity.isCrouching() && entity instanceof Player PE && !level.isClientSide() &&
-                !PowerTypes.isExistentiallyElsewhere(entity)) {
+                !(PowerTypes.isExistentiallyElsewhere(entity) && !PowerTypes.canInteractInExistence(entity))) {
             if (FateTypes.hasBloodHunger(PE)){
                 level.removeBlock(blockPos, false);
                 PE.getFoodData().eat(1,2f);

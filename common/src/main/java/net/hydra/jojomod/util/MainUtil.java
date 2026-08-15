@@ -1980,7 +1980,9 @@ public class MainUtil {
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
-                        && !(PowerTypes.isExistentiallyElsewhere($$1))
+                        && !((PowerTypes.isExistentiallyElsewhere($$1) || PowerTypes.isExistentiallyElsewhere(value))
+                        &&
+                        !PowerTypes.isExistentiallyElsewhereTogether($$1,value))
                         && !(value instanceof FallenMob)
                         && (MainUtil.isActuallyALivingEntityNoCap(value))
                 ) {
@@ -2250,7 +2252,9 @@ public class MainUtil {
     /**Creative players should only be rewound by themselves*/
     public static boolean canRewindInTime(Entity ent, Entity rewinder){
         if (!ent.isRemoved() && ent.isAlive()) {
-            if (PowerTypes.isExistentiallyElsewhere(ent)){
+            if (PowerTypes.isExistentiallyElsewhere(ent) && !PowerTypes.isExistentiallyElsewhereTogether(
+                    ent,rewinder
+            )){
                 return false;
             }
             if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){

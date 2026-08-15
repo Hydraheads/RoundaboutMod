@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -39,9 +40,13 @@ public class D4CPortalBlock extends BaseEntityBlock
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level $$0, BlockState $$1, BlockEntityType<T> $$2) {
-        return createTickerHelper($$2, ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntity::tickBlockEnt);
+        return createTickerHelper($$2, ModBlocks.D4C_PORTAL_BLOCK_ENTITY, D4CPortalBlockEntity::tickBlockEnt);
     }
 
+    @Deprecated
+    public RenderShape getRenderShape(BlockState $$0) {
+        return RenderShape.MODEL;
+    }
     @Override
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
         if (blockState.getValue(WATERLOGGED).booleanValue()) {
@@ -104,9 +109,10 @@ public class D4CPortalBlock extends BaseEntityBlock
         return Shapes.empty();
     }
     @SuppressWarnings("deprecation")
+
     @Override
-    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
-        return false;
+    public boolean skipRendering(BlockState $$0, BlockState $$1, Direction $$2) {
+        return $$1.is(this) ? true : super.skipRendering($$0, $$1, $$2);
     }
 
     @Override

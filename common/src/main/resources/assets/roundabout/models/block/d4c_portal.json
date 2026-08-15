@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "roundabout:block/d4c_portal_bottom",
+    "side": "roundabout:block/d4c_portal"
+  },
+  "render_type": "translucent"
+}

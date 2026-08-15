@@ -78,6 +78,7 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -2934,6 +2935,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                             target.hurt(dmg,
                                     ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage);
                         }
+
+                        if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
                         ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
                         this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);

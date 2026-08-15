@@ -141,6 +141,25 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Unique
     private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(Entity.class,
             EntityDataSerializers.DIRECTION);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$EXIST_PLANE = SynchedEntityData.defineId(Entity.class,
+            EntityDataSerializers.BYTE);
+
+    @Unique
+    @Override
+    public void roundabout$setExistPlane(byte adj) {
+        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
+            this.getEntityData().set(ROUNDABOUT$EXIST_PLANE, adj);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getExistPlane() {
+        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
+            return this.getEntityData().get(ROUNDABOUT$EXIST_PLANE);
+        }
+        return 0;
+    }
 
     @Unique
     @Override
@@ -181,6 +200,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci){
         if (!((Entity)(Object)this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
             ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
+            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$EXIST_PLANE, (byte)0);
         }
     }
 
@@ -805,6 +825,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("GravityDirection",MainUtil.getByteFromDirection(roundabout$getGravityDirection()));
+        compoundtag.putByte("ExistPlane",roundabout$getExistPlane());
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -812,6 +833,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         Direction gd =MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection"));
         roundabout$setGravityDirection(gd);
+        roundabout$setExistPlane($$0.getCompound("roundabout").getByte("ExistPlane"));
         if (gd != Direction.DOWN && rdbt$this() instanceof LivingEntity LE &&
                 ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
             PW.setHeelDirection(gd);

@@ -35,7 +35,7 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
     }
     @Inject(method = "continueDestroyBlock", at = @At("HEAD"), cancellable = true)
     public void roundabout$continueDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this.minecraft.player)){
+        if (PowerTypes.isExistentiallyElsewhere(this.minecraft.player) && !PowerTypes.canInteractInExistence(this.minecraft.player)){
             this.isDestroying = false;
             destroyDelay = 10;
             cir.setReturnValue(false);

@@ -215,7 +215,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     }
                 }
                 if (leaded != null) {
-                    boolean elsewhere = PowerTypes.isExistentiallyElsewhere(leaded);
+                    boolean elsewhere = PowerTypes.isInADifferentExistence(leaded,self);
                     if (!hasStandActive(this.self) || elsewhere) {
                         clearLeaded();
                     }
@@ -1727,7 +1727,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
     public int lassoTime= -1;
     public void lassoImpact(Entity entity){
-        if (PowerTypes.isExistentiallyElsewhere(entity)){
+        if (PowerTypes.isInADifferentExistence(entity,self)){
             return;
         }
         boolean landedLead = false;

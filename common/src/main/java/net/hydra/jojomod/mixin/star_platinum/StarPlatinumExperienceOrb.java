@@ -33,7 +33,7 @@ public abstract class StarPlatinumExperienceOrb extends Entity {
 
     @Inject(method = "scanForEntities", at = @At(value = "TAIL"))
     protected void roundabout$scanForEntities(CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere(followingPlayer)){
+        if (PowerTypes.isInADifferentExistence(followingPlayer,this)){
             followingPlayer = null;
         }
     }

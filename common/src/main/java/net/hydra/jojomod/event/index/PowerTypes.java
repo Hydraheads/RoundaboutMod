@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
@@ -251,6 +252,43 @@ public enum PowerTypes {
         }
         return false;
     }
+    //0 = normal / time erase
+    //1-5 = D4C merging
+    //10 = time erase
+    //11 = man in the mirror
+    public static byte getPlaneOfExisting(Entity entity){
+        if (entity != null){
+            if (PowerTypes.isErasingTime(entity)){
+                return 10;
+            }
+            if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
+                return getPlaneOfExisting(fse.getFollowing());
+            }
+            return ((IGravityEntity)entity).roundabout$getExistPlane();
+        }
+        return 0;
+    }
+    public static boolean canInteractInExistence(Entity entity){
+        if (entity != null){
+            byte plane = getPlaneOfExisting(entity);
+            return plane == 11;
+        }
+        return false;
+    }
+    public static boolean isExistentiallyElsewhereTogether(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            return getPlaneOfExisting(entity) == getPlaneOfExisting(entityTwo);
+        }
+        return false;
+    }
+    public static boolean isInADifferentExistence(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            if (isExistentiallyElsewhere(entity) && isExistentiallyElsewhere(entityTwo)){
+                return !isExistentiallyElsewhereTogether(entity,entityTwo);
+            }
+        }
+        return false;
+    }
     //d4c parallel run + time erase + man in the mirror
     public static boolean isExistentiallyElsewhere(Entity entity){
         if (entity == null){
@@ -274,9 +312,7 @@ public enum PowerTypes {
                 return true;
             }
         }
-        if (isErasingTime(entity)){
-            return true;
-        }
+
         if (entity instanceof FollowingStandEntity se) {
             if (se.getFollowing() != null){
 
@@ -286,6 +322,13 @@ public enum PowerTypes {
             if (se.getUser() != null){
                 return isExistentiallyElsewhere(se.getUser());
             }
+        }
+
+        if (isErasingTime(entity)){
+            return true;
+        }
+        if ((getPlaneOfExisting(entity)) != 0){
+            return true;
         }
         return false;
     }

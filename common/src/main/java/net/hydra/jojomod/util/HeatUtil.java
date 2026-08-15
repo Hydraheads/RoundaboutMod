@@ -92,7 +92,7 @@ public class HeatUtil {
     }
 
     public static void addHeat(Entity entity, int amt){
-        if (PowerTypes.isExistentiallyElsewhere(entity)) {
+        if (PowerTypes.isErasingTime(entity)) {
             return;
         } if (entity instanceof StandEntity){
             return;
