@@ -80,6 +80,7 @@ public class FabricParticlesClient {
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_FIREBALL_EXPLOSION, PWBlueFireballExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_BLASTWAVE_EXPLOSION, PWBlueBlastwaveExplosionParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.PW_BLUE_MUSHROOM_EXPLOSION, PWBlueMushroomExplosionParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.PURPLE_HAZE_SMOKE, PurpleHazeSmokeParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.BABY_CRACKLE, BabyCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.COLD_CRACKLE, ColdCrackleParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.MAGIC_DUST, MagicDustParticle.Provider::new);

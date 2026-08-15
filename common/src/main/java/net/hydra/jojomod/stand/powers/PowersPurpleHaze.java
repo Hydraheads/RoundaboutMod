@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
@@ -283,11 +284,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (purpleHazeFieldDistortionMode) {
 
             serverLevel.sendParticles(
-                    ParticleTypes.LARGE_SMOKE,
+                    ModParticles.PURPLE_HAZE_SMOKE,
                     x,
                     y + 1.0,
                     z,
-                    40,
+                    30,
                     PURPLE_HAZE_RANGE / 2,
                     1.5,
                     PURPLE_HAZE_RANGE / 2,
@@ -302,7 +303,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     x,
                     y + 1.0,
                     z,
-                    60,
+                    45,
                     PURPLE_HAZE_RANGE / 2,
                     1.5,
                     PURPLE_HAZE_RANGE / 2,
@@ -312,31 +313,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else {
 
             serverLevel.sendParticles(
-                    ParticleTypes.LARGE_SMOKE,
+                    ModParticles.PURPLE_HAZE_SMOKE,
                     x,
                     y + 1.0,
                     z,
-                    40,
+                    30,
                     PURPLE_HAZE_RANGE / 2,
                     1.5,
                     PURPLE_HAZE_RANGE / 2,
                     0.01
-            );
-
-
-            serverLevel.sendParticles(
-                    new DustParticleOptions(
-                            new Vector3f(0.45F, 0.0F, 0.55F),
-                            1.5F
-                    ),
-                    x,
-                    y + 1.0,
-                    z,
-                    60,
-                    PURPLE_HAZE_RANGE / 2,
-                    1.5,
-                    PURPLE_HAZE_RANGE / 2,
-                    0.02
             );
         }
 
@@ -392,7 +377,62 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         super.punchImpact(entity);
 
-        if (thirdPunch && entity != null && !self.level().isClientSide()) {
+        if (thirdPunch
+                && entity != null
+                && self != null
+                && !self.level().isClientSide()) {
+
+            if (podsRemaining > 0) {
+                podsRemaining--;
+
+                if (self instanceof Player player) {
+                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(
+                            (byte) podsRemaining
+                    );
+                }
+
+
+                activatePurpleHazeField(
+                        entity.position(),
+                        indistortionmode
+                );
+            }
+        }
+    }
+
+
+
+
+    @Override
+    public void barrageImpact(Entity entity, int hitNumber) {
+
+        super.barrageImpact(entity, hitNumber);
+
+        int actualHitNumber = hitNumber;
+        if (actualHitNumber > 1000) {
+            actualHitNumber -= 1000;
+        }
+
+        boolean lastHit = actualHitNumber >= getBarrageLength();
+
+        if (!lastHit || entity == null) {
+            return;
+        }
+
+        if (self == null || self.level().isClientSide()) {
+            return;
+        }
+
+        if (podsRemaining > 0) {
+            podsRemaining--;
+
+            if (self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
+                        (byte) podsRemaining
+                );
+            }
+
+
             activatePurpleHazeField(
                     entity.position(),
                     indistortionmode
@@ -401,31 +441,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
-    @Override
-    public void barrageImpact(Entity entity, int hitNumber) {
-
-        super.barrageImpact(entity, hitNumber);
-
-
-        int actualHitNumber = hitNumber;
-        if (actualHitNumber > 1000) {
-            actualHitNumber -= 1000;
-        }
-
-
-        boolean lastHit = actualHitNumber >= getBarrageLength();
-
-        if (!lastHit || entity == null) {
-            return;
-        }
-
-        if (self.level().isClientSide()) {
-            return;
-        }
-
-
-        breakPurpleHazePod(entity.position());
-    }
 
     private void breakPurpleHazePod(Vec3 position) {
         if (self.level().isClientSide()) {
@@ -466,7 +481,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(4)) {
-                setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_1_SNEAK);
+                if(indistortionmode){
+                    setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_1_SNEAK);
+                }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_1_SNEAK);
+
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
         } else {
             if (canExecuteMoveWithLevel(4)) {
@@ -489,7 +507,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
-
+        //if(podsRemaining==6){
+          //  setSkillIcon(context, x, y, 4, StandIcons.DODGE, PowerIndex.SKILL_4);
+        //} else setSkillIcon(context, x, y, 4, StandIcons.ANUBIS_ALLURING_LIGHT, PowerIndex.SKILL_4);
         renderPodStock(context, x, y, 4);
     }
 
@@ -565,6 +585,38 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
     private boolean purpleHazeFieldDistortionMode = false;
+
+    //Pod count
+    private static final int MAX_PODS = 6;
+    private int podsRemaining = MAX_PODS;
+
+    private long lastPodResetDay = -1;
+
+    private void tickPodReset() {
+        if (self == null || self.level().isClientSide()) {
+            return;
+        }
+
+        long dayTime = self.level().getDayTime();
+
+        long day = Math.floorDiv(dayTime, 24000L);
+        long timeOfDay = Math.floorMod(dayTime, 24000L);
+
+        /*System.out.println(
+                "PODS: " + podsRemaining +
+                        " DAY: " + day +
+                        " TIME: " + timeOfDay +
+                        " LAST RESET: " + lastPodResetDay
+        );*/
+
+        if (timeOfDay >= 200 && lastPodResetDay != day) {
+            podsRemaining = MAX_PODS;
+            lastPodResetDay = day;
+
+            //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
+        }
+    }
+
 
 
 
@@ -671,10 +723,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void attemptThrowPod() {
 
         ThrowPod();
-        //Only when pod left is at least 1(limit will be added when pod system gets done)
     }
 
     public void ThrowPod() {
+        if (podsRemaining <= 0) {
+            return;
+        }
+
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
             this.self.level().playSound(
                     null,
@@ -708,9 +763,19 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             this.purpleHazePod = snowball;
 
+            podsRemaining--;
+
+            if (self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
+                        (byte) podsRemaining
+                );
+            }
+
+
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
         }
     }
+
 
 
     public void tickPurpleHazePod() {
@@ -746,12 +811,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void tickPower() {
+        if (self == null) {
+            return;
+        }
+
         super.tickPower();
 
-        if (self != null && !self.level().isClientSide) {
+        if (!self.level().isClientSide) {
             tickPurpleHazePod();
+            tickPodReset();
         }
     }
+
+
+
 
     @Override
     public byte getPermaCastContext() {

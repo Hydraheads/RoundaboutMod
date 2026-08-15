@@ -145,4 +145,11 @@ public interface IPlayerEntity {
     AnimationState roundabout$getOffsetCorrect();
     AnimationState getStyleAnimation();
 
+    long roundabout$getPurpleHazePodResetDay();
+    void roundabout$setPurpleHazePodResetDay(long day);
+
+    byte roundabout$getPurpleHazePods();
+    void roundabout$setPurpleHazePods(byte pods);
+
+
 }
