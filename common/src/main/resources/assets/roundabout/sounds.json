@@ -3592,7 +3592,7 @@
       "roundabout:silver_chariot_armor_shed"
     ]
   },
-  "silver_chariot_offhand_weapon": {
+  "silver_chariot_offhand_weapon_hit": {
     "subtitle": "sounds.roundabout.silver_chariot_offhand_weapon_hit",
     "sounds": [
       "roundabout:silver_chariot_offhand_weapon_hit"
