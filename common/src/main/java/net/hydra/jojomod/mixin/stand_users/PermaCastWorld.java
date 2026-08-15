@@ -569,6 +569,44 @@ public class PermaCastWorld implements IPermaCasting {
         }
         return false;
     }
+    @Override
+    public boolean roundabout$inPurpleHazeRange(Vec3i pos) {
+        return roundabout$inPermaCastRange(
+                pos,
+                PermanentZoneCastInstance.PURPLE_SMOKE
+        );
+    }
+
+    @Override
+    public boolean roundabout$inPurpleHazeRange(Entity entity) {
+        return roundabout$inPurpleHazeRange(
+                new Vec3i(
+                        (int) entity.getX(),
+                        (int) entity.getY(),
+                        (int) entity.getZ()
+                )
+        );
+    }
+
+    @Override
+    public LivingEntity roundabout$inPurpleHazeRangeEntity(Vec3i pos) {
+        return roundabout$inPermaCastRangeEntity(
+                pos,
+                PermanentZoneCastInstance.PURPLE_SMOKE
+        );
+    }
+
+    @Override
+    public LivingEntity roundabout$inPurpleHazeRangeEntity(Entity entity) {
+        return roundabout$inPurpleHazeRangeEntity(
+                new Vec3i(
+                        (int) entity.getX(),
+                        (int) entity.getY(),
+                        (int) entity.getZ()
+                )
+        );
+    }
+
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

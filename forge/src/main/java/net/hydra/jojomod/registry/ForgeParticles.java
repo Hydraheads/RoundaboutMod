@@ -301,6 +301,11 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true)
     );
 
+    public static final RegistryObject<SimpleParticleType> PURPLE_HAZE_SMOKE = PARTICLES.register(
+            "purple_haze_smoke",
+            () -> new SimpleParticleType(true)
+    );
+
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

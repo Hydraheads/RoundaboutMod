@@ -1264,8 +1264,25 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ci.cancel();
         }
     }
+    private long purpleHazePodResetDay = -1;
+    private byte purpleHazePods = 6;
 
-
+    @Override
+    public long roundabout$getPurpleHazePodResetDay() {
+        return purpleHazePodResetDay;
+    }
+    @Override
+    public void roundabout$setPurpleHazePodResetDay(long day) {
+        purpleHazePodResetDay = day;
+    }
+    @Override
+    public byte roundabout$getPurpleHazePods() {
+        return purpleHazePods;
+    }
+    @Override
+    public void roundabout$setPurpleHazePods(byte pods) {
+        purpleHazePods = pods;
+    }
     @Unique
     public VampireData rdbt$vampireData = new VampireData(level());
 
@@ -1771,6 +1788,14 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         }
     }
 
+    @Unique
+    public int rdbt$flagTicks = 0;
+    @Unique
+    @Override
+    public int rdbt$getFlagTicks(){
+        return rdbt$flagTicks;
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$Tick(CallbackInfo ci) {
         if (rdbt$levelDecreaseTicks > 0){
@@ -1783,6 +1808,13 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
 
         roundabout$tickStandOrStandless();
         if (this.level().isClientSide()) {
+            if (MainUtil.isHoldingBanner(this)){
+                if (rdbt$flagTicks < 5){
+                    rdbt$flagTicks++;
+                }
+            } else {
+                rdbt$flagTicks = 0;
+            }
             if (FateTypes.isVampire(this) && ClientUtil.isPlayer(this)){
                 if (rdbt$getVampireData().vampireLevel == -1){
                     rdbt$getVampireData().vampireLevel = 0;

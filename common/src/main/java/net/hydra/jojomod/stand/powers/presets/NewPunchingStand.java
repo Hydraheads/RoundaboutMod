@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.GlaiveItem;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersStarPlatinum;
 import net.hydra.jojomod.stand.powers.PowersTheWorld;
+import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -336,11 +338,18 @@ public class NewPunchingStand extends NewDashPreset {
                 takeDeterminedKnockback(this.self, entity, knockbackStrength);
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
-                    if (entity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().interceptGuard()
-                    && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()){
-                        knockShield2(entity, 60);
-                    } else {
-                        knockShield2(entity, 40);
+                    if (entity instanceof LivingEntity LE) {
+                        StandPowers powers = ((StandUser) LE).roundabout$getStandPowers();
+                        if (powers.interceptGuard()
+                                && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()) {
+                            knockShield2(entity, 60);
+                        } else {
+                            if (powers instanceof PowersWhiteAlbum){
+                                knockShield2(entity, 80);
+                            } else {
+                                knockShield2(entity, 40);
+                            }
+                        }
                     }
                 }
             }

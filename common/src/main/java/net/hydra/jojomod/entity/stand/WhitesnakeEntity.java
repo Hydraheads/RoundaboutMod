@@ -91,7 +91,6 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private Vec3 meltingTrailAnchor;
     private Direction meltingTrailGravity = Direction.DOWN;
     private int meltingHoverDripTicks;
-    private int controlKnockbackTicks;
     private float meltingSwimBlend;
     private float meltingSwimBlendOld;
     private float meltingAcidTossBlend;
@@ -310,6 +309,15 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         setDeltaMovement(0.0D, velocity.y, 0.0D);
     }
 
+    public void clearAutoModeMovement() {
+        clearControlInput();
+        yya = 0.0F;
+        setJumping(false);
+        setDeltaMovement(Vec3.ZERO);
+        hasImpulse = false;
+        hurtMarked = false;
+    }
+
     public int getMeltingHoverCharge() {
         return entityData.get(MELTING_HOVER_CHARGE);
     }
@@ -370,14 +378,12 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             tickMeltingHoverMeter(controlled);
             tickMeltingAcid(controlled);
         }
-        if (level().isClientSide() && isControlModeActive() && isControlledByLocalInstance()
-                && !melting) {
+        if (level().isClientSide() && isControlModeActive() && !melting) {
             tickControlBodyRotation();
         } else {
             controlBodyRotationActive = false;
         }
         if (isMeltingModeActive()) setSprinting(false);
-        if (controlKnockbackTicks > 0) controlKnockbackTicks--;
     }
 
     private void tickControlBodyRotation() {
@@ -535,18 +541,11 @@ public class WhitesnakeEntity extends FollowingStandEntity {
                 if (source.getEntity() instanceof Mob attacker && !source.isIndirect()) {
                     knockback(0.4F, attacker.getX() - getX(), attacker.getZ() - getZ());
                 }
-                controlKnockbackTicks = 1;
                 hurtMarked = true;
             }
             return damaged;
         }
         return super.hurt(source, amount);
-    }
-
-    @Override
-    public void handleEntityEvent(byte id) {
-        super.handleEntityEvent(id);
-        if (id == 2 && isRemoteControlled()) controlKnockbackTicks = 1;
     }
 
     @Override
@@ -641,11 +640,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             if (level().isClientSide() && isControlledByLocalInstance()) {
                 super.travel(new Vec3(controlStrafe, movement.y, controlForward));
                 C2SPacketUtil.updatePilot(this);
-            } else if (controlKnockbackTicks > 0) {
-                super.travel(Vec3.ZERO);
             } else {
-                Vec3 velocity = getDeltaMovement();
-                setDeltaMovement(0.0D, velocity.y, 0.0D);
                 super.travel(Vec3.ZERO);
             }
             return;

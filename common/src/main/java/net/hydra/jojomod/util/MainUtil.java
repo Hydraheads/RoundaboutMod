@@ -30,6 +30,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -1316,10 +1317,12 @@ public class MainUtil {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }
     public static void handleMovePilot(double getX, double getY, double getZ, float getYRot, float getXRot,
-                                       Player player, int entityInt) {
+                                       Player player, int entityInt,
+                                       double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
         if (entity != null) {
-            if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)) {
+            if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
+                    || !Double.isFinite(velocityX) || !Double.isFinite(velocityY) || !Double.isFinite(velocityZ)) {
             } else {
                 if (entity != player) {
                     ServerLevel serverlevel = (ServerLevel) player.level();
@@ -1343,6 +1346,10 @@ public class MainUtil {
 
                     entity.absMoveTo(d3, d4, d5, f, f1);
                     entity.moveTo(d3, d4, d5, f, f1);
+                    if (entity instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
+                        whitesnake.setDeltaMovement(velocityX, velocityY, velocityZ);
+                        whitesnake.setYHeadRot(f);
+                    }
                 }
 
             }
@@ -2130,6 +2137,7 @@ public class MainUtil {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
+                || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.CHESS_STRIKE)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
@@ -2161,6 +2169,7 @@ public class MainUtil {
     public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
                 || sauce.is(ModDamageTypes.RIPPER_EYES)
+                || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
@@ -3765,4 +3774,19 @@ public class MainUtil {
 
     }
 
+    public static boolean isHoldingBanner(Entity entity){
+        if (entity instanceof Player pl){
+            //Only works for mainhand on purpose
+            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4 &&
+            pd4.canHoldBanner) {
+                ItemStack stack = pl.getMainHandItem();
+                if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
+                    if (!pl.isUsingItem()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

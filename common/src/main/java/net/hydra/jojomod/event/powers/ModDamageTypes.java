@@ -15,6 +15,7 @@ public class ModDamageTypes {
          * The Identifier in use here points to our JSON file we created earlier.
          */
         public static final ResourceKey<DamageType> STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand"));
+        public static final ResourceKey<DamageType> STAND_BRAWL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_brawl"));
         public static final ResourceKey<DamageType> STAND_RUSH = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_rush"));
         public static final ResourceKey<DamageType> ICE_SHATTER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ice_shatter"));
         public static final ResourceKey<DamageType> STAR_FINGER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "star_finger"));

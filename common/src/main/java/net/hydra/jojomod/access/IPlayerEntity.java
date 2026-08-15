@@ -30,6 +30,7 @@ public interface IPlayerEntity {
     void rdbt$setCooldownQuery2();
     Deque<Vec3> rdbt$getMovementHistory();
     void roundabout$SetPos2(byte Pos);
+    int rdbt$getFlagTicks();
     void rdbt$setLevelDecreaseTicks(int decreaseTicks);
     int rdbt$getLevelDecreaseTicks();
     int roundabout$getAirTime();
@@ -143,5 +144,12 @@ public interface IPlayerEntity {
     AnimationState roundabout$getBubbleShotAim();
     AnimationState roundabout$getOffsetCorrect();
     AnimationState getStyleAnimation();
+
+    long roundabout$getPurpleHazePodResetDay();
+    void roundabout$setPurpleHazePodResetDay(long day);
+
+    byte roundabout$getPurpleHazePods();
+    void roundabout$setPurpleHazePods(byte pods);
+
 
 }

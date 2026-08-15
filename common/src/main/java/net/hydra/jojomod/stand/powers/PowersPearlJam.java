@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -201,43 +202,49 @@ public class PowersPearlJam extends NewDashPreset {
                 RenderSystem.setShader(GameRenderer::getPositionTexShader);
                 RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
-                for (int i = 0; i < palmReadEffects.get(LE).size(); i++){
+                List<MobEffectInstance> effectList = palmReadEffects.get(LE);
 
-                    MobEffect effect = palmReadEffects.get(LE).get(i).getEffect();
-                    float x = palmReadEffects.get(LE).size() > 3 ? ((i % 3) * 20F - (3 * 20) / 2F) : (i * 20F - (palmReadEffects.get(LE).size() * 20F) / 2F);
-                    float y = -((int)(i / 3)) * 20F;
-                    TextureAtlasSprite sprite = mc.getMobEffectTextures().get(effect);
-                    VertexConsumer consumer = bufferSource.getBuffer(RenderType.text(sprite.atlasLocation()));
-                    Matrix4f matrix = matrixStack.last().pose();
-                    Matrix3f normal = matrixStack.last().normal();
+                if (effectList != null) {
+                    for (int i = 0; i < effectList.size(); i++) {
 
-                    consumer.vertex(matrix, x, y, 0)
-                            .color(255,255,255,255)
-                            .uv(sprite.getU0(), sprite.getV1())
-                            .uv2(15728880)
-                            .normal(normal, 0, 0, -1)
-                            .endVertex();
+                        MobEffect effect = effectList.get(i).getEffect();
+                        float x = effectList.size() > 3 ? ((i % 3) * 20F - (3 * 20) / 2F) : (i * 20F - (effectList.size() * 20F) / 2F);
+                        float y = -((int) (i / 3)) * 20F;
+                        TextureAtlasSprite sprite = mc.getMobEffectTextures().get(effect);
+                        VertexConsumer consumer = bufferSource.getBuffer(RenderType.text(sprite.atlasLocation()));
+                        Matrix4f matrix = matrixStack.last().pose();
+                        Matrix3f normal = matrixStack.last().normal();
 
-                    consumer.vertex(matrix, x + 18F, y, 0)
-                            .color(255,255,255,255)
-                            .uv(sprite.getU1(), sprite.getV1())
-                            .uv2(15728880)
-                            .normal(normal, 0, 0, -1)
-                            .endVertex();
+                        consumer.vertex(matrix, x, y, 0)
+                                .color(255, 255, 255, 255)
+                                .uv(sprite.getU0(), sprite.getV1())
+                                .uv2(15728880)
+                                .normal(normal, 0, 0, -1)
+                                .endVertex();
 
-                    consumer.vertex(matrix, x + 18F, y - 18F, 0)
-                            .color(255,255,255,255)
-                            .uv(sprite.getU1(), sprite.getV0())
-                            .uv2(15728880)
-                            .normal(normal, 0, 0, -1)
-                            .endVertex();
+                        consumer.vertex(matrix, x + 18F, y, 0)
+                                .color(255, 255, 255, 255)
+                                .uv(sprite.getU1(), sprite.getV1())
+                                .uv2(15728880)
+                                .normal(normal, 0, 0, -1)
+                                .endVertex();
 
-                    consumer.vertex(matrix, x, y - 18F, 0)
-                            .color(255,255,255,255)
-                            .uv(sprite.getU0(), sprite.getV0())
-                            .uv2(15728880)
-                            .normal(normal, 0, 0, -1)
-                            .endVertex();
+                        consumer.vertex(matrix, x + 18F, y - 18F, 0)
+                                .color(255, 255, 255, 255)
+                                .uv(sprite.getU1(), sprite.getV0())
+                                .uv2(15728880)
+                                .normal(normal, 0, 0, -1)
+                                .endVertex();
+
+                        consumer.vertex(matrix, x, y - 18F, 0)
+                                .color(255, 255, 255, 255)
+                                .uv(sprite.getU0(), sprite.getV0())
+                                .uv2(15728880)
+                                .normal(normal, 0, 0, -1)
+                                .endVertex();
+                    }
+                } else {
+                    Roundabout.LOGGER.info("For some bizarre reason this list instance effect is null");
                 }
                 RenderSystem.enableDepthTest();
                 matrixStack.popPose();
