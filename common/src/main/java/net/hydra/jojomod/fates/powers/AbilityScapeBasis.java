@@ -3284,7 +3284,7 @@ public class AbilityScapeBasis {
     }
     public int attackTargetId = -1;
     public ResourceKey<DamageType> getPunchDamageSource(){
-        return ModDamageTypes.STAND;
+        return ModDamageTypes.STAND_BRAWL;
     }
 
 

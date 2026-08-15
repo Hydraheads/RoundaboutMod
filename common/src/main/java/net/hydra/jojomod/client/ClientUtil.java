@@ -1972,6 +1972,13 @@ public class ClientUtil {
                     PowersWhiteAlbum PW) {
                 PW.stallTicks = 10;
             }
+        } else if (context == PacketDataIndex.STAND_HIT){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+                    PowersWhiteAlbum PW) {
+                PW.setAttackTime(0);
+                PW.setActivePowerPhase(PW.getActivePowerPhaseMax());
+                PW.setAttackTimeMax(PowersWhiteAlbum.gap2);
+            }
         }
     } public static void handleSimpleBytePacketS2C(byte context){
         LocalPlayer player = Minecraft.getInstance().player;

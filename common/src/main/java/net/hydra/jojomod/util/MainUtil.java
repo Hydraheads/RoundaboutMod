@@ -2137,6 +2137,7 @@ public class MainUtil {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
                 || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
+                || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.CHESS_STRIKE)
                 || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
@@ -2168,6 +2169,7 @@ public class MainUtil {
     public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
                 || sauce.is(ModDamageTypes.RIPPER_EYES)
+                || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
                 || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
