@@ -40,6 +40,7 @@ import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.TippableArrowRenderer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -136,6 +137,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.COLD_TWISTER, IceTwisterRenderer::new);
         EntityRendererRegistry.register(FabricEntities.GENTLY_WEEPS, GentlyWeepsRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STAND_ARROW, StandArrowRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.BOMB_PLANTED_ARROW, TippableArrowRenderer::new);
         EntityRendererRegistry.register(FabricEntities.IRON_BALL, IronBallRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_OBJECT, ThrownObjectRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_ANUBIS, ThrownAnubisRenderer::new);
