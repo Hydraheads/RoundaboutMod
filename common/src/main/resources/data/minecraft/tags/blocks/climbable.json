@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:bubble_scaffold"
+    "roundabout:bubble_scaffold",
+    "roundabout:climbing_wire"
   ]
 }

@@ -63,7 +63,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CHESS_PIECE = BLOCKS.register("chess_piece",
             () -> ModBlocks.getChessBlock()
     );
-
+    public static final RegistryObject<Block> CLIMBING_WIRE = BLOCKS.register("climbing_wire",
+            () -> CLIMBING_WIRE_PROPERTIES
+    );
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );

@@ -221,6 +221,7 @@ public class ForgeEvents {
         ModBlocks.AJA_ORE = ForgeBlocks.AJA_ORE.get();
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
+        ModBlocks.CLIMBING_WIRE = ForgeBlocks.CLIMBING_WIRE.get();
         ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
         ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
@@ -241,7 +242,6 @@ public class ForgeEvents {
         ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
         ModBlocks.COLD_AIR = ForgeBlocks.COLD_AIR.get();
         ModBlocks.FREEZING_AIR = ForgeBlocks.FREEZING_AIR.get();
-        ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();

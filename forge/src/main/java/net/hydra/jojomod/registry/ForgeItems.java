@@ -117,6 +117,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.AJA_BLOCK.get(),
                     new Item.Properties()
             )));
+    public static final RegistryObject<BlockItem> CLIMBING_WIRE_ITEM = addToBuildingTab(ITEMS.register("climbing_wire",
+            () -> new BlockItem(ForgeBlocks.CLIMBING_WIRE.get(),
+                    new Item.Properties()
+            )));
     public static final RegistryObject<BlockItem> FROZEN_DIRT_ITEM = addToBuildingTab(ITEMS.register("frozen_dirt",
             () -> new BlockItem(ForgeBlocks.FROZEN_DIRT.get(),
                     new Item.Properties()
