@@ -1042,7 +1042,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (this.self.isCrouching()){
             return;
         }
-        if (PowerTypes.isExistentiallyElsewhere(self)){
+        if (PowerTypes.isErasingTime(self)){
             if (self instanceof ServerPlayer sp){
                 S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), this.getSummonSound());
             }

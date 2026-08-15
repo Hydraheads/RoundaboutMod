@@ -84,7 +84,18 @@ public class PowersSilverChariot extends NewPunchingStand {
             SILVER_CHARIOT_RAPIER_SHOT = 91,
             SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = 92;
 
-    public static final byte SUMMON_ARM_SOUND = 71;
+    public static final byte
+            SUMMON_ARM_SOUND = 71,
+            LAST_HIT_CRY_SOUND = 72,
+            BARRAGE_CRY_SOUND = 73,
+            ARMOR_SHED_SOUND = 74,
+            OFFHAND_WEAPON_HIT_SOUND = 75,
+            RAPIER_SLASH_SOUND = 76,
+            RAPIER_SPIN_SOUND = 77,
+            SELF_GRAB_SOUND = 78,
+            SLAB_CUTTING_SOUND = 79,
+            STATUE_CUTTING_SOUND = 80,
+            RAPIER_SHOT_SOUND = 81;
 
     // Configs
     public int getAttackMultOnPlayers() {
@@ -274,23 +285,68 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == BARRAGE_CRY_SOUND) {
+            return SoundIndex.BARRAGE_SOUND_GROUP;
+        }
+        return super.getSoundCancelingGroupByte(soundChoice);
+    }
+
+    @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SILVER_CHARIOT_SUMMON_EVENT;
         } else if (soundChoice == SUMMON_ARM_SOUND) {
             return ModSounds.SUMMON_SOUND_EVENT;
+        } else if (soundChoice == BARRAGE_CRY_SOUND) {
+            return ModSounds.SILVER_CHARIOT_BARRAGE_CRY_EVENT;
+        } else if (soundChoice == LAST_HIT_CRY_SOUND) {
+            return ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_EVENT;
+        } else if (soundChoice == ARMOR_SHED_SOUND) {
+            return ModSounds.SILVER_CHARIOT_ARMOR_SHED_EVENT;
+        } else if (soundChoice == OFFHAND_WEAPON_HIT_SOUND) {
+            return ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT;
+        } else if (soundChoice == SELF_GRAB_SOUND) {
+            return ModSounds.BLOCK_GRAB_EVENT;
+        } else if (soundChoice == RAPIER_SPIN_SOUND) {
+            return ModSounds.GREEN_DAY_ARM_SPIN_EVENT;
+        } else if (soundChoice == RAPIER_SLASH_SOUND) {
+            return ModSounds.SILVER_CHARIOT_RAPIER_SLASH_EVENT;
+        } else if (soundChoice == RAPIER_SHOT_SOUND) {
+            return ModSounds.SILVER_CHARIOT_RAPIER_SHOT_EVENT;
+        } else if (soundChoice == SLAB_CUTTING_SOUND) {
+            return ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT;
+        } else if (soundChoice == STATUE_CUTTING_SOUND) {
+            return ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
 
     @Override
-    public float getSoundPitchFromByte(byte soundChoice) {
-        return super.getSoundPitchFromByte(soundChoice);
+    public Byte getLastHitSound() {
+        return LAST_HIT_CRY_SOUND;
     }
 
     @Override
-    public byte getSoundCancelingGroupByte(byte soundChoice) {
-        return super.getSoundCancelingGroupByte(soundChoice);
+    public void playTheLastHitSound() {
+        Byte LastHitSound = this.getLastHitSound();
+        this.playStandUserOnlySoundsIfNearby(LastHitSound, 15, false,
+                true);
+    }
+
+    @Override
+    public void playSummonSound() {
+        super.playSummonSound();
+    }
+
+    @Override
+    public void playBarrageEndNoise(float mod, Entity entity) {
+        super.playBarrageEndNoise(mod, entity);
+    }
+
+    @Override
+    public float getSoundPitchFromByte(byte soundChoice) {
+        return super.getSoundPitchFromByte(soundChoice);
     }
 
     @Override
@@ -356,7 +412,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float getRushDistance(){
-        return 5;
+        return 5f;
     }
 
     @Override
@@ -492,6 +548,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public byte chooseBarrageSound() {
+        return BARRAGE_CRY_SOUND;
+    }
+
+    @Override
     public void tickMobAI(LivingEntity attackTarget) {
         super.tickMobAI(attackTarget);
     }
@@ -515,7 +576,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 "instruction.roundabout.barrage", StandIcons.SILVER_CHARIOT_BARRAGE,0,level,bypas));
 
         // Offhand weapon attack
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,getOffhandWeaponLevel(), "ability.roundabout.silver_chariot_offhand_weapon_render",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.silver_chariot_offhand_weapon_render",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.SILVER_CHARIOT_OFFHAND_WEAPON,0,level,bypas));
 
         // Dodge
@@ -547,10 +608,24 @@ public class PowersSilverChariot extends NewPunchingStand {
                 "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_STATUE_CUTTING,4,level,bypas));
 
         // Armor shed
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getArmorShedLevel(), "ability.roundabout.silver_chariot_armor_shed",
+                "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_STATUE_CUTTING,2,level,bypas));
 
         // Rapier shot
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,getRapierShotLevel(), "ability.roundabout.silver_chariot_rapier_shot",
+                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,4,level,bypas));
 
         // Rapier shot platform
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+118,getRapierShotPlatformLevel(), "ability.roundabout.silver_chariot_rapier_shot_platform",
+                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_SINGLE,4,level,bypas));
+
+        // Self grab
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getSelfGrabLevel(), "ability.roundabout.silver_chariot_self_grab",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_MOB,3,level,bypas));
+
+        // Control mode
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getControlModeLevel(), "ability.roundabout.silver_chariot_control_mode",
+                "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON,2,level,bypas));
 
         return $$1;
     }
@@ -572,6 +647,9 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
         } else {
             if (isGuarding()) {
+                if (canExecuteMoveWithLevel(getArmorShedLevel()) && isArmored()) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.NO_CD);
+                }
 
                 if (canExecuteMoveWithLevel(getStatueCuttingLevel())) {
                     if (canCreateStatue()) {
@@ -645,7 +723,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_2_GUARD -> {
                 // TODO: Implement armor shed ability
-                // armorShedClient();
+                armorShedClient();
             }
             case SKILL_2_CROUCH_GUARD -> {
                 // Might implement another ability here
@@ -738,6 +816,10 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
+                && move != PowerIndex.BARRAGE_CHARGE)){
+            this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        }
         return super.tryPower(move, forced);
     }
 
@@ -1417,6 +1499,8 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void armorShedServer() {
         if (!this.self.level().isClientSide()) {
             toggleArmorOff();
+            this.playStandUserOnlySoundsIfNearby(ARMOR_SHED_SOUND, 15, false,
+                    false);
         }
     }
 
@@ -1427,9 +1511,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getBarrageWindup() {
         if (isArmored()) {
-            return (int) (super.getBarrageWindup() * 2f/3f);
+            return (int) ((super.getBarrageWindup() * 2f) / 3f);
         }
-        return super.getBarrageWindup() / 2;
+        return (int) (super.getBarrageWindup() / 2f);
     }
 
     @Override
@@ -1658,7 +1742,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 isRenderingArms = true;
 
                 if (!this.self.isCrouching()) {
-                    // playStandUserOnlySoundsIfNearby(SUMMON_ARM, 10, true, false);
+                    playStandUserOnlySoundsIfNearby(SUMMON_ARM_SOUND, 10, true, false);
                 }
             }
             hasArmsOut = !hasArmsOut;

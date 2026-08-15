@@ -1121,6 +1121,34 @@ public class ModSounds {
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);
     public static SoundEvent SILVER_CHARIOT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_SUMMON_ID);
 
+    public static final String SILVER_CHARIOT_BARRAGE = "silver_chariot_barrage";
+    public static final ResourceLocation SILVER_CHARIOT_BARRAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_BARRAGE);
+    public static SoundEvent SILVER_CHARIOT_BARRAGE_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_BARRAGE_ID);
+
+    public static final String SILVER_CHARIOT_BARRAGE_CRY = "silver_chariot_barrage_cry";
+    public static final ResourceLocation SILVER_CHARIOT_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_BARRAGE_CRY);
+    public static SoundEvent SILVER_CHARIOT_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_BARRAGE_CRY_ID);
+
+    public static final String SILVER_CHARIOT_ARMOR_SHED = "silver_chariot_armor_shed";
+    public static final ResourceLocation SILVER_CHARIOT_ARMOR_SHED_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_ARMOR_SHED);
+    public static SoundEvent SILVER_CHARIOT_ARMOR_SHED_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_ARMOR_SHED_ID);
+
+    public static final String SILVER_CHARIOT_RAPIER_SLASH = "silver_chariot_rapier_slash";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SLASH);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SLASH_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SLASH_ID);
+
+    public static final String SILVER_CHARIOT_OFFHAND_WEAPON_HIT = "silver_chariot_offhand_weapon_hit";
+    public static final ResourceLocation SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_OFFHAND_WEAPON_HIT);
+    public static SoundEvent SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID);
+
+    public static final String SILVER_CHARIOT_RAPIER_SHOT = "silver_chariot_rapier_shot";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SHOT);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SHOT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SHOT_ID);
+
+    public static final String SILVER_CHARIOT_FINAL_HIT_CRY = "silver_chariot_final_hit_cry";
+    public static final ResourceLocation SILVER_CHARIOT_FINAL_HIT_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_FINAL_HIT_CRY);
+    public static SoundEvent SILVER_CHARIOT_FINAL_HIT_CRY_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_FINAL_HIT_CRY_ID);
+
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
     public static SoundEvent RATT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(RATT_SUMMON_ID);

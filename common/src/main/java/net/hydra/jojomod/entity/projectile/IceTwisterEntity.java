@@ -5,6 +5,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.util.HeatUtil;
@@ -64,7 +65,9 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
             for (LivingEntity mob : level().getEntitiesOfClass(
                     LivingEntity.class,
                     wallBox.inflate(0.1))) {
-
+                if (PowerTypes.isInADifferentExistence(mob,this)){
+                    continue;
+                }
                 if (mob.getBoundingBox().intersects(wallBox)) {
                     if (mob.isOnFire()){
                         mob.setRemainingFireTicks(0);

@@ -948,7 +948,7 @@ public int speedActivated = 0;
     }
 
     public void tickHeartbeat(Entity entity){
-        if (entity != null && !self.is(entity) && !PowerTypes.isExistentiallyElsewhere(entity)){
+        if (entity != null && !self.is(entity) && !PowerTypes.isInADifferentExistence(entity,self)){
         if (MainUtil.getMobBleed(entity) && entity.distanceTo(self) <= hearingDistance()) {
 
             ILevelAccess access = ((ILevelAccess) entity.level());

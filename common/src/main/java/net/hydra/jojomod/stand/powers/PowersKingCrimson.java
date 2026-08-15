@@ -3770,6 +3770,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     stand.forceDespawn(true);
                 }
                 isRenderingArms = true;
+                handTicks = getMaxHandTicks();
 
                 if (!self.isCrouching()) {
                     playStandUserOnlySoundsIfNearby(SUMMON_ARMS, 10, true, false);

@@ -550,6 +550,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PW_BLUE_FIREBALL_EXPLOSION.get(), PWBlueFireballExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get(), PWBlueBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get(), PWBlueMushroomExplosionParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_SMOKE.get(), PurpleHazeSmokeParticle.Provider::new);
     }
 
     @SubscribeEvent

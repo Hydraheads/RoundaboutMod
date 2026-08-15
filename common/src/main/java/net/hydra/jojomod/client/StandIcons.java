@@ -830,6 +830,8 @@ public class StandIcons {
     public static final ResourceLocation PURPLE_HAZE_LEDGE_GRAB = Roundabout.location("textures/gui/icons/purple_haze/stand_ledge_grab.png");
     public static final ResourceLocation PURPLE_HAZE_FALL_CATCH = Roundabout.location("textures/gui/icons/purple_haze/fall_brace.png");
     public static final ResourceLocation PURPLE_HAZE_STRANGLE = Roundabout.location("textures/gui/icons/purple_haze/strangle.png");
+    public static final ResourceLocation DISTORTION_MODE = Roundabout.location("textures/gui/icons/purple_haze/distortion_mode.png");
+    public static final ResourceLocation PURPLE_HAZE_MODE = Roundabout.location("textures/gui/icons/purple_haze/purple_haze_mode.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

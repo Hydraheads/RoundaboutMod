@@ -148,7 +148,7 @@ public class MoldSporesEntity extends StandEntity {
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
                             && !isStand
-                            && !(PowerTypes.isExistentiallyElsewhere(entity))
+                            && !(PowerTypes.isInADifferentExistence(entity,this))
                             && !isBoss
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)

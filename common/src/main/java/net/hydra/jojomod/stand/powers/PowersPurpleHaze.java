@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -481,9 +482,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(4)) {
-                if(indistortionmode){
-                    setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_TARGETING, PowerIndex.SKILL_1_SNEAK);
-                }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_STAND_RETRIEVING, PowerIndex.SKILL_1_SNEAK);
+                if(indistortionmode()){
+                    setSkillIcon(context, x, y, 1, StandIcons.DISTORTION_MODE, PowerIndex.SKILL_1_SNEAK);
+
+                }else {
+                    setSkillIcon(context, x, y, 1, StandIcons.PURPLE_HAZE_MODE, PowerIndex.SKILL_1_SNEAK);
+
+                }
 
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
         } else {
@@ -652,16 +657,31 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void DistortionModeChange() {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            if(indistortionmode){
-               indistortionmode=false;
-            } else indistortionmode=true;
+            indistortionmode = !indistortionmode;
+            saveDiscAndSync(); // add this
 
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
-                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK,
-                        400);
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK, 400);
             }
         }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("indistortionmode", indistortionmode);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("indistortionmode")) {
+            indistortionmode = tag.getBoolean("indistortionmode");
+        }
+    }
+    public boolean indistortionmode(){
+        return this.indistortionmode;
     }
     public void activatePurpleHazeField(
             Vec3 position,

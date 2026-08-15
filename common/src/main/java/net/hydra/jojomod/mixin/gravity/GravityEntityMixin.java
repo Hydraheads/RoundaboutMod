@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -1091,13 +1092,17 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             cancellable = true, require = 0
     )
     private void inject_spawnSprintingParticles(CallbackInfo ci) {
-        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        Entity ent = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(ent) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(ent) &&
+                !PowerTypes.isInADifferentExistence(ent, ClientUtil.getPlayer()))){
+            return;
+        }
+
+        Direction gravityDirection = GravityAPI.getGravityDirection(ent);
         if (gravityDirection == Direction.DOWN) return;
 
         ci.cancel();
-        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
-            return;
-        }
 
 
         Vec3 floorPos = this.position().subtract(RotationUtil.vecPlayerToWorld(0.0D, 0.20000000298023224D, 0.0D, gravityDirection));
