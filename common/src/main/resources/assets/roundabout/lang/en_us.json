@@ -3596,9 +3596,6 @@
   "config.roundabout.trackingmessage.name": "Tracking Message",
   "config.roundabout.trackingmessage.desc": "Select how you want the feedback of changing the tracking mode.True=Message,False=Icon",
 
-  "config.roundabout.silverChariot.name": "",
-  "config.roundabout.silverChariot.desc": "",
-
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
   "config.roundabout.silverChariotAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -3627,6 +3624,8 @@
   "config.roundabout.silverChariotCooldownStatueCutting.desc": "The cooldown of Statue Cutting.",
   "config.roundabout.silverChariotCooldownSelfGrab.name": "Self Grab Cooldown",
   "config.roundabout.silverChariotCooldownSelfGrab.desc": "The cooldown of Self Grab.",
+  "config.roundabout.silverChariotCooldownArmorShed.name": "Armor Shed Cooldown",
+  "config.roundabout.silverChariotCooldownArmorShed.desc": "The cooldown of Armor Shed.",
 
   "config.roundabout.manhattanTransferMaxRange.name": "Manhattan Transfer Max Range",
   "config.roundabout.manhattanTransferMaxRange.desc": "How far you and Manhattan Transfer can distance until it despawns.",

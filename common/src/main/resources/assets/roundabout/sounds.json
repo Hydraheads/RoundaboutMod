@@ -3555,5 +3555,53 @@
     "sounds": [
       "roundabout:whitesnake_pucci_hurt_4"
     ]
+  },
+  "silver_chariot_summon": {
+    "subtitle": "sounds.roundabout.silver_chariot_summon",
+    "sounds": [
+      "roundabout:silver_chariot_summon"
+    ]
+  },
+  "silver_chariot_barrage": {
+    "subtitle": "sounds.roundabout.silver_chariot_barrage",
+    "sounds": [
+      "roundabout:silver_chariot_barrage"
+    ]
+  },
+  "silver_chariot_barrage_cry": {
+    "subtitle": "sounds.roundabout.silver_chariot_barrage_cry",
+    "sounds": [
+      "roundabout:silver_chariot_barrage_cry"
+    ]
+  },
+  "silver_chariot_rapier_slash": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_slash",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_slash"
+    ]
+  },
+  "silver_chariot_rapier_shot": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_shot",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_shot"
+    ]
+  },
+  "silver_chariot_armor_shed": {
+    "subtitle": "sounds.roundabout.silver_chariot_armor_shed",
+    "sounds": [
+      "roundabout:silver_chariot_armor_shed"
+    ]
+  },
+  "silver_chariot_offhand_weapon": {
+    "subtitle": "sounds.roundabout.silver_chariot_offhand_weapon_hit",
+    "sounds": [
+      "roundabout:silver_chariot_offhand_weapon_hit"
+    ]
+  },
+  "silver_chariot_final_hit_cry": {
+    "subtitle": "sounds.roundabout.silver_chariot_final_hit_cry",
+    "sounds": [
+      "roundabout:silver_chariot_final_hit_cry"
+    ]
   }
 }
