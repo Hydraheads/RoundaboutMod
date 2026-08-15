@@ -526,9 +526,8 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                     if (flyingTicks > 2 && SpinTicks > 0) {
-
-                        if (Math.abs(this.getY()-entity.getEyeHeight()) < 4 ) {
-                            entity.addDeltaMovement(new Vec3(0, 0.1, 0));
+                        if (Math.abs(this.getY()-((entity.getEyeHeight()) + entity.getY())) < 1 ) {
+                            entity.addDeltaMovement(new Vec3(0, 0.11, 0));
                         }
                     }
 
