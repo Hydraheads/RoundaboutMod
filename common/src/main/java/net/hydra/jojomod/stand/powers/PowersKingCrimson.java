@@ -2008,7 +2008,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (entity == null || !entity.isAlive()) {
             return;
         }
-        if (PowerTypes.isExistentiallyElsewhere(entity)){
+        if (PowerTypes.isInADifferentExistence(entity,self)){
             return;
         }
         if (entity instanceof KingCrimsonProjectionEntity kcpj){
@@ -2508,7 +2508,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     if (entity instanceof KingCrimsonProjectionEntity kcpj){
                         continue;
                     }
-                    if (entity instanceof LivingEntity lv && !(PowerTypes.isExistentiallyElsewhere(lv))) {
+                    if (entity instanceof LivingEntity lv && !(PowerTypes.isInADifferentExistence(lv,self))) {
                         StandEntity stand = getStandEntity(self);
                         int id = entity.getId();
                         if (!(stand != null && stand.getId() == id)) {
