@@ -164,12 +164,14 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                                 HeatUtil.addHeat(mob, -1);
                                             }
                                         } else {
+                                            HeatUtil.makeAngryAtFreeze(mob,user);
                                             HeatUtil.addHeat(mob, -1);
                                         }
                                     } else {
                                         if (mob instanceof Player  || mob instanceof CloneEntity) {
                                             HeatUtil.addHeat(mob, -1);
                                         } else {
+                                            HeatUtil.makeAngryAtFreeze(mob,user);
                                             HeatUtil.addHeat(mob, -1);
                                         }
                                     }

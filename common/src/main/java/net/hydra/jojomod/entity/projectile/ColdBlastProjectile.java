@@ -104,6 +104,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
             if (entity instanceof Player pl){
                 HeatUtil.addHeat(entity,-33);
             } else {
+                HeatUtil.makeAngryAtFreeze(entity,getUser());
                 HeatUtil.addHeat(entity,-40);
                 if (entity instanceof Mob mob && !(entity instanceof AbstractVillager) && getUser() != null
                 && !(getUser() instanceof Player pl && pl.isCreative())) {
