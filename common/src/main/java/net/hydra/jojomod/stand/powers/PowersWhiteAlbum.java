@@ -1170,7 +1170,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-    public static int gap = 13;
+    public static int gap = 14;
     public static int gap2 = 26;
 
     public boolean toggleSkates(){
