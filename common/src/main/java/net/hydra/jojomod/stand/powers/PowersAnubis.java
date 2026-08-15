@@ -2354,7 +2354,7 @@ public class PowersAnubis extends NewDashPreset {
     public List<Entity> getSpinHitbox() {
         return this.getSelf().level().getEntities(this.getSelf(),this.getSelf().getBoundingBox().inflate(5))
                 .stream()
-                .filter(entity -> !entity.is(this.getSelf()) && !(entity instanceof StandEntity SE && SE.getUser().is(this.getSelf()) ))
+                .filter(entity -> !entity.is(this.getSelf()) && !(entity instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(this.getSelf()) ))
                 .filter(entity -> entity.distanceTo(this.getSelf()) < 2.5F).toList();
     }
     public List<Entity> getLaunchHitbox() {
