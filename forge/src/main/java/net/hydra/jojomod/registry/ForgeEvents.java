@@ -289,6 +289,7 @@ public class ForgeEvents {
         ModBlocks.HALLUCINATORY_ACID = ForgeBlocks.HALLUCINATORY_ACID.get();
         ModBlocks.HALLUCINATORY_ACID_WALL = ForgeBlocks.HALLUCINATORY_ACID_WALL.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
+        ModBlocks.D4C_PORTAL = ForgeBlocks.D4C_PORTAL.get();
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
@@ -305,6 +306,7 @@ public class ForgeEvents {
         ModBlocks.OASIS_MUD_BLOCK_ENTITY = ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get();
         ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY = ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
+        ModBlocks.D4C_PORTAL_BLOCK_ENTITY = ForgeBlocks.D4C_PORTAL_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
         ModBlocks.KING_BED_BLOCK_ENTITY = ForgeBlocks.KING_BED_BLOCK_ENTITY.get();

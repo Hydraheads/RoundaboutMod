@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -298,7 +299,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
 
         for (Mob mob : level().getEntitiesOfClass(Mob.class, search)) {
             if (mob.getTarget() == this || (mob.getTarget() != null && mob.getTarget().getId() == this.getId())) {
-                if (mob.distanceTo(this.getPlayer()) < 25 && !(mob instanceof Monster) &&
+                if (mob.distanceTo(this.getPlayer()) < 25 && (!(mob instanceof Monster) || mob instanceof EnderMan) &&
                 mob.hasLineOfSight(this.getPlayer())){
                     ((StandUser) mob).roundabout$aggressivelyEnforceAggro(player);
                 }

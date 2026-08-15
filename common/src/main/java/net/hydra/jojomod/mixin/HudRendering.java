@@ -118,6 +118,8 @@ public abstract class HudRendering implements IHudAccess {
                 RenderSystem.enableBlend();
                 roundabout$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION,
                         0.15F,1F,1F,1F);
+                roundabout$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION_2,
+                        0.2F,1F,1F,1F);
             }
 
             if (ClientUtil.timeSkipTicker > -1){

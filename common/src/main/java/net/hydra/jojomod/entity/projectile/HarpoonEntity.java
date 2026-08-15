@@ -71,6 +71,7 @@ public class HarpoonEntity extends AbstractArrow {
             }
         }
 
+        int maxAccel = 0;
         @Override
         public void tick() {
 
@@ -79,8 +80,11 @@ public class HarpoonEntity extends AbstractArrow {
                 if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())) {
                     if (!this.isNoPhysics()) {
                         double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        if (this.getDeltaMovement().length() > ln) {
-                            ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                        if (maxAccel < 200) {
+                            maxAccel++;
+                            if (this.getDeltaMovement().length() > ln) {
+                                ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                            }
                         }
 
                         this.setDeltaMovement(
