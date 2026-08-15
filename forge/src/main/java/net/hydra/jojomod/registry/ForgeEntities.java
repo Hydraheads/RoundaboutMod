@@ -773,6 +773,12 @@ public class ForgeEntities {
                             clientTrackingRange(6).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stand_arrow").toString())
             );
+    public static final RegistryObject<EntityType<BombPlantedArrow>> BOMB_PLANTED_ARROW =
+            ENTITY_TYPES.register("bomb_planted_arrow", () ->
+                    EntityType.Builder.<BombPlantedArrow>of(BombPlantedArrow::new, MobCategory.MISC).sized(0.7f, 0.7f).
+                            clientTrackingRange(6).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_arrow").toString())
+            );
     public static final RegistryObject<EntityType<IronBallEntity>> IRON_BALL =
             ENTITY_TYPES.register("iron_ball", () ->
                     EntityType.Builder.<IronBallEntity>of(IronBallEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).

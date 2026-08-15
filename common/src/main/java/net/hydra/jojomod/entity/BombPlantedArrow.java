@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -77,5 +78,6 @@ public class BombPlantedArrow extends Arrow {
 
         level().addFreshEntity(arrow);
         discard();
+
     }
 }
