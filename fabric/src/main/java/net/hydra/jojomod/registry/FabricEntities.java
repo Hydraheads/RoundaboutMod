@@ -677,7 +677,7 @@ public class FabricEntities {
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
-                        EntityType.Builder.of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
+                        EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
@@ -871,6 +871,13 @@ public class FabricEntities {
                         new ResourceLocation(Roundabout.MOD_ID, "stand_arrow"),
                         EntityType.Builder.<StandArrowEntity>of(StandArrowEntity::new, MobCategory.MISC).
                                 sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":stand_arrow")
+                );
+    public static final EntityType<BombPlantedArrow> BOMB_PLANTED_ARROW =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_arrow"),
+                        EntityType.Builder.<BombPlantedArrow>of(BombPlantedArrow::new, MobCategory.MISC).
+                                sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":bomb_planted_arrow")
                 );
     public static final EntityType<IronBallEntity> IRON_BALL =
             Registry.register(
@@ -1173,6 +1180,7 @@ public class FabricEntities {
                 ModEntities.GASOLINE_SPLATTER = GASOLINE_SPLATTER;
                 ModEntities.BLOOD_SPLATTER = BLOOD_SPLATTER;
                 ModEntities.STAND_ARROW = STAND_ARROW;
+                ModEntities.BOMB_PLANTED_ARROW = BOMB_PLANTED_ARROW;
                 ModEntities.IRON_BALL = IRON_BALL;
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
