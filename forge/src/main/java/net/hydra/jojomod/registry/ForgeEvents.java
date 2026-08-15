@@ -796,6 +796,7 @@ public class ForgeEvents {
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
+        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
