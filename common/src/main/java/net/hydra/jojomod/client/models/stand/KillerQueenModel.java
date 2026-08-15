@@ -172,7 +172,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
         this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
-        this.animate(pEntity.itemThrow, KillerQueenAnimations.Item_Throw, pAgeInTicks, 1F);
+        this.animate(pEntity.itemThrow, StandAnimations.THROW_ITEM, pAgeInTicks, 1F);
         this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
         this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
         this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/((float) (Power.getMobPlantWindup()) /20)) * 1.364f);

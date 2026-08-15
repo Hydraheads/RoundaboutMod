@@ -2935,6 +2935,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                                     ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage);
                         }
 
+                        if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
+
                         ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
                         this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
                     }

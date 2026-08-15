@@ -33,7 +33,9 @@ public class SheerHeartAttackModel<T extends SheerHeartAttackEntity> extends Sta
 	public ModelPart root() {
 		return stand;
 	}
-
+	public ModelPart getHead(){
+		return stand;
+	}
 
 	public ModelPart getStand() {
 		return stand;

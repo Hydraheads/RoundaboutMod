@@ -159,12 +159,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 3.0f;
-	int stunTicks = 0;
+	final float jumpMaxHeight = 1.3f;
+	int stunTicks = 15;
 
 	public int struckTicks = 0;
 	static final int struckMaxTicks = 12;
 	public int flyngTicks = 0;
+
+	public Vec3 miningDir = Vec3.ZERO;
 
 	static final int
 		THROWED = 2,
@@ -280,7 +282,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 				this.setReturnStatus(this.getHaveToReturn());
 
-				this.setClimbing(this.horizontalCollision);
+				this.setClimbing(this.horizontalCollision && !getTorchStatus());
 
 				if (this.tickTargetFindCount <= 0) {
 					this.findTarget();
@@ -640,7 +642,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
 			Vec3 movement = (this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.25, 0);
-			this.setDeltaMovement(movement.x(), Math.min(movement.y(), 1.2f), movement.z());
+			this.setDeltaMovement(movement.x(), Math.min(movement.y(), jumpMaxHeight), movement.z());
 		}
 	}
 
@@ -671,18 +673,25 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	public void shaMiningMove() {
-		if (explosionMiningTicks > 12) {
+		if (explosionMiningTicks > 16) {
 			shaStopMove();
 			return;
 		}
 
-		Vec3 dir = getLookAngle();
+		Vec3 dir = miningDir;
 		Vec3 viewPos = getEyePosition();
 		Vec3 viewEnd = viewPos.add(dir.scale(1.4f));
 		Vec3 speed = new Vec3(dir.x, 0, dir.z).normalize().scale(0.2f);
 
-		setDeltaMovement(speed.x, getDeltaMovement().y, speed.z);
+		this.lookAt(EntityAnchorArgument.Anchor.EYES, getPosition(1).add(miningDir.scale(3)));
+		setYRot(yRotO);
+		this.lookAt(EntityAnchorArgument.Anchor.FEET, getPosition(1).add(miningDir.scale(3)));
 
+		if (this.horizontalCollision) {
+			shaStopMove();
+		}else {
+			setDeltaMovement(speed.x, getDeltaMovement().y, speed.z);
+		}
 		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen)) { return; }
 		PowersKillerQueen KQ = (PowersKillerQueen)SP;
@@ -691,7 +700,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
 			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
-			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos(), level(), 1.2f, true);
+			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true);
 			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 			explosionMiningTicks = explosionMiningTicksMax;
 			explosions++;
@@ -700,7 +709,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			explosionMiningIntervalTicks--;
 			if (explosionMiningIntervalTicks <= 0) {
 				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
-				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos(), level(), 1.2f, true);
+				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true);
 				level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 				explosions++;
 				explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
@@ -732,9 +741,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 				newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
 			}
 
-			if (newPath == null) {
-				return;
-			}
+			if (newPath == null) { return; }
+
+			this.lookAt(EntityAnchorArgument.Anchor.FEET, new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ()));
 
 			if (!this.getNavigation().moveTo(newPath, 0.45f))
 				ticksUntilNextPathRecalculation += 5;
@@ -758,11 +767,20 @@ public class SheerHeartAttackEntity extends StandEntity {
             return MainUtil.SHA_CUSTOM_BLOCK_HEAT.get(tag);
         }
 
-        return (int)(info.getLightEmission() * 1.5);
+		int light = info.getLightEmission();
+		if (light <= 7) { return 0; }
+
+        return (int)(light * 1.5);
 	}
 
 	public int getEntityWarm(Entity entity) {
 		int points = 0;
+
+		if (entity instanceof TamableAnimal TM) {
+			if (TM.getOwner() == getUser()) { return 0; }
+		}
+
+		if (PowerTypes.isExistentiallyElsewhere(entity)) { return 0; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -907,8 +925,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();
-
-
+				miningDir = new Vec3(dir.x, 0, dir.z).normalize();
 
 				return InteractionResult.SUCCESS;
 			} else if(getTorchStatus()) {
