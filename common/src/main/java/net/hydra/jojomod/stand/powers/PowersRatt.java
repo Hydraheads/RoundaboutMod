@@ -510,7 +510,7 @@ public class PowersRatt extends NewDashPreset {
                 if (e instanceof LivingEntity L) {
                     if (!isAuto() && !L.equals(this.getSelf()) && !L.equals(SE)) {
                         if (!(L instanceof StandEntity) && !MainUtil.getEntityIsTrulyInvisible(e) && L.getEffect(MobEffects.INVISIBILITY) == null
-                        && !(PowerTypes.isExistentiallyElsewhere(L) || PowerTypes.isExistentiallyElsewhere(getStandEntity(self)))) {
+                        && !(PowerTypes.isInADifferentExistence(self,L))) {
                             setShootTarget(L);
                         }
                     }
@@ -520,9 +520,7 @@ public class PowersRatt extends NewDashPreset {
                     }
 
                     if (getShootTarget() != null) {
-                        if ((PowerTypes.isExistentiallyElsewhere(getShootTarget()) ||
-                                PowerTypes.isExistentiallyElsewhere(getStandEntity(self))) &&
-                        !PowerTypes.isExistentiallyElsewhereTogether(getShootTarget(),getStandEntity(self))){
+                        if (PowerTypes.isInADifferentExistence(getShootTarget(),getStandEntity(self))){
                             if (((StandUser)getShootTarget()).roundabout$getStandPowers() instanceof
                             PowersKingCrimson pkc && pkc.timeEraseActive){
                                 setShootTarget(pkc.activeClone);

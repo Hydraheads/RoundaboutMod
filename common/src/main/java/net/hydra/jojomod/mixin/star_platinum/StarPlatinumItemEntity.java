@@ -29,7 +29,7 @@ public abstract class StarPlatinumItemEntity extends Entity {
 
     @Inject(method = "playerTouch", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$playerTouch(Player $$0,CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere($$0)){
+        if (PowerTypes.isInADifferentExistence($$0,this)){
             ci.cancel();
         }
     }

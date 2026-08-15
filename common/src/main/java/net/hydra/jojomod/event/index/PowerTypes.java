@@ -261,6 +261,9 @@ public enum PowerTypes {
             if (PowerTypes.isErasingTime(entity)){
                 return 10;
             }
+            if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
+                return getPlaneOfExisting(fse.getFollowing());
+            }
             return ((IGravityEntity)entity).roundabout$getExistPlane();
         }
         return 0;

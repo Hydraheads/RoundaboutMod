@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityLivingEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.StandUserEntity;
@@ -617,10 +618,40 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             cancellable = true, require = 0
     )
     private void roundabout$tickEffects(CallbackInfo ci) {
-        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        Entity ent = ((Entity) (Object) this);
+        Direction gravityDirection = GravityAPI.getGravityDirection(ent);
         if (gravityDirection == Direction.DOWN) return;
         ci.cancel();
-        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+        if (PowerTypes.isExistentiallyElsewhere(ent) &&
+                !(level().isClientSide() && !PowerTypes.isInADifferentExistence(ent,
+                        ClientUtil.getPlayer()))){
+            // tick effects down but don't spawn particles
+            try {
+                Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
+                while ($$0.hasNext()) {
+                    MobEffect $$1 = $$0.next();
+                    MobEffectInstance $$2 = this.activeEffects.get($$1);
+                    if (!$$2.tick(rdbt$this(), () -> this.onEffectUpdated($$2, true, null))) {
+                        if (!this.level().isClientSide) {
+                            $$0.remove();
+                            this.onEffectRemoved($$2);
+                        }
+                    } else if ($$2.getDuration() % 600 == 0) {
+                        this.onEffectUpdated($$2, false, null);
+                    }
+                }
+            } catch (ConcurrentModificationException var11) {
+            }
+
+            if (this.effectsDirty) {
+                if (!this.level().isClientSide) {
+                    this.updateInvisibilityStatus();
+                    this.updateGlowingStatus();
+                }
+
+                this.effectsDirty = false;
+            }
+            ci.cancel();
             return;
         }
         ((StandUser)rdbt$this()).rdbt$setRemoveLoveSafety(false);

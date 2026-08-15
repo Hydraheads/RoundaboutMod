@@ -311,7 +311,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
                     }
-                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                    if (!PowerTypes.isErasingTime(self)) {
                         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
@@ -382,7 +382,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             int spikeCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.spikeAttackCooldown;
             setCooldown(PowerIndex.GENERAL_1,spikeCooldown);
             if (getPlayerPos2() != PlayerPosIndex.HAIR_SPIKE) {
-                if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                if (!PowerTypes.isErasingTime(self)) {
                     playSoundsIfNearby(SoundIndex.HAIR_SPIKE_CHARGE, 25, false);
                     setPlayerPos2(PlayerPosIndex.HAIR_SPIKE);
                 }
