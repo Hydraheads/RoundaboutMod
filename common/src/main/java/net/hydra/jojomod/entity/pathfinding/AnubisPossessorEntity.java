@@ -34,14 +34,14 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
                 LivingEntity target = Mob.targets.get(i);
                 double tDist = target.distanceTo(this.mob);
                 if (dist > tDist && this.mob.getSensing().hasLineOfSight(target) && target.isAlive()
-                && !PowerTypes.isExistentiallyElsewhere(target)) {
+                && !PowerTypes.isInADifferentExistence(target,this.mob)) {
                     dist = tDist;
                     this.target = target;
                     if (((AnubisPossessorEntity) this.mob).getUser() instanceof Player P) {
                         S2CPacketUtil.syncPossessorTarget(P,this.target.getId());
                     }
                 } else if (!this.mob.getSensing().hasLineOfSight(target) || !target.isAlive()
-                || PowerTypes.isExistentiallyElsewhere(target)) {
+                || PowerTypes.isInADifferentExistence(target,this.mob)) {
                     Mob.targets.remove(target);
                 }
             }

@@ -277,7 +277,9 @@ public enum PowerTypes {
     }
     public static boolean isExistentiallyElsewhereTogether(Entity entity, Entity entityTwo){
         if (entity != null && entityTwo != null){
-            return getPlaneOfExisting(entity) == getPlaneOfExisting(entityTwo);
+            byte p1 = getPlaneOfExisting(entity);
+            byte p2 = getPlaneOfExisting(entityTwo);
+            return ((p1 == p2) && p1 != 11);
         }
         return false;
     }

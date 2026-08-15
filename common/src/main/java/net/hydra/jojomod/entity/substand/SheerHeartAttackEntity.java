@@ -188,7 +188,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public Entity entityTarget = null;
 	public Entity getEntityTarget() {
-		if (PowerTypes.isExistentiallyElsewhere(entityTarget)) {
+		if (PowerTypes.isInADifferentExistence(entityTarget,this)) {
 			if (((StandUser)entityTarget).roundabout$getStandPowers() instanceof
 					PowersKingCrimson pkc && pkc.timeEraseActive){
 				return pkc.activeClone;
@@ -780,7 +780,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (TM.getOwner() == getUser()) { return 0; }
 		}
 
-		if (PowerTypes.isExistentiallyElsewhere(entity)) { return 0; }
+		if (PowerTypes.isInADifferentExistence(entity,this)) { return 0; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -794,7 +794,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (entity instanceof LivingEntity LE) {
 			if (LE.isDeadOrDying()
 					|| (LE instanceof Player pl && pl.isCreative())
-					|| PowerTypes.isExistentiallyElsewhere(entity)) {
+					|| PowerTypes.isInADifferentExistence((entity),this)) {
 				return 0;
 			}
 			points += 20;
