@@ -748,7 +748,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "tickEffects", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$tickEffectsPre(CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
+        if (PowerTypes.isExistentiallyElsewhere(this) &&
+                !(level().isClientSide() && !PowerTypes.isInADifferentExistence(this,
+                ClientUtil.getPlayer()))){
             // tick effects down but don't spawn particles
             try {
                 Iterator<MobEffect> $$0 = this.activeEffects.keySet().iterator();
