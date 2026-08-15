@@ -221,6 +221,7 @@ public class ForgeEvents {
         ModBlocks.AJA_ORE = ForgeBlocks.AJA_ORE.get();
         ModBlocks.DEEPSLATE_AJA_ORE = ForgeBlocks.DEEPSLATE_AJA_ORE.get();
         ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
+        ModBlocks.CLIMBING_WIRE = ForgeBlocks.CLIMBING_WIRE.get();
         ModBlocks.FROZEN_DIRT = ForgeBlocks.FROZEN_DIRT.get();
         ModBlocks.FROZEN_STONE = ForgeBlocks.FROZEN_STONE.get();
         ModBlocks.FROZEN_COBBLESTONE = ForgeBlocks.FROZEN_COBBLESTONE.get();
@@ -241,7 +242,6 @@ public class ForgeEvents {
         ModBlocks.FROZEN_END_STONE = ForgeBlocks.FROZEN_END_STONE.get();
         ModBlocks.COLD_AIR = ForgeBlocks.COLD_AIR.get();
         ModBlocks.FREEZING_AIR = ForgeBlocks.FREEZING_AIR.get();
-        ModBlocks.AJA_BLOCK = ForgeBlocks.AJA_BLOCK.get();
         ModBlocks.SHINY_QUARTZ = ForgeBlocks.SHINY_QUARTZ.get();
         ModBlocks.WHITE_ALBUM_ICE_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE.get();
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();
@@ -289,6 +289,7 @@ public class ForgeEvents {
         ModBlocks.HALLUCINATORY_ACID = ForgeBlocks.HALLUCINATORY_ACID.get();
         ModBlocks.HALLUCINATORY_ACID_WALL = ForgeBlocks.HALLUCINATORY_ACID_WALL.get();
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
+        ModBlocks.D4C_PORTAL = ForgeBlocks.D4C_PORTAL.get();
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
@@ -305,6 +306,7 @@ public class ForgeEvents {
         ModBlocks.OASIS_MUD_BLOCK_ENTITY = ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get();
         ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY = ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get();
         ModBlocks.INVISIBLE_BLOCK_ENTITY = ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get();
+        ModBlocks.D4C_PORTAL_BLOCK_ENTITY = ForgeBlocks.D4C_PORTAL_BLOCK_ENTITY.get();
         ModBlocks.FOG_TRAP_BLOCK_ENTITY = ForgeBlocks.FOG_TRAP_BLOCK_ENTITY.get();
         ModBlocks.COFFIN_BLOCK_ENTITY = ForgeBlocks.COFFIN_BLOCK_ENTITY.get();
         ModBlocks.KING_BED_BLOCK_ENTITY = ForgeBlocks.KING_BED_BLOCK_ENTITY.get();
@@ -713,6 +715,8 @@ public class ForgeEvents {
         ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_BLUE_MUSHROOM_EXPLOSION = ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get();
 
+        ModParticles.PURPLE_HAZE_SMOKE = ForgeParticles.PURPLE_HAZE_SMOKE.get();
+
         FireBlock fire = (FireBlock) Blocks.FIRE;
         ((IFireBlock) fire).roundabout$bootstrap();
 
@@ -796,6 +800,7 @@ public class ForgeEvents {
         ModEntities.STAR_PLATINUM_BASEBALL = ForgeEntities.STAR_PLATINUM_BASEBALL.get();
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
+        ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();

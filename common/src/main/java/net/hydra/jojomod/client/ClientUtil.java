@@ -1107,6 +1107,14 @@ public class ClientUtil {
         }
         return false;
     }
+    public static boolean canRenderBetweenScreen() {
+        if (((StandUser)getPlayer()).roundabout$getStandPowers() instanceof PowersD4C pd){
+            if (pd.seesBetween){
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
             return false;
@@ -1971,6 +1979,13 @@ public class ClientUtil {
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
                     PowersWhiteAlbum PW) {
                 PW.stallTicks = 10;
+            }
+        } else if (context == PacketDataIndex.STAND_HIT){
+            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+                    PowersWhiteAlbum PW) {
+                PW.setAttackTime(0);
+                PW.setActivePowerPhase(PW.getActivePowerPhaseMax());
+                PW.setAttackTimeMax(PowersWhiteAlbum.gap2);
             }
         }
     } public static void handleSimpleBytePacketS2C(byte context){

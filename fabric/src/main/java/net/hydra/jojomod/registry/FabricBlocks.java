@@ -41,6 +41,8 @@ public class FabricBlocks {
     );
     public static final Block AJA_BLOCK = registerBlock("aja_block", AJA_BLOCK_PROPERTIES
     );
+    public static final Block CLIMBING_WIRE = registerBlock("climbing_wire", CLIMBING_WIRE_PROPERTIES
+    );
     public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
     );
     public static final Block FROZEN_COBBLESTONE = registerBlock("frozen_cobblestone", FROZEN_COBBLESTONE_PROPERTIES
@@ -214,6 +216,7 @@ public class FabricBlocks {
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
+    public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
@@ -269,6 +272,8 @@ public class FabricBlocks {
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
     public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
             registerBE("invisible_block",BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK));
+    public static final BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY =
+            registerBE("d4c_portal",BlockEntityType.Builder.of(D4CPortalBlockEntity::new, D4C_PORTAL));
     public static final BlockEntityType<FogTrapBlockEntity> FOGTRAP_BLOCKENTITY =
             registerBE("fog_trap",BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP) );
     public static final BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY =
@@ -359,6 +364,7 @@ public class FabricBlocks {
         ModBlocks.DEEPSLATE_AJA_ORE = DEEPSLATE_AJA_ORE;
         ModBlocks.AJA_BLOCK = AJA_BLOCK;
         ModBlocks.FROZEN_DIRT = FROZEN_DIRT;
+        ModBlocks.CLIMBING_WIRE = CLIMBING_WIRE;
         ModBlocks.FROZEN_COBBLESTONE = FROZEN_COBBLESTONE;
         ModBlocks.FROZEN_STONE = FROZEN_STONE;
         ModBlocks.FROZEN_DEEPSLATE = FROZEN_DEEPSLATE;
@@ -458,6 +464,7 @@ public class FabricBlocks {
         ModBlocks.MELON_PARFAIT = MELON_PARFAIT;
 
         ModBlocks.INVISIBLOCK = INVISIBLOCK;
+        ModBlocks.D4C_PORTAL = D4C_PORTAL;
         ModBlocks.STAND_FIRE = STAND_FIRE;
         ModBlocks.ORANGE_FIRE = ORANGE_FIRE;
         ModBlocks.BLUE_FIRE = BLUE_FIRE;
@@ -470,6 +477,7 @@ public class FabricBlocks {
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
+        ModBlocks.D4C_PORTAL_BLOCK_ENTITY = D4C_PORTAL_BLOCK_ENTITY;
 
         ModBlocks.OASIS_MUD_BLOCK = OASIS_MUD_BLOCK;
         ModBlocks.OASIS_MUD_BLOCK_ENTITY = OASIS_MUD_BLOCK_ENTITY;

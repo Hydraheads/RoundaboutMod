@@ -131,6 +131,7 @@ public class ModBlocks {
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
     public static Block INVISIBLOCK;
+    public static Block D4C_PORTAL;
 
     public static Block FLESH_BLOCK;
 
@@ -151,6 +152,9 @@ public class ModBlocks {
     public static Block FOG_TRAP;
 
     public static Block OASIS_MUD_BLOCK;
+
+    public static Block CLIMBING_WIRE;
+
 
     public static Block FROZEN_DIRT;
     public static Block FROZEN_STONE;
@@ -197,6 +201,7 @@ public class ModBlocks {
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
+    public static BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
     public static BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY;
     public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
@@ -767,7 +772,12 @@ public class ModBlocks {
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
-            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
+            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).sound(SoundType.EMPTY));
+
+    public static D4CPortalBlock D4C_PORTAL_PROPERTIES = new D4CPortalBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+                return 10;
+            }).noParticlesOnBreak().noCollission().pushReaction(PushReaction.IGNORE).sound(SoundType.EMPTY));
     public static StereoBlock STEREO_PROPERTIES = new StereoBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
@@ -879,7 +889,8 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).noOcclusion().instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
     requiresCorrectToolForDrops().strength(3.5F, 6.0F));
 
-
+    public static Block CLIMBING_WIRE_PROPERTIES = new ClimbingWireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            strength(1F).sound(SoundType.METAL).noOcclusion());
     public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
             strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
             ,() -> Blocks.DIRT);

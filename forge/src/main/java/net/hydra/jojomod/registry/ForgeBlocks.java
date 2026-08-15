@@ -63,7 +63,9 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> CHESS_PIECE = BLOCKS.register("chess_piece",
             () -> ModBlocks.getChessBlock()
     );
-
+    public static final RegistryObject<Block> CLIMBING_WIRE = BLOCKS.register("climbing_wire",
+            () -> CLIMBING_WIRE_PROPERTIES
+    );
     public static final RegistryObject<Block> FROZEN_DIRT = BLOCKS.register("frozen_dirt",
             () -> FROZEN_DIRT_PROPERTIES
     );
@@ -378,8 +380,10 @@ public class ForgeBlocks {
             () -> ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> INVISIBLOCK = BLOCKS.register("invisible_block",
             () -> ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
+    public static final RegistryObject<Block> D4C_PORTAL = BLOCKS.register("d4c_portal",
+            () -> ModBlocks.D4C_PORTAL_PROPERTIES);
     public static final RegistryObject<Block> OASIS_MUD_BLOCK = BLOCKS.register("oasis_mud_block",
-            () -> OASIS_MUD_BLOCK_PROPERTIES);
+            () -> ModBlocks.OASIS_MUD_BLOCK_PROPERTIES);
     public static final RegistryObject<Block> ORANGE_FIRE = BLOCKS.register("colored_fire_orange",
             () -> ModBlocks.ORANGE_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BLUE_FIRE = BLOCKS.register("colored_fire_blue",
@@ -407,6 +411,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "block_scaffold")));
     public static final RegistryObject<BlockEntityType<InvisiBlockEntity>> INVISIBLE_BLOCK_ENTITY = BLOCK_ENTITIES.register("invisible_block",
             () -> BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "invisible_block")));
+    public static final RegistryObject<BlockEntityType<D4CPortalBlockEntity>> D4C_PORTAL_BLOCK_ENTITY = BLOCK_ENTITIES.register("d4c_portal",
+            () -> BlockEntityType.Builder.of(D4CPortalBlockEntity::new, D4C_PORTAL.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "d4c_portal")));
     public static final RegistryObject<BlockEntityType<FogTrapBlockEntity>> FOG_TRAP_BLOCK_ENTITY = BLOCK_ENTITIES.register("fog_trap",
             () -> BlockEntityType.Builder.of(FogTrapBlockEntity::new, FOG_TRAP.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "fog_trap")));
     public static final RegistryObject<BlockEntityType<CoffinBlockEntity>> COFFIN_BLOCK_ENTITY = BLOCK_ENTITIES.register("coffin_block",

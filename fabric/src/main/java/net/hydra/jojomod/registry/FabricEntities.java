@@ -673,6 +673,13 @@ public class FabricEntities {
                         EntityType.Builder.of(SilverChariotEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
                 );
+        public static final EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("silver_chariot_rapier"),
+                        EntityType.Builder.of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
+                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
+                );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,

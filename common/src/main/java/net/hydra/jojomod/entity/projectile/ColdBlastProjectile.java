@@ -46,7 +46,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         this.setPos($$1, $$2, $$3);
     }
     public int getMaxLifeSpan(){
-        return 20;
+        return 19;
     }
     protected ColdBlastProjectile(EntityType<RoundaboutGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
@@ -104,6 +104,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
             if (entity instanceof Player pl){
                 HeatUtil.addHeat(entity,-33);
             } else {
+                HeatUtil.makeAngryAtFreeze(entity,getUser());
                 HeatUtil.addHeat(entity,-40);
                 if (entity instanceof Mob mob && !(entity instanceof AbstractVillager) && getUser() != null
                 && !(getUser() instanceof Player pl && pl.isCreative())) {

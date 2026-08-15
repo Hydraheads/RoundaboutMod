@@ -1,0 +1,7 @@
+{
+  "parent": "roundabout:block/flat_trapdoor_open",
+  "textures": {
+    "texture": "roundabout:block/climbing_wire"
+  },
+  "render_type": "cutout"
+}

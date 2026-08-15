@@ -71,6 +71,7 @@ public class HarpoonEntity extends AbstractArrow {
             }
         }
 
+        int maxAccel = 0;
         @Override
         public void tick() {
 
@@ -79,8 +80,11 @@ public class HarpoonEntity extends AbstractArrow {
                 if (targetMob != null && !(this.getOwner() != null && this.getOwner().getUUID() == targetMob.getUUID())) {
                     if (!this.isNoPhysics()) {
                         double ln = targetMob.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
-                        if (this.getDeltaMovement().length() > ln) {
-                            ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                        if (maxAccel < 200) {
+                            maxAccel++;
+                            if (this.getDeltaMovement().length() > ln) {
+                                ln = this.getDeltaMovement().multiply(1.2F, 1.2F, 1.2F).length();
+                            }
                         }
 
                         this.setDeltaMovement(
@@ -187,9 +191,9 @@ public class HarpoonEntity extends AbstractArrow {
             /**Harpoon Buff and Nerf*/
             if (isThrown){
                 if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
-                    $$2*=1.2F;
+                    $$2*=1.1F;
                 } else {
-                    $$2*=1.2F;
+                    $$2*=1.1F;
                 }
                 if ($$1 instanceof Player){
                     if (getOwner() != null){
@@ -197,12 +201,12 @@ public class HarpoonEntity extends AbstractArrow {
                         if (dist <= 3){
                             $$2*=0.5F;
                         } else if (dist <= 5){
-                            $$2*=0.7F;
+                            $$2*=0.65F;
                         } else {
-                            $$2*=0.95F;
+                            $$2*=0.85F;
                         }
                     } else {
-                        $$2*=0.95F;
+                        $$2*=0.85F;
                     }
                 }
             }

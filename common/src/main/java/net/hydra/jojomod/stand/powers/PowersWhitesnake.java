@@ -2918,7 +2918,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 "ability.roundabout.forward_barrage", "instruction.roundabout.forward_barrage",
                 StandIcons.WHITESNAKE_FORWARD_BARRAGE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getMeltingModeLevel(),
-                "ability.roundabout.whitesnake_melting_mode", "instruction.roundabout.whitesnake_press_skill_guard",
+                "ability.roundabout.whitesnake_melting_mode", "instruction.roundabout.press_skill_block",
                 StandIcons.WHITESNAKE_MELTING_MODE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, getImpaleLevel(),
                 "ability.roundabout.impale", "instruction.roundabout.press_skill_crouch",
