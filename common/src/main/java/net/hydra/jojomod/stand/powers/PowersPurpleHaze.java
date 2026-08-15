@@ -602,18 +602,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
         long day = Math.floorDiv(dayTime, 24000L);
         long timeOfDay = Math.floorMod(dayTime, 24000L);
 
-        System.out.println(
+        /*System.out.println(
                 "PODS: " + podsRemaining +
                         " DAY: " + day +
                         " TIME: " + timeOfDay +
                         " LAST RESET: " + lastPodResetDay
-        );
+        );*/
 
         if (timeOfDay >= 200 && lastPodResetDay != day) {
             podsRemaining = MAX_PODS;
             lastPodResetDay = day;
 
-            System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
+            //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
         }
     }
 
