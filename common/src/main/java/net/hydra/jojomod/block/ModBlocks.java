@@ -131,6 +131,7 @@ public class ModBlocks {
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
     public static Block INVISIBLOCK;
+    public static Block D4C_PORTAL;
 
     public static Block FLESH_BLOCK;
 
@@ -200,6 +201,7 @@ public class ModBlocks {
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
+    public static BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
     public static BlockEntityType<ChessPieceBlockEntity> CHESS_PIECE_BLOCK_ENTITY;
     public static BlockEntityType<KingBedBlockEntity> KING_BED_BLOCK_ENTITY;
@@ -768,6 +770,11 @@ public class ModBlocks {
     }
 
     public static InvisiBlock INVISIBLE_BLOCK_PROPERTIES = new InvisiBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
+
+    public static InvisiBlock D4C_PORTAL_PROPERTIES = new InvisiBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.NONE).forceSolidOn().noOcclusion().strength(-1.0F, 3600000.0F).lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.IGNORE).noParticlesOnBreak().sound(SoundType.EMPTY));
