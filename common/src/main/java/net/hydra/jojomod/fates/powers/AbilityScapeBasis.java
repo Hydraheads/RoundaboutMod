@@ -683,7 +683,7 @@ public class AbilityScapeBasis {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
-                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
+                if (!onSelf && PowerTypes.isErasingTime(self) && self.getId() != serverPlayerEntity.getId()){
                     continue;
                 }
 
@@ -784,7 +784,7 @@ public class AbilityScapeBasis {
                 if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) {
                     continue;
                 }
-                if (!onSelf && PowerTypes.isExistentiallyElsewhere(self) && self.getId() != serverPlayerEntity.getId()){
+                if (!onSelf && PowerTypes.isErasingTime(self) && self.getId() != serverPlayerEntity.getId()){
                     continue;
                 }
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
@@ -1906,7 +1906,7 @@ public class AbilityScapeBasis {
         this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
-        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+        if (!PowerTypes.isErasingTime(self)) {
             ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                     this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                     50, 1.1, 0.05, 1.1, 0.4);
@@ -1972,13 +1972,13 @@ public class AbilityScapeBasis {
     }
 
     public <T extends ParticleOptions> void sendParticlesIfPossible(Level level, T $$0, double $$1, double $$2, double $$3, int $$4, double $$5, double $$6, double $$7, double $$8) {
-        if (!PowerTypes.isExistentiallyElsewhere(self) && level instanceof ServerLevel sl) {
+        if (!PowerTypes.isErasingTime(self) && level instanceof ServerLevel sl) {
             sl.sendParticles($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8);
         }
     }
 
     public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
-        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+        if (!PowerTypes.isErasingTime(self)) {
             level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
             return true;
         }
@@ -1986,7 +1986,7 @@ public class AbilityScapeBasis {
     }
 
     public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
-        if (!PowerTypes.isExistentiallyElsewhere(self)) {
+        if (!PowerTypes.isErasingTime(self)) {
             level.playSound($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7);
         }
     }
@@ -2058,7 +2058,7 @@ public class AbilityScapeBasis {
                         this.setCooldown(PowerIndex.GLOBAL_DASH,
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
-                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
+                    if (!PowerTypes.isErasingTime(self)) {
                         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
@@ -2388,7 +2388,7 @@ public class AbilityScapeBasis {
             }
         }
 
-        if (PowerTypes.isExistentiallyElsewhere(targetEntity)){
+        if (PowerTypes.isInADifferentExistence(targetEntity,User)){
             return null;
         }
 

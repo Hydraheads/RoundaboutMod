@@ -3113,6 +3113,9 @@ public class MainUtil {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
                     && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
                     && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)){
+                    return false;
+                }
                 return true;
             }
         }

@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -111,7 +112,10 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         tag.putBoolean(TAG_POTTED, this.getPotted());
         tag.putByte(TAG_SKIN, getBreed());
     }
-
+    @Override
+    public boolean canMate(Animal otherAnimal) {
+        return false;
+    }
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains(TAG_POTTED)) {
@@ -120,6 +124,10 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         if (tag.contains(TAG_SKIN)) {
             this.setBreed(tag.getByte(TAG_SKIN));
         }
+    }
+    @Override
+    public boolean isInLove() {
+        return false;
     }
 
 
