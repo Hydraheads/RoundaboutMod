@@ -1,0 +1,39 @@
+{
+  "variants": {
+    "facing=east,open=false": {
+      "model": "roundabout:block/climbing_wire_top",
+      "y": 90
+    },
+    "facing=east,open=true": {
+      "model": "roundabout:block/climbing_wire_open",
+      "x": 180,
+      "y": 270
+    },
+    "facing=north,open=false": {
+      "model": "roundabout:block/climbing_wire_top"
+    },
+    "facing=north,open=true": {
+      "model": "roundabout:block/climbing_wire_open",
+      "x": 180,
+      "y": 180
+    },
+    "facing=south,open=false": {
+      "model": "roundabout:block/climbing_wire_top",
+      "y": 180
+    },
+    "facing=south,open=true": {
+      "model": "roundabout:block/climbing_wire_open",
+      "x": 180,
+      "y": 0
+    },
+    "facing=west,open=false": {
+      "model": "roundabout:block/climbing_wire_top",
+      "y": 270
+    },
+    "facing=west,open=true": {
+      "model": "roundabout:block/climbing_wire_open",
+      "x": 180,
+      "y": 90
+    }
+  }
+}

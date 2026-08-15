@@ -105,16 +105,23 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     @Override
     public void tick(){
         Vec3 delta = this.getDeltaMovement();
-        if (!this.level().isClientSide()) {
-            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
-
-            }
-        }
         super.tick();
         if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
+            if (this.getStyle() == BRIDGETHROW) {
+                if (this.getItem().getItem().equals(Items.IRON_INGOT)) {
+                    ((ServerLevel) this.level()).sendParticles(
+                            new BlockParticleOption(ParticleTypes.BLOCK, Blocks.IRON_BLOCK.defaultBlockState()),
+                            this.getX(),
+                            this.getY(),
+                            this.getZ(),
+                            5, 0.0, 0, 0.0, 0.5
+                    );
+                }
+            }
+
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
@@ -141,7 +148,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             SOFTTHROW = 3,
             SPINTHROW = 4,
             STAND_DAMAGE = 5,
-            ANUBISTHROW = 6;
+            BRIDGETHROW = 6;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -529,6 +536,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     } else {
                         dropItem(pos);
                     }
+                } else if (this.getStyle() == BRIDGETHROW && this.getOwner() instanceof Player P) {
+                    bridgePlace($$0,P);
                 } else {
                     dropItem(pos);
                 }
@@ -538,6 +547,60 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             this.discard();
         }
 
+    }
+
+private void bridgePlace(BlockHitResult $$0,Player P) {
+        Direction dir = $$0.getDirection();
+        BlockPos origin = $$0.getBlockPos().relative(dir);
+        if (dir != Direction.UP && this.level().getBlockState(origin).isAir()) {
+            int length = 0;
+            for(int i=1;i<=ClimbingWireBlock.DISTANCE;i++) {
+                if (!this.level().getBlockState(origin.relative(dir,i)).isAir()) {
+                    length = i+1;
+                    origin = $$0.getBlockPos();
+                    break;
+                }
+            }
+            if (length == 0) {
+                origin = $$0.getBlockPos().relative(dir);
+                dir = Direction.DOWN;
+                for(int i=1;i<=ClimbingWireBlock.DISTANCE;i++) {
+                    length = i;
+                    if (!this.level().getBlockState(origin.relative(dir,i)).isAir()) {
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; i < length; i++) {
+                BlockPos pos = origin.relative(dir, i);
+                InteractionResult result = ((BlockItem) ModBlocks.CLIMBING_WIRE.asItem()).place(new SafePlaceContext(
+                        this.level(),
+                        P,
+                        pos,
+                        dir,
+                        ModBlocks.CLIMBING_WIRE.asItem().getDefaultInstance(),
+                        dir
+                ));
+                if (result.equals(InteractionResult.CONSUME)) {
+                    this.level().setBlock(pos,
+                            ModBlocks.CLIMBING_WIRE.defaultBlockState()
+                                    .setValue(ClimbingWireBlock.OPEN,dir == Direction.DOWN)
+                                    .setValue(HorizontalDirectionalBlock.FACING,$$0.getDirection()),
+                            5
+                    );
+                }
+
+                Vec3 center = pos.getCenter();
+                ((ServerLevel) this.level()).sendParticles(
+                        new BlockParticleOption(ParticleTypes.BLOCK, Blocks.IRON_BLOCK.defaultBlockState()),
+                        center.x,
+                        center.y,
+                        center.z,
+                        5, 0.0, 0, 0.0, 0.5
+                );
+            }
+
+        }
     }
 
     public int heat = 0;

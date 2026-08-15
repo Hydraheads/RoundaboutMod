@@ -152,6 +152,9 @@ public class ModBlocks {
 
     public static Block OASIS_MUD_BLOCK;
 
+    public static Block CLIMBING_WIRE;
+
+
     public static Block FROZEN_DIRT;
     public static Block FROZEN_STONE;
     public static Block FROZEN_COBBLESTONE;
@@ -879,7 +882,8 @@ public class ModBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.STONE).noOcclusion().instrument(NoteBlockInstrument.BASEDRUM).lightLevel(litBlockEmission(15)).
     requiresCorrectToolForDrops().strength(3.5F, 6.0F));
 
-
+    public static Block CLIMBING_WIRE_PROPERTIES = new ClimbingWireBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).
+            strength(1F).sound(SoundType.METAL).noOcclusion());
     public static Block FROZEN_DIRT_PROPERTIES = new FrozenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).
             strength(0.2F).sound(SoundType.GLASS).friction(0.98F)
             ,() -> Blocks.DIRT);

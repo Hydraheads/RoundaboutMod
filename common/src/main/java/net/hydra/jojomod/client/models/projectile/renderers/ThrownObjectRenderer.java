@@ -94,7 +94,8 @@ public class ThrownObjectRenderer<T extends Entity>
             }
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
 
-            if (((ThrownObjectEntity) entity).getStyle() == ThrownObjectEntity.SPINTHROW) {
+            if (((ThrownObjectEntity) entity).getStyle() == ThrownObjectEntity.SPINTHROW
+                    || ((ThrownObjectEntity)entity).getStyle() == ThrownObjectEntity.BRIDGETHROW) {
                 poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,(entity.tickCount*50)%360),0,0,0);
             }
             this.itemRenderer.renderStatic(((ItemSupplier) entity).getItem(), ItemDisplayContext.GROUND, i, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, ((Entity) entity).level(), ((Entity) entity).getId());

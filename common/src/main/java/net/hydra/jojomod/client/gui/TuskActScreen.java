@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IKeyMapping;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -67,7 +68,11 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         if (SU.roundabout$getStandPowers() instanceof PowersTusk PT ) {
             this.currentlyHovered = PT.getAct();
             for (int i = 0; i < 5; ++i) {
-                actIcon pIcon = new actIcon(i == 0 ? PT.getAct() : i,positions[i][0], positions[i][1]+31 );
+                int id = i == 0 ? PT.getAct() : i;
+                if (id == 4 && ((IPlayerEntity)pl).roundabout$getStandLevel() < 7) {
+                    id = -1;
+                }
+                actIcon pIcon = new actIcon(id,positions[i][0], positions[i][1]+31 );
                 this.slots.add(new PoseSlot(pIcon, this.width / 2 + pIcon.xoff - 13, this.height / 2 + pIcon.yoff - 44));
             }
 
@@ -115,11 +120,12 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         }
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
 
-        for (PoseSlot MobSlot : this.slots) {
-            if (true) {MobSlot.render(guiGraphics, i, j, f);}
-            MobSlot.setSelected(this.currentlyHovered == MobSlot.icon.id);
-            if (!bl && MobSlot.isHoveredOrFocused()) {
-                this.currentlyHovered = MobSlot.icon.id;
+
+        for (PoseSlot slot : this.slots) {
+            slot.render(guiGraphics, i, j, f);
+            slot.setSelected(this.currentlyHovered == slot.icon.id);
+            if (!bl && slot.isHoveredOrFocused() && (slot.icon.id != -1) ) {
+                this.currentlyHovered = slot.icon.id;
             }
         }
 
@@ -222,7 +228,13 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
                     this.drawSelection(guiGraphics);
                 }
 
-                guiGraphics.blit(StandIcons.TUSK_ICONS[this.icon.id],this.getX()+4,this.getY()+4,0,0,18,18,18,18);
+                ResourceLocation icon;
+                if (this.icon.id > 0) {
+                    icon = StandIcons.TUSK_ICONS[this.icon.id];
+                } else {
+                    icon = StandIcons.LOCKED;
+                }
+                guiGraphics.blit(icon,this.getX()+4,this.getY()+4,0,0,18,18,18,18);
             }
         }
 

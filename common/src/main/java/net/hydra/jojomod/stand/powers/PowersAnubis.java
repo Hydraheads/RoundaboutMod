@@ -499,7 +499,7 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (slot == 1) {
-            return this.isBarrageAttacking() || this.isBarrageCharging() || this.getActivePower() == PowersAnubis.POGO;
+            return this.isBarrageAttacking() || this.isBarrageCharging() || this.getActivePower() == PowersAnubis.POGO || this.getActivePower() == PowerIndex.RANGED_BARRAGE;
         }
         switch (activeP) {
             case PowerIndex.SKILL_4 -> {
@@ -2109,7 +2109,8 @@ public class PowersAnubis extends NewDashPreset {
         }
         return !item.equals(ModItems.ANUBIS_ITEM)
                 && !item.equals(Items.SHIELD)
-                && !item.equals(Items.FISHING_ROD);
+                && !item.equals(Items.FISHING_ROD)
+                && (!item.equals(Items.ENDER_PEARL) || !this.isEmpowered());
     }
 
     List<Entity> targets = new ArrayList<>();
