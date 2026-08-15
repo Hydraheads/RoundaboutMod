@@ -114,6 +114,11 @@ public abstract class HudRendering implements IHudAccess {
                 roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
                         0.25F,1F,1F,1F);
             }
+            if (ClientUtil.canRenderBetweenScreen()){
+                RenderSystem.enableBlend();
+                roundabout$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION,
+                        0.15F,1F,1F,1F);
+            }
 
             if (ClientUtil.timeSkipTicker > -1){
                 if (ClientUtil.canSeeStands(this.minecraft.player)) {

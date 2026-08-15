@@ -1107,6 +1107,14 @@ public class ClientUtil {
         }
         return false;
     }
+    public static boolean canRenderBetweenScreen() {
+        if (((StandUser)getPlayer()).roundabout$getStandPowers() instanceof PowersD4C pd){
+            if (pd.seesBetween){
+                return true;
+            }
+        }
+        return false;
+    }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
             return false;

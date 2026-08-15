@@ -85,6 +85,8 @@ public class StandIcons {
 
     public static final ResourceLocation EPITAPH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/misc/epitaph.png");
+    public static final ResourceLocation BETWEEN_VISION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/misc/d4c.png");
 
     public static final ResourceLocation POWDER_SNOW_OUTLINE_LOCATION = new ResourceLocation("textures/misc/powder_snow_outline.png");
 
