@@ -184,9 +184,9 @@ public abstract class ConfigManager {
             MainUtil.standBlockExplosionBlacklist.clear();
             MainUtil.standBlockExplosionBlacklist.addAll(getAdvancedConfig().standBlockExplosionBlacklist);
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeat != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomBlockHeatV2 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeat) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomBlockHeatV2) {
                 try {
                     String[] split = entry.split(":");
 
@@ -205,9 +205,9 @@ public abstract class ConfigManager {
                 }
             }
         }
-        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeat != null)
+        if (getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2 != null)
         {
-            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeat) {
+            for (String entry : getAdvancedConfig().sheerHeartAttackCustomEntityHeatV2) {
                 try {
                     String[] split = entry.split(":");
 
