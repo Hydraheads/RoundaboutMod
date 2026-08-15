@@ -1349,6 +1349,24 @@ public class Config implements Cloneable {
         public Integer miningSpeedMultiplierSilverChariot;
         @IntOption(group = "inherit", value = 0, min = 0, max = 4)
         public Integer getMiningTierSilverChariot;
+        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        public Integer silverChariotRemoteControlRange;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownStatueCutting;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownSlabCutting;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownSelfGrab;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownControlModeToggle;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierShot;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierShotPlatform;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierSpin;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierSlash;
     }
 
     public static class TimeStopSettings {

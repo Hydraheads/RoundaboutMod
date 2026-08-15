@@ -28,9 +28,10 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
     @Override
     public ResourceLocation getTextureLocation(SilverChariotEntity entity) {
         // Yes, I am aware that it is not proper to have only one case in a switch statement
-        return switch (entity.getSkin()) {
-            default -> ANIME_PART_3;
-        };
+        // return switch (entity.getSkin()) {
+        //     default -> ANIME_PART_3;
+        // };
+        return ANIME_PART_3;
     }
 
     @Override
