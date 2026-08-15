@@ -230,6 +230,16 @@ public class RoundaboutCom {
                                         EntityArgument.getEntities(context, "targets")))
                         )
                 );
+        dispatcher.register(Commands.literal("roundaboutDaze")
+                .requires(source
+                        -> source.hasPermission(2))
+                .executes(context -> net.hydra.jojomod.RoundaboutCommands.executeDaze((CommandSourceStack)context.getSource(),
+                        ImmutableList.of(((CommandSourceStack)context.getSource()).getEntityOrException())))
+                .then(Commands.argument("targets", EntityArgument.entities())
+                        .executes(context -> RoundaboutCommands.executeDaze((CommandSourceStack)context.getSource(),
+                                EntityArgument.getEntities(context, "targets")))
+                )
+        );
         dispatcher.register(Commands.literal("roundaboutFogTrapRange")
                         .then(Commands.argument("radius",IntegerArgumentType.integer())
                             .executes(context -> RoundaboutCommands.roundaboutFogTrapRange(context.getSource(), context.getSource().getPlayerOrException() ,IntegerArgumentType.getInteger(context,"radius")))

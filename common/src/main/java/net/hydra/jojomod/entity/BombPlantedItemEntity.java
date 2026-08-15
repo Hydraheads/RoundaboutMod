@@ -117,14 +117,14 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
 
     @Override
     public void playerTouch(Player PL) {
-        if (((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
-            PKQ.itemContacted(PL);
-        }
+
     }
 
     public void defuse() {
-        ItemEntity result = spawnAtLocation(getItem());
-        if (result != null) { result.setDeltaMovement(0, 0, 0); }
+        ItemEntity $$2 = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), getItem(), 0, 0, 0);
+        $$2.setDefaultPickUpDelay();
+        this.level().addFreshEntity($$2);
+        discard();
     }
 
     @Override
@@ -152,8 +152,8 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
     public void tick() {
         if (!level().isClientSide()) {
             if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
-                    && PKQ.getCurrentBombStatus() == (byte)2 && PKQ.bombPlantedItem == this)) {
-                this.discard();
+                    /*&& PKQ.getCurrentBombStatus() == (byte)2*/ && PKQ.bombPlantedItem == this)) {
+                defuse();
             }
         }
         if (this.getItem().isEmpty()) {
@@ -244,6 +244,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
                 this.discard();
             }
         }
+
     }
 
     @Override

@@ -9,10 +9,15 @@ import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -179,5 +184,12 @@ public class HeatUtil {
             }
         }
         return 0;
+    }
+    public static void makeAngryAtFreeze(Entity entity, Entity pl){
+        if (entity instanceof NeutralMob NE && !(entity instanceof Animal) && pl instanceof Player play && !(play.isCreative())) {
+            if (!(entity instanceof IronGolem ig && ig.isPlayerCreated()) && entity.level().getDifficulty() != Difficulty.PEACEFUL) {
+                NE.setTarget(play);
+            }
+        }
     }
 }

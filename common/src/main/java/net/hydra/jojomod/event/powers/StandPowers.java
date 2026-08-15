@@ -613,7 +613,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
 
         if (!this.self.level().isClientSide && (this.isBarraging() || this.isClashing()) && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CLASH
-        && move != PowerIndex.BARRAGE_CHARGE && move != PowerIndex.GUARD) && this.attackTimeDuring  > -1){
+        && move != PowerIndex.BARRAGE_CHARGE)){
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
 

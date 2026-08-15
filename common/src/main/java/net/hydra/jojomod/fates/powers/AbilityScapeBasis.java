@@ -124,6 +124,14 @@ public class AbilityScapeBasis {
     }
 
 
+    /**Stand Damage Dropoff**/
+//    public int sdd = 0;
+//    public int sddTime = 0;
+//    public void addSdd(){
+//        sdd++;
+//    }public void maintainSdd(){
+//        sddTime = 20;
+//    }
 
     /**An easy way to replace the EXP bar with a stand bar, see the function below this one*/
     public boolean replaceHudActively(){
@@ -616,6 +624,11 @@ public class AbilityScapeBasis {
             }
         }
         baseTickPower();
+
+        if (activePower == PowerIndex.NONE && attackTime > -1 && (attackTime < attackTimeMax) && !kickStarted &&
+        self.level().isClientSide()){
+            kickStarted = true;
+        }
     }
 
 
@@ -3271,7 +3284,7 @@ public class AbilityScapeBasis {
     }
     public int attackTargetId = -1;
     public ResourceKey<DamageType> getPunchDamageSource(){
-        return ModDamageTypes.STAND;
+        return ModDamageTypes.STAND_BRAWL;
     }
 
 

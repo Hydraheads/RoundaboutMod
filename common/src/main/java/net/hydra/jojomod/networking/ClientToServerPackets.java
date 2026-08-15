@@ -515,7 +515,11 @@ public class ClientToServerPackets {
                     float xrot = (float)vargs[3];
                     float zrot = (float)vargs[4];
                     int ent = (int)vargs[5];
-                    MainUtil.handleMovePilot(x,y,z,xrot,zrot,sender,ent);
+                    float velocityX = (float)vargs[6];
+                    float velocityY = (float)vargs[7];
+                    float velocityZ = (float)vargs[8];
+                    MainUtil.handleMovePilot(x, y, z, xrot, zrot, sender, ent,
+                            velocityX, velocityY, velocityZ);
                 }
                 /**Sync movement for stand leaning animation as you walk*/
                 if (message.equals(MESSAGES.MoveSync.value)) {

@@ -293,7 +293,7 @@ public class PowersPearlJam extends NewDashPreset {
 
     public boolean foodEnergize(){
         ItemStack itemStack = user.getItemInHand(InteractionHand.MAIN_HAND);
-        if ((itemStack.isEdible() || itemStack.getItem().getName(itemStack).getString().equals("Water Bottle")) && !itemStack.getOrCreateTag().contains("pearljamfood")){
+        if ((itemStack.isEdible() || itemStack.getItem().getName(itemStack).getString().equals("Water Bottle")) && !(itemStack.hasTag() && itemStack.getOrCreateTag().contains("pearljamfood"))){
             this.setActivePower(PowerIndex.POWER_1);
             this.setCooldown(PowerIndex.POWER_1, ClientNetworking.getAppropriateConfig().pearlJamSettings.foodEnergizeCooldown);
             foodEntity = user.drop(itemStack, false, true);

@@ -52,6 +52,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -451,6 +452,9 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+        if (self.level().isClientSide() && seesBetween){
+            tickBetween();
+        }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
             if (!canHoldBanner){
                 rech++;
@@ -508,52 +512,111 @@ public class PowersD4C extends NewPunchingStand {
             }
         }
     }
+    public boolean seesBetween = false;
+    public int seesBetweenTicks = 0;
     public void makeCloneClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2) && isEligable()) {
                 tryPowerPacket(PowerIndex.POWER_2);
         }
     }
+    private BlockPos getForwardPosition(
+            BlockPos origin,
+            Direction facing,
+            int forward,
+            int side,
+            int vertical
+    ) {
+        Direction sideways = facing.getClockWise();
 
-    public void betweenVisionClient(){
-        BlockPos origin = self.blockPosition();
-        Direction forward = self.getDirection();
+        return origin
+                .relative(facing, forward)
+                .relative(sideways, side)
+                .above(vertical);
+    }
+    public void tickBetween(){
+        if (seesBetween){
+            if (!isGuarding()){
+                seesBetween = false;
+                return;
+            }
+            seesBetweenTicks++;
 
-        int maxDistance = 20;
-        int sideRange = 5;
-        int verticalRange = 5;
-        int maxSpots = 15;
+            if (seesBetweenTicks >= 10){
+                seesBetweenTicks =0;
 
-        int found = 0;
-        Direction dir = RotationUtil.getGravityDirection(self);
+                Direction dir = RotationUtil.getGravityDirection(self);
 
-        for (int distance = 0; distance <= maxDistance; distance++) {
-            for (int side = -sideRange; side <= sideRange; side++) {
-                for (int vertical = -verticalRange; vertical <= verticalRange; vertical++) {
 
-                    BlockPos pos = origin
-                            .relative(forward, distance)
-                            .relative(forward.getClockWise(), side)
-                            .above(vertical);
+                Vec3 originVec = self.getEyePosition(1.0F);
+                Vec3 look = self.getLookAngle().normalize();
 
-                    if (!self.level().getBlockState(pos).isSolid() &&
-                            !self.level().getBlockState(pos).liquid() &&
-                            !self.level().getBlockState(pos.relative(dir.getOpposite())).isSolid() &&
-                            !self.level().getBlockState(pos.relative(dir.getOpposite())).liquid() &&
-                    isBetweenSpace(pos,true)) {
+                int maxDistance = 14;
+                int maxSpots = 15;
 
-                        spawnGravitySpiral(
-                                self.level(),
-                                pos,
-                                RotationUtil.getGravityDirection(self)
-                        );
+                double coneAngle = Math.cos(Math.toRadians(30.0D));
 
-                        if (++found >= maxSpots) {
-                            return;
+                int found = 0;
+
+                BlockPos origin = self.blockPosition();
+
+                for (int x = -maxDistance; x <= maxDistance; x++) {
+                    for (int y = -maxDistance; y <= maxDistance; y++) {
+                        for (int z = -maxDistance; z <= maxDistance; z++) {
+
+                            BlockPos pos = origin.offset(x, y, z);
+
+                            Vec3 target = Vec3.atCenterOf(pos);
+
+                            // Vector from the player's eyes toward this position.
+                            Vec3 toTarget = target.subtract(originVec);
+
+                            double distance = toTarget.length();
+
+                            if (distance < 1.0D || distance > maxDistance) {
+                                continue;
+                            }
+
+                            Vec3 directionToTarget = toTarget.normalize();
+
+                            // Dot product determines whether this point is inside the cone.
+                            if (look.dot(directionToTarget) < coneAngle) {
+                                continue;
+                            }
+
+                            // Your existing checks.
+                            if (!self.level().getBlockState(pos).isSolid()
+                                    && !self.level().getBlockState(pos).liquid()
+                                    && !self.level().getBlockState(
+                                    pos.relative(dir.getOpposite())
+                            ).isSolid()
+                                    && !self.level().getBlockState(
+                                    pos.relative(dir.getOpposite())
+                            ).liquid()
+                                    && isBetweenSpace(pos, true)) {
+
+                                spawnGravitySpiral(
+                                        self.level(),
+                                        pos,
+                                        RotationUtil.getGravityDirection(self)
+                                );
+
+                                if (++found >= maxSpots) {
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    }
+    public void betweenVisionClient(){
+        seesBetween = !seesBetween;
+        seesBetweenTicks = 10;
+        if (seesBetween){
+            this.getSelf().playSound(ModSounds.STAR_PLATINUM_SCOPE_EVENT, 1.0F, (float) (1.5F + (Math.random() * 0.04F)));
+        }
+        tickBetween();
     }
     public void dashOrBlockSwitchClient(){
             dash();

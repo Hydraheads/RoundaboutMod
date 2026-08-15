@@ -250,12 +250,13 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!self.level().isClientSide() && hasStandActive(self)) {
 
             //Even if you block the attack, your ice blast should be canceled bc it's insane
-            if (isChargingCold()){
                 if ($$0.getEntity() instanceof LivingEntity LE && self instanceof Player player){
                     S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STALL);
-                    ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
+                    if (isChargingCold()){
+                        S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STAND_HIT);
+                        ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
+                    }
                 }
-            }
 
             if (self instanceof Player pl) {
                 if ($$0.is(DamageTypes.FALL) ||
@@ -1169,7 +1170,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         }
     }
 
-    public static int gap = 13;
+    public static int gap = 14;
+    public static int gap2 = 26;
 
     public boolean toggleSkates(){
         int cooldown = 25;
@@ -1735,7 +1737,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public int getWhiteAlbumChargeLength(){
-        return 35;
+        return 36;
     }
 
     public boolean hasColdCharged(){

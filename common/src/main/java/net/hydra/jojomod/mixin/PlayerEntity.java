@@ -1264,8 +1264,25 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             ci.cancel();
         }
     }
+    private long purpleHazePodResetDay = -1;
+    private byte purpleHazePods = 6;
 
-
+    @Override
+    public long roundabout$getPurpleHazePodResetDay() {
+        return purpleHazePodResetDay;
+    }
+    @Override
+    public void roundabout$setPurpleHazePodResetDay(long day) {
+        purpleHazePodResetDay = day;
+    }
+    @Override
+    public byte roundabout$getPurpleHazePods() {
+        return purpleHazePods;
+    }
+    @Override
+    public void roundabout$setPurpleHazePods(byte pods) {
+        purpleHazePods = pods;
+    }
     @Unique
     public VampireData rdbt$vampireData = new VampireData(level());
 
