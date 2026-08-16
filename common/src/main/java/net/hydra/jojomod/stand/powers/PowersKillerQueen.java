@@ -445,6 +445,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public float getArrowThrowStrenght() {return 0.9F;}
+    public float getArrowThrowChargeMax() {return 20.0F;}
+
 
     // Data save system:
     static final String strayCatTag = "hasStrayCat";
@@ -1535,9 +1538,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.detonateTimer++;
             }
             if (currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT || currentBombStatus == ITEM_CONTACT) {
+                float percent = detonateTimer / (float) getDetonateWindup();
                 if (bombEntity instanceof LivingEntity && bombEntity.isAlive()) {
-                    float percent = detonateTimer / (float) getDetonateWindup();
                     ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
+                }
+                if (bombEntity != null && percent > 0.7f && percent < 0.95f && self.tickCount % 4 == 0) {
+                    Vec3 vec = getRandPos(bombEntity);
+                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SMALL_FLAME,
+                            vec.x, vec.y, vec.z,
+                            4, 0.2, 0.2, 0.2, 0.03);
                 }
             }
 
@@ -1555,7 +1564,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if(this.attackTimeDuring%4==0) {
                         ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
-                                1, 0.2, 0.2, 0.2, 0.05);
+                                1, 0.2, 0.02, 0.2, 0.05);
                     }
                 }
             }
@@ -1592,7 +1601,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void updateArrowCharge(){
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= getMaxKickTime() &&
+            if (this.attackTimeDuring >= getArrowThrowChargeMax() &&
                     (!(this.getSelf() instanceof Player))){
                 int atd = this.getAttackTimeDuring();
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(ARROW_THROW, true, getMaxKickTime());
@@ -1643,10 +1652,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         StandEntity KQ = getStandEntity(self);
         if (KQ != null) {
             ItemStack stack = KQ.getHeldItem();
-            float $$1 = (float)chargedFinal / 20.0F;
+            float $$1 = (float)chargedFinal / getArrowThrowChargeMax();
             $$1 = (($$1 * $$1 + $$1 * 2.0F) / 3.0F);
 
-            if ($$1 > 0.9F) { $$1 = 0.9F; }
+            if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
 
             BombPlantedArrow arrow = new BombPlantedArrow(self.level(), self);
             arrow.host = self;
@@ -3550,7 +3559,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (standOn && this.getActivePower() == ARROW_CHARGE) {
+            int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getArrowThrowChargeMax()) * 15));
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
+        }else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxKickTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
