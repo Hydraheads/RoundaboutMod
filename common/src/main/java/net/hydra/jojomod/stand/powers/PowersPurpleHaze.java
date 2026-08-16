@@ -625,7 +625,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
             S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
         }
     }
-    private long lastPodResetDay = -1;
 
     private void tickPodReset() {
         if (self == null || self.level().isClientSide()) {
@@ -636,20 +635,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         long day = Math.floorDiv(dayTime, 24000L);
         long timeOfDay = Math.floorMod(dayTime, 24000L);
-        /*System.out.println(
+ /*System.out.println(
                 "PODS: " + podsRemaining +
                         " DAY: " + day +
                         " TIME: " + timeOfDay +
                         " LAST RESET: " + lastPodResetDay
         );*/
-        if (timeOfDay >= 200 && lastPodResetDay != day) {
+        IPlayerEntity playerData = (IPlayerEntity) self;
+
+        if (timeOfDay >= 200 &&
+                playerData.roundabout$getPurpleHazePodResetDay() != day) {
+
             setPods(MAX_PODS);
-            lastPodResetDay = day;
+
+            playerData.roundabout$setPurpleHazePodResetDay(day);
         }
         //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
-
-
 
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
