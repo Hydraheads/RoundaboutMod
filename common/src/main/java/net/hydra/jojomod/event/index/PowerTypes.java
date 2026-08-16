@@ -268,6 +268,24 @@ public enum PowerTypes {
         }
         return 0;
     }
+    public static void setPlaneOfExisting(Entity entity, byte plane){
+        if (entity != null){
+            ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+        }
+    }
+
+    public static int getForeignWorldMaxTime(byte worldType){
+        if (worldType == 0 || worldType == 10){
+            return -1;
+        }
+        if (worldType <= 5){
+            return 200;
+        }
+        if (worldType == 11){
+            return 400;
+        }
+        return 1000;
+    }
     public static boolean canInteractInExistence(Entity entity){
         if (entity != null){
             byte plane = getPlaneOfExisting(entity);

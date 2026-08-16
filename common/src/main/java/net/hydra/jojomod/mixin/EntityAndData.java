@@ -888,6 +888,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     public Optional<BlockPos> mainSupportingBlockPos;
+    @Unique
+    private int rdbt$inForeignWorld = 0;
 
     @Override
     @Unique
@@ -895,6 +897,22 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$addSecondToQueue();
         roundabout$tickTrueInvisibility();
         roundabout$tickTrueInvisibilityManhattan();
+
+        Entity thrs = ((Entity) (Object)this);
+        byte world = PowerTypes.getPlaneOfExisting(thrs);
+        if (world != 0){
+            int existTime = PowerTypes.getForeignWorldMaxTime(world);
+            if (existTime != -1){
+                rdbt$inForeignWorld++;
+                if (rdbt$inForeignWorld > existTime){
+                    PowerTypes.setPlaneOfExisting(thrs,(byte) 0);
+                }
+            }
+        } else {
+            if (rdbt$inForeignWorld != 0){
+                rdbt$inForeignWorld = 0;
+            }
+        }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
