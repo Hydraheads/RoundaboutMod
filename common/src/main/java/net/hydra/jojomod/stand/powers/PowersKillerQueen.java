@@ -2916,7 +2916,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             this.detonate();
                         }
                     }
-                }else if (this.currentBombStatus == BOMB_ENTITY) {
+                }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
                     if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2) {
                         Entity contact = detectContact(this.bombEntity, 0.1);
                         if (contact != null) {

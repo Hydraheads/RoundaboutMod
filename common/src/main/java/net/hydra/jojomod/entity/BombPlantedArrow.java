@@ -71,7 +71,7 @@ public class BombPlantedArrow extends Arrow {
     }
 
     public void defuse() {
-        ArrowItem $$10 = (ArrowItem)(getItem().getItem() instanceof ArrowItem ? getItem().getItem() : Items.ARROW);
+        /*ArrowItem $$10 = (ArrowItem)(getItem().getItem() instanceof ArrowItem ? getItem().getItem() : Items.ARROW);
         AbstractArrow arrow = $$10.createArrow(level(), getItem(), host);
         arrow.setCritArrow(isCritArrow());
         arrow.setPos(getPosition(1));
@@ -82,6 +82,6 @@ public class BombPlantedArrow extends Arrow {
 
         level().addFreshEntity(arrow);
         discard();
-
+        */
     }
 }
