@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
 
     public static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/anime.png");
-    public static final ResourceLocation MIG_PLAGUE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/mig_plague.png");
+    public static final ResourceLocation BLAZING_HAZE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/blazing_haze.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -25,8 +25,8 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public ResourceLocation getTextureLocation(PurpleHazeEntity entity) {
         switch (entity.getSkin())
         {
-            case (PurpleHazeEntity.MIG_PLAGUE):
-                return MIG_PLAGUE;
+            case (PurpleHazeEntity.BLAZING_HAZE):
+                return BLAZING_HAZE;
             default:
                 return ANIME;
         }
