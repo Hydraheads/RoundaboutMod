@@ -78,6 +78,9 @@ public class PowersD4C extends NewPunchingStand {
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
     }
+
+    public static final byte WORLD_MERGE = 106;
+    public static final byte PORTAL = 107;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -92,6 +95,10 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.IMPALE_CHARGE_EVENT;
         } else if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_D4C_EVENT;
+        } else if (soundChoice == WORLD_MERGE) {
+            return ModSounds.WORLD_MERGE_EVENT;
+        } else if (soundChoice == PORTAL) {
+            return ModSounds.D4C_PORTAL_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -512,6 +519,7 @@ public class PowersD4C extends NewPunchingStand {
            } else {
                 return;
             }
+            playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }
     }

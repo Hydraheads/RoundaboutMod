@@ -669,9 +669,7 @@ public class ClientUtil {
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
-                        if (!(PowerTypes.isInADifferentExistence(User,getPlayer()) && !PowerTypes.isErasingTime(User))) {
                             ((StandUserClient) User).roundabout$clientQueSound(soundID);
-                        }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
                     /**Read in Sent config*/
@@ -679,9 +677,7 @@ public class ClientUtil {
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
-                        if (!(PowerTypes.isInADifferentExistence(User,getPlayer()) && !PowerTypes.isErasingTime(User))) {
                             ((StandUserClient) User).roundabout$clientQueSoundCanceling(soundID);
-                        }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
                     /**TS Teleport blip*/
