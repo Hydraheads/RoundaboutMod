@@ -110,19 +110,24 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public final AnimationState shaSend = new AnimationState();
     public final AnimationState impale = new AnimationState();
     public final AnimationState bitesTheDust = new AnimationState();
-
+    public final AnimationState itemThrowCharge = new AnimationState();
+    public final AnimationState arrowThrow = new AnimationState();
+    public final AnimationState itemGrabAnimation = new AnimationState();
+    public final AnimationState itemRetractAnimation = new AnimationState();
 
     public static byte
-		KICK = 25,
-		KICK_CHARGE = 27,
-    	DETONATE = 121,
-    	BLOCK_PLANT = 122,
-        MOB_PLANT = 123,
-        MOB_PLANT_2 = 124,
-        BUBBLE_SEND = 125,
-        BITES_THE_DUST_FOLLOW = 126,
-        SHA_SEND = 88,
-    	HEAVY_STRIKE = 26;
+            KICK = 25,
+            KICK_CHARGE = 27,
+            DETONATE = 121,
+            BLOCK_PLANT = 122,
+            MOB_PLANT = 123,
+            MOB_PLANT_2 = 124,
+            BUBBLE_SEND = 125,
+            BITES_THE_DUST_FOLLOW = 126,
+            SHA_SEND = 88,
+    	    HEAVY_STRIKE = 26,
+            ARROW_CHARGE = 89,
+            ARROW_THROW = 90;
     
     @Override
     public void setupAnimationStates() {
@@ -200,13 +205,35 @@ public class KillerQueenEntity extends FollowingStandEntity {
                 this.itemThrow.stop();
             }
 
-            /*
-            if (animation == BLOCK_THROW) {
-                this.blockThrowAnimation.startIfStopped(this.tickCount);
+            if (animation == ARROW_CHARGE) {
+                this.itemThrowCharge.startIfStopped(this.tickCount);
             } else {
-                this.blockThrowAnimation.stop();
+                this.itemThrowCharge.stop();
             }
-            */
+
+            if (this.getAnimation() == ITEM_GRAB) {
+                this.itemGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemGrabAnimation.stop();
+            }
+
+            if (animation == ARROW_THROW) {
+                this.arrowThrow.startIfStopped(this.tickCount);
+            } else {
+                this.arrowThrow.stop();
+            }
+
+            if (this.getAnimation() == ITEM_GRAB) {
+                this.itemGrabAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemGrabAnimation.stop();
+            }
+
+            if (this.getAnimation() == ITEM_RETRACT) {
+                this.itemRetractAnimation.startIfStopped(this.tickCount);
+            } else {
+                this.itemRetractAnimation.stop();
+            }
 
             if (animation == BITES_THE_DUST_FOLLOW) {
                 this.bitesTheDust.startIfStopped(this.tickCount);
