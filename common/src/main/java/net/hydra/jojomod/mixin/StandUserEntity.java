@@ -5807,6 +5807,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$getStandPowers().summonCD > 0) {
             roundabout$getStandPowers().summonCD--;
         }
+
     }
 
     @Unique
