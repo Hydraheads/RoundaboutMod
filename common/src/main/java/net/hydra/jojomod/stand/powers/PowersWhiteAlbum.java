@@ -1337,13 +1337,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(), pos, CollisionContext.empty())) {
                                     if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(),
                                             pos.above(), CollisionContext.empty())) {
-                                            if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
+                                        if (self instanceof Player pl) {
+                                            if (MainUtil.canPlaceOnClaim(pl, pos)){
                                                 self.level().setBlock(
                                                         pos,
                                                         Blocks.ICE.defaultBlockState(),
                                                         Block.UPDATE_ALL
                                                 );
                                             }
+                                        }
 
                                     }
                                 }
@@ -1351,12 +1353,14 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
 
                                 if (replacement != null) {
-                                    if (!(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, pos))) {
-                                        self.level().setBlock(
-                                                pos,
-                                                replacement.defaultBlockState(),
-                                                Block.UPDATE_ALL
-                                        );
+                                    if (self instanceof Player pl) {
+                                        if (MainUtil.canPlaceOnClaim(pl, pos)){
+                                            self.level().setBlock(
+                                                    pos,
+                                                    replacement.defaultBlockState(),
+                                                    Block.UPDATE_ALL
+                                            );
+                                        }
                                     }
                                 }
                             }
