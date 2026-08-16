@@ -63,7 +63,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.ANIME -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
-            //case PurpleHazeEntity.MIG_PLAGUE -> {return Component.translatable("skins.roundabout.purple_haze.mig_plague");}
+            case PurpleHazeEntity.BLAZING_HAZE -> {return Component.translatable("skins.roundabout.purple_haze.blazing_haze");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -81,7 +81,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 PurpleHazeEntity.ANIME,
-                PurpleHazeEntity.MIG_PLAGUE
+                PurpleHazeEntity.BLAZING_HAZE
         );
     }
 
