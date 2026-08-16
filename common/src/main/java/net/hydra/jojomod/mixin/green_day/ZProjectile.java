@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.MatchEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Projectile.class)
@@ -78,6 +80,12 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
         }
     }
 
+    @Inject(method = "canHitEntity", at = @At(value = "HEAD"),cancellable = true)
+    private void roundabout$canHitEntity2(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
+        if (PowerTypes.isInADifferentExistence($$0x,this)){
+            cir.setReturnValue(false);
+        }
 
+    }
 
 }
