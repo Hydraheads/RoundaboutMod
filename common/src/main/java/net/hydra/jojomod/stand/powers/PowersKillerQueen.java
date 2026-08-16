@@ -2723,7 +2723,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             else if (this.bombBlock.level() != this.getSelf().level()) { this.defuseServer(); }
             else if (this.bombBlock.isRemoved()) {this.defuseServer();}
         }
-        else if (this.currentBombStatus == BOMB_ENTITY) {
+        else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB || this.currentBombStatus == ARROW_CONTACT) {
             if (this.bombEntity == null) { this.defuseServer(); }
             else if (!this.bombEntity.isAlive()) { this.defuseServer(); }
             else if (this.bombEntity instanceof LivingEntity LE && LE.isDeadOrDying()) {
