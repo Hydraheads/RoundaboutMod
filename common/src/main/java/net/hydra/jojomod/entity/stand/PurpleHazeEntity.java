@@ -15,7 +15,8 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             BLAZING_HAZE = 2,
             BLACK = 3,
             GREEN = 4,
-            NETHERITE = 5;
+            NETHERITE = 5,
+            MANGA = 6;
 
 
     public final AnimationState hideFists = new AnimationState();

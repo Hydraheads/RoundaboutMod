@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.D4CPortalBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -519,6 +520,7 @@ public class PowersD4C extends NewPunchingStand {
            } else {
                 return;
             }
+            PowerTypes.setPlaneOfExisting(self,(byte)1);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }

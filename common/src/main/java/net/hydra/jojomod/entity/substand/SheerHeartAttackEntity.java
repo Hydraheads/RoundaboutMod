@@ -257,8 +257,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
 	@Override
+	public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
+		return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && validatePowers(userEntity);
+	}
+	@Override
+	public void handleTickDownIfDupe(LivingEntity thisStand){
+		TickDown();
+	}
+	@Override
+	public boolean needsActive(){
+		return false;
+	}
+
+	@Override
 	public void tick() {
-		this.setFadeOut((byte)1);
 		validateUUID();
 
 		this.soundsDelay--;

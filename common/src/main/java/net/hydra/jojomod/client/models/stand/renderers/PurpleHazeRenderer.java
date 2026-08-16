@@ -19,6 +19,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public static final ResourceLocation BLACK = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/black.png");
     public static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/green.png");
     public static final ResourceLocation NETHERITE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/netherite.png");
+    public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/manga.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -28,6 +29,8 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public ResourceLocation getTextureLocation(PurpleHazeEntity entity) {
         switch (entity.getSkin())
         {
+            case (PurpleHazeEntity.MANGA):
+                return MANGA;
             case (PurpleHazeEntity.BLAZING_HAZE):
                 return BLAZING_HAZE;
             case (PurpleHazeEntity.BLACK):

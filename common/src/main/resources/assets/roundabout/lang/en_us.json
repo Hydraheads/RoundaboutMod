@@ -2883,6 +2883,7 @@
   "skins.roundabout.purple_haze.black": "Black&White",
   "skins.roundabout.purple_haze.green": "Green",
   "skins.roundabout.purple_haze.netherite": "Netherite",
+  "skins.roundabout.purple_haze.manga": "Manga",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
@@ -3641,8 +3642,11 @@
   "config.roundabout.meteorTrackingPower.desc": "How much the meteors track you in meteor tracking mode",
   "config.roundabout.PWCanonMovesOnly.name": "Planet Waves Canon Moves Only",
   "config.roundabout.PWCanonMovesOnly.desc": "Block all non-canon moves",
-  "config.roundabout.trackingmessage.name": "Tracking Message",
-  "config.roundabout.trackingmessage.desc": "Select how you want the feedback of changing the tracking mode.True=Message,False=Icon",
+  "config.roundabout.PWtrackingmessage.name": "Tracking Message",
+  "config.roundabout.PWtrackingmessage.desc": "Select how you want the feedback of changing the tracking mode.True=Message,False=Icon",
+
+  "config.roundabout.ThirdPunchCapsuleBreak.name": "Third Punch Capsule Break",
+  "config.roundabout.ThirdPunchCapsuleBreak.desc": "If your third punch in a combo breaks a pod on impact",
 
   "config.roundabout.enableSilverChariot.name": "Enable Silver Chariot",
   "config.roundabout.enableSilverChariot.desc": "Enable Silver Chariot",
@@ -4654,6 +4658,7 @@
   "config.roundabout.standLevelingSettings.name": "Stand Leveling",
   "config.roundabout.anubisSettings.name": "Anubis",
   "config.roundabout.planetWavesSettings.name": "Planet Waves",
+  "config.roundabout.PurpleHazeSettings.name": "Purple Haze",
   "config.roundabout.softAndWetSettings.name": "Soft And Wet",
   "config.roundabout.killerQueenSettings.name": "Killer Queen",
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
