@@ -82,6 +82,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public PlanetWavesSettings PlanetWavesSettings;
     @NestedOption(group = "modded")
+    public PurpleHazeSettings PurpleHazeSettings;
+    @NestedOption(group = "modded")
     public ManhattanTransferSettings manhattanTransferSettings;
     @NestedOption(group = "modded")
     public BlackSabbathSettings blackSabbathSettings;
@@ -814,7 +816,11 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean PWCanonMovesOnly;
         @BooleanOption(group = "inherit", value = false)
-        public Boolean trackingmessage;
+        public Boolean PWtrackingmessage;
+    }
+    public static class PurpleHazeSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean ThirdPunchCapsuleBreak;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
