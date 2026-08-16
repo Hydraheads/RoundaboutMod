@@ -53,8 +53,24 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean canCarrySightDisc(LivingEntity target) {
-        return !(target instanceof Sniffer || target instanceof Bat
+        return isSightDiscEnabled() && !(target instanceof Sniffer || target instanceof Bat
                 || target instanceof Dolphin || target instanceof Warden);
+    }
+
+    public static boolean isSightDiscEnabled() {
+        return ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled;
+    }
+
+    public static boolean isHearingDiscEnabled() {
+        return ClientNetworking.getAppropriateConfig().whitesnakeSettings.hearingDiscStealEnabled;
+    }
+
+    public static boolean isBodyDiscEnabled(byte type) {
+        return switch (type) {
+            case SIGHT -> isSightDiscEnabled();
+            case HEARING -> isHearingDiscEnabled();
+            default -> true;
+        };
     }
 
     private static boolean ejectSight(LivingEntity target) {
@@ -95,6 +111,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     private static ItemStack extractHearing(LivingEntity target, boolean storeOwner) {
+        if (!isHearingDiscEnabled()) return ItemStack.EMPTY;
         DiscBearer bearer = (DiscBearer) target;
         if (!bearer.roundabout$hasHearingDisc()) return ItemStack.EMPTY;
         ItemStack stack = new ItemStack(ModItems.HEARING_DISC);

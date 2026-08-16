@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
@@ -752,9 +753,13 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
                         entries.accept(MAX_STAND_DISC_WHITESNAKE);
-                        entries.accept(SIGHT_DISC);
+                        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled) {
+                            entries.accept(SIGHT_DISC);
+                        }
                         entries.accept(MEMORY_DISC);
-                        entries.accept(HEARING_DISC);
+                        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hearingDiscStealEnabled) {
+                            entries.accept(HEARING_DISC);
+                        }
                         entries.accept(JUMP_BACK_COMMAND_DISC);
                         entries.accept(ATTACK_COMMAND_DISC);
                         entries.accept(FORGET_COMMAND_DISC);

@@ -703,12 +703,12 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_WHITESNAKE = addToWIPTab(ITEMS.register(
             "max_whitesnake_disc", () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1),
                     new PowersWhitesnake(null), (StandDiscItem) STAND_DISC_WHITESNAKE.get())));
-    public static final RegistryObject<Item> SIGHT_DISC = addToWIPTab(ITEMS.register(
-            "sight_disc", () -> new SightDiscItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> SIGHT_DISC = ITEMS.register(
+            "sight_disc", () -> new SightDiscItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> MEMORY_DISC = addToWIPTab(ITEMS.register(
             "memory_disc", () -> new MemoryDiscItem(new Item.Properties().stacksTo(1))));
-    public static final RegistryObject<Item> HEARING_DISC = addToWIPTab(ITEMS.register(
-            "hearing_disc", () -> new HearingDiscItem(new Item.Properties().stacksTo(1))));
+    public static final RegistryObject<Item> HEARING_DISC = ITEMS.register(
+            "hearing_disc", () -> new HearingDiscItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> JUMP_BACK_COMMAND_DISC = addToWIPTab(ITEMS.register(
             "jump_back_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
                     CommandDiscItem.Command.JUMP_BACK)));
