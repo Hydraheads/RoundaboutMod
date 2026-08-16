@@ -958,7 +958,7 @@ public abstract class InputEvents implements IInputEvents {
         }
 
 
-        if (PowerTypes.isExistentiallyElsewhere(player)){
+        if (PowerTypes.isExistentiallyElsewhere(player) && !PowerTypes.canInteractInExistence(player)){
             roundabout$TryGuard();
             return;
         }

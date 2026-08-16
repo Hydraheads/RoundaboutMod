@@ -157,7 +157,7 @@ public class BlockWallEntity extends Entity {
         if ($$0.getEntity() != null){
             if (!level().isClientSide() && isWhiteAlbumWall && $$0.getEntity() instanceof LivingEntity LE &&
                     ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa
-            && $$0.is(ModDamageTypes.STAND)){
+            && $$0.is(ModDamageTypes.STAND_BRAWL)){
                 Vec3 current = position();
                 Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
                 Vec3 delta = target.subtract(current);
