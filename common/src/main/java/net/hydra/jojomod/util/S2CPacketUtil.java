@@ -445,4 +445,13 @@ public class S2CPacketUtil {
             );
 
     }
+    public static void syncPurpleHazePods(Player player, byte pods) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(
+                    SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value,
+                    pods
+            );
+        }
+    }
 }
