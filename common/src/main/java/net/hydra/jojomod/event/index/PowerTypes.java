@@ -283,10 +283,15 @@ public enum PowerTypes {
         }
         return false;
     }
+
     public static boolean isInADifferentExistence(Entity entity, Entity entityTwo){
         if (entity != null && entityTwo != null){
-            if (isExistentiallyElsewhere(entity) && isExistentiallyElsewhere(entityTwo)){
+            boolean ex1 = isExistentiallyElsewhere(entity);
+            boolean ex2 = isExistentiallyElsewhere(entityTwo);
+            if (ex1 && ex2){
                 return !isExistentiallyElsewhereTogether(entity,entityTwo);
+            } else if (ex1 || ex2) {
+                return true;
             }
         }
         return false;

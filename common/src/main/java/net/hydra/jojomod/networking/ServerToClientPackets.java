@@ -18,6 +18,7 @@ public class ServerToClientPackets {
             MANHATTAN_INVISIBILITY("manhattan_invis"),
             SyncDaze("sync_daze"),
             SyncGuard("sync_guard"),
+            SyncWhitesnakeDisc("sync_whitesnake_disc"),
             UpdateBarrageClash("update_barrage_clash_s2c"),
             SendConfig("send_config"),
             PlaySound("play_sound"),
@@ -58,6 +59,7 @@ public class ServerToClientPackets {
             SyncAllies("sync_allies"),
             SyncMoldRange("sync_mold_range"),
             SyncMoldDuration("sync_mold_duration"),
+            SyncPurpleHazePods("sync_purple_haze_pods"),
             AddEpitaph("add_epitaph"),
             ClearEpitaph("clear_epitaph");
 

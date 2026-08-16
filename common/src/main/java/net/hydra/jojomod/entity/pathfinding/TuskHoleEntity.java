@@ -11,6 +11,7 @@ import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -33,6 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -218,15 +220,35 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 }
             } else {
                 Vec3 pos = this.getPosition(0);
+                if (!this.level().getFluidState(this.blockPosition()).isEmpty()) {
+                    Vec3 ceiling = new Vec3(pos.x, Math.floor(pos.y)+this.level().getFluidState(this.blockPosition()).getOwnHeight(), pos.z);
+
+
+                    for (int i = 0; i < 5; i++) {
+                        float duration = 10;
+                        float t = this.tickCount % duration / duration * 5 + i * 0.3F;
+                        float swirl = (float) Math.pow(t, 1) * 0.2F;
+                        double sin = Math.sin(t) * swirl;
+                        double cos = Math.cos(t) * swirl;
+                        Vec3 A = ceiling.add(new Vec3(sin * swirl, 0, cos * swirl));
+                        Vec3 B = ceiling.add(new Vec3(-sin * swirl, 0, -cos * swirl));
+
+                        ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0F, 0F, 0F
+                        ), 1f), A.x, A.y + 0.04, A.z, 0, 0, 0, 0, 0.1);
+                        ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0F, 0F, 0F
+                        ), 1f), B.x, B.y + 0.04, B.z, 0, 0, 0, 0, 0.1);
+                    }
+                }
 
 
                 if (this.tickCount % 2 == 0) {
-                    float radius = 7.5F;
+                    float radius = 5F;
                     List<Entity> targets = MainUtil.genHitbox(this.level(),
                             pos.x, pos.y, pos.z,
                             radius, radius, radius);
                     targets.removeIf(target -> {
                         if (target instanceof Player P && P.getAbilities().flying) {return true;}
+                        if (target instanceof TuskHoleEntity) {return true;}
                         if (target.equals(this) || target.equals(this.getUser())) {return true;}
                         if (target.distanceTo(this) > radius) {return true;}
                         if ( ((!target.isAttackable() || !target.isAlive()) || target instanceof ItemEntity)   && target instanceof StandEntity) {return true;}
@@ -246,10 +268,10 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                         return false;
                     });
                     for (Entity target : targets) {
-                        Vec3 dir = target.getPosition(0).subtract(pos);
+                        Vec3 dir = target.getPosition(0).add(new Vec3(0,target.getEyeHeight()*0.5F,0)).subtract(pos);
                         float strength = (float) dir.length();
                         dir = dir.normalize();
-                        MainUtil.takeKnockbackWithY(target, (strength / radius) * 2, dir.x, dir.y, dir.z);
+                        MainUtil.takeKnockbackWithY(target, (strength / radius), dir.x, dir.y, dir.z);
                     }
                 }
             }
@@ -263,6 +285,12 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
 
     @Override
     protected void goDownInWater() {}
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
     @Override
     public boolean isNoGravity() {return super.isNoGravity() || this.isVortex();}
 

@@ -183,6 +183,10 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		this.animate(pEntity.shaSend, KillerQueenAnimations.sha_deploy, pAgeInTicks, 2F);
 		this.animate(pEntity.impale, KillerQueenAnimations.Impale, pAgeInTicks, 1.04F);
 		this.animate(pEntity.bitesTheDust, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1.04F);
+		this.animate(pEntity.itemThrowCharge, StarPlatinumAnimations.FINAL_PUNCH_WINDUP, pAgeInTicks, 1F);
+		this.animate(pEntity.arrowThrow, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4F);
+		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
+		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
     }
 
 

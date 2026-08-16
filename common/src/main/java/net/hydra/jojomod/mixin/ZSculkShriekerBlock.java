@@ -19,7 +19,8 @@ public class ZSculkShriekerBlock {
     private void RoundaboutCancelRenderTicks(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3,
                                              CallbackInfo ci){
         if (!$$0.isClientSide()){
-            if ($$3 != null && PowerTypes.isExistentiallyElsewhere($$3)) {
+            if ($$3 != null && PowerTypes.isExistentiallyElsewhere($$3) &&
+                    !PowerTypes.canInteractInExistence($$3)) {
                 ci.cancel();
                 return;
             }

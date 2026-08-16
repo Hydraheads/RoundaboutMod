@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,10 +62,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
-            case PurpleHazeEntity.ANIME -> {
-                return Component.translatable("skins.roundabout.purple_haze.anime");
-            }
-            //case PurpleHazeEntity.MIG_PLAGUE -> {return Component.translatable("skins.roundabout.purple_haze.mig_plague");}
+            case PurpleHazeEntity.ANIME -> {return Component.translatable("skins.roundabout.purple_haze.anime");}
+            case PurpleHazeEntity.BLAZING_HAZE -> {return Component.translatable("skins.roundabout.purple_haze.blazing_haze");}
+            case PurpleHazeEntity.BLACK -> {return Component.translatable("skins.roundabout.purple_haze.black");}
+            case PurpleHazeEntity.GREEN -> {return Component.translatable("skins.roundabout.purple_haze.green");}
+            case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -81,7 +84,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 PurpleHazeEntity.ANIME,
-                PurpleHazeEntity.MIG_PLAGUE
+                PurpleHazeEntity.BLAZING_HAZE,
+                PurpleHazeEntity.BLACK,
+                PurpleHazeEntity.GREEN,
+                PurpleHazeEntity.NETHERITE
         );
     }
 
@@ -271,6 +277,25 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ServerLevel serverLevel = (ServerLevel) level;
 
         purpleHazeFieldTicks--;
+        int totalDuration = purpleHazeFieldDistortionMode
+                ? DISTORTION_FIELD_DURATION
+                : PURPLE_HAZE_FIELD_DURATION;
+
+
+        int expansionDuration = 60;
+
+
+        int elapsedTicks = totalDuration - purpleHazeFieldTicks;
+
+
+        float expansionProgress = Math.min(
+                1.0F,
+                (float) elapsedTicks / expansionDuration
+        );
+
+
+        float effectRange = 1.0F +
+                (PURPLE_HAZE_RANGE - 1.0F) * expansionProgress;
 
         if (purpleHazeFieldTicks <= 0) {
             deactivatePurpleHazeField();
@@ -290,9 +315,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     y + 1.0,
                     z,
                     30,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     1.5,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     0.01
             );
 
@@ -305,37 +330,39 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     y + 1.0,
                     z,
                     45,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     1.5,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     0.02
             );
 
         } else {
+            if(standSkin==PurpleHazeEntity.ANIME) {
+                serverLevel.sendParticles(
+                        ModParticles.PURPLE_HAZE_SMOKE,
+                        x,
+                        y + 1.0,
+                        z,
+                        30,
+                        effectRange / 2,
+                        1.5,
+                        effectRange / 2,
+                        0.01
+                );
+            }else if(standSkin==PurpleHazeEntity.BLAZING_HAZE) {
+                serverLevel.sendParticles(
+                        ParticleTypes.LARGE_SMOKE,
+                        x,
+                        y + 1.0,
+                        z,
+                        30,
+                        effectRange / 2,
+                        1.5,
+                        effectRange / 2,
+                        0.01
+                );
+            }
 
-            serverLevel.sendParticles(
-                    ModParticles.PURPLE_HAZE_SMOKE,
-                    x,
-                    y + 1.0,
-                    z,
-                    30,
-                    PURPLE_HAZE_RANGE / 2,
-                    1.5,
-                    PURPLE_HAZE_RANGE / 2,
-                    0.01
-            );
-        }
-
-        int startupDelay;
-
-        if (purpleHazeFieldDistortionMode) {
-            startupDelay = DISTORTION_FIELD_DURATION - 40;
-        } else {
-            startupDelay = PURPLE_HAZE_FIELD_DURATION - 40;
-        }
-
-        if (purpleHazeFieldTicks > startupDelay) {
-            return;
         }
 
         List<Entity> entities = MainUtil.genHitbox(
@@ -343,9 +370,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 x,
                 y,
                 z,
-                PURPLE_HAZE_RANGE,
-                PURPLE_HAZE_RANGE,
-                PURPLE_HAZE_RANGE
+                effectRange,
+                effectRange,
+                effectRange
         );
 
         for (Entity entity : entities) {
@@ -353,14 +380,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!(entity instanceof LivingEntity living)) {
                 continue;
             }
-            if(purpleHazeFieldDistortionMode){
+            int effectDuration = living instanceof Player ? 200 : 300;
+
+            if (purpleHazeFieldDistortionMode) {
                 living.addEffect(
                         new MobEffectInstance(
                                 ModEffects.DISTORTION_VIRUS,
-                                300
+                                effectDuration
                         )
                 );
-            }else if(!purpleHazeFieldDistortionMode) {
+            } else {
                 living.addEffect(
                         new MobEffectInstance(
                                 ModEffects.HAZE_VIRUS,
@@ -383,15 +412,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 && self != null
                 && !self.level().isClientSide()) {
 
-            if (podsRemaining > 0) {
-                podsRemaining--;
-
-                if (self instanceof Player player) {
-                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                            (byte) podsRemaining
-                    );
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
                 }
-
 
                 activatePurpleHazeField(
                         entity.position(),
@@ -424,15 +448,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
-        if (podsRemaining > 0) {
-            podsRemaining--;
-
-            if (self instanceof Player player) {
-                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                        (byte) podsRemaining
-                );
+        if (getPods() > 0) {
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
             }
-
 
             activatePurpleHazeField(
                     entity.position(),
@@ -512,12 +531,52 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
-        //if(podsRemaining==6){
-          //  setSkillIcon(context, x, y, 4, StandIcons.DODGE, PowerIndex.SKILL_4);
-        //} else setSkillIcon(context, x, y, 4, StandIcons.ANUBIS_ALLURING_LIGHT, PowerIndex.SKILL_4);
+
         renderPodStock(context, x, y, 4);
     }
-
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        int startPos = 0;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.king_chop",
+                "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.epitaph",
+                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 1, "ability.roundabout.impale",
+               "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
+       /*  $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.roundabout.time_skip",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,0, "ability.roundabout.time_skip_2",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_2,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.time_skip_3",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_3,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getItemThrowLevel(), "ability.roundabout.item_grab",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getBloodSplashLevel(), "ability.roundabout.blood_splash",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_block", StandIcons.KING_CRIMSON_HANDS_ACTIVE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,getTimeEraseLevel(), "ability.roundabout.time_erase",
+                "instruction.roundabout.press_skill", StandIcons.TIME_ERASE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,getTimeEraseLevel(), "ability.roundabout.time_erase_clone",
+                "instruction.roundabout.passive", StandIcons.TIME_ERASE_2,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getHologramLevel(), "ability.roundabout.hologram",
+                "instruction.roundabout.press_skill_block", StandIcons.HOLOGRAM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.KING_CRIMSON_MINING,0,level,bypas));
+*/
+        return $$1;
+    }
     @Override
     public byte getMaxLevel() {
         return 5;
@@ -567,11 +626,34 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void renderPodStock(GuiGraphics context, int x, int y, int slot) {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
-        CooldownInstance cd = null;
+
         x += slot * 25;
         y -= 1;
-        RenderSystem.enableBlend();
-        context.blit(StandIcons.PODS_STOCKS, x - 3, y - 3, 0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+
+        byte pods = ((IPlayerEntity) this.getSelf()).roundabout$getPurpleHazePods();
+
+        if (pods == 6) {
+            context.blit(StandIcons.PODS_6, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 5) {
+            context.blit(StandIcons.PODS_5, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 4) {
+            context.blit(StandIcons.PODS_4, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 3) {
+            context.blit(StandIcons.PODS_3, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 2) {
+            context.blit(StandIcons.PODS_2, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 1) {
+            context.blit(StandIcons.PODS_1, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else {
+            context.blit(StandIcons.PODS_0, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        }
     }
     private static final float PURPLE_HAZE_RANGE = 8.0F;
 
@@ -581,7 +663,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int purpleHazeFieldTicks = 0;
 
     private static final int PURPLE_HAZE_FIELD_DURATION = 400;
-    private static final int DISTORTION_FIELD_DURATION = 200;
+    private static final int DISTORTION_FIELD_DURATION = 300;
 
 
     private Snowball purpleHazePod = null;
@@ -593,9 +675,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private int podsRemaining = MAX_PODS;
+    //private int podsRemaining = MAX_PODS;
+    private int getPods() {
+        return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
+    }
+    private void setPods(int pods) {
+        ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
 
-    private long lastPodResetDay = -1;
+        if (self instanceof Player player) {
+            S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
+        }
+    }
 
     private void tickPodReset() {
         if (self == null || self.level().isClientSide()) {
@@ -606,24 +696,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         long day = Math.floorDiv(dayTime, 24000L);
         long timeOfDay = Math.floorMod(dayTime, 24000L);
-
-        /*System.out.println(
+ /*System.out.println(
                 "PODS: " + podsRemaining +
                         " DAY: " + day +
                         " TIME: " + timeOfDay +
                         " LAST RESET: " + lastPodResetDay
         );*/
+        IPlayerEntity playerData = (IPlayerEntity) self;
 
-        if (timeOfDay >= 200 && lastPodResetDay != day) {
-            podsRemaining = MAX_PODS;
-            lastPodResetDay = day;
+        if (timeOfDay >= 200 &&
+                playerData.roundabout$getPurpleHazePodResetDay() != day) {
 
-            //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
+            setPods(MAX_PODS);
+
+            playerData.roundabout$setPurpleHazePodResetDay(day);
         }
+        //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
-
-
-
 
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
@@ -746,7 +835,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     public void ThrowPod() {
-        if (podsRemaining <= 0) {
+        if (getPods() <= 0) {
             return;
         }
 
@@ -782,13 +871,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.self.level().addFreshEntity(snowball);
 
             this.purpleHazePod = snowball;
-
-            podsRemaining--;
-
-            if (self instanceof Player player) {
-                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                        (byte) podsRemaining
-                );
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
             }
 
 

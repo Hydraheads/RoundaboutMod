@@ -112,6 +112,19 @@ public class S2CPacketUtil {
             );
         }
     }
+
+    public static void syncWhitesnakeDiscState(Player player, byte type, boolean present,
+                                                int sealTicks, int sealMaxTicks) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModMessageEvents.sendToPlayer(serverPlayer,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncWhitesnakeDisc.value,
+                    type,
+                    present,
+                    sealTicks,
+                    sealMaxTicks
+            );
+        }
+    }
     public static void updateBarrageClashS2C(Player player, int id, float clashProgress){
         if (player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
@@ -444,5 +457,14 @@ public class S2CPacketUtil {
                     dur,entity
             );
 
+    }
+    public static void syncPurpleHazePods(Player player, byte pods) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(
+                    SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value,
+                    pods
+            );
+        }
     }
 }
