@@ -83,7 +83,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.YELLOW);
     }
     @Override
     public Component ifWipListDev(){
@@ -1226,7 +1226,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 meteor.setTrackingUser(true);
             }
         }
-        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.trackingmessage=false) {
+        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.PWtrackingmessage=false) {
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
             }
@@ -1283,7 +1283,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 meteor.setTrackingUser(false);
             }
         }
-        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.trackingmessage=false) {
+        if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.PWtrackingmessage=false) {
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 PE.displayClientMessage(
                         Component.translatable(

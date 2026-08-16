@@ -66,6 +66,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public Component getSkinName(byte skinId) {
         switch (skinId) {
             case PurpleHazeEntity.ANIME -> {return Component.translatable("skins.roundabout.purple_haze.anime");}
+            case PurpleHazeEntity.MANGA -> {return Component.translatable("skins.roundabout.purple_haze.manga");}
             case PurpleHazeEntity.BLAZING_HAZE -> {return Component.translatable("skins.roundabout.purple_haze.blazing_haze");}
             case PurpleHazeEntity.BLACK -> {return Component.translatable("skins.roundabout.purple_haze.black");}
             case PurpleHazeEntity.GREEN -> {return Component.translatable("skins.roundabout.purple_haze.green");}
@@ -97,7 +98,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<Byte> getSkinList(){
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(PurpleHazeEntity.ANIME);
-        //$$1.add(PurpleHazeEntity.MANGA);
+        $$1.add(PurpleHazeEntity.MANGA);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
@@ -261,6 +262,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
+            case PowerIndex.POWER_1_BONUS ->
+                attemptVirusSpit();
             case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode Change
                 attemptDistortionModeChange();
             }
@@ -274,7 +277,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
-                this.tryPowerPacket(PowerIndex.POWER_1);
+                if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
+                    this.tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                }else this.tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
@@ -549,8 +554,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             effectDuration
                     ));
 
-                    if (!alreadyInfected) {
-                        addEXP(5);
+                    if (living != self && !alreadyInfected) {
+                        addEXP(2);
                     }
 
                 } else {
@@ -561,8 +566,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             300
                     ));
 
-                    if (!alreadyInfected) {
-                        addEXP(5);
+                    if (living != self && !alreadyInfected) {
+                        addEXP(3);
                     }
                 }
             }
@@ -573,24 +578,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public void punchImpact(Entity entity) {
         boolean thirdPunch = this.getActivePowerPhase() == 3;
-
         super.punchImpact(entity);
+        if(ClientNetworking.getAppropriateConfig().PurpleHazeSettings.ThirdPunchCapsuleBreak){
+            if (thirdPunch
+                    && entity != null
+                    && self != null
+                    && !self.level().isClientSide()) {
 
-        if (thirdPunch
-                && entity != null
-                && self != null
-                && !self.level().isClientSide()) {
+                if (getPods() > 0) {
+                    if (!(self instanceof Player pl && pl.isCreative())) {
+                        setPods(getPods() - 1);
+                    }
 
-            if (getPods() > 0) {
-                if (!(self instanceof Player pl && pl.isCreative())) {
-                    setPods(getPods() - 1);
-                }
-
-                activatePurpleHazeField(
-                        entity.position(),
-                        indistortionmode
-                );
+                    activatePurpleHazeField(
+                            entity.position(),
+                            indistortionmode
+                    );
             }
+        }
         }
     }
 
@@ -681,7 +686,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1_SNEAK);
         } else {
             if (canExecuteMoveWithLevel(4)) {
-                setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
+                if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
+                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.SKILL_1);
+                }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
 
@@ -717,7 +724,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
                 "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 1, "ability.roundabout.forward_barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 0, "ability.roundabout.forward_barrage",
                "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
@@ -727,11 +734,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,4, "ability.purple_haze.purple_smoke",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
                 "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,4, "ability.purple_haze.distortion_smoke",
                 "instruction.roundabout.passive", StandIcons.DISTORTION_MODE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.purple_haze.strangle",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,2, "ability.purple_haze.strangle",
                 "instruction.roundabout.press_skill", StandIcons.PURPLE_HAZE_STRANGLE,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
@@ -739,7 +746,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_FINAL_PUNCH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.PURPLE_HAZE_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,0, "ability.roundabout.stand_leap",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,3, "ability.roundabout.stand_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_PURPLE_HAZE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.purple_haze.capsule_count",
                 "instruction.roundabout.passive", StandIcons.PODS6NOBORDER,4,level,bypas));
@@ -847,7 +854,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private static final int POD_RECHARGE_TIME = 2400;
+    private static final int POD_RECHARGE_TIME = 1200;
     private int podRechargeTicks = 0;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
@@ -919,8 +926,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
             Distortion();
         }
-
-
     }
 
     public void Distortion() {
@@ -937,6 +942,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.setCooldown(PowerIndex.SKILL_1, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1,
+                        400);
+            }
+        }
+    }
+    public void attemptVirusSpit() {
+        if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
+            VirusSpit();
+        }
+    }
+
+    public void VirusSpit() {
+        if (!this.onCooldown(PowerIndex.POWER_1_BONUS)) {
+            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            self.removeEffect(ModEffects.VIRUS_IMMUNITY);
+
+            this.setCooldown(PowerIndex.POWER_1_BONUS, 400);
+            if (this.getSelf() instanceof ServerPlayer sp) {
+                S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.POWER_1_BONUS,
                         400);
             }
         }
