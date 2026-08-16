@@ -627,6 +627,14 @@ public class PowersSilverChariot extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getControlModeLevel(), "ability.roundabout.silver_chariot_control_mode",
                 "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON,2,level,bypas));
 
+        // Rapier slash
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99, getRapierSlashLevel(), "ability.roundabout.silver_chariot_rapier_slash",
+                "instruction.roundabout.press_skill_crouch", StandIcons.SILVER_CHARIOT_RAPIER_SLASH,1,level,bypas));
+
+        // Rapier spin
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80, getRapierSpinLevel(), "ability.roundabout.silver_chariot_rapier_spin",
+                "instruction.roundabout.press_skill", StandIcons.LOCKED,1,level,bypas));
+
         return $$1;
     }
 
@@ -637,31 +645,41 @@ public class PowersSilverChariot extends NewPunchingStand {
         */
         if (isHoldingSneak()) {
             if (isGuarding()) {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
 
             } else {
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 if (!this.getSelf().onGround() && canVault()) {
                     setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_VAULT, PowerIndex.GLOBAL_DASH);
                 } else if (canFallBrace()) {
                     setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_FALL_BRACE, PowerIndex.NO_CD);
                 }
+                if (canExecuteMoveWithLevel(getRapierSlashLevel())) {
+                    setSkillIcon(context, x, y, 1, StandIcons.SILVER_CHARIOT_RAPIER_SLASH, PowerIndex.POWER_1_SNEAK);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                }
             }
         } else {
             if (isGuarding()) {
-                if (canExecuteMoveWithLevel(getArmorShedLevel()) && isArmored()) {
-                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.NO_CD);
+                if (canExecuteMoveWithLevel(getArmorShedLevel())) {
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.POWER_2_BLOCK);
+                } else {
+                    setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
 
                 if (canExecuteMoveWithLevel(getStatueCuttingLevel())) {
-                    if (canCreateStatue()) {
-                        setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.NO_CD);
-                    }
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_STATUE_CUTTING, PowerIndex.POWER_4_BLOCK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
                 if (canExecuteMoveWithLevel(getSlabCuttingLevel())) {
-                    if (canCreateSlab()) {
-                        setSkillIcon(context, x, y, 1, StandIcons.SILVER_CHARIOT_SLAB_CUTTING, PowerIndex.NO_CD);
-                    }
+                    setSkillIcon(context, x, y, 1, StandIcons.SILVER_CHARIOT_SLAB_CUTTING, PowerIndex.POWER_1_BLOCK);
                 } else {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
@@ -675,12 +693,27 @@ public class PowersSilverChariot extends NewPunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
                 }
+
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             }
         }
     }
 
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (hasHandsOut()) {
+            if (slot != 3) {
+                return true;
+            }
+        }
+        if (!canCreateSlab() && slot == 1 && activeP == PowerIndex.POWER_1_BLOCK) {
+            return true;
+        }
+        if (!canCreateStatue() && slot == 4 && activeP == PowerIndex.POWER_4_BLOCK) {
+            return true;
+        }
         return super.isAttackIneptVisually(activeP, slot);
     }
 
@@ -1666,11 +1699,17 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public boolean canCreateSlab() {
-        BlockPos bp = getGrabPos(5);
-        BlockState bs = this.self.level().getBlockState(bp);
-        Block slab = MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.get(bs.getBlock());
-        if (slab != null && !(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, bp))) {
-            return true;
+        HitResult res = this.self.pick(5.0d, 0.0f, false);
+
+        if (res.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult bhr = (BlockHitResult) res;
+            BlockPos bp = bhr.getBlockPos();
+            BlockState bs = this.self.level().getBlockState(bp);
+
+            Block slab = MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.get(bs.getBlock());
+            if (slab != null && !(self instanceof Player pl && !MainUtil.canPlaceOnClaim(pl, bp))) {
+                return true;
+            }
         }
         return false;
     }
