@@ -154,13 +154,15 @@ public class StandDiscItem extends Item {
         CompoundTag $$4 = $$0.getTagElement("Memory");
         // && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)
         if ($$4 != null && $$1 != null) {
-            if (!standPowers.isSecondaryStand() && $$4.contains("Level")) {
+            if (standPowers != null && !standPowers.isSecondaryStand() && $$4.contains("Level")) {
                 if (ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
                     byte lvl = (byte) ($$4.getByte("Level") + 1);
-                    if (lvl < standPowers.getMaxLevel()) {
-                        $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", lvl).withStyle(ChatFormatting.GRAY));
-                    } else {
-                        $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+                    if(!(this.standPowers.isWip())) {
+                        if (lvl < standPowers.getMaxLevel()) {
+                            $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", lvl).withStyle(ChatFormatting.GRAY));
+                        } else {
+                            $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+                        }
                     }
                 }
             } if ($$4.contains("Skin")) {
@@ -168,15 +170,15 @@ public class StandDiscItem extends Item {
                 $$2.add(Component.literal(standPowers.getSkinName(skin).getString()).withStyle(ChatFormatting.BLUE));
             }
         } else {
-            if (!standPowers.isSecondaryStand()) {
+            if (standPowers != null && !standPowers.isSecondaryStand()) {
                 $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", 1).withStyle(ChatFormatting.GRAY));
             }
         }
 
-        if(this.standPowers.isWip()){
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_3").withStyle(ChatFormatting.RED));
+        if(standPowers != null && this.standPowers.isWip()){
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.roundabout.disc_wip_3").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
             $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDevStatus()));
