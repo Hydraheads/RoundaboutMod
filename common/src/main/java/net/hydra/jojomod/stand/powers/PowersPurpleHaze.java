@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
@@ -9,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleTypes;
@@ -276,7 +278,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 : PURPLE_HAZE_FIELD_DURATION;
 
 
-        int expansionDuration = 40;
+        int expansionDuration = 60;
 
 
         int elapsedTicks = totalDuration - purpleHazeFieldTicks;
@@ -374,14 +376,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!(entity instanceof LivingEntity living)) {
                 continue;
             }
-            if(purpleHazeFieldDistortionMode){
+            int effectDuration = living instanceof Player ? 200 : 300;
+
+            if (purpleHazeFieldDistortionMode) {
                 living.addEffect(
                         new MobEffectInstance(
                                 ModEffects.DISTORTION_VIRUS,
-                                300
+                                effectDuration
                         )
                 );
-            }else if(!purpleHazeFieldDistortionMode) {
+            } else {
                 living.addEffect(
                         new MobEffectInstance(
                                 ModEffects.HAZE_VIRUS,
@@ -526,7 +530,49 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         renderPodStock(context, x, y, 4);
     }
-
+    @Override
+    public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
+        List<AbilityIconInstance> $$1 = Lists.newArrayList();
+        int startPos = 0;
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
+                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
+                "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.king_chop",
+                "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.roundabout.epitaph",
+                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 1, "ability.roundabout.impale",
+               "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
+       /*  $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.roundabout.time_skip",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,0, "ability.roundabout.time_skip_2",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_2,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,0, "ability.roundabout.time_skip_3",
+                "instruction.roundabout.press_skill", StandIcons.TIME_SKIP_3,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getItemThrowLevel(), "ability.roundabout.item_grab",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_ITEM_GRAB,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.roundabout.dodge",
+                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,0, "ability.roundabout.vault",
+                "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getBloodSplashLevel(), "ability.roundabout.blood_splash",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_BLOOD_SPLASH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,getArmsLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_block", StandIcons.KING_CRIMSON_HANDS_ACTIVE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,getTimeEraseLevel(), "ability.roundabout.time_erase",
+                "instruction.roundabout.press_skill", StandIcons.TIME_ERASE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,getTimeEraseLevel(), "ability.roundabout.time_erase_clone",
+                "instruction.roundabout.passive", StandIcons.TIME_ERASE_2,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getHologramLevel(), "ability.roundabout.hologram",
+                "instruction.roundabout.press_skill_block", StandIcons.HOLOGRAM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.KING_CRIMSON_MINING,0,level,bypas));
+*/
+        return $$1;
+    }
     @Override
     public byte getMaxLevel() {
         return 5;
@@ -613,7 +659,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int purpleHazeFieldTicks = 0;
 
     private static final int PURPLE_HAZE_FIELD_DURATION = 400;
-    private static final int DISTORTION_FIELD_DURATION = 200;
+    private static final int DISTORTION_FIELD_DURATION = 300;
 
 
     private Snowball purpleHazePod = null;
