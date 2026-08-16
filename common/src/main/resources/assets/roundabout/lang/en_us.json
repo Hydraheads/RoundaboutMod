@@ -1064,7 +1064,9 @@
   "death.attack.ultraviolet.item": "%1$s saw things in a new light thanks to %2$s",
   "death.attack.chess_strike": "%1$s was put in checkmate by %2$s",
   "death.attack.chess_strike.item": "%1$s was put in checkmate by %2$s",
+  "death.attack.haze_virus.player": "%1$s was consumed by the Purple Haze.",
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
+  "death.attack.distortion_virus.player": "%1$s was consumed by the Distortion Virus.",
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
 
   "item.glaive.charge_power": "Charge Attack",
@@ -2844,6 +2846,7 @@
   "skins.roundabout.black_sabbath.beach": "Beach",
 
   "skins.roundabout.purple_haze.anime": "Anime",
+  "skins.roundabout.purple_haze.blazing_haze": "Blazing Haze",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",

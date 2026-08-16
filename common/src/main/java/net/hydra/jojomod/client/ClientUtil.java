@@ -888,7 +888,9 @@ public class ClientUtil {
                     MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
                     entity.lifetime = data;
 
-
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
+                    byte pods = (byte) vargs[0];
+                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
                 }
 
                 // theoretical deregister dynamic worlds packet

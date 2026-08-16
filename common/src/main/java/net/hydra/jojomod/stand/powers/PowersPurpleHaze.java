@@ -312,18 +312,32 @@ public class PowersPurpleHaze extends NewPunchingStand {
             );
 
         } else {
+            if(standSkin==PurpleHazeEntity.ANIME) {
+                serverLevel.sendParticles(
+                        ModParticles.PURPLE_HAZE_SMOKE,
+                        x,
+                        y + 1.0,
+                        z,
+                        30,
+                        PURPLE_HAZE_RANGE / 2,
+                        1.5,
+                        PURPLE_HAZE_RANGE / 2,
+                        0.01
+                );
+            }else if(standSkin==PurpleHazeEntity.BLAZING_HAZE) {
+                serverLevel.sendParticles(
+                        ParticleTypes.LARGE_SMOKE,
+                        x,
+                        y + 1.0,
+                        z,
+                        30,
+                        PURPLE_HAZE_RANGE / 2,
+                        1.5,
+                        PURPLE_HAZE_RANGE / 2,
+                        0.01
+                );
+            }
 
-            serverLevel.sendParticles(
-                    ModParticles.PURPLE_HAZE_SMOKE,
-                    x,
-                    y + 1.0,
-                    z,
-                    30,
-                    PURPLE_HAZE_RANGE / 2,
-                    1.5,
-                    PURPLE_HAZE_RANGE / 2,
-                    0.01
-            );
         }
 
         int startupDelay;
@@ -383,15 +397,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 && self != null
                 && !self.level().isClientSide()) {
 
-            if (podsRemaining > 0) {
-                podsRemaining--;
-
-                if (self instanceof Player player) {
-                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                            (byte) podsRemaining
-                    );
-                }
-
+            if (getPods() > 0) {
+                setPods(getPods() - 1);
 
                 activatePurpleHazeField(
                         entity.position(),
@@ -424,15 +431,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
-        if (podsRemaining > 0) {
-            podsRemaining--;
-
-            if (self instanceof Player player) {
-                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                        (byte) podsRemaining
-                );
-            }
-
+        if (getPods() > 0) {
+            setPods(getPods() - 1);
 
             activatePurpleHazeField(
                     entity.position(),
@@ -512,9 +512,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         }
-        //if(podsRemaining==6){
-          //  setSkillIcon(context, x, y, 4, StandIcons.DODGE, PowerIndex.SKILL_4);
-        //} else setSkillIcon(context, x, y, 4, StandIcons.ANUBIS_ALLURING_LIGHT, PowerIndex.SKILL_4);
+
         renderPodStock(context, x, y, 4);
     }
 
@@ -567,11 +565,34 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void renderPodStock(GuiGraphics context, int x, int y, int slot) {
         RenderSystem.enableBlend();
         context.setColor(1f, 1f, 1f, 1f);
-        CooldownInstance cd = null;
+
         x += slot * 25;
         y -= 1;
-        RenderSystem.enableBlend();
-        context.blit(StandIcons.PODS_STOCKS, x - 3, y - 3, 0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+
+        byte pods = ((IPlayerEntity) this.getSelf()).roundabout$getPurpleHazePods();
+
+        if (pods == 6) {
+            context.blit(StandIcons.PODS_6, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 5) {
+            context.blit(StandIcons.PODS_5, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 4) {
+            context.blit(StandIcons.PODS_4, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 3) {
+            context.blit(StandIcons.PODS_3, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 2) {
+            context.blit(StandIcons.PODS_2, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else if (pods == 1) {
+            context.blit(StandIcons.PODS_1, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        } else {
+            context.blit(StandIcons.PODS_0, x - 3, y - 3,
+                    0, 0, squareWidth, squareHeight, squareWidth, squareHeight);
+        }
     }
     private static final float PURPLE_HAZE_RANGE = 8.0F;
 
@@ -593,8 +614,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private int podsRemaining = MAX_PODS;
+    //private int podsRemaining = MAX_PODS;
+    private int getPods() {
+        return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
+    }
+    private void setPods(int pods) {
+        ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
 
+        if (self instanceof Player player) {
+            S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
+        }
+    }
     private long lastPodResetDay = -1;
 
     private void tickPodReset() {
@@ -606,22 +636,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         long day = Math.floorDiv(dayTime, 24000L);
         long timeOfDay = Math.floorMod(dayTime, 24000L);
-
         /*System.out.println(
                 "PODS: " + podsRemaining +
                         " DAY: " + day +
                         " TIME: " + timeOfDay +
                         " LAST RESET: " + lastPodResetDay
         );*/
-
         if (timeOfDay >= 200 && lastPodResetDay != day) {
-            podsRemaining = MAX_PODS;
+            setPods(MAX_PODS);
             lastPodResetDay = day;
-
-            //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
         }
+        //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
-
 
 
 
@@ -746,7 +772,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     public void ThrowPod() {
-        if (podsRemaining <= 0) {
+        if (getPods() <= 0) {
             return;
         }
 
@@ -783,13 +809,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             this.purpleHazePod = snowball;
 
-            podsRemaining--;
+            setPods(getPods() - 1);
 
-            if (self instanceof Player player) {
-                ((IPlayerEntity) player).roundabout$setPurpleHazePods(
-                        (byte) podsRemaining
-                );
-            }
 
 
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);
