@@ -728,25 +728,25 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,4, "ability.purple_haze.purple_smoke",
-                "instruction.roundabout.passive", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+                "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,4, "ability.purple_haze.distortion_smoke",
-                "instruction.roundabout.passive", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+                "instruction.roundabout.passive", StandIcons.DISTORTION_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.purple_haze.strangle",
-                "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_FINAL_PUNCH,2,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.PURPLE_HAZE_STRANGLE,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.purple_haze.falling_hit",
                 "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_FINAL_PUNCH,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.PURPLE_HAZE_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,0, "ability.roundabout.stand_leap",
                 "instruction.roundabout.press_skill_crouch", StandIcons.STAND_LEAP_PURPLE_HAZE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+118,0, "ability.purple_haze.capsule_count",
-                "instruction.roundabout.passive", StandIcons.PODS_6,4,level,bypas));
+                "instruction.roundabout.passive", StandIcons.PODS6NOBORDER,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+80,5, "ability.purple_haze.capsule_advanced_recharge",
-                "instruction.roundabout.passive", StandIcons.KING_CRIMSON_FINAL_PUNCH,4,level,bypas));
+                "instruction.roundabout.passive", StandIcons.ADVANCED_RECHARGE,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,0, "ability.roundabout.mining",
-                "instruction.roundabout.hold_attack", StandIcons.SOFT_MINING,0,level,bypas));
+                "instruction.roundabout.hold_attack", StandIcons.MINING,0,level,bypas));
         return $$1;
     }
     @Override
@@ -847,6 +847,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
+    private static final int POD_RECHARGE_TIME = 2400;
+    private int podRechargeTicks = 0;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
         return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
@@ -885,7 +887,34 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
+    private void tickPodRecharge() {
+        if (self == null || self.level().isClientSide()) {
+            return;
+        }
 
+        if (!(self instanceof Player player)) {
+            return;
+        }
+
+        IPlayerEntity playerData = (IPlayerEntity) player;
+
+        if (playerData.roundabout$getStandLevel() < 5) {
+            podRechargeTicks = 0;
+            return;
+        }
+
+        if (getPods() >= MAX_PODS) {
+            podRechargeTicks = 0;
+            return;
+        }
+
+        podRechargeTicks++;
+
+        if (podRechargeTicks >= POD_RECHARGE_TIME) {
+            setPods(Math.min(MAX_PODS, getPods() + 1));
+            podRechargeTicks = 0;
+        }
+    }
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
             Distortion();
@@ -923,6 +952,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.self.level().playSound(null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
             saveDiscAndSync(); // add this
+            // FEU I CANT FIGURE THIS OUT
+            //i dont know how to make it remain when leaving and re entering
 
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
@@ -1099,6 +1130,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPurpleHazePod();
             tickPodReset();
+            tickPodRecharge();
         }
     }
 

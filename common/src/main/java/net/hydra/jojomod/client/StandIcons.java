@@ -841,6 +841,8 @@ public class StandIcons {
     public static final ResourceLocation PODS_4 = Roundabout.location("textures/gui/icons/purple_haze/4_pods.png");
     public static final ResourceLocation PODS_5 = Roundabout.location("textures/gui/icons/purple_haze/5_pods.png");
     public static final ResourceLocation PODS_6 = Roundabout.location("textures/gui/icons/purple_haze/6_pods.png");
+    public static final ResourceLocation ADVANCED_RECHARGE = Roundabout.location("textures/gui/icons/purple_haze/recharge_advanced.png");
+    public static final ResourceLocation PODS6NOBORDER = Roundabout.location("textures/gui/icons/purple_haze/6_pods_no_border.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");
