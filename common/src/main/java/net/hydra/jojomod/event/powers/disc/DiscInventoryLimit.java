@@ -3,6 +3,8 @@ package net.hydra.jojomod.event.powers.disc;
 import net.hydra.jojomod.client.ClientNetworking;
 
 import net.hydra.jojomod.item.EmptyStandDiscItem;
+import net.hydra.jojomod.item.HearingDiscItem;
+import net.hydra.jojomod.item.SightDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.stand.powers.WhitesnakeControlInventory;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +40,8 @@ public final class DiscInventoryLimit {
     private static boolean isLimitedDisc(ItemStack stack) {
         if (stack.isEmpty() || !WhitesnakeControlInventory.isDisc(stack)) return false;
         Item item = stack.getItem();
+        if (item instanceof SightDiscItem && !WhitesnakeDiscUtil.isSightDiscEnabled()) return false;
+        if (item instanceof HearingDiscItem && !WhitesnakeDiscUtil.isHearingDiscEnabled()) return false;
         return !(item instanceof StandDiscItem)
                 && !(item instanceof EmptyStandDiscItem)
                 && !(item instanceof RecordItem);

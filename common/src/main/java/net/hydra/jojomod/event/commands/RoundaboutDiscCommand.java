@@ -58,6 +58,8 @@ public final class RoundaboutDiscCommand {
             Component.literal("Disc type must be memory, stand, sight, or hearing."));
     private static final SimpleCommandExceptionType INVALID_MEMORY_ENTITY = new SimpleCommandExceptionType(
             Component.literal("That ID is not a living mob that can own a memory disc."));
+    private static final SimpleCommandExceptionType DISC_DISABLED = new SimpleCommandExceptionType(
+            Component.literal("That disc type is disabled in the server config."));
 
     private RoundaboutDiscCommand() {
     }
@@ -152,6 +154,7 @@ public final class RoundaboutDiscCommand {
 
     private static int summonBodyDisc(CommandSourceStack source, byte discType)
             throws CommandSyntaxException {
+        requireBodyDiscEnabled(discType);
         ServerPlayer player = source.getPlayerOrException();
         ItemStack disc = new ItemStack(discType == WhitesnakeDiscUtil.SIGHT
                 ? ModItems.SIGHT_DISC : ModItems.HEARING_DISC);
@@ -206,6 +209,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertBodyDisc(CommandSourceStack source, LivingEntity target, byte discType, String value)
             throws CommandSyntaxException {
+        requireBodyDiscEnabled(discType);
         String normalized = value.toLowerCase(Locale.ROOT);
         if (normalized.equals("hand")) return insertHeldDisc(source, target, discType);
         if (!normalized.equals("true") && !normalized.equals("false")) {
@@ -230,6 +234,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertHeldDisc(CommandSourceStack source, LivingEntity target, byte discType)
             throws CommandSyntaxException {
+        requireBodyDiscEnabled(discType);
         ServerPlayer actor = source.getPlayerOrException();
         ItemStack held = matchingHeldDisc(actor, discType);
         if (held.isEmpty()) throw WRONG_HELD_DISC.create();
@@ -282,6 +287,7 @@ public final class RoundaboutDiscCommand {
             case "hearing" -> WhitesnakeDiscUtil.HEARING;
             default -> throw INVALID_EXTRACT_TYPE.create();
         };
+        requireBodyDiscEnabled(discType);
         ItemStack extracted = WhitesnakeDiscUtil.extractDiscStack(target, discType);
         if (extracted.isEmpty()) throw TARGET_MISSING_DISC.create();
 
@@ -307,5 +313,9 @@ public final class RoundaboutDiscCommand {
             case WhitesnakeDiscUtil.HEARING -> "hearing";
             default -> "unknown";
         };
+    }
+
+    private static void requireBodyDiscEnabled(byte discType) throws CommandSyntaxException {
+        if (!WhitesnakeDiscUtil.isBodyDiscEnabled(discType)) throw DISC_DISABLED.create();
     }
 }

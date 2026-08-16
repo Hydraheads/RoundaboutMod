@@ -271,6 +271,25 @@ public class PowersPurpleHaze extends NewPunchingStand {
         ServerLevel serverLevel = (ServerLevel) level;
 
         purpleHazeFieldTicks--;
+        int totalDuration = purpleHazeFieldDistortionMode
+                ? DISTORTION_FIELD_DURATION
+                : PURPLE_HAZE_FIELD_DURATION;
+
+
+        int expansionDuration = 40;
+
+
+        int elapsedTicks = totalDuration - purpleHazeFieldTicks;
+
+
+        float expansionProgress = Math.min(
+                1.0F,
+                (float) elapsedTicks / expansionDuration
+        );
+
+
+        float effectRange = 1.0F +
+                (PURPLE_HAZE_RANGE - 1.0F) * expansionProgress;
 
         if (purpleHazeFieldTicks <= 0) {
             deactivatePurpleHazeField();
@@ -290,9 +309,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     y + 1.0,
                     z,
                     30,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     1.5,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     0.01
             );
 
@@ -305,9 +324,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     y + 1.0,
                     z,
                     45,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     1.5,
-                    PURPLE_HAZE_RANGE / 2,
+                    effectRange / 2,
                     0.02
             );
 
@@ -319,9 +338,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                         y + 1.0,
                         z,
                         30,
-                        PURPLE_HAZE_RANGE / 2,
+                        effectRange / 2,
                         1.5,
-                        PURPLE_HAZE_RANGE / 2,
+                        effectRange / 2,
                         0.01
                 );
             }else if(standSkin==PurpleHazeEntity.BLAZING_HAZE) {
@@ -331,25 +350,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
                         y + 1.0,
                         z,
                         30,
-                        PURPLE_HAZE_RANGE / 2,
+                        effectRange / 2,
                         1.5,
-                        PURPLE_HAZE_RANGE / 2,
+                        effectRange / 2,
                         0.01
                 );
             }
 
-        }
-
-        int startupDelay;
-
-        if (purpleHazeFieldDistortionMode) {
-            startupDelay = DISTORTION_FIELD_DURATION - 40;
-        } else {
-            startupDelay = PURPLE_HAZE_FIELD_DURATION - 40;
-        }
-
-        if (purpleHazeFieldTicks > startupDelay) {
-            return;
         }
 
         List<Entity> entities = MainUtil.genHitbox(
@@ -357,9 +364,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 x,
                 y,
                 z,
-                PURPLE_HAZE_RANGE,
-                PURPLE_HAZE_RANGE,
-                PURPLE_HAZE_RANGE
+                effectRange,
+                effectRange,
+                effectRange
         );
 
         for (Entity entity : entities) {
@@ -398,7 +405,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 && !self.level().isClientSide()) {
 
             if (getPods() > 0) {
-                setPods(getPods() - 1);
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
 
                 activatePurpleHazeField(
                         entity.position(),
@@ -432,7 +441,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (getPods() > 0) {
-            setPods(getPods() - 1);
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
+            }
 
             activatePurpleHazeField(
                     entity.position(),
@@ -625,7 +636,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
             S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
         }
     }
-    private long lastPodResetDay = -1;
 
     private void tickPodReset() {
         if (self == null || self.level().isClientSide()) {
@@ -636,20 +646,23 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         long day = Math.floorDiv(dayTime, 24000L);
         long timeOfDay = Math.floorMod(dayTime, 24000L);
-        /*System.out.println(
+ /*System.out.println(
                 "PODS: " + podsRemaining +
                         " DAY: " + day +
                         " TIME: " + timeOfDay +
                         " LAST RESET: " + lastPodResetDay
         );*/
-        if (timeOfDay >= 200 && lastPodResetDay != day) {
+        IPlayerEntity playerData = (IPlayerEntity) self;
+
+        if (timeOfDay >= 200 &&
+                playerData.roundabout$getPurpleHazePodResetDay() != day) {
+
             setPods(MAX_PODS);
-            lastPodResetDay = day;
+
+            playerData.roundabout$setPurpleHazePodResetDay(day);
         }
         //System.out.println("PURPLE HAZE PODS RESET! DAY " + day);
     }
-
-
 
     public void attemptDistortion() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
@@ -808,9 +821,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             this.self.level().addFreshEntity(snowball);
 
             this.purpleHazePod = snowball;
-
-            setPods(getPods() - 1);
-
+            if (!(self instanceof Player pl && pl.isCreative())) {
+                setPods(getPods() - 1);
+            }
 
 
             this.setCooldown(PowerIndex.SNEAK_ATTACK, 200);

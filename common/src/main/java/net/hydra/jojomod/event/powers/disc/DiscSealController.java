@@ -18,6 +18,7 @@ public final class DiscSealController {
     }
 
     public static boolean seal(LivingEntity target, byte type) {
+        if (!WhitesnakeDiscUtil.isBodyDiscEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
         if (!config.discSealing || (config.discSealingPlayersOnly && !(target instanceof Player))) return false;
         if (config.discSealRequiresHallucination
