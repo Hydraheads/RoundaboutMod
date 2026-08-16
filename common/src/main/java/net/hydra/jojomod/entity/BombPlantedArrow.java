@@ -79,7 +79,6 @@ public class BombPlantedArrow extends Arrow {
         arrow.setXRot(getXRot());
         arrow.setPierceLevel(getPierceLevel());
         arrow.setDeltaMovement(getDeltaMovement());
-        //arrow.pickup = pickup;
 
         level().addFreshEntity(arrow);
         discard();
