@@ -62,10 +62,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
-            case PurpleHazeEntity.ANIME -> {
-                return Component.translatable("skins.roundabout.purple_haze.anime");
-            }
+            case PurpleHazeEntity.ANIME -> {return Component.translatable("skins.roundabout.purple_haze.anime");}
             case PurpleHazeEntity.BLAZING_HAZE -> {return Component.translatable("skins.roundabout.purple_haze.blazing_haze");}
+            case PurpleHazeEntity.BLACK -> {return Component.translatable("skins.roundabout.purple_haze.black");}
+            case PurpleHazeEntity.GREEN -> {return Component.translatable("skins.roundabout.purple_haze.green");}
+            case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
