@@ -576,7 +576,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 "instruction.roundabout.barrage", StandIcons.SILVER_CHARIOT_BARRAGE,0,level,bypas));
 
         // Offhand weapon attack
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,getOffhandWeaponLevel(), "ability.roundabout.silver_chariot_offhand_weapon_render",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.roundabout.silver_chariot_offhand_weapon_render",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.SILVER_CHARIOT_OFFHAND_WEAPON,0,level,bypas));
 
         // Dodge
@@ -608,12 +608,24 @@ public class PowersSilverChariot extends NewPunchingStand {
                 "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_STATUE_CUTTING,4,level,bypas));
 
         // Armor shed
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,0, "ability.roundabout.silver_chariot_armor_shed",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+80,getArmorShedLevel(), "ability.roundabout.silver_chariot_armor_shed",
                 "instruction.roundabout.press_skill_block", StandIcons.SILVER_CHARIOT_STATUE_CUTTING,2,level,bypas));
 
         // Rapier shot
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,getRapierShotLevel(), "ability.roundabout.silver_chariot_rapier_shot",
+                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,4,level,bypas));
 
         // Rapier shot platform
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+118,getRapierShotPlatformLevel(), "ability.roundabout.silver_chariot_rapier_shot_platform",
+                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_SINGLE,4,level,bypas));
+
+        // Self grab
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getSelfGrabLevel(), "ability.roundabout.silver_chariot_self_grab",
+                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_MOB,3,level,bypas));
+
+        // Control mode
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getControlModeLevel(), "ability.roundabout.silver_chariot_control_mode",
+                "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON,2,level,bypas));
 
         return $$1;
     }
@@ -1499,9 +1511,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getBarrageWindup() {
         if (isArmored()) {
-            return (int) (super.getBarrageWindup() * 2f/3f);
+            return (int) ((super.getBarrageWindup() * 2f) / 3f);
         }
-        return super.getBarrageWindup() / 2;
+        return (int) (super.getBarrageWindup() / 2f);
     }
 
     @Override

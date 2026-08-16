@@ -12,8 +12,8 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.BombPlantedArrow;
 import net.hydra.jojomod.entity.BombPlantedItemEntity;
-import net.hydra.jojomod.entity.FakeItemEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.StrayCatAirBubble;
@@ -76,7 +76,10 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
@@ -156,6 +159,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         BITES_THE_DUST = 7,
         BITES_THE_DUST_BIGGER = 8,
         ITEM_CONTACT = 9,
+        ARROW_BOMB = 10,
+        ARROW_CONTACT = 11,
 
     // Sheer Heart Attack Status things
         SHA_NONE = 0,
@@ -1835,45 +1840,56 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean defuseServer() {
-    	if (!this.isClient()) {
-            if (currentBombStatus == BOMB_BLOCK) {
-                this.bombBlock.discard();
-                this.bombBlock = null;
-                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
-                this.setCooldown(PowerIndex.SKILL_1, cooldownAmount);
-                if (this.getSelf() instanceof Player P) {
-                    S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
-                }
-            }else if (currentBombStatus == BOMB_ENTITY) {
-                this.bombEntity = null;
+        if (currentBombStatus == BOMB_BLOCK) {
+            this.bombBlock.discard();
+            this.bombBlock = null;
+            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.blockPlantCooldown;
+            this.setCooldown(PowerIndex.SKILL_1, cooldownAmount);
+            if (this.getSelf() instanceof Player P) {
+                S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_1, cooldownAmount);
+            }
+        }else if (currentBombStatus == BOMB_ENTITY || currentBombStatus == ARROW_BOMB || currentBombStatus == ARROW_CONTACT) {
+            if (bombEntity instanceof BombPlantedArrow AR) {
+                AR.defuse();
+            }
+            this.bombEntity = null;
+            if (currentBombStatus == BOMB_ENTITY) {
                 int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
                 this.setCooldown(PowerIndex.SKILL_2, cooldownAmount);
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2, cooldownAmount);
                 }
-
-            }else if (currentBombStatus == BOMB_BUBBLE) {
-                if (this.bombBubble != null) {
-                    this.bombBubble.setHasTimeLimit(true);
-                    this.bombBubble.setIsPlanted(false);
-                }
-                this.bombBubble = null;
-                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
-                this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
-                if (this.getSelf() instanceof Player P) {
-                    S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
-                }
-            }else if (currentBombStatus == BOMB_ITEM) {
-                if (bombPlantedItem != null) {
-                    bombPlantedItem.defuse();
-                    bombPlantedItem = null;
-                }
-                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown;
+            }else {
+                int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown + 40;
                 this.setCooldown(PowerIndex.SKILL_2_SNEAK, cooldownAmount);
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2_SNEAK, cooldownAmount);
                 }
             }
+
+        }else if (currentBombStatus == BOMB_BUBBLE) {
+            if (this.bombBubble != null) {
+                this.bombBubble.setHasTimeLimit(true);
+                this.bombBubble.setIsPlanted(false);
+            }
+            this.bombBubble = null;
+            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown;
+            this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
+            if (this.getSelf() instanceof Player P) {
+                S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
+            }
+        }else if (currentBombStatus == BOMB_ITEM) {
+            if (bombPlantedItem != null) {
+                bombPlantedItem.defuse();
+                bombPlantedItem = null;
+            }
+            int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown;
+            this.setCooldown(PowerIndex.SKILL_2_SNEAK, cooldownAmount);
+            if (this.getSelf() instanceof Player P) {
+                S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2_SNEAK, cooldownAmount);
+            }
+        }
+        if (!this.isClient()) {
 
             if ((currentBombStatus == BOMB_ENTITY || currentBombStatus == BUBBLE_CONTACT || currentBombStatus == BLOCK_CONTACT || currentBombStatus == ITEM_CONTACT) && bombEntity != null) {
                 ((StandUser)bombEntity).roundabout$setExplosionInflation(-1);
@@ -1918,17 +1934,20 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void itemContacted(Entity ent) {
-        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
-            this.bombEntity = ent;
-            syncBombStatus(ITEM_CONTACT);
+    public void arrowContacted(Entity ent) {
+        this.bombEntity = ent;
+        syncBombStatus(ARROW_CONTACT);
 
+        if (this.self instanceof Player) {
+            S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
+                    PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
+        }
+
+        if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             if (this.detonateTimer == -1) {
                 detonate();
                 //this.explode();
             }
-        }else {
-            //syncBombStatus(NONE);
         }
     }
 
@@ -2432,21 +2451,45 @@ public class PowersKillerQueen extends NewPunchingStand {
             ItemStack stack = ((Player)this.getSelf()).getInventory().getItem(plantInventorySlot);
 
             if (canItemPlantBomb(stack)) {
-                bombPlantedItem = new BombPlantedItemEntity(
-                        ModEntities.BOMB_PLANTED_ITEM,
-                        self.level()
-                );
+                if (stack.getItem() instanceof ArrowItem) {
+                    BombPlantedArrow arrow = new BombPlantedArrow(self.level(), self);
+                    arrow.host = self;
+                    arrow.setEffectsFromItem(stack);
+                    if (!(self instanceof Player PL && PL.getAbilities().instabuild)) {
+                        stack.shrink(1);
+                    }
+                    arrow.shootFromRotation(self, self.getXRot(), self.getYRot(), 0.0F, 0.8f * 3.0F, 1.0F);
+                    arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
 
-                bombPlantedItem.setItem(stack.copyWithCount(1));
-                stack.shrink(1);
+                    self.level().addFreshEntity(arrow);
+                    bombEntity = arrow;
+                    if (this.self instanceof Player) {
+                        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
+                                PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
+                    }
+                    syncBombStatus(ARROW_BOMB);
+                }else {
 
-                bombPlantedItem.setPos(self.getEyePosition());
-                bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.6f).add(0, 0.1, 0));
+                    bombPlantedItem = new BombPlantedItemEntity(
+                            ModEntities.BOMB_PLANTED_ITEM,
+                            self.level()
+                    );
 
-                bombPlantedItem.host = (Player)self;
+                    bombPlantedItem.setItem(stack.copyWithCount(1));
+                    if (!(self instanceof Player PL && PL.getAbilities().instabuild)) {
+                        stack.shrink(1);
+                    }
 
-                self.level().addFreshEntity(bombPlantedItem);
-                syncBombStatus(BOMB_ITEM);
+                    bombPlantedItem.setPos(self.getEyePosition());
+                    bombPlantedItem.setDeltaMovement(self.getViewVector(1).scale(0.6f).add(0, 0.1, 0));
+
+                    bombPlantedItem.host = (Player) self;
+
+                    self.level().addFreshEntity(bombPlantedItem);
+
+                    syncBombStatus(BOMB_ITEM);
+                }
+
                 this.setAttackTimeDuring(-15);
                 animateStand(StandEntity.ITEM_THROW);
             }
@@ -3542,8 +3585,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
                 }
-            }else if (bStatus == BOMB_ITEM || bStatus == ITEM_CONTACT) {
+            }else if (bStatus == BOMB_ITEM || bStatus == ITEM_CONTACT || bStatus == ARROW_BOMB || bStatus == ARROW_CONTACT) {
                 cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.itemPlantCooldown;
+                if (bStatus == ARROW_BOMB) { cooldownAmount += 40; }
+                if (bStatus == ARROW_CONTACT) { cooldownAmount += 200; }
+
                 this.setCooldown(PowerIndex.SKILL_2_SNEAK, cooldownAmount);
                 if (this.getSelf() instanceof Player P) {
                     S2CPacketUtil.sendCooldownSyncPacket(P, PowerIndex.SKILL_2_SNEAK, cooldownAmount);
@@ -3576,7 +3622,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 }
             } else if (bStatus == BOMB_ENTITY || bStatus == BLOCK_CONTACT
-                    || bStatus == BUBBLE_CONTACT || bStatus == ITEM_CONTACT) {
+                    || bStatus == BUBBLE_CONTACT || bStatus == ITEM_CONTACT
+                    || bStatus == ARROW_BOMB || bStatus == ARROW_CONTACT) {
                 target = getBombEntity();
                 if ((PowerTypes.isExistentiallyElsewhere(target))) {
                     if (((StandUser)target).roundabout$getStandPowers() instanceof
