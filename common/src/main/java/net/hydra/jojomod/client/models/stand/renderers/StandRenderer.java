@@ -143,6 +143,10 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
         (this.model).setAlpha(mobEntity.fadePercent);
 
+        if (mobEntity.fadePercent <= 0){
+            return;
+        }
+
         if (skipLighting(mobEntity)){
             super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, 15728880);
         } else {
