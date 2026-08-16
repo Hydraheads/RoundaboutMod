@@ -735,13 +735,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canAttack(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+        if (PowerTypes.isInADifferentExistence($$0,this)) {
             cir.setReturnValue(false);
             return;
         }
     }@Inject(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/targeting/TargetingConditions;)Z", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$canAttack2(LivingEntity $$0, TargetingConditions $$1, CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere($$0)) {
+        if (PowerTypes.isInADifferentExistence($$0,this)) {
             cir.setReturnValue(false);
             return;
         }
@@ -1512,7 +1512,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
         if (rdbt$this() instanceof Mob mb){
             LivingEntity terg = mb.getTarget();
-            if (terg != null && PowerTypes.isExistentiallyElsewhere(terg)){
+            if (terg != null && PowerTypes.isInADifferentExistence(terg,this)){
                 roundabout$deeplyRemoveAttackTarget();
                 if (((StandUser)terg).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
                     if (pkc.isErasingTime() && pkc.activeClone != null){
@@ -1523,14 +1523,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         LivingEntity terg2 = getLastHurtMob();
         LivingEntity terg3 = lastHurtByMob;
-        if (terg2 != null && PowerTypes.isExistentiallyElsewhere(terg2)){
+        if (terg2 != null && PowerTypes.isInADifferentExistence(terg2,this)){
             if (((StandUser)terg2).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
                 if (pkc.isErasingTime() && pkc.activeClone != null){
                     setLastHurtMob(pkc.activeClone);
                 }
             }
         }
-        if (terg3 != null && PowerTypes.isExistentiallyElsewhere(terg3)){
+        if (terg3 != null && PowerTypes.isInADifferentExistence(terg3,this)){
             if (((StandUser)terg3).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
                 if (pkc.isErasingTime() && pkc.activeClone != null){
                     setLastHurtByMob(pkc.activeClone);
@@ -4400,7 +4400,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$getVisibilityPercent(@javax.annotation.Nullable Entity $$0,CallbackInfoReturnable<Double> cir) {
-        if (PowerTypes.isExistentiallyElsewhere($$0)){
+        if (PowerTypes.isInADifferentExistence($$0,this)){
             cir.setReturnValue(0.0);
             return;
         }
@@ -4411,14 +4411,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "isPickable", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$isPickable(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             cir.setReturnValue(false);
             return;
         }
     }
     @Inject(method = "isPushable", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$isPushable(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             cir.setReturnValue(false);
             return;
         }
@@ -4439,7 +4439,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "pushEntities", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$pushEntities(CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             ci.cancel();
             return;
         }
@@ -4489,7 +4489,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Inject(method = "isAffectedByPotions", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void rooundabout$isAffectedByPotions(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)) {
+        if (PowerTypes.isErasingTime(this)) {
             cir.setReturnValue(false);
             return;
         }

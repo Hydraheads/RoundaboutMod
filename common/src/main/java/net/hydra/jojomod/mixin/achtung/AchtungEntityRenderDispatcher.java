@@ -35,11 +35,11 @@ public class AchtungEntityRenderDispatcher {
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
     protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int light, CallbackInfo ci) {
 
-        if (PowerTypes.isExistentiallyElsewhere(entity)){
+        if (PowerTypes.isInADifferentExistence(entity,ClientUtil.getPlayer())){
             if (!ClientUtil.isPlayer(entity)) {
                 if (entity instanceof StandEntity SE) {
                     if (entity instanceof FollowingStandEntity fse) {
-                        if (PowerTypes.isExistentiallyElsewhere(fse.getFollowing())) {
+                        if (PowerTypes.isInADifferentExistence(fse.getFollowing(),ClientUtil.getPlayer())) {
                             if (!ClientUtil.isPlayer(fse.getFollowing()) &&
                                     !(fse.getFollowing() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
                                             && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
@@ -48,7 +48,7 @@ public class AchtungEntityRenderDispatcher {
                             }
                         }
                     }
-                    if (PowerTypes.isExistentiallyElsewhere(SE.getUser())) {
+                    if (PowerTypes.isInADifferentExistence(SE.getUser(),ClientUtil.getPlayer())) {
                         if (!ClientUtil.isPlayer(SE.getUser()) &&
                                 !(SE.getUser() instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
                                         && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
