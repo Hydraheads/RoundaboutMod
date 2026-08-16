@@ -1509,6 +1509,19 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
             }
         }
+        if ((((LivingEntity)(Object)this)) instanceof Mob mb && mb.isLeashed()){
+            Entity holder = mb.getLeashHolder();
+            if (holder != null && PowerTypes.isInADifferentExistence(holder,this)){
+
+                if (((StandUser)holder).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                    pkc.isErasingTime() && pkc.activeClone != null){
+                    mb.setLeashedTo(pkc.activeClone,true);
+                } else {
+                    mb.dropLeash(true,true);
+                }
+            }
+        }
+
 
         if (rdbt$this() instanceof Mob mb){
             LivingEntity terg = mb.getTarget();
