@@ -83,7 +83,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 PurpleHazeEntity.ANIME,
-                PurpleHazeEntity.BLAZING_HAZE
+                PurpleHazeEntity.BLAZING_HAZE,
+                PurpleHazeEntity.BLACK,
+                PurpleHazeEntity.GREEN,
+                PurpleHazeEntity.NETHERITE
         );
     }
 

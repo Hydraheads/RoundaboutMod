@@ -12,7 +12,10 @@ public class PurpleHazeEntity extends FollowingStandEntity{
 
     public static final byte
             ANIME = 1,
-            BLAZING_HAZE = 2;
+            BLAZING_HAZE = 2,
+            BLACK = 3,
+            GREEN = 4,
+            NETHERITE = 5;
 
 
     public final AnimationState hideFists = new AnimationState();
