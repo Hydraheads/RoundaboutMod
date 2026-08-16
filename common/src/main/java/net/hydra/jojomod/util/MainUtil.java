@@ -1870,7 +1870,7 @@ public class MainUtil {
 
         BlockHitResult blockHit = new BlockHitResult(
                 new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
-                pos.relative(Direction.DOWN),false);
+                pos,false);
         if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
             barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),
                     barrier.getDefaultInstance(),blockHit));

@@ -177,6 +177,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
             self.level().scheduleTick(blockPos2, ModBlocks.WHITE_ALBUM_ICE_BLOCK, Mth.nextInt(self.getRandom(), 110, 130));
         }
     }
+
+    public boolean useSledgehammer(){
+        return ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims;
+    }
     @Override
     public void onChangedBlock(BlockPos blockPos){
         if (self instanceof Animal ah && ah.getPassengers() != null && !ah.getPassengers().isEmpty() &&
@@ -1314,7 +1318,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         int cooldown = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezeBlocksCooldown;
         this.setCooldown(PowerIndex.SKILL_4_SNEAK, cooldown);
         if (!this.self.level().isClientSide() && this.self instanceof Player PL && !PL.isInWater()){
-            if (MainUtil.getIsGamemodeApproriateForGrief(PL)){
+            if (MainUtil.getIsGamemodeApproriateForGrief(PL) && !useSledgehammer()){
                 int radius = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.blockFreezeRadius;
                 BlockPos center = self.blockPosition();
                 boolean canFreezeWater = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.freezesSurfaceWater;
@@ -1338,13 +1342,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                     if (self.level().isUnobstructed(Blocks.ICE.defaultBlockState(),
                                             pos.above(), CollisionContext.empty())) {
                                         if (self instanceof Player pl) {
-                                            if (MainUtil.canPlaceOnClaim(pl, pos)){
-                                                self.level().setBlock(
-                                                        pos,
-                                                        Blocks.ICE.defaultBlockState(),
-                                                        Block.UPDATE_ALL
-                                                );
-                                            }
+                                            self.level().setBlock(
+                                                    pos,
+                                                    Blocks.ICE.defaultBlockState(),
+                                                    Block.UPDATE_ALL
+                                            );
                                         }
 
                                     }
@@ -1354,13 +1356,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                                 if (replacement != null) {
                                     if (self instanceof Player pl) {
-                                        if (MainUtil.canPlaceOnClaim(pl, pos)){
-                                            self.level().setBlock(
-                                                    pos,
-                                                    replacement.defaultBlockState(),
-                                                    Block.UPDATE_ALL
-                                            );
-                                        }
+                                        self.level().setBlock(
+                                                pos,
+                                                replacement.defaultBlockState(),
+                                                Block.UPDATE_ALL
+                                        );
                                     }
                                 }
                             }
@@ -1376,9 +1376,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                     Block frozen = MainUtil.FREEZABLE_BLOCK_ITEMS.get(blockItem.getBlock());
 
+                    ItemStack stack2 = new ItemStack(frozen);
+                    stack2.setCount(stack.getCount());
                     self.setItemSlot(
                             EquipmentSlot.MAINHAND,
-                            new ItemStack(frozen)
+                            stack2
                     );
                 }
             }
@@ -1396,6 +1398,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     SoundSource.PLAYERS, 1F, 1F);
         }
     }
+
+
 
     int graceticks = 0;
     @Override
