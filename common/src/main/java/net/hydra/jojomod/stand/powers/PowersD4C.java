@@ -2,6 +2,8 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.block.D4CPortalBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -43,8 +45,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -469,6 +473,48 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
+    public boolean placeOne(BlockPos pos){
+        BlockState state = self.level().getBlockState(pos);
+        boolean water = state.getBlock().equals(Blocks.WATER);
+        if (state.isAir() || water){
+            BlockState state2 = ModBlocks.D4C_PORTAL.defaultBlockState();
+            if (water) {
+                state2.trySetValue(D4CPortalBlock.WATERLOGGED, true);
+            }
+            self.level().setBlock(pos, state2,3);
+            return true;
+        }
+        return false;
+    }
+    public void worldMergingServer(){
+        if (isEligable()){
+            Direction dir = RotationUtil.getGravityDirection(self);
+            BlockPos basePos = self.getOnPos().relative(dir.getOpposite());
+            if (dir != Direction.DOWN){
+                basePos = self.getOnPos();
+            }
+            if (placeOne(basePos)) {
+                placeOne(basePos.relative(dir.getOpposite()));
+            } else if (placeOne(basePos.north())){
+                placeOne(basePos.north().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.south())){
+                placeOne(basePos.south().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.east())){
+                placeOne(basePos.east().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.west())) {
+                placeOne(basePos.west().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.above())){
+                    placeOne(basePos.above().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.below())){
+                    placeOne(basePos.below().relative(dir.getOpposite()));
+            } else if (placeOne(basePos.relative(dir.getOpposite()))){
+                placeOne(basePos.relative(dir.getOpposite()).relative(dir.getOpposite()));
+           } else {
+                return;
+            }
+            enactEligability();
+        }
+    }
     public void spawnCloneServer(){
         if (isEligable()){
             enactEligability();
@@ -498,6 +544,9 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_NORMAL -> {
+                worldMergingClient();
+            }
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
@@ -510,6 +559,11 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+        }
+    }
+    public void worldMergingClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_1) && isEligable()) {
+            tryPowerPacket(PowerIndex.POWER_1);
         }
     }
     public boolean seesBetween = false;
@@ -840,6 +894,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.chopAttack();
         } else if (move == PowerIndex.POWER_2){
             spawnCloneServer();
+            return false;
+        }else if (move == PowerIndex.POWER_1){
+            worldMergingServer();
             return false;
         }
         return super.setPowerOther(move,lastMove);

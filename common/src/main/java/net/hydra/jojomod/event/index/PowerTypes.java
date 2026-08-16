@@ -284,19 +284,6 @@ public enum PowerTypes {
         return false;
     }
 
-    public static boolean isInADifferentExistenceRendering(Entity entity){
-        Player entityTwo = ClientUtil.getPlayer();
-        if (entity != null && entityTwo != null){
-            boolean ex1 = isExistentiallyElsewhere(entity);
-            boolean ex2 = isExistentiallyElsewhere(entityTwo);
-            if (ex1 && ex2){
-                return !isExistentiallyElsewhereTogether(entity,entityTwo);
-            } else if (ex1 || ex2) {
-                return true;
-            }
-        }
-        return false;
-    }
     public static boolean isInADifferentExistence(Entity entity, Entity entityTwo){
         if (entity != null && entityTwo != null){
             boolean ex1 = isExistentiallyElsewhere(entity);
