@@ -80,6 +80,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -643,6 +644,16 @@ public class ClientUtil {
                     boolean guardBroken = (boolean)vargs[1];
                     ((StandUser) player).roundabout$setGuardPoints(guardPoints);
                     ((StandUser)player).roundabout$setGuardBroken(guardBroken);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncWhitesnakeDisc.value)) {
+                    byte type = (byte) vargs[0];
+                    boolean present = (boolean) vargs[1];
+                    int sealTicks = (int) vargs[2];
+                    int sealMaxTicks = (int) vargs[3];
+                    DiscBearer bearer = (DiscBearer) player;
+                    if (type == WhitesnakeDiscUtil.SIGHT) bearer.roundabout$setHasSightDisc(present);
+                    else if (type == WhitesnakeDiscUtil.MEMORY) bearer.roundabout$setHasMemoryDisc(present);
+                    else if (type == WhitesnakeDiscUtil.HEARING) bearer.roundabout$setHasHearingDisc(present);
+                    bearer.roundabout$setDiscSeal(type, sealTicks, sealMaxTicks);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
                     /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];
