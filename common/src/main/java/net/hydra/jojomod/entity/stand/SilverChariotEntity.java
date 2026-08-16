@@ -127,23 +127,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public void travel(Vec3 vec3) {
-        // if (this.isControlledByLocalInstance()) {
-        //    if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
-        //        C2SPacketUtil.updatePilot(this);
-        //    }
-        // }
-        if (isRemoteControlled()) {
-            if (this.level().isClientSide() && this.isControlledByLocalInstance()) {
-                super.travel(vec3);
-                C2SPacketUtil.updatePilot(this);
-            } else {
-                Vec3 velocity = getDeltaMovement();
-                setDeltaMovement(0.0D, velocity.y, 0.0D);
-                super.travel(Vec3.ZERO);
-            }
-            return;
-        }
         super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
     }
 
     @Override
@@ -155,6 +144,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
         } else {
             controlBodyRotationActive = false;
         }
+        // super.tick();
     }
 
     private boolean controlBodyRotationActive;
@@ -193,7 +183,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
+        return super.skipAttackInteraction(attacker);
     }
 
     public boolean isControlModeActive() {
@@ -227,17 +217,17 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean isNoGravity() {
-        return isRemoteControlled();
+        return true;
     }
 
     @Override
     public boolean lockPos() {
-        return !isRemoteControlled();
+        return true;
     }
 
     @Override
     public boolean forceVisualRotation() {
-        return false;
+        return true;
     }
 
     @Override
@@ -262,6 +252,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
         }
         return super.isControlledByLocalInstance();
+    }
+
+    @Override
+    protected float getFlyingSpeed() {
+        return 0.20F;
     }
 
     public void setControlMode(boolean active) {
