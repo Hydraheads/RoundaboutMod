@@ -21,12 +21,12 @@ public abstract class AbstractBodyDiscItem extends Item {
         super(properties);
     }
 
-    protected abstract boolean canImplant(LivingEntity target);
+    protected abstract boolean canImplant(ItemStack stack, LivingEntity target);
     protected abstract void implant(ItemStack stack, LivingEntity target);
     protected abstract boolean showPersonality();
 
     private boolean implantAndConsume(ItemStack stack, LivingEntity target, LivingEntity user) {
-        if (!canImplant(target)) {
+        if (!canImplant(stack, target)) {
             return false;
         }
         if (!target.level().isClientSide()) {

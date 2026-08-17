@@ -244,16 +244,13 @@ public final class DiscItemData {
     }
 
     public static boolean hasPlayerControl(LivingEntity entity) {
-        DiscBearer bearer = (DiscBearer) entity;
-        if (!bearer.roundabout$hasMemoryDisc()) return WhitesnakeDiscUtil.hasUsableStandDisc(entity);
-        return bearer.roundabout$getMemoryPersonality() == MemoryPersonality.PLAYER;
+        return !isLobotomized(entity);
     }
 
     public static boolean canUseAbilities(LivingEntity entity) {
         DiscBearer bearer = (DiscBearer) entity;
         if (!bearer.roundabout$hasMemoryDisc()) return WhitesnakeDiscUtil.hasUsableStandDisc(entity);
-        return !(entity instanceof Player)
-                || bearer.roundabout$getMemoryPersonality() == MemoryPersonality.PLAYER;
+        return true;
     }
 
     public static boolean isLobotomized(LivingEntity entity) {
@@ -273,8 +270,14 @@ public final class DiscItemData {
 
     public static boolean canSelfImplantHeldMemory(Player player) {
         DiscBearer bearer = (DiscBearer) player;
-        return !bearer.roundabout$ownsMemoryDisc()
-                && (player.getMainHandItem().getItem() instanceof MemoryDiscItem
-                || player.getOffhandItem().getItem() instanceof MemoryDiscItem);
+        if (bearer.roundabout$ownsMemoryDisc()) return false;
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offhand = player.getOffhandItem();
+        return isPlayerMemory(mainHand) || isPlayerMemory(offhand);
+    }
+
+    private static boolean isPlayerMemory(ItemStack stack) {
+        return stack.getItem() instanceof MemoryDiscItem
+                && getPersonality(stack) == MemoryPersonality.PLAYER;
     }
 }

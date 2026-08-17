@@ -183,6 +183,9 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     @Inject(method = "tick", at = @At("TAIL"))
     private void roundabout$tickDiscEffects(CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
+        if (!level().isClientSide() && living instanceof ServerPlayer player) {
+            WhitesnakeDiscUtil.ejectMobMemoryFromPlayer(player);
+        }
         DreamingMemoryController.tick(living);
         if (WhitesnakeDiscUtil.canCarrySightDisc(living) && !roundabout$hasSightDisc() && !level().isClientSide()
                 && (!living.hasEffect(MobEffects.BLINDNESS)
@@ -321,11 +324,9 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Override
     public void roundabout$setHasMemoryDisc(boolean value) {
-        boolean changed = entityData.get(ROUNDABOUT$HAS_MEMORY) != value;
         entityData.set(ROUNDABOUT$HAS_MEMORY, value);
         roundabout$setDiscSeal(WhitesnakeDiscUtil.MEMORY, 0, 0);
         roundabout$bodyDiscStateDirty = true;
-        if (changed && (Object) this instanceof ServerPlayer player) MemoryAiController.clearPlayerState(player);
     }
     @Override
     public boolean roundabout$hasHearingDisc() {
@@ -483,9 +484,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Override
     public void roundabout$setMemoryPersonality(byte value) {
-        boolean changed = entityData.get(ROUNDABOUT$MEMORY_PERSONALITY) != value;
         entityData.set(ROUNDABOUT$MEMORY_PERSONALITY, value);
-        if (changed && (Object) this instanceof ServerPlayer player) MemoryAiController.clearPlayerState(player);
     }
     @Override
     public CompoundTag roundabout$getMemoryReading() {
@@ -577,7 +576,6 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
             if (next > 0) continue;
             if (type == WhitesnakeDiscUtil.MEMORY) {
                 if (living instanceof Mob mob && mob.isNoAi()) mob.setNoAi(false);
-                if (living instanceof ServerPlayer player) MemoryAiController.clearPlayerState(player);
             }
         }
     }
