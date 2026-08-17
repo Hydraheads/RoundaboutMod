@@ -610,9 +610,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 && Minecraft.getInstance().options.keySprint.isDown();
         entity.setSprinting(sprinting);
         boolean swimming = !meltingMode && entity.isInWater();
+        boolean inLava = !meltingMode && entity.isInLava();
         entity.setSwimming(swimming && sprinting);
         if (entity.isSwimming()) entity.setPose(Pose.SWIMMING);
-        if (swimming) whitesnake.controlSwim(input.jumping, input.shiftKeyDown);
+        if (swimming || inLava) whitesnake.controlSwim(input.jumping, input.shiftKeyDown);
         float movementSpeed = meltingMode ? 0.06F : input.shiftKeyDown ? 0.03F : sprinting ? 0.13F : 0.1F;
         entity.setSpeed(inputSpeedModifiers(movementSpeed));
         entity.setYHeadRot(entity.getYRot());
@@ -642,7 +643,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             meltingCrawlGraceTicks = 0;
             meltingCrawlTransitionTicks = 0;
         }
-        if (!hoverEnabled && !swimming && input.jumping && entity.onGround()) {
+        if (!hoverEnabled && !swimming && !inLava && input.jumping && entity.onGround()) {
             whitesnake.controlJump();
         }
     }
