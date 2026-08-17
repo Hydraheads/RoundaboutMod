@@ -1443,7 +1443,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 LifeTrackerEntity cross = ModEntities.LIFE_TRACKER.create(this.getSelf().level());
                 if (cross != null) {
                     tracker = cross;
-
+                    PowerTypes.copyPlaneOfExisting(self,cross);
                     Vec3 bam = new Vec3(0,
                             (this.self.getBbHeight()/2),
                             0);
@@ -2621,6 +2621,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
                 groundent.setLifeSpan(200);
+                PowerTypes.copyPlaneOfExisting(self,groundent);
                 groundent.setPos(this.self.position());
                 groundent.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
@@ -2654,6 +2655,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
                         this.getSelf().getYRot(), 0, 0.12F, 0);
                 thrownBlockOrItem.fireStormCreated = isUsingFirestorm();
+                PowerTypes.copyPlaneOfExisting(self,thrownBlockOrItem);
                 if (this.hurricane != null){
 
                     thrownBlockOrItem.setSize(this.hurricane.getSize());

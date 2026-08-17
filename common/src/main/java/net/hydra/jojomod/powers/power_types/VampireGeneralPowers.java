@@ -1630,6 +1630,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 self.hurtMarked = true;
                 self.hasImpulse = true;
                 shootAuraBlast(auraProjectile);
+                PowerTypes.copyPlaneOfExisting(self,auraProjectile);
                 this.getSelf().level().addFreshEntity(auraProjectile);
                 self.swing(InteractionHand.MAIN_HAND, true);
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
@@ -1660,6 +1661,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             RipperEyesProjectile auraProjectile = getRipperEyesProjectile();
             if (auraProjectile != null) {
                 shootRipperEyes(auraProjectile);
+                PowerTypes.copyPlaneOfExisting(self,auraProjectile);
                 this.getSelf().level().addFreshEntity(auraProjectile);
             }
         }

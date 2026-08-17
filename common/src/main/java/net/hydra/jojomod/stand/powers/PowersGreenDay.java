@@ -23,6 +23,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 
@@ -654,7 +655,7 @@ public class PowersGreenDay extends NewPunchingStand {
                         SLE.setXRot(this.self.getXRot());
                         SLE.setYRot(this.self.getYRot());
                         SLE.setPos(this.getRayBlock(this.self, 2).add(0, 1, 0));
-
+                        PowerTypes.copyPlaneOfExisting(self,SLE);
                         SLE.setDeltaMovement(0, 0.7, 0);
                         this.self.level().addFreshEntity(SLE);
                     }
@@ -771,6 +772,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 Off_hand_entity = SAE;
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
+                PowerTypes.copyPlaneOfExisting(self,SAE);
                 SAE.setYRot(this.self.getYRot());
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.OFF_HAND).copy());
@@ -1038,6 +1040,7 @@ public class PowersGreenDay extends NewPunchingStand {
                 SAE.setUser(this.self);
                 SAE.setXRot(this.self.getXRot());
                 SAE.setYRot(this.self.getYRot());
+                PowerTypes.copyPlaneOfExisting(self,SAE);
                 SAE.setPos(getRayBlock(this.self,0.5f).add(0,-0.3,0));
                 SAE.setItemInHand(InteractionHand.MAIN_HAND,this.self.getItemInHand(InteractionHand.MAIN_HAND).copy());
                 this.self.level().addFreshEntity(SAE);
@@ -1404,6 +1407,7 @@ public class PowersGreenDay extends NewPunchingStand {
         if(SLE != null) {
             SLE.setUser(this.self);
             SLE.setXRot(this.self.getXRot());
+            PowerTypes.copyPlaneOfExisting(self,SLE);
             SLE.setYRot(this.self.getYRot());
             SLE.setPos(this.self.getPosition(1).add(0,0.2,0));
             this.self.level().addFreshEntity(SLE);

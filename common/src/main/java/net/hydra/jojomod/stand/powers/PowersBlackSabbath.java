@@ -308,6 +308,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                             BE.setDeltaMovement(Vec3.ZERO);
                             self.setDeltaMovement(Vec3.ZERO);
                             BE.incFadeOut((byte) 1);
+                            PowerTypes.copyPlaneOfExisting(self,BE);
                             this.self.level().addFreshEntity(BE);
                         }
                     }
@@ -340,6 +341,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
                 $$4.setPickUpDelay(0);
                 $$4.setDeltaMovement(Vec3.ZERO);
+                PowerTypes.copyPlaneOfExisting(self,$$4);
                 ojiroSasame.level().addFreshEntity($$4);
             }
         }
@@ -663,6 +665,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 BE.setDeltaMovement(Vec3.ZERO);
                 self.setDeltaMovement(Vec3.ZERO);
                 BE.incFadeOut((byte) 1);
+                PowerTypes.copyPlaneOfExisting(self,BE);
                 this.self.level().addFreshEntity(BE);
         }
     }

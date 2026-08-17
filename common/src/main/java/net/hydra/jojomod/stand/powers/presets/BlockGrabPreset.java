@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -853,6 +854,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                     standEntity.getHeldItem());
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getSelf().getUUID());
+            PowerTypes.copyPlaneOfExisting(self,$$4);
             this.getSelf().level().addFreshEntity($$4);
         }
     }
@@ -912,6 +914,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                             animateStand(StandEntity.BLOCK_RETRACT);
                                             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 10);
                                             this.setCooldown(PowerIndex.SKILL_2, 10);
+                                            PowerTypes.copyPlaneOfExisting(self,itemDrop);
                                             this.getSelf().level().addFreshEntity(itemDrop);
                                             return true;
 
@@ -1129,6 +1132,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         Boat $$11 = ((IBoatItemAccess) BE).roundabout$getBoat(this.getSelf().level(), this.getSelf().position().add(0, 3, 0));
                         $$11.setVariant(((IBoatItemAccess) BE).roundabout$getType());
                         $$11.setYRot(this.getSelf().getYRot());
+                        PowerTypes.copyPlaneOfExisting(self,$$11);
                         this.getSelf().level().addFreshEntity($$11);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if ($$11.startRiding(standEntity)) {
@@ -1153,6 +1157,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             $$7.setCustomName(stack.getHoverName());
                         }
                         $$7.setYRot(this.getSelf().getYRot());
+                        PowerTypes.copyPlaneOfExisting(self,$$7);
                         this.getSelf().level().addFreshEntity($$7);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0,3,0));
                         if ($$7.startRiding(standEntity)) {
@@ -1170,7 +1175,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         roadRoller.setYRot(this.getSelf().getYRot());
 
                         roadRoller.setPos(standEntity.getX(), standEntity.getY() + standEntity.getBbHeight() * 0.5, standEntity.getZ());
-
+                        PowerTypes.copyPlaneOfExisting(self,roadRoller);
                         this.getSelf().level().addFreshEntity(roadRoller);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if (roadRoller.startRiding(standEntity)) {

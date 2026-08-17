@@ -490,31 +490,52 @@ public class ClientUtil {
     }
 
     public static void handleRoadRollerAmbientSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleSkatingSounds(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleTwisterSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
     public static void handleWeepsSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
 
     public static void handleRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
         Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
     }
     public static void stopRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         if (roadRollerMixingSound != null) {
             Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
             roadRollerMixingSound = null;

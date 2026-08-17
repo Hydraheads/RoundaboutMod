@@ -230,6 +230,7 @@ public class ZombieFate extends VampiricFate {
                     setZombieFishCount(Mth.clamp(getZombieFishCount() - 1, 0, 5));
                 }
                 if (zombiefish != null) {
+                    PowerTypes.copyPlaneOfExisting(self,zombiefish);
                     this.getSelf().level().addFreshEntity(zombiefish);
                     //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }

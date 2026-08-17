@@ -1049,6 +1049,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     standEntity.getHeldItem());
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getSelf().getUUID());
+            PowerTypes.copyPlaneOfExisting(self,$$4);
             this.getSelf().level().addFreshEntity($$4);
         }
     }

@@ -925,6 +925,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     IceTwisterEntity twister = new IceTwisterEntity(
                             this.self.level(), twisterPos.getCenter().subtract(0, 0.5F, 0));
                     addIceEntity(twister);
+                    PowerTypes.copyPlaneOfExisting(self,twister);
                     this.getSelf().level().addFreshEntity(twister);
                     twister.user = self;
                     twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterLifespan;
@@ -977,6 +978,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     level, pos.getCenter().add(0, 0.5F, 0));
             addIceEntity(twister);
             twister.user = self;
+            PowerTypes.copyPlaneOfExisting(self,twister);
             level.addFreshEntity(twister);
             twister.lifeSpan = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.gentlyWeepsLifespanv2;
         }
@@ -1128,6 +1130,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         wall.isWhiteAlbumWall = true;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
+                        PowerTypes.copyPlaneOfExisting(self,wall);
                         self.level().addFreshEntity(wall);
                     }
                 }
@@ -1302,6 +1305,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         bubble.setUser(self);
                         bubble.setOwner(self);
                         bubble.shootThis2(pl, 1.75F);
+                        PowerTypes.copyPlaneOfExisting(self,bubble);
                         self.level().addFreshEntity(bubble);
                     }
                 }
@@ -1493,6 +1497,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         wall.timing = 200;
                         wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                         addIceEntity(wall);
+                        PowerTypes.copyPlaneOfExisting(self,wall);
                         self.level().addFreshEntity(wall);
                     }
                 }

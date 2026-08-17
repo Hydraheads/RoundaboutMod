@@ -350,6 +350,7 @@ public class PowersRatt extends NewDashPreset {
         if (stand instanceof RattEntity RE) {
             RE.setMaster(this.self);
             RE.absMoveTo(pos.x(),pos.y(),pos.z());
+            PowerTypes.copyPlaneOfExisting(self,RE);
             RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
             this.getStandUserSelf().roundabout$standMount(RE);
             this.self.level().addFreshEntity(RE);

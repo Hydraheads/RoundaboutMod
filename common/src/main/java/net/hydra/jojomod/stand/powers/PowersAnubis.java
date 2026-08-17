@@ -751,6 +751,7 @@ public class PowersAnubis extends NewDashPreset {
                     slipstreamTimer = 3;
                     AnubisSlipstreamEntity ASE = new AnubisSlipstreamEntity(ModEntities.ANUBIS_SLIPSTREAM,this.getSelf().level(),60,lastSlipstream);
                     ASE.setPos(this.getSelf().getPosition(1F));
+                    PowerTypes.copyPlaneOfExisting(self,ASE);
                     this.getSelf().level().addFreshEntity(ASE);
                     lastSlipstream = ASE;
                 }
