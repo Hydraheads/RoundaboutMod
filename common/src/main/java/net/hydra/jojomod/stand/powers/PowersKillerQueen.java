@@ -1758,7 +1758,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             KQ.setHeldItem(ItemStack.EMPTY);
             syncBombStatus(ARROW_BOMB);
-            arrow.level().playSound(null, arrow, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            playSoundIfPossible(self.level(),arrow,ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS,  1.0F, 1.3F);
         }
         this.setAttackTimeDuring(-20);
     }

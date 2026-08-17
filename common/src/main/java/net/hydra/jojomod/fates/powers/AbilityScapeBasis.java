@@ -1978,6 +1978,46 @@ public class AbilityScapeBasis {
         }
     }
 
+    public boolean playSoundIfPossible(Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self) && entity != null) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    String str = $$3.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$2.getRange($$5);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                soundId.toString(),
+                                str,
+                                $$4,
+                                $$5,
+                                entity
+                        );
+                    }
+                }
+            } else {
+                level.playSound(null,entity,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
     public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){

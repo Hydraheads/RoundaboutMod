@@ -330,7 +330,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                     ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
                 } if(ojiroSasame instanceof ServerPlayer P && (!P.isCreative() || P.isSpectator())){
                     this.eatFingerServer();
-                    ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
+                    playSoundIfPossible(self.level(),ojiroSasame,SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
                 }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
                         ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.20, ojiroSasame.getZ(),

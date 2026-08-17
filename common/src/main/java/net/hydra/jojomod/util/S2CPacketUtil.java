@@ -7,6 +7,7 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
@@ -440,6 +441,14 @@ public class S2CPacketUtil {
             ModMessageEvents.sendToPlayer(SP,
                     ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value,
                     a,b,c,string,string2,x,y
+            );
+        }
+    }
+    public static void sendSafeSound(Player player, String string, String string2, float x, float y, Entity entity) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value,
+                    string,string2,x,y,entity.getId()
             );
         }
     }

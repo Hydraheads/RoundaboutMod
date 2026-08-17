@@ -908,19 +908,36 @@ public class ClientUtil {
                         Minecraft.getInstance().getSoundManager().play($$10);
                     }
 
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
+                    String str1 = (String) vargs[0];
+                    String str2 = (String) vargs[1];
+                    SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
+                            (ResourceLocation.tryParse(str1));
+                    SoundSource soundSource =
+                            SoundSource.valueOf(str2);
+                    float xrot = (float) vargs[2];
+                    float yrot = (float) vargs[3];
+                    int seedThis = (int) vargs[4];
+                    Entity entity = player.level().getEntity(seedThis);
+                    if (entity != null && soundEvent != null){
+                        Minecraft.getInstance().getSoundManager().play(
+                                new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
+                    }
+
                 }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {
                     float data = (float) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.range = data;
-
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.range = data;
+                    }
                 }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
                     int data = (int) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.lifetime = data;
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.lifetime = data;
+                    }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
