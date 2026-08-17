@@ -378,6 +378,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         }
         if (!level().isClientSide()) {
             tickPressurePlates(controlled);
+            tickControlBlockInteractions();
             tickMeltingHoverMeter(controlled);
             tickMeltingAcid(controlled);
         }
@@ -427,6 +428,14 @@ public class WhitesnakeEntity extends FollowingStandEntity {
                 }
             }
         }
+    }
+
+    private void tickControlBlockInteractions() {
+        if (!isControlModeActive()) return;
+        checkInsideBlocks();
+        BlockPos pos = getOnPos();
+        BlockState state = level().getBlockState(pos);
+        state.getBlock().stepOn(level(), pos, state, this);
     }
 
     private void updateControlVisibility(boolean controlled) {
