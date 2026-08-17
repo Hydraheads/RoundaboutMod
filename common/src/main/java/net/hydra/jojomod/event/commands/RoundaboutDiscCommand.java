@@ -32,6 +32,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -60,6 +61,8 @@ public final class RoundaboutDiscCommand {
             Component.literal("That ID is not a living mob that can own a memory disc."));
     private static final SimpleCommandExceptionType DISC_DISABLED = new SimpleCommandExceptionType(
             Component.literal("That disc type is disabled in the server config."));
+    private static final SimpleCommandExceptionType MOB_MEMORY_PLAYER_TARGET = new SimpleCommandExceptionType(
+            Component.literal("Mob memory discs cannot be inserted into players."));
 
     private RoundaboutDiscCommand() {
     }
@@ -198,6 +201,9 @@ public final class RoundaboutDiscCommand {
             case "zombie" -> MemoryPersonality.ZOMBIE;
             default -> throw INVALID_MEMORY_TYPE.create();
         };
+        if (target instanceof Player && personality != MemoryPersonality.PLAYER) {
+            throw MOB_MEMORY_PLAYER_TARGET.create();
+        }
         bearer.roundabout$setMemoryPersonality(personality);
         bearer.roundabout$setHasMemoryDisc(true);
         bearer.roundabout$setMemoryDiscOwnerId("");
@@ -238,6 +244,10 @@ public final class RoundaboutDiscCommand {
         ServerPlayer actor = source.getPlayerOrException();
         ItemStack held = matchingHeldDisc(actor, discType);
         if (held.isEmpty()) throw WRONG_HELD_DISC.create();
+        if (discType == WhitesnakeDiscUtil.MEMORY && target instanceof Player
+                && DiscItemData.getPersonality(held) != MemoryPersonality.PLAYER) {
+            throw MOB_MEMORY_PLAYER_TARGET.create();
+        }
 
         boolean inserted;
         if (discType == WhitesnakeDiscUtil.STAND) {

@@ -19,21 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
 public class BombPlantedArrow extends Arrow {
-    private static final EntityDataAccessor<ItemStack> DATA_ITEM = SynchedEntityData.defineId(BombPlantedArrow.class, EntityDataSerializers.ITEM_STACK);
-    public LivingEntity host = null;
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.getEntityData().define(DATA_ITEM, ItemStack.EMPTY);
-    }
-
-    public void setItem(ItemStack $$0) { this.getEntityData().set(DATA_ITEM, $$0); }
-
-    public ItemStack getItem() {
-        return this.getEntityData().get(DATA_ITEM);
-    }
-
     public BombPlantedArrow(EntityType<? extends Arrow> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -44,13 +29,13 @@ public class BombPlantedArrow extends Arrow {
 
     public BombPlantedArrow(Level $$0, LivingEntity $$1) {
         super($$0, $$1);
-        host = $$1;
     }
 
     public void tick() {
         super.tick();
         if (!level().isClientSide()) {
-            if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+
+            if (getOwner() == null || !(getOwner().isAlive() && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity == this)) {
                 defuse();
             }
@@ -61,14 +46,9 @@ public class BombPlantedArrow extends Arrow {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         Entity target = result.getEntity();
-        if (target != host && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+        if (target != getOwner() && (getOwner() != null && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
             PKQ.arrowContacted(target);
         }
-    }
-
-    public void setEffectsFromItem(ItemStack itemStack) {
-        super.setEffectsFromItem(itemStack);
-        setItem(itemStack);
     }
 
     public void defuse() {
