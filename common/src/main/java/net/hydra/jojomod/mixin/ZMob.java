@@ -632,7 +632,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
-        if (!(getType().builtInRegistryHolder().key().location().getNamespace().equals("mutantmonsters"))) {
+        String nameSpace = getType().builtInRegistryHolder().key().location().getNamespace();
+        if (!(nameSpace.equals("mutantmonsters")) && !(nameSpace.equals("walkers"))) {
             if (this.goalSelector != null) {
                 this.goalSelector.getAvailableGoals().stream()
                         .map(WrappedGoal::getGoal)
