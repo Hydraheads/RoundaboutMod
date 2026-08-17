@@ -379,7 +379,7 @@ public class PowersAnubis extends NewDashPreset {
 
         Vec3 pos = this.getSelf().getPosition(1);
 
-        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.ALLURING_LIGHT,
+        sendParticlesIfPossible(self.level(),ModParticles.ALLURING_LIGHT,
                 pos.x,
                 pos.y + this.getSelf().getEyeHeight(),
                 pos.z,
@@ -1202,7 +1202,7 @@ public class PowersAnubis extends NewDashPreset {
             if (!entities.isEmpty()) {
                 Entity e = entities.get(0);
                 Vec3 pos = e.getPosition(0F).add(0, e.getEyeHeight() / 2, 0);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+                sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
                 playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT, SoundSource.PLAYERS, 1F, 0.9F + (float) (Math.random() * 0.2));
             } else {
                 playMissSound(this.getSelf().level());
@@ -1259,7 +1259,7 @@ public class PowersAnubis extends NewDashPreset {
     public void punchImpact(Entity entity) {
 
         Vec3 pos = entity.getPosition(0F).add(0,entity.getEyeHeight()/2,0);
-        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+        sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
         playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_SWING_EVENT,SoundSource.PLAYERS,1F,pitch);
 
@@ -1441,7 +1441,7 @@ public class PowersAnubis extends NewDashPreset {
             if (!isClient()) {
                 Entity e = entities.get(0);
                 Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+                sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
                 if (this.getSelf() instanceof Player P) {
                     P.crit(e);
                 }
@@ -1454,7 +1454,7 @@ public class PowersAnubis extends NewDashPreset {
         if (this.attackTimeDuring < 16) {
             if (!this.getSelf().level().isClientSide()) {
                 if(this.attackTimeDuring%4==0) {
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                    sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                             this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -1519,7 +1519,7 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
-        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+        sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
         playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
     }
@@ -1567,7 +1567,7 @@ public class PowersAnubis extends NewDashPreset {
                 MainUtil.takeKnockbackWithY(e, 1.5F, vec3.x, -0.15, vec3.z);
 
                 Vec3 pos = e.getPosition(0F).add(0, e.getEyeHeight() / 2, 0);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+                sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
 
                 playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS, 1F, 0.9F + ((float) Math.random() * 0.2F));
             }
@@ -1816,7 +1816,7 @@ public class PowersAnubis extends NewDashPreset {
         }
 
         Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
-        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
+        sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
         playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
     }
@@ -2304,7 +2304,7 @@ public class PowersAnubis extends NewDashPreset {
                         this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
                         playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY() + PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
                         PE.displayClientMessage(
@@ -3018,7 +3018,7 @@ public class PowersAnubis extends NewDashPreset {
                         Vec3 cvec = new Vec3(0, 0.1, 0);
                         Vec3 rDir = dir.scale(0.2F);
 
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
                                 rDir.x,
@@ -3054,7 +3054,7 @@ public class PowersAnubis extends NewDashPreset {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
                         user.roundabout$setStandSkin(b);

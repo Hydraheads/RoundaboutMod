@@ -629,7 +629,7 @@ public class PowersCalifornia extends NewDashPreset {
                         setLeadTarget(LV);
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT,
                                 SoundSource.PLAYERS, 1F, (float) (0.99f + Math.random() * 0.03f));
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MAGIC_HEART,
+                        sendParticlesIfPossible(self.level(),ModParticles.MAGIC_HEART,
                                 LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                                 0, 0, 1,0, 0.15);
                     } else {
@@ -840,7 +840,7 @@ public class PowersCalifornia extends NewDashPreset {
                     if (leaded.distanceTo(self) > getCKBrange() && PowersCalifornia.canSteal(leaded)){
                         if (self instanceof Creeper cr){
                             self.teleportTo(leaded.getX(),leaded.getY(),leaded.getZ());
-                            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                           sendParticlesIfPossible(self.level(),ModParticles.PINK_SMOKE,
                                     this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                                     12, 2, 0.5,2, 0.015);
                             cr.ignite();
@@ -997,7 +997,7 @@ public class PowersCalifornia extends NewDashPreset {
                 rewindSnap.loadTime(self);
                 setCooldown(PowerIndex.SKILL_2,ClientNetworking.getAppropriateConfig().
                         californiaKingBedSettings.doNotHurtMeRewindCD);
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+               sendParticlesIfPossible(self.level(),ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                         12, 2, 0.5,2, 0.015);
             }
@@ -1025,7 +1025,7 @@ public class PowersCalifornia extends NewDashPreset {
                     entity.setDeltaMovement(0,0.15,0);
                     ItemStack piece = getPieceType(entity, exp, true, -1);
                     MainUtil.addItem(sp,piece);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.QUESTION,
+                   sendParticlesIfPossible(self.level(),ModParticles.QUESTION,
                             entity.getEyePosition().x, entity.getEyePosition().y+0.5F, entity.getEyePosition().z,
                             0, 0, 0.5,0, 0.15);
                 }
@@ -1224,7 +1224,7 @@ public class PowersCalifornia extends NewDashPreset {
                 if (release){
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CHESS_PIECE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
 
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                   sendParticlesIfPossible(self.level(),ModParticles.PINK_SMOKE,
                             this.getSelf().getX(), this.getSelf().getY() + 1, this.getSelf().getZ(),
                             5, 0.5, 0.5,0.5, 0.015);
                 }
@@ -1255,10 +1255,10 @@ public class PowersCalifornia extends NewDashPreset {
 
     @Override
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+       sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
+       sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.FALLING_DUST, Blocks.WHITE_WOOL.defaultBlockState()),
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }
@@ -1270,7 +1270,7 @@ public class PowersCalifornia extends NewDashPreset {
                 ((StandUser)self).roundabout$deeplyRemoveAttackTarget();
                 if (self instanceof Mob mb){
                     ((IMob)mb).roundabout$setConfusionTicks(50);
-                    ((ServerLevel) self.level()).sendParticles(ModParticles.QUESTION,
+                    sendParticlesIfPossible(self.level(),ModParticles.QUESTION,
                             self.getEyePosition().x, self.getEyePosition().y+0.5F, self.getEyePosition().z,
                             0, 0, 0.5,0, 0.15);
                 }
@@ -1294,7 +1294,7 @@ public class PowersCalifornia extends NewDashPreset {
         Vec3 lvec = self.getLookAngle();
         Position pn = self.getEyePosition().add(lvec.scale(3));
         Vec3 rev = lvec.reverse();
-        ((ServerLevel) this.self.level()).sendParticles(ModParticles.MAGIC_HEART, pn.x(),
+        sendParticlesIfPossible(self.level(),ModParticles.MAGIC_HEART, pn.x(),
                 pn.y(), pn.z(),
                 0,
                 rev.x, rev.y, rev.z,

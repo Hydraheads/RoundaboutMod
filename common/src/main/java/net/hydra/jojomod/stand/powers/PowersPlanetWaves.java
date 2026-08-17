@@ -306,7 +306,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 ipe.roundabout$setUnlockedBonusSkin(true);
                 playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                         PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         10, 0.5, 0.5, 0.5, 0.2);
                 user.roundabout$setStandSkin(PlanetWavesEntity.COSMIC); //COSMIC
@@ -857,7 +857,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         BlockState state = level.getBlockState(pos);
         if (state.isAir()) return;
 
-        level.sendParticles(
+        sendParticlesIfPossible(self.level(),
                 new BlockParticleOption(ParticleTypes.BLOCK, state),
                 standSurfacePos.x,
                 standSurfacePos.y,
@@ -1316,7 +1316,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 foundMeteor = true;
 
                 if (level instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             meteor.getX(), meteor.getY(), meteor.getZ(),
                             10,
