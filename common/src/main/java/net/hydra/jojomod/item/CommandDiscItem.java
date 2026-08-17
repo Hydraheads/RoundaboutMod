@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.disc.CommandDiscController;
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.hydra.jojomod.event.powers.disc.MemoryAiController;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ExplosionUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -45,11 +46,12 @@ public final class CommandDiscItem extends Item {
     }
 
     public boolean applyCommand(Entity target, LivingEntity whitesnakeUser) {
+        if (!(target instanceof LivingEntity living) || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return false;
         boolean applied = switch (command) {
-            case JUMP_BACK -> target instanceof LivingEntity living && applyJumpBack(living, whitesnakeUser);
-            case ATTACK -> target instanceof LivingEntity living && applyAttack(living, whitesnakeUser);
-            case FORGET -> target instanceof LivingEntity living && applyForget(living, whitesnakeUser);
-            case EXPLOSIVE -> target instanceof LivingEntity living && applyExplosionCommand(living, whitesnakeUser);
+            case JUMP_BACK -> applyJumpBack(living, whitesnakeUser);
+            case ATTACK -> applyAttack(living, whitesnakeUser);
+            case FORGET -> applyForget(living, whitesnakeUser);
+            case EXPLOSIVE -> applyExplosionCommand(living, whitesnakeUser);
         };
         if (applied && !target.level().isClientSide()) {
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,

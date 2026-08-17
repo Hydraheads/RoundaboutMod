@@ -157,7 +157,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public Component ifWipListDev() {
-        return Component.literal("Olive").withStyle(ChatFormatting.AQUA);
+        return Component.literal("Olive").withStyle(ChatFormatting.BLUE);
     }
 
     @Override
