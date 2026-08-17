@@ -447,8 +447,17 @@ public class S2CPacketUtil {
     public static void sendSafeSound(Player player, String string, String string2, float x, float y, Entity entity) {
         if(player instanceof ServerPlayer SP) {
             ModMessageEvents.sendToPlayer(SP,
-                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value,
                     string,string2,x,y,entity.getId()
+            );
+        }
+    }
+    public static void sendSafeParticles(Player player, String string, double x, double y, double z,
+                                         int count, double a, double b, double c, double d) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeParticle.value,
+                    string,x,y,z,count,a,b,c,d
             );
         }
     }

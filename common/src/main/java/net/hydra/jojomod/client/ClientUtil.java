@@ -46,6 +46,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -56,6 +57,9 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -898,15 +902,7 @@ public class ClientUtil {
                             SoundSource.valueOf(str2);
                     float xrot = (float) vargs[5];
                     float yrot = (float) vargs[6];
-                    double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
-                    SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
-                            RandomSource.create(player.level().random.nextLong()), x, y, z);
-                    if ($$9 > 100.0) {
-                        double $$11 = Math.sqrt($$9) / 40.0;
-                        Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
-                    } else {
-                        Minecraft.getInstance().getSoundManager().play($$10);
-                    }
+                    playSoundWithInfo(player.level(),x,y,z,soundEvent,soundSource,xrot,yrot);
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
                     String str1 = (String) vargs[0];
@@ -924,6 +920,58 @@ public class ClientUtil {
                                 new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
                     }
 
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeParticle.value)) {
+                    String str1 = (String) vargs[0];
+
+                    ResourceLocation particleId = new ResourceLocation(str1);
+
+                    ParticleType<?> particleType =
+                            BuiltInRegistries.PARTICLE_TYPE.get(particleId);
+
+                    double x = (double) vargs[1];
+                    double y = (double) vargs[2];
+                    double z = (double) vargs[3];
+
+                    int count = (int) vargs[4];
+
+                    double xDist = (double) vargs[5];
+                    double yDist = (double) vargs[6];
+                    double zDist = (double) vargs[7];
+
+                    double speed = (double) vargs[8];
+
+                    if (particleType instanceof ParticleOptions particle) {
+                        ClientLevel level = Minecraft.getInstance().level;
+
+                        if (level != null) {
+                            if (count == 0) {
+                                double d0 = (double)(speed *xDist);
+                                double d2 = (double)(speed * yDist);
+                                double d4 = (double)(speed * zDist);
+
+                                try {
+                                   level.addParticle(particle, false, x,
+                                           y, z, d0, d2, d4);
+                                } catch (Throwable throwable1) {
+                                }
+                            } else {
+                                for(int i = 0; i < count; ++i) {
+                                    double d1 = level.random.nextGaussian() * xDist;
+                                    double d3 = level.random.nextGaussian() * yDist;
+                                    double d5 = level.random.nextGaussian() * zDist;
+                                    double d6 = level.random.nextGaussian() * speed;
+                                    double d7 = level.random.nextGaussian() * speed;
+                                    double d8 = level.random.nextGaussian() * speed;
+
+                                    try {
+                                        level.addParticle(particle, false,
+                                               x + d1, y + d3,z + d5, d6, d7, d8);
+                                    } catch (Throwable throwable) {
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {
                     float data = (float) vargs[0];
                     int data2 = (int) vargs[1];
@@ -952,6 +1000,18 @@ public class ClientUtil {
                 //        }
             }
         });
+    }
+
+    public static void playSoundWithInfo(Level level, double x,double y,double z,SoundEvent soundEvent, SoundSource soundSource, float xrot, float yrot){
+        double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
+        SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
+                RandomSource.create(level.random.nextLong()), x, y, z);
+        if ($$9 > 100.0) {
+            double $$11 = Math.sqrt($$9) / 40.0;
+            Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
+        } else {
+            Minecraft.getInstance().getSoundManager().play($$10);
+        }
     }
     public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
         return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
