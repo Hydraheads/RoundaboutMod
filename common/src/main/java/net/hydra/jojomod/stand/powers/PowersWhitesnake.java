@@ -54,6 +54,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -1488,7 +1489,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                     ModSounds.KING_CRIMSON_PUNCH_4_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
             }
-            hitParticlesCenter(entity);
+            hitParticles(entity);
             boolean dealsDamage = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealDealsDamage;
             float healthBefore = entity instanceof LivingEntity living ? living.getHealth() : -1.0F;
             boolean hit = dealsDamage ? damageWithDiscSteal(entity) : canApplyDiscSteal(entity);
@@ -1509,6 +1510,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
             playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.PUNCH_2_SOUND_EVENT,
                     SoundSource.PLAYERS, 0.95F, 1.0F);
         }
+    }
+
+    @Override
+    public SimpleParticleType getImpactParticle() {
+        return getActivePower() == DISC_STEAL ? ModParticles.DISC_STEAL_HIT : super.getImpactParticle();
     }
 
     private boolean damageWithDiscSteal(Entity entity) {
