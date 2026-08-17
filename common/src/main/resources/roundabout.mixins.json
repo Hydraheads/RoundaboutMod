@@ -432,6 +432,7 @@
     "shaders.PostChainMixin",
     "shaders.ShaderGameRenderer",
     "shaders.ShaderLevelRenderer",
+    "silver_chariot.SilverChariotEntityRenderMixin",
     "soft_and_wet.SoftAndWetSoundManager",
     "stand_users.LoweringItemInHandRenderer",
     "stand_users.PowersMultiPlayerGameMode",

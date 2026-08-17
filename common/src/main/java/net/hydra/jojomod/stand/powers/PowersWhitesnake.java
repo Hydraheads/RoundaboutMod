@@ -411,7 +411,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (!self.level().isClientSide() && wasPiloting != entering) {
             LivingEntity soundSource = stand == null ? self : stand;
-            self.level().playSound(null, soundSource.blockPosition(), entering
+            playSoundIfPossible(self.level(),null, soundSource.blockPosition(), entering
                             ? ModSounds.WHITESNAKE_CONTROL_MODE_ENTER_EVENT
                             : ModSounds.WHITESNAKE_CONTROL_MODE_EXIT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -990,7 +990,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
         stand.canAcquireHeldItem = true;
         stand.setHeldItem(stack.copyWithCount(1));
-        self.level().playSound(null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
+        playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
                 SoundSource.PLAYERS, 1.7F, 1.3F);
         setActivePower(PowerIndex.POWER_2_SNEAK);
         setAttackTimeDuring(0);
@@ -1138,7 +1138,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 Mth.sin(-20 * ((float) Math.PI / 180)),
                 -Mth.cos(degrees * ((float) Math.PI / 180)));
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, stand.blockPosition(), ModSounds.DODGE_EVENT,
+            playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.DODGE_EVENT,
                     SoundSource.PLAYERS, 1.5F, (float) (0.98 + Math.random() * 0.04));
             if (self instanceof ServerPlayer player) {
                 S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.GLOBAL_DASH, cooldown);
@@ -1177,7 +1177,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             projectile.setPos(origin.getX(), origin.getEyeY() - 0.1D, origin.getZ());
             projectile.shootFromRotation(origin, origin.getXRot(), origin.getYRot(), -7.0F, 0.6F, 1.0F);
             self.level().addFreshEntity(projectile);
-            self.level().playSound(null, origin.blockPosition(), ModSounds.BLOCK_THROW_EVENT,
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.BLOCK_THROW_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
             if (self instanceof ServerPlayer player) {
                 S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_INT_ATD, -20);
@@ -1320,7 +1320,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
             stand.setYRot(getLookAtEntityYaw(stand, target));
             stand.setXRot(getLookAtEntityPitch(stand, target));
-            self.level().playSound(null, stand.blockPosition(), ModSounds.PUNCH_4_SOUND_EVENT,
+            playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.PUNCH_4_SOUND_EVENT,
                     SoundSource.PLAYERS, 0.95F, 1.3F);
             int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.snakeBiteCooldown;
             setCooldown(PowerIndex.SKILL_2, cooldown);
@@ -1421,7 +1421,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (self instanceof ServerPlayer player) {
             S2CPacketUtil.sendCooldownSyncPacket(player, TIME_SPARK_COOLDOWN, cooldown);
             LivingEntity origin = actionOrigin();
-            self.level().playSound(null, origin.blockPosition(), ModSounds.WHITESNAKE_TIME_SPARK_EVENT,
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.WHITESNAKE_TIME_SPARK_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
@@ -1483,7 +1483,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (entity != null && entity.distanceTo(origin) > impaleRange + 0.75F) entity = null;
         if (entity != null) {
             if (!self.level().isClientSide()) {
-                self.level().playSound(null, entity.blockPosition(),
+                playSoundIfPossible(self.level(),null, entity.blockPosition(),
                     ModSounds.KING_CRIMSON_PUNCH_4_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
             }
@@ -1505,7 +1505,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         applyDiscStealCooldown();
         if (entity == null && !self.level().isClientSide()) {
-            self.level().playSound(null, self.blockPosition(), ModSounds.PUNCH_2_SOUND_EVENT,
+            playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.PUNCH_2_SOUND_EVENT,
                     SoundSource.PLAYERS, 0.95F, 1.0F);
         }
     }
@@ -1846,7 +1846,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (!isThrowableDisc(stack)) continue;
             stand.canAcquireHeldItem = true;
             stand.setHeldItem(stack.copyWithCount(1));
-            self.level().playSound(null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
+            playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.BLOCK_GRAB_EVENT,
                     SoundSource.PLAYERS, 1.7F, 1.3F);
             setActivePower(PowerIndex.POWER_2_SNEAK);
             setAttackTimeDuring(0);
@@ -2121,7 +2121,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         MainUtil.takeUnresistableKnockbackWithY(self, 0.91F,
                 Mth.sin(yaw * Mth.DEG_TO_RAD), Mth.sin(-20.0F * Mth.DEG_TO_RAD),
                 -Mth.cos(yaw * Mth.DEG_TO_RAD));
-        self.level().playSound(null, self.blockPosition(), ModSounds.DODGE_EVENT,
+        playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.DODGE_EVENT,
                 SoundSource.PLAYERS, 1.5F, 1.0F);
     }
 
@@ -2379,7 +2379,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (!self.level().isClientSide()) {
             if (entity != null) hitParticles(entity);
-            self.level().playSound(null, origin.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), sound, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -2420,7 +2420,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void updateImpale() {
         if (!self.level().isClientSide() && attackTimeDuring == 20) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.WHITESNAKE_IMPALE_VOICE_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.WHITESNAKE_IMPALE_VOICE_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         if (attackTimeDuring > 24) {
@@ -2468,7 +2468,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 : airTriggered ? ModSounds.WHITESNAKE_PUNCH_FINAL_HIT_EVENT : getImpaleSound();
         if (entity != null) playImpaleConnectSoundExtra();
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, origin.blockPosition(), sound, SoundSource.PLAYERS, 0.95F,
+            playSoundIfPossible(self.level(),null, origin.blockPosition(), sound, SoundSource.PLAYERS, 0.95F,
                     entity == null ? 1.0F : 1.2F);
         }
     }
@@ -2711,7 +2711,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         SoundEvent sound = entity == null ? ModSounds.PUNCH_2_SOUND_EVENT : getFinalAttackSound();
         float pitch = entity == null ? 1.0F : getFinalAttackPitch();
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, self.blockPosition(), sound,
+            playSoundIfPossible(self.level(),null, self.blockPosition(), sound,
                     SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
@@ -2826,7 +2826,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void playBarrageMissNoise(int hitNumber) {
         if (!self.level().isClientSide() && hitNumber % 2 == 0) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT,
                     SoundSource.PLAYERS, 0.95F, (float) (0.8 + Math.random() * 0.4));
         }
     }
@@ -2834,7 +2834,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!self.level().isClientSide() && hitNumber % 2 == 0) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.WHITESNAKE_BARRAGE_HIT_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.WHITESNAKE_BARRAGE_HIT_EVENT,
                     SoundSource.PLAYERS, 0.9F, (float) (0.9 + Math.random() * 0.25));
         }
     }
@@ -2842,7 +2842,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void playBarrageEndNoise(float mod, Entity entity) {
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT,
                     SoundSource.PLAYERS, 0.95F + mod, 1.0F);
         }
     }
@@ -2850,7 +2850,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void playBarrageBlockNoise() {
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT,
                     SoundSource.PLAYERS, 0.95F, (float) (0.8 + Math.random() * 0.4));
         }
     }
@@ -2858,7 +2858,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void playBarrageBlockEndNoise(float mod, Entity entity) {
         if (!self.level().isClientSide()) {
-            self.level().playSound(null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT,
+            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT,
                     SoundSource.PLAYERS, 0.88F + mod, 1.7F);
         }
     }

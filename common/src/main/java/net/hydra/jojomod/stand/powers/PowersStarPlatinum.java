@@ -469,7 +469,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.getActivePower() == POWER_STAR_FINGER) {
                 this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
             }
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
                     0.5F, (float) (1.5 + (Math.random() * 0.04)));
         }
     }
@@ -667,7 +667,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
 
             if (this.attackTimeDuring % 7 == 0){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
             }
 
             double random = (Math.random() * 1.8) - 0.9;
@@ -731,9 +731,9 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                             if (value.distanceTo(this.getSelf()) < 1){
                                                 if (!this.getSelf().level().isClientSide()) {
                                                     ipe.roundabout$setUnlockedBonusSkin(true);
-                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                    playSoundIfPossible(self.level(),null, this.getSelf().getX(), this.getSelf().getY(),
                                                             this.getSelf().getZ(), ModSounds.UNLOCK_SKIN_EVENT, this.getSelf().getSoundSource(), 2.0F, 1.0F);
-                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                    playSoundIfPossible(self.level(),null, this.getSelf().getX(), this.getSelf().getY(),
                                                             this.getSelf().getZ(), SoundEvents.GENERIC_EXPLODE, this.getSelf().getSoundSource(), 2.0F, 1.0F);
                                                     ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.EXPLOSION, this.getSelf().getX(),
                                                             this.getSelf().getY()+this.getSelf().getEyeHeight(), this.getSelf().getZ(),
@@ -817,7 +817,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (!this.self.level().isClientSide()) {
             animateStand(StarPlatinumEntity.IMPALE_2);
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -907,8 +907,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 }
                             }
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, cdr);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
                                 animateStand(StandEntity.BLOCK_GRAB);

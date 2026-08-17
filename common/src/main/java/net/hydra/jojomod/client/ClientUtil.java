@@ -56,6 +56,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -69,6 +70,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -669,14 +671,16 @@ public class ClientUtil {
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
+                        if (!PowerTypes.isInADifferentExistenceNoTE(User,player)){
                             ((StandUserClient) User).roundabout$clientQueSound(soundID);
+                        }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
                     /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
-                    if (User instanceof LivingEntity){
+                    if (User instanceof LivingEntity LE){
                             ((StandUserClient) User).roundabout$clientQueSoundCanceling(soundID);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
@@ -882,19 +886,58 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.clear();
                     }
-                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value)) {
+                    double x = (double) vargs[0];
+                    double y = (double) vargs[1];
+                    double z = (double) vargs[2];
+                    String str1 = (String) vargs[3];
+                    String str2 = (String) vargs[4];
+                    SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
+                            (ResourceLocation.tryParse(str1));
+                    SoundSource soundSource =
+                            SoundSource.valueOf(str2);
+                    float xrot = (float) vargs[5];
+                    float yrot = (float) vargs[6];
+                    double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
+                    SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
+                            RandomSource.create(player.level().random.nextLong()), x, y, z);
+                    if ($$9 > 100.0) {
+                        double $$11 = Math.sqrt($$9) / 40.0;
+                        Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
+                    } else {
+                        Minecraft.getInstance().getSoundManager().play($$10);
+                    }
+
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
+                    String str1 = (String) vargs[0];
+                    String str2 = (String) vargs[1];
+                    SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
+                            (ResourceLocation.tryParse(str1));
+                    SoundSource soundSource =
+                            SoundSource.valueOf(str2);
+                    float xrot = (float) vargs[2];
+                    float yrot = (float) vargs[3];
+                    int seedThis = (int) vargs[4];
+                    Entity entity = player.level().getEntity(seedThis);
+                    if (entity != null && soundEvent != null){
+                        Minecraft.getInstance().getSoundManager().play(
+                                new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
+                    }
+
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {
                     float data = (float) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.range = data;
-
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.range = data;
+                    }
                 }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
                     int data = (int) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.lifetime = data;
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.lifetime = data;
+                    }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
                     ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);

@@ -214,7 +214,7 @@ public class PowersSurvivor extends NewDashPreset {
 
     public void throwBottleActually(ItemStack stack){
 
-        this.self.level().playSound(
+        playSoundIfPossible(self.level(),
                 null,
                 this.self.getX(),
                 this.self.getY(),

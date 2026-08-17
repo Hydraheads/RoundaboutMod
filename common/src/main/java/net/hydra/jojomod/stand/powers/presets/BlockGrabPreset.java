@@ -485,7 +485,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                         }
                                         poseStand(OffsetIndex.ATTACK);
                                         this.setAttackTimeDuring(-15);
-                                        this.getSelf().level().playSound(null, ent, ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
+                                        playSoundIfPossible(self.level(),null, ent.blockPosition(), ModSounds.PUNCH_4_SOUND_EVENT, SoundSource.PLAYERS, 1.0F, 1.18F);
                                     } else {
                                         animateStand(StandEntity.BLOCK_THROW);
                                         poseStand(OffsetIndex.FOLLOW);
@@ -507,7 +507,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                                             }
                                         }
                                     }
-                                    this.getSelf().level().playSound(null, ent, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                                    playSoundIfPossible(self.level(),null, ent.blockPosition(), ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
 
                                     if ((ent instanceof Player || ent instanceof Illusioner || ((TimeStop) this.getSelf().level()).CanTimeStopEntity(ent))) {
                                         ((IEntityAndData) ent).roundabout$setQVec(new Vec3(Mth.sin(((degrees * ((float) Math.PI / 180)))),
@@ -991,7 +991,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                             RRE.thrower = standEntity.getUser();
                             RRE.hasBeenBaraged = false;
                         }
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_EXTRA);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -1063,7 +1063,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         if(this.getSelf().level().getBlockState(this.grabBlock).isAir() || !MainUtil.getIsGamemodeApproriateForGrief(this.getSelf())) {
 
                             standEntity.setHeldItem(state.getBlock().asItem().getDefaultInstance());
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_SNEAK);
 
                             this.setAttackTimeDuring(0);
@@ -1132,7 +1132,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         this.getSelf().level().addFreshEntity($$11);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0, 3, 0));
                         if ($$11.startRiding(standEntity)) {
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -1156,7 +1156,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         this.getSelf().level().addFreshEntity($$7);
                         this.getSelf().level().gameEvent(this.getSelf(), GameEvent.ENTITY_PLACE, this.getSelf().position().add(0,3,0));
                         if ($$7.startRiding(standEntity)) {
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -1176,7 +1176,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         if (roadRoller.startRiding(standEntity)) {
                             roadRoller.isThrown = false;
                             roadRoller.thrower = standEntity.getUser();
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                             this.setActivePower(PowerIndex.POWER_2_EXTRA);
                             this.setAttackTimeDuring(0);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -1186,7 +1186,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                         /**Item throw*/
                         standEntity.canAcquireHeldItem = true;
                         standEntity.setHeldItem(stack.copyWithCount(1));
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);

@@ -45,6 +45,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -1899,11 +1900,11 @@ public class AbilityScapeBasis {
     }
 
     public void playFallBraceInitSound(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
     }
 
     public void playFallBraceImpactSounds(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
         if (!PowerTypes.isErasingTime(self)) {
@@ -1977,9 +1978,82 @@ public class AbilityScapeBasis {
         }
     }
 
+    public boolean playSoundIfPossible(Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self) && entity != null) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    String str = $$3.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$2.getRange($$5);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                soundId.toString(),
+                                str,
+                                $$4,
+                                $$5,
+                                entity
+                        );
+                    }
+                }
+            } else {
+                level.playSound(null,entity,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
     public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self)) {
-            level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    String str = $$3.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$2.getRange($$5);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                $$1.getX(),
+                                $$1.getY(),
+                                $$1.getZ(),
+                                soundId.toString(),
+                                str,
+                                $$4,
+                                $$5
+                        );
+                    }
+                }
+            } else {
+                level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            }
             return true;
         }
         return false;
@@ -1987,7 +2061,40 @@ public class AbilityScapeBasis {
 
     public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
         if (!PowerTypes.isErasingTime(self)) {
-            level.playSound($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7);
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$4 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
+                    String str = $$5.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$4.getRange($$7);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr(new Vec3($$1,$$2,$$3)) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                $$1,
+                                $$2,
+                                $$3,
+                                soundId.toString(),
+                                str,
+                                $$6,
+                                $$7
+                        );
+                    }
+                }
+            } else {
+                level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
+            }
         }
     }
     public boolean vault() {
@@ -3224,31 +3331,31 @@ public class AbilityScapeBasis {
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
             }
         }
     }
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
     }
 
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
         }
     }
     public void playBarrageBlockEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
         }
     }
     public void playBarrageBlockNoise(){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
     }
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
@@ -3338,12 +3445,12 @@ public class AbilityScapeBasis {
                         if (!(entity instanceof Player)) {
                             takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         }
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         addToCombo(entity);
                         hitParticles(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 }

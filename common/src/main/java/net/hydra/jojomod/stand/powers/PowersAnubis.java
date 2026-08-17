@@ -528,8 +528,8 @@ public class PowersAnubis extends NewDashPreset {
         switch (move) {
             case PowersAnubis.POGO -> disablePogo();
 
-            case PowerIndex.POWER_1 ->  this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_ALLURING_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
-            case PowerIndex.POWER_1_SNEAK -> this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_RAGING_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
+            case PowerIndex.POWER_1 ->  playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_ALLURING_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
+            case PowerIndex.POWER_1_SNEAK -> playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_RAGING_EVENT, SoundSource.PLAYERS,1.0F,1.0F);
             case PowerIndex.BARRAGE -> {
                 this.setActivePower(PowerIndex.RANGED_BARRAGE);
                 setPowerOther(PowerIndex.RANGED_BARRAGE,this.getActivePower());
@@ -543,7 +543,7 @@ public class PowersAnubis extends NewDashPreset {
                 this.setAttackTimeDuring(0);
                 this.setActivePower(PowerIndex.SNEAK_MOVEMENT);
                 this.setCooldown(PowerIndex.GLOBAL_DASH, ConfigManager.getConfig().anubisSettings.anubisBackflipCooldown);
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BACKFLIP_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 if (!isClient()) {
                     setAnimation(PowerIndex.SNEAK_MOVEMENT);
@@ -584,7 +584,7 @@ public class PowersAnubis extends NewDashPreset {
                     this.setAttackTime(0);
                     this.setAttackTimeDuring(0);
                     this.setAttackTimeMax(40);
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_EMPOWER_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_EMPOWER_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 }
             }
             case PowerIndex.POWER_1 -> AlluringLightServer();
@@ -1203,7 +1203,7 @@ public class PowersAnubis extends NewDashPreset {
                 Entity e = entities.get(0);
                 Vec3 pos = e.getPosition(0F).add(0, e.getEyeHeight() / 2, 0);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT, SoundSource.PLAYERS, 1F, 0.9F + (float) (Math.random() * 0.2));
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT, SoundSource.PLAYERS, 1F, 0.9F + (float) (Math.random() * 0.2));
             } else {
                 playMissSound(this.getSelf().level());
             }
@@ -1261,7 +1261,7 @@ public class PowersAnubis extends NewDashPreset {
         Vec3 pos = entity.getPosition(0F).add(0,entity.getEyeHeight()/2,0);
         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_SWING_EVENT,SoundSource.PLAYERS,1F,pitch);
+        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_SWING_EVENT,SoundSource.PLAYERS,1F,pitch);
 
         this.setAttackTimeDuring(-10);
         float knockbackStrength = 0.2F;
@@ -1336,7 +1336,7 @@ public class PowersAnubis extends NewDashPreset {
 
             this.setAttackTimeMax(55);
             this.getSelf().teleportTo(bp.getX(),bp.getY(),bp.getZ());
-            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_END_EVENT,SoundSource.PLAYERS,1.5F,0.9F);
+            playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_END_EVENT,SoundSource.PLAYERS,1.5F,0.9F);
         } else {
             this.setAttackTimeMax(15);
         }
@@ -1361,12 +1361,12 @@ public class PowersAnubis extends NewDashPreset {
                     if (StandRushDamageEntityAttack(entity, 3F, 0F, this.getSelf())) {
                         MainUtil.takeKnockbackWithY(entity, 0.9, 0, -1, 0);
                     }
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_EVENT, SoundSource.PLAYERS, 1.5F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_EVENT, SoundSource.PLAYERS, 1.5F, 1.0F);
                 } else if (this.getSelf().tickCount % 2 == 1) {
                     if (StandRushDamageEntityAttack(entity, getBarrageHitStrength(entity)+0.5F, 0F, this.getSelf())) {
                         MainUtil.takeUnresistableKnockbackWithY(entity, 0.01, 0, -1, 0);
                         this.hitParticles(entity);
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT, SoundSource.PLAYERS, 1.0F, 0.9F + (float) (Math.random() * 0.2));
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT, SoundSource.PLAYERS, 1.0F, 0.9F + (float) (Math.random() * 0.2));
                     }
                 }
             }
@@ -1399,7 +1399,7 @@ public class PowersAnubis extends NewDashPreset {
 
         List<Entity> entities = defaultSwordHitbox(this.getSelf(),4, 45,0.05);
         if (!entities.isEmpty()) {
-            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
+            playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),SoundEvents.PLAYER_ATTACK_KNOCKBACK,SoundSource.PLAYERS,1F,0.4F + (float)(Math.random()*0.2));
         } else {
             playMissSound(this.getSelf().level());
         }
@@ -1521,7 +1521,7 @@ public class PowersAnubis extends NewDashPreset {
         Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
+        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
     }
 
     public void updateSpin() {
@@ -1569,7 +1569,7 @@ public class PowersAnubis extends NewDashPreset {
                 Vec3 pos = e.getPosition(0F).add(0, e.getEyeHeight() / 2, 0);
                 ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
 
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS, 1F, 0.9F + ((float) Math.random() * 0.2F));
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS, 1F, 0.9F + ((float) Math.random() * 0.2F));
             }
         }
 
@@ -1664,7 +1664,7 @@ public class PowersAnubis extends NewDashPreset {
                             ((IPlayerEntity) PE).roundabout$setCameraHits(2);
                         }
                         if (!sideHit) {
-                            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float)Math.random()*0.2F));
+                            playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float)Math.random()*0.2F));
                             //    playKickBarrageNoise(hitNumber, entity);
                         }
                     }
@@ -1778,7 +1778,7 @@ public class PowersAnubis extends NewDashPreset {
                         if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
                             this.getSelf().level().destroyBlock(blockHit.getBlockPos(), false, this.getSelf());
                         } else {
-                            this.getSelf().level().playSound(null,this.getSelf().blockPosition(),state.getSoundType().getBreakSound(),SoundSource.PLAYERS,1F,1F);
+                            playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),state.getSoundType().getBreakSound(),SoundSource.PLAYERS,1F,1F);
                         }
 
                         ThrownObjectEntity toe = new ThrownObjectEntity(this.getSelf(), this.getSelf().level(), state.getBlock().asItem().getDefaultInstance(), false);
@@ -1818,7 +1818,7 @@ public class PowersAnubis extends NewDashPreset {
         Vec3 pos = e.getPosition(0F).add(0,e.getEyeHeight()/2,0);
         ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y, pos.z, 0, 0, 0.0, 0, 0.0);
         float pitch = 0.9F+(float)(Math.random()*0.2F);
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
+        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(), ModSounds.ANUBIS_UPPERCUT_EVENT,SoundSource.PLAYERS,1F,pitch);
     }
 
     public void tryPogoAttack(boolean stab) {
@@ -1858,7 +1858,7 @@ public class PowersAnubis extends NewDashPreset {
                         PogoLaunch();
                     } else if (!isClient()) {
                         this.iframeTicks = 7;
-                        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)(Math.random()*0.2) );
+                        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)(Math.random()*0.2) );
                     }
                 } else if (attackTimeDuring < windup) {
                     if ((isClient() && isPacketPlayer())) {
@@ -1943,7 +1943,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
 
-        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
+        playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+(float)Math.random()*0.2F);
         super.setPowerNone();
     }
 
@@ -2282,7 +2282,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void playMissSound(Level l) {
-        l.playSound(null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,(float)(1.0F+Math.random()*0.2F));
+        playSoundIfPossible(l,null,this.getSelf().blockPosition(),ModSounds.ANUBIS_POGO_LAUNCH_EVENT,SoundSource.PLAYERS,1F,(float)(1.0F+Math.random()*0.2F));
     }
 
     @Override
@@ -2302,7 +2302,7 @@ public class PowersAnubis extends NewDashPreset {
                     if (tag.contains("AnubisSkin")) {
                         ((IPlayerEntity)PE).roundabout$setUnlockedBonusSkin(true);
                         this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
-                        lv.playSound(null, PE.getX(), PE.getY(),
+                        playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY() + PE.getEyeHeight(), PE.getZ(),
@@ -3052,7 +3052,7 @@ public class PowersAnubis extends NewDashPreset {
                 if (!ipe.roundabout$getUnlockedBonusSkin()){
                     if (!lv.isClientSide()) {
                         ipe.roundabout$setUnlockedBonusSkin(true);
-                        lv.playSound(null, PE.getX(), PE.getY(),
+                        playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),

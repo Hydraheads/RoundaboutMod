@@ -1018,7 +1018,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                             ((ServerPlayer) SE).displayClientMessage(Component.translatable("text.roundabout.launch_bubble_encased"), true);
                         }
                         Vec3 storedVec = SE.roundabout$getStoredVelocity();
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, 1);
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, 1);
                         MainUtil.takeLiteralUnresistableKnockbackWithY(this.self, storedVec.x, storedVec.y, storedVec.z);
                     }
             }
@@ -1288,7 +1288,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             this.bubbleList.add(bubble);
             this.getSelf().level().addFreshEntity(bubble);
 
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
         }
         return true;
@@ -1304,7 +1304,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             if (ent instanceof LivingEntity LV && ent.isAlive()) {
                 this.setCooldown(PowerIndex.SKILL_4_SNEAK, ClientNetworking.getAppropriateConfig().softAndWetSettings.woundPlugCooldown);
                 LV.heal(1f);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
 
                 ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, LV.getEyePosition().x,
                         LV.getEyePosition().y, LV.getEyePosition().z,
@@ -1316,7 +1316,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                             LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                             10, 0.25F, 0.1F, 0.25F, 0.02);
                 } else {
-                    this.self.level().playSound(null, LV.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    playSoundIfPossible(self.level(),null, LV.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
                     ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
                             LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                             10, 0.25F, 0.1F, 0.25F, 0.02);
@@ -1385,7 +1385,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         }
         ((StandUser) self).roundabout$setGasolineTime(-1);
         self.extinguishFire();
-        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5 + (Math.random() * 0.04)));
 
 
         Vec3 vec3 = new Vec3(0,this.self.getBbHeight()*0.5,0);
@@ -1435,8 +1435,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     bubbleListInit();
                     this.bubbleList.add(bubble);
                     this.getSelf().level().addFreshEntity(bubble);
-
-                    this.self.level().playSound(bubble, bubble.blockPosition(), ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                    playSoundIfPossible(self.level(),bubble,ModSounds.GO_BEYOND_LAUNCH_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
 
 
                     Vec3 vector = Vec3.directionFromRotation(new Vec2(-52, this.self.yBodyRot - 90));
@@ -1496,7 +1495,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
                     bubbleListInit();
                     this.bubbleList.add(bubble);
                     this.getSelf().level().addFreshEntity(bubble);
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (1.2 + (Math.random() * 0.04)));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXPLOSIVE_BUBBLE_SHOT_EVENT, SoundSource.PLAYERS, 0.7F, (float) (1.2 + (Math.random() * 0.04)));
                 }
             }
         }
@@ -1519,7 +1518,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             this.getSelf().level().addFreshEntity(bubble);
 
             if (bubbleType != PlunderTypes.SOUND.id) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
         }
         return true;
@@ -1724,7 +1723,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             }
             /**
             if (bubbleType != PlunderTypes.SOUND.id) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
              **/
         }
@@ -1980,7 +1979,7 @@ public void unlockSkin(){
             if (!ipe.roundabout$getUnlockedBonusSkin()){
                 if (!lv.isClientSide()) {
                     ipe.roundabout$setUnlockedBonusSkin(true);
-                    lv.playSound(null, PE.getX(), PE.getY(),
+                    playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                             PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                     ((ServerLevel) lv).sendParticles(ModParticles.HEART_ATTACK_MINI, PE.getX(),
                             PE.getY()+PE.getEyeHeight(), PE.getZ(),
@@ -2084,7 +2083,7 @@ public void unlockSkin(){
                 addEXP(1);
 
                 //((StandUser)this.self).roundabout$setAdjustedGravity(30);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BIG_BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
         }
         return false;
@@ -2137,13 +2136,13 @@ public void unlockSkin(){
                 if (this.self.level().getBlockEntity(buildingBubbleScaffoldPos) instanceof BubbleScaffoldBlockEntity SBE) {
                     SBE.standuser = this.self;
                     SBE.bubbleNo = bubbleNumber;
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT,
                             SoundSource.PLAYERS, 2F, (float) (0.9 + (Math.random() * 0.2)));
                 }
             }
@@ -2434,9 +2433,9 @@ public void unlockSkin(){
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             if (chargedFinal >= getMaxSuperHitTime() && entity instanceof LivingEntity) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.WATER_ENCASE_EVENT, SoundSource.PLAYERS, 1F, pitch);
             }
         }
     }
@@ -2545,7 +2544,7 @@ public void unlockSkin(){
             this.getSelf().level().addFreshEntity(bubble);
 
             if (bubbleType != PlunderTypes.SOUND.id) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
             }
         }
 
@@ -2691,7 +2690,7 @@ public void unlockSkin(){
                 }
 
                 if (success){
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT, SoundSource.PLAYERS, 1.7F, 1.8F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_PLUNDER_EVENT, SoundSource.PLAYERS, 1.7F, 1.8F);
                     return true;
                 }
             }
@@ -2725,17 +2724,17 @@ public void unlockSkin(){
 
     @Override
     public void playFallBraceInitSound(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.SUMMON_SOFT_AND_WET_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.SUMMON_SOFT_AND_WET_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
     }
     @Override
     public void playFallBraceImpactSounds(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.9 + (Math.random() * 0.2)));
     }
 
 
@@ -2799,13 +2798,13 @@ public void unlockSkin(){
     @Override
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SOFT_HIT_4_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SOFT_HIT_4_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
         }
     }
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_SOFT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_SOFT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
     }

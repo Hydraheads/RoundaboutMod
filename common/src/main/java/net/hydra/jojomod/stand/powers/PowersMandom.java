@@ -237,7 +237,7 @@ public class PowersMandom extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_2, cooldown);
             setTimeHasBeenAltered(-1);
             if (isClient()) {
-                this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+                playSoundIfPossible(self.level(),null, self.getX(),self.getY(),self.getZ(),ModSounds.MANDOM_REWIND_EVENT, self.getSoundSource(), 200F, 1.0F);
             } else {
                 rewindTimeActivation();
             }

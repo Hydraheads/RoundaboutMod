@@ -714,7 +714,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.purple_haze.punch",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
@@ -930,10 +930,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void Distortion() {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.addEffect(new MobEffectInstance(
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
+                this.eatCapsuleServer();
                 self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
             }
             if (!(self instanceof Player pl && pl.isCreative())) {
@@ -946,6 +947,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
         }
     }
+    public int capsuleEatingTick = 0;
+    private  void setCapsuleEatingTick(int tick){capsuleEatingTick = tick;}
+    public void eatCapsuleServer(){
+        if (self instanceof ServerPlayer pl){
+            setCapsuleEatingTick(16);
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
+        }
+    }
     public void attemptVirusSpit() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
             VirusSpit();
@@ -954,7 +963,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void VirusSpit() {
         if (!this.onCooldown(PowerIndex.POWER_1_BONUS)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.removeEffect(ModEffects.VIRUS_IMMUNITY);
 
             this.setCooldown(PowerIndex.POWER_1_BONUS, 400);
@@ -972,7 +981,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     public void DistortionModeChange() {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
             saveDiscAndSync(); // add this
             // FEU I CANT FIGURE THIS OUT
@@ -1069,7 +1078,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
-            this.self.level().playSound(
+            playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
                     ModSounds.STAR_FINGER_EVENT,
@@ -1155,10 +1164,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickPodReset();
             tickPodRecharge();
         }
-    }
 
+            if (capsuleEatingTick > 0) {
+                capsuleEatingTick--;
 
-
+                if (capsuleEatingTick == 0) {
+                    if (self instanceof ServerPlayer pl) {
+                        this.setAttackTimeDuring(0);
+                        ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
+                    }
+                }
+            }
+        }
 
     @Override
     public byte getPermaCastContext() {

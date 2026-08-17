@@ -353,9 +353,7 @@ public class PowersRatt extends NewDashPreset {
             RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
             this.getStandUserSelf().roundabout$standMount(RE);
             this.self.level().addFreshEntity(RE);
-            this.getSelf().level().playSound(this.getSelf(),this.getSelf().blockPosition(),ModSounds.RATT_PLACE_EVENT,SoundSource.PLAYERS,1F,1F);
-
-
+            playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.RATT_PLACE_EVENT,SoundSource.PLAYERS,1F,1F);
         }
     }
 
@@ -615,7 +613,7 @@ public class PowersRatt extends NewDashPreset {
     public void placeBurst() {
         this.animateStand(RattEntity.FIRE);
         this.setPowerNone();
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_FIRING_EVENT, SoundSource.PLAYERS, 1.7F, 0.9F+(float)Math.random()*0.2F);
         for (int i = 0; i < 3; i++) {
             if (this.getStandEntity(this.getSelf()) instanceof RattEntity RE) {
                 RattDartEntity e = new RattDartEntity(RE.level(), this.getSelf());
@@ -834,7 +832,7 @@ public class PowersRatt extends NewDashPreset {
                 Placement = null;
                 if (this.getStandEntity(this.getSelf()) != null) {
                     if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                     }
                     this.getStandEntity(this.getSelf()).forceDespawnSet = true;
                 }
@@ -859,10 +857,10 @@ public class PowersRatt extends NewDashPreset {
             }
             case PowersRatt.TOGGLE_BURSTING -> {
                 if (isPlaced()) {
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.JUSTICE_SELECT_EVENT,SoundSource.PLAYERS,0.3F,(float)(1.1+Math.random()*0.2));
+                    playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.JUSTICE_SELECT_EVENT,SoundSource.PLAYERS,0.3F,(float)(1.1+Math.random()*0.2));
                     setAuto(!isAuto());
                 } else {
-                    this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_MODE_CHANGE_EVENT,SoundSource.PLAYERS,1F,(float)(0.9+Math.random()*0.2));
+                    playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.RATT_MODE_CHANGE_EVENT,SoundSource.PLAYERS,1F,(float)(0.9+Math.random()*0.2));
                     if (isClient()) {
                         this.changeFireMode();
                     }
@@ -874,7 +872,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setAttackTimeDuring(0);
                 this.setAttackTime(-1);
                 if (this.getActivePower() != PowersRatt.PLACE_BURST) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_LOADING_EVENT, SoundSource.PLAYERS);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_LOADING_EVENT, SoundSource.PLAYERS,1,1);
                 }
                 this.setActivePower(PowersRatt.PLACE_BURST);
                 if (this.getSelf() instanceof Player) {
@@ -916,7 +914,7 @@ public class PowersRatt extends NewDashPreset {
                     Vec3 vec3 = new Vec3(dir.x, Mth.clamp(dir.y+0.2F,0.1,100), dir.z);
                     this.getStandEntity(this.getSelf()).setDeltaMovement(vec3);
                 }
-                this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
+                playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.RATT_LEAP_EVENT, SoundSource.PLAYERS, 1F,1.2F);
             }
         }
         return super.tryPower(move, forced);
@@ -1063,7 +1061,7 @@ public class PowersRatt extends NewDashPreset {
                     if (this.getSelf() instanceof Player P) {
                         if (this.getStandUserSelf().roundabout$getCombatMode() && PowerTypes.isUsingStand(this.getSelf())) {
                             int nc = Math.max(this.getChargeTime() - 30, 0);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
                             this.updatePowerInt(PowersRatt.UPDATE_CHARGE, nc);
                             S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, nc);
                         }

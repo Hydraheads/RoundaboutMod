@@ -639,7 +639,7 @@ public class PowersEmperor extends NewDashPreset {
             this.getSelf().level().addFreshEntity(bullet);
         }
 
-        this.self.level().playSound(
+        playSoundIfPossible(self.level(),
                 null,
                 this.self.blockPosition(),
                 ModSounds.EMPEROR_SHOOT_EVENT,

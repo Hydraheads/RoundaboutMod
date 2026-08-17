@@ -292,7 +292,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(moveMode == 0) {
             if (!this.getSelf().level().isClientSide()) {
                 if (blackSelect == null || blackSelect.isRemoved()){
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
                     StandEntity stand = this.getNewStandEntity();
                     if (stand != null) {
                         blackSelect = stand;
@@ -316,7 +316,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         } else {
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
-                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                         this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
             }
         }
@@ -330,7 +330,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                     ojiroSasame.hurt(ModDamageTypes.of(ojiroSasame.level(), DamageTypes.GENERIC_KILL), 1F);
                 } if(ojiroSasame instanceof ServerPlayer P && (!P.isCreative() || P.isSpectator())){
                     this.eatFingerServer();
-                    ojiroSasame.level().playSound(null, ojiroSasame, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
+                    playSoundIfPossible(self.level(),ojiroSasame,SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.85F, 1.0F);
                 }
                 ItemEntity $$4 = new ItemEntity(ojiroSasame.level(), ojiroSasame.getX(),
                         ojiroSasame.getY() + ojiroSasame.getBbHeight() - 0.20, ojiroSasame.getZ(),
@@ -396,7 +396,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                 active = false;
                 if (this.getStandEntity(this.getSelf()) != null) {
                     if (!this.getStandEntity(this.getSelf()).forceDespawnSet) {
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.RATT_DEPLACE_EVENT, SoundSource.PLAYERS, 0.5F, 1F);
                     }
                     if(this.getStandEntity(self) instanceof BlackSabbathEntity b){
                         b.setTickDownSecond(10);
@@ -647,7 +647,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
         if (self.level() instanceof ServerLevel sl){
-            self.level().playSound(null, this.self.blockPosition(),
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                     ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,
                     (float) (0.99f + Math.random() * 0.02f));
         }

@@ -268,6 +268,15 @@ public enum PowerTypes {
         }
         return 0;
     }
+    public static byte getPlaneOfExisting2(Entity entity){
+        if (entity != null){
+            if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
+                return getPlaneOfExisting2(fse.getFollowing());
+            }
+            return ((IGravityEntity)entity).roundabout$getExistPlane();
+        }
+        return 0;
+    }
     public static void setPlaneOfExisting(Entity entity, byte plane){
         if (entity != null){
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
@@ -301,6 +310,14 @@ public enum PowerTypes {
         }
         return false;
     }
+    public static boolean isExistentiallyElsewhereTogether2(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            byte p1 = getPlaneOfExisting2(entity);
+            byte p2 = getPlaneOfExisting2(entityTwo);
+            return ((p1 == p2) && p1 != 11);
+        }
+        return false;
+    }
 
     public static boolean isInADifferentExistence(Entity entity, Entity entityTwo){
         if (entity != null && entityTwo != null){
@@ -308,6 +325,18 @@ public enum PowerTypes {
             boolean ex2 = isExistentiallyElsewhere(entityTwo);
             if (ex1 && ex2){
                 return !isExistentiallyElsewhereTogether(entity,entityTwo);
+            } else if (ex1 || ex2) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean isInADifferentExistenceNoTE(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            boolean ex1 = isExistentiallyElsewhere(entity);
+            boolean ex2 = isExistentiallyElsewhere(entityTwo);
+            if (ex1 && ex2){
+                return !isExistentiallyElsewhereTogether2(entity,entityTwo);
             } else if (ex1 || ex2) {
                 return true;
             }

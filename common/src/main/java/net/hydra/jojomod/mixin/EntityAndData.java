@@ -27,12 +27,16 @@ import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -924,15 +928,63 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickQVec();
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent $$0, float $$1, float $$2,CallbackInfo ci) {
-        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(((Entity) (Object)this))){
+    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+        Entity thrs = ((Entity) (Object)this);
+        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
             if (sbpe !=null) {
-                sbpe.addPlunderBubbleSounds($$0, this.getSoundSource(), $$1, $$2);
+                sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
             }
             ci.cancel();
+            return;
+        }
+        if (level().isClientSide()){
+            if (PowerTypes.isInADifferentExistenceNoTE(thrs,ClientUtil.getPlayer())){
+                ci.cancel();
+                return;
+            }
+        } else {
+            if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                if (thrs.level() instanceof ServerLevel sl) {
+                    if (soundEvent != null) {
+                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
+                        String str = this.getSoundSource().name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = soundEvent.getRange(g);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(thrs) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    thrs,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    thrs.getX(),
+                                    thrs.getY(),
+                                    thrs.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    f,
+                                    g
+                            );
+                        }
+                    }
+                }
+                ci.cancel();
+                return;
+            }
         }
     }
+
+
+
     @Inject(method = "thunderHit", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$thunderHit(CallbackInfo ci) {
         if (((Entity)(Object)this) instanceof Player PE){

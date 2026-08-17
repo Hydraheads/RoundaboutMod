@@ -231,7 +231,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
         switch (move) {
             case PowersManhattanTransfer.MANHATTAN_DODGE -> {
                     this.setXtraSpdTick(10);
-                    this.getStandEntity(this.getSelf()).level().playSound(null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 0.8F, 2F);
+                playSoundIfPossible(this.getStandEntity(this.getSelf()).level(),null, this.getSelf().blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 0.8F, 2F);
 
                     if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
                         if (!ME.level().isClientSide()) {
@@ -257,6 +257,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
             tryPower(PowersManhattanTransfer.MANHATTAN_DODGE);
             tryPowerPacket(PowersManhattanTransfer.MANHATTAN_DODGE);
             if (isClient()) {
+
                 this.self.playSound(ModSounds.VAMPIRE_DASH_EVENT, 100F, 1.2F);
             }
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().manhattanTransferSettings.manhattanDashCooldown);
@@ -881,7 +882,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                 if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
                     if (this.getSelf() instanceof Player P) {
                         if (this.getStandUserSelf().roundabout$getCombatMode()) {
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
                         }
                     }
                 }
@@ -930,7 +931,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             powerUpMobArrow($$11);
                                         }
                                         ME.powerUpProjectile();
-                                        ME.playSound(ModSounds.BULLET_RICOCHET_EVENT, 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
+                                        playSoundIfPossible(ME.level(),null,ME.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, ME.getSoundSource(), 1.0F, (ME.getRandom().nextFloat() * 0.2F + 0.7F));
                                     }
                                 }
                                 mobShootArrow = 100;
