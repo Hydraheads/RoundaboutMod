@@ -1306,18 +1306,18 @@ public class PowersSoftAndWet extends NewPunchingStand {
                 LV.heal(1f);
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CINDERELLA_SPARKLE_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
 
-                ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, LV.getEyePosition().x,
+                sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, LV.getEyePosition().x,
                         LV.getEyePosition().y, LV.getEyePosition().z,
                         0, 0, 0, 0, 0.2);
 
                 byte sk = ((StandUser) this.getSelf()).roundabout$getStandSkin();
                 if (sk == SoftAndWetEntity.KIRA) {
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.HEART_ATTACK_MINI,
+                    sendParticlesIfPossible(self.level(),ModParticles.HEART_ATTACK_MINI,
                             LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                             10, 0.25F, 0.1F, 0.25F, 0.02);
                 } else {
                     playSoundIfPossible(self.level(),null, LV.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PURPLE_STAR,
+                    sendParticlesIfPossible(self.level(),ModParticles.PURPLE_STAR,
                             LV.getEyePosition().x, LV.getEyePosition().y, LV.getEyePosition().z,
                             10, 0.25F, 0.1F, 0.25F, 0.02);
                 }
@@ -1394,7 +1394,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
             vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
         }
 
-        ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+        sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK,
                         Blocks.WATER.defaultBlockState()),
                 this.self.getX()+vec3.x,
                 this.self.getY() +vec3.y,
@@ -1981,7 +1981,7 @@ public void unlockSkin(){
                     ipe.roundabout$setUnlockedBonusSkin(true);
                     playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                             PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                    ((ServerLevel) lv).sendParticles(ModParticles.HEART_ATTACK_MINI, PE.getX(),
+                    sendParticlesIfPossible(self.level(),ModParticles.HEART_ATTACK_MINI, PE.getX(),
                             PE.getY()+PE.getEyeHeight(), PE.getZ(),
                             10, 0.5, 0.5, 0.5, 0.2);
                     user.roundabout$setStandSkin(SoftAndWetEntity.KIRA);
@@ -2391,7 +2391,7 @@ public void unlockSkin(){
                                     vec3 = RotationUtil.vecPlayerToWorld(vec3,direction);
                                 }
 
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SPLASH,
+                                sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
                                         LE.getX() + vec3.x, (double) ($$4 + vec3.y), LE.getZ() + vec3.z,
                                         30, $$2.x, $$2.y, $$2.z, 0.4);
                             }
@@ -2418,7 +2418,7 @@ public void unlockSkin(){
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -2714,10 +2714,10 @@ public void unlockSkin(){
 
     @Override
     public void playFallBraceImpactParticles(){
-        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BUBBLE_POP,
+        sendParticlesIfPossible(self.level(),ModParticles.BUBBLE_POP,
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 50, 1.1, 0.05, 1.1, 0.4);
-        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BUBBLE_POP,
+        sendParticlesIfPossible(self.level(),ModParticles.BUBBLE_POP,
                 this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                 30, 1, 0.05, 1, 0.4);
     }
