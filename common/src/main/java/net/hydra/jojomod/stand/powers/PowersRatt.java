@@ -458,7 +458,7 @@ public class PowersRatt extends NewDashPreset {
                 RecallClient(true);
             }
         } else if (!isClient() && this.Placement != null) {
-            ((ServerLevel)this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
+            sendParticlesIfPossible(self.level(),new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
                     ), 1f),
                     Placement.x(), Placement.y()+0.5F, Placement.z(),
                     0, 0, 0, 0, 0);
@@ -495,7 +495,7 @@ public class PowersRatt extends NewDashPreset {
             if (!this.isClient()) {
 
                 if (!SE.onGround()) {
-                    ((ServerLevel) this.getSelf().level()).sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
+                    sendParticlesIfPossible(self.level(),new DustParticleOptions(new Vector3f(0.86F, 0.28F, 0.48F
                             ), 1f),
                             SE.getX(), ((RattEntity)SE).getEyeP(0F).y(), SE.getZ(),
                             0, 0, 0, 0, 0);
@@ -1277,7 +1277,7 @@ public class PowersRatt extends NewDashPreset {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         lv.playSound(null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
                         user.roundabout$setStandSkin(RattEntity.CHAIR_RAT_SKIN);

@@ -346,7 +346,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         switch (standSkin) {
             case PurpleHazeEntity.BLAZING_HAZE -> {
                 if (purpleHazeFieldDistortionMode) {
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.LARGE_SMOKE,
                             x,
                             y + 1.0,
@@ -357,7 +357,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             effectRange / 2,
                             0.01
                     );
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -372,7 +372,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.02
                     );
 
-                }else serverLevel.sendParticles(
+                }else sendParticlesIfPossible(self.level(),
                         ParticleTypes.LARGE_SMOKE,
                         x,
                         y + 1.0,
@@ -387,7 +387,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.GREEN -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -399,7 +399,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -416,7 +416,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -434,7 +434,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.NETHERITE -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -446,7 +446,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -463,7 +463,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -481,7 +481,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             default -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ModParticles.PURPLE_HAZE_SMOKE,
                             x,
                             y + 1.0,
@@ -493,7 +493,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -510,7 +510,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                        serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                                 ModParticles.PURPLE_HAZE_SMOKE,
                                 x,
                                 y + 1.0,
@@ -656,7 +656,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
         if (self.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(
+            sendParticlesIfPossible(self.level(),
                     ParticleTypes.LARGE_SMOKE,
                     position.x,
                     position.y + 1.0,

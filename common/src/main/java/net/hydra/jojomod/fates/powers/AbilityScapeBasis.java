@@ -296,7 +296,7 @@ public class AbilityScapeBasis {
         if (gd != Direction.DOWN){
             funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
         }
-        ((ServerLevel) this.self.level()).sendParticles(
+        sendParticlesIfPossible(self.level(),
                 getImpactParticle(),
                 entity.getX()+funnyVec.x,entity.getY()+funnyVec.y,entity.getZ()+funnyVec.z,
                 1, 0.0, 0.0, 0.0, 1);
@@ -1908,10 +1908,10 @@ public class AbilityScapeBasis {
     }
     public void playFallBraceImpactParticles(){
         if (!PowerTypes.isErasingTime(self)) {
-            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+            sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                     this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                     50, 1.1, 0.05, 1.1, 0.4);
-            ((ServerLevel) this.getSelf().level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
+            sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(this.getSelf().getOnPos())),
                     this.getSelf().getX(), this.getSelf().getOnPos().getY() + 1.1, this.getSelf().getZ(),
                     30, 1, 0.05, 1, 0.4);
         }
@@ -2014,6 +2014,47 @@ public class AbilityScapeBasis {
                         yDist,
                         zDist,
                         speed
+                );
+            }
+        }
+
+    }
+    public <T extends ParticleOptions> void sendParticlesIfPossible(
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            double xDist,
+            double yDist,
+            double zDist
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.addParticle(
+                        particle,
+                        x,
+                        y,
+                        z,
+                        xDist,
+                        yDist,
+                        zDist
                 );
             }
         }
@@ -2207,7 +2248,7 @@ public class AbilityScapeBasis {
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
                     if (!PowerTypes.isErasingTime(self)) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
                                 dvec.x,

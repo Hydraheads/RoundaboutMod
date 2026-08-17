@@ -329,7 +329,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
                                 IBE.setOriginal2(BI.getBlock().getStateForPlacement($$1));
                                 IBE.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
-                                PowersAchtungBaby.spawnExplosionParticles(this.self.level(), pos.getCenter(), 10, 0.2);
+                                spawnExplosionParticles(this.self.level(), pos.getCenter(), 10, 0.2);
                                 return true;
                             }
                         }
@@ -432,7 +432,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         Vec3 pos = new Vec3(this.self.getX(),
                 this.self.getY() +(this.self.getBbHeight()*0.5),
                 this.self.getZ());
-        sl.sendParticles(ModParticles.BABY_CRACKLE,
+        sendParticlesIfPossible(sl,ModParticles.BABY_CRACKLE,
                 pos.x(),
                 pos.y(),
                 pos.z(),
@@ -444,7 +444,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         Vec3 pos = new Vec3(this.self.getX(),
                 this.self.getY() +(this.self.getBbHeight()*0.5),
                 this.self.getZ());
-        sl.sendParticles(ModParticles.BABY_CRACKLE,
+        sendParticlesIfPossible(sl,ModParticles.BABY_CRACKLE,
                 pos.x(),
                 pos.y(),
                 pos.z(),
@@ -503,7 +503,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         return super.canUseStillStandingRecharge(bt);
     }
 
-    public static void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
+    public void spawnExplosionParticles(Level level, Vec3 center, int particleCount, double speed) {
         if (!(level instanceof ServerLevel serverLevel)) return;
 
         RandomSource random = level.random;
@@ -514,7 +514,7 @@ public class PowersAchtungBaby extends NewDashPreset {
             double y = random.nextFloat()-0.5F;
             double z = random.nextFloat()-0.5F;
 
-            serverLevel.sendParticles(
+            sendParticlesIfPossible(self.level(),
                     ModParticles.MAGIC_DUST, // Use another ParticleOptions if desired
                     center.x, center.y, center.z,
                     0, // count (we send 1 at a time in a loop)

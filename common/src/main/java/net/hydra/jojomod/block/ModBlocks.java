@@ -841,7 +841,7 @@ public class ModBlocks {
                 return 1;
             }));
     public static KingBedBlock KING_BED_BLOCK_PROPERTIES = new KingBedBlock(
-            DyeColor.BLACK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(-1.0F, 3600000.0F).noLootTable()
+            DyeColor.BLACK, BlockBehaviour.Properties.of().forceSolidOff().mapColor(MapColor.COLOR_RED).strength(-1.0F, 3600000.0F).noLootTable()
             .sound(SoundType.EMPTY).isValidSpawn(ModBlocks::never).lightLevel((L) -> {
         return 1;
     }));

@@ -228,15 +228,13 @@ public class NewDashPreset extends StandPowerRewrite {
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown);
                     }
 
-                    if (!PowerTypes.isExistentiallyElsewhere(self)) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
                                 dvec.x,
                                 dvec.y,
                                 dvec.z,
                                 0.8);
-                    }
                 }
             }
         }

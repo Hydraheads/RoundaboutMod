@@ -665,7 +665,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                        ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
                         user.roundabout$setStandSkin(WalkingHeartEntity.SPIDER_SKIN);

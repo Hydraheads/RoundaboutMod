@@ -235,7 +235,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
                     if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
                         if (!ME.level().isClientSide()) {
-                            ((ServerLevel) ME.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                            sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                     ME.getX(), ME.getY(), ME.getZ(),
                                     0, 0, 0, 0, 0);
                         }

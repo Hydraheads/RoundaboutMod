@@ -312,7 +312,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
                     }
                     if (!PowerTypes.isErasingTime(self)) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
                                 dvec.x,
@@ -605,7 +605,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,0.3*self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                    sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -616,7 +616,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,0.3*self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                    sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -625,7 +625,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FALLING_WATER,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.FALLING_WATER,
                             gravVec.x, gravVec.y, gravVec.z,
                             2, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -664,7 +664,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 hitPos = blockHit.getLocation();
                     farDist = self.position().distanceTo(new Vec3(hitPos.x,hitPos.y,hitPos.z));
 
-                            ((ServerLevel) self.level()).sendParticles(
+                            sendParticlesIfPossible(self.level(),
                             ParticleTypes.FLAME,
                             hitPos.x,
                             hitPos.y,
@@ -673,7 +673,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             0, 0, 0,
                             0.01
                     );
-                    ((ServerLevel) self.level()).sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             hitPos.x,
                             hitPos.y,
@@ -1207,7 +1207,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else if (MainUtil.hasEnderBlood(entity)){
                             spt = ModParticles.ENDER_BLOOD;
                         }
-                        ((ServerLevel) this.getSelf().level()).sendParticles(spt,
+                        sendParticlesIfPossible(self.level(),spt,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 30,
                                 0, 0, 0,
@@ -1218,7 +1218,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
                                     vp.addBloodExp(15, entity);
                                 }
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                                sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                                         entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                         10,
                                         0.2,
@@ -1294,7 +1294,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         addToCombo(entity);
 
                         SimpleParticleType spt = ParticleTypes.SNOWFLAKE;
-                        ((ServerLevel) this.getSelf().level()).sendParticles(spt,
+                        sendParticlesIfPossible(self.level(),spt,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 30,
                                 0, 0, 0,
@@ -1329,7 +1329,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
 
             Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(0.75f));
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.ICE_SPARKLE,
+            sendParticlesIfPossible(self.level(),ModParticles.ICE_SPARKLE,
                     posPo.x, posPo.y, posPo.z,
                     0, 0, 0, 0, 0.8);
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
@@ -1375,7 +1375,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
 
             Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(0.75f));
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.RED_SPARKLE,
+            sendParticlesIfPossible(self.level(),ModParticles.RED_SPARKLE,
                     posPo.x, posPo.y, posPo.z,
                     0, 0, 0, 0, 0.8);
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
@@ -1517,7 +1517,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
             Vec3 pos = self.getPosition(1f).add(self.getLookAngle().scale(0.75f));
 
-            ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK,
+            sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK,
                     pos.x, pos.y+0.5F, pos.z,
                     0, 0, 0, 0, 0.8);
             doSweepHit();
@@ -1548,7 +1548,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                 }
 
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                         this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
                         0, cvec.x, cvec.y, cvec.z, 0.8);
             }
@@ -1871,7 +1871,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             sendClutchCooldowns(12);
                             setDazed(livingEntity,(byte) 12);
                         }
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 10,
                                 0.2,

@@ -479,7 +479,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if (self.level() instanceof ServerLevel sl) {
                     if ((self instanceof Mob mb && !MainUtil.isHumanoid2(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
                         if (self.tickCount % 10 == 0) {
-                            sl.sendParticles(
+                            sendParticlesIfPossible(sl,
                                     ParticleTypes.SNOWFLAKE,
                                     self.getEyePosition().x,
                                     self.getEyePosition().y,
@@ -1386,7 +1386,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
 
             if (self.level() instanceof ServerLevel sl) {
-                sl.sendParticles(ModParticles.COLD_CRACKLE,
+                sendParticlesIfPossible(sl,ModParticles.COLD_CRACKLE,
                         self.getEyePosition().x,
                         self.getEyePosition().y,
                         self.getEyePosition().z,
@@ -1865,7 +1865,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                             ipe.roundabout$setUnlockedBonusSkin(true);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                            ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                            sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                     10, 0.5, 0.5, 0.5, 0.2);
                             user.roundabout$setStandSkin(YUKI);

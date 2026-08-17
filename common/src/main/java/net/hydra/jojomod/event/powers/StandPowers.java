@@ -797,7 +797,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**Override this in general with leveling stands so you can display generic messages of what each level unlocks*/
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
+            sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD,
                     this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
