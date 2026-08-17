@@ -243,7 +243,7 @@ public class AbilityScapeBasis {
 
     public void hitParticles(Entity entity){
         Vec3 vec = getRandPos(entity);
-        ((ServerLevel) this.self.level()).sendParticles(
+        sendParticlesIfPossible(self.level(),
                 getImpactParticle(),
                 vec.x,vec.y,vec.z,
                 1, 0.0, 0.0, 0.0, 1);
@@ -1972,10 +1972,52 @@ public class AbilityScapeBasis {
         return 0;
     }
 
-    public <T extends ParticleOptions> void sendParticlesIfPossible(Level level, T $$0, double $$1, double $$2, double $$3, int $$4, double $$5, double $$6, double $$7, double $$8) {
-        if (!PowerTypes.isErasingTime(self) && level instanceof ServerLevel sl) {
-            sl.sendParticles($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7,$$8);
+    public <T extends ParticleOptions> void sendParticlesIfPossible(
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            int count,
+            double xDist,
+            double yDist,
+            double zDist,
+            double speed
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.sendParticles(
+                        playerInList,
+                        particle,
+                        false,
+                        x,
+                        y,
+                        z,
+                        count,
+                        xDist,
+                        yDist,
+                        zDist,
+                        speed
+                );
+            }
         }
+
     }
 
     public boolean playSoundIfPossible(Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
@@ -2058,7 +2100,6 @@ public class AbilityScapeBasis {
         }
         return false;
     }
-
     public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){

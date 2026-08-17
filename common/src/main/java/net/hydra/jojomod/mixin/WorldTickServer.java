@@ -138,12 +138,12 @@ public class WorldTickServer {
             ci.cancel();
         }
     }
-    @Inject(method = "sendParticles(Lnet/minecraft/server/level/ServerPlayer;ZDDDLnet/minecraft/network/protocol/Packet;)Z", at = @At("HEAD"), cancellable = true)
-    private void rdbt$sendParticlesHide(ServerPlayer $$0, boolean $$1, double $$2, double $$3, double $$4, Packet<?> $$5, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0 != null && PowerTypes.isExistentiallyElsewhere($$0) && !PowerTypes.isErasingTime($$0)){
-            cir.setReturnValue(false);
-        }
-    }
+    ///Inject(method = "sendParticles(Lnet/minecraft/server/level/ServerPlayer;ZDDDLnet/minecraft/network/protocol/Packet;)Z", at = @At("HEAD"), cancellable = true)
+    //private void rdbt$sendParticlesHide(ServerPlayer $$0, boolean $$1, double $$2, double $$3, double $$4, Packet<?> $$5, CallbackInfoReturnable<Boolean> cir) {
+    //    if ($$0 != null && PowerTypes.isExistentiallyElsewhere($$0) && !PowerTypes.isErasingTime($$0)){
+    //        cir.setReturnValue(false);
+    //    }
+    //}
     @Inject(method = "gameEvent", at = @At("HEAD"), cancellable = true)
     private void rdbt$hideEntity(GameEvent $$0, Vec3 $$1, GameEvent.Context $$2, CallbackInfo ci) {
         if ($$2 != null && PowerTypes.isExistentiallyElsewhere($$2.sourceEntity())) {
