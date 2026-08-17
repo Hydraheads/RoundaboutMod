@@ -434,6 +434,15 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendSafeSound(Player player, double a, double b, double c,
+                                     String string, String string2, float x, float y) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value,
+                    a,b,c,string,string2,x,y
+            );
+        }
+    }
 
     public static void sync_allies(Player player,String allies) {
         if(player instanceof ServerPlayer SP) {

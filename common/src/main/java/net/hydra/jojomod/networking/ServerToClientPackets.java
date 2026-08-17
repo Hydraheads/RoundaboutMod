@@ -61,7 +61,8 @@ public class ServerToClientPackets {
             SyncMoldDuration("sync_mold_duration"),
             SyncPurpleHazePods("sync_purple_haze_pods"),
             AddEpitaph("add_epitaph"),
-            ClearEpitaph("clear_epitaph");
+            ClearEpitaph("clear_epitaph"),
+            SendSafeSound("send_safe_sound");
 
             public final String value;
 

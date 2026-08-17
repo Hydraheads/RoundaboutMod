@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.SetBlockInstance;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.mixin.access.AccessInventory;
@@ -421,18 +422,29 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     private void roundabout$playSeed(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
+            return;
         } if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }
             ci.cancel();
+            return;
         } else if(((ILevelAccess)this).roundabout$isSoundPlunderedEntity($$1)){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity($$1);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }
             ci.cancel();
+            return;
+        }
+
+        if (!PowerTypes.isErasingTime(ClientUtil.getPlayer()) &&
+                (PowerTypes.isInADifferentExistence($$1,ClientUtil.getPlayer()) ||
+        PowerTypes.isInADifferentExistence($$0,ClientUtil.getPlayer()))
+        ){
+            ci.cancel();
+            return;
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
@@ -447,6 +459,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
             }
             ci.cancel();
+            return;
+        }
+        if (!PowerTypes.isErasingTime(ClientUtil.getPlayer()) &&
+                PowerTypes.isExistentiallyElsewhere(ClientUtil.getPlayer())){
+            ci.cancel();
+            return;
         }
     }
     @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)

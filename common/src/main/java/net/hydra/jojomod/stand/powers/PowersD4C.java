@@ -41,7 +41,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -520,7 +522,15 @@ public class PowersD4C extends NewPunchingStand {
            } else {
                 return;
             }
-            PowerTypes.setPlaneOfExisting(self,(byte)1);
+
+            for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
+                if (!target.equals(self) && target.isAlive()) {
+                    PowerTypes.setPlaneOfExisting(target,(byte)1);
+                }
+            }
+            if (!self.isCrouching()){
+                PowerTypes.setPlaneOfExisting(self,(byte)1);
+            }
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }

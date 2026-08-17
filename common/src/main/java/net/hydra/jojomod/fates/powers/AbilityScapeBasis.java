@@ -45,6 +45,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -1979,7 +1980,40 @@ public class AbilityScapeBasis {
 
     public boolean playSoundIfPossible(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self)) {
-            level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    String str = $$3.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$2.getRange($$5);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                $$1.getX(),
+                                $$1.getY(),
+                                $$1.getZ(),
+                                soundId.toString(),
+                                str,
+                                $$4,
+                                $$5
+                        );
+                    }
+                }
+            } else {
+                level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            }
             return true;
         }
         return false;
@@ -1987,7 +2021,40 @@ public class AbilityScapeBasis {
 
     public void playSoundIfPossible(Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
         if (!PowerTypes.isErasingTime(self)) {
-            level.playSound($$0,$$1,$$2,$$3,$$4,$$5,$$6,$$7);
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$4 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
+                    String str = $$5.name();
+                    for (ServerPlayer playerInList :
+                            sl.getServer().getPlayerList().getPlayers()) {
+
+                        double range = $$4.getRange($$7);
+                        double rangeSqr = range * range;
+                        if (playerInList.distanceToSqr(new Vec3($$1,$$2,$$3)) > rangeSqr) {
+                            continue;
+                        }
+
+                        if (PowerTypes.isInADifferentExistenceNoTE(
+                                self,
+                                playerInList)) {
+                            continue;
+                        }
+
+                        S2CPacketUtil.sendSafeSound(
+                                playerInList,
+                                $$1,
+                                $$2,
+                                $$3,
+                                soundId.toString(),
+                                str,
+                                $$6,
+                                $$7
+                        );
+                    }
+                }
+            } else {
+                level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
+            }
         }
     }
     public boolean vault() {
