@@ -1734,6 +1734,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
 
+            if ((double)$$1 < 0.1D) {return; }
+
             AbstractArrow arrow;
             if (stack.getItem() instanceof SpectralArrowItem) {
                 arrow = new BombPlantedSpectralArrow(self.level(), self);
@@ -3643,10 +3645,18 @@ public class PowersKillerQueen extends NewPunchingStand {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
+        if (standOn && this.getActivePower() == ARROW_HOLDING) {
+            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
+        }
+
         if (standOn && this.getActivePower() == ARROW_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getArrowThrowChargeMax()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
-            context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
+            if (ClashTime == 15) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
+            }else {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
+            }
         }else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             int ClashTime = Math.min(15, Math.round(((float) attackTimeDuring / getMaxKickTime()) * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
