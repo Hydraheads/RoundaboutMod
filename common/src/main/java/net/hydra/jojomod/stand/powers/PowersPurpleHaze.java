@@ -714,7 +714,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.purple_haze.punch",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
@@ -934,6 +934,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             self.addEffect(new MobEffectInstance(
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
+                this.eatCapsuleServer();
                 self.hurt(ModDamageTypes.of(self.level(), DamageTypes.GENERIC_KILL), 2F);
             }
             if (!(self instanceof Player pl && pl.isCreative())) {
@@ -944,6 +945,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1,
                         400);
             }
+        }
+    }
+    public int capsuleEatingTick = 0;
+    private  void setCapsuleEatingTick(int tick){capsuleEatingTick = tick;}
+    public void eatCapsuleServer(){
+        if (self instanceof ServerPlayer pl){
+            setCapsuleEatingTick(16);
+            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
         }
     }
     public void attemptVirusSpit() {
@@ -1155,10 +1164,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
             tickPodReset();
             tickPodRecharge();
         }
-    }
 
+            if (capsuleEatingTick > 0) {
+                capsuleEatingTick--;
 
-
+                if (capsuleEatingTick == 0) {
+                    if (self instanceof ServerPlayer pl) {
+                        this.setAttackTimeDuring(0);
+                        ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
+                    }
+                }
+            }
+        }
 
     @Override
     public byte getPermaCastContext() {
