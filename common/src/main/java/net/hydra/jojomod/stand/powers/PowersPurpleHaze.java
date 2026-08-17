@@ -930,7 +930,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void Distortion() {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.addEffect(new MobEffectInstance(
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
@@ -963,7 +963,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void VirusSpit() {
         if (!this.onCooldown(PowerIndex.POWER_1_BONUS)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.removeEffect(ModEffects.VIRUS_IMMUNITY);
 
             this.setCooldown(PowerIndex.POWER_1_BONUS, 400);
@@ -981,7 +981,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
     public void DistortionModeChange() {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
             saveDiscAndSync(); // add this
             // FEU I CANT FIGURE THIS OUT
@@ -1078,7 +1078,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
-            this.self.level().playSound(
+            playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
                     ModSounds.STAR_FINGER_EVENT,

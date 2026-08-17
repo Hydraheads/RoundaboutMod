@@ -587,7 +587,7 @@ public class PowersCinderella extends NewDashPreset {
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -596,7 +596,7 @@ public class PowersCinderella extends NewDashPreset {
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 15) {
                 MainUtil.makeFaceless(this.self,800,0,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
             }
         }

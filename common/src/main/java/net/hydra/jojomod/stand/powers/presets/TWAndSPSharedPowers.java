@@ -367,7 +367,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (!(IE.getItem().getItem() instanceof BlockItem BI && BI.getBlock() instanceof ShulkerBoxBlock && BI.getBlock() instanceof FancyLighterBlock)){
                         stand.canAcquireHeldItem = true;
                         stand.setHeldItem(IE.getItem().copyWithCount(1));
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
                         this.setActivePower(PowerIndex.POWER_2_SNEAK);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -742,7 +742,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             }
             ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
             ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
+            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
     }
@@ -1189,7 +1189,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 playBarrageBlockNoise();
             } else {
                 if (hitNumber % 3 == 0) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
                 }
             }
         }
@@ -1965,7 +1965,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -2005,7 +2005,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 playBarrageBlockNoise();
             } else {
                 if (hitNumber % 2 == 0) {
-                    this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
                 }
             }
         }
@@ -2019,7 +2019,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 }
                 playBarrageBlockEndNoise(0,entity);
             } else {
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
             }
         }
     }

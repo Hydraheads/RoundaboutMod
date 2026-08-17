@@ -2861,7 +2861,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             cherrySkip++;
                             if (cherrySkip >= 5) {
                                 ipe.roundabout$setUnlockedBonusSkin(true);
-                                self.level().playSound(null, self.getX(), self.getY(),
+                                playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                                         self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
                                 ((ServerLevel) self.level()).sendParticles(ParticleTypes.END_ROD, self.getX(),
                                         self.getY() + self.getEyeHeight(), self.getZ(),
@@ -2877,7 +2877,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
                                         self.getY() + self.getEyeHeight(), self.getZ(),
                                         10+(cherrySkip * 10), 0.5, 0.5, 0.5, 0.2);
-                                this.self.level().playSound(null, this.self.blockPosition(),
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                                         SoundEvents.PORTAL_AMBIENT,
                                         SoundSource.PLAYERS, 1F, (float) (1.5F + Math.random() * 0.02));
                             }
@@ -2953,7 +2953,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         if (!isUsingTimeErase()) {
             bloodsplash.setSplatterType((byte) 1);
 
-            this.self.level().playSound(null, this.self.blockPosition(),
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                     ModSounds.KING_BLOOD_SPLASH_EVENT,
                     SoundSource.PLAYERS, 1F, (float) (0.99F + Math.random() * 0.02));
         } else {
@@ -2991,7 +2991,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (!isBigOuchie) {
                     if (!(self instanceof Player pl && pl.isCreative())) {
                         MainUtil.makeBleed(self, 0, bloodTime, self);
-                        this.self.level().playSound(null, this.self.blockPosition(),
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                                 ModSounds.KING_CRIMSON_PUNCH_EVENT,
                                 SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
                     }
@@ -3003,7 +3003,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             self.getEyePosition().x(), self.getEyePosition().y() + 0.3F, self.getEyePosition().z(),
                             30, 0, 0, 0, 0.3);
                 }
-                this.self.level().playSound(null, this.self.blockPosition(),
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                         ModSounds.VAMPIRE_DRAIN_EVENT,
                         SoundSource.PLAYERS, 1F, (float) (0.9F + Math.random() * 0.2));
             } else {
@@ -4029,7 +4029,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
     public SoundEvent getFinalAttackSound(){

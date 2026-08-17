@@ -304,7 +304,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (!ipe.roundabout$getUnlockedBonusSkin() && !bypass && this.self.getY() > 319) {
                 ipe.roundabout$setUnlockedBonusSkin(true);
-                lv.playSound(null, PE.getX(), PE.getY(),
+                playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                         PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                 ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
@@ -382,7 +382,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 Level level = this.getSelf().level();
                 Vec3 origin = this.self.position();
 
-                level.playSound(null, this.self.blockPosition(),
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                         ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
 
@@ -488,7 +488,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         level.addFreshEntity(meteor);
 
-        level.playSound(null, this.self.blockPosition(),
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT,
                 net.minecraft.sounds.SoundSource.PLAYERS, 0.5F, 1.0F);
 
@@ -615,7 +615,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2, appliedCooldown);
         }
 
-        level.playSound(
+        playSoundIfPossible(self.level(),
                 null,
                 this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_BIG_METEOR_EVENT,
@@ -763,7 +763,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         syncStandMode();
 
-        level.playSound(null, this.self.blockPosition(),
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
                 SoundSource.PLAYERS, 0.5F, 1.0F);
 
@@ -879,7 +879,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         SoundType sound = state.getSoundType();
 
-        level.playSound(
+        playSoundIfPossible(self.level(),
                 null,
                 pos,
                 sound.getHitSound(), // o getBreakSound()
@@ -1212,7 +1212,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                             .PlanetWavesSettings.usertargetingCooldown);
         }
 
-        level.playSound(null, this.self.blockPosition(),
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                 ModSounds.PLANET_WAVES_TARGET_EVENT,
                 SoundSource.PLAYERS, 0.5F, 1.0F);
     }
@@ -1327,7 +1327,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             }
         }
         if (foundMeteor) {
-            level.playSound(
+            playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
                     ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT,
@@ -1511,7 +1511,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
             if (wasTargeting) {
                 Level level = this.self.level();
-                level.playSound(null, this.self.blockPosition(),
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                         ModSounds.PLANET_WAVES_TARGET_EVENT,
                         SoundSource.PLAYERS, 0.5F, 1.0F);
 

@@ -587,7 +587,7 @@ public class PowersJustice extends NewDashPreset {
     }
 
     public void particleSpew(){
-        this.self.level().playSound(null, this.self, ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
         ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                 this.self.getY()+(this.self.getBbWidth()*0.6), this.self.getZ(),
                 14, 0.4, 0.2, 0.4, 0.35);
@@ -755,7 +755,7 @@ public class PowersJustice extends NewDashPreset {
                     if (!ipe.roundabout$getUnlockedBonusSkin()){
                         if (!lv.isClientSide()) {
                             ipe.roundabout$setUnlockedBonusSkin(true);
-                            lv.playSound(null, PE.getX(), PE.getY(),
+                            playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                             ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
@@ -1111,7 +1111,7 @@ public class PowersJustice extends NewDashPreset {
                         vector.z+random3,
                         0.15);
 
-                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                         this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
             }
         }
@@ -1144,7 +1144,7 @@ public class PowersJustice extends NewDashPreset {
                 JE.cackleTime = 54;
                 //this.playStandUserOnlySoundsIfNearby(SoundIndex.CACKLE, 200, true,
                         //true);
-                this.self.level().playSound(null, JE.getX(),JE.getY(),
+                playSoundIfPossible(self.level(),null, JE.getX(),JE.getY(),
                         JE.getZ(), ModSounds.CACKLE_EVENT, this.self.getSoundSource(), 15.0F, 1F);
             }
             return;
@@ -1412,7 +1412,7 @@ public class PowersJustice extends NewDashPreset {
             ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
-            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+            playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                     this.self.getZ(), ModSounds.FOG_CLONE_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         }
         return true;
@@ -1542,7 +1542,7 @@ public class PowersJustice extends NewDashPreset {
                     addEXP(4);
                     int cdr = ClientNetworking.getAppropriateConfig().justiceSettings.fogChainCooldown;
                     this.setCooldown(PowerIndex.SKILL_2, cdr);
-                    this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                    playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                             this.self.getZ(), ModSounds.INHALE_EVENT, this.self.getSoundSource(), 100.0F, 0.5F);
                     return true;
                 }

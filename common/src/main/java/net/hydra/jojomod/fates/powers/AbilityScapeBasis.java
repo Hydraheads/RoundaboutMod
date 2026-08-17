@@ -1900,11 +1900,11 @@ public class AbilityScapeBasis {
     }
 
     public void playFallBraceInitSound(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.78 + (Math.random() * 0.04)));
     }
 
     public void playFallBraceImpactSounds(){
-        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
+        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.FALL_BRACE_EVENT, SoundSource.PLAYERS, 1.0F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void playFallBraceImpactParticles(){
         if (!PowerTypes.isErasingTime(self)) {
@@ -3291,31 +3291,31 @@ public class AbilityScapeBasis {
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
             }
         }
     }
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
     }
 
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
         }
     }
     public void playBarrageBlockEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
         }
     }
     public void playBarrageBlockNoise(){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
     }
     public void barrageImpact2(Entity entity, boolean lastHit, float knockbackStrength){
@@ -3405,12 +3405,12 @@ public class AbilityScapeBasis {
                         if (!(entity instanceof Player)) {
                             takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
                         }
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         addToCombo(entity);
                         hitParticles(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 }

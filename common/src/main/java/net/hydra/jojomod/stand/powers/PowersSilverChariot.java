@@ -1466,7 +1466,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         if (!self.level().isClientSide())
         {
             MainUtil.playPop(self);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
             List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
                     self.getZ(), 4, 4, 4), 4, 360,true);
             if (hitbox != null)
@@ -1496,9 +1496,9 @@ public class PowersSilverChariot extends NewPunchingStand {
                                 } else if (e instanceof LivingEntity livingEntity && !MainUtil.isBossMob(livingEntity)){
                                     setDazed(livingEntity,(byte) 16);
                                 }
-                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
                             } else {
-                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
                             }
                         }
                     }
@@ -1735,7 +1735,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 Entity entity = this.getSelf();
 
 
-                this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                 this.setActivePower(PowerIndex.POWER_3_SNEAK);
                 this.setAttackTimeDuring(0);
                 poseStand(OffsetIndex.LOOSE);

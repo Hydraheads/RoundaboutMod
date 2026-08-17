@@ -290,19 +290,19 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             switch (mode) {
                 case 1 -> {
                     staticMode = 1;
-                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_GROUND_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 2 -> {
                     staticMode = 2;
-                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_NORMAL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 3 -> {
                     staticMode = 3;
-                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_PROPEL_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
                 case 4 -> {
                     staticMode = 4;
-                    this.self.level().playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
+                    playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_OUTPUT_STANCE_EVENT, SoundSource.PLAYERS, 3.0F, 1.0F);
                 }
             }
             this.self.stopUsingItem();
@@ -350,14 +350,14 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.CBHasDurability && hasStandActive(this.getSelf())) {
                 if (amount > ClientNetworking.getAppropriateConfig().centuryBoySettings.CBDurability) {
                     user.roundabout$breakGuard();
-                    this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
                     if (self instanceof Player player) {
                         player.getCooldowns().addCooldown(Items.SHIELD, 100);
                     }
                 } else {
                     user.roundabout$damageGuard(amount);
                     if (user.roundabout$getGuardBroken()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
                         if (self instanceof Player player) {
                             player.getCooldowns().addCooldown(Items.SHIELD, 100);
                         }
@@ -612,7 +612,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if (wardenMunches < 3){
             wardenMunches++;
         }else {
-            this.self.level().playSound(warden, warden.getOnPos(), SoundEvents.GENERIC_EAT, SoundSource.HOSTILE, 15F, 1F);
+            warden.playSound(SoundEvents.GENERIC_EAT, 15F, 1F);
             this.self.hurt(this.self.level().damageSources().genericKill(), 7);
         }
     }

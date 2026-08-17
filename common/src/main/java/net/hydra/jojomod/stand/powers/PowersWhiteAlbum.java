@@ -132,7 +132,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public void onLandingAnimatedJump(){
         if (hasSkatesActivated()){
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SKATING_LAND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }
 
@@ -280,7 +280,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 if ($$0.is(DamageTypes.FALL)) {
                     if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
                         user.roundabout$breakGuard();
-                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                 SoundSource.PLAYERS, 1F, 1.5F);
                         if (self instanceof Player player){
                             player.getCooldowns().addCooldown(Items.SHIELD, 100);
@@ -288,10 +288,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     } else {
                         user.roundabout$damageGuard($$1);
                         if (!user.roundabout$getGuardBroken()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
                                     SoundSource.PLAYERS, 0.8F, 1.6F + self.level().random.nextFloat() * 0.3f);
                         } else {
-                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                     SoundSource.PLAYERS, 1F, 1.5F);
                             if (self instanceof Player player){
                                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
@@ -312,7 +312,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         $$1*=0.05F;
                         if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
                             user.roundabout$breakGuard();
-                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                     SoundSource.PLAYERS, 1F, 1.5F);
                             if (self instanceof Player player){
                                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
@@ -320,7 +320,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         } else {
                             user.roundabout$damageGuard($$1);
                             if (user.roundabout$getGuardBroken()) {
-                                this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                         SoundSource.PLAYERS, 1F, 1.5F);
                                 if (self instanceof Player player){
                                     player.getCooldowns().addCooldown(Items.SHIELD, 100);
@@ -956,7 +956,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 }
             }
 
-            level.playSound(null, center, ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1F);
+            playSoundIfPossible(self.level(),null, center, ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1F);
         }
     }
 
@@ -1020,7 +1020,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             iceCenter = self.blockPosition();
             startIceSnapRing = 1;
 
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SNAP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SNAP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
         }
     }
 
@@ -1132,7 +1132,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     }
                 }
                 addEXP(1);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
         }
     }
@@ -1144,9 +1144,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             if (!isChargingCold()) {
                 fistsOut = !fistsOut;
                 if (fistsOut) {
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 0.9F, (float) (1.02 + (Math.random() * 0.06)));
                 } else {
-                    //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                    //playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
                 }
                 saveDiscAndSync();
             }
@@ -1185,15 +1185,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     vf.isPlantedInWall()) {
                 if (skatesActive) {
                     skatesActive = false;
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
                     saveDiscAndSync();
                 }
             } else {
                 skatesActive = !skatesActive;
                 if (skatesActive) {
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SKATE_EQUIP_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
                 } else {
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SKATE_RETRACT_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
                 }
                 saveDiscAndSync();
             }
@@ -1294,7 +1294,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 this.setActivePowerPhase(this.getActivePowerPhaseMax());
                 this.setAttackTimeMax(gap);
                 if (isBrawling()) {
-                    self.level().playSound((Player) null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                    playSoundIfPossible(self.level(),(Player) null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
                             SoundSource.NEUTRAL, 1F, (float) (1F + Math.random() * 0.08f));
                     if (!self.level().isClientSide) {
                         ColdBlastProjectile bubble = new ColdBlastProjectile(self, self.level());
@@ -1394,7 +1394,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
             }
             addEXP(1);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.BLOCK_FREEZE_EVENT,
                     SoundSource.PLAYERS, 1F, 1F);
         }
     }
@@ -1497,7 +1497,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     }
                 }
                 addEXP(1);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.ICE_RISES_EVENT, SoundSource.PLAYERS, 1F, (float) (0.97 + (Math.random() * 0.06)));
             }
         }
     }
@@ -1863,7 +1863,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     if (!ipe.roundabout$getUnlockedBonusSkin()){
                         if (!lv.isClientSide()) {
                             ipe.roundabout$setUnlockedBonusSkin(true);
-                            lv.playSound(null, PE.getX(), PE.getY(),
+                            playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                             ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),

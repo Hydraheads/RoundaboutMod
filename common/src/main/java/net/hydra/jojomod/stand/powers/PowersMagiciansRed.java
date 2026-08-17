@@ -280,7 +280,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 ticksUntilHurricaneEnds--;
                 if (ticksUntilHurricaneEnds <= -1) {
                     if (hasHurricane()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 2F, 0.8F);
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 2F, 0.8F);
                         ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
                                 this.self.getY() + (this.self.getBbHeight() * 0.5), this.self.getZ(),
                                 20,
@@ -709,7 +709,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             if (this.getSelf() instanceof Player PE &&
                     ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
-                PE.level().playSound(null, PE.getX(), PE.getY(),
+                playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                         PE.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST, PE.getSoundSource(), 2.0F, 1.0F);
             } else {
                 playStandUserOnlySoundsIfNearby(barrageCrySound, 32, false,true);
@@ -1416,9 +1416,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     if (!ipe.roundabout$getUnlockedBonusSkin() && MainUtil.isDreadBook(PE.getMainHandItem())){
                         if (!lv.isClientSide()) {
                             ipe.roundabout$setUnlockedBonusSkin(true);
-                            lv.playSound(null, PE.getX(), PE.getY(),
+                            playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                            lv.playSound(null, PE.getX(), PE.getY(),
+                            playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.DREAD_SUMMON_EVENT, PE.getSoundSource(), 3.0F, 1.0F);
                             ((ServerLevel) lv).sendParticles(ModParticles.DREAD_FLAME, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
@@ -1439,7 +1439,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         this.setActivePower(PowerIndex.POWER_1_BLOCK);
         if (!this.getSelf().level().isClientSide()) {
             if (tracker == null || tracker.isRemoved()){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_WHOOSH_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
                 LifeTrackerEntity cross = ModEntities.LIFE_TRACKER.create(this.getSelf().level());
                 if (cross != null) {
                     tracker = cross;
@@ -1458,7 +1458,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             } else {
                 tracker.discard();
-                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                         this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 1F, 1.1F);
             }
         }
@@ -1763,7 +1763,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             }
 
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
         }
         if (!this.self.level().isClientSide() && self instanceof Player player) {
@@ -1817,7 +1817,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void fireballSpitGo(){
         if (!this.self.level().isClientSide()) {
             StandFireballEntity fireball = new StandFireballEntity(this.self,this.self.level());
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIREBALL_SHOOT_EVENT, SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIREBALL_SHOOT_EVENT, SoundSource.PLAYERS, 1F, (float)(0.9F + Math.random()*0.2));
             if (fireball != null) {
                 Vec3 bam = new Vec3(0,
                         this.self.getEyeHeight()*0.25,
@@ -1966,7 +1966,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring >= getChargingCrossfire()){
                 if (this.attackTimeDuring == getChargingCrossfire()){
-                    this.self.level().playSound(null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
                             SoundSource.PLAYERS, 1F, 2F);
 
                     ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
@@ -1985,7 +1985,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         10,
                         0.4, 0.4, 0.4,
                         0.01);
-                this.self.level().playSound(null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
                         SoundSource.PLAYERS, 1F, 1.5F);
             }
         } else {
@@ -2141,7 +2141,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 sendSpecialParticle(blockPosForSpecial.north().east());
                 sendSpecialParticle(blockPosForSpecial.south().west());
                 sendSpecialParticle(blockPosForSpecial.south().east());
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 0.8F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 0.8F);
                 generateCrossfire(1, getChargingCrossfireSpecialSize());
                 generateCrossfire(2, getChargingCrossfireSpecialSize());
                 generateCrossfire(3, getChargingCrossfireSpecialSize());
@@ -2263,7 +2263,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -2439,13 +2439,13 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     }
                     entity.setDeltaMovement(prevVelocity);
                     if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1F);
                         this.lastHurtTick = this.self.tickCount;
                     }
                 } else {
                    entity.setDeltaMovement(prevVelocity);
                     if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 0.8F);
                         this.lastHurtTick = this.self.tickCount;
                     }
                 }
@@ -2586,7 +2586,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         cfh.isSpecial = true;
                         hurricaneSpecial2.remove(0);
                         shootAnkh(cfh);
-                        this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
                                 SoundSource.PLAYERS, 2F, 1F);
                     }
                 }
@@ -2599,7 +2599,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     cfh.setCrossNumber(0);
                     shootAnkh(cfh);
                     hurricane = null;
-                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
                             SoundSource.PLAYERS, 2F, 1F);
                 }
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
@@ -2618,7 +2618,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (!this.self.level().isClientSide()) {
                 this.setCooldown(PowerIndex.SKILL_4_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
                 groundent.setLifeSpan(200);
                 groundent.setPos(this.self.position());
@@ -2648,7 +2648,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setAttackTimeDuring(-15);
             this.setActivePower(PowerIndex.POWER_1_BONUS);
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 ConcealedFlameObjectEntity thrownBlockOrItem = new ConcealedFlameObjectEntity(this.getSelf(), this.getSelf().level(), this.self.getMainHandItem().copy());
                 thrownBlockOrItem.setPos(thrownBlockOrItem.position().subtract(0,this.self.getBbHeight()*0.3,0));
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
@@ -2673,7 +2673,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_2);
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 1.2F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 2F, 1.2F);
                 playStandUserOnlySoundsIfNearby(CRY_2_NOISE, 27, false,true);
                 ticksUntilHurricaneEnds = -1;
                 CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());
@@ -2693,7 +2693,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     public boolean fireBlast() {
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+            playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                     this.self.getZ(), ModSounds.FIRE_BLAST_EVENT, this.self.getSoundSource(), 2.0F, 1F);
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null && grabBlock != null) {
@@ -2790,7 +2790,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public boolean snap(){
-        this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+        playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                 this.self.getZ(), ModSounds.SNAP_EVENT, this.self.getSoundSource(), 2.0F, 1F);
         this.setCooldown(PowerIndex.SKILL_3,  multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.snapFireAwayCooldown));
         clearEverything();
@@ -2829,7 +2829,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!$$0.isClientSide) {
             PrimedTnt $$3 = new PrimedTnt($$0, (double)$$1.getX() + 0.5, (double)$$1.getY(), (double)$$1.getZ() + 0.5, $$2);
             $$0.addFreshEntity($$3);
-            $$0.playSound((Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            $$3.playSound(SoundEvents.TNT_PRIMED, 1.0F, 1.0F);
             $$0.gameEvent($$2, GameEvent.PRIME_FUSE, $$1);
         }
     }
@@ -2851,7 +2851,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         Block.UPDATE_ALL
                 );
 
-                self.level().playSound(
+                playSoundIfPossible(self.level(),
                         null,
                         grabBlock,
                         SoundEvents.FLINTANDSTEEL_USE,
@@ -2888,7 +2888,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                     }
                                 });
 
-                        self.level().playSound(
+                        playSoundIfPossible(self.level(),
                                 null,
                                 grabBlock,
                                 SoundEvents.FLINTANDSTEEL_USE,
@@ -2904,7 +2904,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     explode(this.self.level(),grabBlock,this.self);
                 }
             } else if (tryPlaceBlock(grabBlock)) {
-                this.self.level().playSound(null, this.self.getX(), this.self.getY(),
+                playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                         this.self.getZ(), ModSounds.FIRE_WHOOSH_EVENT, this.self.getSoundSource(), 2.0F, 2F);
                 for (int j = 0; j < 10; j++) {
                     double random = (Math.random() * 0.8) - 0.4;
@@ -3018,7 +3018,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (effect.getDuration() == 15) {
                 StandUser user = ((StandUser) this.self);
                 user.roundabout$setSecondsOnStandFire(20);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MAGICIANS_RED_CRY_3_EVENT,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MAGICIANS_RED_CRY_3_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
                 user.roundabout$setOnStandFire((byte) 1, this.self);
                 ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
@@ -3172,7 +3172,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             drillT = true;
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().magiciansRedSettings.redBindDazeAttackCooldown);
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 drillTime = 80;
                 addEXP(6, leaded);
                 ((StandUser) leaded).roundabout$setRedBound(true);
@@ -3474,7 +3474,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             }
 
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
         }
     }

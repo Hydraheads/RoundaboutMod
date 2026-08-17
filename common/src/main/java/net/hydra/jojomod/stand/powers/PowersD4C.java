@@ -543,7 +543,7 @@ public class PowersD4C extends NewPunchingStand {
     public void useUpBanner(ItemStack banner){
         if (self instanceof ServerPlayer pl) {
             pl.getCooldowns().addCooldown(banner.getItem(),getRechargeTime());
-            pl.level().playSound(null, pl.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER,
+            playSoundIfPossible(self.level(),null, pl.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER,
                     SoundSource.PLAYERS, 1F, 1);
             canHoldBanner = false;
             saveDiscAndSync();
@@ -1039,7 +1039,7 @@ public class PowersD4C extends NewPunchingStand {
             }
 
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
         }
     }
@@ -1140,7 +1140,7 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
     public SoundEvent getFinalAttackSound(){

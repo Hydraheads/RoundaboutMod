@@ -324,7 +324,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                 Player $$5 = $$1.getPlayer();
                                 BlockState $$7 = $$4.getBlockState($$3);
                                 SoundType $$8 = $$7.getSoundType();
-                                $$4.playSound($$5, $$3, this.getPlaceSound(BI.getBlock().defaultBlockState()), SoundSource.BLOCKS, ($$8.getVolume() + 1.0F) / 2.0F, $$8.getPitch() * 0.8F);
+                                playSoundIfPossible(self.level(),$$5, $$3, this.getPlaceSound(BI.getBlock().defaultBlockState()), SoundSource.BLOCKS, ($$8.getVolume() + 1.0F) / 2.0F, $$8.getPitch() * 0.8F);
                                 $$4.gameEvent(GameEvent.BLOCK_PLACE, $$3, GameEvent.Context.of($$5, $$7));
 
                                 IBE.setOriginal2(BI.getBlock().getStateForPlacement($$1));
@@ -420,7 +420,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         if (this.self.level() instanceof ServerLevel sl) {
             burstTicks = 22;
             burstParticlesRejection(sl);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.ACHTUNG_BURST_EVENT, SoundSource.PLAYERS, 0.95F, 1f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.ACHTUNG_BURST_EVENT, SoundSource.PLAYERS, 0.95F, 1f);
             float range = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstRange;
             burstEntities(range);
             burstBlocks(sl);

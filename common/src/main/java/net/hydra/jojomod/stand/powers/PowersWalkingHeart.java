@@ -348,19 +348,19 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 80) {
                 MainUtil.makeBleed(this.self,0,900,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
                 if (MainUtil.getMobBleed(this.self)){
                     MainUtil.makeMobBleed(this.self);
                 }
             } if (effect.getDuration() == 50) {
                 MainUtil.makeBleed(this.self,1,900,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
                 if (MainUtil.getMobBleed(this.self)){
                     MainUtil.makeMobBleed(this.self);
                 }
             } if (effect.getDuration() == 20) {
                 MainUtil.makeBleed(this.self,2,900,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, 1);
                 if (MainUtil.getMobBleed(this.self)){
                     MainUtil.makeMobBleed(this.self);
                 }
@@ -430,7 +430,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1f);
                 } else {
                     Direction gf = ((IGravityEntity)self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
@@ -442,7 +442,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                                 self.getZ() + vec.z);
                     }
                     setHeelAttachCooldown();
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 }
             }
         }
@@ -553,7 +553,7 @@ public class PowersWalkingHeart extends NewDashPreset {
         if (getStandUserSelf().roundabout$getCombatMode()){
             getStandUserSelf().roundabout$setCombatMode(false);
             if (!this.self.level().isClientSide()){
-                this.self.level().playSound(null, self.getX(), self.getY(),
+                playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                         self.getZ(), ModSounds.HEEL_STOMP_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         } else {
@@ -563,7 +563,7 @@ public class PowersWalkingHeart extends NewDashPreset {
             this.self.setSprinting(false);
             getStandUserSelf().roundabout$setCombatMode(true);
             if (!this.self.level().isClientSide()){
-                this.self.level().playSound(null, self.getX(), self.getY(),
+                playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                         self.getZ(), ModSounds.HEEL_RAISE_EVENT, self.getSoundSource(), 1F, 1.0F);
             }
         }
@@ -663,7 +663,7 @@ public class PowersWalkingHeart extends NewDashPreset {
                     if (!lv.isClientSide()) {
                         IPlayerEntity ipe = ((IPlayerEntity) PE);
                         ipe.roundabout$setUnlockedBonusSkin(true);
-                        lv.playSound(null, PE.getX(), PE.getY(),
+                        playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
@@ -782,12 +782,12 @@ public class PowersWalkingHeart extends NewDashPreset {
 
     public void hitSound(){
         sendHeelPacket(120);
-        this.self.level().playSound(null, this.self.blockPosition(),
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                 ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
     public void missSound(){
         sendHeelPacket(120);
-        this.self.level().playSound(null, this.self.blockPosition(),
+        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                 ModSounds.SPIKE_MISS_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
     }
 

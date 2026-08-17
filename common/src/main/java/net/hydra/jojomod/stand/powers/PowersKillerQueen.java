@@ -975,7 +975,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         20, 0, 0, 0, 0.4);
                 this.hasBitesTheDust = true;
 
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_NOISE_EVENT, SoundSource.PLAYERS, 0.85F, 1.0f);
 
                 syncCanBTDStatus(true);
 
@@ -1298,7 +1298,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 hitParticles(entity);
             } else {
             }
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
         }
     }
 
@@ -1368,7 +1368,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
          if (!this.self.level().isClientSide()) {
-             this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
+             playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, volume, pitch);
              this.playStandUserOnlySoundsIfNearby(soundShiba, 15, false, true);
          }
     }
@@ -1758,7 +1758,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             KQ.setHeldItem(ItemStack.EMPTY);
             syncBombStatus(ARROW_BOMB);
-            this.getSelf().level().playSound(null, arrow, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
+            arrow.level().playSound(null, arrow, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
         }
         this.setAttackTimeDuring(-20);
     }
@@ -1915,7 +1915,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (ent != null) {
                 int id = ent.getId();
 
-                //this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 2.0F,(float)(1.1+Math.random()*0.2));
+                //playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 2.0F,(float)(1.1+Math.random()*0.2));
 
                 this.tryIntPower(PowerIndex.POWER_2_EXTRA, false, id);
                 tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, id);
@@ -1944,7 +1944,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean addStrayCatto() {
         if (!this.isClient()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
 
             Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
@@ -2627,7 +2627,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         /**Item throw*/
                         standEntity.canAcquireHeldItem = true;
                         standEntity.setHeldItem(stack.copyWithCount(1));
-                        this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
+                        playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 1.3F);
                         setActivePower(ARROW_HOLDING);
                         this.setAttackTimeDuring(0);
                         poseStand(OffsetIndex.FOLLOW_NOLEAN);
@@ -2665,10 +2665,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentShaStatus == SHA_NONE) {
                 if (shaThrow) {
                     this.animateStand(KillerQueenEntity.HEAVY_STRIKE);
-                    this.self.level().playSound(null, this.self.blockPosition(), getPunchHitSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), getPunchHitSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.poseStand(OffsetIndex.ATTACK);
                 } else {
-                    this.self.level().playSound(null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.animateStand(KillerQueenEntity.SHA_SEND);
                     this.poseStand(OffsetIndex.FOLLOW);
                 }
@@ -2863,7 +2863,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 float radius = this.self.getBbWidth() * 0.5f + 0.05f;
                 ExplosionUtil.explodeEffects(this.self.getPosition(0), this.self.level(), ModParticles.KILLER_QUEEN_EXPLOSION, radius, 12);
-                this.getSelf().level().playSound(null, this.self.getOnPos(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.3F, 1.0f);
+                playSoundIfPossible(self.level(),null, this.self.getOnPos(), ModSounds.KILLER_QUEEN_EXPLOSION_EVENT, SoundSource.PLAYERS, 0.3F, 1.0f);
             }
         }
     }
@@ -3143,7 +3143,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
                         ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
-                        this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                        playSoundIfPossible(self.level(),null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
                     }
                 }else {
                     toRemoveFromList.add(id);
@@ -3189,7 +3189,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             }
 
                             ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
-                            this.getSelf().level().playSound(null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                            playSoundIfPossible(self.level(),null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
                         }
                     }
                 }else {
@@ -3892,7 +3892,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
-            this.getSelf().level().playSound(null, bPos, getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+            playSoundIfPossible(self.level(),null, bPos, getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
         }
 
         this.detonateTimer = -1;
@@ -3930,7 +3930,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!destruction && info.getBlock() instanceof TntBlock TNT) {
                     PrimedTnt $$3 = new PrimedTnt(level, (double)pos.getX() + (double)0.5F, (double)pos.getY(), (double)pos.getZ() + (double)0.5F, PE);
                     level.addFreshEntity($$3);
-                    level.playSound((Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    playSoundIfPossible(self.level(),(Player)null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
                     level.gameEvent(PE, GameEvent.PRIME_FUSE, pos);
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
                 }
@@ -3939,7 +3939,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     tntSweeped++;
                     if (tntSweeped > 2) {
                         ipe.roundabout$setUnlockedBonusSkin(true);
-                        self.level().playSound(null, self.getX(), self.getY(),
+                        playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                                 self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
                         ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
@@ -3955,7 +3955,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
                                 10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
-                        this.self.level().playSound(null, this.self.blockPosition(),
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                                 ModSounds.KQ_MINESWEEPER_BTD_NOISE_EVENT,
                                 SoundSource.PLAYERS, 2.2F, (float) (1.5F + Math.random() * 0.02));
                     }
