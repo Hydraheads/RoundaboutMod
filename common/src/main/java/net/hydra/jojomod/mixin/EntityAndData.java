@@ -693,9 +693,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
         Entity thirs = ((Entity)(Object)this);
-        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
-                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
-                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
+        if (PowerTypes.isErasingTime(thirs)){
             ci.cancel();
         }
     }
@@ -709,9 +707,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$waterSwimSound(CallbackInfo ci) {
         Entity thirs = ((Entity)(Object)this);
-        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
-                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
-                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
+        if (PowerTypes.isErasingTime(thirs)){
             ci.cancel();
         }
     }
@@ -942,6 +938,15 @@ public abstract class EntityAndData implements IEntityAndData {
             if (PowerTypes.isInADifferentExistenceNoTE(thrs,ClientUtil.getPlayer())){
                 ci.cancel();
                 return;
+            } else if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                ClientUtil.playSoundWithInfo(thrs.level(),
+                        thrs.getX(),
+                        thrs.getY(),
+                        thrs.getZ(),
+                        soundEvent,
+                        this.getSoundSource(),
+                        f,
+                        g);
             }
         } else {
             if (PowerTypes.isExistentiallyElsewhere(thrs)){

@@ -898,15 +898,7 @@ public class ClientUtil {
                             SoundSource.valueOf(str2);
                     float xrot = (float) vargs[5];
                     float yrot = (float) vargs[6];
-                    double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
-                    SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
-                            RandomSource.create(player.level().random.nextLong()), x, y, z);
-                    if ($$9 > 100.0) {
-                        double $$11 = Math.sqrt($$9) / 40.0;
-                        Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
-                    } else {
-                        Minecraft.getInstance().getSoundManager().play($$10);
-                    }
+                    playSoundWithInfo(player.level(),x,y,z,soundEvent,soundSource,xrot,yrot);
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
                     String str1 = (String) vargs[0];
@@ -952,6 +944,18 @@ public class ClientUtil {
                 //        }
             }
         });
+    }
+
+    public static void playSoundWithInfo(Level level, double x,double y,double z,SoundEvent soundEvent, SoundSource soundSource, float xrot, float yrot){
+        double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
+        SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
+                RandomSource.create(level.random.nextLong()), x, y, z);
+        if ($$9 > 100.0) {
+            double $$11 = Math.sqrt($$9) / 40.0;
+            Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
+        } else {
+            Minecraft.getInstance().getSoundManager().play($$10);
+        }
     }
     public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
         return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);

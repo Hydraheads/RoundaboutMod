@@ -4,6 +4,9 @@ package net.hydra.jojomod.mixin;
 import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClientPlayer;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -11,16 +14,22 @@ import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.AmbientSoundHandler;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -135,6 +144,7 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
             }
         }
     }
+
     @Unique
     private void roundabout$ClashJump(){
         if (((StandUser) this).roundabout$isClashing()) {
@@ -171,7 +181,28 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
             ci.cancel();
         }
     }
-
+    @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+        Entity thrs = ((Entity) (Object)this);
+        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
+            }
+            ci.cancel();
+            return;
+        }
+        if (PowerTypes.isExistentiallyElsewhere(thrs) && !PowerTypes.isErasingTime(thrs)){
+            ClientUtil.playSoundWithInfo(thrs.level(),
+                    thrs.getX(),
+                    thrs.getY(),
+                    thrs.getZ(),
+                    soundEvent,
+                    this.getSoundSource(),
+                    f,
+                    g);
+        }
+    }
 
     /**Soft and Wet blindness disables sprinting like actual blindness*/
     @Inject(method = "canStartSprinting", at = @At(value = "HEAD"), cancellable = true)
