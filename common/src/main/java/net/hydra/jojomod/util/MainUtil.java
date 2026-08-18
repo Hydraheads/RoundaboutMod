@@ -233,6 +233,7 @@ public class MainUtil {
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
@@ -349,6 +350,11 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isDiscEntityBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        return discEntityBlacklist != null && !discEntityBlacklist.isEmpty()
+                && rl != null && discEntityBlacklist.contains(rl.toString());
     }
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
         if (ent == null)

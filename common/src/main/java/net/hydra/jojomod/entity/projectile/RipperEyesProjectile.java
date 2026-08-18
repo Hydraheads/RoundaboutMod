@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
@@ -74,6 +75,9 @@ public class RipperEyesProjectile extends RoundaboutGeneralProjectile{
 
     public void blastEntity(Entity entity){
         //Add hurt code here
+        if (PowerTypes.isInADifferentExistence(entity,this)){
+            return;
+        }
         if (getOwner() instanceof Player pl && ((IPowersPlayer)pl).rdbt$getPowers() instanceof VampireGeneralPowers vgp){
 
             if (hasPassedThroughWall && MainUtil.isBossMob(entity) && !ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses){

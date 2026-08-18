@@ -135,6 +135,7 @@ public class ClientUtil {
     }
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
+    public static boolean leftADimension = false;
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
@@ -144,6 +145,16 @@ public class ClientUtil {
         }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
+            if (!canRenderWorldMerge()){
+                D4CTickStart = player.tickCount;
+            } else {
+                leftADimension = true;
+            }
+
+            if (!(leftADimension && !canRenderWorldMerge())){
+                D4CTickStart2 = player.tickCount;
+            }
+
             skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
@@ -1214,6 +1225,9 @@ public class ClientUtil {
     }
     public static float GameTimeStart = 0;
     public static float PlayerTickStart = 0;
+    public static float D4CTickStart = 0;
+    public static float D4CTickStart2 = 0;
+
     public static int TimeErase = -1;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1251,6 +1265,9 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+    public static boolean canRenderWorldMerge() {
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.getPlaneOfExisting2(getPlayer()) < 6;
     }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
