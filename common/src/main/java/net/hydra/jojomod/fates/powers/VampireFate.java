@@ -555,6 +555,11 @@ public class VampireFate extends VampiricFate {
         } else if (!self.isCrouching()){
             rechargeJump = false;
         }
+        if (!self.level().isClientSide()){
+            if (isHypnotizing && PowerTypes.isErasingTime(self)){
+                hypnosisServer();
+            }
+        }
         tickHypnosis();
         tickHair();
         super.tickPower();
@@ -870,7 +875,9 @@ public class VampireFate extends VampiricFate {
         }
 
         if (isHoldingSneak()) {
-            setSkillIcon(context, x, y, 2, StandIcons.REGENERATE, PowerIndex.FATE_2_SNEAK);
+            if (!PowerTypes.isInD4CWorld(self)) {
+                setSkillIcon(context, x, y, 2, StandIcons.REGENERATE, PowerIndex.FATE_2_SNEAK);
+            }
         } else {
             if (negateDrink()){
                 setSkillIcon(context, x, y, 2, StandIcons.FLOWER_DRINK, PowerIndex.FATE_EXTRA);

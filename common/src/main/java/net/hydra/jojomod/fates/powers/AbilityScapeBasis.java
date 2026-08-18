@@ -1664,6 +1664,9 @@ public class AbilityScapeBasis {
 
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
+        if (PowerTypes.isErasingTime(self)){
+            return;
+        }
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1673,6 +1676,9 @@ public class AbilityScapeBasis {
     }
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
+        if (PowerTypes.isErasingTime(self)){
+            return;
+        }
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1683,6 +1689,9 @@ public class AbilityScapeBasis {
 
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
+        if (PowerTypes.isErasingTime(self)){
+            return;
+        }
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
@@ -1693,6 +1702,9 @@ public class AbilityScapeBasis {
 
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
+        if (PowerTypes.isErasingTime(self)){
+            return;
+        }
         if (!hasActive(this.getSelf())) {
             if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
                 ((StandUser) this.getSelf()).roundabout$setIdleTime(0);

@@ -1267,7 +1267,7 @@ public class ClientUtil {
         return false;
     }
     public static boolean canRenderWorldMerge() {
-        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.getPlaneOfExisting2(getPlayer()) < 6;
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.isInD4CWorld(getPlayer());
     }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){

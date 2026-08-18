@@ -411,6 +411,10 @@ public enum PowerTypes {
         }
         return false;
     }
+    public static boolean isInD4CWorld(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 5;
+    }
 
     public static boolean hasPowerActive(Entity entity){
         if (entity instanceof LivingEntity LE){
