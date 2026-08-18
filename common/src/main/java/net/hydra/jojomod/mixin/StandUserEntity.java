@@ -5049,6 +5049,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     mb.setYHeadRot(this.yHeadRot);
                     mb.yHeadRotO = this.getYHeadRot();
                     mb.setOldPosAndRot();
+                    PowerTypes.copyPlaneOfExisting(this,mb);
                     this.level().addFreshEntity(mb);
                 }
                 if (marked){

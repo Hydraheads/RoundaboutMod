@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -174,6 +175,7 @@ public class BlockWallEntity extends Entity {
                             LE.getYRot(), -8.0F, 0.8F, 0.1F);
                     thrownBlockOrItem.setPos(position().add(0,0.5F,0));
                     thrownBlockOrItem.setStyle(ThrownObjectEntity.STAND_DAMAGE);
+                    PowerTypes.copyPlaneOfExisting(LE,thrownBlockOrItem);
                     LE.level().addFreshEntity(thrownBlockOrItem);
                     this.discard();
                 }

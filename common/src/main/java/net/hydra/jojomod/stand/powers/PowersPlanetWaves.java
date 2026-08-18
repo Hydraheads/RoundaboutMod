@@ -410,7 +410,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     meteor.shoot(direction.x, direction.y, direction.z, 1.2F, 0.0F);
 
                     meteor.setMeteorScale(0.5F);
-
+                    PowerTypes.copyPlaneOfExisting(self,meteor);
                     level.addFreshEntity(meteor);
                 }
             }
@@ -485,7 +485,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
 
         meteor.setChain(0, true);
-
+        PowerTypes.copyPlaneOfExisting(self,meteor);
         level.addFreshEntity(meteor);
 
         playSoundIfPossible(self.level(),null, this.self.blockPosition(),
@@ -528,7 +528,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         meteor.absMoveTo(spawnPos.x, spawnPos.y, spawnPos.z);
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
-
+        PowerTypes.copyPlaneOfExisting(self,meteor);
         level.addFreshEntity(meteor);
     }
 
@@ -602,7 +602,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         meteor.setCraterMultiplier(targetingActive ? 1.5F : 1.0F);
 
         meteor.shoot(direction.x, direction.y, direction.z, 1.8F, 0.0F);
-
+        PowerTypes.copyPlaneOfExisting(self,meteor);
         level.addFreshEntity(meteor);
 
 

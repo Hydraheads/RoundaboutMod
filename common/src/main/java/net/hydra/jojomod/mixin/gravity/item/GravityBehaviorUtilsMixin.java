@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity.item;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +26,7 @@ public class GravityBehaviorUtilsMixin {
             LivingEntity entity, ItemStack $$1, Vec3 $$2, Vec3 $$3, float $$4, CallbackInfo ci
     ) {
         Direction gravityDirection = GravityAPI.getGravityDirection(entity);
-        if (gravityDirection == Direction.DOWN)
+        if (gravityDirection == Direction.DOWN && !PowerTypes.isExistentiallyElsewhere(entity))
             return;
         ci.cancel();
 
@@ -46,6 +47,7 @@ public class GravityBehaviorUtilsMixin {
         $$7 = $$7.normalize().multiply($$3.x, $$3.y, $$3.z);
         GravityAPI.setWorldVelocity(itemEntity, $$7);
         itemEntity.setDefaultPickUpDelay();
+        PowerTypes.copyPlaneOfExisting(entity,itemEntity);
         entity.level().addFreshEntity(itemEntity);
     }
 

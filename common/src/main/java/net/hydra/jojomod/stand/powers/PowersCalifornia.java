@@ -677,6 +677,7 @@ public class PowersCalifornia extends NewDashPreset {
                 step.userEntity = self;
                 step.timing = 440;
                 addSpawnedEntity(step);
+                PowerTypes.copyPlaneOfExisting(self,step);
                 self.level().addFreshEntity(step);
             }
         }

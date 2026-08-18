@@ -282,6 +282,12 @@ public enum PowerTypes {
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
         }
     }
+    public static void copyPlaneOfExisting(Entity from, Entity to){
+        if (from != null && to != null){
+            ((IGravityEntity)to).roundabout$setExistPlane(
+                    ((IGravityEntity)from).roundabout$getExistPlane());
+        }
+    }
 
     public static int getForeignWorldMaxTime(byte worldType){
         if (worldType == 0 || worldType == 10){

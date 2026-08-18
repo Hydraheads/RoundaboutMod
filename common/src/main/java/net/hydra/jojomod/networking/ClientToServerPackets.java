@@ -406,6 +406,7 @@ public class ClientToServerPackets {
                                 fm.setPos(vec.x, vec.y + yElevation, vec.z);
                                 fm.placer = sender;
                                 fm.setPhasesFull(true);
+                                PowerTypes.copyPlaneOfExisting(sender,fm);
                                 fm.tickThroughPlacerStart();
                                 fm.setForcedRotation(sender.getYRot() % 360);
                                 fm.setYRot(sender.getYRot() % 360);
