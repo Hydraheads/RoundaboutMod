@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -100,6 +101,9 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     public void blastEntity(LivingEntity entity){
         //Add hurt code here
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
+        if (PowerTypes.isInADifferentExistence(entity,this)){
+            return;
+        }
         if (!entity.isInvulnerable()){
             if (entity instanceof Player pl){
                 HeatUtil.addHeat(entity,-33);

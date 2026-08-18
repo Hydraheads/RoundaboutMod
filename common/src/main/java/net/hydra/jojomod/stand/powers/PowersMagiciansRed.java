@@ -1922,6 +1922,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (!listE.isEmpty()){
                     for (int i = 0; i< listE.size(); i++){
                         if (!(listE.get(i) instanceof StandEntity SE && !SE.canBeHitByStands()) && listE.get(i).distanceTo(this.self) < distMax) {
+                            if (PowerTypes.isInADifferentExistence(listE.get(i),self)){
+                                continue;
+                            }
                             if (lastHit){
                                 tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK_2,listE.get(i).getId());
                             } else {
@@ -1947,6 +1950,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 for (int i = 0; i< listE.size(); i++){
                     if (!(storeEnt != null && listE.get(i).is(storeEnt))) {
                         if (!(listE.get(i) instanceof StandEntity) && listE.get(i).distanceTo(this.self) < distMax) {
+                            if (PowerTypes.isInADifferentExistence(listE.get(i),self)){
+                                continue;
+                            }
                             if (lastHit) {
                                 rangedBarrageImpact(listE.get(i), true);
                             } else {

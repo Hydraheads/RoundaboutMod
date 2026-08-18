@@ -2878,7 +2878,7 @@ public class AbilityScapeBasis {
 
         for (Entity value : entities) {
             if (!value.showVehicleHealth() || (!MainUtil.isStandPickable(value) && !(value instanceof StandEntity)) || (!value.isAttackable() && !(value instanceof StandEntity)) || value.isInvulnerable() || !value.isAlive()
-                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID()) || PowerTypes.isInADifferentExistence(value,self)
                     || value.is(User) || (((StandUser)User).roundabout$getStand() != null &&
                     ((StandUser)User).roundabout$getStand().is(User)) || (User instanceof StandEntity SE && SE.getUser() !=null && SE.getUser().is(value)) ||
                     (User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() && SE2.getUser().getVehicle().getUUID() == value.getUUID())){

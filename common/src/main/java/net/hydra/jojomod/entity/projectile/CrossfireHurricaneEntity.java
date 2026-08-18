@@ -7,6 +7,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -466,6 +467,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
     public static void blastEntity(Entity gotten, Entity proj, int size, LivingEntity user, boolean direct, PowersMagiciansRed PMR,
                                    boolean fireStorm, float multi){
+        if (PowerTypes.isInADifferentExistence(gotten,proj)){
+            return;
+        }
         if (!(user instanceof Player) && !(user instanceof Monster)){
             if (!(gotten instanceof Monster)){
                 if (!(user instanceof Mob mb && mb.getTarget() !=null && mb.getTarget().is(gotten))){
