@@ -232,6 +232,7 @@ public enum PowerTypes {
         return false;
     }
 
+    public static Entity expStore = null;
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){

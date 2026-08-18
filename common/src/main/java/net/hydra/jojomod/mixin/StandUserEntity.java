@@ -88,6 +88,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -392,8 +393,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "dropExperience", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$dropExperience(CallbackInfo ci) {
         if (rdbt$getExperienceTaken()){
+            PowerTypes.expStore = null;
             ci.cancel();
+            return;
         }
+        PowerTypes.expStore = this;
+    }
+    @Inject(method = "dropExperience", at = @At(value = "TAIL"), cancellable = true, require = 0)
+    public void roundabout$dropExperience2(CallbackInfo ci) {
+        PowerTypes.expStore = null;
     }
 
     @Unique
@@ -6289,6 +6297,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+
     @Unique
     public void rdbt$tickCooldowns(){
         try {
@@ -6417,6 +6426,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             BtdPlantedTicks = e;
         }
     }
+
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
