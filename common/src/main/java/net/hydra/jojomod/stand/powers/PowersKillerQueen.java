@@ -1100,10 +1100,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!keyIsDown) {
                     if (activePower == ARROW_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        if (!((double)getStrenghtFromTime(atd) < 0.1D)) {
-                            this.tryIntPower(ARROW_THROW, true, atd);
-                            tryIntPowerPacket(ARROW_THROW, atd);
-                        }
+                        this.tryIntPower(ARROW_THROW, true, atd);
+                        tryIntPowerPacket(ARROW_THROW, atd);
+
                     }else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
                         this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
@@ -3660,8 +3659,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (ClashTime == 15) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
-            } else if (((double)getStrenghtFromTime(this.getAttackTimeDuring()) < 0.1D)) {
-                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
             }else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
             }
