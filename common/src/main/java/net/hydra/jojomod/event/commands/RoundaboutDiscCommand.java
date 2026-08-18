@@ -63,6 +63,8 @@ public final class RoundaboutDiscCommand {
             Component.literal("That disc type is disabled in the server config."));
     private static final SimpleCommandExceptionType MOB_MEMORY_PLAYER_TARGET = new SimpleCommandExceptionType(
             Component.literal("Mob memory discs cannot be inserted into players."));
+    private static final SimpleCommandExceptionType DISC_TARGET_BLACKLISTED = new SimpleCommandExceptionType(
+            Component.literal("That entity is blacklisted from having discs."));
 
     private RoundaboutDiscCommand() {
     }
@@ -143,6 +145,10 @@ public final class RoundaboutDiscCommand {
                 .orElseThrow(INVALID_MEMORY_ENTITY::create);
         Entity created = type.create(source.getLevel());
         if (!(created instanceof LivingEntity mob)) throw INVALID_MEMORY_ENTITY.create();
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(mob)) {
+            created.discard();
+            throw DISC_TARGET_BLACKLISTED.create();
+        }
 
         ItemStack disc = new ItemStack(ModItems.MEMORY_DISC);
         DiscItemData.setOwner(disc, mob);
@@ -176,6 +182,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertMemory(CommandSourceStack source, LivingEntity target, String value)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         String type = value.toLowerCase(Locale.ROOT);
         if (type.equals("hand")) return insertHeldDisc(source, target, WhitesnakeDiscUtil.MEMORY);
 
@@ -215,6 +222,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertBodyDisc(CommandSourceStack source, LivingEntity target, byte discType, String value)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         requireBodyDiscEnabled(discType);
         String normalized = value.toLowerCase(Locale.ROOT);
         if (normalized.equals("hand")) return insertHeldDisc(source, target, discType);
@@ -240,6 +248,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertHeldDisc(CommandSourceStack source, LivingEntity target, byte discType)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         requireBodyDiscEnabled(discType);
         ServerPlayer actor = source.getPlayerOrException();
         ItemStack held = matchingHeldDisc(actor, discType);
@@ -289,6 +298,7 @@ public final class RoundaboutDiscCommand {
 
     private static int extractDisc(CommandSourceStack source, LivingEntity target, String requestedType)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         ServerPlayer actor = source.getPlayerOrException();
         byte discType = switch (requestedType.toLowerCase(Locale.ROOT)) {
             case "memory" -> WhitesnakeDiscUtil.MEMORY;
@@ -327,5 +337,9 @@ public final class RoundaboutDiscCommand {
 
     private static void requireBodyDiscEnabled(byte discType) throws CommandSyntaxException {
         if (!WhitesnakeDiscUtil.isBodyDiscEnabled(discType)) throw DISC_DISABLED.create();
+    }
+
+    private static void requireDiscTarget(LivingEntity target) throws CommandSyntaxException {
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(target)) throw DISC_TARGET_BLACKLISTED.create();
     }
 }

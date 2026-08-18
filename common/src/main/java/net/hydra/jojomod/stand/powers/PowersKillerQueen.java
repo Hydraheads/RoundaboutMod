@@ -1100,8 +1100,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!keyIsDown) {
                     if (activePower == ARROW_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        this.tryIntPower(ARROW_THROW, true, atd);
-                        tryIntPowerPacket(ARROW_THROW, atd);
+                        if (!((double)getStrenghtFromTime() < 0.1D)) {
+                            this.tryIntPower(ARROW_THROW, true, atd);
+                            tryIntPowerPacket(ARROW_THROW, atd);
+                        }
                     }else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                         int atd = this.getAttackTimeDuring();
                         this.tryIntPower(PowerIndex.SNEAK_ATTACK, true, atd);
@@ -1726,16 +1728,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
+    public float getStrenghtFromTime() {
+        float $$1 = (float)chargedFinal / getArrowThrowChargeMax();
+        $$1 = (($$1 * $$1 + $$1 * 2.0F) / 3.0F);
+
+        if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
+
+        return $$1;
+    }
+
     public void arrowThrow() {
         StandEntity KQ = getStandEntity(self);
         if (KQ != null) {
+            float $$1 = getStrenghtFromTime();
+
             ItemStack stack = KQ.getHeldItem();
-            float $$1 = (float)chargedFinal / getArrowThrowChargeMax();
-            $$1 = (($$1 * $$1 + $$1 * 2.0F) / 3.0F);
-
-            if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
-
-            if ((double)$$1 < 0.1D) {return; }
 
             AbstractArrow arrow;
             if (stack.getItem() instanceof SpectralArrowItem) {
@@ -3446,7 +3453,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.getSelf().hasLineOfSight(ent)) {
 
-            if (this.currentBombStatus == BOMB_ENTITY && this.getBombEntity() != null) {
+            if ((this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB || this.currentBombStatus == ARROW_CONTACT) && this.getBombEntity() != null) {
                 if ((PowerTypes.isExistentiallyElsewhere(this.getBombEntity()))) {
                     if (((StandUser)this.getBombEntity()).roundabout$getStandPowers() instanceof
                             PowersKingCrimson pkc && pkc.timeEraseActive){
@@ -3485,7 +3492,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
         if (ent == this.SHA) { return 0xffffff; }
-        if(this.currentBombStatus == BOMB_ENTITY) {
+        if((this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB || this.currentBombStatus == ARROW_CONTACT)) {
             if (this.getBombEntity() != null && ent == this.getBombEntity()) {
                 if (this.getSelf().hasLineOfSight(ent)) { return 16150472; }
             }
@@ -3653,6 +3660,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (ClashTime == 15) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
+            } else if (((double)getStrenghtFromTime() < 0.1D)) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
             }else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
             }
