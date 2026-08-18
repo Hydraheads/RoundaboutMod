@@ -52,34 +52,9 @@ vec3 hueShift(vec3 color, float angle) {
     return rotation * color;
 }
 void main() {
-    vec4 original = texture(DiffuseSampler, texCoord);
+vec4 original = texture(DiffuseSampler, texCoord);
 
-    // Create a moderately shifted version
-    vec3 shifted = hueShift(original.rgb, 0.7);
-
-    // Only partially apply the shift
-    vec3 color = mix(
-        original.rgb,
-        shifted,
-        0.45
-    );
-
-    // Calculate brightness
-    float gray = dot(
-        color,
-        vec3(0.299, 0.587, 0.114)
-    );
-
-    // Reduce saturation for softer/pastel colors
-    color = mix(
-        vec3(gray),
-        color,
-        0.72
-    );
-
-
-
-
+vec3 color = original.rgb;
 
 float transitionTime =
     (GameTime + PartialTick) - GameTimeStart;
@@ -135,6 +110,4 @@ fragColor = vec4(
     clamp(color, 0.0, 1.0),
     original.a
 );
-
-
 }

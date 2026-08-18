@@ -113,10 +113,19 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
 
             RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
-            RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTimeStart",(float) ClientUtil.GameTimeStart);
+            RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTimeStart",(float) ClientUtil.D4CTickStart);
             RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("PartialTick",tickDelta%1);
 
             RPostShaderRegistry.D4C_DIM_MERGE.roundabout$process(tickDelta);
+        } else if(ClientUtil.leftADimension){
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTimeStart",(float) ClientUtil.D4CTickStart2);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("PartialTick",tickDelta%1);
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$process(tickDelta);
         }
     }
 

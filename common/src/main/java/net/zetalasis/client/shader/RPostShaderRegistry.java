@@ -22,6 +22,7 @@ public class RPostShaderRegistry {
     public static IPostChainAccessor WIND_VISION = null;
     public static IPostChainAccessor EPITAPH = null;
     public static IPostChainAccessor D4C_DIM_MERGE = null;
+    public static IPostChainAccessor D4C_DIM_MERGE_LEAVE = null;
 
     /** Super Secret Shaders */
     public static IPostChainAccessor DESATURATE = null;
@@ -38,6 +39,7 @@ public class RPostShaderRegistry {
         WIND_VISION = register("windvision");
         EPITAPH = register("epitaph");
         D4C_DIM_MERGE = register("d4cdimmerge");
+        D4C_DIM_MERGE_LEAVE = register("d4cdimmerge_leave");
 
         /** Super Secret Shaders */
         DESATURATE = register("desaturate");
