@@ -1100,7 +1100,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (!keyIsDown) {
                     if (activePower == ARROW_CHARGE) {
                         int atd = this.getAttackTimeDuring();
-                        if (!((double)getStrenghtFromTime() < 0.1D)) {
+                        if (!((double)getStrenghtFromTime(atd) < 0.1D)) {
                             this.tryIntPower(ARROW_THROW, true, atd);
                             tryIntPowerPacket(ARROW_THROW, atd);
                         }
@@ -1728,8 +1728,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public float getStrenghtFromTime() {
-        float $$1 = (float)chargedFinal / getArrowThrowChargeMax();
+    public float getStrenghtFromTime(int charged) {
+        float $$1 = (float)charged / getArrowThrowChargeMax();
         $$1 = (($$1 * $$1 + $$1 * 2.0F) / 3.0F);
 
         if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
@@ -1740,7 +1740,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void arrowThrow() {
         StandEntity KQ = getStandEntity(self);
         if (KQ != null) {
-            float $$1 = getStrenghtFromTime();
+            float $$1 = getStrenghtFromTime(chargedFinal);
 
             ItemStack stack = KQ.getHeldItem();
 
@@ -3660,7 +3660,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             if (ClashTime == 15) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 24, ClashTime, 6);
-            } else if (((double)getStrenghtFromTime() < 0.1D)) {
+            } else if (((double)getStrenghtFromTime(this.getAttackTimeDuring()) < 0.1D)) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
             }else {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 18, ClashTime, 6);
