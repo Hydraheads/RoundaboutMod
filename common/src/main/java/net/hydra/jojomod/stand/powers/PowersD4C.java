@@ -525,12 +525,10 @@ public class PowersD4C extends NewPunchingStand {
 
             for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
                 if (!target.equals(self) && target.isAlive()) {
-                    PowerTypes.setPlaneOfExisting(target,(byte)1);
+                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
                 }
             }
-            if (!self.isCrouching()){
-                PowerTypes.setPlaneOfExisting(self,(byte)1);
-            }
+            PowerTypes.setPlaneOfExisting(self,(byte)1);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }

@@ -141,7 +141,22 @@ public abstract class EntityAndData implements IEntityAndData {
         this.hasImpulse = true;
     }
 
+    @Inject(
+            method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
+            at = @At("RETURN")
+    )
+    private void roundabout$copyPlaneToDroppedItem(
+            ItemStack stack,
+            float yOffset,
+            CallbackInfoReturnable<ItemEntity> cir
+    ) {
+        Entity self = (Entity)(Object)this;
+        ItemEntity item = cir.getReturnValue();
 
+        if (item != null) {
+            PowerTypes.copyPlaneOfExisting(self, item);
+        }
+    }
 
     @Unique
     @Override

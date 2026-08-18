@@ -544,6 +544,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     continue;
                 }
 
+                ((StandUser) living).SetInPurpleHazeTicks(5);
+
                 int effectDuration = living instanceof Player ? 200 : 300;
 
                 if (purpleHazeFieldDistortionMode) {
@@ -715,17 +717,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.PH_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.purple_haze.capsule_throw",
                 "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.purple_haze.punch_barrage",
-                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+                "instruction.roundabout.barrage", StandIcons.PH_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
-                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
+                "instruction.roundabout.kick_barrage", StandIcons.PH_KICK_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 0, "ability.roundabout.forward_barrage",
-               "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
+               "instruction.roundabout.forward_barrage", StandIcons.PH_FORWARD_BARRAGE,1,level,bypas));
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
@@ -733,7 +735,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
                 "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,4, "ability.purple_haze.distortion_smoke",
