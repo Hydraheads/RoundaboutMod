@@ -1252,6 +1252,9 @@ public class ClientUtil {
         }
         return false;
     }
+    public static boolean canRenderWorldMerge() {
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.getPlaneOfExisting2(getPlayer()) < 6;
+    }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){
             return false;
