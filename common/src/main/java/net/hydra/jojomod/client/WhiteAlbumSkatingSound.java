@@ -2,6 +2,7 @@ package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.minecraft.client.Minecraft;
@@ -41,8 +42,8 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
             return;
         }
         if(user instanceof LivingEntity LE){
-            if (!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated() &&
-            user.isSprinting())){
+            if ((!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated() &&
+            user.isSprinting())) || PowerTypes.isInADifferentExistenceNoTE(ClientUtil.getPlayer(),LE)){
                 //Stop if you stop skating
                 stop();
                 return;
