@@ -32,6 +32,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -3604,7 +3605,12 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static Boolean isInPurpleHaze(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getPurpleHazeTicks() > 0;
+        }
+        return false;
+    }
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 

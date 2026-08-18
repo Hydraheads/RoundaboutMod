@@ -345,6 +345,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BOOLEAN);
 
     @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+
+    @Unique
     private StandPowers roundabout$Powers;
     @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
@@ -941,6 +944,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$endTick(CallbackInfo ci) {
         if(MoldTicks > 0){
             MoldTicks -= 1;
+        }
+        if (getPurpleHazeTicks() > 0) {
+            SetInPurpleHazeTicks(getPurpleHazeTicks() - 1);
         }
         if(BtdPlantedTicks > 0){
             if (roundabout$hasAStand()) {
@@ -3635,6 +3641,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 4);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
+
         }
     }
 
@@ -6391,6 +6399,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public int getMoldTicks() {
         return MoldTicks;
+    }
+
+    @Override
+    public void SetInPurpleHazeTicks(int e) {
+        this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
+    }
+
+    @Override
+    public int getPurpleHazeTicks() {
+        return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
     }
 
     public int BtdPlantedTicks;
