@@ -268,8 +268,24 @@ public class BlockGrabPreset extends NewPunchingStand {
         super.tickPower();
 
         if (!this.getSelf().level().isClientSide) {
-            if (hasEntity() && getActivePower() != PowerIndex.POWER_2_EXTRA) {
                 StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+                if (standEntity != null) {
+                    if (!standEntity.getHeldItem().isEmpty() && ((getActivePower() != PowerIndex.POWER_2 && getActivePower() != PowerIndex.POWER_2_SNEAK
+                            && getActivePower() != PowerIndex.POWER_2_SNEAK_EXTRA) || (standEntity.getAnimation() != StandEntity.BLOCK_GRAB &&
+                            standEntity.getAnimation() != StandEntity.ITEM_GRAB))) {
+                            if (!MainUtil.isThrownBlockItem(standEntity.getHeldItem().getItem())) {
+                                animateStand(StandEntity.ITEM_RETRACT);
+                            } else {
+                                animateStand(StandEntity.BLOCK_RETRACT);
+                            }
+                            if (standEntity.canAcquireHeldItem) {
+                                this.addItem(standEntity);
+                                standEntity.setHeldItem(ItemStack.EMPTY);
+                            }
+                        }
+                    }
+
+            if (hasEntity() && getActivePower() != PowerIndex.POWER_2_EXTRA) {
                 if (standEntity != null){
                     standEntity.ejectPassengers();
                 }
