@@ -63,7 +63,8 @@ public class ServerToClientPackets {
             AddEpitaph("add_epitaph"),
             ClearEpitaph("clear_epitaph"),
             SendSafeSound("send_safe_sound"),
-            SendSafeSound2("send_safe_sound_2");
+            SendSafeSound2("send_safe_sound_2"),
+            SendSafeParticle("send_safe_particle");
 
             public final String value;
 

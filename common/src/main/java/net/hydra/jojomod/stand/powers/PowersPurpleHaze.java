@@ -346,7 +346,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         switch (standSkin) {
             case PurpleHazeEntity.BLAZING_HAZE -> {
                 if (purpleHazeFieldDistortionMode) {
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.LARGE_SMOKE,
                             x,
                             y + 1.0,
@@ -357,7 +357,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             effectRange / 2,
                             0.01
                     );
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -372,7 +372,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.02
                     );
 
-                }else serverLevel.sendParticles(
+                }else sendParticlesIfPossible(self.level(),
                         ParticleTypes.LARGE_SMOKE,
                         x,
                         y + 1.0,
@@ -387,7 +387,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.GREEN -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -399,7 +399,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -416,7 +416,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -434,7 +434,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.NETHERITE -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -446,7 +446,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -463,7 +463,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -481,7 +481,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             default -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ModParticles.PURPLE_HAZE_SMOKE,
                             x,
                             y + 1.0,
@@ -493,7 +493,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -510,7 +510,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                        serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                                 ModParticles.PURPLE_HAZE_SMOKE,
                                 x,
                                 y + 1.0,
@@ -543,6 +543,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if (!(entity instanceof LivingEntity living)) {
                     continue;
                 }
+
+                ((StandUser) living).SetInPurpleHazeTicks(5);
 
                 int effectDuration = living instanceof Player ? 200 : 300;
 
@@ -656,7 +658,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
         if (self.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(
+            sendParticlesIfPossible(self.level(),
                     ParticleTypes.LARGE_SMOKE,
                     position.x,
                     position.y + 1.0,
@@ -715,17 +717,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.PH_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.purple_haze.capsule_throw",
                 "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.purple_haze.punch_barrage",
-                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+                "instruction.roundabout.barrage", StandIcons.PH_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
-                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
+                "instruction.roundabout.kick_barrage", StandIcons.PH_KICK_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 0, "ability.roundabout.forward_barrage",
-               "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
+               "instruction.roundabout.forward_barrage", StandIcons.PH_FORWARD_BARRAGE,1,level,bypas));
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
@@ -733,7 +735,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
                 "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,4, "ability.purple_haze.distortion_smoke",

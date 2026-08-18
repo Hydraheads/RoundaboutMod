@@ -12,7 +12,7 @@ public class HearingDiscItem extends AbstractBodyDiscItem {
     }
 
     @Override
-    protected boolean canImplant(LivingEntity target) {
+    protected boolean canImplant(ItemStack stack, LivingEntity target) {
         return WhitesnakeDiscUtil.isHearingDiscEnabled()
                 && !((DiscBearer) target).roundabout$ownsHearingDisc();
     }

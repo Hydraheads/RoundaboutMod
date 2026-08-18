@@ -610,9 +610,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 && Minecraft.getInstance().options.keySprint.isDown();
         entity.setSprinting(sprinting);
         boolean swimming = !meltingMode && entity.isInWater();
+        boolean inLava = !meltingMode && entity.isInLava();
         entity.setSwimming(swimming && sprinting);
         if (entity.isSwimming()) entity.setPose(Pose.SWIMMING);
-        if (swimming) whitesnake.controlSwim(input.jumping, input.shiftKeyDown);
+        if (swimming || inLava) whitesnake.controlSwim(input.jumping, input.shiftKeyDown);
         float movementSpeed = meltingMode ? 0.06F : input.shiftKeyDown ? 0.03F : sprinting ? 0.13F : 0.1F;
         entity.setSpeed(inputSpeedModifiers(movementSpeed));
         entity.setYHeadRot(entity.getYRot());
@@ -642,7 +643,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             meltingCrawlGraceTicks = 0;
             meltingCrawlTransitionTicks = 0;
         }
-        if (!hoverEnabled && !swimming && input.jumping && entity.onGround()) {
+        if (!hoverEnabled && !swimming && !inLava && input.jumping && entity.onGround()) {
             whitesnake.controlJump();
         }
     }
@@ -2358,7 +2359,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         } else if (!self.level().isClientSide()) {
             Vec3 point = DamageHandler.getRayPoint(origin, CONTROL_PUNCH_RANGE * 0.5F);
-            ((ServerLevel) self.level()).sendParticles(ModParticles.PUNCH_MISS,
+            sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS,
                     point.x, point.y, point.z, 1, 0.0, 0.0, 0.0, 1);
         }
         SoundEvent sound;
@@ -2427,7 +2428,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             standImpale();
         } else if (attackTimeDuring >= 0 && !self.level().isClientSide() && attackTimeDuring % 4 == 0) {
             LivingEntity origin = actionOrigin();
-            ((ServerLevel) self.level()).sendParticles(ModParticles.MENACING,
+            sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                     origin.getX(), origin.getY() + 0.3D, origin.getZ(),
                     1, 0.2D, 0.2D, 0.2D, 0.05D);
         }
@@ -2704,7 +2705,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                     : this.getDistanceOut(this.self, this.getReach(), false) * 0.5F;
             Vec3 pointVec = DamageHandler.getRayPoint(origin, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS,
                         pointVec.x, pointVec.y, pointVec.z, 1, 0.0, 0.0, 0.0, 1);
             }
         }

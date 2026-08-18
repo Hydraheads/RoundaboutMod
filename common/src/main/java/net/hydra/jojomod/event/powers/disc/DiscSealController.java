@@ -7,7 +7,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.ModEffects;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -34,8 +33,6 @@ public final class DiscSealController {
                     mob.setTarget(null);
                     mob.getNavigation().stop();
                     if (mob.isNoAi()) mob.setNoAi(false);
-                } else if (target instanceof ServerPlayer player) {
-                    MemoryAiController.clearPlayerState(player);
                 }
             }
             return true;
@@ -59,8 +56,6 @@ public final class DiscSealController {
                 mob.setTarget(null);
                 mob.getNavigation().stop();
                 if (mob.isNoAi()) mob.setNoAi(false);
-            } else if (target instanceof ServerPlayer player) {
-                MemoryAiController.clearPlayerState(player);
             }
         }
         return true;

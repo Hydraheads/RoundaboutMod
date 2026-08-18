@@ -1,24 +1,30 @@
 package net.hydra.jojomod.mixin.forge;
 
 import net.hydra.jojomod.access.IFatePlayer;
+import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.HeatUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,6 +38,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
@@ -166,6 +173,70 @@ public abstract class ForgePlayer extends LivingEntity {
         }
     }
 
+    @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
+    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g, CallbackInfo ci) {
+        Entity thrs = ((Entity) (Object)this);
+        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+            if (sbpe !=null) {
+                sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
+            }
+            ci.cancel();
+            return;
+        }
+        if (level().isClientSide()){
+            if (PowerTypes.isInADifferentExistenceNoTE(thrs, ClientUtil.getPlayer())){
+                ci.cancel();
+                return;
+            } else if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                ClientUtil.playSoundWithInfo(thrs.level(),
+                        thrs.getX(),
+                        thrs.getY(),
+                        thrs.getZ(),
+                        soundEvent,
+                        this.getSoundSource(),
+                        f,
+                        g);
+            }
+        } else {
+            if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                if (thrs.level() instanceof ServerLevel sl) {
+                    if (soundEvent != null) {
+                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
+                        String str = this.getSoundSource().name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = soundEvent.getRange(g);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(thrs) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    thrs,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    thrs.getX(),
+                                    thrs.getY(),
+                                    thrs.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    f,
+                                    g
+                            );
+                        }
+                    }
+                }
+                ci.cancel();
+                return;
+            }
+        }
+    }
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
     protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {

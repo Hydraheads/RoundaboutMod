@@ -282,8 +282,11 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     }
 
     public void controlSwim(boolean ascending, boolean descending) {
-        if (!isInWater() || isMeltingModeActive()) return;
-        if (ascending) jumpInLiquid(FluidTags.WATER);
+        if (isMeltingModeActive()) return;
+        if (ascending) {
+            if (isInWater()) jumpInLiquid(FluidTags.WATER);
+            else if (isInLava()) jumpInLiquid(FluidTags.LAVA);
+        }
         if (descending) {
             Vec3 velocity = getDeltaMovement();
             setDeltaMovement(velocity.x, velocity.y - 0.04D, velocity.z);

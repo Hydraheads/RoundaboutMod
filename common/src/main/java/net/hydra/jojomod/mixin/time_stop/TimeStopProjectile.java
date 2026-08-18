@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -58,6 +59,7 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
                     }
                 }
             }
+            PowerTypes.copyPlaneOfExisting($$0,this);
         }
     }
 

@@ -843,6 +843,11 @@ public class StandIcons {
     public static final ResourceLocation PODS_6 = Roundabout.location("textures/gui/icons/purple_haze/6_pods.png");
     public static final ResourceLocation ADVANCED_RECHARGE = Roundabout.location("textures/gui/icons/purple_haze/recharge_advanced.png");
     public static final ResourceLocation PODS6NOBORDER = Roundabout.location("textures/gui/icons/purple_haze/6_pods_no_border.png");
+    public static final ResourceLocation PH_KICK_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/kick_barrage.png");
+    public static final ResourceLocation PH_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/barrage.png");
+    public static final ResourceLocation PH_SWITCH = Roundabout.location("textures/gui/icons/purple_haze/switch.png");
+    public static final ResourceLocation PH_FORWARD_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/forwardbarrage.png");
+    public static final ResourceLocation PH_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/punch.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

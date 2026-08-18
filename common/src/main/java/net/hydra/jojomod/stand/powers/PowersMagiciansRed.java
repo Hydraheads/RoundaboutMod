@@ -281,7 +281,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (ticksUntilHurricaneEnds <= -1) {
                     if (hasHurricane()) {
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 2F, 0.8F);
-                        ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                        sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                                 this.self.getY() + (this.self.getBbHeight() * 0.5), this.self.getZ(),
                                 20,
                                 1.2, 1.2, 1.2,
@@ -343,7 +343,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!this.self.level().isClientSide()) {
             if (this.isInRain() && !this.self.isUnderWater() && isUsingFirestorm()) {
                 if (this.self.tickCount % 2 == 0) {
-                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, this.self.getX(),
+                    sendParticlesIfPossible(self.level(),ParticleTypes.SMOKE, this.self.getX(),
                             this.self.getY() + this.self.getBbHeight(), this.self.getZ(),
                             2,
                             0.2,
@@ -1420,7 +1420,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.DREAD_SUMMON_EVENT, PE.getSoundSource(), 3.0F, 1.0F);
-                            ((ServerLevel) lv).sendParticles(ModParticles.DREAD_FLAME, PE.getX(),
+                            sendParticlesIfPossible(self.level(),ModParticles.DREAD_FLAME, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                     10, 0.5, 0.5, 0.5, 0.2);
                             user.roundabout$setStandSkin(MagiciansRedEntity.DREAD_BEAST_SKIN);
@@ -1443,7 +1443,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 LifeTrackerEntity cross = ModEntities.LIFE_TRACKER.create(this.getSelf().level());
                 if (cross != null) {
                     tracker = cross;
-
+                    PowerTypes.copyPlaneOfExisting(self,cross);
                     Vec3 bam = new Vec3(0,
                             (this.self.getBbHeight()/2),
                             0);
@@ -1496,7 +1496,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
             StandEntity stand = this.getStandEntity(this.self);
             if (stand != null) {
-                ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                sendParticlesIfPossible(self.level(),getFlameParticle(), stand.getX(),
                         stand.getY(), stand.getZ(),
                         80,
                         0.5,
@@ -1686,7 +1686,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
@@ -1855,7 +1855,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         double random = (Math.random() * 2.2) - 1.1;
                         double random2 = (Math.random() * 2.2) - 1.1;
                         double random3 = (Math.random() * 2.2) - 1.1;
-                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                        sendParticlesIfPossible(self.level(),getFlameParticle(), stand.getX(),
                                 stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
                                 0,
                                 (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
@@ -1879,7 +1879,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         double random = (Math.random() * 6) - 3;
                         double random2 = (Math.random() * 6) - 3;
                         double random3 = (Math.random() * 6) - 3;
-                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                        sendParticlesIfPossible(self.level(),getFlameParticle(), stand.getX(),
                                 stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
                                 0,
                                 (-3 * (stand.getX() - vector.x()) + 0.5 + random) * spd,
@@ -1969,7 +1969,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(),  SoundEvents.FIRECHARGE_USE,
                             SoundSource.PLAYERS, 1F, 2F);
 
-                    ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                    sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                             this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
                             20,
                             0.4, 0.4, 0.4,
@@ -1980,7 +1980,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
             } else if (this.attackTimeDuring == getChargingCrossfireSpecialSize()){
 
-                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                         this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
                         10,
                         0.4, 0.4, 0.4,
@@ -2093,27 +2093,27 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     public void sendSpecialParticle(BlockPos pos){
         if (!this.self.level().isClientSide()) {
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.5,
+            sendParticlesIfPossible(self.level(),getFlameParticle(), pos.getX()+0.5,
                     pos.getY(), pos.getZ()+0.5,
                     0,
                     0, 1, 0,
                     0.16);
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.25,
+            sendParticlesIfPossible(self.level(),getFlameParticle(), pos.getX()+0.25,
                     pos.getY(), pos.getZ()+0.25,
                     0,
                     0, 1, 0,
                     0.16);
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.25,
+            sendParticlesIfPossible(self.level(),getFlameParticle(), pos.getX()+0.25,
                     pos.getY(), pos.getZ()+0.75,
                     0,
                     0, 1, 0,
                     0.16);
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.75,
+            sendParticlesIfPossible(self.level(),getFlameParticle(), pos.getX()+0.75,
                     pos.getY(), pos.getZ()+0.25,
                     0,
                     0, 1, 0,
                     0.16);
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), pos.getX()+0.75,
+            sendParticlesIfPossible(self.level(),getFlameParticle(), pos.getX()+0.75,
                     pos.getY(), pos.getZ()+0.75,
                     0,
                     0, 1, 0,
@@ -2237,7 +2237,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 fireCount = 100;
                 firespeed =0.1F;
             }
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), entity.getX(),
+            sendParticlesIfPossible(self.level(),getFlameParticle(), entity.getX(),
                     entity.getY() + (entity.getBbHeight() * 0.5), entity.getZ(),
                     fireCount,
                     0, 0, 0,
@@ -2248,7 +2248,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -2621,6 +2621,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_FLAME_HIT_EVENT, SoundSource.PLAYERS, 1F, 1.5F);
                 GroundHurricaneEntity groundent = new GroundHurricaneEntity(this.getSelf().level(), this.self);
                 groundent.setLifeSpan(200);
+                PowerTypes.copyPlaneOfExisting(self,groundent);
                 groundent.setPos(this.self.position());
                 groundent.fireStormCreated = isUsingFirestorm();
                 if (this.hurricane != null){
@@ -2654,6 +2655,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 thrownBlockOrItem.shootFromRotationDeltaAgnostic(this.getSelf(), this.getSelf().getXRot(),
                         this.getSelf().getYRot(), 0, 0.12F, 0);
                 thrownBlockOrItem.fireStormCreated = isUsingFirestorm();
+                PowerTypes.copyPlaneOfExisting(self,thrownBlockOrItem);
                 if (this.hurricane != null){
 
                     thrownBlockOrItem.setSize(this.hurricane.getSize());
@@ -2703,7 +2705,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         double random = (Math.random() * 14) - 7;
                         double random2 = (Math.random() * 14) - 7;
                         double random3 = (Math.random() * 14) - 7;
-                        ((ServerLevel) stand.level()).sendParticles(getFlameParticle(), stand.getX(),
+                        sendParticlesIfPossible(self.level(),getFlameParticle(), stand.getX(),
                                 stand.getY() + stand.getEyeHeight() * 0.8, stand.getZ(),
                                 0,
                                 (-3 * (stand.getX() - grabBlock.getX()) + 0.5 + random) * spd,
@@ -2735,7 +2737,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
                 if (angleDistance(lookVec.x, (User.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, User.getXRot()) <= angle){
                     hitEntities.remove(value);
-                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, value.getX(),
+                    sendParticlesIfPossible(self.level(),ParticleTypes.SMOKE, value.getX(),
                             value.getY(), value.getZ(),
                             20,
                             0.1,
@@ -2744,9 +2746,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                             0.03);
 
                     if (value instanceof GasolineSplatterEntity || value instanceof GasolineCanEntity){
-                        ((ServerLevel) value.level()).sendParticles(ParticleTypes.FLAME, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.FLAME, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
                                 40, 0.0, 0.2, 0.0, 0.2);
-                        ((ServerLevel) value.level()).sendParticles(ParticleTypes.EXPLOSION, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
+                        sendParticlesIfPossible(self.level(),ParticleTypes.EXPLOSION, value.getX(), value.getY()+value.getEyeHeight(), value.getZ(),
                                 1, 0.5, 0.5, 0.5, 0.2);
                         MainUtil.gasExplode(null, (ServerLevel) value.level(), value.getOnPos(), 0, 2, 4, MainUtil.gasDamageMultiplier()*10);
                     }
@@ -2910,7 +2912,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     double random = (Math.random() * 0.8) - 0.4;
                     double random2 = (Math.random() * 0.8) - 0.4;
                     double random3 = (Math.random() * 0.8) - 0.4;
-                    ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                    sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                             this.self.getY() + this.self.getEyeHeight() * 0.7, this.self.getZ(),
                             0,
                             -1 * (this.self.getX() - grabBlock.getX()) + 0.5 + random,
@@ -3021,7 +3023,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MAGICIANS_RED_CRY_3_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
                 user.roundabout$setOnStandFire((byte) 1, this.self);
-                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), this.self.getX(),
+                sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                         this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
                         10,
                         0.25, 0.25, 0.25,
@@ -3176,7 +3178,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 drillTime = 80;
                 addEXP(6, leaded);
                 ((StandUser) leaded).roundabout$setRedBound(true);
-                ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
+                sendParticlesIfPossible(self.level(),getFlameParticle(), leaded.getX(),
                         leaded.getY() + (leaded.getBbHeight() * 0.5), leaded.getZ(),
                         10,
                         0.25, 0.25, 0.25,
@@ -3191,7 +3193,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             setDazed( leaded, (byte) 3);
             leaded.hurtMarked = true;
             leaded.setDeltaMovement(leaded.getDeltaMovement().x(),0.028,leaded.getDeltaMovement().z());
-            ((ServerLevel) this.self.level()).sendParticles(getFlameParticle(), leaded.getX(),
+            sendParticlesIfPossible(self.level(),getFlameParticle(), leaded.getX(),
                     leaded.getY()+(leaded.getBbHeight()*0.7), leaded.getZ(),
                     2,
                     0.25, 0.3, 0.25,
@@ -3403,7 +3405,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         this.setAttackTimeDuring(-10);
         if (entity != null) {
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                sendParticlesIfPossible(self.level(),ParticleTypes.SMOKE, entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                         4, 0.1, 0.1, 0.1, 0.3);
             }
             float pow;
@@ -3443,7 +3445,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SMOKE, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ParticleTypes.SMOKE, pointVec.x, pointVec.y, pointVec.z,
                         10, 0.2, 0.2, 0.2, 0.1);
             }
         }

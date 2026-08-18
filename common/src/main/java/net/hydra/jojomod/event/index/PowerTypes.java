@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -232,6 +233,7 @@ public enum PowerTypes {
         return false;
     }
 
+    public static Entity expStore = null;
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
@@ -280,6 +282,22 @@ public enum PowerTypes {
     public static void setPlaneOfExisting(Entity entity, byte plane){
         if (entity != null){
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+        }
+    }
+    public static void forcePlaneOfExisting(Entity entity, byte plane){
+        if (entity instanceof LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$isClashing()){
+                user.roundabout$getStandPowers().endClash();
+            }
+            user.roundabout$tryPower(PowerIndex.NONE,true);
+        }
+        ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+    }
+    public static void copyPlaneOfExisting(Entity from, Entity to){
+        if (from != null && to != null){
+            ((IGravityEntity)to).roundabout$setExistPlane(
+                    ((IGravityEntity)from).roundabout$getExistPlane());
         }
     }
 

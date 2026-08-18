@@ -525,12 +525,10 @@ public class PowersD4C extends NewPunchingStand {
 
             for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
                 if (!target.equals(self) && target.isAlive()) {
-                    PowerTypes.setPlaneOfExisting(target,(byte)1);
+                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
                 }
             }
-            if (!self.isCrouching()){
-                PowerTypes.setPlaneOfExisting(self,(byte)1);
-            }
+            PowerTypes.setPlaneOfExisting(self,(byte)1);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }
@@ -796,7 +794,7 @@ public class PowersD4C extends NewPunchingStand {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
@@ -1125,7 +1123,7 @@ public class PowersD4C extends NewPunchingStand {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }

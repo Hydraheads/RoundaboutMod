@@ -73,9 +73,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere(this) &&
-                !(level().isClientSide() && !PowerTypes.isErasingTime(this) &&
-                        !PowerTypes.isInADifferentExistence(this, ClientUtil.getPlayer()))){
+        if (PowerTypes.isErasingTime(this)){
             ci.cancel();
             return;
         }

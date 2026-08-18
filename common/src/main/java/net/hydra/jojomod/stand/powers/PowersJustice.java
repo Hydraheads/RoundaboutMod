@@ -588,7 +588,7 @@ public class PowersJustice extends NewDashPreset {
 
     public void particleSpew(){
         playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FOG_MORPH_EVENT, SoundSource.PLAYERS, 0.36F, 1.0F);
-        ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
+        sendParticlesIfPossible(self.level(),ModParticles.FOG_CHAIN, this.self.getX(),
                 this.self.getY()+(this.self.getBbWidth()*0.6), this.self.getZ(),
                 14, 0.4, 0.2, 0.4, 0.35);
     }
@@ -757,7 +757,7 @@ public class PowersJustice extends NewDashPreset {
                             ipe.roundabout$setUnlockedBonusSkin(true);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
-                            ((ServerLevel) lv).sendParticles(ParticleTypes.END_ROD, PE.getX(),
+                            sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                     10, 0.5, 0.5, 0.5, 0.2);
                             user.roundabout$setStandSkin(JusticeEntity.FLAMED);
@@ -1103,7 +1103,7 @@ public class PowersJustice extends NewDashPreset {
                 double random = (Math.random() * 1.2) - 0.6;
                 double random2 = (Math.random() * 1.2) - 0.6;
                 double random3 = (Math.random() * 1.2) - 0.6;
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, this.self.getX(),
+                sendParticlesIfPossible(self.level(),ParticleTypes.POOF, this.self.getX(),
                         this.self.getY() + this.self.getEyeHeight(), this.self.getZ(),
                         0,
                         vector.x+random,
@@ -1409,7 +1409,7 @@ public class PowersJustice extends NewDashPreset {
             clone2 = fclone2;
 
             this.setCooldown(PowerIndex.SKILL_3, ClientNetworking.getAppropriateConfig().justiceSettings.fogCloneCooldown);
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.FOG_CHAIN, this.self.getX(),
+            sendParticlesIfPossible(self.level(),ModParticles.FOG_CHAIN, this.self.getX(),
                     this.self.getY()+this.self.getEyeHeight(), this.self.getZ(),
                     50, 1, 1, 1, 0.1);
             playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
@@ -1506,7 +1506,7 @@ public class PowersJustice extends NewDashPreset {
                 boolean success = false;
                 for (Entity value : entities) {
                     if (!(!value.showVehicleHealth() || !value.isAttackable() || value.isInvulnerable() ||
-                            !value.isAlive())) {
+                            !value.isAlive()) && !PowerTypes.isInADifferentExistence(value,self)) {
                         if (icast.roundabout$inPermaCastFogRange(value)) {
                             if (bpos != null){
                                 if (value instanceof LivingEntity LE){
@@ -1519,7 +1519,7 @@ public class PowersJustice extends NewDashPreset {
                                         Vec3 vector = new Vec3((bpos.getX() - LE.getX()),
                                                 (bpos.getY()+2 - LE.getY()),
                                                 (bpos.getZ() - LE.getZ())).normalize().scale(1.8F);
-                                        ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.POOF, value.getX(),
+                                        sendParticlesIfPossible(self.level(),ParticleTypes.POOF, value.getX(),
                                                 value.getY() + value.getEyeHeight(), value.getZ(),
                                                 0,
                                                 vector.x+random,

@@ -970,7 +970,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean onStandArrowUse() {
         if (this.self instanceof Player PE) {
             if (this.canExecuteMoveWithLevel(this.getBitesTheDustLevel())) {
-                ((ServerLevel) PE.level()).sendParticles(ParticleTypes.FIREWORK, PE.getX(),
+                sendParticlesIfPossible(self.level(),ParticleTypes.FIREWORK, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         20, 0, 0, 0, 0.4);
                 this.hasBitesTheDust = true;
@@ -1049,6 +1049,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     standEntity.getHeldItem());
             $$4.setPickUpDelay(40);
             $$4.setThrower(this.getSelf().getUUID());
+            PowerTypes.copyPlaneOfExisting(self,$$4);
             this.getSelf().level().addFreshEntity($$4);
         }
     }
@@ -1264,7 +1265,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -1343,7 +1344,7 @@ public class PowersKillerQueen extends NewPunchingStand {
              float halfReach = (float) (distMax * 0.5);
              Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
              if (!this.self.level().isClientSide) {
-                 ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                 sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                          1, 0.0, 0.0, 0.0, 1);
              }
          }
@@ -1623,7 +1624,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
                 if (bombEntity != null && percent > 0.2f && percent < 0.85f && self.tickCount % 4 == 0) {
                     Vec3 vec = getRandPos(bombEntity);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SMALL_FLAME,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.SMALL_FLAME,
                             vec.x, vec.y, vec.z,
                             4, 0.3, 0.2, 0.3, 0.05);
                 }
@@ -1641,7 +1642,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.02, 0.2, 0.05);
                     }
@@ -1656,7 +1657,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
@@ -2950,7 +2951,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     .scale(factor);
             Vec3 pos = gizmo.add(addToPos).add(bubblePos);
 
-            ((ServerLevel) this.self.level()).sendParticles(getBubbleParticle(),
+            sendParticlesIfPossible(self.level(),getBubbleParticle(),
                     (double)pos.x, (double)pos.y, (double)pos.z,
                     0, 0, 0, 0.0, 1);
 
@@ -3958,10 +3959,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                         ipe.roundabout$setUnlockedBonusSkin(true);
                         playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                                 self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
-                        ((ServerLevel) self.level()).sendParticles(ModParticles.SMALL_EXPLOSION, self.getX(),
+                        sendParticlesIfPossible(self.level(),ModParticles.SMALL_EXPLOSION, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                        sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.01);
                         user.roundabout$setStandSkin(KillerQueenEntity.MINESWEEPER);
@@ -3969,7 +3970,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                 Component.translatable("unlock_skin.roundabout.killer_queen.minesweeper"), true);
                         user.roundabout$summonStand(self.level(), true, false);
                     }else {
-                        ((ServerLevel) self.level()).sendParticles(ModParticles.AIRBUBBLE_BOMB, self.getX(),
+                        sendParticlesIfPossible(self.level(),ModParticles.AIRBUBBLE_BOMB, self.getX(),
                                 self.getY() + self.getEyeHeight(), self.getZ(),
                                 10+(tntSweeped * 8), 0.5, 0.5, 0.5, 0.01);
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(),

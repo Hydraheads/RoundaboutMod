@@ -9,6 +9,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -97,6 +98,20 @@ public final class WhitesnakeDiscUtil {
             case STAND -> extractStand(target, false);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    public static void ejectMobMemoryFromPlayer(ServerPlayer player) {
+        DiscBearer bearer = (DiscBearer) player;
+        if (!bearer.roundabout$ownsMemoryDisc()
+                || bearer.roundabout$getMemoryPersonality() == MemoryPersonality.PLAYER) return;
+        bearer.roundabout$setDiscSeal(MEMORY, 0, 0);
+        ItemStack disc = extractMemory(player, true);
+        bearer.roundabout$setMemoryDiscOwnerId("");
+        bearer.roundabout$setMemoryDiscOwnerName("");
+        bearer.roundabout$setMemoryTameOwnerId("");
+        bearer.roundabout$setMemoryTameOwnerName("");
+        bearer.roundabout$setMemoryPersonality(MemoryPersonality.PLAYER);
+        if (!disc.isEmpty() && !player.getInventory().add(disc)) player.drop(disc, false);
     }
 
     private static ItemStack extractSight(LivingEntity target, boolean storeOwner) {

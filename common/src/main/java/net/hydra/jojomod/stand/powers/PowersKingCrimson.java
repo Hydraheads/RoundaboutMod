@@ -266,7 +266,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 continue;
             }
 
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+            sendParticlesIfPossible(self.level(),ModParticles.BLOOD,
                     entity.getEyePosition().x(), entity.getEyePosition().y(), entity.getEyePosition().z(),
                     30, 0, 0, 0, 0.1);
             entity.addEffect(new MobEffectInstance(
@@ -2863,10 +2863,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 ipe.roundabout$setUnlockedBonusSkin(true);
                                 playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                                         self.getZ(), ModSounds.UNLOCK_SKIN_EVENT, self.getSoundSource(), 2.0F, 1.0F);
-                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.END_ROD, self.getX(),
+                                sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, self.getX(),
                                         self.getY() + self.getEyeHeight(), self.getZ(),
                                         10, 0.5, 0.5, 0.5, 0.2);
-                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                sendParticlesIfPossible(self.level(),ParticleTypes.CHERRY_LEAVES, self.getX(),
                                         self.getY() + self.getEyeHeight(), self.getZ(),
                                         10, 0.5, 0.5, 0.5, 0.2);
                                 user.roundabout$setStandSkin(KingCrimsonEntity.REAPER);
@@ -2874,7 +2874,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                         Component.translatable("unlock_skin.roundabout.king_crimson.reaper"), true);
                                 user.roundabout$summonStand(self.level(), true, false);
                             } else {
-                                ((ServerLevel) self.level()).sendParticles(ParticleTypes.CHERRY_LEAVES, self.getX(),
+                                sendParticlesIfPossible(self.level(),ParticleTypes.CHERRY_LEAVES, self.getX(),
                                         self.getY() + self.getEyeHeight(), self.getZ(),
                                         10+(cherrySkip * 10), 0.5, 0.5, 0.5, 0.2);
                                 playSoundIfPossible(self.level(),null, this.self.blockPosition(),
@@ -2995,11 +2995,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                                 ModSounds.KING_CRIMSON_PUNCH_EVENT,
                                 SoundSource.PLAYERS, 1F, (float) (1.2F + Math.random() * 0.05));
                     }
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                    sendParticlesIfPossible(self.level(),ModParticles.BLOOD,
                             self.getEyePosition().x(), self.getEyePosition().y(), self.getEyePosition().z(),
                             30, 0, 0, 0, 0.1);
                 } else {
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD,
+                    sendParticlesIfPossible(self.level(),ModParticles.BLOOD,
                             self.getEyePosition().x(), self.getEyePosition().y() + 0.3F, self.getEyePosition().z(),
                             30, 0, 0, 0, 0.3);
                 }
@@ -3829,7 +3829,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
@@ -4014,7 +4014,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
