@@ -1684,9 +1684,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     (!(this.getSelf() instanceof Player))){
                 int atd = this.getAttackTimeDuring();
                 ((StandUser) this.getSelf()).roundabout$tryIntPower(ARROW_THROW, true, getMaxKickTime());
-                /*if (this.self.level().isClientSide()){
+                if (this.self.level().isClientSide()){
                     tryIntPowerPacket(ARROW_THROW,atd);
-                }*/
+                }
             }
         }
     }
