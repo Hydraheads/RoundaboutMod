@@ -3,10 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -2034,6 +2031,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             clearBitedTheDust();
             clearDayBitedTheDust();
             btdTicks = -1;
+            combatActivations = 0;
 
             if (inBitesTheDustMode()) {
                 this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustPlantCooldown);
@@ -2343,14 +2341,18 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.combatSavedBTD.clear();
     }
 
+    public int combatActivations = 0;
+
     public boolean bitesTheDustCombatActivate() {
         if (this.isClient()) {
             btdTicks = 0;
             return true;
         }
 
+        combatActivations++;
+
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
-                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus);
+                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
         this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
 
         combatSavedBTDinit();
@@ -2485,13 +2487,20 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
+        long dayTime = ((ServerLevel) this.self.level()).getDayTime();
+        long targetDayTime = dayTime - (dayTime % 24000);
+
         if (ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayModeAffectGlobalTime) {
-            long dayTime = ((ServerLevel) this.self.level()).getDayTime();
-            ((ServerLevel) this.self.level()).setDayTime(dayTime - (dayTime % 24000));
+            ((ServerLevel) this.self.level()).setDayTime(targetDayTime);
+        }else {
+            /// needs to be a package to clients envolved on btd
+            /*IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData)self.level().getLevelData());
+            levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
+            levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);*/
         }
 
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
-                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus);
+                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
         this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
                 ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus);
 
@@ -2940,7 +2949,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 int id = serverPlayerEntity.getId();
                 this.combatSavedBTDinit();
                 if (this.combatSavedBTD.containsKey(id)) {
-                    S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.BITES_THE_DUST);
+                    S2CPacketUtil.sendSimpleByteToClientPacket(serverPlayerEntity,PacketDataIndex.BITES_THE_DUST_COMBAT);
                 }
             }
         }
