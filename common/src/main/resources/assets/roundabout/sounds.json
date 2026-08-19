@@ -3360,7 +3360,24 @@
       "roundabout:purple_haze_summon"
     ]
   },
-
+  "purple_haze_barrage_cry": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
+    "sounds": [
+      "roundabout:purple_haze_barrage_cry"
+    ]
+  },
+  "purple_haze_smoke": {
+    "subtitle": "sounds.roundabout.purple_haze_smoke",
+    "sounds": [
+      "roundabout:purple_haze_smoke"
+    ]
+  },
+  "purple_haze_distortion_smoke": {
+    "subtitle": "sounds.roundabout.purple_haze_distortion_smoke",
+    "sounds": [
+      "roundabout:purple_haze_distortion_smoke"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [
