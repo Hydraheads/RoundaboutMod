@@ -294,7 +294,16 @@ public int speedActivated = 0;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
+
             if (getActivePower() == BLOOD_REGEN && self.isAlive() && !self.isRemoved()){
+
+                if (PowerTypes.isErasingTime(self) || PowerTypes.isInD4CWorld(self)){
+                    xTryPower(PowerIndex.NONE, true);
+                    this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
+
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                    return;
+                }
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
@@ -489,7 +498,7 @@ public int speedActivated = 0;
                 && getActivePower() != BLOOD_REGEN && self.getHealth() < self.getMaxHealth();
     }
     public void regenClient(){
-        if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
+        if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK) && !PowerTypes.isInD4CWorld(self)){
             if (isHearing()){
                 stopHearingClient();
             }

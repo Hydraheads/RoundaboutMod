@@ -374,6 +374,11 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     }
                 }
             }
+            if (isUsingTimeErase()) {
+                if (!PowerTypes.hasStandActivelyEquipped(self)){
+                    timeErase();
+                }
+            }
         } else {
             if (disengageTime > 0){
                 disengageTime--;

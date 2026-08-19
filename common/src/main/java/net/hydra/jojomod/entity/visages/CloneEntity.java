@@ -145,6 +145,73 @@ public class CloneEntity extends PathfinderMob {
             this.player = null;
         }
     }
+    private void moveCloak() {
+        this.xCloakO = this.xCloak;
+        this.yCloakO = this.yCloak;
+        this.zCloakO = this.zCloak;
+        double $$0 = this.getX() - this.xCloak;
+        double $$1 = this.getY() - this.yCloak;
+        double $$2 = this.getZ() - this.zCloak;
+        double $$3 = 10.0;
+        if ($$0 > 10.0) {
+            this.xCloak = this.getX();
+            this.xCloakO = this.xCloak;
+        }
+
+        if ($$2 > 10.0) {
+            this.zCloak = this.getZ();
+            this.zCloakO = this.zCloak;
+        }
+
+        if ($$1 > 10.0) {
+            this.yCloak = this.getY();
+            this.yCloakO = this.yCloak;
+        }
+
+        if ($$0 < -10.0) {
+            this.xCloak = this.getX();
+            this.xCloakO = this.xCloak;
+        }
+
+        if ($$2 < -10.0) {
+            this.zCloak = this.getZ();
+            this.zCloakO = this.zCloak;
+        }
+
+        if ($$1 < -10.0) {
+            this.yCloak = this.getY();
+            this.yCloakO = this.yCloak;
+        }
+
+        this.xCloak += $$0 * 0.25;
+        this.zCloak += $$2 * 0.25;
+        this.yCloak += $$1 * 0.25;
+    }
+
+    public float oBob;
+    public float bob;
+    public void aiStep(){
+        super.aiStep();
+        this.oBob = this.bob;
+        float $$4;
+        if (this.onGround() && !this.isDeadOrDying()) {
+            $$4 = (float)Math.min(0.1, this.getDeltaMovement().horizontalDistance());
+        } else {
+            $$4 = 0.0F;
+        }
+
+        this.bob = this.bob + ($$4 - this.bob) * 0.4F;
+    }
+    public double xCloakO;
+    public double yCloakO;
+    public double zCloakO;
+    public double xCloak;
+    public double yCloak;
+    public double zCloak;
+    public void tick(){
+        moveCloak();
+        super.tick();
+    }
     public final Optional<UUID> getPlayerUUID() {
         return this.entityData.get(PLAYER);
     }
