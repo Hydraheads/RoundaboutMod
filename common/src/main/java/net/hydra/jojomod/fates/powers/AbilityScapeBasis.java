@@ -2078,30 +2078,32 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
-                    String str = $$3.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$2.getRange($$5);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr(entity) > rangeSqr) {
-                            continue;
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5,
+                                    entity
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                soundId.toString(),
-                                str,
-                                $$4,
-                                $$5,
-                                entity
-                        );
                     }
                 }
             } else {
@@ -2118,32 +2120,34 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
-                    String str = $$3.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$2.getRange($$5);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
-                            continue;
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1.getX(),
+                                    $$1.getY(),
+                                    $$1.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                $$1.getX(),
-                                $$1.getY(),
-                                $$1.getZ(),
-                                soundId.toString(),
-                                str,
-                                $$4,
-                                $$5
-                        );
                     }
                 }
             } else {
@@ -2158,32 +2162,34 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$4 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
-                    String str = $$5.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$5.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$4.getRange($$7);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr(new Vec3($$1,$$2,$$3)) > rangeSqr) {
-                            continue;
+                            double range = $$4.getRange($$7);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(new Vec3($$1, $$2, $$3)) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1,
+                                    $$2,
+                                    $$3,
+                                    soundId.toString(),
+                                    str,
+                                    $$6,
+                                    $$7
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                $$1,
-                                $$2,
-                                $$3,
-                                soundId.toString(),
-                                str,
-                                $$6,
-                                $$7
-                        );
                     }
                 }
             } else {
