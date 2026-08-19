@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.D4CPortalBlock;
@@ -13,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -45,6 +47,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -170,6 +173,9 @@ public class PowersD4C extends NewPunchingStand {
 
         Direction gravity = RotationUtil.getGravityDirection(self);
         AABB box = self.getBoundingBox();
+        if (self.getPose() == Pose.CROUCHING){
+            box = ((IEntityAndData)self).rdbt$getPoseBox(Pose.STANDING);
+        }
         if (move){
             box = box.move(Vec3.atCenterOf(pos).subtract(box.getCenter().subtract(
                     RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity)
@@ -202,78 +208,9 @@ public class PowersD4C extends NewPunchingStand {
 
         return false;
     }
-
-    public static void spawnGravitySpiral(Level level, BlockPos pos, Direction gravity) {
-        Direction upDirection = gravity.getOpposite();
-
-        Vec3 start = Vec3.atCenterOf(pos).subtract(RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity));
-
-        double height = 2.0D;
-        int particles = 40;
-        double radius = 0.35D;
-        double rotations = 2.0D;
-
-        for (int i = 0; i < particles; i++) {
-            double progress = (double) i / (particles - 1);
-
-            // Position along the axis opposite gravity.
-            Vec3 axisOffset = new Vec3(
-                    upDirection.getStepX() * height * progress,
-                    upDirection.getStepY() * height * progress,
-                    upDirection.getStepZ() * height * progress
-            );
-
-            // Spiral angle.
-            double angle = progress * Math.PI * 2.0D * rotations;
-
-            double offset1 = Math.cos(angle) * radius;
-            double offset2 = Math.sin(angle) * radius;
-
-            double x = start.x + axisOffset.x;
-            double y = start.y + axisOffset.y;
-            double z = start.z + axisOffset.z;
-
-            // The two perpendicular axes depend on gravity.
-            switch (gravity.getAxis()) {
-                case Y -> {
-                    x += offset1;
-                    z += offset2;
-                }
-
-                case X -> {
-                    y += offset1;
-                    z += offset2;
-                }
-
-                case Z -> {
-                    x += offset1;
-                    y += offset2;
-                }
-            }
-            Vector3f color;
-            if (i % 2 == 0) {
-                // Light blue
-                color = new Vector3f(0.4F, 0.8F, 1.0F);
-            } else {
-                // Light purple
-                color = new Vector3f(0.8F, 0.5F, 1.0F);
-            }
-            level.addParticle(
-                    new DustParticleOptions(
-                            color,
-                            1.0F
-                    ),
-                    x,
-                    y,
-                    z,
-                    0.0D,
-                    0.0D,
-                    0.0D
-            );
-        }
-    }
     private AABB[] getFootAndEyeSlices(AABB box, Direction gravity) {
         double thickness = 0.05D;
+
 
         switch (gravity) {
             case DOWN -> {
@@ -284,14 +221,14 @@ public class PowersD4C extends NewPunchingStand {
                                 box.minY,
                                 box.minZ,
                                 box.maxX,
-                                box.minY + thickness,
+                                box.minY - thickness,
                                 box.maxZ
                         ),
 
                         // Eye / head
                         new AABB(
                                 box.minX,
-                                box.maxY - thickness,
+                                box.maxY + thickness,
                                 box.minZ,
                                 box.maxX,
                                 box.maxY,
@@ -305,7 +242,7 @@ public class PowersD4C extends NewPunchingStand {
                         // Foot (upper end because gravity points UP)
                         new AABB(
                                 box.minX,
-                                box.maxY - thickness,
+                                box.maxY + thickness,
                                 box.minZ,
                                 box.maxX,
                                 box.maxY,
@@ -318,7 +255,7 @@ public class PowersD4C extends NewPunchingStand {
                                 box.minY,
                                 box.minZ,
                                 box.maxX,
-                                box.minY + thickness,
+                                box.minY - thickness,
                                 box.maxZ
                         )
                 };
@@ -421,6 +358,76 @@ public class PowersD4C extends NewPunchingStand {
             }
 
             default -> throw new IllegalStateException("Unexpected gravity: " + gravity);
+        }
+    }
+
+    public static void spawnGravitySpiral(Level level, BlockPos pos, Direction gravity) {
+        Direction upDirection = gravity.getOpposite();
+
+        Vec3 start = Vec3.atCenterOf(pos).subtract(RotationUtil.vecPlayerToWorld(new Vec3(0,0.49,0),gravity));
+
+        double height = 2.0D;
+        int particles = 40;
+        double radius = 0.35D;
+        double rotations = 2.0D;
+
+        for (int i = 0; i < particles; i++) {
+            double progress = (double) i / (particles - 1);
+
+            // Position along the axis opposite gravity.
+            Vec3 axisOffset = new Vec3(
+                    upDirection.getStepX() * height * progress,
+                    upDirection.getStepY() * height * progress,
+                    upDirection.getStepZ() * height * progress
+            );
+
+            // Spiral angle.
+            double angle = progress * Math.PI * 2.0D * rotations;
+
+            double offset1 = Math.cos(angle) * radius;
+            double offset2 = Math.sin(angle) * radius;
+
+            double x = start.x + axisOffset.x;
+            double y = start.y + axisOffset.y;
+            double z = start.z + axisOffset.z;
+
+            // The two perpendicular axes depend on gravity.
+            switch (gravity.getAxis()) {
+                case Y -> {
+                    x += offset1;
+                    z += offset2;
+                }
+
+                case X -> {
+                    y += offset1;
+                    z += offset2;
+                }
+
+                case Z -> {
+                    x += offset1;
+                    y += offset2;
+                }
+            }
+            Vector3f color;
+            if (i % 2 == 0) {
+                // Light blue
+                color = new Vector3f(0.4F, 0.8F, 1.0F);
+            } else {
+                // Light purple
+                color = new Vector3f(0.8F, 0.5F, 1.0F);
+            }
+            level.addParticle(
+                    new DustParticleOptions(
+                            color,
+                            1.0F
+                    ),
+                    x,
+                    y,
+                    z,
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
         }
     }
     public static boolean isCollidingWithD4CPortal(Entity entity) {
@@ -588,6 +595,28 @@ public class PowersD4C extends NewPunchingStand {
             enactEligability();
         }
     }
+    public void isekaiTarget(Entity target){
+        if (isEligable()) {
+            this.setAttackTimeDuring(-7);
+            if (target != null && !target.isRemoved()){
+                if (target.distanceTo(self) > grabRange+0.75F ||
+                MainUtil.isBossMob(target)) {
+                    target = null;
+                }
+                int worldId = ((int) (Math.random() * 3)) + 5;
+                PowerTypes.setPlaneOfExisting(target, (byte) worldId);
+                playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
+            }
+            if (target == null){
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PUNCH_1_SOUND_EVENT,
+                        SoundSource.PLAYERS, 0.95F, 1F);
+            }
+            enactEligability();
+        } else {
+            xTryPower(PowerIndex.NONE,true);
+            animateStand(StandEntity.IDLE);
+        }
+    }
     public void spawnCloneServer(){
         if (isEligable()){
             enactEligability();
@@ -647,7 +676,13 @@ public class PowersD4C extends NewPunchingStand {
         if (PowerTypes.isInD4CWorld(self)){
             exitD4CClient();
         } else if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
-            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+            if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                tryPowerPacket(PowerIndex.NONE);
+            } else {
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+            }
         }
     }
     public void worldMergingClient(){
@@ -770,7 +805,7 @@ public class PowersD4C extends NewPunchingStand {
         if (!canImpale()){
             return;
         }
-        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+        if (!this.onCooldown(PowerIndex.SKILL_3)) {
             if (this.activePower == PowerIndex.POWER_3_SNEAK) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -783,13 +818,13 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
         } else if (PowerTypes.isInD4CWorld(self)){
-            LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.SKILL_1,0);
+            LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NONE,0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 1, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_1,0);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
         if (!isHoldingSneak()){
@@ -805,7 +840,7 @@ public class PowersD4C extends NewPunchingStand {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
             }
         } else {
-            LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_1_SNEAK,0);
+            LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
@@ -829,7 +864,11 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean cancelSprintJump(){
-        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+        byte ap = this.getActivePower();
+        if (ap == PowerIndex.SNEAK_ATTACK_CHARGE ||
+                ap == PowerIndex.POWER_3_SNEAK ||
+                ap == PowerIndex.POWER_1_SNEAK
+        ){
             return true;
         }
         return super.cancelSprintJump();
@@ -852,11 +891,51 @@ public class PowersD4C extends NewPunchingStand {
         return (((float)this.chargedFinal/(float)getMaxSuperHitTime()));
     }
 
+    public void standDrag(){
+        /*By setting this to -10, there is a delay between the stand retracting*/
+
+        if (this.self instanceof Player){
+            if (isPacketPlayer()){
+                this.setAttackTimeDuring(-20);
+                impaleTicks = 15;
+                tryIntToServerPacket(PacketDataIndex.INT_STAND_ATTACK,getTargetEntityId2(grabRange));
+            }
+        } else {
+            /*Caps how far out the punch goes*/
+            Entity targetEntity = getTargetEntity(this.self,grabRange);
+            isekaiTarget(targetEntity);
+        }
+
+    }
+    public void updateDrag(){
+        if (this.attackTimeDuring > -1) {
+            if (!isEligable()) {
+                if (!this.getSelf().level().isClientSide()) {
+                    xTryPower(PowerIndex.NONE,true);
+                    animateStand(StandEntity.IDLE);
+                }
+            }
+            if (this.attackTimeDuring > 24) {
+                this.standDrag();
+            } else {
+                if (!this.getSelf().level().isClientSide()) {
+                    if(this.attackTimeDuring%4==0) {
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
+                                this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
+                                1, 0.2, 0.2, 0.2, 0.05);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK) {
             updateChop();
+        } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            updateDrag();
         } if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
@@ -920,6 +999,12 @@ public class PowersD4C extends NewPunchingStand {
                 basis *= g;
             }
             basis *= 0.3f;
+        } else if (this.getActivePower()==PowerIndex.POWER_1_SNEAK){
+            if (this.getSelf().isCrouching()){
+                float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
+                float g = 1/f;
+                basis *= g;
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -971,6 +1056,8 @@ public class PowersD4C extends NewPunchingStand {
             chopImpact(target);
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
             finalAttackImpact(target);
+        } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+            isekaiTarget(target);
         }
     }
     @Override
@@ -988,8 +1075,11 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
-        } else if (move == PowerIndex.POWER_2){
+        } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
+            return false;
+        } else if (move == PowerIndex.POWER_1_SNEAK){
+            standDragServer();
             return false;
         }else if (move == PowerIndex.POWER_1){
             worldMergingServer();
@@ -1002,6 +1092,17 @@ public class PowersD4C extends NewPunchingStand {
         return super.setPowerOther(move,lastMove);
     }
 
+    public void standDragServer(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            if (isEligable()) {
+                this.setAttackTimeDuring(0);
+                this.setActivePower(PowerIndex.POWER_1_SNEAK);
+                this.animateStand(D4CEntity.DRAG);
+                this.poseStand(OffsetIndex.GUARD);
+            }
+        }
+    }
     public void exitWorldServer(){
         if (isEligableForExit()){
             PowerTypes.setPlaneOfExisting(self,(byte)0);
@@ -1065,12 +1166,19 @@ public class PowersD4C extends NewPunchingStand {
 
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
-        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
             int cdr = 25;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
+            return true;
+        } else if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
+            int cdr = 25;
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, cdr);
+            }
+            this.setCooldown(PowerIndex.SKILL_3, cdr);
             return true;
         }
         return super.canInterruptPower(sauce,interrupter);
@@ -1107,9 +1215,9 @@ public class PowersD4C extends NewPunchingStand {
             }
 
             if (this.getSelf() instanceof Player) {
-                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 40);
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, 40);
             }
-            this.setCooldown(PowerIndex.SKILL_1_SNEAK, 40);
+            this.setCooldown(PowerIndex.SKILL_3, 40);
             SoundEvent SE;
             float pitch = 1F;
             if (entity != null) {
@@ -1258,6 +1366,7 @@ public class PowersD4C extends NewPunchingStand {
         animateStand((byte) 86);
     }
     public static final float chopRange = 4F;
+    public static final float grabRange = 3.5F;
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
@@ -1266,12 +1375,18 @@ public class PowersD4C extends NewPunchingStand {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
+        byte active = this.getActivePower();
+        if (standOn && active == PowerIndex.POWER_3_SNEAK) {
             Entity TE = this.getTargetEntity(playerEntity, chopRange);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
-        } else if (standOn && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE){
+        } else if (standOn && active == PowerIndex.POWER_1_SNEAK){
+            Entity TE = this.getTargetEntity(playerEntity, grabRange);
+            if (TE != null && !MainUtil.isBossMob(TE)) {
+                context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
+            }
+        } else if (standOn && active == PowerIndex.SNEAK_ATTACK_CHARGE){
             float zamn = ((float) attackTimeDuring / getMaxSuperHitTime());
             int ClashTime = Math.min(15,Math.round(zamn * 15));
             context.blit(StandIcons.JOJO_ICONS, k, j, 213, 68, 15, 6);

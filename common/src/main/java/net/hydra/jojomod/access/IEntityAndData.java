@@ -2,6 +2,8 @@ package net.hydra.jojomod.access;
 
 import net.hydra.jojomod.event.SavedSecond;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +26,7 @@ public interface IEntityAndData {
     boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 
+    AABB rdbt$getPoseBox(Pose pose);
     void roundabout$setNoAAB();
 
     Entity roundabout$getVehicle();

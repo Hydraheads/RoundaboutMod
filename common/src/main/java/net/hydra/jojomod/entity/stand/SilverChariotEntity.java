@@ -122,16 +122,28 @@ public class SilverChariotEntity extends FollowingStandEntity {
         xxa = 0.0F;
         zza = 0.0F;
         Vec3 velocity = getDeltaMovement();
-        setDeltaMovement(0.0D, velocity.y, 0.0D);
+        setDeltaMovement(0.0D, 0.0D, 0.0D);
     }
 
     @Override
     public boolean isRemoteControlled() {
-        return entityData.get(CONTROL_MODE) != CONTROL_MODE_NONE;
+        // return entityData.get(CONTROL_MODE) != CONTROL_MODE_NONE;
+        return super.isRemoteControlled();
     }
 
     @Override
     public void travel(Vec3 vec3) {
+        /*
+        if (isRemoteControlled()) {
+            if (level().isClientSide() && isControlledByLocalInstance()) {
+                super.travel(new Vec3(vec3.x, vec3.y, vec3.z));
+                C2SPacketUtil.updatePilot(this);
+            } else {
+                super.travel(Vec3.ZERO);
+            }
+            return;
+        }
+        */
         super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
@@ -186,7 +198,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return super.skipAttackInteraction(attacker);
+        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
     }
 
     public boolean isControlModeActive() {
@@ -257,13 +269,11 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean isControlledByLocalInstance() {
-        LivingEntity user = getUser();
-        if (user instanceof Player player) {
-            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
-                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
-                if (controlled != null && controlled.is(this)) {
-                    return player.isLocalPlayer();
-                }
+        LivingEntity user =  this.getUser();
+        if (user != null){
+            Entity ent =  this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
+            if (ent != null && ent.is(this)){
+                return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }
         }
         return super.isControlledByLocalInstance();
