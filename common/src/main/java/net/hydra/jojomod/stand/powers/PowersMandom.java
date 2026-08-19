@@ -237,7 +237,7 @@ public class PowersMandom extends NewDashPreset {
             this.setCooldown(PowerIndex.SKILL_2, cooldown);
             setTimeHasBeenAltered(-1);
             if (isClient()) {
-                this.self.playSound(ModSounds.MANDOM_REWIND_EVENT, 200F, 1.0F);
+                playSoundIfPossible(self.level(),null, self.getX(),self.getY(),self.getZ(),ModSounds.MANDOM_REWIND_EVENT, self.getSoundSource(), 200F, 1.0F);
             } else {
                 rewindTimeActivation();
             }
@@ -432,7 +432,7 @@ public class PowersMandom extends NewDashPreset {
                                                 "chrono_vision_player",
                                                 ent.getId(),lastSecond.position.x,lastSecond.position.y,lastSecond.position.z);
                                     } else {
-                                        ((ServerLevel) this.self.level()).sendParticles(getParticle(ent),
+                                        sendParticlesIfPossible(self.level(),getParticle(ent),
                                                 lastSecond.position.x, lastSecond.position.y+ent.getEyeHeight()*0.8, lastSecond.position.z,
                                                 0, 0, 0, 0, 0.015);
                                     }
@@ -440,7 +440,7 @@ public class PowersMandom extends NewDashPreset {
                                 if (!(ent instanceof Projectile) && !(ent instanceof ItemEntity)) {
                                     if (lastSecond.isTickingParticles != null && lastSecond.isTickingParticles.is(this.self)) {
                                         Vec3 forward = Vec3.directionFromRotation(new Vec2(lastSecond.rotationVec.x,lastSecond.headYRotation));
-                                        ((ServerLevel) this.self.level()).sendParticles(ModParticles.TIME_EMBER,
+                                        sendParticlesIfPossible(self.level(),ModParticles.TIME_EMBER,
                                                 lastSecond.position.x, lastSecond.position.y + ent.getEyeHeight() * 0.8, lastSecond.position.z,
                                                 0,
                                                 forward.x,

@@ -11,6 +11,7 @@ import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
 public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T> {
@@ -28,6 +29,11 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		this.Stray_Cat = this.body.getChild("body2")
 				.getChild("torso").getChild("lower_chest").getChild("lower_torso").getChild("Stray_Cat");
 	}
+
+	protected ModelPart getArm(HumanoidArm p_102852_) {
+		return p_102852_ == HumanoidArm.LEFT ? this.rightHand : this.leftHand;
+	}
+
 	public static LayerDefinition getTexturedModelData() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
@@ -172,7 +178,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
         this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);
-        this.animate(pEntity.itemThrow, KillerQueenAnimations.Item_Throw, pAgeInTicks, 1F);
+        this.animate(pEntity.itemThrow, StandAnimations.THROW_ITEM, pAgeInTicks, 1F);
         this.animate(pEntity.detonate, KillerQueenAnimations.detonate, pAgeInTicks, 1F);
         this.animate(pEntity.thirdBomb, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1F);
         this.animate(pEntity.mobBombPlant, KillerQueenAnimations.FirstBombTouchMob,   pAgeInTicks, (1/((float) (Power.getMobPlantWindup()) /20)) * 1.364f);
@@ -183,6 +189,10 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 		this.animate(pEntity.shaSend, KillerQueenAnimations.sha_deploy, pAgeInTicks, 2F);
 		this.animate(pEntity.impale, KillerQueenAnimations.Impale, pAgeInTicks, 1.04F);
 		this.animate(pEntity.bitesTheDust, KillerQueenAnimations.TertiaryBomb, pAgeInTicks, 1.04F);
+		this.animate(pEntity.itemThrowCharge, StarPlatinumAnimations.ItemGrab, pAgeInTicks, (1/((float) (Power.getArrowThrowChargeMax()) / 20.0f)) * 0.29f);
+		this.animate(pEntity.arrowThrow, StarPlatinumAnimations.ItemThrow, pAgeInTicks, 1F);
+		this.animate(pEntity.itemGrabAnimation, StandAnimations.GRAB_ITEM, pAgeInTicks, 1f);
+		this.animate(pEntity.itemRetractAnimation, StandAnimations.RETRACT_ITEM, pAgeInTicks, 1.25f);
     }
 
 

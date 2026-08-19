@@ -60,7 +60,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.CLIMBING_WIRE,
                 ModBlocks.MELON_PARFAIT);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.WHITE_ALBUM_ICE_BLOCK,
-                ModBlocks.COLD_AIR, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
+                ModBlocks.COLD_AIR,ModBlocks.D4C_PORTAL, ModBlocks.FREEZING_AIR, ModBlocks.STICKY_ICE,
                 ModBlocks.WHITE_ALBUM_ICE_SLAB, ModBlocks.HALLUCINATORY_ACID,
                 ModBlocks.HALLUCINATORY_ACID_WALL);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);

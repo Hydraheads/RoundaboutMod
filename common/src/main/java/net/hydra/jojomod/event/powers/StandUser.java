@@ -54,6 +54,7 @@ public interface StandUser {
     void roundabout$setExplosionInflation(int e);
     int roundabout$getExplosionInflation();
 
+    
     int roundabout$increaseAirSupply(int $$0);
     int roundabout$getZappedTicks();
 
@@ -376,6 +377,12 @@ public interface StandUser {
     int getMoldTicks();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
+
+    /** Purple Haze :) **/
+    void SetInPurpleHazeTicks(int e);
+    int getPurpleHazeTicks();
+
+
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 

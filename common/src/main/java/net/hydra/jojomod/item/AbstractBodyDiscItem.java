@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -21,12 +22,12 @@ public abstract class AbstractBodyDiscItem extends Item {
         super(properties);
     }
 
-    protected abstract boolean canImplant(LivingEntity target);
+    protected abstract boolean canImplant(ItemStack stack, LivingEntity target);
     protected abstract void implant(ItemStack stack, LivingEntity target);
     protected abstract boolean showPersonality();
 
     private boolean implantAndConsume(ItemStack stack, LivingEntity target, LivingEntity user) {
-        if (!canImplant(target)) {
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(target) || !canImplant(stack, target)) {
             return false;
         }
         if (!target.level().isClientSide()) {

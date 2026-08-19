@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.achtung;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -30,7 +31,15 @@ public abstract class AchtungItemEntity extends Entity {
                 if (MainUtil.getEntityIsTrulyInvisible(pl) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
                     ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
                 }
+                PowerTypes.copyPlaneOfExisting(pl,this);
             }
+        }
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/world/entity/item/ItemEntity;)V", at = @At(value = "RETURN"))
+    protected void roundabout$setPlaneOfItem(ItemEntity $$0, CallbackInfo ci) {
+        if ($$0 != null) {
+            PowerTypes.copyPlaneOfExisting($$0,this);
         }
     }
 

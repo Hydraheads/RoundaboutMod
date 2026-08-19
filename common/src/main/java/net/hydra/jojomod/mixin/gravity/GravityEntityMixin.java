@@ -6,6 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.CinderellaVisageDisplayEntity;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -141,6 +142,25 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Unique
     private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(Entity.class,
             EntityDataSerializers.DIRECTION);
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$EXIST_PLANE = SynchedEntityData.defineId(Entity.class,
+            EntityDataSerializers.BYTE);
+
+    @Unique
+    @Override
+    public void roundabout$setExistPlane(byte adj) {
+        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
+            this.getEntityData().set(ROUNDABOUT$EXIST_PLANE, adj);
+        }
+    }
+    @Unique
+    @Override
+    public byte roundabout$getExistPlane() {
+        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
+            return this.getEntityData().get(ROUNDABOUT$EXIST_PLANE);
+        }
+        return 0;
+    }
 
     @Unique
     @Override
@@ -181,6 +201,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci){
         if (!((Entity)(Object)this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
             ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
+            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$EXIST_PLANE, (byte)0);
         }
     }
 
@@ -805,6 +826,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         CompoundTag compoundtag = $$0.getCompound("roundabout");
         compoundtag.putByte("GravityDirection",MainUtil.getByteFromDirection(roundabout$getGravityDirection()));
+        compoundtag.putByte("ExistPlane",roundabout$getExistPlane());
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -812,6 +834,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         Direction gd =MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection"));
         roundabout$setGravityDirection(gd);
+        roundabout$setExistPlane($$0.getCompound("roundabout").getByte("ExistPlane"));
         if (gd != Direction.DOWN && rdbt$this() instanceof LivingEntity LE &&
                 ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
             PW.setHeelDirection(gd);
@@ -1069,13 +1092,17 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             cancellable = true, require = 0
     )
     private void inject_spawnSprintingParticles(CallbackInfo ci) {
-        Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
+        Entity ent = ((Entity) (Object) this);
+        if (PowerTypes.isExistentiallyElsewhere(ent) &&
+                !(level().isClientSide() && !PowerTypes.isErasingTime(ent) &&
+                !PowerTypes.isInADifferentExistence(ent, ClientUtil.getPlayer()))){
+            return;
+        }
+
+        Direction gravityDirection = GravityAPI.getGravityDirection(ent);
         if (gravityDirection == Direction.DOWN) return;
 
         ci.cancel();
-        if (PowerTypes.isExistentiallyElsewhere((Entity) (Object) this)){
-            return;
-        }
 
 
         Vec3 floorPos = this.position().subtract(RotationUtil.vecPlayerToWorld(0.0D, 0.20000000298023224D, 0.0D, gravityDirection));

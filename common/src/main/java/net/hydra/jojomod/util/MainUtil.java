@@ -32,6 +32,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -232,6 +233,7 @@ public class MainUtil {
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
@@ -348,6 +350,11 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isDiscEntityBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        return discEntityBlacklist != null && !discEntityBlacklist.isEmpty()
+                && rl != null && discEntityBlacklist.contains(rl.toString());
     }
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
         if (ent == null)
@@ -1867,22 +1874,25 @@ public class MainUtil {
         boolean isLiquid = (!player.level().getBlockState(pos).isSolid() && !player.level().getBlockState(pos).isAir());
         BlockState replace = player.level().getBlockState(pos);
         //Always correct, but for some reason I need to put it as a conditional
+
+        BlockHitResult blockHit = new BlockHitResult(
+                new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
+                pos,false);
         if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
             barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),
-                    barrier.getDefaultInstance(),new BlockHitResult(
-                            new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
-                    pos.relative(Direction.DOWN),false)));
+                    barrier.getDefaultInstance(),blockHit));
+            BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
 
-            player.level().destroyBlock(pos,false,player);
-            if(!player.level().getBlockState(pos).isAir()){
-                player.level().removeBlock(pos,false);
+            player.level().destroyBlock(placedBPos,false,player);
+            if(!player.level().getBlockState(placedBPos).isAir()){
+                player.level().removeBlock(placedBPos,false);
                 if(isLiquid) {
-                    player.level().setBlock(pos, replace, 0);
+                    player.level().setBlock(blockHit.getBlockPos(), replace, 0);
                 }
                 return false;
             }
             if(isLiquid) {
-                player.level().setBlock(pos, replace, 0);
+                player.level().setBlock(blockHit.getBlockPos(), replace, 0);
             }
         }
         return true;
@@ -1980,7 +1990,9 @@ public class MainUtil {
         if (!entities.isEmpty()) {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
-                        && !(PowerTypes.isExistentiallyElsewhere($$1))
+                        && !((PowerTypes.isExistentiallyElsewhere($$1) || PowerTypes.isExistentiallyElsewhere(value))
+                        &&
+                        !PowerTypes.isExistentiallyElsewhereTogether($$1,value))
                         && !(value instanceof FallenMob)
                         && (MainUtil.isActuallyALivingEntityNoCap(value))
                 ) {
@@ -2250,7 +2262,9 @@ public class MainUtil {
     /**Creative players should only be rewound by themselves*/
     public static boolean canRewindInTime(Entity ent, Entity rewinder){
         if (!ent.isRemoved() && ent.isAlive()) {
-            if (PowerTypes.isExistentiallyElsewhere(ent)){
+            if (PowerTypes.isExistentiallyElsewhere(ent) && !PowerTypes.isExistentiallyElsewhereTogether(
+                    ent,rewinder
+            )){
                 return false;
             }
             if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
@@ -3109,6 +3123,9 @@ public class MainUtil {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
                     && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
                     && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)){
+                    return false;
+                }
                 return true;
             }
         }
@@ -3594,7 +3611,12 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static Boolean isInPurpleHaze(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getPurpleHazeTicks() > 0;
+        }
+        return false;
+    }
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 

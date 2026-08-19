@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.VampireData;
@@ -72,7 +73,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
     @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             ci.cancel();
             return;
         }

@@ -140,6 +140,9 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                         wallBox.inflate(0.1))) {
 
                     if (mob.getBoundingBox().intersects(wallBox)) {
+                        if (PowerTypes.isInADifferentExistence(mob,this)){
+                            continue;
+                        }
                         if (mob instanceof Projectile pj){
                             dealWithProjectile(pj,this);
                         } else {
@@ -220,6 +223,9 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                         Player.class,
                         wallBox.inflate(0.1))) {
 
+                    if (PowerTypes.isInADifferentExistence(mob,this)){
+                        continue;
+                    }
                     if (mob.getBoundingBox().intersects(wallBox)) {
                         if (mob.isAlive()) {
                             if (((StandUser) mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa) {

@@ -249,7 +249,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:barrier"
             )
     );
-    public Set<String> sheerHeartAttackCustomBlockHeat = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomBlockHeatV2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:torch:4",
                     "minecraft:soul_torch:3",
@@ -259,15 +259,19 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:cave_vines_plant:0",
                     "minecraft:cave_vines:0",
                     "minecraft:nether_portal:0",
-                    "minecraft:end_portal:0"
+                    "minecraft:end_portal:0",
+                    "minecraft:enchanting_table:0",
+                    "minecraft:oxeye_daisy:0",
+                    "minecraft:magma_block:18"
             )
     );
-    public Set<String> sheerHeartAttackCustomEntityHeat = new HashSet<>(
+    public Set<String> sheerHeartAttackCustomEntityHeatV2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:blaze:90",
                     "minecraft:magna_cube:70",
                     "minecraft:slime:0",
                     "minecraft:stray:-50",
+                    "minecraft:wither_skeleton:20",
                     "roundabout:stray_cat_entity:0"
             )
     );
@@ -305,11 +309,23 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:vex"
             )
     );
+    public Set<String> discEntityBlacklist = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:armor_stand",
+                    "minecraft:ender_dragon",
+                    "minecraft:wither",
+                    "minecraft:elder_guardian",
+                    "minecraft:warden"
+            )
+    );
     public Set<String> hypnotismMobBlackList = new HashSet<>(
             Arrays.asList(
                     "minecraft:ender_dragon",
                     "minecraft:wither",
-                    "minecraft:warden"
+                    "minecraft:warden",
+                    "mowziesmobs:frostmaw",
+                    "mowziesmobs:ferrous_wroughtnaut",
+                    "mowziesmobs:umvuthi"
             )
     );
     public Set<String> fleshBudMobBlacklist = new HashSet<>(

@@ -37,12 +37,24 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
     at = @At(value = "HEAD"),cancellable = true)
     public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere($$3)){
-            if (!(ClientUtil.isPlayer($$3))) {
-                if (!($$3 instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
-                        && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
-                    ci.cancel();
-                    return;
+        if (PowerTypes.isErasingTime(ClientUtil.getPlayer())){
+            if (PowerTypes.isExistentiallyElsewhere($$3)){
+                if (!(ClientUtil.isPlayer($$3))) {
+                    if (!($$3 instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                            && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                        ci.cancel();
+                        return;
+                    }
+                }
+            }
+        } else {
+            if (PowerTypes.isInADifferentExistence($$3,ClientUtil.getPlayer())){
+                if (!(ClientUtil.isPlayer($$3))) {
+                    if (!($$3 instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer())
+                            && ConfigManager.getClientConfig().generalSettings.canSeeFatedSelf)) {
+                        ci.cancel();
+                        return;
+                    }
                 }
             }
         }

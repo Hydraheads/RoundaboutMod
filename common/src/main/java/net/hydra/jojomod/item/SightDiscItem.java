@@ -12,8 +12,9 @@ public class SightDiscItem extends AbstractBodyDiscItem {
     }
 
     @Override
-    protected boolean canImplant(LivingEntity target) {
-        return WhitesnakeDiscUtil.canCarrySightDisc(target)
+    protected boolean canImplant(ItemStack stack, LivingEntity target) {
+        return WhitesnakeDiscUtil.isSightDiscEnabled()
+                && WhitesnakeDiscUtil.canCarrySightDisc(target)
                 && !((DiscBearer) target).roundabout$ownsSightDisc();
     }
 

@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -231,6 +233,7 @@ public enum PowerTypes {
         return false;
     }
 
+    public static Entity expStore = null;
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
@@ -247,6 +250,116 @@ public enum PowerTypes {
             StandUser user = (StandUser) LE;
             if (user.roundabout$getStandPowers() != null) {
                 return user.roundabout$getStandPowers().isMiningStand();
+            }
+        }
+        return false;
+    }
+    //0 = normal / time erase
+    //1-5 = D4C merging
+    //10 = time erase
+    //11 = man in the mirror
+    public static byte getPlaneOfExisting(Entity entity){
+        if (entity != null){
+            if (PowerTypes.isErasingTime(entity)){
+                return 10;
+            }
+            if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
+                return getPlaneOfExisting(fse.getFollowing());
+            }
+            return ((IGravityEntity)entity).roundabout$getExistPlane();
+        }
+        return 0;
+    }
+    public static byte getPlaneOfExisting2(Entity entity){
+        if (entity != null){
+            if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
+                return getPlaneOfExisting2(fse.getFollowing());
+            }
+            return ((IGravityEntity)entity).roundabout$getExistPlane();
+        }
+        return 0;
+    }
+    public static void setPlaneOfExisting(Entity entity, byte plane){
+        if (entity != null){
+            ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+        }
+    }
+    public static void forcePlaneOfExisting(Entity entity, byte plane){
+        if (entity instanceof LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$isClashing()){
+                user.roundabout$getStandPowers().endClash();
+            }
+            user.roundabout$tryPower(PowerIndex.NONE,true);
+        }
+        ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+    }
+    public static void copyPlaneOfExisting(Entity from, Entity to){
+        if (from != null && to != null){
+            ((IGravityEntity)to).roundabout$setExistPlane(
+                    ((IGravityEntity)from).roundabout$getExistPlane());
+        }
+    }
+
+    public static int d4cWorldUptime(){
+        return 200;
+    }
+    public static int getForeignWorldMaxTime(byte worldType){
+        if (worldType == 0 || worldType == 10){
+            return -1;
+        }
+        if (worldType <= 8){
+            return d4cWorldUptime();
+        }
+        if (worldType == 11){
+            return 400;
+        }
+        return 1000;
+    }
+    public static boolean canInteractInExistence(Entity entity){
+        if (entity != null){
+            byte plane = getPlaneOfExisting(entity);
+            return plane == 11;
+        }
+        return false;
+    }
+    public static boolean isExistentiallyElsewhereTogether(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            byte p1 = getPlaneOfExisting(entity);
+            byte p2 = getPlaneOfExisting(entityTwo);
+            return ((p1 == p2) && p1 != 11);
+        }
+        return false;
+    }
+    public static boolean isExistentiallyElsewhereTogether2(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            byte p1 = getPlaneOfExisting2(entity);
+            byte p2 = getPlaneOfExisting2(entityTwo);
+            return ((p1 == p2) && p1 != 11);
+        }
+        return false;
+    }
+
+    public static boolean isInADifferentExistence(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            boolean ex1 = isExistentiallyElsewhere(entity);
+            boolean ex2 = isExistentiallyElsewhere(entityTwo);
+            if (ex1 && ex2){
+                return !isExistentiallyElsewhereTogether(entity,entityTwo);
+            } else if (ex1 || ex2) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean isInADifferentExistenceNoTE(Entity entity, Entity entityTwo){
+        if (entity != null && entityTwo != null){
+            boolean ex1 = isExistentiallyElsewhere(entity);
+            boolean ex2 = isExistentiallyElsewhere(entityTwo);
+            if (ex1 && ex2){
+                return !isExistentiallyElsewhereTogether2(entity,entityTwo);
+            } else if (ex1 || ex2) {
+                return true;
             }
         }
         return false;
@@ -274,9 +387,7 @@ public enum PowerTypes {
                 return true;
             }
         }
-        if (isErasingTime(entity)){
-            return true;
-        }
+
         if (entity instanceof FollowingStandEntity se) {
             if (se.getFollowing() != null){
 
@@ -287,6 +398,13 @@ public enum PowerTypes {
                 return isExistentiallyElsewhere(se.getUser());
             }
         }
+
+        if (isErasingTime(entity)){
+            return true;
+        }
+        if ((getPlaneOfExisting(entity)) != 0){
+            return true;
+        }
         return false;
     }
     public static boolean isErasingTime(Entity entity){
@@ -295,6 +413,14 @@ public enum PowerTypes {
                     pkc.timeEraseActive;
         }
         return false;
+    }
+    public static boolean isInD4CWorld(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 8;
+    }
+    public static boolean isInD4CWorldWithRender(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 5;
     }
 
     public static boolean hasPowerActive(Entity entity){

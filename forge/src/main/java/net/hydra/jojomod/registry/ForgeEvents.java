@@ -653,6 +653,7 @@ public class ForgeEvents {
         ModParticles.PUNCH_IMPACT_A = ForgeParticles.PUNCH_IMPACT_A.get();
         ModParticles.PUNCH_IMPACT_B = ForgeParticles.PUNCH_IMPACT_B.get();
         ModParticles.PUNCH_IMPACT_C = ForgeParticles.PUNCH_IMPACT_C.get();
+        ModParticles.DISC_STEAL_HIT = ForgeParticles.DISC_STEAL_HIT.get();
         ModParticles.PUNCH_MISS = ForgeParticles.PUNCH_MISS.get();
         ModParticles.BUBBLE_TRAIL = ForgeParticles.BUBBLE_TRAIL.get();
         ModParticles.WARDEN_CLOCK = ForgeParticles.WARDEN_CLOCK.get();
@@ -829,6 +830,8 @@ public class ForgeEvents {
         ModEntities.GASOLINE_SPLATTER = ForgeEntities.GASOLINE_SPLATTER.get();
         ModEntities.BLOOD_SPLATTER = ForgeEntities.BLOOD_SPLATTER.get();
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
+        ModEntities.BOMB_PLANTED_ARROW = ForgeEntities.BOMB_PLANTED_ARROW.get();
+        ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get();
         ModEntities.IRON_BALL = ForgeEntities.IRON_BALL.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();

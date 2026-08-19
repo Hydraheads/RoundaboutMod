@@ -359,7 +359,7 @@ public class NewPunchingStand extends NewDashPreset {
             float halfReach = (float) (distMax * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(self, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS, pointVec.x, pointVec.y, pointVec.z,
                         1, 0.0, 0.0, 0.0, 1);
             }
         }
@@ -392,7 +392,7 @@ public class NewPunchingStand extends NewDashPreset {
                 hitParticles(entity);
             } else {
             }
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -482,7 +482,7 @@ public class NewPunchingStand extends NewDashPreset {
             }
 
             if (throwPunch) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
                 if (StandDamageEntityAttack(this.getSelf(), pow, 0, this.self)) {
                     takeDeterminedKnockback(this.self, this.getSelf(), kbs);
                     if ((kbs *= (float) (1.0 - ((LivingEntity)this.getSelf()).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
@@ -591,7 +591,7 @@ public class NewPunchingStand extends NewDashPreset {
             }
 
             if (!this.self.level().isClientSide()) {
-                this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
             }
         }
     }

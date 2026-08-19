@@ -32,6 +32,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -58,6 +59,12 @@ public final class RoundaboutDiscCommand {
             Component.literal("Disc type must be memory, stand, sight, or hearing."));
     private static final SimpleCommandExceptionType INVALID_MEMORY_ENTITY = new SimpleCommandExceptionType(
             Component.literal("That ID is not a living mob that can own a memory disc."));
+    private static final SimpleCommandExceptionType DISC_DISABLED = new SimpleCommandExceptionType(
+            Component.literal("That disc type is disabled in the server config."));
+    private static final SimpleCommandExceptionType MOB_MEMORY_PLAYER_TARGET = new SimpleCommandExceptionType(
+            Component.literal("Mob memory discs cannot be inserted into players."));
+    private static final SimpleCommandExceptionType DISC_TARGET_BLACKLISTED = new SimpleCommandExceptionType(
+            Component.literal("That entity is blacklisted from having discs."));
 
     private RoundaboutDiscCommand() {
     }
@@ -138,6 +145,10 @@ public final class RoundaboutDiscCommand {
                 .orElseThrow(INVALID_MEMORY_ENTITY::create);
         Entity created = type.create(source.getLevel());
         if (!(created instanceof LivingEntity mob)) throw INVALID_MEMORY_ENTITY.create();
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(mob)) {
+            created.discard();
+            throw DISC_TARGET_BLACKLISTED.create();
+        }
 
         ItemStack disc = new ItemStack(ModItems.MEMORY_DISC);
         DiscItemData.setOwner(disc, mob);
@@ -152,6 +163,7 @@ public final class RoundaboutDiscCommand {
 
     private static int summonBodyDisc(CommandSourceStack source, byte discType)
             throws CommandSyntaxException {
+        requireBodyDiscEnabled(discType);
         ServerPlayer player = source.getPlayerOrException();
         ItemStack disc = new ItemStack(discType == WhitesnakeDiscUtil.SIGHT
                 ? ModItems.SIGHT_DISC : ModItems.HEARING_DISC);
@@ -170,6 +182,7 @@ public final class RoundaboutDiscCommand {
 
     private static int insertMemory(CommandSourceStack source, LivingEntity target, String value)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         String type = value.toLowerCase(Locale.ROOT);
         if (type.equals("hand")) return insertHeldDisc(source, target, WhitesnakeDiscUtil.MEMORY);
 
@@ -195,6 +208,9 @@ public final class RoundaboutDiscCommand {
             case "zombie" -> MemoryPersonality.ZOMBIE;
             default -> throw INVALID_MEMORY_TYPE.create();
         };
+        if (target instanceof Player && personality != MemoryPersonality.PLAYER) {
+            throw MOB_MEMORY_PLAYER_TARGET.create();
+        }
         bearer.roundabout$setMemoryPersonality(personality);
         bearer.roundabout$setHasMemoryDisc(true);
         bearer.roundabout$setMemoryDiscOwnerId("");
@@ -206,6 +222,8 @@ public final class RoundaboutDiscCommand {
 
     private static int insertBodyDisc(CommandSourceStack source, LivingEntity target, byte discType, String value)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
+        requireBodyDiscEnabled(discType);
         String normalized = value.toLowerCase(Locale.ROOT);
         if (normalized.equals("hand")) return insertHeldDisc(source, target, discType);
         if (!normalized.equals("true") && !normalized.equals("false")) {
@@ -230,9 +248,15 @@ public final class RoundaboutDiscCommand {
 
     private static int insertHeldDisc(CommandSourceStack source, LivingEntity target, byte discType)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
+        requireBodyDiscEnabled(discType);
         ServerPlayer actor = source.getPlayerOrException();
         ItemStack held = matchingHeldDisc(actor, discType);
         if (held.isEmpty()) throw WRONG_HELD_DISC.create();
+        if (discType == WhitesnakeDiscUtil.MEMORY && target instanceof Player
+                && DiscItemData.getPersonality(held) != MemoryPersonality.PLAYER) {
+            throw MOB_MEMORY_PLAYER_TARGET.create();
+        }
 
         boolean inserted;
         if (discType == WhitesnakeDiscUtil.STAND) {
@@ -274,6 +298,7 @@ public final class RoundaboutDiscCommand {
 
     private static int extractDisc(CommandSourceStack source, LivingEntity target, String requestedType)
             throws CommandSyntaxException {
+        requireDiscTarget(target);
         ServerPlayer actor = source.getPlayerOrException();
         byte discType = switch (requestedType.toLowerCase(Locale.ROOT)) {
             case "memory" -> WhitesnakeDiscUtil.MEMORY;
@@ -282,6 +307,7 @@ public final class RoundaboutDiscCommand {
             case "hearing" -> WhitesnakeDiscUtil.HEARING;
             default -> throw INVALID_EXTRACT_TYPE.create();
         };
+        requireBodyDiscEnabled(discType);
         ItemStack extracted = WhitesnakeDiscUtil.extractDiscStack(target, discType);
         if (extracted.isEmpty()) throw TARGET_MISSING_DISC.create();
 
@@ -307,5 +333,13 @@ public final class RoundaboutDiscCommand {
             case WhitesnakeDiscUtil.HEARING -> "hearing";
             default -> "unknown";
         };
+    }
+
+    private static void requireBodyDiscEnabled(byte discType) throws CommandSyntaxException {
+        if (!WhitesnakeDiscUtil.isBodyDiscEnabled(discType)) throw DISC_DISABLED.create();
+    }
+
+    private static void requireDiscTarget(LivingEntity target) throws CommandSyntaxException {
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(target)) throw DISC_TARGET_BLACKLISTED.create();
     }
 }

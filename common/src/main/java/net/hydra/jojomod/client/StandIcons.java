@@ -509,6 +509,8 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/arm_summon.png");
     public static final ResourceLocation SILVER_CHARIOT_OFFHAND_WEAPON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/offhand_weapon.png");
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/rapier_slash.png");
 
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
@@ -787,6 +789,7 @@ public class StandIcons {
     public static final ResourceLocation D4C_DIMENSION_HOP_KEY = Roundabout.location("textures/gui/icons/d4c/dimension_hop_key.png");
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
+    public static final ResourceLocation MERGING_RETURN = Roundabout.location("textures/gui/icons/d4c/merging_return.png");
     public static final ResourceLocation D4C_PARALLEL_GRAB = Roundabout.location("textures/gui/icons/d4c/parallel_grab.png");
     public static final ResourceLocation D4C_CHOP = Roundabout.location("textures/gui/icons/d4c/chop.png");
     public static final ResourceLocation D4C_SHIELD_STAND = Roundabout.location("textures/gui/icons/d4c/shield_stand.png");
@@ -830,6 +833,22 @@ public class StandIcons {
     public static final ResourceLocation PURPLE_HAZE_LEDGE_GRAB = Roundabout.location("textures/gui/icons/purple_haze/stand_ledge_grab.png");
     public static final ResourceLocation PURPLE_HAZE_FALL_CATCH = Roundabout.location("textures/gui/icons/purple_haze/fall_brace.png");
     public static final ResourceLocation PURPLE_HAZE_STRANGLE = Roundabout.location("textures/gui/icons/purple_haze/strangle.png");
+    public static final ResourceLocation DISTORTION_MODE = Roundabout.location("textures/gui/icons/purple_haze/distortion_mode.png");
+    public static final ResourceLocation PURPLE_HAZE_MODE = Roundabout.location("textures/gui/icons/purple_haze/purple_haze_mode.png");
+    public static final ResourceLocation PODS_0 = Roundabout.location("textures/gui/icons/purple_haze/0_pods.png");
+    public static final ResourceLocation PODS_1 = Roundabout.location("textures/gui/icons/purple_haze/1_pods.png");
+    public static final ResourceLocation PODS_2 = Roundabout.location("textures/gui/icons/purple_haze/2_pods.png");
+    public static final ResourceLocation PODS_3 = Roundabout.location("textures/gui/icons/purple_haze/3_pods.png");
+    public static final ResourceLocation PODS_4 = Roundabout.location("textures/gui/icons/purple_haze/4_pods.png");
+    public static final ResourceLocation PODS_5 = Roundabout.location("textures/gui/icons/purple_haze/5_pods.png");
+    public static final ResourceLocation PODS_6 = Roundabout.location("textures/gui/icons/purple_haze/6_pods.png");
+    public static final ResourceLocation ADVANCED_RECHARGE = Roundabout.location("textures/gui/icons/purple_haze/recharge_advanced.png");
+    public static final ResourceLocation PODS6NOBORDER = Roundabout.location("textures/gui/icons/purple_haze/6_pods_no_border.png");
+    public static final ResourceLocation PH_KICK_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/kick_barrage.png");
+    public static final ResourceLocation PH_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/barrage.png");
+    public static final ResourceLocation PH_SWITCH = Roundabout.location("textures/gui/icons/purple_haze/switch.png");
+    public static final ResourceLocation PH_FORWARD_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/forwardbarrage.png");
+    public static final ResourceLocation PH_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/punch.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

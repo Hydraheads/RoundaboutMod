@@ -1,11 +1,14 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -16,87 +19,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class D4CPortalBlockEntity extends BlockEntity {
-    private BlockState originalState = Blocks.AIR.defaultBlockState();
-
-    public BlockState getOriginalState(){
-        return originalState;
-    }
-
-    private CompoundTag originalTag = null;
     public int ticksUntilRestore = 100; // 5 seconds at 20 tps
-
-    public LivingEntity standuser = null;
-
-    public int lastRenderTick = 0;
-
-    public List<Vec3> bubbleList = new ArrayList<>();
-
-    public void setOriginal(BlockState replacedState, @Nullable CompoundTag tag, Level level) {
-        this.originalState = replacedState;
-        this.originalTag = tag;
-        /*** This just does not work and is inneficient
-        if (level instanceof ServerLevel SL){
-            CompoundTag $$0 = new CompoundTag();
-            $$0.put("OriginalState", NbtUtils.writeBlockState(originalState));
-            MainUtil.spreadRadialClientPacket(level,getBlockPos(),100, ServerToClientPackets.S2CPackets.MESSAGES.INVIS_BLOCK_STATE.value,
-                    getBlockPos(),$$0);
-        }
-         **/
-    }
-    public void setOriginal2(BlockState replacedState) {
-        this.originalState = replacedState;
-    }
-    @Nullable
+    public boolean initialized = false;
+    public int worldId = 0;
+    public UUID creator = null;
+    public Entity getCreator = null;
     @Override
     public Level getLevel() {
         return super.getLevel();
-    }
-
-    public void restoreNow() {
-        if (level != null && !level.isClientSide && level.getBlockEntity(worldPosition) == this) {
-            level.setBlock(worldPosition, originalState, 3);
-            level.scheduleTick(worldPosition, originalState.getBlock(), 1);
-
-            if (originalTag != null) {
-                BlockEntity restored = level.getBlockEntity(worldPosition);
-                if (restored != null) {
-                    restored.load(originalTag);
-                }
-            }
-            restoreParticles();
-        }
-    }
-
-    public void restoreParticles(){
-
-        if (level instanceof ServerLevel SL) {
-            SL.sendParticles(
-                    ModParticles.MAGIC_DUST, // use whatever type you like
-                    worldPosition.getX() + 0.5,
-                    worldPosition.getY() + 0.5,
-                    worldPosition.getZ() + 0.5,
-                    7, // count
-                    0.3, 0.3, 0.3, // spread
-                    0.05 // speed
-            );
-        }
-    }
-
-    public void restoreParticlesLesser(){
-
-        if (level instanceof ServerLevel SL) {
-            SL.sendParticles(
-                    ModParticles.MAGIC_DUST, // use whatever type you like
-                    worldPosition.getX() + 0.45,
-                    worldPosition.getY() + 0.45,
-                    worldPosition.getZ() + 0.45,
-                    10, // count
-                    0.3, 0.3, 0.3, // spread
-                    0.01 // speed
-            );
-        }
     }
 
     public D4CPortalBlockEntity(BlockPos $$0, BlockState $$1) {
@@ -105,6 +38,11 @@ public class D4CPortalBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         tag.putInt("TicksLeft", ticksUntilRestore);
+        tag.putInt("WorldId", worldId);
+        tag.putBoolean("Intialized", initialized);
+        if (creator != null){
+            tag.putUUID("Creator", creator);
+        }
         super.saveAdditional(tag);
     }
 
@@ -114,31 +52,45 @@ public class D4CPortalBlockEntity extends BlockEntity {
         if (tag.contains("TicksLeft")) {
             ticksUntilRestore = tag.getInt("TicksLeft");
         }
+        if (tag.contains("WorldId")) {
+            worldId = tag.getInt("WorldId");
+        }
+        if (tag.contains("Intialized")) {
+            initialized = tag.getBoolean("Intialized");
+        }
+        if (tag.contains("Creator")) {
+            creator = tag.getUUID("Creator");
+        }
     }
     public void tick() {
         if (!level.isClientSide && --ticksUntilRestore <= 0) {
-            if (level != null && level.getBlockEntity(worldPosition) == this) {
-                level.setBlock(worldPosition, originalState, 3);
-                restoreParticles();
-                if (originalTag != null) {
-                    BlockEntity restored = level.getBlockEntity(worldPosition);
-                    level.scheduleTick(worldPosition, originalState.getBlock(), 1);
-                    if (restored != null) {
-                        restored.load(originalTag);
-                    }
+
+        }
+    }
+    public static void tickBlockEnt(Level lvl, BlockPos bp, BlockState bs, D4CPortalBlockEntity portal) {
+        if (!lvl.isClientSide() && lvl instanceof ServerLevel sl) {
+            if (!portal.initialized) {
+                lvl.removeBlock(bp, false);
+                return;
+            }
+            portal.ticksUntilRestore--;
+            if (portal.ticksUntilRestore <= 0) {
+                lvl.removeBlock(bp, false);
+                return;
+            }
+
+            if (portal.worldId > 0){
+                if (portal.getCreator == null && portal.creator != null){
+                    portal.getCreator = sl.getEntity(portal.creator);
+                }
+                if (portal.getCreator != null){
+                  if (PowerTypes.getPlaneOfExisting2(portal.getCreator) != portal.worldId){
+                      lvl.removeBlock(bp, false);
+                      return;
+                  }
                 }
             }
         }
-    }
-    public static void tickBlockEnt(Level lvl, BlockPos bp, BlockState bs, D4CPortalBlockEntity invisiBlockEntity) {
-        invisiBlockEntity.tick();
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = super.getUpdateTag();
-        tag.put("stored_state", NbtUtils.writeBlockState(this.originalState));
-        return tag;
     }
 
 }

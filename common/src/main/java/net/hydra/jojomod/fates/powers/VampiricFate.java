@@ -101,7 +101,7 @@ public class VampiricFate extends FatePowers {
 
     public void blockBreakParticles(Block block, Vec3 pos){
         if (!this.self.level().isClientSide()) {
-            ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+            sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK,
                             block.defaultBlockState()),
                     pos.x, pos.y, pos.z,
                     100, 0.2, 0.2, 0.2, 0.5);
@@ -294,7 +294,16 @@ public int speedActivated = 0;
     public final int duration = 100;
     public void tickBloodRegen(){
         if (!this.self.level().isClientSide()) {
+
             if (getActivePower() == BLOOD_REGEN && self.isAlive() && !self.isRemoved()){
+
+                if (PowerTypes.isErasingTime(self) || PowerTypes.isInD4CWorld(self)){
+                    xTryPower(PowerIndex.NONE, true);
+                    this.stopSoundsIfNearby(SoundIndex.BLOOD_REGEN, 100,false);
+
+                    playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_REGEN_FINISH_EVENT, SoundSource.PLAYERS, 1F, 1F);
+                    return;
+                }
                 if (self instanceof Player PE && !PE.isCreative()){
                     PE.getFoodData().setFoodLevel(0);
                 }
@@ -307,7 +316,7 @@ public int speedActivated = 0;
                 Vec3 spawnPos = shotPos.add(self.getEyePosition(1f));
                 shotPos = shotPos.multiply(new Vec3(-1,-1,-1));
 
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.BLOOD_MIST,
+                sendParticlesIfPossible(self.level(),ModParticles.BLOOD_MIST,
                         spawnPos.x, spawnPos.y, spawnPos.z,
                         0, shotPos.x, shotPos.y,shotPos.z, 0.03);
 
@@ -416,7 +425,7 @@ public int speedActivated = 0;
                             if (MainUtil.hasBlueBlood(TE)) {
                                 particle = ModParticles.BLUE_BLOOD;
                             }
-                            ((ServerLevel) this.self.level()).sendParticles(particle, TE.getX() + random,
+                            sendParticlesIfPossible(self.level(),particle, TE.getX() + random,
                                     TE.getY() + TE.getEyeHeight() + random2, TE.getZ() + random3,
                                     0,
                                     (this.self.getX() - TE.getX()), (this.self.getY() - TE.getY() + TE.getEyeHeight()), (this.self.getZ() - TE.getZ()),
@@ -489,7 +498,7 @@ public int speedActivated = 0;
                 && getActivePower() != BLOOD_REGEN && self.getHealth() < self.getMaxHealth();
     }
     public void regenClient(){
-        if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK)){
+        if (canUseRegen() && !onCooldown(PowerIndex.FATE_2_SNEAK) && !PowerTypes.isInD4CWorld(self)){
             if (isHearing()){
                 stopHearingClient();
             }
@@ -687,7 +696,7 @@ public int speedActivated = 0;
                     playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                     playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1F, 1F+(float)(Math.random()*0.1));
                     int $$23 = (int)((double)2 * 0.5);
-                    ((ServerLevel)this.self.level()).sendParticles(ParticleTypes.CRIT,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                             bloodSuckingTarget.getEyePosition().x,
                             bloodSuckingTarget.getEyePosition().y,
                             bloodSuckingTarget.getEyePosition().z,
@@ -948,7 +957,7 @@ public int speedActivated = 0;
     }
 
     public void tickHeartbeat(Entity entity){
-        if (entity != null && !self.is(entity) && !PowerTypes.isExistentiallyElsewhere(entity)){
+        if (entity != null && !self.is(entity) && !PowerTypes.isInADifferentExistence(entity,self)){
         if (MainUtil.getMobBleed(entity) && entity.distanceTo(self) <= hearingDistance()) {
 
             ILevelAccess access = ((ILevelAccess) entity.level());

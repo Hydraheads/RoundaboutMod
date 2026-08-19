@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -157,7 +158,7 @@ public class BlockWallEntity extends Entity {
         if ($$0.getEntity() != null){
             if (!level().isClientSide() && isWhiteAlbumWall && $$0.getEntity() instanceof LivingEntity LE &&
                     ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa
-            && $$0.is(ModDamageTypes.STAND)){
+            && $$0.is(ModDamageTypes.STAND_BRAWL)){
                 Vec3 current = position();
                 Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
                 Vec3 delta = target.subtract(current);
@@ -174,6 +175,7 @@ public class BlockWallEntity extends Entity {
                             LE.getYRot(), -8.0F, 0.8F, 0.1F);
                     thrownBlockOrItem.setPos(position().add(0,0.5F,0));
                     thrownBlockOrItem.setStyle(ThrownObjectEntity.STAND_DAMAGE);
+                    PowerTypes.copyPlaneOfExisting(LE,thrownBlockOrItem);
                     LE.level().addFreshEntity(thrownBlockOrItem);
                     this.discard();
                 }

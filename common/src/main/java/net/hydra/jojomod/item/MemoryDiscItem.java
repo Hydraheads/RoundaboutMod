@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
 import net.hydra.jojomod.event.powers.disc.DreamingMemoryController;
+import net.hydra.jojomod.event.powers.disc.MemoryPersonality;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +19,10 @@ public class MemoryDiscItem extends AbstractBodyDiscItem {
     }
 
     @Override
-    protected boolean canImplant(LivingEntity target) {
+    protected boolean canImplant(ItemStack stack, LivingEntity target) {
+        if (target instanceof Player && DiscItemData.getPersonality(stack) != MemoryPersonality.PLAYER) {
+            return false;
+        }
         if (DreamingMemoryController.canTemporarilyImplant(target)) return true;
         return !((DiscBearer) target).roundabout$ownsMemoryDisc();
     }

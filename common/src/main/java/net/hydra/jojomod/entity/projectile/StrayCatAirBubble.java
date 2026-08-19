@@ -96,7 +96,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
         Entity target = this.level().getEntity(id);
 
-        if (PowerTypes.isExistentiallyElsewhere(target)){
+        if (PowerTypes.isInADifferentExistence(target,this)){
             if (((StandUser)target).roundabout$getStandPowers() instanceof
                     PowersKingCrimson pkc && pkc.timeEraseActive){
                 target = pkc.activeClone;

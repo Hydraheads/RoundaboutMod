@@ -30,6 +30,7 @@ public class ModParticles {
     public static SimpleParticleType PUNCH_IMPACT_A;
     public static SimpleParticleType PUNCH_IMPACT_B;
     public static SimpleParticleType PUNCH_IMPACT_C;
+    public static SimpleParticleType DISC_STEAL_HIT;
 
     public static SimpleParticleType PUNCH_MISS;
 

@@ -11,6 +11,7 @@ import net.hydra.jojomod.client.WhiteAlbumSkatingSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.sound.ModSounds;
@@ -124,11 +125,13 @@ public abstract class StandUserClientOnly extends Entity implements StandUserCli
             if (((StandUser) this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()
                     && (this.isSprinting() || PWA.getPlayerPos() == PlayerPosIndex.SKATE_GENERAL) && this.onGround() && !isSwimming() && !isFallFlying() && !isCrouching()
             && !((StandUser)this).roundabout$isDazed()) {
-                if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
-                    rdbt$whiteSkate = new WhiteAlbumSkatingSound(
-                            ModSounds.ICE_SKATING_EVENT,
-                            SoundSource.PLAYERS, 1, 1, this);
-                    Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+                if (!PowerTypes.isInADifferentExistenceNoTE(ClientUtil.getPlayer(),this)) {
+                    if (rdbt$whiteSkate == null || rdbt$whiteSkate.isStopped()) {
+                        rdbt$whiteSkate = new WhiteAlbumSkatingSound(
+                                ModSounds.ICE_SKATING_EVENT,
+                                SoundSource.PLAYERS, 1, 1, this);
+                        Minecraft.getInstance().getSoundManager().play(rdbt$whiteSkate);
+                    }
                 }
             }
         }

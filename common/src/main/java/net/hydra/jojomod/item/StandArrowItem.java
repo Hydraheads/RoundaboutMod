@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -313,6 +314,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
 
 
     public static boolean grantStand(ItemStack discStack, LivingEntity target){
+        if (MainUtil.isDiscEntityBlacklisted(target)) return false;
         if (discStack.getItem() instanceof StandDiscItem de){
             if (!target.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)){
                 discStack.getOrCreateTagElement("Memory").putByte("Level",de.standPowers.getMaxLevel());

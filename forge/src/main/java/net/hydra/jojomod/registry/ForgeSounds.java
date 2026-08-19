@@ -48,6 +48,8 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_D4C, ModSounds.SUMMON_D4C_ID);
     public static final RegistryObject<SoundEvent> DISC_INSERT_EVENT =
             register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
+    public static final RegistryObject<SoundEvent> D4C_PORTAL =
+            register(ModSounds.D4C_PORTAL, ModSounds.D4C_PORTAL_ID);
     public static final RegistryObject<SoundEvent> DISC_REMOVE_EVENT =
             register(ModSounds.DISC_REMOVE, ModSounds.DISC_REMOVE_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =
@@ -911,10 +913,29 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_SUMMON =
             register(ModSounds.PURPLE_HAZE_SUMMON, ModSounds.PURPLE_HAZE_SUMMON_ID);
-
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_CRY =
+            register(ModSounds.PURPLE_HAZE_BARRAGE_CRY, ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_SMOKE=
+            register(ModSounds.PURPLE_HAZE_SMOKE, ModSounds.PURPLE_HAZE_SMOKE_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_DISTORTION_SMOKE =
+            register(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE, ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID);
 
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_BARRAGE =
+            register(ModSounds.SILVER_CHARIOT_BARRAGE, ModSounds.SILVER_CHARIOT_BARRAGE_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_BARRAGE_CRY =
+            register(ModSounds.SILVER_CHARIOT_BARRAGE_CRY, ModSounds.SILVER_CHARIOT_BARRAGE_CRY_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SLASH =
+            register(ModSounds.SILVER_CHARIOT_RAPIER_SLASH, ModSounds.SILVER_CHARIOT_RAPIER_SLASH_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SHOT =
+            register(ModSounds.SILVER_CHARIOT_RAPIER_SHOT, ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_ARMOR_SHED =
+            register(ModSounds.SILVER_CHARIOT_ARMOR_SHED, ModSounds.SILVER_CHARIOT_ARMOR_SHED_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_OFFHAND_WEAPON =
+            register(ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT, ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_FINAL_HIT_CRY =
+            register(ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY, ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);

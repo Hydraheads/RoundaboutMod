@@ -31,9 +31,19 @@ public abstract class StarPlatinumExperienceOrb extends Entity {
         }
     }
 
+    //Jank mixin for hard to access exp orb making it spawn in other d4c plane
+    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDI)V", at = @At(value = "RETURN"))
+    protected void roundabout$initinit(CallbackInfo ci) {
+        if (PowerTypes.expStore != null) {
+            if (PowerTypes.isInADifferentExistenceNoTE(PowerTypes.expStore,this)){
+                PowerTypes.copyPlaneOfExisting(PowerTypes.expStore,this);
+            }
+        }
+    }
+
     @Inject(method = "scanForEntities", at = @At(value = "TAIL"))
     protected void roundabout$scanForEntities(CallbackInfo ci) {
-        if (PowerTypes.isExistentiallyElsewhere(followingPlayer)){
+        if (PowerTypes.isInADifferentExistence(followingPlayer,this)){
             followingPlayer = null;
         }
     }

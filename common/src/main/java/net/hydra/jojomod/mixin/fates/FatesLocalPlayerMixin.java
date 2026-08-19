@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.fates;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -30,7 +31,9 @@ public abstract class FatesLocalPlayerMixin extends Entity {
     protected void roundabout$canSpawnSprintParticle(CallbackInfoReturnable<Boolean> cir)
     {
 
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isExistentiallyElsewhere(this) && !(level().isClientSide()
+                && !PowerTypes.isErasingTime(this) &&
+                !PowerTypes.isInADifferentExistence(this, ClientUtil.getPlayer()))){
             cir.setReturnValue(false);
             return;
         }

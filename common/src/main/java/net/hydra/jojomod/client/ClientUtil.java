@@ -46,6 +46,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -56,6 +57,10 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -69,6 +74,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -80,6 +86,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -128,6 +135,8 @@ public class ClientUtil {
     }
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
+    public static boolean leftADimension = false;
+    public static int leftDimTicks = 0;
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
@@ -137,6 +146,23 @@ public class ClientUtil {
         }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
+            if (!canRenderWorldMerge()){
+                D4CTickStart = player.tickCount;
+            } else {
+                leftADimension = true;
+                leftDimTicks = 0;
+            }
+
+            if (!(leftADimension && !canRenderWorldMerge())){
+                D4CTickStart2 = player.tickCount;
+            } else {
+                leftDimTicks++;
+                if (leftDimTicks > 40){
+                    leftADimension = false;
+                    leftDimTicks = 0;
+                }
+            }
+
             skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
@@ -483,31 +509,52 @@ public class ClientUtil {
     }
 
     public static void handleRoadRollerAmbientSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleSkatingSounds(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleTwisterSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
     public static void handleWeepsSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
 
     public static void handleRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
         Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
     }
     public static void stopRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         if (roadRollerMixingSound != null) {
             Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
             roadRollerMixingSound = null;
@@ -643,6 +690,16 @@ public class ClientUtil {
                     boolean guardBroken = (boolean)vargs[1];
                     ((StandUser) player).roundabout$setGuardPoints(guardPoints);
                     ((StandUser)player).roundabout$setGuardBroken(guardBroken);
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncWhitesnakeDisc.value)) {
+                    byte type = (byte) vargs[0];
+                    boolean present = (boolean) vargs[1];
+                    int sealTicks = (int) vargs[2];
+                    int sealMaxTicks = (int) vargs[3];
+                    DiscBearer bearer = (DiscBearer) player;
+                    if (type == WhitesnakeDiscUtil.SIGHT) bearer.roundabout$setHasSightDisc(present);
+                    else if (type == WhitesnakeDiscUtil.MEMORY) bearer.roundabout$setHasMemoryDisc(present);
+                    else if (type == WhitesnakeDiscUtil.HEARING) bearer.roundabout$setHasHearingDisc(present);
+                    bearer.roundabout$setDiscSeal(type, sealTicks, sealMaxTicks);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.UpdateBarrageClash.value)) {
                     /**Barrage Clash S2C Packet*/
                     int clashOpID = (int)vargs[0];
@@ -658,15 +715,17 @@ public class ClientUtil {
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
-                        ((StandUserClient)User).roundabout$clientQueSound(soundID);
+                        if (!PowerTypes.isInADifferentExistenceNoTE(User,player)){
+                            ((StandUserClient) User).roundabout$clientQueSound(soundID);
+                        }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
                     /**Read in Sent config*/
                     int entId = (int) vargs[0];
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
-                    if (User instanceof LivingEntity){
-                        ((StandUserClient)User).roundabout$clientQueSoundCanceling(soundID);
+                    if (User instanceof LivingEntity LE){
+                            ((StandUserClient) User).roundabout$clientQueSoundCanceling(soundID);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
                     /**TS Teleport blip*/
@@ -871,20 +930,115 @@ public class ClientUtil {
                     if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.clear();
                     }
-                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {;
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value)) {
+                    double x = (double) vargs[0];
+                    double y = (double) vargs[1];
+                    double z = (double) vargs[2];
+                    String str1 = (String) vargs[3];
+                    String str2 = (String) vargs[4];
+                    SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
+                            (ResourceLocation.tryParse(str1));
+                    if (soundEvent != null) {
+                            SoundSource soundSource =
+                                    SoundSource.valueOf(str2);
+                        if (soundSource != null) {
+                            float xrot = (float) vargs[5];
+                            float yrot = (float) vargs[6];
+                            playSoundWithInfo(player.level(), x, y, z, soundEvent, soundSource, xrot, yrot);
+                        }
+                    }
+
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
+                    String str1 = (String) vargs[0];
+                    String str2 = (String) vargs[1];
+                    SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
+                            (ResourceLocation.tryParse(str1));
+                    if (soundEvent != null) {
+                        SoundSource soundSource =
+                                SoundSource.valueOf(str2);
+                        if (soundSource != null) {
+                            float xrot = (float) vargs[2];
+                            float yrot = (float) vargs[3];
+                            int seedThis = (int) vargs[4];
+                            Entity entity = player.level().getEntity(seedThis);
+                            if (entity != null) {
+                                Minecraft.getInstance().getSoundManager().play(
+                                        new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
+                            }
+                        }
+                    }
+
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeParticle.value)) {
+                    String str1 = (String) vargs[0];
+
+                    ResourceLocation particleId = new ResourceLocation(str1);
+
+                    ParticleType<?> particleType =
+                            BuiltInRegistries.PARTICLE_TYPE.get(particleId);
+
+                    if (particleType != null) {
+                        double x = (double) vargs[1];
+                        double y = (double) vargs[2];
+                        double z = (double) vargs[3];
+
+                        int count = (int) vargs[4];
+
+                        double xDist = (double) vargs[5];
+                        double yDist = (double) vargs[6];
+                        double zDist = (double) vargs[7];
+
+                        double speed = (double) vargs[8];
+
+                        if (particleType instanceof ParticleOptions particle) {
+                            ClientLevel level = Minecraft.getInstance().level;
+
+                            if (level != null) {
+                                if (count == 0) {
+                                    double d0 = (double) (speed * xDist);
+                                    double d2 = (double) (speed * yDist);
+                                    double d4 = (double) (speed * zDist);
+
+                                    try {
+                                        level.addParticle(particle, false, x,
+                                                y, z, d0, d2, d4);
+                                    } catch (Throwable throwable1) {
+                                    }
+                                } else {
+                                    for (int i = 0; i < count; ++i) {
+                                        double d1 = level.random.nextGaussian() * xDist;
+                                        double d3 = level.random.nextGaussian() * yDist;
+                                        double d5 = level.random.nextGaussian() * zDist;
+                                        double d6 = level.random.nextGaussian() * speed;
+                                        double d7 = level.random.nextGaussian() * speed;
+                                        double d8 = level.random.nextGaussian() * speed;
+
+                                        try {
+                                            level.addParticle(particle, false,
+                                                    x + d1, y + d3, z + d5, d6, d7, d8);
+                                        } catch (Throwable throwable) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldRange.value)) {
                     float data = (float) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.range = data;
-
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.range = data;
+                    }
                 }else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncMoldDuration.value)) {;
                     int data = (int) vargs[0];
                     int data2 = (int) vargs[1];
-                    MoldSporesEntity entity = (MoldSporesEntity) player.level().getEntity(data2);
-                    entity.lifetime = data;
-
-
+                    Entity entity = player.level().getEntity(data2);
+                    if (entity instanceof MoldSporesEntity mse){
+                        mse.lifetime = data;
+                    }
+                } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
+                    byte pods = (byte) vargs[0];
+                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
                 }
 
                 // theoretical deregister dynamic worlds packet
@@ -896,6 +1050,18 @@ public class ClientUtil {
                 //        }
             }
         });
+    }
+
+    public static void playSoundWithInfo(Level level, double x,double y,double z,SoundEvent soundEvent, SoundSource soundSource, float xrot, float yrot){
+        double $$9 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().distanceToSqr(x, y, z);
+        SimpleSoundInstance $$10 = new SimpleSoundInstance(soundEvent, soundSource, xrot, yrot,
+                RandomSource.create(level.random.nextLong()), x, y, z);
+        if ($$9 > 100.0) {
+            double $$11 = Math.sqrt($$9) / 40.0;
+            Minecraft.getInstance().getSoundManager().playDelayed($$10, (int)($$11 * 20.0));
+        } else {
+            Minecraft.getInstance().getSoundManager().play($$10);
+        }
     }
     public static List<Component> getTooltipFromItem(Minecraft p_281881_, ItemStack p_282833_) {
         return p_282833_.getTooltipLines(p_281881_.player, p_281881_.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL);
@@ -1077,6 +1243,9 @@ public class ClientUtil {
     }
     public static float GameTimeStart = 0;
     public static float PlayerTickStart = 0;
+    public static float D4CTickStart = 0;
+    public static float D4CTickStart2 = 0;
+
     public static int TimeErase = -1;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1114,6 +1283,9 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+    public static boolean canRenderWorldMerge() {
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.isInD4CWorld(getPlayer());
     }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){

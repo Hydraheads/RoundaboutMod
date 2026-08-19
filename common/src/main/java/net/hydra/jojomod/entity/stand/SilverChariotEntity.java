@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -9,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -106,6 +108,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
     private float controlStrafe;
     private float controlForward;
 
+    private boolean controlBodyRotationActive;
+    private float controlBodyYaw;
+
     public void setControlInput(float strafe, float forward) {
         controlStrafe = strafe;
         controlForward = forward;
@@ -127,38 +132,26 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public void travel(Vec3 vec3) {
-        // if (this.isControlledByLocalInstance()) {
-        //    if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
-        //        C2SPacketUtil.updatePilot(this);
-        //    }
-        // }
-        if (isRemoteControlled()) {
-            if (this.level().isClientSide() && this.isControlledByLocalInstance()) {
-                super.travel(vec3);
-                C2SPacketUtil.updatePilot(this);
-            } else {
-                Vec3 velocity = getDeltaMovement();
-                setDeltaMovement(0.0D, velocity.y, 0.0D);
-                super.travel(Vec3.ZERO);
-            }
-            return;
-        }
         super.travel(vec3);
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
     }
 
     @Override
     public void tick() {
         super.tick();
+    }
 
-        if (this.level().isClientSide() && isControlledByLocalInstance() && isControlModeActive()) {
+    private void tickControlMode() {
+        if (this.level().isClientSide() && isControlModeActive()) {
             tickControlBodyRotation();
         } else {
             controlBodyRotationActive = false;
         }
     }
-
-    private boolean controlBodyRotationActive;
-    private float controlBodyYaw;
 
     private void tickControlBodyRotation() {
         if (!controlBodyRotationActive) {
@@ -193,7 +186,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
+        return super.skipAttackInteraction(attacker);
     }
 
     public boolean isControlModeActive() {
@@ -221,23 +214,33 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
+    public void setItemInHand(InteractionHand $$0, ItemStack $$1) {
+        super.setItemInHand($$0, $$1);
+    }
+
+    @Override
+    public ItemStack getOffhandItem() {
+        return super.getOffhandItem();
+    }
+
+    @Override
     public ItemStack getMainHandItem() {
         return super.getMainHandItem();
     }
 
     @Override
     public boolean isNoGravity() {
-        return isRemoteControlled();
+        return true;
     }
 
     @Override
     public boolean lockPos() {
-        return !isRemoteControlled();
+        return false;
     }
 
     @Override
     public boolean forceVisualRotation() {
-        return false;
+        return true;
     }
 
     @Override
@@ -254,14 +257,21 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean isControlledByLocalInstance() {
-        LivingEntity user = this.getUser();
-        if (user != null && user instanceof Player player) {
-            Entity ent = this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
-            if (ent != null && ent.is(this)) {
-                return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
+        LivingEntity user = getUser();
+        if (user instanceof Player player) {
+            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
+                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
+                if (controlled != null && controlled.is(this)) {
+                    return player.isLocalPlayer();
+                }
             }
         }
         return super.isControlledByLocalInstance();
+    }
+
+    @Override
+    protected float getFlyingSpeed() {
+        return 0.40F;
     }
 
     public void setControlMode(boolean active) {

@@ -198,7 +198,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     @Override
     public void playSummonSound() {
         if (!this.self.isCrouching()){
-            this.self.level().playSound(null, self.getX(), self.getY(),
+            playSoundIfPossible(self.level(),null, self.getX(), self.getY(),
                     self.getZ(), ModSounds.HEEL_RAISE_EVENT, self.getSoundSource(), 0.9F, 1.02F);
         }
     }

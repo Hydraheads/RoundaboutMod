@@ -93,16 +93,33 @@ public class PurpleSmokeEntity extends StandEntity {
                 range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
             }
         }
-        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
+        List<Entity> damages = MainUtil.genHitbox(
+                this.level(),
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                range,
+                range,
+                range
+        );
+
+        if (client) {
+            Roundabout.LOGGER.info(
+                    "[PURPLE DEBUG] CLIENT smoke tick | range=" + range
+                            + " | entities found=" + damages.size()
+                            + " | user=" + this.getUser()
+            );
+        }
+
         for (int j = 0; j < damages.size(); j++) {
 
             if (Objects.nonNull(this.getUser())) {
+
                 Entity entity = damages.get(j);
+
                 if (entity instanceof LivingEntity) {
-
-                    ((StandUser) entity).SetInMoldTicks(3);
+                    ((StandUser) entity).SetInPurpleHazeTicks(5);
                 }
-
             }
         }
         if (!client) {
@@ -148,7 +165,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
                             && !((StandUser) entity).roundabout$isBubbleEncased()
                             && !isStand
-                            && !(PowerTypes.isExistentiallyElsewhere(entity))
+                            && !(PowerTypes.isInADifferentExistence(entity,this))
                             && !isBoss
                             && ((StandUser) entity).GoingDown()
                             && !(entity instanceof FallenMob)
