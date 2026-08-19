@@ -301,12 +301,15 @@ public enum PowerTypes {
         }
     }
 
+    public static int d4cWorldUptime(){
+        return 200;
+    }
     public static int getForeignWorldMaxTime(byte worldType){
         if (worldType == 0 || worldType == 10){
             return -1;
         }
         if (worldType <= 8){
-            return 200;
+            return d4cWorldUptime();
         }
         if (worldType == 11){
             return 400;

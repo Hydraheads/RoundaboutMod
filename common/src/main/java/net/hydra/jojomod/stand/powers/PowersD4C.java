@@ -1,9 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.D4CPortalBlock;
+import net.hydra.jojomod.block.D4CPortalBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -483,7 +485,7 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
-    public boolean placeOne(BlockPos pos){
+    public boolean placeOne(BlockPos pos, int worldId){
         BlockState state = self.level().getBlockState(pos);
         boolean water = state.getBlock().equals(Blocks.WATER);
         if (state.isAir() || water){
@@ -492,6 +494,12 @@ public class PowersD4C extends NewPunchingStand {
                 state2.trySetValue(D4CPortalBlock.WATERLOGGED, true);
             }
             self.level().setBlock(pos, state2,3);
+            if (self.level().getBlockEntity(pos) instanceof D4CPortalBlockEntity portal){
+                portal.ticksUntilRestore = PowerTypes.d4cWorldUptime();
+                portal.initialized = true;
+                portal.worldId = worldId;
+                portal.creator = self.getUUID();
+            }
             return true;
         }
         return false;
@@ -503,22 +511,23 @@ public class PowersD4C extends NewPunchingStand {
             if (dir != Direction.DOWN){
                 basePos = self.getOnPos();
             }
-            if (placeOne(basePos)) {
-                placeOne(basePos.relative(dir.getOpposite()));
-            } else if (placeOne(basePos.north())){
-                placeOne(basePos.north().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.south())){
-                placeOne(basePos.south().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.east())){
-                placeOne(basePos.east().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.west())) {
-                placeOne(basePos.west().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.above())){
-                    placeOne(basePos.above().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.below())){
-                    placeOne(basePos.below().relative(dir.getOpposite()));
-            } else if (placeOne(basePos.relative(dir.getOpposite()))){
-                placeOne(basePos.relative(dir.getOpposite()).relative(dir.getOpposite()));
+            int worldId = ((int) (Math.random()*4))+1;
+            if (placeOne(basePos,worldId)) {
+                placeOne(basePos.relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.north(),worldId)){
+                placeOne(basePos.north().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.south(),worldId)){
+                placeOne(basePos.south().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.east(),worldId)){
+                placeOne(basePos.east().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.west(),worldId)) {
+                placeOne(basePos.west().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.above(),worldId)){
+                    placeOne(basePos.above().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.below(),worldId)){
+                    placeOne(basePos.below().relative(dir.getOpposite()),worldId);
+            } else if (placeOne(basePos.relative(dir.getOpposite()),worldId)){
+                placeOne(basePos.relative(dir.getOpposite()).relative(dir.getOpposite()),worldId);
            } else {
                 return;
             }
