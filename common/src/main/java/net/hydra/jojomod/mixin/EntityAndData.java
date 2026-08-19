@@ -930,6 +930,16 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
 
+    private int lastDay = -1;
+
+    public void roundabout$initialDayCheck(int day) {
+        Entity self = (Entity)(Object)this;
+        if (lastDay != day && SavedSecond.canTeleportTo(self.level(), self.getPosition(1), self)) {
+            roundabout$setInitialDaySec();
+            lastDay = day;
+        }
+    }
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     protected void roundabout$tickH(CallbackInfo ci) {
         roundabout$universalTick();

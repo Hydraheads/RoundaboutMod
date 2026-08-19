@@ -290,6 +290,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public int plantInventorySlot=1;
 
 	private boolean hasStrayCat = false;
+    private CompoundTag strayCatData = null;
 
     public boolean canUseStrayCat() {
         return this.hasStrayCat || (this.getSelf() instanceof Player pl && ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
@@ -446,13 +447,26 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
     // Data save system:
-    static final String strayCatTag = "hasStrayCat";
+    static final String strayCatTagOld = "hasStrayCat";
+    static final String strayCatTag = "strayCatData";/// Old stray cat save system
+    static final String strayCatBreed = "breed";
+    static final String strayCatCustomName = "customName";
+    //static final String strayCatPotted = "potted";
     static final String BitesTheDustTag = "hasBTD";
+
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
-        $$0.putBoolean(strayCatTag, this.hasStrayCat);
+        //$$0.putBoolean(strayCatTagOld, this.hasStrayCat);
+        if (strayCatData != null) {
+            $$0.put(strayCatTag, strayCatData);
+        } else if (hasStrayCat) {
+            strayCatData = new CompoundTag();
+            strayCatData.putByte(strayCatBreed, (byte)0);
+            $$0.put(strayCatTag, strayCatData);
+            //strayCatData.putBoolean(strayCatPotted, true);
+        }
         $$0.putBoolean(BitesTheDustTag, this.hasBitesTheDust);
     }
 
@@ -460,7 +474,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
         if ($$0.contains(strayCatTag)) {
-            this.hasStrayCat = $$0.getBoolean(strayCatTag); }
+            strayCatData = $$0.getCompound(strayCatTag);
+            this.hasStrayCat = true;
+        } else if ($$0.contains(strayCatTagOld)) {
+            this.hasStrayCat = $$0.getBoolean(strayCatTag);
+        }
         if ($$0.contains(BitesTheDustTag)) {
             this.hasBitesTheDust = $$0.getBoolean(BitesTheDustTag);
         }
@@ -1917,20 +1935,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void airBubbleRedirectClient(){
-        //if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-            Entity ent = this.getTargetEntity(this.self, 30);
-            if (ent != null) {
-                int id = ent.getId();
+        Entity ent = this.getTargetEntity(this.self, 30);
+        if (ent != null) {
+            int id = ent.getId();
 
-                //playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.KILLER_QUEEN_BUBBLE_SELECT_EVENT,SoundSource.PLAYERS, 2.0F,(float)(1.1+Math.random()*0.2));
+            this.tryIntPower(PowerIndex.POWER_2_EXTRA, false, id);
+            tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, id);
 
-                this.tryIntPower(PowerIndex.POWER_2_EXTRA, false, id);
-                tryIntPowerPacket(PowerIndex.POWER_2_EXTRA, id);
-
-                this.entityTargetBuffer = ent;
-            }
-        //}
-
+            this.entityTargetBuffer = ent;
+        }
     }
 
     public void tryMobPlantBomb() {
@@ -1957,21 +1970,42 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
                 if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
-                    StrayCatForSure.discard();
                     this.hasStrayCat = true;
+                    CompoundTag data = new CompoundTag();
+                    data.putByte(strayCatBreed, StrayCatForSure.getBreed());
+                    //data.putBoolean(strayCatPotted, StrayCatForSure.getPotted());
+                    if (StrayCatForSure.hasCustomName()) {
+                        data.putString(strayCatCustomName, StrayCatForSure.getCustomName().getString());
+                    }
+                    strayCatData = data;
                     syncCanStrayCatStatus(true);
                     this.saveDiscAndSync();
 
+                    StrayCatForSure.discard();
                     return true;
                 }
             }
 
             ItemStack item = this.getSelf().getMainHandItem();
-            if (item.getItem() instanceof StrayCatItem) {
+            if (item.getItem() instanceof StrayCatItem && item.hasTag() && StrayCatItem.validateStrayCatOwner(item, self)) {
+                CompoundTag itemTag = item.getTag();
+                CompoundTag data = new CompoundTag();
+                if (itemTag.contains(StrayCatItem.SKIN_TAG)) {
+                    data.putByte(strayCatBreed, itemTag.getByte(StrayCatItem.SKIN_TAG));
+                }
+                //data.putBoolean(strayCatPotted, true);
+                if (item.hasCustomHoverName()) {
+                    data.putString(strayCatCustomName, item.getHoverName().getString());
+                }
+
+                strayCatData = data;
+
                 Player PL = (Player)this.getSelf();
+
                 if (!PL.getAbilities().instabuild) {
                     item.shrink(1);
                 }
+
                 this.hasStrayCat = true;
                 this.saveDiscAndSync();
 

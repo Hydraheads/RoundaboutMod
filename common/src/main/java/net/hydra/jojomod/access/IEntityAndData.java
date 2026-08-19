@@ -62,7 +62,7 @@ public interface IEntityAndData {
     void roundabout$setDeltaMovementRaw(Vec3 ec);
     ArrayDeque<SavedSecond> roundabout$getSecondQue();
 
-
+    void roundabout$initialDayCheck(int day);
     void roundabout$setInitialDaySec();
     SavedSecond roundabout$getInitialDaySec();
 

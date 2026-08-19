@@ -5816,7 +5816,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$IdleTime = -1;
     }
 
-
     @Unique
     public void roundabout$UniversalTick(){
         if (this.roundabout$TSHurtTime > 0){this.roundabout$TSHurtTime--;}
@@ -5824,6 +5823,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$getStandPowers().summonCD > 0) {
             roundabout$getStandPowers().summonCD--;
         }
+
 
     }
 

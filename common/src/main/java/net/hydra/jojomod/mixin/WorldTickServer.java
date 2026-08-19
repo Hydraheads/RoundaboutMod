@@ -69,6 +69,8 @@ public class WorldTickServer {
 
     }
 
+    public int currentDay = -1;
+
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see FollowingStandEntity#tickStandOut */
 
@@ -80,6 +82,11 @@ public class WorldTickServer {
 
         ((TimeStop) this).tickAllTimeStops();
         ((IPermaCasting) this).roundabout$tickAllPermaCasts();
+
+
+        int time = (int)((ServerLevel)(Object) this).getDayTime();
+        int extraSecs = time % 24000;
+        currentDay = (time - extraSecs) / 24000;
 
         this.entityTickList.forEach($$0x -> {
             if ($$0x instanceof FollowingStandEntity standEntity) {
@@ -94,6 +101,8 @@ public class WorldTickServer {
                         roundabout$tickStandIn(null,standEntity);
                     }
                 }
+            }else if ($$0x != null) {
+                ((IEntityAndData) $$0x).roundabout$initialDayCheck(currentDay);
             }
         });
     }
