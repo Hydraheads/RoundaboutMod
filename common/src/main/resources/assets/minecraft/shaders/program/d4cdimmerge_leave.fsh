@@ -108,6 +108,6 @@ color += lineColor * lines * 0.7;
 
 fragColor = vec4(
     clamp(color, 0.0, 1.0),
-    original.a
+    1.0
 );
 }

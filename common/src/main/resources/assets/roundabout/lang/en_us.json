@@ -49,7 +49,7 @@
 
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
-  "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
+  "text.roundabout.bullets.sniper": "Compatible with Sniper Rifles.",
 
   "text.roundabout.stray_cat.anime": "Anime Color",
   "text.roundabout.stray_cat.manga": "Manga Color",
@@ -320,7 +320,7 @@
 
   "item.roundabout.colt_revolver": "Colt Revolver",
 
-  "item.roundabout.jackal_rifle": "Jackal Rifle",
+  "item.roundabout.jackal_rifle": "Sniper Rifle",
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
 
   "item.roundabout.light_bulb": "Light Bulb",

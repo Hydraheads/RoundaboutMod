@@ -136,6 +136,7 @@ public class ClientUtil {
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
     public static boolean leftADimension = false;
+    public static int leftDimTicks = 0;
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
@@ -149,10 +150,17 @@ public class ClientUtil {
                 D4CTickStart = player.tickCount;
             } else {
                 leftADimension = true;
+                leftDimTicks = 0;
             }
 
             if (!(leftADimension && !canRenderWorldMerge())){
                 D4CTickStart2 = player.tickCount;
+            } else {
+                leftDimTicks++;
+                if (leftDimTicks > 40){
+                    leftADimension = false;
+                    leftDimTicks = 0;
+                }
             }
 
             skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
@@ -930,26 +938,34 @@ public class ClientUtil {
                     String str2 = (String) vargs[4];
                     SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
                             (ResourceLocation.tryParse(str1));
-                    SoundSource soundSource =
-                            SoundSource.valueOf(str2);
-                    float xrot = (float) vargs[5];
-                    float yrot = (float) vargs[6];
-                    playSoundWithInfo(player.level(),x,y,z,soundEvent,soundSource,xrot,yrot);
+                    if (soundEvent != null) {
+                            SoundSource soundSource =
+                                    SoundSource.valueOf(str2);
+                        if (soundSource != null) {
+                            float xrot = (float) vargs[5];
+                            float yrot = (float) vargs[6];
+                            playSoundWithInfo(player.level(), x, y, z, soundEvent, soundSource, xrot, yrot);
+                        }
+                    }
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value)) {
                     String str1 = (String) vargs[0];
                     String str2 = (String) vargs[1];
                     SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get
                             (ResourceLocation.tryParse(str1));
-                    SoundSource soundSource =
-                            SoundSource.valueOf(str2);
-                    float xrot = (float) vargs[2];
-                    float yrot = (float) vargs[3];
-                    int seedThis = (int) vargs[4];
-                    Entity entity = player.level().getEntity(seedThis);
-                    if (entity != null && soundEvent != null){
-                        Minecraft.getInstance().getSoundManager().play(
-                                new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
+                    if (soundEvent != null) {
+                        SoundSource soundSource =
+                                SoundSource.valueOf(str2);
+                        if (soundSource != null) {
+                            float xrot = (float) vargs[2];
+                            float yrot = (float) vargs[3];
+                            int seedThis = (int) vargs[4];
+                            Entity entity = player.level().getEntity(seedThis);
+                            if (entity != null) {
+                                Minecraft.getInstance().getSoundManager().play(
+                                        new EntityBoundSoundInstance(soundEvent, soundSource, xrot, yrot, entity, entity.level().getRandom().nextLong()));
+                            }
+                        }
                     }
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeParticle.value)) {
@@ -960,45 +976,47 @@ public class ClientUtil {
                     ParticleType<?> particleType =
                             BuiltInRegistries.PARTICLE_TYPE.get(particleId);
 
-                    double x = (double) vargs[1];
-                    double y = (double) vargs[2];
-                    double z = (double) vargs[3];
+                    if (particleType != null) {
+                        double x = (double) vargs[1];
+                        double y = (double) vargs[2];
+                        double z = (double) vargs[3];
 
-                    int count = (int) vargs[4];
+                        int count = (int) vargs[4];
 
-                    double xDist = (double) vargs[5];
-                    double yDist = (double) vargs[6];
-                    double zDist = (double) vargs[7];
+                        double xDist = (double) vargs[5];
+                        double yDist = (double) vargs[6];
+                        double zDist = (double) vargs[7];
 
-                    double speed = (double) vargs[8];
+                        double speed = (double) vargs[8];
 
-                    if (particleType instanceof ParticleOptions particle) {
-                        ClientLevel level = Minecraft.getInstance().level;
+                        if (particleType instanceof ParticleOptions particle) {
+                            ClientLevel level = Minecraft.getInstance().level;
 
-                        if (level != null) {
-                            if (count == 0) {
-                                double d0 = (double)(speed *xDist);
-                                double d2 = (double)(speed * yDist);
-                                double d4 = (double)(speed * zDist);
-
-                                try {
-                                   level.addParticle(particle, false, x,
-                                           y, z, d0, d2, d4);
-                                } catch (Throwable throwable1) {
-                                }
-                            } else {
-                                for(int i = 0; i < count; ++i) {
-                                    double d1 = level.random.nextGaussian() * xDist;
-                                    double d3 = level.random.nextGaussian() * yDist;
-                                    double d5 = level.random.nextGaussian() * zDist;
-                                    double d6 = level.random.nextGaussian() * speed;
-                                    double d7 = level.random.nextGaussian() * speed;
-                                    double d8 = level.random.nextGaussian() * speed;
+                            if (level != null) {
+                                if (count == 0) {
+                                    double d0 = (double) (speed * xDist);
+                                    double d2 = (double) (speed * yDist);
+                                    double d4 = (double) (speed * zDist);
 
                                     try {
-                                        level.addParticle(particle, false,
-                                               x + d1, y + d3,z + d5, d6, d7, d8);
-                                    } catch (Throwable throwable) {
+                                        level.addParticle(particle, false, x,
+                                                y, z, d0, d2, d4);
+                                    } catch (Throwable throwable1) {
+                                    }
+                                } else {
+                                    for (int i = 0; i < count; ++i) {
+                                        double d1 = level.random.nextGaussian() * xDist;
+                                        double d3 = level.random.nextGaussian() * yDist;
+                                        double d5 = level.random.nextGaussian() * zDist;
+                                        double d6 = level.random.nextGaussian() * speed;
+                                        double d7 = level.random.nextGaussian() * speed;
+                                        double d8 = level.random.nextGaussian() * speed;
+
+                                        try {
+                                            level.addParticle(particle, false,
+                                                    x + d1, y + d3, z + d5, d6, d7, d8);
+                                        } catch (Throwable throwable) {
+                                        }
                                     }
                                 }
                             }
@@ -1267,7 +1285,7 @@ public class ClientUtil {
         return false;
     }
     public static boolean canRenderWorldMerge() {
-        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.getPlaneOfExisting2(getPlayer()) < 6;
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.isInD4CWorld(getPlayer());
     }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){

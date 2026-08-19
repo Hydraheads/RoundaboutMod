@@ -55,13 +55,21 @@ void main() {
     vec4 original = texture(DiffuseSampler, texCoord);
 
     // Create a moderately shifted version
-    vec3 shifted = hueShift(original.rgb, 0.7);
+    vec3 shifted = clamp(
+        hueShift(original.rgb, 0.7),
+        0.0,
+        1.0
+    );
 
     // Only partially apply the shift
-    vec3 color = mix(
-        original.rgb,
-        shifted,
-        0.45
+    vec3 color = clamp(
+        mix(
+            original.rgb,
+            shifted,
+            0.45
+        ),
+        0.0,
+        1.0
     );
 
     // Calculate brightness
@@ -133,7 +141,7 @@ color += lineColor * lines * 0.7;
 
 fragColor = vec4(
     clamp(color, 0.0, 1.0),
-    original.a
+    1.0
 );
 
 

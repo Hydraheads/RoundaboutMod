@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -602,7 +604,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
-
+    @Override
+    public float getBarrageFinisherKnockback(){
+        return 0.8F;
+    }
 
     @Override
     public void barrageImpact(Entity entity, int hitNumber) {
@@ -689,7 +694,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
-                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.SKILL_1);
+                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.POWER_1_BONUS);
                 }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
@@ -1027,14 +1032,38 @@ public class PowersPurpleHaze extends NewPunchingStand {
         IPermaCasting permaCasting =
                 (IPermaCasting) this.self.level();
 
-        purpleHazeFieldPosition = position;
+        boolean wasAlreadyActive = purpleHazeFieldActive;
 
+        purpleHazeFieldPosition = position;
 
         purpleHazeFieldDistortionMode = distortionMode;
 
         purpleHazeFieldTicks = distortionMode
                 ? DISTORTION_FIELD_DURATION
                 : PURPLE_HAZE_FIELD_DURATION;
+
+            if (distortionMode) {
+                playSoundIfPossible(
+                        self.level(),
+                        null,
+                        BlockPos.containing(purpleHazeFieldPosition),
+                        ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT,
+                        SoundSource.NEUTRAL,
+                        4.0F,
+                        1.0F
+                );
+            } else {
+                playSoundIfPossible(
+                        self.level(),
+                        null,
+                        BlockPos.containing(purpleHazeFieldPosition),
+                        ModSounds.PURPLE_HAZE_SMOKE_EVENT,
+                        SoundSource.PLAYERS,
+                        4.0F,
+                        1.0F
+                );
+            }
+
 
         if (!permaCasting.roundabout$isPermaCastingEntity(this.self)) {
             permaCasting.roundabout$addPermaCaster(this.self);
@@ -1080,14 +1109,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
-            playSoundIfPossible(self.level(),
+            /*playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
                     ModSounds.STAR_FINGER_EVENT,
                     SoundSource.PLAYERS,
                     1.0F,
                     1.0F
-            );
+            );*/
 
             Snowball snowball = new Snowball(this.self.level(), self);
 
@@ -1207,11 +1236,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return SoundIndex.SUMMON_SOUND;
     }
     @Override
-    public SoundEvent getSoundFromByte(byte soundChoice){
+    public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
+    protected SoundEvent getBarrageSound() {
+
+        return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.PURPLE_HAZE_SUMMON_EVENT;
-        }
+        } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+            return getBarrageSound();
+    }
         return super.getSoundFromByte(soundChoice);
+    }
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     @Override
