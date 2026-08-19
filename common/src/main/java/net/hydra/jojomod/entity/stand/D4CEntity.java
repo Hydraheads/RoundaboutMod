@@ -1,21 +1,9 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.joml.Vector3f;
-
-import java.util.List;
 
 public class D4CEntity extends FollowingStandEntity {
     public D4CEntity(EntityType<? extends Mob> entityType, Level world) {

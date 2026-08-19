@@ -599,7 +599,8 @@ public class PowersD4C extends NewPunchingStand {
         if (isEligable()) {
             this.setAttackTimeDuring(-7);
             if (target != null && !target.isRemoved()){
-                if (target.distanceTo(self) > grabRange+0.75F) {
+                if (target.distanceTo(self) > grabRange+0.75F ||
+                MainUtil.isBossMob(target)) {
                     target = null;
                 }
                 int worldId = ((int) (Math.random() * 3)) + 5;
@@ -1382,7 +1383,7 @@ public class PowersD4C extends NewPunchingStand {
             }
         } else if (standOn && active == PowerIndex.POWER_1_SNEAK){
             Entity TE = this.getTargetEntity(playerEntity, grabRange);
-            if (TE != null) {
+            if (TE != null && !MainUtil.isBossMob(TE)) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
             }
         } else if (standOn && active == PowerIndex.SNEAK_ATTACK_CHARGE){
