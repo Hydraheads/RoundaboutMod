@@ -305,7 +305,7 @@ public enum PowerTypes {
         if (worldType == 0 || worldType == 10){
             return -1;
         }
-        if (worldType <= 5){
+        if (worldType <= 8){
             return 200;
         }
         if (worldType == 11){
@@ -412,6 +412,10 @@ public enum PowerTypes {
         return false;
     }
     public static boolean isInD4CWorld(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 8;
+    }
+    public static boolean isInD4CWorldWithRender(Entity entity){
         byte exist = getPlaneOfExisting(entity);
         return exist >0 && exist <= 5;
     }
