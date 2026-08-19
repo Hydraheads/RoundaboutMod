@@ -560,9 +560,9 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             if (Objects.nonNull(stand)) {
                 this.setActivePower(PowerIndex.POWER_1_BONUS);
                 if (!this.getSelf().level().isClientSide) {
-                    this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.HAPPY_VILLAGER,
                             stand.getX(), stand.getY() + 0.3, stand.getZ(),
                             30, 0.4, 0.4, 0.4, 0.4);
                 }
@@ -653,20 +653,20 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                     if (!(this.getActivePower() == PowerIndex.POWER_1_BONUS)){
                         if (build == 80){
-                            this.self.level().playSound(null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH,
                                     SoundSource.PLAYERS, 0.95F, 1.3F);
                             build++;
 
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
                         } else if (attackTimeDuring > 80){
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
@@ -973,7 +973,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                     stopSoundsIfNearby(ASSAULT_NOISE, 100, false);
                     stand.setYRot(getLookAtEntityYaw(stand,$$5));
                     stand.setXRot(getLookAtEntityPitch(stand,$$5));
-                    this.self.level().playSound(null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(),  ModSounds.PUNCH_4_SOUND_EVENT,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
                     int cdr = ClientNetworking.getAppropriateConfig().theWorldSettings.assaultCooldown;
                     if (this.getSelf() instanceof ServerPlayer) {
@@ -1485,7 +1485,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
             boolean $$8 = randomTeleport($$0, $$1, $$2, true,tptype);
             if ($$8) {
                 if (!this.getSelf().isSilent()) {
-                    this.getSelf().level().playSound(null, this.getSelf().xo, this.getSelf().yo,
+                    playSoundIfPossible(self.level(),null, this.getSelf().xo, this.getSelf().yo,
                             this.getSelf().zo, ModSounds.TIME_SNAP_EVENT, this.getSelf().getSoundSource(), 2.0F, 1.0F);
                     this.getSelf().playSound(ModSounds.TIME_SNAP_EVENT, 2.0F, 1.0F);
                 }

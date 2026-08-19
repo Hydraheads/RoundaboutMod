@@ -27,12 +27,16 @@ import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -43,6 +47,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -137,7 +142,22 @@ public abstract class EntityAndData implements IEntityAndData {
         this.hasImpulse = true;
     }
 
+    @Inject(
+            method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
+            at = @At("RETURN")
+    )
+    private void roundabout$copyPlaneToDroppedItem(
+            ItemStack stack,
+            float yOffset,
+            CallbackInfoReturnable<ItemEntity> cir
+    ) {
+        Entity self = (Entity)(Object)this;
+        ItemEntity item = cir.getReturnValue();
 
+        if (item != null) {
+            PowerTypes.copyPlaneOfExisting(self, item);
+        }
+    }
 
     @Unique
     @Override
@@ -227,6 +247,7 @@ public abstract class EntityAndData implements IEntityAndData {
     SavedSecond initialDaySecond = null;;
 
     @Unique
+    @Override
     public void roundabout$setInitialDaySec() {
         initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
     }
@@ -613,6 +634,9 @@ public abstract class EntityAndData implements IEntityAndData {
         return this.maxUpStep;
     }
 
+    public  AABB rdbt$getPoseBox(Pose pose){
+        return getBoundingBoxForPose(pose);
+    }
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
     protected void roundabout$SetFireTicks(int $$0, CallbackInfo ci){
@@ -689,9 +713,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "playSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$noSwimSound(float volume, CallbackInfo ci) {
         Entity thirs = ((Entity)(Object)this);
-        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
-                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
-                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
+        if (PowerTypes.isErasingTime(thirs)){
             ci.cancel();
         }
     }
@@ -705,9 +727,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "waterSwimSound", at = @At("HEAD"), cancellable = true, require = 0)
     private void rdbt$waterSwimSound(CallbackInfo ci) {
         Entity thirs = ((Entity)(Object)this);
-        if (PowerTypes.isExistentiallyElsewhere(thirs) &&
-                !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
-                        !PowerTypes.isInADifferentExistence(thirs, ClientUtil.getPlayer()))){
+        if (PowerTypes.isErasingTime(thirs)){
             ci.cancel();
         }
     }
@@ -758,6 +778,10 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
     protected void roundabout$push(Entity entity, CallbackInfo ci) {
+        if (PowerTypes.isInADifferentExistence(entity,(((Entity) (Object)this)))){
+            ci.cancel();
+            return;
+        }
         Entity thisEnt = ((Entity) (Object) this);
         if (thisEnt instanceof LivingEntity lv){
             if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
@@ -885,12 +909,47 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     public Optional<BlockPos> mainSupportingBlockPos;
 
+    @Shadow
+    protected abstract AABB getBoundingBoxForPose(Pose pose);
+
+    @Unique
+    private int rdbt$inForeignWorld = 0;
+
     @Override
     @Unique
     public void roundabout$universalTick(){
         roundabout$addSecondToQueue();
         roundabout$tickTrueInvisibility();
         roundabout$tickTrueInvisibilityManhattan();
+
+        Entity thrs = ((Entity) (Object)this);
+        byte world = PowerTypes.getPlaneOfExisting(thrs);
+        if (world != 0){
+            int existTime = PowerTypes.getForeignWorldMaxTime(world);
+            if (existTime != -1){
+                rdbt$inForeignWorld++;
+                if (rdbt$inForeignWorld > existTime){
+                    PowerTypes.setPlaneOfExisting(thrs,(byte) 0);
+                }
+            }
+        } else {
+            if (rdbt$inForeignWorld != 0){
+                rdbt$inForeignWorld = 0;
+            }
+        }
+    }
+
+    @Unique
+    private int lastDay = -1;
+
+    @Unique
+    @Override
+    public void roundabout$initialDayCheck(int day) {
+        Entity self = (Entity)(Object)this;
+        if (lastDay != day && SavedSecond.canTeleportTo(self.level(), self.getPosition(1), self)) {
+            roundabout$setInitialDaySec();
+            lastDay = day;
+        }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
@@ -902,15 +961,72 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickQVec();
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent $$0, float $$1, float $$2,CallbackInfo ci) {
-        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(((Entity) (Object)this))){
+    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+        Entity thrs = ((Entity) (Object)this);
+        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
             if (sbpe !=null) {
-                sbpe.addPlunderBubbleSounds($$0, this.getSoundSource(), $$1, $$2);
+                sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
             }
             ci.cancel();
+            return;
+        }
+        if (level().isClientSide()){
+            if (PowerTypes.isInADifferentExistenceNoTE(thrs,ClientUtil.getPlayer())){
+                ci.cancel();
+                return;
+            } else if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                ClientUtil.playSoundWithInfo(thrs.level(),
+                        thrs.getX(),
+                        thrs.getY(),
+                        thrs.getZ(),
+                        soundEvent,
+                        this.getSoundSource(),
+                        f,
+                        g);
+            }
+        } else {
+            if (PowerTypes.isExistentiallyElsewhere(thrs)){
+                if (thrs.level() instanceof ServerLevel sl) {
+                    if (soundEvent != null) {
+                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
+                        String str = this.getSoundSource().name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = soundEvent.getRange(g);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(thrs) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    thrs,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    thrs.getX(),
+                                    thrs.getY(),
+                                    thrs.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    f,
+                                    g
+                            );
+                        }
+                    }
+                }
+                ci.cancel();
+                return;
+            }
         }
     }
+
+
+
     @Inject(method = "thunderHit", at = @At(value = "HEAD"), cancellable = true)
     protected void roundabout$thunderHit(CallbackInfo ci) {
         if (((Entity)(Object)this) instanceof Player PE){

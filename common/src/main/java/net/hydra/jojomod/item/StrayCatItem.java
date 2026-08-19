@@ -23,6 +23,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.UUID;
+
 public class StrayCatItem extends Item {
     public final byte breed;
 
@@ -65,6 +67,19 @@ public class StrayCatItem extends Item {
         }
 
         stack.setTag(tag);
+    }
+
+
+    static public boolean validateStrayCatOwner(ItemStack stack, LivingEntity attempt) {
+        if (stack.getItem() instanceof StrayCatItem && stack.hasTag() && attempt != null) {
+            CompoundTag tag = stack.getTag();
+            if (tag != null && tag.contains(OWNER_UUID_TAG)) {
+                UUID uuid = tag.getUUID(OWNER_UUID_TAG);
+                return uuid.equals(attempt.getUUID());
+            }
+        }
+
+        return false;
     }
 
     @Override

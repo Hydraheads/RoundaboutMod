@@ -17,6 +17,18 @@
       "roundabout:summon_d4c"
     ]
   },
+  "d4c_portal": {
+    "subtitle": "sounds.roundabout.d4c_portal",
+    "sounds": [
+      "roundabout:d4c_portal"
+    ]
+  },
+  "world_merge": {
+    "subtitle": "sounds.roundabout.world_merge",
+    "sounds": [
+      "roundabout:world_merge"
+    ]
+  },
   "disc_insert": {
     "subtitle": "sounds.roundabout.disc_insert",
     "sounds": [
@@ -3348,7 +3360,24 @@
       "roundabout:purple_haze_summon"
     ]
   },
-
+  "purple_haze_barrage_cry": {
+    "subtitle": "sounds.roundabout.purple_haze_barrage_cry",
+    "sounds": [
+      "roundabout:purple_haze_barrage_cry"
+    ]
+  },
+  "purple_haze_smoke": {
+    "subtitle": "sounds.roundabout.purple_haze_smoke",
+    "sounds": [
+      "roundabout:purple_haze_smoke"
+    ]
+  },
+  "purple_haze_distortion_smoke": {
+    "subtitle": "sounds.roundabout.purple_haze_distortion_smoke",
+    "sounds": [
+      "roundabout:purple_haze_distortion_smoke"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [

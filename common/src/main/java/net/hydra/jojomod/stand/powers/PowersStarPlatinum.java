@@ -111,7 +111,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
         if (!forced) {
             if (((StandUser) this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN) {
                 if (!this.getSelf().level().isClientSide()) {
-                    ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.EXPLOSION,
                             this.getSelf().getX(), this.getSelf().getY() + this.getSelf().getEyeHeight(), this.getSelf().getZ(),
                             5, 0.4, 0.4, 0.4, 0.4);
                 }
@@ -469,7 +469,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             if (this.getActivePower() == POWER_STAR_FINGER) {
                 this.animateStand(StarPlatinumEntity.STAR_FINGER_2);
             }
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DSP_SUMMON_EVENT, SoundSource.PLAYERS,
                     0.5F, (float) (1.5 + (Math.random() * 0.04)));
         }
     }
@@ -667,13 +667,13 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
             }
 
             if (this.attackTimeDuring % 7 == 0){
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.INHALE_EVENT, SoundSource.PLAYERS, 0.5F, (float) (0.98 + (Math.random() * 0.04)));
             }
 
             double random = (Math.random() * 1.8) - 0.9;
             double random2 = (Math.random() * 1.8) - 0.9;
             double random3 = (Math.random() * 1.8) - 0.9;
-            ((ServerLevel) this.self.level()).sendParticles(ModParticles.VACUUM, pointVec2.x + random,
+            sendParticlesIfPossible(self.level(),ModParticles.VACUUM, pointVec2.x + random,
                     pointVec2.y+ random2, pointVec2.z + random3,
                     0,
                     (this.getSelf().getEyePosition().x - pointVec2.x)*1.4F, (this.getSelf().getEyePosition().y - pointVec2.y)*1.4F, (this.getSelf().getEyePosition().z - pointVec2.z)*1.4F,
@@ -688,7 +688,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
             for (Entity value : listEnt) {
                 if (PowerTypes.isInADifferentExistence(self,value)){
-                    return;
+                    continue;
                 }
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(self, value), getLookAtEntityPitch(self, value));
                 if (gravD != Direction.DOWN) {
@@ -731,11 +731,11 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                             if (value.distanceTo(this.getSelf()) < 1){
                                                 if (!this.getSelf().level().isClientSide()) {
                                                     ipe.roundabout$setUnlockedBonusSkin(true);
-                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                    playSoundIfPossible(self.level(),null, this.getSelf().getX(), this.getSelf().getY(),
                                                             this.getSelf().getZ(), ModSounds.UNLOCK_SKIN_EVENT, this.getSelf().getSoundSource(), 2.0F, 1.0F);
-                                                    this.getSelf().level().playSound(null, this.getSelf().getX(), this.getSelf().getY(),
+                                                    playSoundIfPossible(self.level(),null, this.getSelf().getX(), this.getSelf().getY(),
                                                             this.getSelf().getZ(), SoundEvents.GENERIC_EXPLODE, this.getSelf().getSoundSource(), 2.0F, 1.0F);
-                                                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.EXPLOSION, this.getSelf().getX(),
+                                                    sendParticlesIfPossible(self.level(),ParticleTypes.EXPLOSION, this.getSelf().getX(),
                                                             this.getSelf().getY()+this.getSelf().getEyeHeight(), this.getSelf().getZ(),
                                                             20, 0.7, 0.7, 0.7, 0.2);
                                                     user.roundabout$setStandSkin(StarPlatinumEntity.ATOMIC_SKIN);
@@ -817,7 +817,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
         if (!this.self.level().isClientSide()) {
             animateStand(StarPlatinumEntity.IMPALE_2);
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -907,8 +907,8 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 }
                             }
                             this.setCooldown(PowerIndex.SKILL_EXTRA_2, cdr);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
-                            this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.ITEM_CATCH_EVENT, SoundSource.PLAYERS, 1.7F, 1.2F);
+                            playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.BLOCK_GRAB_EVENT, SoundSource.PLAYERS, 1.7F, 0.5F);
                             poseStand(OffsetIndex.FOLLOW_NOLEAN);
                             if (MainUtil.isThrownBlockItem(SE.getHeldItem().getItem())) {
                                 animateStand(StandEntity.BLOCK_GRAB);
@@ -916,7 +916,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 animateStand(StandEntity.ITEM_GRAB);
                             }
 
-                            ((ServerLevel) this.self.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                            sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                     ent.getX(), ent.getY(), ent.getZ(),
                                     0, 0, 0, 0, 0);
                             return true;
@@ -971,7 +971,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
     @Override
     public void dspStuff(Entity ent){
         if (((StandUser)this.getSelf()).roundabout$getStandSkin() == StarPlatinumEntity.ATOMIC_SKIN) {
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.EXPLOSION,
+            sendParticlesIfPossible(self.level(),ParticleTypes.EXPLOSION,
                     ent.getX(), ent.getY() + ent.getEyeHeight(), ent.getZ(),
                     5, 0.6, 0.6, 0.6, 0.4);
         }

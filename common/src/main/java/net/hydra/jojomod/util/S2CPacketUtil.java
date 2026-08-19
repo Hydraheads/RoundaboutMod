@@ -7,6 +7,7 @@ import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.zetalasis.networking.message.api.ModMessageEvents;
@@ -109,6 +110,19 @@ public class S2CPacketUtil {
                     ServerToClientPackets.S2CPackets.MESSAGES.SyncGuard.value,
                     guardPoints,
                     guardBroken
+            );
+        }
+    }
+
+    public static void syncWhitesnakeDiscState(Player player, byte type, boolean present,
+                                                int sealTicks, int sealMaxTicks) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModMessageEvents.sendToPlayer(serverPlayer,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncWhitesnakeDisc.value,
+                    type,
+                    present,
+                    sealTicks,
+                    sealMaxTicks
             );
         }
     }
@@ -421,6 +435,32 @@ public class S2CPacketUtil {
             );
         }
     }
+    public static void sendSafeSound(Player player, double a, double b, double c,
+                                     String string, String string2, float x, float y) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value,
+                    a,b,c,string,string2,x,y
+            );
+        }
+    }
+    public static void sendSafeSound(Player player, String string, String string2, float x, float y, Entity entity) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound2.value,
+                    string,string2,x,y,entity.getId()
+            );
+        }
+    }
+    public static void sendSafeParticles(Player player, String string, double x, double y, double z,
+                                         int count, double a, double b, double c, double d) {
+        if(player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SendSafeParticle.value,
+                    string,x,y,z,count,a,b,c,d
+            );
+        }
+    }
 
     public static void sync_allies(Player player,String allies) {
         if(player instanceof ServerPlayer SP) {
@@ -444,5 +484,14 @@ public class S2CPacketUtil {
                     dur,entity
             );
 
+    }
+    public static void syncPurpleHazePods(Player player, byte pods) {
+        if (player instanceof ServerPlayer SP) {
+            ModMessageEvents.sendToPlayer(
+                    SP,
+                    ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value,
+                    pods
+            );
+        }
     }
 }

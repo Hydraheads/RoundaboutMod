@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin.whitesnake;
 
 import com.mojang.blaze3d.audio.Listener;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.access.DiscBearer;
 import net.minecraft.client.Camera;
@@ -38,6 +39,7 @@ public abstract class WhitesnakeSoundListenerMixin {
             }
         }
         float volume = minecraft.player == null
+                || !WhitesnakeDiscUtil.isHearingDiscEnabled()
                 || ((DiscBearer) minecraft.player).roundabout$hasHearingDisc()
                 ? minecraft.options.getSoundSourceVolume(SoundSource.MASTER) : 0.0F;
         executor.execute(() -> listener.setGain(volume));

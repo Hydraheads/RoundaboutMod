@@ -41,6 +41,7 @@ import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.SpectralArrowRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.TippableArrowRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -134,7 +135,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GASOLINE_SPLATTER.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.FLESH_PILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STAND_ARROW.get(), StandArrowRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ARROW.get(), TippableArrowRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ARROW.get(), BombPlantedArrowRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get(), BombPlantedArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.IRON_BALL.get(), IronBallRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
@@ -462,6 +464,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_A.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_B.get(), PunchImpactParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_IMPACT_C.get(), PunchImpactParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.DISC_STEAL_HIT.get(), DiscStealHitParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PUNCH_MISS.get(), PunchMissParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.MELTING.get(), BloodParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.BLOOD.get(), BloodParticle.Provider::new);

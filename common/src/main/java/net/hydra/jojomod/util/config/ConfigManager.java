@@ -236,6 +236,11 @@ public abstract class ConfigManager {
             MainUtil.naturalStandUserMobBlacklist.clear();
             MainUtil.naturalStandUserMobBlacklist.addAll(getAdvancedConfig().naturalStandUserMobBlacklist);
         }
+        if (getAdvancedConfig().discEntityBlacklist != null)
+        {
+            MainUtil.discEntityBlacklist.clear();
+            MainUtil.discEntityBlacklist.addAll(getAdvancedConfig().discEntityBlacklist);
+        }
         if (getAdvancedConfig().hypnotismMobBlackList != null)
         {
             MainUtil.hypnotismMobBlackList.clear();

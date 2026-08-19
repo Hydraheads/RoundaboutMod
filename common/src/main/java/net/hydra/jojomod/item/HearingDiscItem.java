@@ -2,6 +2,7 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,8 +12,9 @@ public class HearingDiscItem extends AbstractBodyDiscItem {
     }
 
     @Override
-    protected boolean canImplant(LivingEntity target) {
-        return !((DiscBearer) target).roundabout$ownsHearingDisc();
+    protected boolean canImplant(ItemStack stack, LivingEntity target) {
+        return WhitesnakeDiscUtil.isHearingDiscEnabled()
+                && !((DiscBearer) target).roundabout$ownsHearingDisc();
     }
 
     @Override

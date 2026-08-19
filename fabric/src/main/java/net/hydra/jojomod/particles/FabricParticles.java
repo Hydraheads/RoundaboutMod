@@ -15,6 +15,7 @@ public class FabricParticles {
     public static final SimpleParticleType PUNCH_IMPACT_A = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_B = FabricParticleTypes.simple();
     public static final SimpleParticleType PUNCH_IMPACT_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType DISC_STEAL_HIT = FabricParticleTypes.simple();
     public static final SimpleParticleType MELTING = FabricParticleTypes.simple();
     public static final SimpleParticleType BLOOD = FabricParticleTypes.simple();
     public static final SimpleParticleType POINTER = FabricParticleTypes.simple();
@@ -115,6 +116,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_a"), PUNCH_IMPACT_A);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_b"), PUNCH_IMPACT_B);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("punch_impact_c"), PUNCH_IMPACT_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("disc_steal_hit"), DISC_STEAL_HIT);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("melting"), MELTING);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("blood"), BLOOD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("pointer"), POINTER);
@@ -223,6 +225,7 @@ public class FabricParticles {
         ModParticles.PUNCH_IMPACT_A = PUNCH_IMPACT_A;
         ModParticles.PUNCH_IMPACT_B = PUNCH_IMPACT_B;
         ModParticles.PUNCH_IMPACT_C = PUNCH_IMPACT_C;
+        ModParticles.DISC_STEAL_HIT = DISC_STEAL_HIT;
         ModParticles.PUNCH_MISS = PUNCH_MISS;
         ModParticles.VACUUM = VACUUM;
         ModParticles.STAR = STAR;

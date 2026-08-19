@@ -339,7 +339,7 @@ public class PowersCinderella extends NewDashPreset {
         } else {
             if (this.getActivePower() == PowerIndex.POWER_1){
 
-                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.PINK_SMOKE,
+                sendParticlesIfPossible(self.level(),ModParticles.PINK_SMOKE,
                         this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                         1, 2.5, 2,2.5, 0.015);
 
@@ -448,7 +448,7 @@ public class PowersCinderella extends NewDashPreset {
             } else {
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 this.getSelf().getX(), this.getSelf().getY() + 0.3, this.getSelf().getZ(),
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }
@@ -587,7 +587,7 @@ public class PowersCinderella extends NewDashPreset {
         }
 
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), SE, SoundSource.PLAYERS, 0.95F, pitch);
         }
     }
 
@@ -596,7 +596,7 @@ public class PowersCinderella extends NewDashPreset {
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 15) {
                 MainUtil.makeFaceless(this.self,800,0,this.self);
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.CINDERELLA_FAIL_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
             }
         }

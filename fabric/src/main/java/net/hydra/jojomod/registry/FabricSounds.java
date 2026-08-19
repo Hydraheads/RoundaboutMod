@@ -68,6 +68,8 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
+        addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
+        addSound(ModSounds.WORLD_MERGE_ID, ModSounds.WORLD_MERGE_EVENT);
         addSound(ModSounds.DISC_INSERT_ID, ModSounds.DISC_INSERT_EVENT);
         addSound(ModSounds.DISC_REMOVE_ID, ModSounds.DISC_REMOVE_EVENT);
         addSound(ModSounds.SUMMON_CALIFORNIA_ID, ModSounds.SUMMON_CALIFORNIA_EVENT);
@@ -632,6 +634,9 @@ public class FabricSounds {
         addSound(ModSounds.PLANET_WAVES_TARGET_ID,ModSounds.PLANET_WAVES_TARGET_EVENT);
 
         addSound(ModSounds.PURPLE_HAZE_SUMMON_ID,ModSounds.PURPLE_HAZE_SUMMON_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID,ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_SMOKE_ID,ModSounds.PURPLE_HAZE_SMOKE_EVENT);
+        addSound(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID,ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT);
 
         addSound(ModSounds.SILVER_CHARIOT_SUMMON_ID,ModSounds.SILVER_CHARIOT_SUMMON_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_BARRAGE_ID,ModSounds.SILVER_CHARIOT_BARRAGE_EVENT);

@@ -482,7 +482,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (PE instanceof RoundaboutBulletEntity) {
                     ((RoundaboutBulletEntity) PE).setSuperThrown(false);
                     PE.setOwner(self);
-                    PE.level().playSound(null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    playSoundIfPossible(PE.level(), null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
                 ipa.roundabout$setIsDeflected(true);
                 ((IEntityAndData)ent).rdbt$forceDeltaMovement(ent.getDeltaMovement().scale(-0.4));
@@ -797,10 +797,10 @@ public class StandPowers extends AbilityScapeBasis {
     /**Override this in general with leveling stands so you can display generic messages of what each level unlocks*/
     public void levelUp(){
         if (!this.getSelf().level().isClientSide()){
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.END_ROD,
+            sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD,
                     this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
             this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
         }
     }
@@ -966,31 +966,31 @@ public class StandPowers extends AbilityScapeBasis {
     public void playBarrageMissNoise(int hitNumber){
         if (!this.self.level().isClientSide()) {
             if (hitNumber%2==0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_MISS_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
             }
         }
     }
     public void playBarrageNoise(int hitNumber, Entity entity){
         if (!this.self.level().isClientSide()) {
             if (hitNumber % 2 == 0) {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
             }
         }
     }
 
     public void playBarrageEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_EVENT, SoundSource.PLAYERS, 0.95F+mod, 1f);
         }
     }
     public void playBarrageBlockEndNoise(float mod, Entity entity){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_END_BLOCK_EVENT, SoundSource.PLAYERS, 0.88F+mod, 1.7f);
         }
     }
     public void playBarrageBlockNoise(){
         if (!this.self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_BARRAGE_BLOCK_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
         }
     }
 

@@ -1,21 +1,9 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.google.common.collect.Lists;
-import net.hydra.jojomod.access.ILivingEntityAccess;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.joml.Vector3f;
-
-import java.util.List;
 
 public class D4CEntity extends FollowingStandEntity {
     public D4CEntity(EntityType<? extends Mob> entityType, Level world) {
@@ -52,6 +40,8 @@ public class D4CEntity extends FollowingStandEntity {
     public final AnimationState finalPunchWindup = new AnimationState();
     public final AnimationState chop = new AnimationState();
     public final AnimationState impale2 = new AnimationState();
+    public final AnimationState drag = new AnimationState();
+    public final AnimationState drag2 = new AnimationState();
 
     public final AnimationState hideFists = new AnimationState();
 
@@ -59,7 +49,9 @@ public class D4CEntity extends FollowingStandEntity {
             FINAL_1 = 82,
             FINAL_2 = 83,
             IMPALE_2 = 50,
-            CHOP = 51;
+            CHOP = 51,
+            DRAG = 52,
+            DRAG_2 = 53;
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
@@ -74,27 +66,37 @@ public class D4CEntity extends FollowingStandEntity {
         } else {
             this.finalPunchWindup.stop();
         }
-        if (this.getAnimation() == FINAL_ATTACK) {
+        if (anim == FINAL_ATTACK) {
             this.finalPunch.startIfStopped(this.tickCount);
         } else {
             this.finalPunch.stop();
         }
-        if (this.getAnimation() == FINAL_1) {
+        if (anim == DRAG) {
+            this.drag.startIfStopped(this.tickCount);
+        } else {
+            this.drag.stop();
+        }
+        if (anim == DRAG_2) {
+            this.drag2.startIfStopped(this.tickCount);
+        } else {
+            this.drag2.stop();
+        }
+        if (anim == FINAL_1) {
             this.finalPunch2.startIfStopped(this.tickCount);
         } else {
             this.finalPunch2.stop();
         }
-        if (this.getAnimation() == FINAL_2) {
+        if (anim == FINAL_2) {
             this.finalPunch3.startIfStopped(this.tickCount);
         } else {
             this.finalPunch3.stop();
         }
-        if (this.getAnimation() == IMPALE_2) {
+        if (anim == IMPALE_2) {
             this.impale2.startIfStopped(this.tickCount);
         } else {
             this.impale2.stop();
         }
-        if (this.getAnimation() == CHOP) {
+        if (anim == CHOP) {
             this.chop.startIfStopped(this.tickCount);
         } else {
             this.chop.stop();

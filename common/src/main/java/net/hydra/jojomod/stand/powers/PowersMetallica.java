@@ -196,7 +196,7 @@ public class PowersMetallica extends NewDashPreset {
             int nuggetsCount = 9 + player.getRandom().nextInt(10);
             ItemStack drop = new ItemStack(Items.IRON_NUGGET, nuggetsCount);
             if (!player.addItem(drop)) player.drop(drop, false);
-            else player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            else player.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
             return;
         }
 
@@ -216,14 +216,14 @@ public class PowersMetallica extends NewDashPreset {
         if (nuggetsCount > 0) {
             ItemStack drop = new ItemStack(Items.IRON_NUGGET, nuggetsCount);
             if (!player.addItem(drop)) player.drop(drop, false);
-            else player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            else player.playSound(SoundEvents.ITEM_PICKUP,0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
         }
 
         if (mob instanceof AbstractFish) nuggetsCount = 1;
         if (nuggetsCount > 0) {
             ItemStack drop = new ItemStack(Items.IRON_NUGGET, nuggetsCount);
             if (!player.addItem(drop)) player.drop(drop, false);
-            else player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            else player.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
         }
     }
 
@@ -310,7 +310,7 @@ public class PowersMetallica extends NewDashPreset {
                         self.level().setBlock(pos, newState, 3);
                     }
                     createKnifeEntity(pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5);
-                    self.level().playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.PLAYERS, 0.5f, 1.0f);
+                    playSoundIfPossible(self.level(),null, pos, SoundEvents.HOE_TILL, SoundSource.PLAYERS, 0.5f, 1.0f);
                     spawned = true;
                 }
             }
@@ -375,15 +375,15 @@ public class PowersMetallica extends NewDashPreset {
                         self.level().setBlock(pos, replacement.defaultBlockState(), 3);
                         int count = 1 + self.getRandom().nextInt(3);
                         spawnMagnetItem(pos, new ItemStack(Items.RAW_IRON, count));
-                        self.level().playSound(null, pos, SoundEvents.ANVIL_BREAK, SoundSource.PLAYERS, 0.5f, 1.5f);
-                        if (self.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.WAX_OFF, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 5, 0.3, 0.3, 0.3, 0.1);
+                        playSoundIfPossible(self.level(),null, pos, SoundEvents.ANVIL_BREAK, SoundSource.PLAYERS, 0.5f, 1.5f);
+                        if (self.level() instanceof ServerLevel sl) sendParticlesIfPossible(self.level(),ParticleTypes.WAX_OFF, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 5, 0.3, 0.3, 0.3, 0.1);
                         anyHarvested = true;
                     } else {
                         self.level().destroyBlock(pos, false);
                         int count = 1 + self.getRandom().nextInt(3);
                         spawnMagnetItem(pos, new ItemStack(Items.IRON_NUGGET, count));
-                        self.level().playSound(null, pos, SoundEvents.GRASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
-                        if (self.level() instanceof ServerLevel sl) sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 3, 0.2, 0.2, 0.2, 0);
+                        playSoundIfPossible(self.level(),null, pos, SoundEvents.GRASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+                        if (self.level() instanceof ServerLevel sl) sendParticlesIfPossible(self.level(),ParticleTypes.HAPPY_VILLAGER, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 3, 0.2, 0.2, 0.2, 0);
                         anyHarvested = true;
                     }
                 }
@@ -429,8 +429,8 @@ public class PowersMetallica extends NewDashPreset {
                         if (!p.isCreative()) resource.shrink(1);
                         net.minecraft.core.Direction facing = state.getValue(AnvilBlock.FACING);
                         self.level().setBlock(pos, newState.setValue(AnvilBlock.FACING, facing), 3);
-                        self.level().playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        self.level().addParticle(ParticleTypes.WAX_OFF, pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, 0,0,0);
+                        playSoundIfPossible(self.level(),null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1.0f, 1.0f);
+                        sendParticlesIfPossible(self.level(),ParticleTypes.WAX_OFF, pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, 0,0,0);
                         return true;
                     }
                 }
@@ -455,9 +455,9 @@ public class PowersMetallica extends NewDashPreset {
             int repairAmount = target.getMaxDamage() / 4;
             target.setDamageValue(Math.max(0, target.getDamageValue() - repairAmount));
             if (!p.isCreative()) p.getInventory().getItem(nuggetsSlot).shrink(1);
-            self.level().playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 0.5f, 1.2f);
+            playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 0.5f, 1.2f);
             if (self.level() instanceof ServerLevel sl) {
-                sl.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.IRON_INGOT)),
+                sendParticlesIfPossible(self.level(),new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.IRON_INGOT)),
                         self.getX(), self.getEyeY(), self.getZ(), 15, 0.4, 0.4, 0.4, 0.1);
             }
             return true;
@@ -622,7 +622,7 @@ public class PowersMetallica extends NewDashPreset {
                             ModParticles.METALLICA_C, ModParticles.METALLICA_D
                     };
                     int pIdx = (int)(time % bodyVariants.length);
-                    self.level().addParticle(bodyVariants[pIdx],
+                    sendParticlesIfPossible(self.level(),bodyVariants[pIdx],
                             self.getX() + (self.getRandom().nextDouble() - 0.5),
                             self.getY() + (self.getRandom().nextDouble() * self.getBbHeight()),
                             self.getZ() + (self.getRandom().nextDouble() - 0.5),
@@ -650,7 +650,7 @@ public class PowersMetallica extends NewDashPreset {
                                 double dx = Math.cos(angle) * currentRadius;
                                 double dz = Math.sin(angle) * currentRadius;
                                 double dy = 0.5 + (0.5 * clientFieldExpansion);
-                                self.level().addParticle(ModParticles.METALLICA_FIELD_PNG,
+                                sendParticlesIfPossible(self.level(),ModParticles.METALLICA_FIELD_PNG,
                                         self.getX() + dx, self.getY() + dy, self.getZ() + dz,
                                         (double)self.getId(), 1.0d, 0d);
                             }
@@ -773,7 +773,7 @@ public class PowersMetallica extends NewDashPreset {
         };
 
         if (self.level() instanceof net.minecraft.server.level.ServerLevel sl) {
-            sl.sendParticles(pType,
+            sendParticlesIfPossible(self.level(),pType,
                     victim.getX(), victim.getY() + victim.getBbHeight()/2, victim.getZ(),
                     120, 0.5, 0.5, 0.5, 0.1);
         }
@@ -789,7 +789,7 @@ public class PowersMetallica extends NewDashPreset {
         if (net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.containsKey(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.Roundabout.MOD_ID, "bleed"))) {
             self.removeEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.get(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.Roundabout.MOD_ID, "bleed")));
         }
-        self.level().playSound(null, self.getX(), self.getY(), self.getZ(), net.minecraft.sounds.SoundEvents.IRON_GOLEM_REPAIR, net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.5f);
+        playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), net.minecraft.sounds.SoundEvents.IRON_GOLEM_REPAIR, net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.5f);
         return true;
     }
 

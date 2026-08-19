@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.CooldownInstance;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -214,7 +215,7 @@ public class PowersSurvivor extends NewDashPreset {
 
     public void throwBottleActually(ItemStack stack){
 
-        this.self.level().playSound(
+        playSoundIfPossible(self.level(),
                 null,
                 this.self.getX(),
                 this.self.getY(),
@@ -487,6 +488,7 @@ public class PowersSurvivor extends NewDashPreset {
             stand.setSkin(user.roundabout$getStandSkin());
             stand.setIdleAnimation(user.roundabout$getIdlePos());
             stand.setMaster(this.self);
+            PowerTypes.copyPlaneOfExisting(self,stand);
             addSurvivorToList(SE);
             SE.setRandomSize((float) (Math.random()*0.4F));
             SE.setYRot(this.self.getYHeadRot() % 360);

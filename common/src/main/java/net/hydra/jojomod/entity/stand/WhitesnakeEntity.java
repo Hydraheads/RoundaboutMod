@@ -282,8 +282,11 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     }
 
     public void controlSwim(boolean ascending, boolean descending) {
-        if (!isInWater() || isMeltingModeActive()) return;
-        if (ascending) jumpInLiquid(FluidTags.WATER);
+        if (isMeltingModeActive()) return;
+        if (ascending) {
+            if (isInWater()) jumpInLiquid(FluidTags.WATER);
+            else if (isInLava()) jumpInLiquid(FluidTags.LAVA);
+        }
         if (descending) {
             Vec3 velocity = getDeltaMovement();
             setDeltaMovement(velocity.x, velocity.y - 0.04D, velocity.z);
@@ -375,6 +378,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         }
         if (!level().isClientSide()) {
             tickPressurePlates(controlled);
+            tickControlBlockInteractions();
             tickMeltingHoverMeter(controlled);
             tickMeltingAcid(controlled);
         }
@@ -424,6 +428,14 @@ public class WhitesnakeEntity extends FollowingStandEntity {
                 }
             }
         }
+    }
+
+    private void tickControlBlockInteractions() {
+        if (!isControlModeActive()) return;
+        checkInsideBlocks();
+        BlockPos pos = getOnPos();
+        BlockState state = level().getBlockState(pos);
+        state.getBlock().stepOn(level(), pos, state, this);
     }
 
     private void updateControlVisibility(boolean controlled) {

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
@@ -14,10 +15,12 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -47,6 +50,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -66,6 +70,8 @@ public class WorldTickServer {
 
     }
 
+    public int currentDay = -1;
+
     /** Called every tick on the Server. Checks if a mob has a stand out, and updates the position of the stand.
      * @see FollowingStandEntity#tickStandOut */
 
@@ -77,6 +83,11 @@ public class WorldTickServer {
 
         ((TimeStop) this).tickAllTimeStops();
         ((IPermaCasting) this).roundabout$tickAllPermaCasts();
+
+
+        int time = (int)((ServerLevel)(Object) this).getDayTime();
+        int extraSecs = time % 24000;
+        currentDay = (time - extraSecs) / 24000;
 
         this.entityTickList.forEach($$0x -> {
             if ($$0x instanceof FollowingStandEntity standEntity) {
@@ -91,6 +102,8 @@ public class WorldTickServer {
                         roundabout$tickStandIn(null,standEntity);
                     }
                 }
+            }else if ($$0x != null) {
+                ((IEntityAndData) $$0x).roundabout$initialDayCheck(currentDay);
             }
         });
     }
@@ -135,8 +148,14 @@ public class WorldTickServer {
             ci.cancel();
         }
     }
+    ///Inject(method = "sendParticles(Lnet/minecraft/server/level/ServerPlayer;ZDDDLnet/minecraft/network/protocol/Packet;)Z", at = @At("HEAD"), cancellable = true)
+    //private void rdbt$sendParticlesHide(ServerPlayer $$0, boolean $$1, double $$2, double $$3, double $$4, Packet<?> $$5, CallbackInfoReturnable<Boolean> cir) {
+    //    if ($$0 != null && PowerTypes.isExistentiallyElsewhere($$0) && !PowerTypes.isErasingTime($$0)){
+    //        cir.setReturnValue(false);
+    //    }
+    //}
     @Inject(method = "gameEvent", at = @At("HEAD"), cancellable = true)
-    private void hideEntity(GameEvent $$0, Vec3 $$1, GameEvent.Context $$2, CallbackInfo ci) {
+    private void rdbt$hideEntity(GameEvent $$0, Vec3 $$1, GameEvent.Context $$2, CallbackInfo ci) {
         if ($$2 != null && PowerTypes.isExistentiallyElsewhere($$2.sourceEntity())) {
             ci.cancel();
         }

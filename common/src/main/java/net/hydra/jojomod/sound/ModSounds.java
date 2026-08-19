@@ -154,6 +154,14 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_D4C_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_D4C);
     public static SoundEvent SUMMON_D4C_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_D4C_ID);
 
+    public static final String D4C_PORTAL = "d4c_portal";
+    public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
+    public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
+
+    public static final String WORLD_MERGE = "world_merge";
+    public static final ResourceLocation WORLD_MERGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WORLD_MERGE);
+    public static SoundEvent WORLD_MERGE_EVENT = SoundEvent.createVariableRangeEvent(WORLD_MERGE_ID);
+
     public static final String DISC_INSERT = "disc_insert";
     public static final ResourceLocation DISC_INSERT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DISC_INSERT);
     public static SoundEvent DISC_INSERT_EVENT = SoundEvent.createVariableRangeEvent(DISC_INSERT_ID);
@@ -1116,6 +1124,19 @@ public class ModSounds {
     public static final String PURPLE_HAZE_SUMMON = "purple_haze_summon";
     public static final ResourceLocation PURPLE_HAZE_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SUMMON);
     public static SoundEvent PURPLE_HAZE_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SUMMON_ID);
+
+    public static final String PURPLE_HAZE_BARRAGE_CRY = "purple_haze_barrage_cry";
+    public static final ResourceLocation PURPLE_HAZE_BARRAGE_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_BARRAGE_CRY);
+    public static SoundEvent PURPLE_HAZE_BARRAGE_CRY_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_BARRAGE_CRY_ID);
+
+    public static final String PURPLE_HAZE_SMOKE = "purple_haze_smoke";
+    public static final ResourceLocation PURPLE_HAZE_SMOKE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_SMOKE);
+    public static SoundEvent PURPLE_HAZE_SMOKE_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_SMOKE_ID);
+
+    public static final String PURPLE_HAZE_DISTORTION_SMOKE = "purple_haze_distortion_smoke";
+    public static final ResourceLocation PURPLE_HAZE_DISTORTION_SMOKE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+PURPLE_HAZE_DISTORTION_SMOKE);
+    public static SoundEvent PURPLE_HAZE_DISTORTION_SMOKE_EVENT = SoundEvent.createVariableRangeEvent(PURPLE_HAZE_DISTORTION_SMOKE_ID);
+
 
     public static final String SILVER_CHARIOT_SUMMON = "silver_chariot_summon";
     public static final ResourceLocation SILVER_CHARIOT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_SUMMON);

@@ -1,6 +1,7 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -60,8 +61,15 @@ public class ForgeCreativeTab {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemgroup.jojo_wip_features")).hideTitle()
                     .icon(ForgeItems.AJA.get()::getDefaultInstance)
-                    .displayItems((displayParams, output) ->
-                            WIP_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get())))
+                    .displayItems((displayParams, output) -> {
+                        WIP_TAB_ITEMS.forEach(itemLike -> output.accept(itemLike.get()));
+                        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled) {
+                            output.accept(ForgeItems.SIGHT_DISC.get());
+                        }
+                        if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hearingDiscStealEnabled) {
+                            output.accept(ForgeItems.HEARING_DISC.get());
+                        }
+                    })
                     .withSearchBar()
                     .build()
     );

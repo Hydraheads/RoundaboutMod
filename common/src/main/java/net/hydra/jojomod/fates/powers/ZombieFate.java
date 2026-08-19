@@ -230,6 +230,7 @@ public class ZombieFate extends VampiricFate {
                     setZombieFishCount(Mth.clamp(getZombieFishCount() - 1, 0, 5));
                 }
                 if (zombiefish != null) {
+                    PowerTypes.copyPlaneOfExisting(self,zombiefish);
                     this.getSelf().level().addFreshEntity(zombiefish);
                     //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.BUBBLE_CREATE_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                 }
@@ -252,7 +253,7 @@ public class ZombieFate extends VampiricFate {
                     if (!isMorphed) {
                         boolean isDisguised = isDisguised();
                         Position pn = self.getEyePosition();
-                        ((ServerLevel) self.level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 pn.x(), pn.y(), pn.z(),
                                 4, 0.2, 0.2, 0.2, 0.01);
                         if (isDisguised) {
@@ -361,7 +362,7 @@ public class ZombieFate extends VampiricFate {
                 setActivePower(ZOMBIE_SHOT);
                 setAttackTimeDuring(0);
                 setCooldown(PowerIndex.FATE_1_SNEAK,60);
-                self.level().playSound(null, self.blockPosition(), ModSounds.ZOMBIE_CHARGE_EVENT,
+                playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.ZOMBIE_CHARGE_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
             } else {
                 setActivePower(PowerIndex.NONE);
@@ -469,7 +470,7 @@ public class ZombieFate extends VampiricFate {
                         Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                                 new Vec3(0,0.3*self.getEyeHeight(),0),
                                 ((IGravityEntity)self).roundabout$getGravityDirection()));
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                        sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 gravVec.x, gravVec.y, gravVec.z,
                                 1, 0.2, 0.2, 0.2, 0.05);
                     }

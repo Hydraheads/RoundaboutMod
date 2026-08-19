@@ -247,8 +247,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             cancellable = true, require = 0
     )
     public void rdbt$touch(Entity $$0, CallbackInfo ci){
-        if (PowerTypes.isExistentiallyElsewhere(this) ||
-                PowerTypes.isExistentiallyElsewhere($$0)){
+        if (PowerTypes.isInADifferentExistence(this,$$0)){
             ci.cancel();
         }
 

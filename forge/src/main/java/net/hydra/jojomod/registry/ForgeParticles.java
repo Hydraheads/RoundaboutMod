@@ -136,6 +136,10 @@ public class ForgeParticles {
             "punch_impact_c",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> DISC_STEAL_HIT = PARTICLES.register(
+            "disc_steal_hit",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> BUBBLE_TRAIL = PARTICLES.register(
             "bubble_trail",
             () -> new SimpleParticleType(true)

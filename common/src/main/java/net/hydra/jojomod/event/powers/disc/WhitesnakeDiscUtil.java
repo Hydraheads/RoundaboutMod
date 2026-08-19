@@ -9,6 +9,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,6 +35,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean ejectDisc(LivingEntity target, byte type, boolean ignoreHealthRequirement) {
+        if (isDiscBlacklisted(target)) return false;
         if (!isDiscStealEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
         if (target instanceof Mob && !config.discStealHealthRequirementAffectsMobs) {
@@ -53,8 +55,29 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean canCarrySightDisc(LivingEntity target) {
-        return !(target instanceof Sniffer || target instanceof Bat
+        return isSightDiscEnabled() && !isDiscBlacklisted(target)
+                && !(target instanceof Sniffer || target instanceof Bat
                 || target instanceof Dolphin || target instanceof Warden);
+    }
+
+    public static boolean isDiscBlacklisted(LivingEntity target) {
+        return MainUtil.isDiscEntityBlacklisted(target);
+    }
+
+    public static boolean isSightDiscEnabled() {
+        return ClientNetworking.getAppropriateConfig().whitesnakeSettings.sightDiscStealEnabled;
+    }
+
+    public static boolean isHearingDiscEnabled() {
+        return ClientNetworking.getAppropriateConfig().whitesnakeSettings.hearingDiscStealEnabled;
+    }
+
+    public static boolean isBodyDiscEnabled(byte type) {
+        return switch (type) {
+            case SIGHT -> isSightDiscEnabled();
+            case HEARING -> isHearingDiscEnabled();
+            default -> true;
+        };
     }
 
     private static boolean ejectSight(LivingEntity target) {
@@ -74,6 +97,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
+        if (isDiscBlacklisted(target)) return ItemStack.EMPTY;
         return switch (type) {
             case SIGHT -> extractSight(target, true);
             case MEMORY -> extractMemory(target, true);
@@ -81,6 +105,20 @@ public final class WhitesnakeDiscUtil {
             case STAND -> extractStand(target, false);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    public static void ejectMobMemoryFromPlayer(ServerPlayer player) {
+        DiscBearer bearer = (DiscBearer) player;
+        if (!bearer.roundabout$ownsMemoryDisc()
+                || bearer.roundabout$getMemoryPersonality() == MemoryPersonality.PLAYER) return;
+        bearer.roundabout$setDiscSeal(MEMORY, 0, 0);
+        ItemStack disc = extractMemory(player, true);
+        bearer.roundabout$setMemoryDiscOwnerId("");
+        bearer.roundabout$setMemoryDiscOwnerName("");
+        bearer.roundabout$setMemoryTameOwnerId("");
+        bearer.roundabout$setMemoryTameOwnerName("");
+        bearer.roundabout$setMemoryPersonality(MemoryPersonality.PLAYER);
+        if (!disc.isEmpty() && !player.getInventory().add(disc)) player.drop(disc, false);
     }
 
     private static ItemStack extractSight(LivingEntity target, boolean storeOwner) {
@@ -95,6 +133,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     private static ItemStack extractHearing(LivingEntity target, boolean storeOwner) {
+        if (!isHearingDiscEnabled()) return ItemStack.EMPTY;
         DiscBearer bearer = (DiscBearer) target;
         if (!bearer.roundabout$hasHearingDisc()) return ItemStack.EMPTY;
         ItemStack stack = new ItemStack(ModItems.HEARING_DISC);

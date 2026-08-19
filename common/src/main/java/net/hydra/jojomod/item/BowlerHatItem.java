@@ -93,6 +93,7 @@ public class BowlerHatItem extends TieredItem implements Vanishable {
                 player.getCooldowns().addCooldown(stack.getItem(), 60);
                 BladedBowlerHatEntity $$7 = new BladedBowlerHatEntity(dimension, livingEntity, stack.copy());
                 $$7.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
+                PowerTypes.copyPlaneOfExisting(player,$$7);
                 dimension.addFreshEntity($$7);
                 stack.shrink(1);
                 if (livingEntity != null && ((StandUser)livingEntity).roundabout$isBubbleEncased()){

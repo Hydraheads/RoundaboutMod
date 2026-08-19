@@ -48,6 +48,8 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_D4C, ModSounds.SUMMON_D4C_ID);
     public static final RegistryObject<SoundEvent> DISC_INSERT_EVENT =
             register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
+    public static final RegistryObject<SoundEvent> D4C_PORTAL =
+            register(ModSounds.D4C_PORTAL, ModSounds.D4C_PORTAL_ID);
     public static final RegistryObject<SoundEvent> DISC_REMOVE_EVENT =
             register(ModSounds.DISC_REMOVE, ModSounds.DISC_REMOVE_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =
@@ -911,7 +913,12 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_SUMMON =
             register(ModSounds.PURPLE_HAZE_SUMMON, ModSounds.PURPLE_HAZE_SUMMON_ID);
-
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_CRY =
+            register(ModSounds.PURPLE_HAZE_BARRAGE_CRY, ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_SMOKE=
+            register(ModSounds.PURPLE_HAZE_SMOKE, ModSounds.PURPLE_HAZE_SMOKE_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_DISTORTION_SMOKE =
+            register(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE, ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID);
 
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);

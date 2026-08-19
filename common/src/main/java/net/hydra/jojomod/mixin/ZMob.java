@@ -396,7 +396,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
     private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
-        ((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDaySec();
+
 
         if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
@@ -632,7 +632,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Unique
     @Override
     public void roundabout$deeplyRemoveTargets(){
-        if (!(getType().builtInRegistryHolder().key().location().getNamespace().equals("mutantmonsters"))) {
+        String nameSpace = getType().builtInRegistryHolder().key().location().getNamespace();
+        if (!(nameSpace.equals("mutantmonsters")) && !(nameSpace.equals("walkers"))) {
             if (this.goalSelector != null) {
                 this.goalSelector.getAvailableGoals().stream()
                         .map(WrappedGoal::getGoal)

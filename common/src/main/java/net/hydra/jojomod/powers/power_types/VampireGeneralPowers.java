@@ -312,7 +312,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);
                     }
                     if (!PowerTypes.isErasingTime(self)) {
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                                 this.getSelf().getX() + cvec.x, this.getSelf().getY() + cvec.y, this.getSelf().getZ() + cvec.z,
                                 0,
                                 dvec.x,
@@ -605,7 +605,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,0.3*self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                    sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -616,7 +616,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,0.3*self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.MENACING,
+                    sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                             gravVec.x, gravVec.y, gravVec.z,
                             1, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -625,7 +625,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                             new Vec3(0,self.getEyeHeight(),0),
                             ((IGravityEntity)self).roundabout$getGravityDirection()));
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.FALLING_WATER,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.FALLING_WATER,
                             gravVec.x, gravVec.y, gravVec.z,
                             2, 0.2, 0.2, 0.2, 0.05);
                 }
@@ -664,7 +664,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     Vec3 hitPos = blockHit.getLocation();
                     farDist = self.position().distanceTo(new Vec3(hitPos.x,hitPos.y,hitPos.z));
 
-                            ((ServerLevel) self.level()).sendParticles(
+                            sendParticlesIfPossible(self.level(),
                             ParticleTypes.FLAME,
                             hitPos.x,
                             hitPos.y,
@@ -673,7 +673,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             0, 0, 0,
                             0.01
                     );
-                    ((ServerLevel) self.level()).sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             hitPos.x,
                             hitPos.y,
@@ -849,14 +849,14 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 if (!(MainUtil.resistsKnockBack(entity))) {
                     if (entity.isPassenger() && !(entity instanceof Player pl && pl.isCreative()))
                         entity.removeVehicle();
-                    this.self.level().playSound(null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.LASSO_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.05f));
 
                     entity.hurtMarked = true;
                     entity.hasImpulse = true;
                     entity.setDeltaMovement(self.getEyePosition().subtract(entity.position()).normalize().scale(1));
                 }
             } else {
-                this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.5f + Math.random() * 0.08f));
             }
         }
     }
@@ -1197,7 +1197,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             setDazed(LE,(byte) 4);
                         }
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.BLOOD_SUCK_DRAIN_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
 
@@ -1207,7 +1207,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         } else if (MainUtil.hasEnderBlood(entity)){
                             spt = ModParticles.ENDER_BLOOD;
                         }
-                        ((ServerLevel) this.getSelf().level()).sendParticles(spt,
+                        sendParticlesIfPossible(self.level(),spt,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 30,
                                 0, 0, 0,
@@ -1218,7 +1218,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 if (((IFatePlayer)pl).rdbt$getFatePowers() instanceof VampireFate vp) {
                                     vp.addBloodExp(15, entity);
                                 }
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                                sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                                         entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                         10,
                                         0.2,
@@ -1256,12 +1256,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         }
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 } else {
                     if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.85f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.85f + Math.random() * 0.1f));
                     }
                 }
             }
@@ -1289,12 +1289,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             setDazed(LE,(byte) 4);
                         }
                         HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
 
                         SimpleParticleType spt = ParticleTypes.SNOWFLAKE;
-                        ((ServerLevel) this.getSelf().level()).sendParticles(spt,
+                        sendParticlesIfPossible(self.level(),spt,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 30,
                                 0, 0, 0,
@@ -1302,12 +1302,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 } else {
                     if (!this.self.level().isClientSide()) {
-                        this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.85f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.85f + Math.random() * 0.1f));
                     }
                 }
             }
@@ -1329,10 +1329,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
 
             Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(0.75f));
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.ICE_SPARKLE,
+            sendParticlesIfPossible(self.level(),ModParticles.ICE_SPARKLE,
                     posPo.x, posPo.y, posPo.z,
                     0, 0, 0, 0, 0.8);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
         } else {
             tryPowerPacket(ICE_CLUTCH);
         }
@@ -1354,7 +1354,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_DASH);
             }
 
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
         } else {
             tryPowerPacket(ICE_CLUTCH_2);
         }
@@ -1375,10 +1375,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             }
 
             Vec3 posPo = self.getEyePosition().add(self.getLookAngle().scale(0.75f));
-            ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.RED_SPARKLE,
+            sendParticlesIfPossible(self.level(),ModParticles.RED_SPARKLE,
                     posPo.x, posPo.y, posPo.z,
                     0, 0, 0, 0, 0.8);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_GLEAM_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
         } else {
             tryPowerPacket(BLOOD_CLUTCH);
         }
@@ -1394,7 +1394,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setPlayerPos2(PlayerPosIndex.CLUTCH_DASH);
             }
 
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.VAMPIRE_DASH_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
         } else {
             tryPowerPacket(BLOOD_CLUTCH_2);
         }
@@ -1451,7 +1451,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 setPlayerPos2(PlayerPosIndex.HAIR_SPIKE_2);
             }
             MainUtil.playPop(self);
-            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.EXTEND_SPIKES_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.05f));
             List<Entity> hitbox = StandGrabHitbox(self,DamageHandler.genHitbox(self, self.getX(), self.getY(),
                     self.getZ(), 4, 4, 4), 4, 360,true);
             if (hitbox != null) {
@@ -1476,13 +1476,13 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                     sendClutchCooldowns(16);
                                     setDazed(livingEntity,(byte) 16);
                                 }
-                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SPIKE_HIT_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.05f));
                                 if (!combo){
                                     combo = true;
                                 }
                                 addToCombo(value);
                             } else {
-                                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
+                                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.0f + Math.random() * 0.1f));
                             }
                         }
                     }
@@ -1517,7 +1517,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
             Vec3 pos = self.getPosition(1f).add(self.getLookAngle().scale(0.75f));
 
-            ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.SWEEP_ATTACK,
+            sendParticlesIfPossible(self.level(),ParticleTypes.SWEEP_ATTACK,
                     pos.x, pos.y+0.5F, pos.z,
                     0, 0, 0, 0, 0.8);
             doSweepHit();
@@ -1548,11 +1548,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                 }
 
-                ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CLOUD,
+                sendParticlesIfPossible(self.level(),ParticleTypes.CLOUD,
                         this.getSelf().getX()+cvec.x, this.getSelf().getY()+cvec.y, this.getSelf().getZ()+cvec.z,
                         0, cvec.x, cvec.y, cvec.z, 0.8);
             }
-            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.VAMPIRE_DIVE_EVENT, SoundSource.PLAYERS, 1F, (float) (0.96f + Math.random() * 0.08f));
         } else {
             Vec3 lower = self.getDeltaMovement();
             self.setDeltaMovement(lower.x(),-1.8,lower.z());
@@ -1630,9 +1630,10 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 self.hurtMarked = true;
                 self.hasImpulse = true;
                 shootAuraBlast(auraProjectile);
+                PowerTypes.copyPlaneOfExisting(self,auraProjectile);
                 this.getSelf().level().addFreshEntity(auraProjectile);
                 self.swing(InteractionHand.MAIN_HAND, true);
-                this.self.level().playSound(null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.EVIL_AURA_BLAST_EVENT, SoundSource.PLAYERS, 3F, (float) (0.96f + Math.random() * 0.08f));
             }
         } else {
             tryPowerPacket(EVIL_AURA);
@@ -1644,7 +1645,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         setActivePower(CAMO);
         setCooldown(PowerIndex.GENERAL_EXTRA, 100);
         if (!self.level().isClientSide()) {
-            this.self.level().playSound(null, this.self.blockPosition(),ModSounds.VAMPIRE_CAMO_EVENT, SoundSource.PLAYERS, 1F, (float) (0.98f + Math.random() * 0.04f));
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(),ModSounds.VAMPIRE_CAMO_EVENT, SoundSource.PLAYERS, 1F, (float) (0.98f + Math.random() * 0.04f));
             camoVec = self.getPosition(1f);
             if (getPlayerPos2() != PlayerPosIndex.VANISH_START) {
                 setPlayerPos2(PlayerPosIndex.VANISH_START);
@@ -1660,6 +1661,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
             RipperEyesProjectile auraProjectile = getRipperEyesProjectile();
             if (auraProjectile != null) {
                 shootRipperEyes(auraProjectile);
+                PowerTypes.copyPlaneOfExisting(self,auraProjectile);
                 this.getSelf().level().addFreshEntity(auraProjectile);
             }
         }
@@ -1684,7 +1686,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             }
 
 
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (1.05f + Math.random() * 0.1f));
                             self.swing(InteractionHand.MAIN_HAND, true);
                             ipa.roundabout$setIsDeflected(true);
                             ((IEntityAndData)ent).rdbt$forceDeltaMovement(ent.getDeltaMovement().scale(-0.4));
@@ -1706,7 +1708,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 this.attackTimeDuring = 0;
                 setActivePower(RIPPER_EYES);
             } else {
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.RIPPER_EYES_SHORT_EVENT, SoundSource.PLAYERS, 1F, (float) (1f + Math.random() * 0.05f));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.RIPPER_EYES_SHORT_EVENT, SoundSource.PLAYERS, 1F, (float) (1f + Math.random() * 0.05f));
                 ripperEyeShot();
                 this.stopSoundsIfNearby(SoundIndex.RIPPER_EYES_CHARGE, 100, false);
                 setActivePower(NONE);
@@ -1728,7 +1730,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                 playSoundsIfNearby(SoundIndex.RIPPER_EYES_BEAM, 45, false,false);
                 ripperEyesLeft = ripperBeamTime;
                 this.attackTimeDuring = 0;
-                //this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
+                //playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
                 setActivePower(RIPPER_EYES_ACTIVATED);
                 if (getPlayerPos2() != PlayerPosIndex.RIPPER_EYES_ACTIVE) {
                     setPlayerPos2(PlayerPosIndex.RIPPER_EYES_ACTIVE);
@@ -1742,7 +1744,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
         if (!self.level().isClientSide()) {
             if (!onCooldown(PowerIndex.GENERAL_4_SNEAK)) {
                 this.attackTimeDuring = 0;
-                this.self.level().playSound(null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.IMPALE_CHARGE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.7f + Math.random() * 0.1f));
                 setActivePower(DEFLECTION);
                 int deflectionCooldown = ClientNetworking.getAppropriateConfig().vampireSettings.deflectionCooldown;
                 setCooldown(PowerIndex.GENERAL_4_SNEAK, deflectionCooldown);
@@ -1806,12 +1808,12 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
                     if (DamageHandler.VampireDamageEntity(entity, pow, this.self)) {
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.15f + Math.random() * 0.1f));
                         addToCombo(entity);
                         hitParticles(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 }
@@ -1871,7 +1873,7 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                             sendClutchCooldowns(12);
                             setDazed(livingEntity,(byte) 12);
                         }
-                        ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.CRIT,
+                        sendParticlesIfPossible(self.level(),ParticleTypes.CRIT,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
                                 10,
                                 0.2,
@@ -1879,11 +1881,11 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                                 0.2,
                                 0.01);
                         takeDeterminedKnockbackWithY2(this.self, entity, knockbackStrength);
-                        this.self.level().playSound(null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
+                        playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (0.7f + Math.random() * 0.1f));
                         addToCombo(entity);
                     } else {
                         if (!this.self.level().isClientSide()) {
-                            this.self.level().playSound(null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
+                            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MELEE_GUARD_SOUND_EVENT, SoundSource.PLAYERS, 1F, (float) (0.95f + Math.random() * 0.1f));
                         }
                     }
                 }
