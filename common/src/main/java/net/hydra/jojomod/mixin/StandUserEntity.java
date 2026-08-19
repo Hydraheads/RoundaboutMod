@@ -82,6 +82,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -5816,7 +5817,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         this.roundabout$IdleTime = -1;
     }
 
-
     @Unique
     public void roundabout$UniversalTick(){
         if (this.roundabout$TSHurtTime > 0){this.roundabout$TSHurtTime--;}
@@ -5824,6 +5824,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (roundabout$getStandPowers().summonCD > 0) {
             roundabout$getStandPowers().summonCD--;
         }
+
 
     }
 
@@ -6416,23 +6417,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (BtdPlantedTicks > 0 && !this.level().isClientSide()
-                && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())) {
-            if (rdbt$this().isDamageSourceBlocked(source)) {
-            /*if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
-                    source.is(DamageTypes.WITHER) ||
-                    source.is(DamageTypes.DRAGON_BREATH) ||
-                    source.is(ModDamageTypes.GO_BEYOND) ||
-                    source.is(DamageTypes.GENERIC_KILL) ||
-                    source.is(DamageTypes.STARVE) ||
-                    source.is(DamageTypes.IN_FIRE) ||
-                    source.is(DamageTypes.LAVA) ||
-                    source.is(DamageTypes.DROWN) ||
-                    source.is(ModDamageTypes.SUNLIGHT)
-            ){*/
-                return false;
-            }
+                && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
+                && !source.is(DamageTypeTags.BYPASSES_SHIELD) 
+                /*&& !($$1 instanceof AbstractArrow $$3 && $$3.getPierceLevel() > 0)*/) {
 
-            return true;
+            Vec3 $$4 = source.getSourcePosition();
+            if ($$4 != null) {
+                Vec3 $$5 = this.getViewVector(1.0F);
+                Vec3 $$6 = $$4.vectorTo(this.position()).normalize();
+                $$6 = new Vec3($$6.x, (double)0.0F, $$6.z);
+                return ($$6.dot($$5) < (double)0.0F);
+            }
         }
 
         return false;

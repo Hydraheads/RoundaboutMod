@@ -247,6 +247,7 @@ public abstract class EntityAndData implements IEntityAndData {
     SavedSecond initialDaySecond = null;;
 
     @Unique
+    @Override
     public void roundabout$setInitialDaySec() {
         initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
     }
@@ -935,6 +936,19 @@ public abstract class EntityAndData implements IEntityAndData {
             if (rdbt$inForeignWorld != 0){
                 rdbt$inForeignWorld = 0;
             }
+        }
+    }
+
+    @Unique
+    private int lastDay = -1;
+
+    @Unique
+    @Override
+    public void roundabout$initialDayCheck(int day) {
+        Entity self = (Entity)(Object)this;
+        if (lastDay != day && SavedSecond.canTeleportTo(self.level(), self.getPosition(1), self)) {
+            roundabout$setInitialDaySec();
+            lastDay = day;
         }
     }
 
