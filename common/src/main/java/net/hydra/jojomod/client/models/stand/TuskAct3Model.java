@@ -45,9 +45,9 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
                 .texOffs(60, 63).addBox(-5.9F, -3.9357F, -2.6357F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(64, 63).addBox(-4.9F, -4.9357F, -2.6357F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.1357F, -0.9643F));
 
-        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -29.0F, 0.0F));
 
-        PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 29.0F, 0.0F));
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -167,9 +167,14 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
     }
 
     @Override
+    public float rotationStrength() {
+        return 0.5F;
+    }
+
+    @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        this.defaultModifiers(pEntity);
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.defaultModifiers(pEntity);
     }
 
 }

@@ -6418,7 +6418,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
         if (BtdPlantedTicks > 0 && !this.level().isClientSide()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
-                && !source.is(DamageTypeTags.BYPASSES_SHIELD) 
+                && !source.is(DamageTypeTags.BYPASSES_SHIELD)
                 /*&& !($$1 instanceof AbstractArrow $$3 && $$3.getPierceLevel() > 0)*/) {
 
             Vec3 $$4 = source.getSourcePosition();

@@ -3,6 +3,7 @@ package net.hydra.jojomod.client.models.stand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.client.models.stand.animations.TuskAnimations;
 import net.hydra.jojomod.entity.stand.TuskEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -54,9 +55,9 @@ public class TuskAct2Model<T extends TuskEntity> extends StandModel<T> {
                 .texOffs(3, 62).mirror().addBox(5.0398F, -28.6609F, -1.75F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(1, 2).addBox(6.0F, -29.25F, -2.5F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
-        PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         PartDefinition torso = body2.addOrReplaceChild("torso", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
@@ -117,8 +118,9 @@ public class TuskAct2Model<T extends TuskEntity> extends StandModel<T> {
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        this.defaultModifiers(pEntity);
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.defaultModifiers(pEntity);
+    //    this.animate(pEntity.idleAnimationState, TuskAnimations.ACT_2_IDLE,pAgeInTicks,1F);
     }
 
 
