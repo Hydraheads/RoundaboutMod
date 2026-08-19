@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.stand;
 
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.stand.powers.PowersSilverChariot;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -9,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -106,6 +108,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
     private float controlStrafe;
     private float controlForward;
 
+    private boolean controlBodyRotationActive;
+    private float controlBodyYaw;
+
     public void setControlInput(float strafe, float forward) {
         controlStrafe = strafe;
         controlForward = forward;
@@ -138,17 +143,15 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public void tick() {
         super.tick();
+    }
 
-        if (this.level().isClientSide() && isControlledByLocalInstance() && isControlModeActive()) {
+    private void tickControlMode() {
+        if (this.level().isClientSide() && isControlModeActive()) {
             tickControlBodyRotation();
         } else {
             controlBodyRotationActive = false;
         }
-        // super.tick();
     }
-
-    private boolean controlBodyRotationActive;
-    private float controlBodyYaw;
 
     private void tickControlBodyRotation() {
         if (!controlBodyRotationActive) {
@@ -211,6 +214,16 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
+    public void setItemInHand(InteractionHand $$0, ItemStack $$1) {
+        super.setItemInHand($$0, $$1);
+    }
+
+    @Override
+    public ItemStack getOffhandItem() {
+        return super.getOffhandItem();
+    }
+
+    @Override
     public ItemStack getMainHandItem() {
         return super.getMainHandItem();
     }
@@ -222,7 +235,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean lockPos() {
-        return true;
+        return false;
     }
 
     @Override
@@ -244,11 +257,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean isControlledByLocalInstance() {
-        LivingEntity user = this.getUser();
-        if (user != null && user instanceof Player player) {
-            Entity ent = this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
-            if (ent != null && ent.is(this)) {
-                return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
+        LivingEntity user = getUser();
+        if (user instanceof Player player) {
+            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
+                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
+                if (controlled != null && controlled.is(this)) {
+                    return player.isLocalPlayer();
+                }
             }
         }
         return super.isControlledByLocalInstance();
@@ -256,7 +271,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     protected float getFlyingSpeed() {
-        return 0.20F;
+        return 0.40F;
     }
 
     public void setControlMode(boolean active) {
