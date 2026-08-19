@@ -610,6 +610,7 @@ public class PowersD4C extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PUNCH_1_SOUND_EVENT,
                         SoundSource.PLAYERS, 0.95F, 1F);
             }
+            enactEligability();
         } else {
             xTryPower(PowerIndex.NONE,true);
             animateStand(StandEntity.IDLE);
