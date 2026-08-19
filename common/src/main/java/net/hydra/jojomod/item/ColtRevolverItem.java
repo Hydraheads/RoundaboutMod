@@ -177,7 +177,7 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
                     0.0F, 3.5F, 1.3F);
             $$7.setAmmoType(RoundaboutBulletEntity.COLT);
             level.addFreshEntity($$7);
-            level.playSound(null, player, ModSounds.COLT_FIRE_EVENT, SoundSource.PLAYERS, 7.0, 1.0F);
+            level.playSound(null, player, ModSounds.COLT_FIRE_EVENT, SoundSource.PLAYERS, 7.0F, 1.0F);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
