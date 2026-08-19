@@ -161,6 +161,8 @@ public class D4CModel<T extends D4CEntity> extends StandModel<T> {
         this.animate(pEntity.finalPunch, D4CAnimations.CrossPunch_Release_V2, pAgeInTicks, 1.4f);
         this.animate(pEntity.finalPunch2, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
         this.animate(pEntity.finalPunch3, D4CAnimations.CrossPunch_Release, pAgeInTicks, 1.4f);
+        this.animate(pEntity.drag, StandAnimations.IMPALE, pAgeInTicks, 1.04f);
+        this.animate(pEntity.drag2, StarPlatinumAnimations.Impale2, pAgeInTicks, 1.04f);
 	}
 
 	@Override
