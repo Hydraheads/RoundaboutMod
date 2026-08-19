@@ -1460,7 +1460,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == BITES_THE_DUST_COMBAT) {
             return this.bitesTheDustCombatActivate();
         } else if (move == BITES_THE_DUST_DAY) {
-            //return this.bitesTheDustDayActivate();
+            return this.bitesTheDustDayActivate();
         }
     	
     	return super.setPowerOther(move,  lastMove);
@@ -1639,11 +1639,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (bombEntity instanceof LivingEntity && bombEntity.isAlive()) {
                     ((StandUser)bombEntity).roundabout$setExplosionInflation((int)(percent * 18));
                 }
-                if (bombEntity != null && percent > 0.2f && percent < 0.85f && self.tickCount % 4 == 0) {
+                if (bombEntity != null && self.tickCount % 3 == 0 && percent > 0.1f) {
                     Vec3 vec = getRandPos(bombEntity);
-                    sendParticlesIfPossible(self.level(),ParticleTypes.SMALL_FLAME,
-                            vec.x, vec.y, vec.z,
-                            4, 0.3, 0.2, 0.3, 0.05);
+
+                    if ( percent < 0.45f) {
+                        sendParticlesIfPossible(self.level(),ParticleTypes.SMALL_FLAME,
+                                vec.x, vec.y, vec.z,
+                                8, 0.2, 0.1, 0.2, 0.01);
+                    }else if (percent < 0.9f) {
+                        sendParticlesIfPossible(self.level(),ParticleTypes.FLAME,
+                                vec.x, vec.y, vec.z,
+                                4, 0.3, 0.1, 0.3, 0.01);
+                    }
                 }
             }
 
@@ -2421,16 +2428,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        StandEntity stand = this.getStandEntity(this.self);
-        KillerQueenEntity standKQ;
         Entity target = bitesTheDustPlantedEntity;
-        /*if (stand instanceof KillerQueenEntity KQE) {
-            standKQ = KQE;
-            target = KQE.getPlantedBitesTheDust();
-        }else {
-            btdDefuseServer();
-            return false;
-        }*/
+
         if (target == null || target.isRemoved() || !target.isAlive()) {
             btdDefuseServer();
             return false;
@@ -3138,7 +3137,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         Vec3 pos = KQE.getBitesTheDustOffset(bitesTheDustPlantedEntity);
 
-                        stand.absMoveTo(pos.x, pos.y, pos.z);
+                        stand.setPosRaw(pos.x, pos.y, pos.z);
 
                         stand.setYRot(bitesTheDustPlantedEntity.getYHeadRot() % 360);
                         stand.setXRot(bitesTheDustPlantedEntity.getXRot());
