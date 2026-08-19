@@ -136,6 +136,7 @@ public class ClientUtil {
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
     public static boolean leftADimension = false;
+    public static int leftDimTicks = 0;
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
@@ -149,10 +150,17 @@ public class ClientUtil {
                 D4CTickStart = player.tickCount;
             } else {
                 leftADimension = true;
+                leftDimTicks = 0;
             }
 
             if (!(leftADimension && !canRenderWorldMerge())){
                 D4CTickStart2 = player.tickCount;
+            } else {
+                leftDimTicks++;
+                if (leftDimTicks > 40){
+                    leftADimension = false;
+                    leftDimTicks = 0;
+                }
             }
 
             skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
