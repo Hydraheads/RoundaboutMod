@@ -166,7 +166,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             level.addFreshEntity($$7);
             S2CPacketUtil.gunRecoil(player, "tommy");
             float randomPitch = random.nextFloat(1.7F - 1.5F) + 1.5F;
-            level.playSound(null, player, ModSounds.TOMMY_FIRE_EVENT, SoundSource.PLAYERS, 100.0F, randomPitch);
+            level.playSound(null, player, ModSounds.TOMMY_FIRE_EVENT, SoundSource.PLAYERS, 7.0F, randomPitch);
             if (level instanceof ServerLevel serverLevel) {
                 Vec3 look = player.getLookAngle().normalize();
                 Vec3 up = new Vec3(0, 1, 0);
