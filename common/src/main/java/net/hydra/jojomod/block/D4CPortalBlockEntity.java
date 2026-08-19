@@ -2,11 +2,13 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -24,6 +26,7 @@ public class D4CPortalBlockEntity extends BlockEntity {
     public boolean initialized = false;
     public int worldId = 0;
     public UUID creator = null;
+    public Entity getCreator = null;
     @Override
     public Level getLevel() {
         return super.getLevel();
@@ -65,7 +68,7 @@ public class D4CPortalBlockEntity extends BlockEntity {
         }
     }
     public static void tickBlockEnt(Level lvl, BlockPos bp, BlockState bs, D4CPortalBlockEntity portal) {
-        if (!lvl.isClientSide()) {
+        if (!lvl.isClientSide() && lvl instanceof ServerLevel sl) {
             if (!portal.initialized) {
                 lvl.removeBlock(bp, false);
                 return;
@@ -74,6 +77,18 @@ public class D4CPortalBlockEntity extends BlockEntity {
             if (portal.ticksUntilRestore <= 0) {
                 lvl.removeBlock(bp, false);
                 return;
+            }
+
+            if (portal.worldId > 0){
+                if (portal.getCreator == null && portal.creator != null){
+                    portal.getCreator = sl.getEntity(portal.creator);
+                }
+                if (portal.getCreator != null){
+                  if (PowerTypes.getPlaneOfExisting2(portal.getCreator) != portal.worldId){
+                      lvl.removeBlock(bp, false);
+                      return;
+                  }
+                }
             }
         }
     }

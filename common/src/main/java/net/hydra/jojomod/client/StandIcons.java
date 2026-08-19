@@ -789,6 +789,7 @@ public class StandIcons {
     public static final ResourceLocation D4C_DIMENSION_HOP_KEY = Roundabout.location("textures/gui/icons/d4c/dimension_hop_key.png");
     public static final ResourceLocation D4C_GENERATE_KEY = Roundabout.location("textures/gui/icons/d4c/key_generation.png");
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
+    public static final ResourceLocation MERGING_RETURN = Roundabout.location("textures/gui/icons/d4c/merging_return.png");
     public static final ResourceLocation D4C_PARALLEL_GRAB = Roundabout.location("textures/gui/icons/d4c/parallel_grab.png");
     public static final ResourceLocation D4C_CHOP = Roundabout.location("textures/gui/icons/d4c/chop.png");
     public static final ResourceLocation D4C_SHIELD_STAND = Roundabout.location("textures/gui/icons/d4c/shield_stand.png");

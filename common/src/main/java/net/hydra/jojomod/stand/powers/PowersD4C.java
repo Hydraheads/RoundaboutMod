@@ -52,6 +52,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
@@ -114,6 +115,9 @@ public class PowersD4C extends NewPunchingStand {
                 useUpBanner(self.getMainHandItem());
             }
         }
+    }
+    public boolean isEligableForExit(){
+        return isEligable() || isCollidingWithD4CPortal(self);
     }
 
     public boolean isEligable(){
@@ -419,6 +423,48 @@ public class PowersD4C extends NewPunchingStand {
             default -> throw new IllegalStateException("Unexpected gravity: " + gravity);
         }
     }
+    public static boolean isCollidingWithD4CPortal(Entity entity) {
+        Level level = entity.level();
+        AABB box = entity.getBoundingBox();
+
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
+        int minX = Mth.floor(box.minX);
+        int minY = Mth.floor(box.minY);
+        int minZ = Mth.floor(box.minZ);
+
+        int maxX = Mth.floor(box.maxX);
+        int maxY = Mth.floor(box.maxY);
+        int maxZ = Mth.floor(box.maxZ);
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+
+                    pos.set(x, y, z);
+
+                    if (level.getBlockState(pos).getBlock()
+                            instanceof D4CPortalBlock) {
+
+                        if (entity.level().isClientSide()){
+                            return true;
+                        } else {
+                            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+                            if (blockEntity instanceof D4CPortalBlockEntity portal) {
+                                if (portal.worldId ==
+                                        PowerTypes.getPlaneOfExisting2(entity)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
     private boolean isBlockedInDirection(AABB box, Direction direction) {
         double checkDistance = 0.4D;
 
@@ -532,12 +578,12 @@ public class PowersD4C extends NewPunchingStand {
                 return;
             }
 
-            for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
-                if (!target.equals(self) && target.isAlive()) {
-                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
-                }
-            }
-            PowerTypes.setPlaneOfExisting(self,(byte)1);
+//            for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
+//                if (!target.equals(self) && target.isAlive()) {
+//                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
+//                }
+//            }
+            PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }
@@ -574,6 +620,9 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_1_NORMAL -> {
                 worldMergingClient();
             }
+            case SKILL_1_CROUCH -> {
+                worldTakingClient();
+            }
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
@@ -588,8 +637,23 @@ public class PowersD4C extends NewPunchingStand {
             }
         }
     }
+
+    public void exitD4CClient(){
+        if (isEligableForExit()){
+            tryPowerPacket(PowerIndex.POWER_1_BONUS);
+        }
+    }
+    public void worldTakingClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            exitD4CClient();
+        } else if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
+            tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+        }
+    }
     public void worldMergingClient(){
-        if (!this.onCooldown(PowerIndex.SKILL_1) && isEligable()) {
+        if (PowerTypes.isInD4CWorld(self)){
+            exitD4CClient();
+        } else if (!this.onCooldown(PowerIndex.SKILL_1) && isEligable()) {
             tryPowerPacket(PowerIndex.POWER_1);
         }
     }
@@ -707,12 +771,12 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            if (this.activePower == PowerIndex.POWER_1_SNEAK) {
+            if (this.activePower == PowerIndex.POWER_3_SNEAK) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
             } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
-                tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
+                tryPowerPacket(PowerIndex.POWER_3_SNEAK);
             }
         }
     }
@@ -720,10 +784,12 @@ public class PowersD4C extends NewPunchingStand {
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_3);
+        } else if (PowerTypes.isInD4CWorld(self)){
+            LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.SKILL_1,0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 1, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_1,0);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_3);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_EXTRA);
         }
 
         if (!isHoldingSneak()){
@@ -750,7 +816,10 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
         if (slot == 1 || slot == 2 || slot == 4){
-            return !isEligable();
+            if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
+                return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+            }
+            return !isEligable() || super.isAttackIneptVisually(activeP,slot);
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
@@ -786,7 +855,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void updateUniqueMoves() {
         /*Tick through Time Stop Charge*/
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
             updateChop();
         } if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
             updateFinalAttack();
@@ -898,7 +967,7 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public void handleStandAttack(Player player, Entity target){
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
             chopImpact(target);
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK){
             finalAttackImpact(target);
@@ -917,7 +986,7 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
-        } else if (move == PowerIndex.POWER_1_SNEAK){
+        } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
         } else if (move == PowerIndex.POWER_2){
             spawnCloneServer();
@@ -925,8 +994,18 @@ public class PowersD4C extends NewPunchingStand {
         }else if (move == PowerIndex.POWER_1){
             worldMergingServer();
             return false;
+        } else if (move == PowerIndex.POWER_1_BONUS){
+
+            exitWorldServer();
+            return false;
         }
         return super.setPowerOther(move,lastMove);
+    }
+
+    public void exitWorldServer(){
+        if (isEligableForExit()){
+            PowerTypes.setPlaneOfExisting(self,(byte)0);
+        }
     }
 
 
@@ -935,7 +1014,7 @@ public class PowersD4C extends NewPunchingStand {
         if (Objects.nonNull(stand)){
 
             this.setAttackTimeDuring(0);
-            this.setActivePower(PowerIndex.POWER_1_SNEAK);
+            this.setActivePower(PowerIndex.POWER_3_SNEAK);
             playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(D4CEntity.IMPALE_2);
             this.poseStand(OffsetIndex.GUARD);
@@ -986,7 +1065,7 @@ public class PowersD4C extends NewPunchingStand {
 
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
             int cdr = 25;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
@@ -1001,7 +1080,7 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     public void chopImpact(Entity entity){
-        if (activePower == PowerIndex.POWER_1_SNEAK){
+        if (activePower == PowerIndex.POWER_3_SNEAK){
             this.animateStand(D4CEntity.CHOP);
             this.setAttackTimeDuring(-20);
             if (entity != null && entity.distanceTo(self) > chopRange+0.75F) {
@@ -1187,7 +1266,7 @@ public class PowersD4C extends NewPunchingStand {
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
-        if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
+        if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
             Entity TE = this.getTargetEntity(playerEntity, chopRange);
             if (TE != null) {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 0, 15, 6);
