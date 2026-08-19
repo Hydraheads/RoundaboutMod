@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -15,6 +16,7 @@ import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -346,7 +348,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         switch (standSkin) {
             case PurpleHazeEntity.BLAZING_HAZE -> {
                 if (purpleHazeFieldDistortionMode) {
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.LARGE_SMOKE,
                             x,
                             y + 1.0,
@@ -357,7 +359,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             effectRange / 2,
                             0.01
                     );
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -372,7 +374,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.02
                     );
 
-                }else serverLevel.sendParticles(
+                }else sendParticlesIfPossible(self.level(),
                         ParticleTypes.LARGE_SMOKE,
                         x,
                         y + 1.0,
@@ -387,7 +389,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.GREEN -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -399,7 +401,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -416,7 +418,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SNEEZE,
                             x,
                             y + 1.0,
@@ -434,7 +436,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.NETHERITE -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -446,7 +448,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -463,7 +465,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ParticleTypes.SMOKE,
                             x,
                             y + 1.0,
@@ -481,7 +483,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             default -> {
                 if (purpleHazeFieldDistortionMode) {
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             ModParticles.PURPLE_HAZE_SMOKE,
                             x,
                             y + 1.0,
@@ -493,7 +495,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             0.01
                     );
 
-                    serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                             new DustParticleOptions(
                                     new Vector3f(0.0F, 0.0F, 0.0F),
                                     1.5F
@@ -510,7 +512,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
                 }else {
 
-                        serverLevel.sendParticles(
+                    sendParticlesIfPossible(self.level(),
                                 ModParticles.PURPLE_HAZE_SMOKE,
                                 x,
                                 y + 1.0,
@@ -543,6 +545,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if (!(entity instanceof LivingEntity living)) {
                     continue;
                 }
+
+                ((StandUser) living).SetInPurpleHazeTicks(5);
 
                 int effectDuration = living instanceof Player ? 200 : 300;
 
@@ -600,7 +604,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
 
-
+    @Override
+    public float getBarrageFinisherKnockback(){
+        return 0.8F;
+    }
 
     @Override
     public void barrageImpact(Entity entity, int hitNumber) {
@@ -656,7 +663,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
 
         if (self.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(
+            sendParticlesIfPossible(self.level(),
                     ParticleTypes.LARGE_SMOKE,
                     position.x,
                     position.y + 1.0,
@@ -687,7 +694,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
-                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.SKILL_1);
+                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.POWER_1_BONUS);
                 }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
@@ -715,17 +722,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = 0;
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+80,0, "ability.roundabout.punch",
-                "instruction.roundabout.press_attack", StandIcons.STAR_PLATINUM_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack", StandIcons.PH_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.purple_haze.capsule_throw",
                 "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.purple_haze.punch_barrage",
-                "instruction.roundabout.barrage", StandIcons.STAR_PLATINUM_BARRAGE,0,level,bypas));
+                "instruction.roundabout.barrage", StandIcons.PH_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
-                "instruction.roundabout.kick_barrage", StandIcons.STAR_PLATINUM_KICK_BARRAGE,1,level,bypas));
+                "instruction.roundabout.kick_barrage", StandIcons.PH_KICK_BARRAGE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118, 0, "ability.roundabout.forward_barrage",
-               "instruction.roundabout.forward_barrage", StandIcons.STAR_PLATINUM_TRAVEL_BARRAGE,1,level,bypas));
+               "instruction.roundabout.forward_barrage", StandIcons.PH_FORWARD_BARRAGE,1,level,bypas));
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
@@ -733,7 +740,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
                 "instruction.roundabout.passive", StandIcons.PURPLE_HAZE_MODE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+118,4, "ability.purple_haze.distortion_smoke",
@@ -1025,14 +1032,38 @@ public class PowersPurpleHaze extends NewPunchingStand {
         IPermaCasting permaCasting =
                 (IPermaCasting) this.self.level();
 
-        purpleHazeFieldPosition = position;
+        boolean wasAlreadyActive = purpleHazeFieldActive;
 
+        purpleHazeFieldPosition = position;
 
         purpleHazeFieldDistortionMode = distortionMode;
 
         purpleHazeFieldTicks = distortionMode
                 ? DISTORTION_FIELD_DURATION
                 : PURPLE_HAZE_FIELD_DURATION;
+
+            if (distortionMode) {
+                playSoundIfPossible(
+                        self.level(),
+                        null,
+                        BlockPos.containing(purpleHazeFieldPosition),
+                        ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_EVENT,
+                        SoundSource.NEUTRAL,
+                        4.0F,
+                        1.0F
+                );
+            } else {
+                playSoundIfPossible(
+                        self.level(),
+                        null,
+                        BlockPos.containing(purpleHazeFieldPosition),
+                        ModSounds.PURPLE_HAZE_SMOKE_EVENT,
+                        SoundSource.PLAYERS,
+                        4.0F,
+                        1.0F
+                );
+            }
+
 
         if (!permaCasting.roundabout$isPermaCastingEntity(this.self)) {
             permaCasting.roundabout$addPermaCaster(this.self);
@@ -1078,14 +1109,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         if (!this.onCooldown(PowerIndex.SNEAK_ATTACK)) {
-            playSoundIfPossible(self.level(),
+            /*playSoundIfPossible(self.level(),
                     null,
                     this.self.blockPosition(),
                     ModSounds.STAR_FINGER_EVENT,
                     SoundSource.PLAYERS,
                     1.0F,
                     1.0F
-            );
+            );*/
 
             Snowball snowball = new Snowball(this.self.level(), self);
 
@@ -1205,11 +1236,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return SoundIndex.SUMMON_SOUND;
     }
     @Override
-    public SoundEvent getSoundFromByte(byte soundChoice){
+    public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
+    protected SoundEvent getBarrageSound() {
+
+        return ModSounds.PURPLE_HAZE_BARRAGE_CRY_EVENT;
+    }
+    @Override
+    public SoundEvent getSoundFromByte(byte soundChoice) {
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.PURPLE_HAZE_SUMMON_EVENT;
-        }
+        } else if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) {
+            return getBarrageSound();
+    }
         return super.getSoundFromByte(soundChoice);
+    }
+    @Override
+    public byte getSoundCancelingGroupByte(byte soundChoice) {
+        if (soundChoice == SoundIndex.BARRAGE_CRY_SOUND) { return SoundIndex.BARRAGE_SOUND_GROUP; }
+        return super.getSoundCancelingGroupByte(soundChoice);
     }
 
     @Override

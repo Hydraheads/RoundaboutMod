@@ -88,6 +88,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void roundabout$saveDiscData(CompoundTag tag, CallbackInfo ci) {
+        if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
         CompoundTag discs = new CompoundTag();
         discs.putBoolean("HasMemory", roundabout$ownsMemoryDisc());
         discs.putInt("MemorySealTicks", roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY));
@@ -129,6 +130,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void roundabout$loadDiscData(CompoundTag tag, CallbackInfo ci) {
+        if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
         if (!tag.contains("roundabout.WhitesnakeDiscs", 10)) {
             return;
         }
@@ -183,6 +185,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     @Inject(method = "tick", at = @At("TAIL"))
     private void roundabout$tickDiscEffects(CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
+        if (WhitesnakeDiscUtil.isDiscBlacklisted(living)) return;
         if (!level().isClientSide() && living instanceof ServerPlayer player) {
             WhitesnakeDiscUtil.ejectMobMemoryFromPlayer(player);
         }
@@ -244,7 +247,8 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     @Inject(method = "die", at = @At("TAIL"))
     private void roundabout$dropForeignDiscs(DamageSource source, CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
-        if (roundabout$foreignDiscsDropped || living.level().isClientSide()) return;
+        if (roundabout$foreignDiscsDropped || living.level().isClientSide()
+                || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return;
         roundabout$foreignDiscsDropped = true;
         String entityId = living.getUUID().toString();
 

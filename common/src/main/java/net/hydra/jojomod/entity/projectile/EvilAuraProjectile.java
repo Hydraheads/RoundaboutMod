@@ -5,6 +5,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
@@ -52,6 +53,9 @@ public class EvilAuraProjectile extends RoundaboutGeneralProjectile{
     public List<Entity> alreadyHitEntities = new ArrayList<>();
 
     public void blastEntity(Entity entity){
+        if (PowerTypes.isInADifferentExistence(entity,this)){
+            return;
+        }
         if (!(MainUtil.resistsKnockBack(entity))) {
             entity.setDeltaMovement(entity.getDeltaMovement().add(getDeltaMovement().normalize().scale(1.4F)));
             entity.hasImpulse = true;

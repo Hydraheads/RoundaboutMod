@@ -35,6 +35,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean ejectDisc(LivingEntity target, byte type, boolean ignoreHealthRequirement) {
+        if (isDiscBlacklisted(target)) return false;
         if (!isDiscStealEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
         if (target instanceof Mob && !config.discStealHealthRequirementAffectsMobs) {
@@ -54,8 +55,13 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean canCarrySightDisc(LivingEntity target) {
-        return isSightDiscEnabled() && !(target instanceof Sniffer || target instanceof Bat
+        return isSightDiscEnabled() && !isDiscBlacklisted(target)
+                && !(target instanceof Sniffer || target instanceof Bat
                 || target instanceof Dolphin || target instanceof Warden);
+    }
+
+    public static boolean isDiscBlacklisted(LivingEntity target) {
+        return MainUtil.isDiscEntityBlacklisted(target);
     }
 
     public static boolean isSightDiscEnabled() {
@@ -91,6 +97,7 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
+        if (isDiscBlacklisted(target)) return ItemStack.EMPTY;
         return switch (type) {
             case SIGHT -> extractSight(target, true);
             case MEMORY -> extractMemory(target, true);

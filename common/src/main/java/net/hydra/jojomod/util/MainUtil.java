@@ -32,6 +32,7 @@ import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -232,6 +233,7 @@ public class MainUtil {
     public static ArrayList<String> standBlockExplosionBlacklist = Lists.newArrayList();
     public static ArrayList<String> occultChargeEffectsToBanish = Lists.newArrayList();
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
@@ -348,6 +350,11 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isDiscEntityBlacklisted(Entity ent){
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        return discEntityBlacklist != null && !discEntityBlacklist.isEmpty()
+                && rl != null && discEntityBlacklist.contains(rl.toString());
     }
     public static boolean isHypnotismTargetBlacklisted(Entity ent){
         if (ent == null)
@@ -3604,7 +3611,12 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static Boolean isInPurpleHaze(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getPurpleHazeTicks() > 0;
+        }
+        return false;
+    }
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 

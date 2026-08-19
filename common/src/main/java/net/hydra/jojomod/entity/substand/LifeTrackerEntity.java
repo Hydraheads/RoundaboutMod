@@ -4,6 +4,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.TridentsIgnoreThis;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersMagiciansRed;
 import net.hydra.jojomod.util.MainUtil;
@@ -41,6 +42,7 @@ public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThi
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();
         if (!client) {
+            PowerTypes.copyPlaneOfExisting(user,this);
             if (isEffectivelyInWater() || isInWaterOrRain()) {
                 this.discard();
                 return;

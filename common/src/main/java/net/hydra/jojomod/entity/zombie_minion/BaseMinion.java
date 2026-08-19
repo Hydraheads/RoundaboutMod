@@ -10,6 +10,7 @@ import net.hydra.jojomod.entity.goals.*;
 import net.hydra.jojomod.entity.projectile.PoisonLlamaSpit;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.Tactics;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -193,6 +194,7 @@ public class BaseMinion extends PathfinderMob {
     public void dropHead(Player player){
         if (getHeadItem() != null && !getHeadItem().isEmpty()){
             ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getHeadItem());
+            PowerTypes.copyPlaneOfExisting(this,itemEntity);
             level().addFreshEntity(itemEntity);
             setHeadItem(ItemStack.EMPTY);
         }
@@ -200,6 +202,7 @@ public class BaseMinion extends PathfinderMob {
     public void dropBody(Player player){
         if (getBodyItem() != null && !getBodyItem().isEmpty()){
             ItemEntity itemEntity = new ItemEntity(level(),getX(), getY(), getZ(), getBodyItem());
+            PowerTypes.copyPlaneOfExisting(this,itemEntity);
             level().addFreshEntity(itemEntity);
             setBodyItem(ItemStack.EMPTY);
         }
@@ -228,6 +231,7 @@ public class BaseMinion extends PathfinderMob {
                             setBodyItem(stack.copyWithCount(1));
                             if (getMainHandItem() != null && !getMainHandItem().isEmpty()) {
                                 ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getMainHandItem());
+                                PowerTypes.copyPlaneOfExisting(this,itemEntity);
                                 level().addFreshEntity(itemEntity);
                                 setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                             }

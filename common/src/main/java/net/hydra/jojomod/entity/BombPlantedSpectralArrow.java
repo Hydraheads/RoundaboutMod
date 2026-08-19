@@ -8,6 +8,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
@@ -50,17 +52,8 @@ public class BombPlantedSpectralArrow extends SpectralArrow {
     }
 
     public void defuse() {
-        /*ArrowItem $$10 = (ArrowItem)(getItem().getItem() instanceof ArrowItem ? getItem().getItem() : Items.ARROW);
-        AbstractArrow arrow = $$10.createArrow(level(), getItem(), host);
-        arrow.setCritArrow(isCritArrow());
-        arrow.setPos(getPosition(1));
-        arrow.setYRot(getYRot());
-        arrow.setXRot(getXRot());
-        arrow.setPierceLevel(getPierceLevel());
-        arrow.setDeltaMovement(getDeltaMovement());
-
-        level().addFreshEntity(arrow);
-        discard();
-        */
+        if (getOwner() instanceof Player) {
+            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        }
     }
 }

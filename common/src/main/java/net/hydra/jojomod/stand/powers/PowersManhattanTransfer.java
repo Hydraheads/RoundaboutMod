@@ -235,7 +235,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
                     if (this.getStandEntity(this.getSelf()) != null && this.getStandEntity(this.getSelf()) instanceof ManhattanTransferEntity ME) {
                         if (!ME.level().isClientSide()) {
-                            ((ServerLevel) ME.level()).sendParticles(ModParticles.AIR_CRACKLE,
+                            sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                     ME.getX(), ME.getY(), ME.getZ(),
                                     0, 0, 0, 0, 0);
                         }
@@ -916,6 +916,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             $$7.setOwner(this.getSelf());
                                             $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$7.setItem($$7.getItem());
+                                            PowerTypes.copyPlaneOfExisting(self,$$7);
                                             $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
                                             ME.level().addFreshEntity($$7);
                                             ME.hattanDeflected = $$7;
@@ -925,6 +926,7 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             $$11.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
                                             $$11.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 2.5F, 0.0F);
                                             $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
+                                            PowerTypes.copyPlaneOfExisting(self,$$11);
                                             ME.level().addFreshEntity($$11);
                                             ME.hattanDeflected = $$11;
                                             $$11.setRemainingFireTicks(ticksOnFireBlaze);

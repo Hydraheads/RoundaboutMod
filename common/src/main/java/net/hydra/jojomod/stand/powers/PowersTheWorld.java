@@ -562,7 +562,7 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
                 if (!this.getSelf().level().isClientSide) {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP,
                             SoundSource.PLAYERS, 0.95F, 1.3F);
-                    ((ServerLevel) this.getSelf().level()).sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                    sendParticlesIfPossible(self.level(),ParticleTypes.HAPPY_VILLAGER,
                             stand.getX(), stand.getY() + 0.3, stand.getZ(),
                             30, 0.4, 0.4, 0.4, 0.4);
                 }
@@ -659,14 +659,14 @@ public class PowersTheWorld extends TWAndSPSharedPowers {
 
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }
                         } else if (attackTimeDuring > 80){
                             StandEntity stand = getStandEntity(this.self);
                             if (Objects.nonNull(stand)) {
-                                ((ServerLevel) this.getSelf().level()).sendParticles(ModParticles.AIR_CRACKLE,
+                                sendParticlesIfPossible(self.level(),ModParticles.AIR_CRACKLE,
                                         stand.getX(), stand.getY() + 0.3, stand.getZ(),
                                         0, 0, 0, 0, 0.4);
                             }

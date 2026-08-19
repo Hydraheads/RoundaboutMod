@@ -133,6 +133,9 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
     public void blastEntity(Entity entity){
         //Add hurt code here
         //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
+        if (PowerTypes.isInADifferentExistence(entity,this)){
+            return;
+        }
         if (entity instanceof LivingEntity lv) {
             if (entity instanceof BaseMinion || entity instanceof Zombiefish  ||
                     FateTypes.isVampire(lv)  ||

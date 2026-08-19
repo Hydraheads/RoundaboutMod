@@ -88,6 +88,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -344,6 +345,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             EntityDataSerializers.BOOLEAN);
 
     @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+
+    @Unique
     private StandPowers roundabout$Powers;
     @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
@@ -392,8 +396,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Inject(method = "dropExperience", at = @At(value = "HEAD"), cancellable = true, require = 0)
     public void roundabout$dropExperience(CallbackInfo ci) {
         if (rdbt$getExperienceTaken()){
+            PowerTypes.expStore = null;
             ci.cancel();
+            return;
         }
+        PowerTypes.expStore = this;
+    }
+    @Inject(method = "dropExperience", at = @At(value = "TAIL"), cancellable = true, require = 0)
+    public void roundabout$dropExperience2(CallbackInfo ci) {
+        PowerTypes.expStore = null;
     }
 
     @Unique
@@ -933,6 +944,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$endTick(CallbackInfo ci) {
         if(MoldTicks > 0){
             MoldTicks -= 1;
+        }
+        if (getPurpleHazeTicks() > 0) {
+            SetInPurpleHazeTicks(getPurpleHazeTicks() - 1);
         }
         if(BtdPlantedTicks > 0){
             if (roundabout$hasAStand()) {
@@ -3627,6 +3641,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_JUMP_IMUNITY_TICKS, 4);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
+
         }
     }
 
@@ -5049,6 +5065,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     mb.setYHeadRot(this.yHeadRot);
                     mb.yHeadRotO = this.getYHeadRot();
                     mb.setOldPosAndRot();
+                    PowerTypes.copyPlaneOfExisting(this,mb);
                     this.level().addFreshEntity(mb);
                 }
                 if (marked){
@@ -6288,6 +6305,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+
     @Unique
     public void rdbt$tickCooldowns(){
         try {
@@ -6383,6 +6401,16 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return MoldTicks;
     }
 
+    @Override
+    public void SetInPurpleHazeTicks(int e) {
+        this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
+    }
+
+    @Override
+    public int getPurpleHazeTicks() {
+        return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
+    }
+
     public int BtdPlantedTicks;
 
     @Override
@@ -6416,6 +6444,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             BtdPlantedTicks = e;
         }
     }
+
 
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {

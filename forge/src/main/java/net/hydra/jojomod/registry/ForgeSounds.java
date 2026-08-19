@@ -913,7 +913,12 @@ public class ForgeSounds {
 
     public static final RegistryObject<SoundEvent> PURPLE_HAZE_SUMMON =
             register(ModSounds.PURPLE_HAZE_SUMMON, ModSounds.PURPLE_HAZE_SUMMON_ID);
-
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_BARRAGE_CRY =
+            register(ModSounds.PURPLE_HAZE_BARRAGE_CRY, ModSounds.PURPLE_HAZE_BARRAGE_CRY_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_SMOKE=
+            register(ModSounds.PURPLE_HAZE_SMOKE, ModSounds.PURPLE_HAZE_SMOKE_ID);
+    public static final RegistryObject<SoundEvent> PURPLE_HAZE_DISTORTION_SMOKE =
+            register(ModSounds.PURPLE_HAZE_DISTORTION_SMOKE, ModSounds.PURPLE_HAZE_DISTORTION_SMOKE_ID);
 
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_SUMMON =
             register(ModSounds.SILVER_CHARIOT_SUMMON, ModSounds.SILVER_CHARIOT_SUMMON_ID);

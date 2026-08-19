@@ -702,7 +702,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             double z = this.self.getZ();
 
             if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z,10,.2,.3, 0.3, .3);
+                sendParticlesIfPossible(serverLevel,new BlockParticleOption(ParticleTypes.BLOCK, state), x, y, z,10,.2,.3, 0.3, .3);
             }
             level.playSound(null, this.getSelf().blockPosition(), ModSounds.CENTURY_BOY_HIT_EVENT, SoundSource.PLAYERS, 3F, 1.0F);
         }

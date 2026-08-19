@@ -54,6 +54,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -157,7 +158,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public Component ifWipListDev() {
-        return Component.literal("Olive").withStyle(ChatFormatting.AQUA);
+        return Component.literal("Olive").withStyle(ChatFormatting.BLUE);
     }
 
     @Override
@@ -1488,7 +1489,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                     ModSounds.KING_CRIMSON_PUNCH_4_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
             }
-            hitParticlesCenter(entity);
+            hitParticles(entity);
             boolean dealsDamage = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealDealsDamage;
             float healthBefore = entity instanceof LivingEntity living ? living.getHealth() : -1.0F;
             boolean hit = dealsDamage ? damageWithDiscSteal(entity) : canApplyDiscSteal(entity);
@@ -1509,6 +1510,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
             playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.PUNCH_2_SOUND_EVENT,
                     SoundSource.PLAYERS, 0.95F, 1.0F);
         }
+    }
+
+    @Override
+    public SimpleParticleType getImpactParticle() {
+        return getActivePower() == DISC_STEAL ? ModParticles.DISC_STEAL_HIT : super.getImpactParticle();
     }
 
     private boolean damageWithDiscSteal(Entity entity) {
@@ -2359,7 +2365,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         } else if (!self.level().isClientSide()) {
             Vec3 point = DamageHandler.getRayPoint(origin, CONTROL_PUNCH_RANGE * 0.5F);
-            ((ServerLevel) self.level()).sendParticles(ModParticles.PUNCH_MISS,
+            sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS,
                     point.x, point.y, point.z, 1, 0.0, 0.0, 0.0, 1);
         }
         SoundEvent sound;
@@ -2428,7 +2434,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             standImpale();
         } else if (attackTimeDuring >= 0 && !self.level().isClientSide() && attackTimeDuring % 4 == 0) {
             LivingEntity origin = actionOrigin();
-            ((ServerLevel) self.level()).sendParticles(ModParticles.MENACING,
+            sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                     origin.getX(), origin.getY() + 0.3D, origin.getZ(),
                     1, 0.2D, 0.2D, 0.2D, 0.05D);
         }
@@ -2705,7 +2711,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                     : this.getDistanceOut(this.self, this.getReach(), false) * 0.5F;
             Vec3 pointVec = DamageHandler.getRayPoint(origin, halfReach);
             if (!this.self.level().isClientSide) {
-                ((ServerLevel) this.self.level()).sendParticles(ModParticles.PUNCH_MISS,
+                sendParticlesIfPossible(self.level(),ModParticles.PUNCH_MISS,
                         pointVec.x, pointVec.y, pointVec.z, 1, 0.0, 0.0, 0.0, 1);
             }
         }

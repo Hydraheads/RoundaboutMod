@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -48,6 +49,7 @@ public abstract class GravityIllusionerMixin extends SpellcasterIllager implemen
         double $$7 =  Math.sqrt(Math.sqrt($$4 * $$4 + $$6 * $$6));
         $$3.shoot($$4, $$5 + $$7 * 0.2F, $$6, 1.6F, (float)(14 - this.level().getDifficulty().getId() * 4));
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        PowerTypes.copyPlaneOfExisting(this,$$3);
         this.level().addFreshEntity($$3);
     }
 }

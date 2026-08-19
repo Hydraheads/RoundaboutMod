@@ -377,6 +377,12 @@ public interface StandUser {
     int getMoldTicks();
     void MoldFieldExit();
     void rdbt$SetCrawlTicks(int ticks);
+
+    /** Purple Haze :) **/
+    void SetInPurpleHazeTicks(int e);
+    int getPurpleHazeTicks();
+
+
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
 

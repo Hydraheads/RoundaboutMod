@@ -9,6 +9,7 @@ import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -232,6 +233,7 @@ public enum PowerTypes {
         return false;
     }
 
+    public static Entity expStore = null;
     public static boolean hasStandActive(Entity entity){
         if (entity instanceof LivingEntity LE){
             if (entity instanceof Player PL){
@@ -282,13 +284,32 @@ public enum PowerTypes {
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
         }
     }
+    public static void forcePlaneOfExisting(Entity entity, byte plane){
+        if (entity instanceof LivingEntity LE){
+            StandUser user = ((StandUser) LE);
+            if (user.roundabout$isClashing()){
+                user.roundabout$getStandPowers().endClash();
+            }
+            user.roundabout$tryPower(PowerIndex.NONE,true);
+        }
+        ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+    }
+    public static void copyPlaneOfExisting(Entity from, Entity to){
+        if (from != null && to != null){
+            ((IGravityEntity)to).roundabout$setExistPlane(
+                    ((IGravityEntity)from).roundabout$getExistPlane());
+        }
+    }
 
+    public static int d4cWorldUptime(){
+        return 200;
+    }
     public static int getForeignWorldMaxTime(byte worldType){
         if (worldType == 0 || worldType == 10){
             return -1;
         }
-        if (worldType <= 5){
-            return 200;
+        if (worldType <= 8){
+            return d4cWorldUptime();
         }
         if (worldType == 11){
             return 400;
@@ -392,6 +413,14 @@ public enum PowerTypes {
                     pkc.timeEraseActive;
         }
         return false;
+    }
+    public static boolean isInD4CWorld(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 8;
+    }
+    public static boolean isInD4CWorldWithRender(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 5;
     }
 
     public static boolean hasPowerActive(Entity entity){

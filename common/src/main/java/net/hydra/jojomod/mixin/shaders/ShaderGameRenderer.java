@@ -4,8 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -107,6 +109,27 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             RPostShaderRegistry.EPITAPH.roundabout$setUniform("BlueValue",(float)vec.z);
 
             RPostShaderRegistry.EPITAPH.roundabout$process(tickDelta);
+        }
+        if(ClientUtil.canRenderWorldMerge()){
+            if (PowerTypes.isInD4CWorldWithRender(ClientUtil.getPlayer()) ||
+                    ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersD4C) {
+                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+
+                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTime", (float) ClientUtil.getPlayer().tickCount);
+                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTimeStart", (float) ClientUtil.D4CTickStart);
+                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("PartialTick", tickDelta % 1);
+
+                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$process(tickDelta);
+            }
+        } else if(ClientUtil.leftADimension){
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTimeStart",(float) ClientUtil.D4CTickStart2);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("PartialTick",tickDelta%1);
+
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$process(tickDelta);
         }
     }
 

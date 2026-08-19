@@ -24,7 +24,8 @@ public final class MusicDiscController {
     }
 
     public static boolean implant(ItemStack stack, LivingEntity target, LivingEntity thrower) {
-        if (!(stack.getItem() instanceof RecordItem) || !(target instanceof Mob)) return false;
+        if (!(stack.getItem() instanceof RecordItem) || !(target instanceof Mob)
+                || WhitesnakeDiscUtil.isDiscBlacklisted(target)) return false;
         if (target.level().isClientSide()) return true;
         DiscBearer bearer = (DiscBearer) target;
         if (!bearer.roundabout$getMusicDisc().isEmpty()) return false;

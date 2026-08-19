@@ -135,6 +135,8 @@ public class ClientUtil {
     }
     public static int skinTicker = 10;
     public static byte lastSkin = 0;
+    public static boolean leftADimension = false;
+    public static int leftDimTicks = 0;
 
     public static boolean isUsingTimeErase = false;
     public static void tickClientUtilStuff(){
@@ -144,6 +146,23 @@ public class ClientUtil {
         }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
+            if (!canRenderWorldMerge()){
+                D4CTickStart = player.tickCount;
+            } else {
+                leftADimension = true;
+                leftDimTicks = 0;
+            }
+
+            if (!(leftADimension && !canRenderWorldMerge())){
+                D4CTickStart2 = player.tickCount;
+            } else {
+                leftDimTicks++;
+                if (leftDimTicks > 40){
+                    leftADimension = false;
+                    leftDimTicks = 0;
+                }
+            }
+
             skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
             PlayerTickStart = player.tickCount;
             if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
@@ -490,31 +509,52 @@ public class ClientUtil {
     }
 
     public static void handleRoadRollerAmbientSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleSkatingSounds(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerAmbientSound(ModSounds.ROAD_ROLLER_AMBIENT_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
     public static void handleTwisterSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.ICY_WIND_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
     public static void handleWeepsSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new EntityBoundSoundInstance(ModSounds.GENTLY_WEEPS_EVENT,
                 SoundSource.PLAYERS, 1, 1, entity,
                 entity.level().random.nextLong()));
     }
 
     public static void handleRoadRollerExplosionSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         Minecraft.getInstance().getSoundManager().play(new RoadRollerExplosionSound(ModSounds.ROAD_ROLLER_EXPLOSION_EVENT, SoundSource.PLAYERS, 1, 0, entity));
     }
 
     public static void handleRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         roadRollerMixingSound = new RoadRollerMixingSound(ModSounds.ROAD_ROLLER_MIXING_EVENT, SoundSource.PLAYERS, 1.0F, 0.0F, entity);
         Minecraft.getInstance().getSoundManager().play(roadRollerMixingSound);
     }
     public static void stopRoadRollerMixingSound(Entity entity) {
+        if (PowerTypes.isInADifferentExistence(entity,getPlayer())){
+            return;
+        }
         if (roadRollerMixingSound != null) {
             Minecraft.getInstance().getSoundManager().stop(roadRollerMixingSound);
             roadRollerMixingSound = null;
@@ -1193,6 +1233,9 @@ public class ClientUtil {
     }
     public static float GameTimeStart = 0;
     public static float PlayerTickStart = 0;
+    public static float D4CTickStart = 0;
+    public static float D4CTickStart2 = 0;
+
     public static int TimeErase = -1;
     public static boolean isUsingEpitaph(){
         LocalPlayer player = Minecraft.getInstance().player;
@@ -1230,6 +1273,9 @@ public class ClientUtil {
             }
         }
         return false;
+    }
+    public static boolean canRenderWorldMerge() {
+        return PowerTypes.isExistentiallyElsewhere(getPlayer()) && PowerTypes.isInD4CWorld(getPlayer());
     }
     public static boolean canEpitaphRenderShader() {
         if (ConfigManager.getClientConfig().generalSettings.alternateEpitaph){

@@ -571,7 +571,7 @@ public class PowersOasis extends NewDashPreset {
 
     public void onFallingBlockLand(BlockPos blockPos, BlockState blockState) {
         if (!this.self.level().isClientSide) {
-            ((ServerLevel) this.self.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5, 30, 0.3, 0.1, 0.3, 0.15);
+            sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK, blockState), blockPos.getX() + 0.5, blockPos.getY() + 1.0, blockPos.getZ() + 0.5, 30, 0.3, 0.1, 0.3, 0.15);
 
             SoundType soundType = blockState.getSoundType();
 
@@ -630,7 +630,7 @@ public class PowersOasis extends NewDashPreset {
                 BlockHitResult hitBlock = this.getLookedBlock(3);
                 Vec3 pos = hitBlock.getLocation();
 
-                ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
+                sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .01, .01, .01, .05);
                 float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
                 this.self.level().playSound(null, hitBlock.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
             }
@@ -841,7 +841,7 @@ if (keyIsDown) {
 
             BlockHitResult hitBlock = this.getLookedBlock(3);
             Vec3 pos = hitBlock.getLocation();
-            ((ServerLevel) this.self.level()).sendParticles(ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .1, .1, .1, .05);
+            sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH, pos.x, pos.y, pos.z, 4, .1, .1, .1, .05);
             float pitch = (float) ((Math.random() * 0.1 - 0.5) + 1.0);
             this.self.level().playSound(null, hitBlock.getBlockPos(), SoundEvents.PLAYER_SPLASH, SoundSource.PLAYERS, 0.9f, pitch);
 
