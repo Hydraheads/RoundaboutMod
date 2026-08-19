@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "roundabout:block/mint_0"
+  },
+  "render_type": "cutout"
+}

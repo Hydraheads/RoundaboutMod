@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "roundabout:chamomile"
+    },
+    {
+      "item": "roundabout:mint"
+    },
+    {
+      "item": "minecraft:potion"
+    }
+  ],
+  "result": {
+    "item": "roundabout:herb_tea"
+  }
+}

@@ -291,6 +291,8 @@ public class ForgeEvents {
         ModBlocks.INVISIBLOCK = ForgeBlocks.INVISIBLOCK.get();
         ModBlocks.D4C_PORTAL = ForgeBlocks.D4C_PORTAL.get();
         ModBlocks.MELON_PARFAIT = ForgeBlocks.MELON_PARFAIT.get();
+        ModBlocks.CHAMOMILE = ForgeBlocks.CHAMOMILE.get();
+        ModBlocks.MINT = ForgeBlocks.MINT.get();
 
         ModBlocks.ORANGE_FIRE = ForgeBlocks.ORANGE_FIRE.get();
         ModBlocks.BLUE_FIRE = ForgeBlocks.BLUE_FIRE.get();
@@ -479,6 +481,13 @@ public class ForgeEvents {
 
         ModItems.COFFEE_GUM = ForgeItems.COFFEE_GUM.get();
         ModItems.CHERRIES = ForgeItems.CHERRIES.get();
+
+        ModItems.CHAMOMILE_SEEDS = ForgeItems.CHAMOMILE_SEEDS.get();
+        ModItems.MINT_SEEDS = ForgeItems.MINT_SEEDS.get();
+        ModItems.CHAMOMILE = ForgeItems.CHAMOMILE.get();
+        ModItems.MINT = ForgeItems.MINT.get();
+        ModItems.HERB_TEA = ForgeItems.HERB_TEA.get();
+
 
         ModItems.ANUBIS_ITEM = ForgeItems.ANUBIS_ITEM.get();
 
@@ -740,6 +749,7 @@ public class ForgeEvents {
         ModEffects.HALLUCINATION = ForgeEffects.HALLUCINATION.get();
         ModEffects.OLD = ForgeEffects.OLD.get();
         ModEffects.DREAMING = ForgeEffects.DREAMING.get();
+        ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();

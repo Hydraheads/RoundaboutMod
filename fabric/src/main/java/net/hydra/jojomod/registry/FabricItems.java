@@ -20,7 +20,6 @@ import net.hydra.jojomod.item.CommandDiscItem;
 import net.hydra.jojomod.item.HearingDiscItem;
 import net.hydra.jojomod.item.MemoryDiscItem;
 import net.hydra.jojomod.item.SightDiscItem;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -275,6 +274,30 @@ public class FabricItems {
 
     public static Item STAND_DISC = registerItem("stand_disc", new EmptyStandDiscItem(new Item.Properties().stacksTo(1)));
     public static Item COFFEE_GUM = registerItem("coffee_gum", new Item(new Item.Properties().food(ModFoodComponents.COFFEE_GUM)));
+
+
+    public static Item CHAMOMILE_SEEDS = registerItem("chamomile_seeds", new ItemNameBlockItem(ModBlocks.CHAMOMILE, new Item.Properties()));
+    public static Item CHAMOMILE = registerItem("chamomile", new Item(new Item.Properties()
+            .food(new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.CHAMOMILE_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
+    public static Item MINT_SEEDS = registerItem("mint_seeds", new ItemNameBlockItem(ModBlocks.MINT, new Item.Properties())  );
+    public static Item MINT = registerItem("mint", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.MINT_DURATION),1.0F)
+                    .alwaysEat()
+                    .build())));
+    public static Item HERB_TEA = registerItem("herb_tea", new Item(new Item.Properties().food(
+            new FoodProperties.Builder()
+                    .nutrition(8)
+                    .saturationMod(0.25F)
+                    .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
+                    .build())));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
@@ -933,6 +956,12 @@ public class FabricItems {
         ModItems.SNIPER_AMMO = SNIPER_AMMO;
         ModItems.STAND_DISC = STAND_DISC;
         ModItems.COFFEE_GUM = COFFEE_GUM;
+        ModItems.CHAMOMILE_SEEDS = CHAMOMILE_SEEDS;
+        ModItems.MINT_SEEDS = MINT_SEEDS;
+        ModItems.CHAMOMILE = CHAMOMILE;
+        ModItems.MINT = MINT;
+
+        ModItems.HERB_TEA = HERB_TEA;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
         //ModItems.HAND = HAND;
