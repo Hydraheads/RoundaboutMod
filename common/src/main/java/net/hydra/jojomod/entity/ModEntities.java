@@ -150,6 +150,7 @@ public class ModEntities {
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
     public static EntityType<MoldSporesEntity> MOLD_SPORES;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
+    public static EntityType<PHCapsuleEntity> PH_CAPSULE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;

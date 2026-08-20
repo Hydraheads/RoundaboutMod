@@ -708,6 +708,14 @@ public class FabricEntities {
                         EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).
                                 sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":knife")
                 );
+    public static final EntityType<PHCapsuleEntity> PH_CAPSULE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "ph_capsule"),
+                    EntityType.Builder.<PHCapsuleEntity>of(PHCapsuleEntity::new, MobCategory.MISC).
+                            sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":ph_capsule")
+            );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1163,6 +1171,7 @@ public class FabricEntities {
                 ModEntities.BLADED_BOWLER_HAT = BLADED_BOWLER_HAT;
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
+                ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.STEP_RULE = STEP_RULE;
                 ModEntities.STRAY_CAT = STRAY_CAT;

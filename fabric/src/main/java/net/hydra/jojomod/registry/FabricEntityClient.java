@@ -113,6 +113,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_RAPIER, SilverChariotRapierRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_HARPOON, HarpoonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PH_CAPSULE, PHCapsuleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLOCK_WALL, BlockWallEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEP_RULE, StepRuleRenderer::new);
 
