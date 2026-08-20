@@ -870,7 +870,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                             wentForCharge = true;
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
                         } else if (RNG < 0.6 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge
-                                && distanceTo <= 3 && (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax)){
+                                && distanceTo <= 3){
                             wentForCharge = true;
                             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
                         } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
