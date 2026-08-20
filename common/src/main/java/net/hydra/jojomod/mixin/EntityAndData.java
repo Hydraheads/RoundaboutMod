@@ -12,6 +12,7 @@ import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -917,24 +918,40 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Override
     @Unique
+    public int rdbt$getForeignWorldTicks(){
+        return rdbt$inForeignWorld;
+    }
+    @Override
+    @Unique
+    public void rdbt$setForeignWorldTicks(int lol){
+        rdbt$inForeignWorld = lol;
+        if (((Entity)(Object)this) instanceof ServerPlayer player){
+            S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_MERGE_TIME_INT,lol);
+        }
+    }
+
+    @Override
+    @Unique
     public void roundabout$universalTick(){
         roundabout$addSecondToQueue();
         roundabout$tickTrueInvisibility();
         roundabout$tickTrueInvisibilityManhattan();
 
-        Entity thrs = ((Entity) (Object)this);
-        byte world = PowerTypes.getPlaneOfExisting(thrs);
-        if (world != 0){
-            int existTime = PowerTypes.getForeignWorldMaxTime(world);
-            if (existTime != -1){
-                rdbt$inForeignWorld++;
-                if (rdbt$inForeignWorld > existTime){
-                    PowerTypes.setPlaneOfExisting(thrs,(byte) 0);
+        if (!level().isClientSide()) {
+            Entity thrs = ((Entity) (Object) this);
+            byte world = PowerTypes.getPlaneOfExisting(thrs);
+            if (world != 0) {
+                int existTime = PowerTypes.getForeignWorldMaxTime(world);
+                if (existTime != -1) {
+                    rdbt$setForeignWorldTicks(rdbt$inForeignWorld+1);
+                    if (rdbt$inForeignWorld > existTime) {
+                        PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
+                    }
                 }
-            }
-        } else {
-            if (rdbt$inForeignWorld != 0){
-                rdbt$inForeignWorld = 0;
+            } else {
+                if (rdbt$inForeignWorld != 0) {
+                    rdbt$setForeignWorldTicks(0);
+                }
             }
         }
     }

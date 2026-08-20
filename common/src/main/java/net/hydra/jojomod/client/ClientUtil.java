@@ -1148,6 +1148,8 @@ public class ClientUtil {
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboAmt(data);
             }
+        } else if (context == PacketDataIndex.S2C_MERGE_TIME_INT){
+            ((IEntityAndData)player).rdbt$setForeignWorldTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_COMBO_SEC_LEFT){
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboExpireTicks(data);

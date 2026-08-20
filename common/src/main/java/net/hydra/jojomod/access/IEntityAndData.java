@@ -23,6 +23,9 @@ public interface IEntityAndData {
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
 
+    int rdbt$getForeignWorldTicks();
+    void rdbt$setForeignWorldTicks(int lol);
+
     boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 

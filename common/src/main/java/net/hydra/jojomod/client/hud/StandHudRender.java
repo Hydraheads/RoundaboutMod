@@ -675,6 +675,29 @@ public class StandHudRender {
     }
 
 
+
+    public static void renderForeignWorldTimer(GuiGraphics context, Player playerEntity,
+                                       int scaledWidth, int scaledHeight, int x,
+                                       boolean removeNum) {
+            int l;
+            IEntityAndData entity = ((IEntityAndData) playerEntity);
+            int current = entity.rdbt$getForeignWorldTicks();
+            int maximum = PowerTypes.getForeignWorldMaxTime(PowerTypes.getPlaneOfExisting2(playerEntity));
+            int blt = 182-((int) Math.floor(((double) 182 / maximum) * (current)));
+            l = scaledHeight - 32 + 3;
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 125, 182, 5);
+            if (blt > 0) {
+                context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 130, blt, 5);
+            }
+
+            if (!removeNum) {
+                int u = 183;
+                int k = scaledWidth / 2 - 5;
+                l = scaledHeight - 31 - 5;
+                context.blit(StandIcons.JOJO_ICONS_2, k, l, u, 123, 9, 9);
+            }
+    }
+
     public static void renderRipperHud(GuiGraphics context, Player playerEntity,
                                     int scaledWidth, int scaledHeight, int x,
                                     boolean removeNum) {

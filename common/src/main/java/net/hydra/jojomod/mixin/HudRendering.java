@@ -791,6 +791,9 @@ public abstract class HudRendering implements IHudAccess {
             } else if (((IEntityAndData)minecraft.player).roundabout$getTrueInvisibility() > -1){
                 StandHudRender.renderInvisibilityHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
+            } else if (PowerTypes.isInD4CWorldWithRender(minecraft.player)){
+                StandHudRender.renderForeignWorldTimer(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
+                return true;
             } else if (user.roundabout$getGuardPoints() < user.roundabout$getMaxGuardPoints()){
                 StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
                 if (showComboAmt){

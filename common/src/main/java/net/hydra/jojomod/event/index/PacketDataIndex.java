@@ -51,7 +51,7 @@ public class PacketDataIndex {
     public static final byte INT_VAMPIRE_SKILL_BUY = 19;
     public static final byte INT_WHITE_ALBUM_ACCELERATION = 20;
     public static final byte INT_MOLD_JUMP_TICKS = 21;
-    public static final byte INT_MOLD_GOING_DOWN = 22;;
+    public static final byte INT_MOLD_GOING_DOWN = 22;
 
     /**Single Byte packets*/
     public static final byte SINGLE_BYTE_GLAIVE_START_SOUND = 1;
@@ -135,6 +135,7 @@ public class PacketDataIndex {
     public static final byte S2C_STAND_SPECIAL_INT = 26;
     public static final byte S2C_DISC_ADD_INT = 27;
     public static final byte S2C_DISC_REMOVE_INT = 28;
+    public static final byte S2C_MERGE_TIME_INT = 29;
 
 
     /**S2C BUNDLE packets*/
