@@ -12,5 +12,7 @@ public interface IDayInterpolationClientLevelData {
     boolean roundabout$getRoundaboutTimeStopInitialized();
 
     void roundabout$roundaboutInitializeTS();
+    void roundabout$setInterpolationMaxStep(long value);
+    long roundabout$getInterpolationMaxStep();
 
 }

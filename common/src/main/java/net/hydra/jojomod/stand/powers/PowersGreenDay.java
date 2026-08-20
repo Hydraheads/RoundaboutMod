@@ -48,6 +48,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SculkChargeParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.server.Main;
@@ -427,6 +428,12 @@ public class PowersGreenDay extends NewPunchingStand {
                     if(MainhandSpinThrowChargeSlim == 0){
                         MainHandSpinAndThrowSlim();
                     }
+                }
+                if(Main_arm == null){
+                    HasMainArm = true;
+                }
+                if(Off_hand_entity == null){
+                    HasOffHand = true;
                 }
             }
         }
@@ -847,33 +854,35 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public boolean OffHandReturnServer() {
-        ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Off_hand_entity.getMainHandItem());
-        //this.self.level().addFreshEntity($$2);
-        Player player = (Player)this.self;
-        if(this.self.getOffhandItem().getItem() instanceof AirItem){
-            OffhandItemToReturn = Off_hand_entity.getMainHandItem();
-        }else {
-            OffhandItemToReturn = Off_hand_entity.getMainHandItem();
-           // ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
-            //$$2.setPickUpDelay(1);
-           // this.self.level().addFreshEntity($$2);
-        }
+        if(!HasOffHand) {
+            ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(), Off_hand_entity.getMainHandItem());
+            //this.self.level().addFreshEntity($$2);
+            Player player = (Player) this.self;
+            if (this.self.getOffhandItem().getItem() instanceof AirItem) {
+                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+            } else {
+                OffhandItemToReturn = Off_hand_entity.getMainHandItem();
+                // ItemEntity item = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 2, this.self.getZ(), Off_hand_entity.getMainHandItem());
+                //$$2.setPickUpDelay(1);
+                // this.self.level().addFreshEntity($$2);
+            }
 
-        Off_hand_entity.setUser(null);
-        Off_hand_entity.discard();
-        Off_hand_entity = null;
-        HasOffHand = true;
-        double Xangle = Math.toRadians(this.self.getLookAngle().x);
-        double Pitch = Math.toRadians(this.self.getLookAngle().y);
-        double Zangle = Math.toRadians(this.self.getLookAngle().z);
-        double diameter = 0.6d;
-        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-        for (int i = 0; i < 11; i = i + 1) {
-            sendParticlesIfPossible(self.level(),ModParticles.STITCH,
-                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
-                    this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
-                    0, 0, 0, 0, 0);
+            Off_hand_entity.setUser(null);
+            Off_hand_entity.discard();
+            Off_hand_entity = null;
+            HasOffHand = true;
+            double Xangle = Math.toRadians(this.self.getLookAngle().x);
+            double Pitch = Math.toRadians(this.self.getLookAngle().y);
+            double Zangle = Math.toRadians(this.self.getLookAngle().z);
+            double diameter = 0.6d;
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            for (int i = 0; i < 11; i = i + 1) {
+                sendParticlesIfPossible(self.level(), ModParticles.STITCH,
+                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                        this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                        0, 0, 0, 0, 0);
+            }
         }
         return true;
     }
@@ -883,17 +892,21 @@ public class PowersGreenDay extends NewPunchingStand {
 
             if (!this.onCooldown(PowerIndex.SKILL_2)) {
                 if (isClient()) {
+                    if(HasOffHand){
+                        setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+                    }
                     AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
                     if ((abstractClientPlayer).getModelName().equals("default")) {
                         tryPowerPacket(PowerIndex.POWER_2_BLOCK);
                     } else {
                         tryPowerPacket(OFF_HAND_SPIN_THROW_SLIM);
+
                         // tryPowerPacket(PowerIndex.POWER_1);
                     }
 
                 }
 
-                setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+
                 setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
             }
 
@@ -999,11 +1012,15 @@ public class PowersGreenDay extends NewPunchingStand {
     public void MainArmSpin(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (isClient()) {
+                if(HasMainArm){
+                    setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+                }
                 AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) this.self;
                 if ((abstractClientPlayer).getModelName().equals("default")) {
                     tryPowerPacket(PowerIndex.POWER_1_BLOCK);
                 } else {
                     tryPowerPacket(MAIN_ARM_SPIN_THROW_SLIM);
+
                     // tryPowerPacket(PowerIndex.POWER_1);
                 }
 
@@ -1011,7 +1028,7 @@ public class PowersGreenDay extends NewPunchingStand {
 
 
             setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
-            setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinCooldown);
+
         }
 
     }
@@ -1108,31 +1125,33 @@ public class PowersGreenDay extends NewPunchingStand {
     }
 
     public boolean MainArmReturnServer() {
-        HasMainArm = true;
-        ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(),Main_arm.getMainHandItem());
-        $$2.setDefaultPickUpDelay();
-        //this.self.level().addFreshEntity($$2);
-        Player player = (Player)this.self;
-        if(this.self.getMainHandItem().getItem() instanceof AirItem){
-            this.self.setItemInHand(InteractionHand.MAIN_HAND,Main_arm.getMainHandItem());
-        }else {
-            this.self.spawnAtLocation(Main_arm.getMainHandItem());
-        }
-        //this.self.spawnAtLocation(Main_arm.getMainHandItem());
-        Main_arm.setUser(null);
-        Main_arm.discard();
-        Main_arm = null;
-        double Xangle = Math.toRadians(this.self.getLookAngle().x);
-        double Pitch = Math.toRadians(this.self.getLookAngle().y);
-        double Zangle = Math.toRadians(this.self.getLookAngle().z);
-        double diameter = 0.6d;
-        playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-        for (int i = 0; i < 11; i = i + 1) {
-            sendParticlesIfPossible(self.level(),ModParticles.STITCH,
-                    this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
-                    this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
-                    this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
-                    0, 0, 0, 0, 0);
+        if(!HasMainArm) {
+            HasMainArm = true;
+            ItemEntity $$2 = new ItemEntity(this.self.level(), this.self.getX(), this.self.getY() + 1, this.self.getZ(), Main_arm.getMainHandItem());
+            $$2.setDefaultPickUpDelay();
+            //this.self.level().addFreshEntity($$2);
+            Player player = (Player) this.self;
+            if (this.self.getMainHandItem().getItem() instanceof AirItem) {
+                this.self.setItemInHand(InteractionHand.MAIN_HAND, Main_arm.getMainHandItem());
+            } else {
+                this.self.spawnAtLocation(Main_arm.getMainHandItem());
+            }
+            //this.self.spawnAtLocation(Main_arm.getMainHandItem());
+            Main_arm.setUser(null);
+            Main_arm.discard();
+            Main_arm = null;
+            double Xangle = Math.toRadians(this.self.getLookAngle().x);
+            double Pitch = Math.toRadians(this.self.getLookAngle().y);
+            double Zangle = Math.toRadians(this.self.getLookAngle().z);
+            double diameter = 0.6d;
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GREEN_DAY_STITCH_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            for (int i = 0; i < 11; i = i + 1) {
+                sendParticlesIfPossible(self.level(), ModParticles.STITCH,
+                        this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
+                        this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7),
+                        this.getSelf().getZ() + (diameter * Math.cos(i * 4)) * Math.cos(Zangle),
+                        0, 0, 0, 0, 0);
+            }
         }
         return true;
     }
@@ -1531,6 +1550,22 @@ public class PowersGreenDay extends NewPunchingStand {
     public boolean isMoldFieldOn() {
         return((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
     };
+
+    public void addAdditionalSaveData(CompoundTag $$0) {
+        super.addAdditionalSaveData($$0);
+        $$0.putBoolean("hasmainarm",HasMainArm);
+        $$0.putBoolean("hasoffhand",HasOffHand);
+
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag $$0) {
+        super.readAdditionalSaveData($$0);
+        if ($$0.contains("hasmainhand")) {
+            HasMainArm = $$0.getBoolean("hasmainarm");
+        }if ($$0.contains("hasoffhand")) {
+            HasMainArm = $$0.getBoolean("hasoffhand");
+        }
+    }
 
     @Override
     public void playSummonEffects(boolean forced) {
