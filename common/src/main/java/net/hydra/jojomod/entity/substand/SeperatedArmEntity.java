@@ -359,6 +359,11 @@ public class SeperatedArmEntity extends StandEntity {
     public boolean hasUsedItem = false;
 
     public void removearm(){
+        if(userUUID == null){
+            spawnAtLocation(this.getMainHandItem());
+            discard();
+            return;
+        }
         if((level().getPlayerByUUID(UUID.fromString(userUUID)) != null)) {
             if ((level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
                     && (level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().getFreeSlot() > -1)) {
