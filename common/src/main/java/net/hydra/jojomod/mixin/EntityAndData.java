@@ -167,6 +167,7 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
     public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
+        $$0.putInt("inForeignWorld",rdbt$inForeignWorld);
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -174,6 +175,8 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
         if ($$0.contains("canMobGrab")) {
             rdbt$canBePickedUp = $$0.getBoolean("canMobGrab");
+        } if ($$0.contains("inForeignWorld")) {
+            rdbt$inForeignWorld = $$0.getInt("inForeignWorld");
         }
 
     }
