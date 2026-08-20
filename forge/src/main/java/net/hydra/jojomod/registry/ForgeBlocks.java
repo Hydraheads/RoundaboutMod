@@ -307,6 +307,11 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> MELON_PARFAIT = BLOCKS.register("melon_parfait",
             () -> MELON_PARFAIT_PROPERTIES);
 
+    public static final RegistryObject<Block> CHAMOMILE = BLOCKS.register("chamomile",
+            () -> CHAMOMILE_PROPERTIES);
+    public static final RegistryObject<Block> MINT = BLOCKS.register("mint",
+            () -> MINT_PROPERTIES);
+
 
     public static final RegistryObject<Block> LOCACACA_CACTUS = BLOCKS.register("locacaca_cactus",
             () -> ModBlocks.LOCACACA_CACTUS_PROPERTIES

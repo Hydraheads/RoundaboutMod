@@ -265,6 +265,7 @@
     "time_stop.TimeStopWarden",
     "time_stop.TimeStopWorld",
     "tusk.OffBalanceMixin",
+    "tusk.TuskRefreshedMixin",
     "vanilla_tweaks.ErrorFixUtil",
     "vanilla_tweaks.TameAbstractHorse",
     "white_album.SkatingMagmaBlock",

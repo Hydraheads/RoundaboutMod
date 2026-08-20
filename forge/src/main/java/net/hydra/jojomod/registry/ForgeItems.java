@@ -117,10 +117,6 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.AJA_BLOCK.get(),
                     new Item.Properties()
             )));
-    public static final RegistryObject<BlockItem> CLIMBING_WIRE_ITEM = addToBuildingTab(ITEMS.register("climbing_wire",
-            () -> new BlockItem(ForgeBlocks.CLIMBING_WIRE.get(),
-                    new Item.Properties()
-            )));
     public static final RegistryObject<BlockItem> FROZEN_DIRT_ITEM = addToBuildingTab(ITEMS.register("frozen_dirt",
             () -> new BlockItem(ForgeBlocks.FROZEN_DIRT.get(),
                     new Item.Properties()
@@ -612,6 +608,38 @@ public class ForgeItems {
             () -> new ItemNameBlockItem(ForgeBlocks.NEW_LOCACACA_BLOCK.get(), new Item.Properties())));
     public static final RegistryObject<Item> NEW_LOCACACA = addToTab(ITEMS.register("new_locacaca",
             () -> new NewLocacacaItem(new Item.Properties().food(ModFoodComponents.LOCACACA))));
+
+    public static final RegistryObject<Item> CHAMOMILE_SEEDS = addToTab(ITEMS.register("chamomile_seeds",
+            () -> new ItemNameBlockItem(ForgeBlocks.CHAMOMILE.get(), new Item.Properties()) ));
+    public static final RegistryObject<Item> CHAMOMILE = addToTab(ITEMS.register("chamomile",
+            () -> new Item(new Item.Properties()
+                    .food(new FoodProperties.Builder()
+                            .nutrition(2)
+                            .saturationMod(0.1F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.CHAMOMILE_DURATION),1.0F)
+                            .alwaysEat()
+                            .build()))
+    ));
+    public static final RegistryObject<Item> MINT_SEEDS = addToTab(ITEMS.register("mint_seeds",
+            () -> new ItemNameBlockItem(ForgeBlocks.MINT.get(), new Item.Properties()) ));
+    public static final RegistryObject<Item> MINT = addToTab(ITEMS.register("mint",
+            () -> new Item(new Item.Properties().food(
+                    new FoodProperties.Builder()
+                            .nutrition(2)
+                            .saturationMod(0.1F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.MINT_DURATION),1.0F)
+                            .alwaysEat()
+                            .build()))
+    ));
+    public static final RegistryObject<Item> HERB_TEA = addToTab(ITEMS.register("herb_tea",
+            () -> new Item(new Item.Properties().food(
+                    new FoodProperties.Builder()
+                            .nutrition(8)
+                            .saturationMod(0.25F)
+                            .effect(() -> new MobEffectInstance(ForgeEffects.REFRESHED.get(),ModItems.TEA_DURATION),1.0F)
+                            .build())
+            )));
+
     public static final RegistryObject<Item> MUSIC_DISC_TORTURE_DANCE = addToTab(ITEMS.register("music_disc_torture_dance",
             () -> new RecordItem(1, ForgeSounds.TORTURE_DANCE,
                     (new Item.Properties()).stacksTo(1).rarity(Rarity.RARE), 2840)));
