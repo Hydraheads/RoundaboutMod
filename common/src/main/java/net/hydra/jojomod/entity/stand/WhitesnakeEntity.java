@@ -62,8 +62,6 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public static final byte DISC_STEAL_WINDUP = 88;
     public static final byte DISC_STEAL_RELEASE = 89;
     public static final byte ACID_TOSS = 90;
-    public static final byte SNAKE_BITE = 39;
-    public static final byte SNAKE_BITE_IMPACT = 40;
     private static final EntityDataAccessor<Optional<UUID>> DISGUISE_ID = SynchedEntityData.defineId(
             WhitesnakeEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<String> DISGUISE_NAME = SynchedEntityData.defineId(
@@ -110,8 +108,6 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public final AnimationState itemRetract = new AnimationState();
     public final AnimationState impale = new AnimationState();
     public final AnimationState phaseGrab = new AnimationState();
-    public final AnimationState snakeBite = new AnimationState();
-    public final AnimationState snakeBiteImpact = new AnimationState();
 
     public WhitesnakeEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -218,12 +214,6 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     public boolean isControlModeActive() {
         return entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL;
-    }
-
-    public boolean isSnakeBiteActive() {
-        LivingEntity user = getUser();
-        return user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
-                && powers.getActivePower() == PowersWhitesnake.SNAKE_BITE;
     }
 
     @Override
@@ -456,7 +446,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         boolean hovering = hoverEnabled && isMeltingHovering() && getMeltingHoverCharge() > 0;
         if (isMeltingHovering() != hovering) entityData.set(MELTING_HOVERING, hovering);
         int charge = getMeltingHoverCharge();
-        boolean canRegenerate = hoverEnabled && hasGravitySurfaceSupport() && !isSnakeBiteActive();
+        boolean canRegenerate = hoverEnabled && hasGravitySurfaceSupport();
         int next = hovering ? charge - 1 : canRegenerate ? charge + 1 : charge;
         next = Math.max(0, Math.min(getMaxMeltingHoverCharge(), next));
         if (next != charge) entityData.set(MELTING_HOVER_CHARGE, next);
@@ -632,18 +622,6 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public void travel(Vec3 movement) {
-        if (isSnakeBiteActive()) {
-            LivingEntity user = getUser();
-            if (level().isClientSide() && isControlledByLocalInstance() && user != null
-                    && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
-                Vec3 direction = getViewVector(0.0F).normalize();
-                setPos(position().add(direction.scale(
-                        PowersWhitesnake.snakeBiteTravelSpeed(powers.getAttackTimeDuring()))));
-                C2SPacketUtil.updatePilot(this);
-            }
-            setDeltaMovement(Vec3.ZERO);
-            return;
-        }
         if (isAutoModeActive()) {
             super.travel(movement);
             return;
@@ -730,9 +708,5 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         else this.impale.stop();
         if (animation == PHASE_GRAB) this.phaseGrab.startIfStopped(this.tickCount);
         else this.phaseGrab.stop();
-        if (animation == SNAKE_BITE) this.snakeBite.startIfStopped(this.tickCount);
-        else this.snakeBite.stop();
-        if (animation == SNAKE_BITE_IMPACT) this.snakeBiteImpact.startIfStopped(this.tickCount);
-        else this.snakeBiteImpact.stop();
     }
 }

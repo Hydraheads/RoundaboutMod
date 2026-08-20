@@ -32,8 +32,7 @@ public abstract class WhitesnakeMeltingCollisionMixin {
                                                           CallbackInfoReturnable<VoxelShape> cir) {
         if (!(context instanceof EntityCollisionContext entityContext)) return;
         Entity entity = entityContext.getEntity();
-        if (!(entity instanceof WhitesnakeEntity whitesnake)
-                || !(whitesnake.isMeltingModeActive() || whitesnake.isSnakeBiteActive())) return;
+        if (!(entity instanceof WhitesnakeEntity whitesnake) || !whitesnake.isMeltingModeActive()) return;
         Block block = ((BlockState) (Object) this).getBlock();
         if (block instanceof IronBarsBlock || block instanceof FenceBlock || block instanceof FenceGateBlock
                 || block instanceof SlabBlock || block instanceof AnvilBlock || block instanceof BellBlock

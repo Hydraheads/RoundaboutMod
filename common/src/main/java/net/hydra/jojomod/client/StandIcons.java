@@ -20,7 +20,6 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_DISC_THROW = whitesnakeIcon("disc_throw");
     public static final ResourceLocation WHITESNAKE_PHASE_GRAB = whitesnakeIcon("phase_grab");
     public static final ResourceLocation WHITESNAKE_DISC_STEAL = whitesnakeIcon("disc_steal");
-    public static final ResourceLocation WHITESNAKE_SNAKE_BITE = whitesnakeIcon("snake_bite");
     public static final ResourceLocation WHITESNAKE_ACID_TOSS = whitesnakeIcon("acid_toss");
     public static final ResourceLocation WHITESNAKE_MELTING_MODE = whitesnakeIcon("melting_mode");
     public static final ResourceLocation WHITESNAKE_CONTROL_MODE = whitesnakeIcon("control_mode");
