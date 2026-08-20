@@ -2463,11 +2463,12 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
-        if (!canActuallyHit(targetEntity)) {
+
+        if (targetEntity != null && !canActuallyHit(targetEntity)) {
+            storeEnt = null;
             return new ArrayList<>() {
             };
         }
-
         storeEnt = targetEntity;
 
         return listE;
