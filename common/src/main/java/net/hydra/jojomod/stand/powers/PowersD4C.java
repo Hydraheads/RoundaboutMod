@@ -595,6 +595,18 @@ public class PowersD4C extends NewPunchingStand {
             enactEligability();
         }
     }
+    public static int getDeductionTicks(Entity target, double distance){
+        if (PowerTypes.isInD4CWorldWithRender(target)){
+            if (distance >= 15) {
+                return 6;
+            } else if (distance >= 12){
+                return 3;
+            } else if (distance >= 9){
+                return 2;
+            }
+        }
+        return 1;
+    }
     public void isekaiTarget(Entity target){
         if (isEligable()) {
             this.setAttackTimeDuring(-7);

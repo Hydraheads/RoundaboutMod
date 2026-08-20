@@ -178,8 +178,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
     }
 
-    @Unique
-
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {
         if ($$0 instanceof Player P) {

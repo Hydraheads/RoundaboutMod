@@ -23,10 +23,7 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
-import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -43,6 +40,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -913,6 +911,9 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     protected abstract AABB getBoundingBoxForPose(Pose pose);
 
+    @Shadow
+    public abstract Vec3 position();
+
     @Unique
     private int rdbt$inForeignWorld = 0;
 
@@ -943,8 +944,13 @@ public abstract class EntityAndData implements IEntityAndData {
             if (world != 0) {
                 int existTime = PowerTypes.getForeignWorldMaxTime(world);
                 if (existTime != -1) {
-                    rdbt$setForeignWorldTicks(rdbt$inForeignWorld+1);
-                    if (rdbt$inForeignWorld > existTime) {
+                    int clmp = Mth.clamp(rdbt$inForeignWorld+
+                            PowersD4C.getDeductionTicks(thrs,position().distanceTo(
+                                    ((IGravityEntity)thrs).rdbt$getExistPlaneStartPoint())
+                            ),
+                            0,existTime);
+                    rdbt$setForeignWorldTicks(clmp);
+                    if (rdbt$inForeignWorld >= existTime) {
                         PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
                     }
                 }
