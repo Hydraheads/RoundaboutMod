@@ -301,12 +301,15 @@ public enum PowerTypes {
         }
     }
 
+    public static int d4cWorldUptime(){
+        return 200;
+    }
     public static int getForeignWorldMaxTime(byte worldType){
         if (worldType == 0 || worldType == 10){
             return -1;
         }
-        if (worldType <= 5){
-            return 200;
+        if (worldType <= 8){
+            return d4cWorldUptime();
         }
         if (worldType == 11){
             return 400;
@@ -412,6 +415,10 @@ public enum PowerTypes {
         return false;
     }
     public static boolean isInD4CWorld(Entity entity){
+        byte exist = getPlaneOfExisting(entity);
+        return exist >0 && exist <= 8;
+    }
+    public static boolean isInD4CWorldWithRender(Entity entity){
         byte exist = getPlaneOfExisting(entity);
         return exist >0 && exist <= 5;
     }

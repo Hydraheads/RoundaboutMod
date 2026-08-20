@@ -49,7 +49,7 @@
 
   "text.roundabout.bullets.revolver": "Compatible with Snubnosed Revolvers and Colt Revolvers.",
   "text.roundabout.bullets.tommy": "Compatible with Tommy Guns.",
-  "text.roundabout.bullets.sniper": "Compatible with Jackal Rifles.",
+  "text.roundabout.bullets.sniper": "Compatible with Sniper Rifles.",
 
   "text.roundabout.stray_cat.anime": "Anime Color",
   "text.roundabout.stray_cat.manga": "Manga Color",
@@ -120,6 +120,11 @@
   "item.roundabout.lucky_lipstick.desc": "For better trades, apply until you sleep",
   "item.roundabout.sacrificial_dagger": "Sacrificial Dagger",
   "item.roundabout.cherries": "Cherries",
+  "item.roundabout.chamomile_seeds": "Chamomile Seeds",
+  "item.roundabout.mint_seeds": "Mint Seeds",
+  "item.roundabout.chamomile": "Chamomile",
+  "item.roundabout.mint": "Mint",
+  "item.roundabout.herb_tea": "Herb Tea",
   "item.roundabout.hairspray": "Hairspray",
   "item.roundabout.occult_charge": "Occult Charge",
   "item.roundabout.iron_ball_crossbow": "Iron Ball Crossbow",
@@ -320,7 +325,7 @@
 
   "item.roundabout.colt_revolver": "Colt Revolver",
 
-  "item.roundabout.jackal_rifle": "Jackal Rifle",
+  "item.roundabout.jackal_rifle": "Sniper Rifle",
   "item.roundabout.sniper_ammo": "Rifle Ammunition",
 
   "item.roundabout.light_bulb": "Light Bulb",
@@ -524,6 +529,7 @@
   "effect.roundabout.switch": "Switch",
   "effect.roundabout.singe": "Char",
   "effect.roundabout.crippled": "Crippled",
+  "effect.roundabout.refreshed": "Refreshed",
   "effect.roundabout.haze_virus": "Haze Virus",
   "effect.roundabout.distortion_virus": "Distortion Virus",
   "effect.roundabout.virus_immunity": "Virus Immunity",
@@ -786,6 +792,8 @@
   "block.roundabout.cultivated_oak_sapling": "Cultivated Oak Sapling",
   "block.roundabout.cultivated_locacaca": "Cultivated Locacaca",
   "block.roundabout.melon_parfait": "Melon Parfait",
+  "block.roundabout.chamomile": "Chamomile Blossoms",
+  "block.roundabout.mint": "Mint Leaves",
   "block.roundabout.acid_puddle": "Acid Puddle",
   "block.roundabout.poison_trail_mushroom": "Poison Trail Mushroom",
   "block.roundabout.cold_air": "Cold Air",
@@ -2924,6 +2932,8 @@
   "skins.roundabout.tusk.manga" : "Manga",
   "skins.roundabout.tusk.blue" : "Blue",
   "skins.roundabout.tusk.resonance" : "Resonance",
+  "skins.roundabout.tusk.breaker" : "Breaker",
+  "skins.roundabout.tusk.frigid" : "Frigid",
 
 
   "roundabout.tusk.act_1": "Act 1",

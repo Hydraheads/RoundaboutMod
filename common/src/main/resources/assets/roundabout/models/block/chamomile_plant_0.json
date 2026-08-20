@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "roundabout:block/chamomile_0"
+  },
+  "render_type": "cutout"
+}

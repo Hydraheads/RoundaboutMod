@@ -24,6 +24,7 @@ public class ModEffects {
     public static MobEffect HALLUCINATION;
     public static MobEffect OLD;
     public static MobEffect DREAMING;
+    public static MobEffect REFRESHED;
 
     public static MobEffect HAZE_VIRUS;
     public static MobEffect DISTORTION_VIRUS;

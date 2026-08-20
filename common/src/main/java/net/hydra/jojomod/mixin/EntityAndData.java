@@ -47,6 +47,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -246,6 +247,7 @@ public abstract class EntityAndData implements IEntityAndData {
     SavedSecond initialDaySecond = null;;
 
     @Unique
+    @Override
     public void roundabout$setInitialDaySec() {
         initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
     }
@@ -632,6 +634,9 @@ public abstract class EntityAndData implements IEntityAndData {
         return this.maxUpStep;
     }
 
+    public  AABB rdbt$getPoseBox(Pose pose){
+        return getBoundingBoxForPose(pose);
+    }
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
     protected void roundabout$SetFireTicks(int $$0, CallbackInfo ci){
@@ -903,6 +908,10 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow
     public Optional<BlockPos> mainSupportingBlockPos;
+
+    @Shadow
+    protected abstract AABB getBoundingBoxForPose(Pose pose);
+
     @Unique
     private int rdbt$inForeignWorld = 0;
 
@@ -927,6 +936,19 @@ public abstract class EntityAndData implements IEntityAndData {
             if (rdbt$inForeignWorld != 0){
                 rdbt$inForeignWorld = 0;
             }
+        }
+    }
+
+    @Unique
+    private int lastDay = -1;
+
+    @Unique
+    @Override
+    public void roundabout$initialDayCheck(int day) {
+        Entity self = (Entity)(Object)this;
+        if (lastDay != day && SavedSecond.canTeleportTo(self.level(), self.getPosition(1), self)) {
+            roundabout$setInitialDaySec();
+            lastDay = day;
         }
     }
 

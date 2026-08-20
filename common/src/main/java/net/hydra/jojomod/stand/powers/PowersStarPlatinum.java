@@ -1109,8 +1109,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 for (Entity value2 : hitEntities) {
                     if (value2.is(SE.getUser())) {
                         hitEntities2.remove(value);
+                        continue;
                     }
                 }
+            }
+            if (PowerTypes.isInADifferentExistence(self,value)){
+                hitEntities2.remove(value);
             }
         }
         return hitEntities2;

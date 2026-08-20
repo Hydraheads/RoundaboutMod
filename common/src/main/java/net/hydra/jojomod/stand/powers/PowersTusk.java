@@ -250,17 +250,15 @@ public class PowersTusk extends NewDashPreset {
         }
     }
 
-    private void tickNails() {
+    public void tickNails() {tickNails(1);}
+    public void tickNails(int ticks) {
         for (int i=0;i<this.nailCooldowns.size();i++) {
             CooldownInstance cd = this.nailCooldowns.get(i);
-            if (cd.time <= 0) {
+            if (cd.time <= ticks-1) {
                 this.nailCooldowns.remove(cd);
             } else {
-                cd.time -= 1;
+                cd.time -= ticks;
             }
-        }
-        if (this.getSelf() instanceof Player P && P.isCreative()) {
-            this.nailCooldowns = new ArrayList<>();
         }
     }
     @Override
@@ -493,6 +491,10 @@ public class PowersTusk extends NewDashPreset {
 
 
         if (this.getSelf() instanceof Player P) {
+            if (P.isCreative()) {
+                this.nailCooldowns = new ArrayList<>();
+            }
+
 
             if (this.getStandUserSelf().roundabout$getStandAnimation() == PowersTusk.FLATTEN) {
                 this.flattenTicks = this.getAttackTimeDuring();
@@ -1333,7 +1335,7 @@ public class PowersTusk extends NewDashPreset {
     public boolean canWarpHoles() {
         if (this.getAct() == 3) {
             if (isInHole() && this.getPilotingStand() instanceof TuskHoleEntity THE) {
-                if (THE.getTimeInHole() > 20 + THE.distanceTo(this.getSelf()) * 3) {
+                if (THE.getTimeInHole() > 10 + THE.distanceTo(this.getSelf())*1.5) {
                     return THE.level().getBlockState(THE.blockPosition()).isAir();
                 }
             }
@@ -1849,6 +1851,8 @@ public class PowersTusk extends NewDashPreset {
             MANGA_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/manga.png");
             BLUE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/blue.png");
             RESONANCE_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/resonance.png");
+            BREAKER_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/breaker.png");
+            FRIGID_SKIN[i] = new ResourceLocation(Roundabout.MOD_ID,location+(i+1)+ "/frigid.png");
         }
     }
     public static ResourceLocation getSkin(byte skin, int act) {
@@ -1857,6 +1861,8 @@ public class PowersTusk extends NewDashPreset {
             case MANGA -> MANGA_SKIN;
             case BLUE -> BLUE_SKIN;
             case RESONANCE -> RESONANCE_SKIN;
+            case FRIGID -> FRIGID_SKIN;
+            case BREAKER -> BREAKER_SKIN;
             default -> MANGA_SKIN;
         };
         return skins[act-1];
@@ -1871,17 +1877,22 @@ public class PowersTusk extends NewDashPreset {
     private static ResourceLocation[] MANGA_SKIN = new ResourceLocation[4];
     private static ResourceLocation[] BLUE_SKIN = new ResourceLocation[4];
     private static ResourceLocation[] RESONANCE_SKIN = new ResourceLocation[4];
-
+    private static ResourceLocation[] BREAKER_SKIN = new ResourceLocation[4];
+    private static ResourceLocation[] FRIGID_SKIN = new ResourceLocation[4];
 
     public static final byte
             MANGA = 1,
             BLUE = 2,
-            RESONANCE = 3;
+            RESONANCE = 3,
+            BREAKER = 4,
+            FRIGID = 5;
     @Override
     public List<Byte> getSkinList() {
         return Arrays.asList(
                 MANGA,
-                BLUE
+                BLUE,
+                BREAKER,
+                FRIGID
           //      RESONANCE
         );
     }
@@ -1890,6 +1901,9 @@ public class PowersTusk extends NewDashPreset {
         {
             case BLUE -> Component.translatable("skins.roundabout.tusk.blue");
             case RESONANCE -> Component.translatable("skins.roundabout.tusk.resonance");
+            case BREAKER -> Component.translatable("skins.roundabout.tusk.breaker");
+            case FRIGID -> Component.translatable("skins.roundabout.tusk.frigid");
+
             default -> Component.translatable("skins.roundabout.tusk.manga");
         };
     }

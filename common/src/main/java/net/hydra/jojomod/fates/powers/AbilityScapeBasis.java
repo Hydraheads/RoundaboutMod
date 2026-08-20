@@ -2078,30 +2078,32 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
-                    String str = $$3.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$2.getRange($$5);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr(entity) > rangeSqr) {
-                            continue;
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5,
+                                    entity
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                soundId.toString(),
-                                str,
-                                $$4,
-                                $$5,
-                                entity
-                        );
                     }
                 }
             } else {
@@ -2118,32 +2120,34 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
-                    String str = $$3.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$2.getRange($$5);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
-                            continue;
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1.getX(),
+                                    $$1.getY(),
+                                    $$1.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                $$1.getX(),
-                                $$1.getY(),
-                                $$1.getZ(),
-                                soundId.toString(),
-                                str,
-                                $$4,
-                                $$5
-                        );
                     }
                 }
             } else {
@@ -2158,32 +2162,34 @@ public class AbilityScapeBasis {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$4 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
-                    String str = $$5.name();
-                    for (ServerPlayer playerInList :
-                            sl.getServer().getPlayerList().getPlayers()) {
+                    if (soundId != null) {
+                        String str = $$5.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
 
-                        double range = $$4.getRange($$7);
-                        double rangeSqr = range * range;
-                        if (playerInList.distanceToSqr(new Vec3($$1,$$2,$$3)) > rangeSqr) {
-                            continue;
+                            double range = $$4.getRange($$7);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(new Vec3($$1, $$2, $$3)) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1,
+                                    $$2,
+                                    $$3,
+                                    soundId.toString(),
+                                    str,
+                                    $$6,
+                                    $$7
+                            );
                         }
-
-                        if (PowerTypes.isInADifferentExistenceNoTE(
-                                self,
-                                playerInList)) {
-                            continue;
-                        }
-
-                        S2CPacketUtil.sendSafeSound(
-                                playerInList,
-                                $$1,
-                                $$2,
-                                $$3,
-                                soundId.toString(),
-                                str,
-                                $$6,
-                                $$7
-                        );
                     }
                 }
             } else {
@@ -2457,6 +2463,10 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
+        if (!canActuallyHit(targetEntity)) {
+            return new ArrayList<>() {
+            };
+        }
 
         storeEnt = targetEntity;
 
@@ -2494,6 +2504,7 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
+
 
         return targetEntity;
     }
@@ -2590,6 +2601,9 @@ public class AbilityScapeBasis {
         }
 
         if (PowerTypes.isInADifferentExistence(targetEntity,User)){
+            return null;
+        }
+        if (!canActuallyHit(targetEntity)) {
             return null;
         }
 
@@ -2920,36 +2934,16 @@ public class AbilityScapeBasis {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
+        if (entity == null){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
             return true;
         }
-        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result = this.self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this.self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        if (isBlocked){
-            from = this.self.getEyePosition(1); // your position
-            to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-            result = this.self.level().clip(new ClipContext(
-                    from,
-                    to,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    this.self
-            ));
-            isBlocked = result.getType() != HitResult.Type.MISS &&
-                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (self.hasLineOfSight(entity)){
+            return true;
         }
-        return !isBlocked;
+         return false;
     }
 
     /**disables stand guard amd shield guard, this is simplified in the next function*/

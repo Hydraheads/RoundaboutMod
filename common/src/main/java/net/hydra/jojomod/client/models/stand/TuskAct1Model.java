@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.hydra.jojomod.client.models.stand.animations.TuskAnimations;
 import net.hydra.jojomod.entity.stand.TuskEntity;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -99,8 +100,9 @@ public class TuskAct1Model<T extends TuskEntity> extends StandModel<T> {
 
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        this.defaultModifiers(pEntity);
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
+        this.defaultModifiers(pEntity);
+        this.animate(pEntity.idleAnimationState, TuskAnimations.ACT_1_IDLE,pAgeInTicks,1F);
     }
 
 }

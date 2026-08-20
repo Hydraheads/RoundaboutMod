@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
@@ -36,11 +37,13 @@ import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -1317,23 +1320,51 @@ public class PowersGreenDay extends NewPunchingStand {
     }
     public int bonusLeapCount = -1;
     public void bigLeap(LivingEntity entity,float range, float mult){
+            Vec3 vec3d = entity.getEyePosition(1);
+            Vec3 vec3d2 = entity.getViewVector(1);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+            BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+            double mag = this.getSelf().getPosition(1).distanceTo(
+                    new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+            Vec3 vec3 = new Vec3(
+                    (blockHit.getLocation().x - this.getSelf().getX())/mag,
+                    (blockHit.getLocation().y - this.getSelf().getY())/mag,
+                    (blockHit.getLocation().z - this.getSelf().getZ())/mag
+            );
+            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            if (gravD != Direction.DOWN){
+                vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
+            }
+            vec3= new Vec3(
+                    vec3.x*mult*2.9,
+                    0+Math.max(vec3.y,0)*mult,
+                    vec3.z*mult*2.9
+            );
+
+            MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+                    vec3.x,
+                    vec3.y,
+                    vec3.z
+            );
+
+
         //legGoneTicks = 240;
-        Vec3 vec3d = entity.getEyePosition(0);
-        Vec3 vec3d2 = entity.getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        //Vec3 vec3d = entity.getEyePosition(0);
+       // Vec3 vec3d2 = entity.getViewVector(0);
+       // Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
+       // BlockHitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
 
-        double mag = this.getSelf().getPosition(1).distanceTo(
-                new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
+      //  double mag = this.getSelf().getPosition(1).distanceTo(
+       //         new Vec3(blockHit.getLocation().x, blockHit.getLocation().y,blockHit.getLocation().z))*0.75+1;
 
-        MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
-                ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult*2.2,
-                (0.3+ (Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*1) * mult,
-                ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult*2.2
-        );
+      //  MainUtil.takeUnresistableKnockbackWithY2(this.getSelf(),
+      //          ((blockHit.getLocation().x - this.getSelf().getX())/mag)*mult*2.2,
+      //          (0.3+ (Math.max((blockHit.getLocation().y - this.getSelf().getY())/mag,0))*1) * mult,
+      //          ((blockHit.getLocation().z - this.getSelf().getZ())/mag)*mult*2.2
+       // );
 
     }
-
     public void tryToStandLeapClient() {
             if (vaultOrFallBraceFails()) {
                 if (this.getSelf().onGround() && !isBarraging()) {
