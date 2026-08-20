@@ -813,6 +813,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return false;
     }
+    public int delay = 0;
     public void tickMobAINotClone(LivingEntity attackTarget){
         if (activePower == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (self instanceof Mob mb) {
@@ -848,12 +849,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
             boolean upAiNow = upAi(attackTarget);
+            if (delay > 0){
+                delay--;
+                return;
+            }
             if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3) &&
             MainUtil.getMobBleed(self) && !(MainUtil.hasBlueBlood(self))
                     && !(MainUtil.hasEnderBlood(self))) {
                 if (this.attackTimeDuring <= -1) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                     setCooldown(PowerIndex.SKILL_2_SNEAK,60);
+                    delay = 55;
                 }
             } else {
                 Entity targetEntity = getTargetEntity(this.self, -1);

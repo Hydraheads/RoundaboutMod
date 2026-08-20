@@ -107,6 +107,9 @@ public class ModBlocks {
     public static Block DEEPSLATE_AJA_ORE;
     public static Block AJA_BLOCK;
 
+    public static Block CHAMOMILE;
+    public static Block MINT;
+
     public static Block COLD_AIR;
     public static Block FREEZING_AIR;
 
@@ -972,6 +975,26 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_LIGHT_BLUE)
                     .strength(0.3F).sound(SoundType.GLASS)
                     .noOcclusion()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static Block MINT_PROPERTIES = new MintPlantBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.3F).sound(SoundType.CROP)
+                    .noOcclusion()
+                    .noCollission()
+                    .ignitedByLava()
+                    .instabreak()
+                    .pushReaction(PushReaction.DESTROY)
+    );
+    public static Block CHAMOMILE_PROPERTIES = new ChamomilePlantBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .strength(0.3F).sound(SoundType.CROP)
+                    .noOcclusion()
+                    .noCollission()
+                    .ignitedByLava()
+                    .instabreak()
                     .pushReaction(PushReaction.DESTROY)
     );
 

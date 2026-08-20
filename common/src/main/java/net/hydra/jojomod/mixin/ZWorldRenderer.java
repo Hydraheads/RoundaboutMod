@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -131,8 +132,10 @@ public class ZWorldRenderer {
             if (!levelTimeData.roundabout$getRoundaboutTimeStopInitialized()){
                 long dayTime =levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
                 long dayTimeOld = levelTimeData.roundabout$getRoundaboutDayTimeActual();
-                if (Math.abs(dayTimeOld - dayTime) > 1L){
-                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long) Mth.lerp((double)$$1, dayTimeOld, dayTime));
+                long distance = dayTime - dayTimeOld;
+                if (Math.abs(distance) > 1L){
+                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long)(dayTimeOld + $$1 * Math.min(distance, 50)));
+                    //levelTimeData.roundabout$setRoundaboutDayTimeActual((long) Mth.lerp(lerpStrength, dayTimeOld, dayTime));
                 } else {
                     levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(false);
                 }

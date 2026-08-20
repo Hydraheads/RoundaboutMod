@@ -8,6 +8,7 @@ import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.projectile.PHCapsuleEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
@@ -852,7 +853,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private static final int DISTORTION_FIELD_DURATION = 300;
 
 
-    private Snowball purpleHazePod = null;
+    private PHCapsuleEntity purpleHazePod = null;
     private boolean purpleHazePodDistortionMode = false;
     private Vec3 purpleHazeFieldPosition = null;
 
@@ -1118,15 +1119,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     1.0F
             );*/
 
-            Snowball snowball = new Snowball(this.self.level(), self);
+            PHCapsuleEntity capsule = new PHCapsuleEntity(
+                    ModEntities.PH_CAPSULE,
+                    self.level()
+            );
 
-            snowball.setPos(
+            capsule.setOwner(self);
+            capsule.setUser(self);
+
+            capsule.setPos(
                     self.getX(),
                     self.getEyeY() - 0.1,
                     self.getZ()
             );
 
-            snowball.shootFromRotation(
+            capsule.shootFromRotation(
                     self,
                     self.getXRot(),
                     self.getYRot(),
@@ -1137,9 +1144,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             purpleHazePodDistortionMode = indistortionmode;
 
-            this.self.level().addFreshEntity(snowball);
+            self.level().addFreshEntity(capsule);
 
-            this.purpleHazePod = snowball;
+            this.purpleHazePod = capsule;
             if (!(self instanceof Player pl && pl.isCreative())) {
                 setPods(getPods() - 1);
             }

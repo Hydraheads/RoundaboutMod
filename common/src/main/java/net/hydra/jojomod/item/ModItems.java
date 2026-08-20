@@ -20,6 +20,11 @@ import java.util.List;
 
 public class ModItems {
 
+    // 'refreshed' effect durations for foods.
+    public static final int CHAMOMILE_DURATION = 100;
+    public static final int MINT_DURATION = 75;
+    public static final int TEA_DURATION = 800;
+
     public static Item STAND_ARROW;
     public static Item STAND_BEETLE_ARROW;
     public static Item WORTHY_ARROW;
@@ -107,6 +112,11 @@ public class ModItems {
     public static Item LOCACACA_BRANCH;
     public static Item NEW_LOCACACA;
     public static Item COFFEE_GUM;
+    public static Item CHAMOMILE_SEEDS;
+    public static Item MINT_SEEDS;
+    public static Item CHAMOMILE;
+    public static Item MINT;
+    public static Item HERB_TEA;
     public static Item METEORITE;
     public static Item METEORITE_INGOT;
     public static Item TERRIER_SPAWN_EGG;

@@ -212,7 +212,7 @@ public class StepRuleEntity extends Entity {
                                     }
                                 }
                             }
-                        } else if (mob instanceof StepRuleEntity sre && !sre.is(this)){
+                        } else if (mob instanceof StepRuleEntity sre && !sre.is(this) && sre.distanceTo(this) <= 0.4){
                             discard();
                         }
                     }

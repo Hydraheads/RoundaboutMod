@@ -41,7 +41,7 @@ public class FabricBlocks {
     );
     public static final Block AJA_BLOCK = registerBlock("aja_block", AJA_BLOCK_PROPERTIES
     );
-    public static final Block CLIMBING_WIRE = registerBlock("climbing_wire", CLIMBING_WIRE_PROPERTIES
+    public static final Block CLIMBING_WIRE = registerBlockItemless("climbing_wire", CLIMBING_WIRE_PROPERTIES
     );
     public static final Block FROZEN_DIRT = registerBlock("frozen_dirt", FROZEN_DIRT_PROPERTIES
     );
@@ -224,6 +224,9 @@ public class FabricBlocks {
     public static final Block CULTIVATED_OAK_SAPLING = registerBlockItemless("cultivated_oak_sapling",ModBlocks.cultivationPot(Blocks.OAK_SAPLING));
     public static final Block CULTIVATED_LOCACACA = registerBlockItemless("cultivated_locacaca",ModBlocks.cultivationPot(NEW_LOCACACA_BLOCK));
     public static final Block MELON_PARFAIT = registerBlockUnstackable("melon_parfait", MELON_PARFAIT_PROPERTIES,1);
+    public static final Block CHAMOMILE_PLANT = registerBlockItemless("chamomile", CHAMOMILE_PROPERTIES);
+    public static final Block MINT_PLANT = registerBlockItemless("mint", MINT_PROPERTIES);
+
 
     public static final Block FLESH_BLOCK = registerFleshBlockFood("flesh_block",ModBlocks.FLESH_BLOCK_PROPERTIES, ModFoodComponents.FLESH_CHUNK);
     public static final Block MINING_ALERT_BLOCK = registerBlockItemless("mining_alert_block",ModBlocks.MINING_ALERT_BLOCK_PROPERTIES);
@@ -462,6 +465,8 @@ public class FabricBlocks {
         ModBlocks.CULTIVATED_OAK_SAPLING = CULTIVATED_OAK_SAPLING;
         ModBlocks.CULTIVATED_LOCACACA = CULTIVATED_LOCACACA;
         ModBlocks.MELON_PARFAIT = MELON_PARFAIT;
+        ModBlocks.CHAMOMILE = CHAMOMILE_PLANT;
+        ModBlocks.MINT = MINT_PLANT;
 
         ModBlocks.INVISIBLOCK = INVISIBLOCK;
         ModBlocks.D4C_PORTAL = D4C_PORTAL;

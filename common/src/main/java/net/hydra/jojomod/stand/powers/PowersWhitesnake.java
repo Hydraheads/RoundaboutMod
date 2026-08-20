@@ -2549,6 +2549,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public boolean canActuallyHit(Entity entity) {
+        if (entity == null) return false;
         if (!isPiloting() && !autoMode) return super.canActuallyHit(entity);
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners) {
             return true;

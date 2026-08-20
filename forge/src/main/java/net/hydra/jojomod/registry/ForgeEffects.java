@@ -79,7 +79,10 @@ public class ForgeEffects{
             POTION_EFFECTS.register("hallucination", HallucinationEffect::new);
     public static final RegistryObject<MobEffect> OLD = POTION_EFFECTS.register("old", OldEffect::new);
     public static final RegistryObject<MobEffect> DREAMING = POTION_EFFECTS.register("dreaming", DreamingEffect::new);
-
+    public static final RegistryObject<MobEffect> REFRESHED =
+            POTION_EFFECTS.register("refreshed", () ->
+                    new Effect(MobEffectCategory.BENEFICIAL, 13302495)
+            );
     public static final RegistryObject<MobEffect> HAZE_VIRUS =
             POTION_EFFECTS.register("haze_virus", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11606258)

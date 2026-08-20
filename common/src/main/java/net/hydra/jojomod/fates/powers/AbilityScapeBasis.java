@@ -2464,6 +2464,11 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
+        if (targetEntity != null && !canActuallyHit(targetEntity)) {
+            storeEnt = null;
+            return new ArrayList<>() {
+            };
+        }
         storeEnt = targetEntity;
 
         return listE;
@@ -2500,6 +2505,7 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
+
 
         return targetEntity;
     }
@@ -2596,6 +2602,9 @@ public class AbilityScapeBasis {
         }
 
         if (PowerTypes.isInADifferentExistence(targetEntity,User)){
+            return null;
+        }
+        if (!canActuallyHit(targetEntity)) {
             return null;
         }
 
@@ -2926,36 +2935,16 @@ public class AbilityScapeBasis {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
+        if (entity == null){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
             return true;
         }
-        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result = this.self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this.self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        if (isBlocked){
-            from = this.self.getEyePosition(1); // your position
-            to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-            result = this.self.level().clip(new ClipContext(
-                    from,
-                    to,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    this.self
-            ));
-            isBlocked = result.getType() != HitResult.Type.MISS &&
-                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (self.hasLineOfSight(entity)){
+            return true;
         }
-        return !isBlocked;
+         return false;
     }
 
     /**disables stand guard amd shield guard, this is simplified in the next function*/

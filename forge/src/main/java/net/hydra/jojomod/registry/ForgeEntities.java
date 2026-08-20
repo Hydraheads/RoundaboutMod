@@ -934,4 +934,11 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
             );
+    public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
+            ENTITY_TYPES.register("ph_capsule", () ->
+                    EntityType.Builder.<PHCapsuleEntity>of(PHCapsuleEntity::new, MobCategory.MISC).
+                            sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
+            );
 }

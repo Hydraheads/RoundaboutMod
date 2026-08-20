@@ -62,6 +62,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.hydra.jojomod.networking.ServerToClientPackets;
@@ -2138,6 +2139,16 @@ public class ClientUtil {
         } else if (context == PacketDataIndex.TIME_SKIP){
             timeSkipTicker = 0;
         } else if (context == PacketDataIndex.BITES_THE_DUST){
+            bitesTheDustTicker = 0;
+
+            IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData) player.level().getLevelData());
+
+            long dayTime = levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
+            long targetDayTime = dayTime - (dayTime % 24000);
+
+            levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
+            levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);
+        } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
             if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
