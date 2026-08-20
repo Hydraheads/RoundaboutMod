@@ -226,6 +226,7 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY.get(),
                 HallucinatoryAcidBlockEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PH_CAPSULE.get(), PHCapsuleRenderer::new);
     }
 
     @SubscribeEvent
