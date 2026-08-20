@@ -601,7 +601,7 @@ public class PowersD4C extends NewPunchingStand {
                 return 6;
             } else if (distance >= 12){
                 return 3;
-            } else if (distance >= 9){
+            } else if (distance >= 10){
                 return 2;
             }
         }
