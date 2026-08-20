@@ -3564,62 +3564,66 @@ public class PowersKillerQueen extends NewPunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.punch",
+        int startPos = -16;
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.KILLER_QUEEN_PUNCH,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.kq_fast_kick",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos,topPos+118,0, "ability.roundabout.kq_fast_kick",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.KILLER_QUEEN_FAST_KICK,0,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.barrage",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39 + startPos,topPos+80,0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.KILLER_QUEEN_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getStrayCatShieldLevel(), "ability.roundabout.kq_guard_bubble",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+39 + startPos, topPos + 99, getStrayCatShieldLevel(), "ability.roundabout.kq_guard_bubble",
                 "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.kq_bomb_block",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39 + startPos,topPos+118,0, "ability.roundabout.kq_bomb_block",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.kq_detonate",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58 + startPos,topPos+80,0, "ability.roundabout.kq_detonate",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_DETONATE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.kq_defuse",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58 + startPos,topPos+99,0, "ability.roundabout.kq_defuse",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_DEFUSE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, getBitesTheDustDayLevel(), "ability.roundabout.kq_btd_day",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58 + startPos,topPos+118, getBitesTheDustDayLevel(), "ability.roundabout.kq_btd_day",
                 "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_DAY,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80, 0, "ability.roundabout.kq_bomb_item",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+80, 0, "ability.roundabout.kq_bomb_item",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99, 0, "ability.roundabout.kq_config",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+99, 0, "ability.roundabout.kq_config",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BOMB_SETIINGS,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.kq_bomb_mob",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+118,0, "ability.roundabout.kq_bomb_mob",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB,2,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,getImpaleLevel(), "ability.roundabout.impale",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+80,getImpaleLevel(), "ability.roundabout.impale",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_IMPALE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+99, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble_redirect",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+118, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble_redirect",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT,2,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
                 "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,0, "ability.roundabout.vault",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+118,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.KILLER_QUEEN_VAULT,3,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+80, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_SHA_SUMMON,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_throw",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+99,getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_throw",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_SHA_THROW,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+80, getStrayCatLevel(), "ability.roundabout.add_stray_cat",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+80, getStrayCatLevel(), "ability.roundabout.add_stray_cat",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+99, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+99, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
                 "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+153,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.sha_mining",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.sha_mining",
                 "instruction.roundabout.press_block", StandIcons.KILLER_QUEEN_SHA_MINE,0,level, bypas));
 
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+80,0, "ability.roundabout.mining",
+                "instruction.roundabout.hold_attack", StandIcons.MINING,0,level,bypas));
 
         return $$1;
     }
