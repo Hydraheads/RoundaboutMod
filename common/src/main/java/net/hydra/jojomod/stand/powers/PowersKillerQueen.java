@@ -3008,7 +3008,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if ((this.SHA.shaIsNear() && this.SHA.getHaveToReturn()) || this.SHA.isRemoved() || this.inBitesTheDustMode()) {
                     int shaCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackCooldown;
 
-                    shaCooldown = (int)Math.max(shaCooldown / (this.SHA.getMaxExplosions() - this.SHA.explosions + 1), 60);
+                    shaCooldown = (int)Math.max(shaCooldown / Math.max(this.SHA.getMaxExplosions() - this.SHA.explosions + 1, 1), 60);
 
                     if (this.SHA.throwStatus >= 1) { shaCooldown += ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackThrowExtraCooldown; }
 
