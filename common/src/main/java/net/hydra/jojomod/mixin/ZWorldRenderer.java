@@ -134,8 +134,8 @@ public class ZWorldRenderer {
                 long dayTimeOld = levelTimeData.roundabout$getRoundaboutDayTimeActual();
                 long distance = dayTime - dayTimeOld;
                 if (Math.abs(distance) > 1L){
-                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long)(dayTimeOld + $$1 * Math.min(distance, 50)));
-                    //levelTimeData.roundabout$setRoundaboutDayTimeActual((long) Mth.lerp(lerpStrength, dayTimeOld, dayTime));
+                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long)(dayTimeOld + $$1 * Math.min(distance, levelTimeData.roundabout$getInterpolationMaxStep())));
+                    //levelTimeData.roundabout$setRoundaboutDayTimeActual((long) Mth.lerp((double)$$1, dayTimeOld, dayTime));
                 } else {
                     levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(false);
                 }

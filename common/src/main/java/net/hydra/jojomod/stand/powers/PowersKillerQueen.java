@@ -107,7 +107,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override public boolean canUseStandArrow() { return !this.hasBitesTheDust; }
 
-	// TODO Make bomb item
+	// TODO Make bomb item (WIP)
 	// TODO Bites The Dust (WIP)
 	
 	// TODO Audio Translations (WIP)
@@ -2492,11 +2492,6 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayModeAffectGlobalTime) {
             ((ServerLevel) this.self.level()).setDayTime(targetDayTime);
-        }else {
-            /// needs to be a package to clients envolved on btd
-            /*IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData)self.level().getLevelData());
-            levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
-            levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);*/
         }
 
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +

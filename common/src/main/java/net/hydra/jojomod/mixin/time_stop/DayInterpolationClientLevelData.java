@@ -28,6 +28,18 @@ public abstract class DayInterpolationClientLevelData implements IDayInterpolati
     private boolean roundabout$InterpolatingDaytime = false;
 
     @Unique
+    long roundabout$interpolationMaxStep = 50;
+
+    /// will be used for Made In Heaven Time acceleration
+    public void roundabout$setInterpolationMaxStep(long value) {
+        this.roundabout$interpolationMaxStep = value;
+    }
+
+    public long roundabout$getInterpolationMaxStep() {
+        return this.roundabout$interpolationMaxStep;
+    }
+
+    @Unique
     @Override
     public long roundabout$getRoundaboutDayTimeActual(){
         return roundabout$DayTimeActual;
