@@ -603,7 +603,7 @@ public class PowersD4C extends NewPunchingStand {
                 MainUtil.isBossMob(target)) {
                     target = null;
                 }
-                int worldId = ((int) (Math.random() * 3)) + 5;
+                int worldId = ((int) (Math.random() * 2)) + 6;
                 PowerTypes.setPlaneOfExisting(target, (byte) worldId);
                 playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             }
