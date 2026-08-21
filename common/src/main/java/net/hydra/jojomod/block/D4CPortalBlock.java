@@ -73,10 +73,13 @@ public class D4CPortalBlock extends BaseEntityBlock
 
             if (blockEntity instanceof D4CPortalBlockEntity portal) {
                 if (portal.worldId != 0 && PowerTypes.getPlaneOfExisting2(entity) != portal.worldId
-                && !MainUtil.isBossMob(entity) && portal.ticksUntilRestore > 17) {
+                && !MainUtil.isBossMob(entity) && portal.ticksUntilRestore > 17 && !(portal.entityList.contains(entity))
+                        && !(portal.creator != null &&
+                        portal.creator.equals(entity.getUUID()))) {
                     ((IEntityAndData)entity).rdbt$setForeignWorldTicks(
                             PowerTypes.getForeignWorldMaxTime((byte) portal.worldId) - portal.ticksUntilRestore);
                     PowerTypes.setPlaneOfExisting(entity, (byte) portal.worldId);
+                    portal.entityList.add(entity);
                     // Entity is on the same plane.
                     // Do your portal behavior here.
                 }

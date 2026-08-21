@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -944,26 +945,37 @@ public abstract class EntityAndData implements IEntityAndData {
         if (!level().isClientSide()) {
             Entity thrs = ((Entity) (Object) this);
             byte world = PowerTypes.getPlaneOfExisting(thrs);
-            if (world != 0) {
-                int existTime = PowerTypes.getForeignWorldMaxTime(world);
-                if (existTime != -1) {
-                    int clmp = Mth.clamp(rdbt$inForeignWorld+
-                            PowersD4C.getDeductionTicks(thrs,position().distanceTo(
-                                    ((IGravityEntity)thrs).rdbt$getExistPlaneStartPoint())
-                            ),
-                            0,existTime);
-                    rdbt$setForeignWorldTicks(clmp);
-                    if (rdbt$inForeignWorld >= existTime) {
-                        PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
+            if (!(thrs instanceof FollowingStandEntity fs && fs.getFollowing() != null)
+            && !(thrs instanceof StandEntity se && se.getUser() != null)) {
+                if (world != 0) {
+                    int existTime = PowerTypes.getForeignWorldMaxTime(world);
+                    if (existTime != -1) {
+                        int clmp = Mth.clamp(rdbt$inForeignWorld +
+                                        PowersD4C.getDeductionTicks(thrs, position().distanceTo(
+                                                ((IGravityEntity) thrs).rdbt$getExistPlaneStartPoint())
+                                        ),
+                                0, existTime);
+                        rdbt$setForeignWorldTicks(clmp);
+                        if (rdbt$inForeignWorld >= existTime) {
+                            if (PowerTypes.isInD4CWorld(thrs)) {
+                                if (!PowersD4C.ejectFromNearestEntity(thrs)) {
+                                    if (!PowersD4C.ejectFromOGSpot(thrs)) {
+                                    }
+                                }
+                            }
+                            PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
+                        }
                     }
-                }
-            } else {
-                if (rdbt$inForeignWorld != 0) {
-                    rdbt$setForeignWorldTicks(0);
+                } else {
+                    if (rdbt$inForeignWorld != 0) {
+                        rdbt$setForeignWorldTicks(0);
+                    }
                 }
             }
         }
     }
+
+
 
     @Unique
     private int lastDay = -1;
