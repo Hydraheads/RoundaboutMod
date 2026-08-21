@@ -151,7 +151,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         DETONATE_NOISE = 114,
         BTD_PLANT = 115,
         BUBBLE_TARGET = 116,
-        BTD_DETONATE = SoundIndex.BITES_THE_DUST_COMBAT,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -2481,7 +2480,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), SoundIndex.BITES_THE_DUST_COMBAT);
+            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getBitesTheDustCombatByte());
         }
 
         saveCombatEntitiesSeconds(target.position());
@@ -2570,7 +2569,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
-            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), SoundIndex.BITES_THE_DUST_DAY);
+            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getBitesTheDustDayByte());
         }
 
         syncBombStatus(BITES_THE_DUST_BIGGER);
@@ -3391,11 +3390,18 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
 
-    protected SoundEvent getBitesTheDustSound() {
+    protected byte getBitesTheDustCombatByte() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
-        if (skn == KillerQueenEntity.MINESWEEPER) { return ModSounds.KQ_MINESWEEPER_BTD_DETONATE_EVENT; }
+        if (skn == KillerQueenEntity.MINESWEEPER) { return SoundIndex.BITES_THE_DUST_MINESWEEPER; }
 
-        return ModSounds.KILLER_QUEEN_BTD_DETONATE_EVENT;
+        return SoundIndex.BITES_THE_DUST_COMBAT;
+    }
+
+    protected byte getBitesTheDustDayByte() {
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == KillerQueenEntity.MINESWEEPER) { return SoundIndex.BITES_THE_DUST_MINESWEEPER; }
+
+        return SoundIndex.BITES_THE_DUST_DAY;
     }
 
     protected SoundEvent getBitesTheDustNoiseSound() {
