@@ -837,7 +837,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     //Pod count
     private static final int MAX_PODS = 6;
-    private static final int POD_RECHARGE_TIME = 1200;
+    private static final int POD_RECHARGE_TIME = 800;
     private int podRechargeTicks = 0;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
@@ -906,7 +906,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     public void attemptDistortion() {
-        if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
+        if (canExecuteMoveWithLevel(4) && !this.isBarraging() && getPods()>0 ) {
             Distortion();
         }
     }

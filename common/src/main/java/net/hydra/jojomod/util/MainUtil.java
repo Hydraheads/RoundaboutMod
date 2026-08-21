@@ -94,6 +94,7 @@ import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -3566,6 +3567,47 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
+    public static Entity pick(Entity self, double distance){
+        double $$2 = distance;
+        float choose = 1;
+        if (self.level().isClientSide()){
+            choose = ClientUtil.getFrameTime() % 1;
+        }
+        HitResult pick = self.pick($$2, choose, false);
+        Vec3 $$3 = self.getEyePosition(choose);
+        boolean $$4 = false;
+        int $$5 = 3;
+        double $$6 = $$2;
+        if ($$2 > 3.0) {
+            $$4 = true;
+        }
+
+        $$6 *= $$6;
+        if (pick != null) {
+            $$6 = pick.getLocation().distanceToSqr($$3);
+        }
+
+        Vec3 $$7 = self.getViewVector(1.0F);
+        Vec3 $$8 = $$3.add($$7.x * $$2, $$7.y * $$2, $$7.z * $$2);
+        AABB $$10 = self.getBoundingBox().expandTowards($$7.scale($$2)).inflate(1.0, 1.0, 1.0);
+        EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10, $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
+                && !$$0x.hasPassenger(self), $$6);
+        if ($$11 != null) {
+            Entity $$12 = $$11.getEntity();
+            Vec3 $$13 = $$11.getLocation();
+            double $$14 = $$3.distanceToSqr($$13);
+            if ($$4 && $$14 > 9.0) {
+                pick = BlockHitResult.miss($$13, Direction.getNearest($$7.x, $$7.y, $$7.z), BlockPos.containing($$13));
+            } else if ($$14 < $$6 || pick == null) {
+                pick = $$11;
+                if ($$12 instanceof LivingEntity || $$12 instanceof ItemFrame) {
+                    return $$12;
+                }
+            }
+        }
+        return  null;
+    }
+
 
     public static boolean isHoldingRoadRoller(Entity ent){
         if (ent instanceof LivingEntity LE){
@@ -3783,7 +3825,9 @@ public class MainUtil {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {
-                        return true;
+                        if (!PowerTypes.isInD4CWorld(entity)) {
+                            return true;
+                        }
                     }
                 }
             }

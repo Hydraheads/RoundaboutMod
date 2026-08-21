@@ -34,6 +34,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -44,10 +45,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -57,6 +55,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -64,8 +63,10 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -839,7 +840,9 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
-        if (!isHoldingSneak()){
+        if (PowerTypes.isInD4CWorld(self)){
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2,0);
+        } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2,0);
         } else {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
@@ -862,11 +865,13 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (slot == 1 || slot == 2 || slot == 4){
-            if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
-                return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+        if (!(slot == 2 && PowerTypes.isInD4CWorld(self))){
+            if (slot == 1 || slot == 2 || slot == 4){
+                if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
+                    return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+                }
+                return !isEligable() || super.isAttackIneptVisually(activeP,slot);
             }
-            return !isEligable() || super.isAttackIneptVisually(activeP,slot);
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
@@ -939,6 +944,188 @@ public class PowersD4C extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    public static boolean hasNoBlockCollision(
+            Entity entity,
+            AABB box
+    ) {
+        Level level = entity.level();
+
+        // Check block collisions
+        for (VoxelShape shape : level.getBlockCollisions(entity, box)) {
+            if (!shape.isEmpty()) {
+                return false;
+            }
+        }
+
+        // Preserve vanilla world border collision
+        VoxelShape border = borderCollision(level,entity, box);
+
+        return border == null
+                || !Shapes.joinIsNotEmpty(
+                border,
+                Shapes.create(box),
+                BooleanOp.AND
+        );
+    }
+    private static VoxelShape borderCollision(Level lvl, Entity $$0, AABB $$1) {
+        WorldBorder $$2 = lvl.getWorldBorder();
+        return $$2.isInsideCloseToBorder($$0, $$1) ? $$2.getCollisionShape() : null;
+    }
+    @Unique
+    public static boolean ejectFromOGSpot(Entity self) {
+        if (self == null){
+            return false;
+        }
+        Vec3 fallback =
+                ((IGravityEntity) self).rdbt$getExistPlaneStartPoint();
+        if (fallback != null) {
+
+            AABB fallbackBox = self.getBoundingBox()
+                    .move(fallback.subtract(self.position()));
+
+            if (hasNoBlockCollision(self, fallbackBox)) {
+
+                if (self instanceof ServerPlayer player && player.level() instanceof ServerLevel sl) {
+                    player.teleportTo(
+                            sl,
+                            fallback.x,
+                            fallback.y,
+                            fallback.z,
+                            player.getYRot(),
+                            player.getXRot()
+                    );
+                } else {
+                    self.teleportTo(
+                            fallback.x,
+                            fallback.y,
+                            fallback.z
+                    );
+                }
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Unique
+    public static boolean ejectFromNearestEntity(Entity self) {
+        if (self == null){
+            return false;
+        }
+        Level level = self.level();
+
+        double range = 10.0D;
+
+        AABB searchBox = self.getBoundingBox().inflate(range);
+
+        Entity target = level.getEntities(
+                        self,
+                        searchBox,
+                        entity ->
+                                ((entity instanceof Mob
+                                        || entity instanceof Player) && PowerTypes.getPlaneOfExisting2(entity) == 0
+                                && !(entity instanceof StandEntity))
+                ).stream()
+                .filter(entity -> entity != self)
+                .filter(Entity::isAlive)
+                .min(Comparator.comparingDouble(self::distanceToSqr))
+                .orElse(null);
+
+        if (target == null) {
+            return false;
+        }
+
+        // Horizontal direction the target is facing.
+        Vec3 forward = target.getLookAngle()
+                .multiply(1.0D, 0.0D, 1.0D);
+
+        if (forward.lengthSqr() < 0.001D) {
+            return false;
+        }
+
+        forward = forward.normalize();
+
+        // "Back" of the target.
+        Vec3 backward = forward.scale(-1.0D);
+
+        // Try several positions behind them.
+        for (double distance = 0.8D; distance <= 2.5D; distance += 0.2D) {
+
+            Vec3 candidatePos = new Vec3(
+                    target.getX() + backward.x * distance,
+                    target.getY(),
+                    target.getZ() + backward.z * distance
+            );
+
+            // Keep the ejecting entity's current dimensions.
+            AABB candidateBox = self.getBoundingBox()
+                    .move(candidatePos.subtract(self.position()));
+
+            // Check whether the entity can physically fit there.
+            if (!hasNoBlockCollision(self, candidateBox)) {
+                continue;
+            }
+
+            float yaw = target.getYRot() + 180.0F;
+
+            if (self instanceof ServerPlayer player && player.level() instanceof ServerLevel sl) {
+
+                player.teleportTo(sl,
+                        candidatePos.x,
+                        candidatePos.y,
+                        candidatePos.z,
+                        yaw,
+                        player.getXRot()
+                );
+
+            } else {
+
+                self.teleportTo(
+                        candidatePos.x,
+                        candidatePos.y,
+                        candidatePos.z
+                );
+
+                self.setYRot(yaw);
+                self.setYHeadRot(yaw);
+                self.setYBodyRot(yaw);
+
+                self.yRotO = yaw;
+            }
+
+            // Small push outward from the target.
+            Vec3 push = backward.scale(0.15D);
+
+            self.setDeltaMovement(
+                    push.x,
+                    0.08D,
+                    push.z
+            );
+            self.hurtMarked = true;
+            self.hasImpulse = true;
+
+            // A few cloud particles.
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        ParticleTypes.CLOUD,
+                        candidatePos.x,
+                        candidatePos.y + self.getBbHeight() * 0.5D,
+                        candidatePos.z,
+                        4,
+                        0.15D,
+                        0.2D,
+                        0.15D,
+                        0.02D
+                );
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
