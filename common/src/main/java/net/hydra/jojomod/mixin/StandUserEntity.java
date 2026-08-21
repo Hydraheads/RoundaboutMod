@@ -6434,15 +6434,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (BtdPlantedTicks > 0 && !this.level().isClientSide()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
+                && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())
                 /*&& !($$1 instanceof AbstractArrow $$3 && $$3.getPierceLevel() > 0)*/) {
 
-            Vec3 $$4 = source.getSourcePosition();
-            if ($$4 != null) {
-                Vec3 $$5 = this.getViewVector(1.0F);
-                Vec3 $$6 = $$4.vectorTo(this.position()).normalize();
-                $$6 = new Vec3($$6.x, (double)0.0F, $$6.z);
-                return ($$6.dot($$5) < (double)0.0F);
-            }
+           return true;
         }
 
         return false;

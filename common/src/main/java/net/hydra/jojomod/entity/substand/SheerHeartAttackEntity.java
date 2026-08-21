@@ -151,7 +151,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 15;
+	static final int attackTickMax = 45;
 	int jumpTick = 0;
 	static final int jumpTickMax = 68;
 	int explosionMiningTicks = 0;
@@ -344,6 +344,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					if (this.onGround() || this.onClimbable() || this.wasTouchingWater
 							|| this.wasInPowderSnow || this.getDeltaMovement().length() < 0.8) {
 						throwStatus = HAS_BEEN;
+						stunTicks = 90;
 					}else {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
