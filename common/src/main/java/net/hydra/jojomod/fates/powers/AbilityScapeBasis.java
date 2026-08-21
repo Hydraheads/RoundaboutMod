@@ -2450,8 +2450,10 @@ public class AbilityScapeBasis {
         Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
         List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                 pointVec.z, halfReach, halfReach, halfReach), distMax);
+        boolean test = false;
         if (targetEntity == null) {
             targetEntity = StandAttackHitboxNear(User,listE,angle);
+            test = true;
         }
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
@@ -2464,7 +2466,7 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
-        if (targetEntity != null && !canActuallyHit(targetEntity)) {
+        if (targetEntity != null && test && !canActuallyHit(targetEntity)) {
             storeEnt = null;
             return new ArrayList<>() {
             };
@@ -2574,24 +2576,18 @@ public class AbilityScapeBasis {
             targetEntity = null;
         }
 
+        boolean test = false;
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         if (targetEntity == null) {
+            test = true;
             float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
         }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                //This code doesn't play nicely with server distance checks or countering assault
-                //targetEntity = SE.getUser();
-            }
-        }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
-
 
         if (targetEntity != null && distMax > 0){
             double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
@@ -2604,7 +2600,7 @@ public class AbilityScapeBasis {
         if (PowerTypes.isInADifferentExistence(targetEntity,User)){
             return null;
         }
-        if (!canActuallyHit(targetEntity)) {
+        if (test && !canActuallyHit(targetEntity)) {
             return null;
         }
 
@@ -2813,7 +2809,7 @@ public class AbilityScapeBasis {
     }
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
     public Entity rayCastEntity(LivingEntity User, float reach){
-        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
+        Entity entityHitResult = MainUtil.pick(User,reach);
         if (entityHitResult != null){
             if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
                     !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
