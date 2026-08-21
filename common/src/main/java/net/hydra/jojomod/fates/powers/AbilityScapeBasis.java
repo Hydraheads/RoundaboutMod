@@ -626,7 +626,7 @@ public class AbilityScapeBasis {
         }
         baseTickPower();
 
-        if (activePower == PowerIndex.NONE && attackTime > -1 && (attackTime < attackTimeMax) && !kickStarted &&
+        if (activePower == PowerIndex.NONE && attackTime > -1  && !kickStarted &&
         self.level().isClientSide()){
             kickStarted = true;
         }
