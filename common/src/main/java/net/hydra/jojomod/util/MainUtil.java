@@ -1934,11 +1934,11 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                         }
                     }
@@ -3600,10 +3600,7 @@ public class MainUtil {
             if ($$4 && $$14 > 9.0) {
                 pick = BlockHitResult.miss($$13, Direction.getNearest($$7.x, $$7.y, $$7.z), BlockPos.containing($$13));
             } else if ($$14 < $$6 || pick == null) {
-                pick = $$11;
-                if ($$12 instanceof LivingEntity || $$12 instanceof ItemFrame) {
-                    return $$12;
-                }
+                return $$12;
             }
         }
         return  null;
