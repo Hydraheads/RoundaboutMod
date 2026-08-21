@@ -865,11 +865,13 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (slot == 1 || slot == 2 || slot == 4){
-            if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
-                return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+        if (!(slot == 2 && PowerTypes.isInD4CWorld(self))){
+            if (slot == 1 || slot == 2 || slot == 4){
+                if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
+                    return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+                }
+                return !isEligable() || super.isAttackIneptVisually(activeP,slot);
             }
-            return !isEligable() || super.isAttackIneptVisually(activeP,slot);
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
