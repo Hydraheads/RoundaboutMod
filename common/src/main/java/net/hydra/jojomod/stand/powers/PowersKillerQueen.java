@@ -3779,7 +3779,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+80,0, "ability.roundabout.mining",
                 "instruction.roundabout.hold_attack", StandIcons.KILLER_QUEEN_MINING,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+99,getImpaleLevel(), "ability.roundabout.arms_mode",
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+99,getImpaleLevel(), "ability.roundabout.kq_arms_mode",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_HANDS_ACTIVE,4,level,bypas));
 
         return $$1;
@@ -4148,10 +4148,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 boolean isBoss = MainUtil.isBossMob(target);
 
                 if (isBoss) { hitPoints *= 0.70f; }
-                DamageSource desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.DISINTEGRATION, this.getSelf());;
+                DamageSource desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.KQ_EXPLOSION, this.getSelf());;
 
                 if (target instanceof LivingEntity LE && !LE.hasLineOfSight(this.getSelf()) && !isBoss) {
-                    desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.DISINTEGRATION, null);
+                    desintegrationDmg = ModDamageTypes.of(level, ModDamageTypes.KQ_EXPLOSION, null);
                 }
 
                 if (target instanceof Player pl) {

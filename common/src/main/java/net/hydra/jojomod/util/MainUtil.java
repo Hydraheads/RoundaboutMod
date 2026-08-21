@@ -2159,6 +2159,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
+                || sauce.is(ModDamageTypes.KQ_EXPLOSION)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
