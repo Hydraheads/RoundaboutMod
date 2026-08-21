@@ -830,7 +830,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if ($$0.getEffect().equals(ModEffects.CAPTURING_LOVE) && !roundabout$safeToRemoveLove) {
             roundabout$prepUglyFace = true;
         }
-        if ($$0.getEffect().equals(ModEffects.VIRUS_IMMUNITY)) {
+        if ($$0.getEffect().equals(ModEffects.VIRUS_IMMUNITY) && $$0.getDuration() <= 0) {
             if (this.hasEffect(ModEffects.HAZE_VIRUS)) {
                 roundabout$clearHazeVirus = true;
             }
