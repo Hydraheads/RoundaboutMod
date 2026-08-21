@@ -349,6 +349,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
 
     @Unique
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$DISTORTION_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+
+    @Unique
     private StandPowers roundabout$Powers;
     @Unique
     private StandPowers roundabout$RejectionStandPowers = null;
@@ -948,6 +951,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
         if (getPurpleHazeTicks() > 0) {
             SetInPurpleHazeTicks(getPurpleHazeTicks() - 1);
+        }
+        if (getDistortionHazeTicks() > 0) {
+            SetInDistortionHazeTicks(getDistortionHazeTicks() - 1);
         }
         if(BtdPlantedTicks > 0){
             if (roundabout$hasAStand()) {
@@ -3643,6 +3649,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
 
         }
     }
@@ -6410,6 +6417,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Override
     public int getPurpleHazeTicks() {
         return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
+    }
+    @Override
+    public void SetInDistortionHazeTicks(int e) {
+        this.entityData.set(ROUNDABOUT$DISTORTION_HAZE_TICKS, e);
+    }
+    @Override
+    public int getDistortionHazeTicks() {
+        return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
     public int BtdPlantedTicks;

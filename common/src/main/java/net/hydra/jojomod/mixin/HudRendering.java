@@ -229,10 +229,17 @@ public abstract class HudRendering implements IHudAccess {
                 if(MainUtil.isInMold(this.minecraft.player)) {
                     this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
                 }
+                //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
                     RenderSystem.enableBlend();
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 2 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
+                            "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
+                }
+                //Distortion Haze overlay
+                if (MainUtil.isInDistortionHaze(this.minecraft.player)) {
+                    RenderSystem.enableBlend();
+                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                            "textures/misc/distortion_overlay/distortion_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
                 }
                 //Vampire freeze overlay
                 if (HeatUtil.isCold(this.minecraft.player) && !(this.minecraft.player.getTicksFrozen() > 0)) {
