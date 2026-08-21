@@ -350,7 +350,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.BLAZING_HAZE -> {
                 if (purpleHazeFieldDistortionMode) {
                     sendParticlesIfPossible(self.level(),
-                            ParticleTypes.LARGE_SMOKE,
+                            ModParticles.DISTORTION_SMOKE,
                             x,
                             y + 1.0,
                             z,
@@ -359,20 +359,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             1.5,
                             effectRange / 2,
                             0.01
-                    );
-                    sendParticlesIfPossible(self.level(),
-                            new DustParticleOptions(
-                                    new Vector3f(0.0F, 0.0F, 0.0F),
-                                    1.5F
-                            ),
-                            x,
-                            y + 1.0,
-                            z,
-                            45,
-                            effectRange / 2,
-                            1.5,
-                            effectRange / 2,
-                            0.02
                     );
 
                 }else sendParticlesIfPossible(self.level(),
@@ -485,7 +471,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 if (purpleHazeFieldDistortionMode) {
 
                     sendParticlesIfPossible(self.level(),
-                            ModParticles.PURPLE_HAZE_SMOKE,
+                            ModParticles.DISTORTION_SMOKE,
                             x,
                             y + 1.0,
                             z,
@@ -494,21 +480,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             1.5,
                             effectRange / 2,
                             0.01
-                    );
-
-                    sendParticlesIfPossible(self.level(),
-                            new DustParticleOptions(
-                                    new Vector3f(0.0F, 0.0F, 0.0F),
-                                    1.5F
-                            ),
-                            x,
-                            y + 1.0,
-                            z,
-                            45,
-                            effectRange / 2,
-                            1.5,
-                            effectRange / 2,
-                            0.02
                     );
 
                 }else {
@@ -547,7 +518,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     continue;
                 }
 
-                ((StandUser) living).SetInPurpleHazeTicks(5);
+
 
                 int effectDuration = living instanceof Player ? 200 : 300;
 
@@ -558,14 +529,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
                             ModEffects.DISTORTION_VIRUS,
                             effectDuration
                     ));
-
+                    ((StandUser) living).SetInDistortionHazeTicks(5);
                     if (living != self && !alreadyInfected) {
                         addEXP(2);
                     }
 
                 } else {
                     boolean alreadyInfected = living.hasEffect(ModEffects.HAZE_VIRUS);
-
+                    ((StandUser) living).SetInPurpleHazeTicks(5);
                     living.addEffect(new MobEffectInstance(
                             ModEffects.HAZE_VIRUS,
                             300
@@ -608,6 +579,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public float getBarrageFinisherKnockback(){
         return 0.8F;
+    }
+    @Override
+    public int getBarrageLength(){
+        return 70;
     }
 
     @Override

@@ -310,6 +310,10 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true)
     );
 
+    public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
+            "distortion_smoke",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

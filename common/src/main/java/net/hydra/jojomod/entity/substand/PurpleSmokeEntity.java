@@ -120,6 +120,9 @@ public class PurpleSmokeEntity extends StandEntity {
                 if (entity instanceof LivingEntity) {
                     ((StandUser) entity).SetInPurpleHazeTicks(5);
                 }
+                if (entity instanceof LivingEntity) {
+                    ((StandUser) entity).SetInDistortionHazeTicks(5);
+                }
             }
         }
         if (!client) {

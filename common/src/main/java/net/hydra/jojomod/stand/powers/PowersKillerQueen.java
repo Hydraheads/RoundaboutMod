@@ -134,9 +134,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         ARROW_CHARGE = 73,
         ARROW_THROW = 74,
 
+        HANDS_COOLDOWN = 75,
+
     // COOLDOWN INDEXES
         BUBBLE_SEND_COOLDOWN = PowerIndex.SKILL_4_SNEAK,
         SHA_COOLDOWN = PowerIndex.SKILL_3,
+
 
     // SOUNDS ID
         IMPALE_NOISE = 105,
@@ -144,10 +147,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         SHIBABA = 110,
         AIRBUBBLE = 111,
         BTD_NOISE = 112,
-        DETONATE_NOISE = 113,
-        BTD_PLANT = 114,
+        SUMMON_ARMS = 113,
+        DETONATE_NOISE = 114,
+        BTD_PLANT = 115,
+        BUBBLE_TARGET = 116,
         BTD_DETONATE = SoundIndex.BITES_THE_DUST_DETONATE,
-        BUBBLE_TARGET = 115,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -451,6 +455,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     //static final String strayCatPotted = "potted";
     static final String BitesTheDustTag = "hasBTD";
 
+    @Override
+    public boolean hasHandsOutRendering(){
+        return isRenderingArms && self instanceof Player;
+    }
+
+    @Override
+    public boolean hasHandsOut(){ return hasArmsOut; }
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
@@ -465,6 +476,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             //strayCatData.putBoolean(strayCatPotted, true);
         }
         $$0.putBoolean(BitesTheDustTag, this.hasBitesTheDust);
+        $$0.putBoolean("hasArmsOut",hasArmsOut);
+        $$0.putBoolean("isRenderingArms",isRenderingArms);
+
     }
 
     @Override
@@ -478,6 +492,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if ($$0.contains(BitesTheDustTag)) {
             this.hasBitesTheDust = $$0.getBoolean(BitesTheDustTag);
+        }
+        if ($$0.contains("hasArmsOut")) {
+            hasArmsOut = $$0.getBoolean("hasArmsOut");
+        }
+        if ($$0.contains("isRenderingArms")) {
+            isRenderingArms = $$0.getBoolean("isRenderingArms");
         }
     }
 
@@ -674,12 +694,21 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-        if (!canExecuteMoveWithLevel(getBitesTheDustLevel()) || !canBitesTheDust()) {
-            setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
-        } else if (inBitesTheDustMode()) {
+
+        if (inBitesTheDustMode()) {
         	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_DEACTIVATE, PowerIndex.NO_CD);
-        }else {
-        	setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.SKILL_4);
+        }else if (isHoldingSneak()) {
+            if (!canExecuteMoveWithLevel(getImpaleLevel())) {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }else {
+                setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_HANDS_ACTIVE, HANDS_COOLDOWN);
+            }
+        }else{
+            if (!canExecuteMoveWithLevel(getBitesTheDustLevel()) || !canBitesTheDust()) {
+                setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
+            }else {
+                setSkillIcon(context, x, y, 4, StandIcons.KILLER_QUEEN_BTD_ACTIVATE, PowerIndex.SKILL_4);
+            }
         }
     }
     
@@ -813,7 +842,15 @@ public class PowersKillerQueen extends NewPunchingStand {
                     tryToSendOrReturnSHA(true);
                 }
         	}
-        	case SKILL_4_NORMAL, SKILL_4_CROUCH, SKILL_4_GUARD, SKILL_4_CROUCH_GUARD -> {
+            case SKILL_4_CROUCH, SKILL_4_CROUCH_GUARD -> {
+                if (inBitesTheDustMode()) {
+                    btdDefuseClient();
+                }else {
+                    handsActiveClient();
+                }
+            }
+
+        	case SKILL_4_NORMAL, SKILL_4_GUARD -> {
                 if (inBitesTheDustMode()) {
                     btdDefuseClient();
                 }else {
@@ -879,6 +916,20 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter){
+        if (this.getActivePower() == ARROW_CHARGE) {
+            StandEntity standEntity = this.getStandEntity(getSelf());
+            if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() &&
+                    this.getSelf() instanceof Player) {
+                /**Item throw*/
+                setActivePower(ARROW_HOLDING);
+                this.setAttackTimeDuring(0);
+                poseStand(OffsetIndex.FOLLOW_NOLEAN);
+            }
+
+            animateStand(StandEntity.ITEM_GRAB);
+
+            return true;
+        }
         if (this.getActivePower() == PowerIndex.POWER_2) {
             int cdr = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
             if (this.getSelf() instanceof Player) {
@@ -1004,7 +1055,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (this.activePower == PowerIndex.POWER_2) {
+        if (this.activePower == ARROW_CHARGE) {
+            basis*=0.5f;
+        }else if (this.activePower == PowerIndex.POWER_2) {
             if (this.getSelf().isCrouching()){
                 float f = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(this.getSelf()), 0.0F, 1.0F);
                 float g = 1/f;
@@ -1794,6 +1847,17 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     
     // Clients Move sender/try:
+
+    public void handsActiveClient(){
+        if (!onCooldown(HANDS_COOLDOWN)) {
+            if (canAttackHeavy()) {
+                if (canExecuteMoveWithLevel(getImpaleLevel())) {
+                    tryPowerPacket(PowerIndex.POWER_4_SNEAK);
+                    setCooldown(HANDS_COOLDOWN, 7);
+                }
+            }
+        }
+    }
     
     public void tryToDashClient(){
         if (!doVault()){
@@ -2567,6 +2631,31 @@ public class PowersKillerQueen extends NewPunchingStand {
                     updateMaxBtdTicks(dayMode);
                 }
             }
+        }
+    }
+
+    boolean hasArmsOut = false;
+    boolean isRenderingArms = false;
+
+    public void switchHands(){
+        if (!self.level().isClientSide()){
+            this.poseStand(OffsetIndex.FOLLOW);
+            animateStand(StandEntity.IDLE);
+            xTryPower(PowerIndex.NONE,true);
+            if (!hasArmsOut){
+                StandEntity stand = getStandUserSelf().roundabout$getStand();
+                if (stand != null){
+                    stand.forceDespawn(true);
+                }
+                isRenderingArms = true;
+                handTicks = getMaxHandTicks();
+
+                if (!self.isCrouching()) {
+                    playStandUserOnlySoundsIfNearby(SUMMON_ARMS, 10, true, false);
+                }
+            }
+            hasArmsOut = !hasArmsOut;
+            saveDiscAndSync();
         }
     }
 
@@ -3435,7 +3524,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
-        if (soundChoice == BUBBLE_TARGET) {
+        if (soundChoice == SUMMON_ARMS) {
+            return 1.6F;
+        }else if (soundChoice == BUBBLE_TARGET) {
             return (float)(1.1+Math.random()*0.2);
         }
 
@@ -3478,6 +3569,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             return getBitesTheDustSound();
         }else if (soundChoice == BUBBLE_TARGET) {
             return ModSounds.JUSTICE_SELECT_EVENT;
+        }else if (soundChoice == SUMMON_ARMS) {
+            return ModSounds.SUMMON_SOUND_EVENT;
         }
 
         return super.getSoundFromByte(soundChoice);
@@ -3623,7 +3716,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                 "instruction.roundabout.press_block", StandIcons.KILLER_QUEEN_SHA_MINE,0,level, bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+80,0, "ability.roundabout.mining",
-                "instruction.roundabout.hold_attack", StandIcons.MINING,0,level,bypas));
+                "instruction.roundabout.hold_attack", StandIcons.KILLER_QUEEN_MINING,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+172+startPos,topPos+99,getImpaleLevel(), "ability.roundabout.arms_mode",
+                "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_HANDS_ACTIVE,4,level,bypas));
 
         return $$1;
     }

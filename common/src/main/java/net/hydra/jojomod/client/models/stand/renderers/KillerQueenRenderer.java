@@ -35,56 +35,59 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final ResourceLocation NOTW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/notw.png");
     private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/mementomorioh.png");
     private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/stardust.png");
-    
-    
+
+    static public ResourceLocation getSkin(byte BT) {
+        if (BT == KillerQueenEntity.PART_4) {
+            return PART_4_SKIN;
+        } else if (BT == KillerQueenEntity.MANGA) {
+            return MANGA_SKIN;
+        } else if (BT == KillerQueenEntity.UMBRA) {
+            return UMBRA_SKIN;
+        } else if (BT == KillerQueenEntity.GOGO) {
+            return GOGO_SKIN;
+        } else if (BT == KillerQueenEntity.ARTWORK) {
+            return ARTWORK_SKIN;
+        } else if (BT == KillerQueenEntity.CRACKED) {
+            return CRACKED_SKIN;
+        } else if (BT == KillerQueenEntity.CREEPER) {
+            return CREEPER_SKIN;
+        } else if (BT == KillerQueenEntity.STRAY) {
+            return STRAY_SKIN;
+        } else if (BT == KillerQueenEntity.NIGHTMARE) {
+            return NIGHTMARE_SKIN;
+        } else if (BT == KillerQueenEntity.LIMBUSMORTIS) {
+            return LIMBUSMORTIS_SKIN;
+        } else if (BT == KillerQueenEntity.JOJOLION) {
+            return JOJOLION_SKIN;
+        } else if (BT == KillerQueenEntity.GUNPOWDER) {
+            return GUNPOWDER_SKIN;
+        } else if (BT == KillerQueenEntity.FINAL) {
+            return FINALSHOWDOWN_SKIN;
+        } else if (BT == KillerQueenEntity.DEADLY) {
+            return DEADLY_SKIN;
+        } else if (BT == KillerQueenEntity.YELLOW) {
+            return YELLOW_SKIN;
+        } else if (BT == KillerQueenEntity.TAMA) {
+            return TAMA_SKIN;
+        } else if (BT == KillerQueenEntity.MINESWEEPER) {
+            return MINESWEEPER_SKIN;
+        } else if (BT == KillerQueenEntity.NOTW) {
+            return NOTW_SKIN;
+        } else if (BT == KillerQueenEntity.MEMENTO) {
+            return MEMENTO_SKIN;
+        } else if (BT == KillerQueenEntity.STARDUST) {
+            return STARDUST_SKIN;
+        }
+
+
+        return PART_4_SKIN;
+    }
+
     @Override
     public ResourceLocation getTextureLocation(KillerQueenEntity entity) {
     	byte BT = entity.getSkin();
     	
-    	if (BT == KillerQueenEntity.PART_4) {
-    		return PART_4_SKIN;
-    	} else if (BT == KillerQueenEntity.MANGA) {
-    		return MANGA_SKIN;
-    	} else if (BT == KillerQueenEntity.UMBRA) {
-    		return UMBRA_SKIN;
-    	} else if (BT == KillerQueenEntity.GOGO) {
-    		return GOGO_SKIN;
-    	} else if (BT == KillerQueenEntity.ARTWORK) {
-    		return ARTWORK_SKIN;
-    	} else if (BT == KillerQueenEntity.CRACKED) {
-    		return CRACKED_SKIN;
-    	} else if (BT == KillerQueenEntity.CREEPER) {
-    		return CREEPER_SKIN;
-    	} else if (BT == KillerQueenEntity.STRAY) {
-    		return STRAY_SKIN;
-    	} else if (BT == KillerQueenEntity.NIGHTMARE) {
-    		return NIGHTMARE_SKIN;
-    	} else if (BT == KillerQueenEntity.LIMBUSMORTIS) {
-    		return LIMBUSMORTIS_SKIN;
-    	} else if (BT == KillerQueenEntity.JOJOLION) {
-    		return JOJOLION_SKIN;
-    	} else if (BT == KillerQueenEntity.GUNPOWDER) {
-    		return GUNPOWDER_SKIN;
-    	} else if (BT == KillerQueenEntity.FINAL) {
-    		return FINALSHOWDOWN_SKIN;
-    	} else if (BT == KillerQueenEntity.DEADLY) {
-    		return DEADLY_SKIN;
-    	} else if (BT == KillerQueenEntity.YELLOW) {
-    		return YELLOW_SKIN;
-    	} else if (BT == KillerQueenEntity.TAMA) {
-    		return TAMA_SKIN;
-    	} else if (BT == KillerQueenEntity.MINESWEEPER) {
-    		return MINESWEEPER_SKIN;
-    	} else if (BT == KillerQueenEntity.NOTW) {
-    		return NOTW_SKIN;
-    	} else if (BT == KillerQueenEntity.MEMENTO) {
-    		return MEMENTO_SKIN;
-    	} else if (BT == KillerQueenEntity.STARDUST) {
-    		return STARDUST_SKIN;
-    	}
-    	
-    	
-        return PART_4_SKIN;
+    	return getSkin(BT);
     }
     
     public KillerQueenRenderer(EntityRendererProvider.Context context) {

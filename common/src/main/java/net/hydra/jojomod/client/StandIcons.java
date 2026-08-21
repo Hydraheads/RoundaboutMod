@@ -469,6 +469,10 @@ public class StandIcons {
             "textures/gui/icons/killer_queen/guard_bubbles.png");
     public static final ResourceLocation KILLER_QUEEN_FAST_KICK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/fast_kick.png");
+    public static final ResourceLocation KILLER_QUEEN_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/mining.png");
+    public static final ResourceLocation KILLER_QUEEN_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/hands_active.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");

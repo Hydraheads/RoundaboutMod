@@ -3590,6 +3590,12 @@ public class MainUtil {
         }
         return false;
     }
+    public static Boolean isInDistortionHaze(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getDistortionHazeTicks() > 0;
+        }
+        return false;
+    }
 
     public static Entity raytraceEntityStandThroughWalls(Level world, LivingEntity player, double maxDistance) {
 
