@@ -1220,6 +1220,9 @@
   "sounds.roundabout.planet_waves_disintegration":  "Meteor Disintegrating",
 
   "sounds.roundabout.purple_haze_summon":  "Stand summoned",
+  "sounds.roundabout.purple_haze_barrage_cry":  "UBASHAAAA!!!",
+  "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
+  "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1443,6 +1446,7 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.kq_minesweeper_redirect": "[Bomb Redirecting]",
   "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
   "sounds.roundabout.kq_minesweeper_barrage": "[Shibabababa!]",
@@ -1488,6 +1492,10 @@
   "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
+
+  "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
+  "sounds.roundabout.btd_full_reset": "Bites the dust Day",
+  "sounds.roundabout.btd_arrow": "Bites the dust obtainment",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 

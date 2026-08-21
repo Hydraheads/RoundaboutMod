@@ -476,6 +476,9 @@ public class RoundaboutCommands {
                     ((StandUser) PE).roundabout$setMaxSealedTicks(-1);
                     S2CPacketUtil.sendIntPowerDataPacket(PE,PacketDataIndex.S2C_INT_MAX_SEAL,-1);
                     ((IPlayerEntity) PE).rdbt$setLevelDecreaseTicks(0);
+                    ((IPlayerEntity) PE).roundabout$setPurpleHazePods((byte) 6);
+                    S2CPacketUtil.syncPurpleHazePods((ServerPlayer) PE, (byte) 6);
+
                 }
 
             }
