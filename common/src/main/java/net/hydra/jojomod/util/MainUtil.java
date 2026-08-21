@@ -3777,7 +3777,9 @@ public class MainUtil {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {
-                        return true;
+                        if (!PowerTypes.isInD4CWorld(entity)) {
+                            return true;
+                        }
                     }
                 }
             }
