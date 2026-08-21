@@ -557,6 +557,42 @@
       "roundabout:killer_queen_explosion"
     ]
   },
+  "killer_queen_explosion_1": {
+    "subtitle": "sounds.roundabout.killer_queen_explosion",
+    "sounds": [
+      "roundabout:killer_queen_explosion_1"
+    ]
+  },
+  "killer_queen_explosion_2": {
+    "subtitle": "sounds.roundabout.killer_queen_explosion",
+    "sounds": [
+      "roundabout:killer_queen_explosion_2"
+    ]
+  },
+  "killer_queen_explosion_3": {
+    "subtitle": "sounds.roundabout.killer_queen_explosion",
+    "sounds": [
+      "roundabout:killer_queen_explosion_3"
+    ]
+  },
+  "btd_normal_reset": {
+    "subtitle": "sounds.roundabout.btd_normal_reset",
+    "sounds": [
+      "roundabout:btd_normal_reset"
+    ]
+  },
+  "btd_full_reset": {
+    "subtitle": "sounds.roundabout.btd_full_reset",
+    "sounds": [
+      "roundabout:btd_full_reset"
+    ]
+  },
+  "btd_arrow": {
+    "subtitle": "sounds.roundabout.btd_arrow",
+    "sounds": [
+      "roundabout:btd_arrow"
+    ]
+  },
   "killer_queen_bomb_detonate": {
     "subtitle": "sounds.roundabout.killer_queen_bomb_detonate",
     "sounds": [
@@ -687,6 +723,12 @@
     "subtitle": "sounds.roundabout.killer_queen_shibaba",
     "sounds": [
       "roundabout:killer_queen_shibaba"
+    ]
+  },
+  "kq_minesweeper_redirect": {
+    "subtitle": "sounds.roundabout.kq_minesweeper_redirect",
+    "sounds": [
+      "roundabout:kq_minesweeper_redirect"
     ]
   },
   "kq_minesweeper_kick": {

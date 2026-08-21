@@ -353,6 +353,12 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_SUMMON, ModSounds.KILLER_QUEEN_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_SELECT_EVENT =
             register(ModSounds.KILLER_QUEEN_BUBBLE_SELECT, ModSounds.KILLER_QUEEN_BUBBLE_SELECT_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_COMBAT_EVENT =
+            register(ModSounds.BITES_THE_DUST_COMBAT, ModSounds.BITES_THE_DUST_COMBAT_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_DAY_EVENT =
+        register(ModSounds.BITES_THE_DUST_DAY, ModSounds.BITES_THE_DUST_DAY_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_ARROW =
+        register(ModSounds.BITES_THE_DUST_ARROW, ModSounds.BITES_THE_DUST_ARROW_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
@@ -364,6 +370,8 @@ public class ForgeSounds {
             register(ModSounds.KQ_MINESWEEPER_KICK, ModSounds.KQ_MINESWEEPER_KICK_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT =
             register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_REDIRECT, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BARRAGE_EVENT =
             register(ModSounds.KQ_MINESWEEPER_BARRAGE, ModSounds.KQ_MINESWEEPER_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_IMPALE_EVENT =
@@ -389,6 +397,14 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_SUMMON_DARK, ModSounds.KILLER_QUEEN_SUMMON_DARK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_EVENT =
             register(ModSounds.KILLER_QUEEN_EXPLOSION, ModSounds.KILLER_QUEEN_EXPLOSION_ID);
+
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_1_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_1, ModSounds.KILLER_QUEEN_EXPLOSION_1_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_2_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_2, ModSounds.KILLER_QUEEN_EXPLOSION_2_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_3_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_3, ModSounds.KILLER_QUEEN_EXPLOSION_3_ID);
+
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_DETONATE_EVENT =
             register(ModSounds.KILLER_QUEEN_DETONATE, ModSounds.KILLER_QUEEN_DETONATE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_LAUNCH_EVENT =
