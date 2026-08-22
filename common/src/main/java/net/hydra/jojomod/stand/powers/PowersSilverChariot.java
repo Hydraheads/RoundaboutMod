@@ -373,11 +373,15 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public boolean armoured = true;
 
-    public float armouredTimeModifier = 2f / 3f;
+    public float getArmouredTimeModifier() {
+        return 0.75F;
+    }
 
-    public float notArmouredTimeModifier = 1f / 3f;
+    public float getUnarmouredTimeModifier() {
+        return 0.50F;
+    }
 
-    public boolean resummonFromArmorShed = false;
+    public boolean unarmouredInArmsMode = false;
 
     public boolean hasRapier = true;
 
@@ -556,7 +560,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean interceptGuard() {
-        return super.interceptGuard();
+        return true;
     }
 
     @Override
@@ -1140,7 +1144,21 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float getPunchStrength(Entity entity) {
-        return super.getPunchStrength(entity);
+        if (this.getReducedDamage(entity)){
+            return 1.3125F;
+        } else {
+            return 3.75F;
+        }
+    }
+
+    @Override
+    public float getBarrageDamageMob() {
+        return 10;
+    }
+
+    @Override
+    public float getBarrageDamagePlayer() {
+        return 7;
     }
 
     @Override
@@ -1917,23 +1935,23 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public int getBarrageWindup() {
         if (armoured) {
-            return (int) (((float) super.getBarrageWindup()) * armouredTimeModifier);
+            return Math.round(((float) super.getBarrageWindup()) * this.getArmouredTimeModifier());
         }
-        return (int) (((float) super.getBarrageWindup()) * notArmouredTimeModifier);
+        return Math.round(((float) super.getBarrageWindup()) * this.getUnarmouredTimeModifier());
     }
 
     @Override
     public int getBarrageRecoilTime() {
         if (armoured) {
-            return (int) (((float) super.getBarrageRecoilTime()) * armouredTimeModifier);
+            return Math.round(((float) super.getBarrageRecoilTime()) * this.getArmouredTimeModifier());
         }
-        return (int) (((float) super.getBarrageRecoilTime()) * notArmouredTimeModifier);
+        return Math.round(((float) super.getBarrageRecoilTime()) * this.getUnarmouredTimeModifier());
     }
 
     @Override
     public boolean canSummonStand() {
-        // TODO: Make Silver Chariot not be able to be summoned while the guard meter is regenerating while armor shed is active.
-        return true;
+        // TODO: Make Silver Chariot not be able to be resummoned while the guard meter is regenerating while armor shed is active.
+        return armoured;
     }
 
     @Override
@@ -1960,16 +1978,16 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.activePowerPhase++;
             if (this.activePowerPhase == 3) {
                 if (armoured) {
-                    this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown / 2 + getMeltLevel()*3;
+                    this.attackTimeMax = Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown * this.getArmouredTimeModifier()) + getMeltLevel()*3;
                 } else {
-                    this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown / 3 + getMeltLevel()*3;
+                    this.attackTimeMax = Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown * this.getUnarmouredTimeModifier()) + getMeltLevel()*3;
                 }
                 // this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown + getMeltLevel()*3;
             } else {
                 if (armoured) {
-                    this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown / 2 + getMeltLevel()*3;
+                    this.attackTimeMax = Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown * this.getArmouredTimeModifier()) + getMeltLevel()*3;
                 } else {
-                    this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown / 3 + getMeltLevel()*3;
+                    this.attackTimeMax = Math.round(ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown * this.getUnarmouredTimeModifier()) + getMeltLevel()*3;
                 }
                 // this.attackTimeMax= ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchCooldown + getMeltLevel()*3;
             }
@@ -1995,20 +2013,34 @@ public class PowersSilverChariot extends NewPunchingStand {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
             } else {
                 int meltLevel = getMeltLevel();
+                if (armoured) {
+                    if ((this.attackTimeDuring == (((int) (5 * this.getArmouredTimeModifier()))+meltLevel) && this.activePowerPhase == 1)
+                            || this.attackTimeDuring == (((int) (6 * this.getArmouredTimeModifier()))+meltLevel)) {
+                        this.standPunch();
+                    }
+                } else {
+                    if ((this.attackTimeDuring == (((int) (5 * this.getUnarmouredTimeModifier()))+meltLevel) && this.activePowerPhase == 1)
+                            || this.attackTimeDuring == (((int) (6 * this.getUnarmouredTimeModifier()))+meltLevel)) {
+                        this.standPunch();
+                    }
+                }
+                /*
                 if ((this.attackTimeDuring == (5+meltLevel) && this.activePowerPhase == 1)
                         || this.attackTimeDuring == (6+meltLevel)) {
                     this.standPunch();
                 }
+                */
             }
         }
     }
 
     @Override
     public void setAttack() {
+        // TODO: Implement support for faster rapier swings while armour is removed
         if (HeatUtil.isArmsFrozen(self)){
-            this.attackTimeMax= 36;
+            this.attackTimeMax = 36;
         } else {
-            this.attackTimeMax= 21;
+            this.attackTimeMax = 21;
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
@@ -2231,6 +2263,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void onActuallyHurt(DamageSource $$0, float $$1) {
+
         super.onActuallyHurt($$0, $$1);
     }
 
@@ -2256,6 +2289,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                     standEntity.forceDespawn(true);
                 }
                 isRenderingArms = true;
+                handTicks = getMaxHandTicks();
 
                 if (!this.self.isCrouching()) {
                     playStandUserOnlySoundsIfNearby(SUMMON_ARM_SOUND, 10, true, false);
@@ -2377,15 +2411,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean rendersPlayer() {
-        return hasHandsOut() && super.rendersPlayer();
-    }
-
-    public boolean isRenderingArms() {
-        return isRenderingArms;
-    }
-
-    public void setRenderingArms(boolean renderingArms) {
-        isRenderingArms = renderingArms;
+        return hasHandsOut();
     }
 
     @Override
