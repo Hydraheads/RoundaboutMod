@@ -284,6 +284,7 @@ public enum PowerTypes {
         if (entity != null){
             ((IEntityAndData)entity).rdbt$setTicksUntilGone(ticks);
             ((IEntityAndData)entity).rdbt$setNativeTo(worldId);
+            ((IEntityAndData)entity).rdbt$setOriginWorld(worldId);
         }
     }
     public static void setPlaneOfExisting(Entity entity, byte plane){
@@ -318,6 +319,14 @@ public enum PowerTypes {
         if (entity != null){
 
             return ((IEntityAndData)entity).rdbt$getNativeTo() == 0;
+
+        }
+        return false;
+    }
+    public static boolean originatedFromOurWorld(Entity entity){
+        if (entity != null){
+
+            return ((IEntityAndData)entity).rdbt$getNativeTo() == 0 && ((IEntityAndData)entity).rdbt$getOriginWorld() == 0;
 
         }
         return false;

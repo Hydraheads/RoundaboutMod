@@ -114,6 +114,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public D4CSettings d4cSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
@@ -1140,6 +1142,12 @@ public class Config implements Cloneable {
         public Integer maxShootTicks;
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer emperorBulletDamage;
+    }
+    public static class D4CSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableD4c;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 2)
+        public Integer dropMode;
     }
 
     public static class KingCrimsonSettings {

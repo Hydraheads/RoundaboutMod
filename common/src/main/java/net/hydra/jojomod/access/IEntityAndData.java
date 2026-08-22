@@ -28,6 +28,8 @@ public interface IEntityAndData {
     int rdbt$getTicksUntilGone();
     byte rdbt$getNativeTo();
     void rdbt$setNativeTo(byte lol);
+    void rdbt$setOriginWorld(byte lol);
+    byte rdbt$getOriginWorld();
     void rdbt$setTicksUntilGone(int lol);
 
     boolean rdbt$getSharedFlag(int flag);

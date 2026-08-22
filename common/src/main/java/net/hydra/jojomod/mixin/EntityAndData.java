@@ -173,6 +173,7 @@ public abstract class EntityAndData implements IEntityAndData {
         $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
         $$0.putInt("inForeignWorld",rdbt$inForeignWorld);
         $$0.putByte("nativeToWorld",rdbt$nativeTo);
+        $$0.putByte("originWorld",rdbt$originWorld);
         if (rdbt$nativeCopy != null){
             $$0.putUUID("rdbt$nativeCopy",rdbt$nativeCopy);
         }
@@ -189,6 +190,8 @@ public abstract class EntityAndData implements IEntityAndData {
             rdbt$nativeTo = $$0.getByte("nativeToWorld");
         } if ($$0.hasUUID("nativeToWorldCopy")) {
             rdbt$nativeCopy = $$0.getUUID("nativeToWorld");
+        } if ($$0.hasUUID("rdbt$originWorld")) {
+            rdbt$nativeCopy = $$0.getUUID("rdbt$originWorld");
         }
 
     }
@@ -938,6 +941,8 @@ public abstract class EntityAndData implements IEntityAndData {
     private int rdbt$ticksUntilGone = 0;
     @Unique
     private byte rdbt$nativeTo = 0;
+    @Unique
+    private byte rdbt$originWorld = 0;
 
     @Override
     @Unique
@@ -963,6 +968,16 @@ public abstract class EntityAndData implements IEntityAndData {
     @Unique
     public void rdbt$setNativeTo(byte lol){
         rdbt$nativeTo = lol;
+    }
+    @Override
+    @Unique
+    public byte rdbt$getOriginWorld(){
+        return rdbt$originWorld;
+    }
+    @Override
+    @Unique
+    public void rdbt$setOriginWorld(byte lol){
+        rdbt$originWorld = lol;
     }
     @Override
     @Unique

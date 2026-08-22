@@ -3744,6 +3744,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     //Vampire remains mob drops
     @Inject(method = "dropAllDeathLoot", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$dropAllDeathLoot(DamageSource $$0, CallbackInfo ci) {
+        if (!PowerTypes.originatedFromOurWorld(this)){
+            int dropMode = ClientNetworking.getAppropriateConfig().d4cSettings.dropMode;
+            if (dropMode < 2) {
+                if (dropMode == 1){
+                    this.dropExperience();
+                }
+                ci.cancel();
+                return;
+            }
+        }
+
         FateTypes.vampireKillDropAnimal($$0.getEntity(),this);
     }
     @Inject(method = "isBlocking", at = @At(value = "HEAD"), cancellable = true, require = 0)
@@ -6048,6 +6059,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Shadow
     protected abstract void updateGlowingStatus();
+
+    @Shadow
+    protected abstract void dropExperience();
 
     public double previousYpos = getY();
 

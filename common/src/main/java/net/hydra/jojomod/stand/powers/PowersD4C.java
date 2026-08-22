@@ -87,7 +87,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled() {
-        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableKingCrimson;
+        return ClientNetworking.getAppropriateConfig().d4cSettings.enableD4c;
     }
     @Override
     protected Byte getSummonSound() {
@@ -662,6 +662,7 @@ public class PowersD4C extends NewPunchingStand {
                                 && !(entity instanceof CloneEntity)
                                 && !(entity instanceof Player)
                                 && MainUtil.canCopyMob(entity)
+                                && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
         );
 
@@ -764,6 +765,7 @@ public class PowersD4C extends NewPunchingStand {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 mb2.setDropChance(slot, 0.0F);
             }
+
         }
         // Cats
         if (original instanceof Cat originalCat

@@ -3297,6 +3297,8 @@
   "config.roundabout.emperorBulletRange.name":"Bullet Range",
   "config.roundabout.emperorBulletRange.desc": "The range bullets have.",
 
+  "config.roundabout.enableD4c.name":"Enable Stand",
+  "config.roundabout.enableD4c.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableOasis.name":"Enable Stand",
   "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
@@ -3364,6 +3366,9 @@
   "config.roundabout.skipPastDeath.name": "Fake Death Skip",
   "config.roundabout.skipPastDeath.desc": "Makes your fated self play a fake death message and potentially drop fake items based on gamerule.",
 
+
+  "config.roundabout.dropMode.name": "Drop Mode",
+  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
@@ -4708,6 +4713,7 @@
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
+  "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",
