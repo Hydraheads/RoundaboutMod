@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -221,7 +222,12 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
     public boolean canCollideWith(Entity $$0) { return false;}
 
     @Override
-    public boolean hurt(DamageSource source, float amount) { return false;}
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
+        return false;}
 	
     @Override
     public boolean canBeHitByProjectile() { return false;}

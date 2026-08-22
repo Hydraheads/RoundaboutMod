@@ -181,6 +181,10 @@ public abstract class WorldTickServer extends Level {
         if (stand == null || stand.isRemoved()) {
             return;
         }
+        stand.dangerExploitFix(stand.getOffsetType());
+        if (stand == null || stand.isRemoved()) {
+            return;
+        }
         if (entity !=null && stand.getFollowing() != null && stand.getFollowing().getId() != entity.getId()) {
             ((StandUser)entity).roundabout$removeFollower(stand);
             return;
@@ -232,6 +236,7 @@ public abstract class WorldTickServer extends Level {
     private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof FollowingStandEntity SE) {
+                SE.dangerExploitFix(SE.getOffsetType());
                 if (SE.getFollowing() != null && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
                     ci.cancel();
                 }
@@ -279,6 +284,7 @@ public abstract class WorldTickServer extends Level {
     private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
 
         if ($$1 instanceof FollowingStandEntity SE) {
+            SE.dangerExploitFix(SE.getOffsetType());
             if (SE.getFollowing() != null){
                 ci.cancel();
             }

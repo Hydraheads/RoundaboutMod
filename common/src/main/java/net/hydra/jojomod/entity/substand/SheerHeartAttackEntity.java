@@ -35,6 +35,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -910,6 +911,10 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
 		Entity causer = source.getEntity();
 		if (!(causer == this.getUser() || causer instanceof StandEntity SE && SE.getUser() == this.getUser())
 				&& MainUtil.isStandDamage(source)) {
