@@ -69,7 +69,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.THE_WORLD_ULTIMATE, TheWorldUltimateRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON, KingCrimsonRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WHITESNAKE, WhitesnakeRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.HALLUCINATORY_ACID_PROJECTILE, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.HALLUCINATORY_ACID_PROJECTILE, HallucinatoryAcidProjectileRenderer::new);
         EntityRendererRegistry.register(FabricEntities.D4C, D4CRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_REAPER, KingCrimsonReaperRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JUSTICE, JusticeRenderer::new);
@@ -207,6 +207,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageRenderer::new);
         
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -233,6 +234,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ANUBIS_GUARDIAN_LAYER, AnubisGuardianModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.WHITESNAKE_LAYER, WhitesnakeModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HALLUCINATORY_ACID_PROJECTILE_LAYER, HallucinatoryAcidProjectileModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.THE_WORLD_LAYER, TheWorldModel::getTexturedModelData);
@@ -281,6 +283,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_AFTERIMAGE_LAYER, SilverChariotAfterimageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);

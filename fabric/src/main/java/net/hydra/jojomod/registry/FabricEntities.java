@@ -251,6 +251,13 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).
                             sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":king_crimson_projection")
             );
+    public static final EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_afterimage"),
+                    EntityType.Builder.of(SilverChariotAfterimageEntity::new, MobCategory.MISC).
+                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":silver_chariot_afterimage")
+            );
         public static final EntityType<FallenZombie> FALLEN_ZOMBIE =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1220,6 +1227,7 @@ public class FabricEntities {
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
                 ModEntities.TUSK_NAIL = TUSK_NAIL;
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
+                ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;
@@ -1269,6 +1277,7 @@ public class FabricEntities {
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
+                ModEntities.SILVER_CHARIOT_AFTERIMAGE = SILVER_CHARIOT_AFTERIMAGE;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
@@ -1378,6 +1387,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageEntity.createStandAttributes());
                 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

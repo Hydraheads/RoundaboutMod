@@ -944,6 +944,7 @@ public class PowersGreenDay extends NewPunchingStand {
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Off_hand_entity.flyingTicks = 0;
+        Off_hand_entity.neuteredSpinTicks = 0;
     }
 
     public void OffHandSpinAndThrowSlim(){
@@ -986,6 +987,7 @@ public class PowersGreenDay extends NewPunchingStand {
         playSoundIfPossible(self.level(),null,Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Main_arm.flyingTicks = 0;
+        Main_arm.neuteredSpinTicks = 15;
     }
 
     public void MainHandSpinAndThrowSlim(){
@@ -1669,7 +1671,7 @@ public class PowersGreenDay extends NewPunchingStand {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SUMMON_GREEN_DAY_EVENT;
+                return ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);

@@ -1265,8 +1265,6 @@ public class Config implements Cloneable {
         public Integer discStealCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealDealsDamage;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer snakeBiteCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer hallucinatoryDisguiseCooldown;
         @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
@@ -1313,8 +1311,6 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer discSealHallucinationMultiplierPerLevel;
 
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-        public Integer snakeBiteHallucinationDuration;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hallucinationAppliesMelting;
         @BooleanOption(group = "inherit", value = false)
