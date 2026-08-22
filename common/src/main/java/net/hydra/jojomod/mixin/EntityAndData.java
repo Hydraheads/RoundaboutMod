@@ -1090,7 +1090,7 @@ public abstract class EntityAndData implements IEntityAndData {
             if (PowerTypes.isExistentiallyElsewhere(thrs)){
                 if (thrs.level() instanceof ServerLevel sl) {
                     if (soundEvent != null) {
-                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
+                        ResourceLocation soundId = soundEvent.getLocation();
                         if (soundId != null) {
                             String str = this.getSoundSource().name();
                             if (str != null) {

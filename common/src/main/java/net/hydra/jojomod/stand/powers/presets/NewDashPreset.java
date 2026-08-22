@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -243,7 +244,9 @@ public class NewDashPreset extends StandPowerRewrite {
                 addEXP(1);
             }
             if (!playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.98 + (Math.random() * 0.04)))){
+
                 if (self instanceof ServerPlayer sp){
+
                     S2CPacketUtil.sendPlaySoundPacket(sp, this.self.getId(), DODGE_NOISE);
                 }
             }

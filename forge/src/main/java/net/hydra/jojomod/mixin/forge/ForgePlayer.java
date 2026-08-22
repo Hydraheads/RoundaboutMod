@@ -202,7 +202,7 @@ public abstract class ForgePlayer extends LivingEntity {
             if (PowerTypes.isExistentiallyElsewhere(thrs)){
                 if (thrs.level() instanceof ServerLevel sl) {
                     if (soundEvent != null) {
-                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
+                        ResourceLocation soundId = soundEvent.getLocation();
                         String str = this.getSoundSource().name();
                         for (ServerPlayer playerInList :
                                 sl.getServer().getPlayerList().getPlayers()) {

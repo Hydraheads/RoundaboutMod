@@ -24,6 +24,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
@@ -2078,7 +2079,7 @@ public class AbilityScapeBasis {
         if (!PowerTypes.isErasingTime(self) && entity != null) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
                         for (ServerPlayer playerInList :
@@ -2120,7 +2121,8 @@ public class AbilityScapeBasis {
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+
+                    ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
                         for (ServerPlayer playerInList :
@@ -2137,6 +2139,7 @@ public class AbilityScapeBasis {
                                     playerInList)) {
                                 continue;
                             }
+                            Roundabout.LOGGER.info("5");
 
                             S2CPacketUtil.sendSafeSound(
                                     playerInList,
@@ -2162,7 +2165,7 @@ public class AbilityScapeBasis {
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$4 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
+                    ResourceLocation soundId = $$4.getLocation();
                     if (soundId != null) {
                         String str = $$5.name();
                         for (ServerPlayer playerInList :
