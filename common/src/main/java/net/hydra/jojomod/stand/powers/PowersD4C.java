@@ -1566,12 +1566,30 @@ public class PowersD4C extends NewPunchingStand {
             isekaiTarget(target);
         }
     }
+    public int dragTarget = 0;
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
         }
+        if (move == PowerIndex.SNEAK_ATTACK) {
+            this.dragTarget = chargeTime;
+        }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+    public void grabMobIntoWorld(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            if (targetEntity != null && !PowerTypes.isNativeToOurWorld(targetEntity)) {
+                PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
+                this.setAttackTimeDuring(-5);
+                this.setActivePower(PowerIndex.POWER_2_BONUS);
+                playSoundsIfNearby(IMPALE_NOISE, 27, false);
+                this.animateStand(D4CEntity.DRAG_2);
+                this.poseStand(OffsetIndex.GUARD);
+            }
+        }
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -1579,6 +1597,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_2_BONUS) {
+            this.grabMobIntoWorld();
+            return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
         } else if (move == PowerIndex.POWER_2) {
