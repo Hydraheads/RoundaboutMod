@@ -46,10 +46,20 @@ public class SeperatedLegsEntity extends StandEntity {
     }
     public int StartupTicks = 10;
 
-
+    @Override
+    public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
+        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && validatePowers(userEntity);
+    }
+    @Override
+    public void handleTickDownIfDupe(LivingEntity thisStand){
+        TickDown();
+    }
+    @Override
+    public boolean needsActive(){
+        return false;
+    }
     @Override
     public void tick() {
-        this.setFadeOut((byte)1);
         this.setAnimation(IDLE);
         boolean client = this.level().isClientSide();
         LivingEntity user = this.getUser();

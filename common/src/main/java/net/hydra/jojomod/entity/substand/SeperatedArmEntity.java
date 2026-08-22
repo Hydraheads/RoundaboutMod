@@ -201,13 +201,22 @@ public class SeperatedArmEntity extends StandEntity {
         return Checkpos;
     }
     public int flyingTicks=0;
-
+    @Override
+    public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
+        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && validatePowers(userEntity);
+    }
+    @Override
+    public void handleTickDownIfDupe(LivingEntity thisStand){
+        TickDown();
+    }
+    @Override
+    public boolean needsActive(){
+        return false;
+    }
 
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
-
-
         tickeffects();
     }
 
