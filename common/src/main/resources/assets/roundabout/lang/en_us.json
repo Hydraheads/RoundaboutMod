@@ -3356,6 +3356,12 @@
   "config.roundabout.timeEraseBlocks.name": "Render TE Blocks",
   "config.roundabout.timeEraseBlocks.desc": "If blocks in time erase should render.",
 
+  "config.roundabout.whiteListModdedMobs.name": "Whitelist Modded Mobs",
+  "config.roundabout.whiteListModdedMobs.desc": "By default, d4c creates parallel mobs for modded mobs with world merging. It operates through a blacklist in the advanced config. Turning this on makes it a whitelist in case you want to keep these parallel mobs strictly vanilla to avoid conflicts.",
+
+  "config.roundabout.blacklistHighHealthMobs.name": "Ban High HP Mobs",
+  "config.roundabout.blacklistHighHealthMobs.desc": "Automatically prevents high health mobs from being parallel versions in the interest of avoiding weird boss interactions for mobs that mods didn't do their diligence and add the forge or fabric boss tag to.",
+
   "config.roundabout.enableDaySkip.name": "Day Skip",
   "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
 

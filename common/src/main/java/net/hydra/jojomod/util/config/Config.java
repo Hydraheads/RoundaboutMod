@@ -1148,6 +1148,10 @@ public class Config implements Cloneable {
         public Boolean enableD4c;
         @IntOption(group = "inherit", value = 1, min = 0, max = 2)
         public Integer dropMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean whiteListModdedMobs;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean blacklistHighHealthMobs;
     }
 
     public static class KingCrimsonSettings {
