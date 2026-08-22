@@ -7,7 +7,6 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
-import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -28,14 +27,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 
 import java.util.UUID;
 
 public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     public static final String SKIN_TAG = "WhitesnakeAcidSkin";
     private int puddleAmount = 8;
-    private boolean acidTossShot;
 
     public HallucinatoryAcidProjectile(EntityType<? extends HallucinatoryAcidProjectile> type, Level level) {
         super(type, level);
@@ -43,14 +40,12 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
 
     public HallucinatoryAcidProjectile(LivingEntity owner, Level level) {
         super(ModEntities.HALLUCINATORY_ACID_PROJECTILE, owner, level);
-        acidTossShot = true;
         setItem(createSkinItem(ownerSkin(owner)));
     }
 
     public HallucinatoryAcidProjectile(LivingEntity owner, Level level, int puddleAmount) {
         this(owner, level);
         this.puddleAmount = Mth.clamp(puddleAmount, 1, 8);
-        acidTossShot = false;
     }
 
     @Override
@@ -68,17 +63,6 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
         stack.getOrCreateTag().putInt(SKIN_TAG, Mth.clamp(skin,
                 WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.GOLD_TRIMMED_SKIN));
         return stack;
-    }
-
-    @Override
-    protected void onHitEntity(EntityHitResult hit) {
-        super.onHitEntity(hit);
-        if (!acidTossShot || level().isClientSide()) return;
-        hit.getEntity().hurt(level().damageSources().thrown(this, getOwner()), 2.0F);
-        if (hit.getEntity() instanceof LivingEntity living) {
-            living.addEffect(HallucinationEffect.createInstance(200, 1));
-        }
-        discard();
     }
 
     @Override
@@ -101,14 +85,12 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("PuddleAmount", puddleAmount);
-        tag.putBoolean("AcidTossShot", acidTossShot);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("PuddleAmount")) puddleAmount = Mth.clamp(tag.getInt("PuddleAmount"), 1, 8);
-        acidTossShot = tag.getBoolean("AcidTossShot");
     }
 
     private void placePuddle(BlockPos impact, int amount) {

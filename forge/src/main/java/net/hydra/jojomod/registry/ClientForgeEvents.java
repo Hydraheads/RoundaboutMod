@@ -76,7 +76,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.THE_WORLD_ULTIMATE.get(), TheWorldUltimateRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON.get(), KingCrimsonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WHITESNAKE.get(), WhitesnakeRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.HALLUCINATORY_ACID_PROJECTILE.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.HALLUCINATORY_ACID_PROJECTILE.get(), HallucinatoryAcidProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.D4C.get(), D4CRenderer::new);
         event.registerEntityRenderer(ForgeEntities.KING_CRIMSON_REAPER.get(), KingCrimsonReaperRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE.get(), JusticeRenderer::new);
@@ -238,6 +238,7 @@ public class ClientForgeEvents {
 
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_LAYER, KingCrimsonModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.WHITESNAKE_LAYER, WhitesnakeModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.HALLUCINATORY_ACID_PROJECTILE_LAYER, HallucinatoryAcidProjectileModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.D4C_LAYER, D4CModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KING_CRIMSON_REAPER_LAYER, KingCrimsonReaperModel::getTexturedModelData);
 
