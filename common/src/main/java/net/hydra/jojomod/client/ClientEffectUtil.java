@@ -2,6 +2,7 @@ package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.event.TerrainFragments;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +20,10 @@ import java.util.List;
 
 public class ClientEffectUtil {
     public static void spawnTerrainFragment(LocalPlayer player) {
+        if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                !ConfigManager.getClientConfig().generalSettings.timeEraseBlocks){
+            return;
+        }
         if (player != null && (((TimeStop) player.level()).inTimeStopRange(player))){
             return;
         }
@@ -94,6 +99,10 @@ public class ClientEffectUtil {
 
     public static final List<TerrainFragments> terrainFragments = new ArrayList<>();
     public static void updateTerrainFragments() {
+        if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().generalSettings != null &&
+                !ConfigManager.getClientConfig().generalSettings.timeEraseBlocks){
+            return;
+        }
         Player player = ClientUtil.getPlayer();
         if (player != null && (((TimeStop) player.level()).inTimeStopRange(player))){
             return;
