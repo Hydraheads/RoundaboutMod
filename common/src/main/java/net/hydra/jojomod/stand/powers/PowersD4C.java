@@ -830,38 +830,33 @@ public class PowersD4C extends NewPunchingStand {
             double radius
     ) {
         int attempts = 40;
+        double minDistance = 2.5D+ (entity.getBbWidth()/2);
 
         for (int i = 0; i < attempts; i++) {
 
             double angle = Math.random() * Math.PI * 2.0D;
 
-            // Random distance, biased across the whole circle
-            double distance = Math.sqrt(Math.random()) * radius;
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
 
             double x = self.getX() + Math.cos(angle) * distance;
             double z = self.getZ() + Math.sin(angle) * distance;
 
-            // Start around the player's Y and search vertically
             int baseY = Mth.floor(self.getY());
 
             for (int yOffset = -4; yOffset <= 4; yOffset++) {
 
                 double y = baseY + yOffset;
 
-                Vec3 candidate = new Vec3(
-                        x,
-                        y,
-                        z
-                );
+                Vec3 candidate = new Vec3(x, y, z);
 
-                // Move the ENTITY'S OWN hitbox to the candidate position
                 AABB testBox = entity.getBoundingBox().move(
                         candidate.x - entity.getX(),
                         candidate.y - entity.getY(),
                         candidate.z - entity.getZ()
                 );
 
-                // Block collision only
                 if (level.noCollision(entity, testBox)) {
                     return candidate;
                 }
