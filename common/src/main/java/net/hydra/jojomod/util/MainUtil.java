@@ -2069,6 +2069,9 @@ public class MainUtil {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
+        if (PowerTypes.isInADifferentExistenceNoTE(User,targetEntity)){
+            targetEntity = null;
+        }
         return targetEntity;
     }
 

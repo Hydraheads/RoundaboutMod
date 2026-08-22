@@ -875,6 +875,10 @@ public class ForgeSounds {
             register(ModSounds.KING_CRIMSON_PUNCH_4, ModSounds.KING_CRIMSON_PUNCH_4_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH_5 =
             register(ModSounds.KING_CRIMSON_PUNCH_5, ModSounds.KING_CRIMSON_PUNCH_5_ID);
+    public static final RegistryObject<SoundEvent> D4C_PUNCH =
+            register(ModSounds.D4C_PUNCH, ModSounds.D4C_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> D4C_PUNCH_2 =
+            register(ModSounds.D4C_PUNCH_2, ModSounds.D4C_PUNCH_2_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GOAT_CHARGE =

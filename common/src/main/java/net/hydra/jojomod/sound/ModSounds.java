@@ -1558,6 +1558,13 @@ public class ModSounds {
     public static SoundEvent EPITAPH_FADE_EVENT = SoundEvent.createVariableRangeEvent(EPITAPH_FADE_ID);
 
 
+    public static final String D4C_PUNCH = "d4c_punch";
+    public static final ResourceLocation D4C_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_PUNCH);
+    public static SoundEvent D4C_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(D4C_PUNCH_ID);
+    public static final String D4C_PUNCH_2 = "d4c_punch_2";
+    public static final ResourceLocation D4C_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_PUNCH_2);
+    public static SoundEvent D4C_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(D4C_PUNCH_2_ID);
+
     public static final String KING_CRIMSON_PUNCH = "king_crimson_punch";
     public static final ResourceLocation KING_CRIMSON_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH);
     public static SoundEvent KING_CRIMSON_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(KING_CRIMSON_PUNCH_ID);

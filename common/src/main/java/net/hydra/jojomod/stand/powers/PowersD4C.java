@@ -1566,12 +1566,55 @@ public class PowersD4C extends NewPunchingStand {
             isekaiTarget(target);
         }
     }
+    public int dragTarget = 0;
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
         }
+        if (move == PowerIndex.SNEAK_ATTACK) {
+            this.dragTarget = chargeTime;
+        }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+    public void grabMobIntoWorld(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            if (targetEntity != null && !PowerTypes.isNativeToOurWorld(targetEntity)) {
+                PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
+                this.setAttackTimeDuring(-5);
+                this.setActivePower(PowerIndex.POWER_2_BONUS);
+                playSoundsIfNearby(IMPALE_NOISE, 27, false);
+                this.animateStand(D4CEntity.DRAG_2);
+                this.poseStand(OffsetIndex.GUARD);
+                if (self.level() instanceof ServerLevel sl){
+                    Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                    sl.sendParticles(new DustParticleOptions(
+                                    color,
+                                    1.0F
+                            ), targetEntity.getX(),
+                            targetEntity.getY()+targetEntity.getEyeHeight(), targetEntity.getZ(),
+                            20, 0.3, 0.3, 0.3, 0.3);
+                }
+            }
+        }
+    }
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.D4C_PUNCH_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.D4C_PUNCH_2_EVENT;
+    }
+    @Override
+    public float getPunchLandPitch(){
+        return 1.0F - 0.05F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 1F;
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -1579,6 +1622,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_2_BONUS) {
+            this.grabMobIntoWorld();
+            return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
         } else if (move == PowerIndex.POWER_2) {
