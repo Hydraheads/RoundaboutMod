@@ -242,7 +242,9 @@ public class BlockWallEntity extends Entity {
                 wallBox.inflate(0.1))) {
 
             if (mob.getBoundingBox().intersects(wallBox)) {
-                mob.push(0, 0.2, 0);
+                if (mob.isControlledByLocalInstance()) {
+                    mob.push(0, 0.2, 0);
+                }
             }
         }
 

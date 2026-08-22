@@ -114,6 +114,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
+    public D4CSettings d4cSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
@@ -1141,6 +1143,16 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 6, min = 0, max = 72000)
         public Integer emperorBulletDamage;
     }
+    public static class D4CSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableD4c;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 2)
+        public Integer dropMode;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean whiteListModdedMobs;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean blacklistHighHealthMobs;
+    }
 
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1253,8 +1265,6 @@ public class Config implements Cloneable {
         public Integer discStealCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealDealsDamage;
-        @IntOption(group = "inherit", value = 80, min = 0, max = 72000)
-        public Integer snakeBiteCooldown;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer hallucinatoryDisguiseCooldown;
         @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
@@ -1301,8 +1311,6 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 30, min = 0, max = 100)
         public Integer discSealHallucinationMultiplierPerLevel;
 
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
-        public Integer snakeBiteHallucinationDuration;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hallucinationAppliesMelting;
         @BooleanOption(group = "inherit", value = false)

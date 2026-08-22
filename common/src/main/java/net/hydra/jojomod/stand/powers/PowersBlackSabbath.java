@@ -935,7 +935,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.LIGHT_PURPLE);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.LIGHT_PURPLE);
     }
     @Override
     public Component ifWipListDev(){

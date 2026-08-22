@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -279,6 +280,13 @@ public enum PowerTypes {
         }
         return 0;
     }
+    public static void setTicksUntilGone(Entity entity, int ticks, byte worldId){
+        if (entity != null){
+            ((IEntityAndData)entity).rdbt$setTicksUntilGone(ticks);
+            ((IEntityAndData)entity).rdbt$setNativeTo(worldId);
+            ((IEntityAndData)entity).rdbt$setOriginWorld(worldId);
+        }
+    }
     public static void setPlaneOfExisting(Entity entity, byte plane){
         if (entity != null){
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
@@ -298,7 +306,30 @@ public enum PowerTypes {
         if (from != null && to != null){
             ((IGravityEntity)to).roundabout$setExistPlane(
                     ((IGravityEntity)from).roundabout$getExistPlane());
+            ((IEntityAndData)to).rdbt$setForeignWorldTicks(
+                    ((IEntityAndData)from).rdbt$getForeignWorldTicks());
+            ((IEntityAndData)to).rdbt$setTicksUntilGone(
+                    ((IEntityAndData)from).rdbt$getTicksUntilGone());
+            ((IEntityAndData)to).rdbt$setNativeTo(
+                    ((IEntityAndData)from).rdbt$getNativeTo());
+
         }
+    }
+    public static boolean isNativeToOurWorld(Entity entity){
+        if (entity != null){
+
+            return ((IEntityAndData)entity).rdbt$getNativeTo() == 0;
+
+        }
+        return false;
+    }
+    public static boolean originatedFromOurWorld(Entity entity){
+        if (entity != null){
+
+            return ((IEntityAndData)entity).rdbt$getNativeTo() == 0 && ((IEntityAndData)entity).rdbt$getOriginWorld() == 0;
+
+        }
+        return false;
     }
 
     public static int d4cWorldUptime(){

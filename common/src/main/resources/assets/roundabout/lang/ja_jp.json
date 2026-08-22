@@ -2000,8 +2000,6 @@
   "ability.roundabout.whitesnake_chop.desc": "チャージ時間によって攻撃が変化する。半分以下なら少量のダメージを与える弱パンチ、半分以上なら出血を与える手刀、最大チャージなら大ダメージを与え対象を大きくノックバックさせる強烈なパンチを繰り出す。",
   "ability.roundabout.whitesnake_acid_toss": "アシッドボム",
   "ability.roundabout.whitesnake_acid_toss.desc": "着弾地点の壁や床に広がる毒を投げる。毒の周囲にいるMOBは時間経過で幻覚毒を受け、少しづつレベルが上がっていく。。",
-  "ability.roundabout.whitesnake_snake_bite": "スネイクバイト",
-  "ability.roundabout.whitesnake_snake_bite.desc": "融解中に発動すると、ホワイトスネイクが前方に飛行して攻撃する。攻撃を当てた対象には幻覚毒を与える。",
   "ability.roundabout.whitesnake_melting_mode": "融解",
   "ability.roundabout.whitesnake_melting_mode.desc": "遠隔操作中に発動し、融解モードに切り替える。壁や天井を這って移動することができ、通過地点には幻覚毒が残る。Space長押しで少しだけ浮遊できる。",
   "ability.roundabout.whitesnake_control_mode": "遠隔操作",

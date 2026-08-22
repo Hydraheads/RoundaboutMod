@@ -94,6 +94,7 @@ import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -235,6 +236,7 @@ public class MainUtil {
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+    public static ArrayList<String> blackOrWhiteListParallelMobs = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
@@ -367,6 +369,15 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isBlackOrWhiteListed(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (blackOrWhiteListParallelMobs != null && !blackOrWhiteListParallelMobs.isEmpty() && rl != null && blackOrWhiteListParallelMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
 
     public static boolean isFleshBudBlacklisted(Entity ent){
         if (ent == null)
@@ -386,6 +397,38 @@ public class MainUtil {
             return false;
         if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
 
+            return true;
+        }
+        return false;
+    }
+    public static boolean canCopyMob(Entity entity){
+        if (entity != null){
+            if (entity instanceof FallenMob fm){
+                return false;
+            }
+            boolean whiteList = ClientNetworking.getAppropriateConfig().d4cSettings.whiteListModdedMobs;
+            String nameSpace = entity.getType().builtInRegistryHolder().key().location().getNamespace();
+            if (whiteList){
+                if (!(nameSpace.equals("minecraft"))){
+                    if (!isBlackOrWhiteListed(entity)){
+                        return false;
+                    }
+                }
+            } else {
+                if (isBlackOrWhiteListed(entity)){
+                    return false;
+                }
+            }
+
+            if (entity instanceof LivingEntity lv && lv.getMaxHealth() >= 60 &&
+                    ClientNetworking.getAppropriateConfig().d4cSettings.blacklistHighHealthMobs){
+                if (!(nameSpace.equals("minecraft"))) {
+                    return false;
+                }
+            }
+            if (isBossMob(entity)){
+                return false;
+            }
             return true;
         }
         return false;
@@ -1933,11 +1976,11 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                         }
                     }
@@ -2158,6 +2201,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
+                || sauce.is(ModDamageTypes.KQ_EXPLOSION)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
@@ -3564,6 +3608,44 @@ public class MainUtil {
         }
 
         return closest; // null if no valid hit
+    }
+
+    public static Entity pick(Entity self, double distance){
+        double $$2 = distance;
+        float choose = 1;
+        if (self.level().isClientSide()){
+            choose = ClientUtil.getFrameTime() % 1;
+        }
+        HitResult pick = self.pick($$2, choose, false);
+        Vec3 $$3 = self.getEyePosition(choose);
+        boolean $$4 = false;
+        int $$5 = 3;
+        double $$6 = $$2;
+        if ($$2 > 3.0) {
+            $$4 = true;
+        }
+
+        $$6 *= $$6;
+        if (pick != null) {
+            $$6 = pick.getLocation().distanceToSqr($$3);
+        }
+
+        Vec3 $$7 = self.getViewVector(1.0F);
+        Vec3 $$8 = $$3.add($$7.x * $$2, $$7.y * $$2, $$7.z * $$2);
+        AABB $$10 = self.getBoundingBox().expandTowards($$7.scale($$2)).inflate(1.0, 1.0, 1.0);
+        EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10, $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
+                && !$$0x.hasPassenger(self), $$6);
+        if ($$11 != null) {
+            Entity $$12 = $$11.getEntity();
+            Vec3 $$13 = $$11.getLocation();
+            double $$14 = $$3.distanceToSqr($$13);
+            if ($$4 && $$14 > 9.0) {
+                pick = BlockHitResult.miss($$13, Direction.getNearest($$7.x, $$7.y, $$7.z), BlockPos.containing($$13));
+            } else if ($$14 < $$6 || pick == null) {
+                return $$12;
+            }
+        }
+        return  null;
     }
 
 

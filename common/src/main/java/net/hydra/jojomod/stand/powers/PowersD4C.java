@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
@@ -47,6 +48,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -65,10 +72,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class PowersD4C extends NewPunchingStand {
     public PowersD4C(LivingEntity self) {
@@ -82,7 +87,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled() {
-        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableKingCrimson;
+        return ClientNetworking.getAppropriateConfig().d4cSettings.enableD4c;
     }
     @Override
     protected Byte getSummonSound() {
@@ -591,10 +596,276 @@ public class PowersD4C extends NewPunchingStand {
 //                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
 //                }
 //            }
+            populateWorld((byte) worldId);
             PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             enactEligability();
         }
+    }
+
+    public void populateWorld(byte worldId) {
+        if (!(self.level() instanceof ServerLevel sl)) {
+            return;
+        }
+
+        int maxCopies = 8;
+        double scanRadius = 15.0D;
+        double scanRadius2 = 70.0D;
+        double spawnRadius = 10.0D;
+
+        AABB scanBox = self.getBoundingBox().inflate(scanRadius);
+        AABB scanBox2 = self.getBoundingBox().inflate(scanRadius2);
+
+        // -------------------------------------------------
+        // FIRST: Check if this alternate world is already
+        // populated in this area.
+        // -------------------------------------------------
+
+        List<LivingEntity> existingParallelEntities =
+                sl.getEntitiesOfClass(
+                        LivingEntity.class,
+                        scanBox2,
+                        entity ->
+                                entity.isAlive()
+                                        && entity != self
+                                        && PowerTypes.getPlaneOfExisting(entity) == worldId
+                                        && !PowerTypes.isNativeToOurWorld(entity)
+                );
+
+        // If this universe already has its population here,
+        // refresh all of their lifetimes and do not create
+        // any new copies.
+        if (!existingParallelEntities.isEmpty()) {
+
+            for (LivingEntity entity : existingParallelEntities) {
+                PowerTypes.setTicksUntilGone(
+                        entity,
+                        PowerTypes.getForeignWorldMaxTime(worldId),
+                        worldId
+                );
+            }
+
+            return;
+        }
+
+        // -------------------------------------------------
+        // OTHERWISE: Populate it normally.
+        // -------------------------------------------------
+
+        List<LivingEntity> possibleTargets = sl.getEntitiesOfClass(
+                LivingEntity.class,
+                scanBox,
+                entity ->
+                        entity.isAlive()
+                                && entity != self
+                                && !(entity instanceof StandEntity)
+                                && !(entity instanceof CloneEntity)
+                                && !(entity instanceof Player)
+                                && MainUtil.canCopyMob(entity)
+                                && PowerTypes.originatedFromOurWorld(entity)
+                                && PowerTypes.getPlaneOfExisting(entity) == 0
+        );
+
+        Collections.shuffle(possibleTargets);
+
+        int copied = 0;
+
+        for (LivingEntity target : possibleTargets) {
+            if (copied >= maxCopies) {
+                break;
+            }
+
+            Vec3 spawnPos = findWorldMergeSpawnPosition(
+                    sl,
+                    target,
+                    spawnRadius
+            );
+
+            if (spawnPos == null) {
+                continue;
+            }
+
+            if (createParallelCopy(sl, target, spawnPos, worldId)) {
+                copied++;
+            }
+        }
+    }
+
+    public boolean createParallelCopy(
+            ServerLevel level,
+            LivingEntity original,
+            Vec3 spawnPos,
+            byte worldId
+    ) {
+        Entity copyEntity = original.getType().create(level);
+
+        if (!(copyEntity instanceof LivingEntity copy)) {
+            return false;
+        }
+
+        // -------------------------------------------------
+        // UNIVERSAL STUFF YOU ACTUALLY WANT TO PRESERVE
+        // -------------------------------------------------
+
+        // Name
+        if (original.hasCustomName()) {
+            copy.setCustomName(original.getCustomName());
+            copy.setCustomNameVisible(original.isCustomNameVisible());
+        }
+
+        // Rotation
+        copy.setYRot(original.getYRot());
+        copy.setXRot(original.getXRot());
+
+        // -------------------------------------------------
+        // ENTITY-SPECIFIC APPEARANCE
+        // -------------------------------------------------
+
+        copyMobAppearance(original, copy);
+
+        // Position
+        copy.moveTo(
+                spawnPos.x,
+                spawnPos.y,
+                spawnPos.z,
+                original.getYRot(),
+                original.getXRot()
+        );
+
+        // Alternate universe
+        PowerTypes.setPlaneOfExisting(copy, worldId);
+        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+
+        level.addFreshEntity(copy);
+
+        return true;
+    }
+    public void copyMobAppearance(LivingEntity original, LivingEntity copy) {
+
+        // Horses
+        if (original instanceof Horse originalHorse
+                && copy instanceof Horse copyHorse) {
+
+            copyHorse.setVariant(originalHorse.getVariant());
+        }
+
+
+        if (original instanceof Mob mb && copy instanceof Mob mb2){
+            if (original instanceof AgeableMob ag && copy instanceof AgeableMob ag2){
+                ag2.setAge(ag.getAge());
+            }
+            mb2.setBaby(mb.isBaby());
+
+            mb2.setItemSlot(EquipmentSlot.HEAD, mb.getItemBySlot(EquipmentSlot.HEAD).copy());
+            mb2.setItemSlot(EquipmentSlot.CHEST, mb.getItemBySlot(EquipmentSlot.CHEST).copy());
+            mb2.setItemSlot(EquipmentSlot.LEGS, mb.getItemBySlot(EquipmentSlot.LEGS).copy());
+            mb2.setItemSlot(EquipmentSlot.FEET, mb.getItemBySlot(EquipmentSlot.FEET).copy());
+            mb2.setItemSlot(EquipmentSlot.MAINHAND, mb.getMainHandItem().copy());
+            mb2.setItemSlot(EquipmentSlot.OFFHAND, mb.getOffhandItem().copy());
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                mb2.setDropChance(slot, 0.0F);
+            }
+
+        }
+        // Cats
+        if (original instanceof Cat originalCat
+                && copy instanceof Cat copyCat) {
+
+            copyCat.setVariant(originalCat.getVariant());
+        }
+        if (original instanceof Phantom originalPhantom
+                && copy instanceof Phantom copyPhantom) {
+
+            copyPhantom.setPhantomSize(originalPhantom.getPhantomSize());
+        }
+        if (original instanceof Slime originalSlime
+                && copy instanceof Slime copySlime) {
+
+            copySlime.setSize(originalSlime.getSize(), true);
+        }
+        // Sheep
+        if (original instanceof Sheep originalSheep
+                && copy instanceof Sheep copySheep) {
+
+            copySheep.setColor(originalSheep.getColor());
+        }
+
+        // Rabbits
+        if (original instanceof Rabbit originalRabbit
+                && copy instanceof Rabbit copyRabbit) {
+
+            copyRabbit.setVariant(originalRabbit.getVariant());
+        }
+
+        // Foxes
+        if (original instanceof Fox originalFox
+                && copy instanceof Fox copyFox) {
+
+            copyFox.setVariant(originalFox.getVariant());
+        }
+
+        // Axolotls
+        if (original instanceof Axolotl originalAxolotl
+                && copy instanceof Axolotl copyAxolotl) {
+
+            copyAxolotl.setVariant(originalAxolotl.getVariant());
+        }
+
+        // Frogs
+        if (original instanceof Frog originalFrog
+                && copy instanceof Frog copyFrog) {
+
+            copyFrog.setVariant(originalFrog.getVariant());
+        }
+
+        // Tropical fish
+        if (original instanceof TropicalFish originalFish
+                && copy instanceof TropicalFish copyFish) {
+
+            copyFish.setVariant(originalFish.getVariant());
+        }
+    }
+    @Nullable
+    public Vec3 findWorldMergeSpawnPosition(
+            ServerLevel level,
+            LivingEntity entity,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (entity.getBbWidth()/2);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB testBox = entity.getBoundingBox().move(
+                        candidate.x - entity.getX(),
+                        candidate.y - entity.getY(),
+                        candidate.z - entity.getZ()
+                );
+
+                if (level.noCollision(entity, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
     }
     public static int getDeductionTicks(Entity target, double distance){
         if (PowerTypes.isInD4CWorldWithRender(target)){
@@ -668,6 +939,12 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
+            case SKILL_2_GUARD -> {
+                switchCloneClient();
+            }
+            case SKILL_2_CROUCH_GUARD -> {
+                replaceBodyClient();
+            }
             case SKILL_3_GUARD -> {
                 betweenVisionClient();
             }
@@ -677,6 +954,13 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+        }
+    }
+
+    public void pullIntoRealityClient(){
+        Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+        if (targetEntity !=null && targetEntity.isAlive()){
+            tryIntPowerPacket(PowerIndex.POWER_2_BONUS,targetEntity.getId());
         }
     }
 
@@ -707,7 +991,24 @@ public class PowersD4C extends NewPunchingStand {
     }
     public boolean seesBetween = false;
     public int seesBetweenTicks = 0;
+    public void switchCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            return;
+        }
+
+    }
+    public void replaceBodyClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
+
+    }
     public void makeCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
         if (!this.onCooldown(PowerIndex.SKILL_2) && isEligable()) {
                 tryPowerPacket(PowerIndex.POWER_2);
         }
@@ -865,12 +1166,18 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (!(slot == 2 && PowerTypes.isInD4CWorld(self))){
+        boolean dworld = PowerTypes.isInD4CWorld(self);
+        if (!(slot == 2 && dworld)){
             if (slot == 1 || slot == 2 || slot == 4){
-                if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
+                if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
                 }
                 return !isEligable() || super.isAttackIneptVisually(activeP,slot);
+            }
+        } else {
+            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+            if (targetEntity == null){
+                return true;
             }
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -1012,7 +1319,7 @@ public class PowersD4C extends NewPunchingStand {
 
     @Unique
     public static boolean ejectFromNearestEntity(Entity self) {
-        if (self == null){
+        if (self == null || !MainUtil.isActuallyALivingEntityNoCap(self)){
             return false;
         }
         Level level = self.level();

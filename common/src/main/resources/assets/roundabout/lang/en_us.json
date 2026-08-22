@@ -1035,6 +1035,10 @@
   "death.attack.bites_the_dust.player": "%%$2s made %1$s bite the dust",
   "death.attack.bites_the_dust.item": "%1$s bit the dust",
   "death.attack.bites_the_dust.player.item": "%$2s made %1$s bite the dust",
+  "death.attack.kq_explosion": "%1$s was reduced to dust",
+  "death.attack.kq_explosion.player": "%%$2s reduced %1$s to dust",
+  "death.attack.kq_explosion.item": "%1$s was reduced to dust",
+  "death.attack.kq_explosion.player.item": "%%$2s reduced %1$s to dust",
   "death.attack.kick": "%1$s was ran over",
   "death.attack.kick.player": "%$2s trampled %1$s",
   "death.attack.kick.item": "%1$s was ran over",
@@ -1220,6 +1224,9 @@
   "sounds.roundabout.planet_waves_disintegration":  "Meteor Disintegrating",
 
   "sounds.roundabout.purple_haze_summon":  "Stand summoned",
+  "sounds.roundabout.purple_haze_barrage_cry":  "UBASHAAAA!!!",
+  "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
+  "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1443,6 +1450,7 @@
 
   "sounds.roundabout.summon_killer_queen": "Stand summoned",
   "sounds.roundabout.summon_creeper_queen": "Creeper Queen Summon",
+  "sounds.roundabout.kq_minesweeper_redirect": "[Bomb Redirecting]",
   "sounds.roundabout.kq_minesweeper_start": "[MINESWEEPER START]",
   "sounds.roundabout.killer_queen_barrage": "Shibabababa!",
   "sounds.roundabout.kq_minesweeper_barrage": "[Shibabababa!]",
@@ -1488,6 +1496,10 @@
   "sounds.roundabout.stray_cat_sound_1": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_3": "Stray Cat Hiss",
   "sounds.roundabout.stray_cat_sound_2": "Stray Cat Interest",
+
+  "sounds.roundabout.btd_normal_reset": "Bites the dust Combat",
+  "sounds.roundabout.btd_full_reset": "Bites the dust Day",
+  "sounds.roundabout.btd_arrow": "Bites the dust obtainment",
 
   "sounds.roundabout.levelup": "Development Level Up!",
 
@@ -2242,9 +2254,9 @@
   "ability.roundabout.kq_bomb_block":"Block Primary Bomb Plant",
   "ability.roundabout.kq_bomb_block.desc":"Plants a bomb on the block you are facing",
   "ability.roundabout.kq_bomb_item":"Item Primary Bomb Plant",
-  "ability.roundabout.kq_bomb_item.desc":"Plants a bomb on the item you are holding, the item is automatically throw on detonate",
+  "ability.roundabout.kq_bomb_item.desc":"Plants a bomb on the item you are holding, dropping it on floor, it can't be picked up until you defuse. If you plant on a arrow, it goes for your stand hand, you can hold attack to shoot it like a bow",
   "ability.roundabout.kq_bomb_mob":"Mob Primary Bomb Plant",
-  "ability.roundabout.kq_bomb_mob.desc":"Plants a bomb on the mob you are facing, it slows you a bit and has a big interruptable windup, but it will deal 40 damage on mobs and insta-kill players when detonating",
+  "ability.roundabout.kq_bomb_mob.desc":"Plants a bomb on the mob you are facing, it slows you a bit and has a big interruptable windup, but it will deal 40 damage on mobs and one hits players when detonating",
   "ability.roundabout.kq_bomb_bubble":"Stray cats Bubble Primary Bomb",
   "ability.roundabout.kq_bomb_bubble.desc":"Send a controllable air bubble bomb which goes in the direction that you are facing",
   "ability.roundabout.kq_bomb_bubble_redirect":"Stray cats Bubble redirect",
@@ -2265,6 +2277,9 @@
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
   "ability.roundabout.sha_mining":"Sheer heart attack mining",
   "ability.roundabout.sha_mining.desc":"Right click sha with a torch, he will continue the direction that he is facing, and explode blocks when he collides, doesnt destroy ores.",
+
+  "ability.roundabout.kq_arms_mode":"Arms Mode",
+  "ability.roundabout.kq_arms_mode.desc":"Hide your stand. You can't attack and lose access to many of your abilities while this is toggled, but can use major abilities discretely.",
 
   "ability.roundabout.arms_mode":"Arms Mode",
   "ability.roundabout.arms_mode.desc":"Hide your stand. Replaces your attacks with up close brawling punching that disable shields like axes. You lose access to many of your abilities while this is toggled, but can use major abilities discretely.",
@@ -2379,8 +2394,6 @@
   "ability.roundabout.whitesnake_chop.desc": "Hold and release within the threshold to unleash a devastating chop, or full charge it for a powerful punch.",
   "ability.roundabout.whitesnake_acid_toss": "Acid Toss",
   "ability.roundabout.whitesnake_acid_toss.desc": "Toss hallucinatory acid that spreads across floors and walls which inflicts Hallucination overtime.",
-  "ability.roundabout.whitesnake_snake_bite": "Snake Bite",
-  "ability.roundabout.whitesnake_snake_bite.desc": "While in Melting Mode, send Whitesnake forward. Applies hallucination on hit.",
   "ability.roundabout.whitesnake_melting_mode": "Melting Mode",
   "ability.roundabout.whitesnake_melting_mode.desc": "While in control mode, you can enter melting mode. Your stand slithers along the ground, walls, and ceiling, leaving a trail of its acid wherever it goes. Holding space in this mode lets you hover temporarily.",
   "ability.roundabout.whitesnake_control_mode": "Control Mode",
@@ -3282,6 +3295,8 @@
   "config.roundabout.emperorBulletRange.name":"Bullet Range",
   "config.roundabout.emperorBulletRange.desc": "The range bullets have.",
 
+  "config.roundabout.enableD4c.name":"Enable Stand",
+  "config.roundabout.enableD4c.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableOasis.name":"Enable Stand",
   "config.roundabout.enableOasis.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableKillerQueen.name": "Enable Stand",
@@ -3336,6 +3351,15 @@
   "config.roundabout.timeSkipRange.name": "Time Skip Range",
   "config.roundabout.timeSkipRange.desc": "How far entities get skipped. The effect and sounds play 25 blocks further than this as padding for people witnessing it. This could be laggy if you drastically increase the range so I would recommend avoiding that.",
 
+  "config.roundabout.timeEraseBlocks.name": "Render TE Blocks",
+  "config.roundabout.timeEraseBlocks.desc": "If blocks in time erase should render.",
+
+  "config.roundabout.whiteListModdedMobs.name": "Whitelist Modded Mobs",
+  "config.roundabout.whiteListModdedMobs.desc": "By default, d4c creates parallel mobs for modded mobs with world merging. It operates through a blacklist in the advanced config. Turning this on makes it a whitelist in case you want to keep these parallel mobs strictly vanilla to avoid conflicts.",
+
+  "config.roundabout.blacklistHighHealthMobs.name": "Ban High HP Mobs",
+  "config.roundabout.blacklistHighHealthMobs.desc": "Automatically prevents high health mobs from being parallel versions in the interest of avoiding weird boss interactions for mobs that mods didn't do their diligence and add the forge or fabric boss tag to.",
+
   "config.roundabout.enableDaySkip.name": "Day Skip",
   "config.roundabout.enableDaySkip.desc": "Enable to make the sun go by at 100 ticks (5 seconds) globally. Off by default.",
 
@@ -3349,6 +3373,9 @@
   "config.roundabout.skipPastDeath.name": "Fake Death Skip",
   "config.roundabout.skipPastDeath.desc": "Makes your fated self play a fake death message and potentially drop fake items based on gamerule.",
 
+
+  "config.roundabout.dropMode.name": "Drop Mode",
+  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
@@ -4548,16 +4575,12 @@
 
   "config.roundabout.enableWhitesnake.name": "Enable Stand",
   "config.roundabout.enableWhitesnake.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
-  "config.roundabout.snakeBiteCooldown.name": "Snake Bite Cooldown",
-  "config.roundabout.snakeBiteCooldown.desc": "Snake Bite cooldown in ticks.",
   "config.roundabout.hallucinatoryDisguiseCooldown.name": "Hallucinatory Disguise Cooldown",
   "config.roundabout.hallucinatoryDisguiseCooldown.desc": "Hallucinatory Disguise cooldown in ticks.",
   "config.roundabout.acidTossCooldown.name": "Acid Toss Cooldown",
   "config.roundabout.acidTossCooldown.desc": "Acid Toss cooldown in ticks.",
   "config.roundabout.timeSparkCooldown.name": "Time Spark Cooldown",
   "config.roundabout.timeSparkCooldown.desc": "Time Spark cooldown in ticks.",
-  "config.roundabout.snakeBiteHallucinationDuration.name": "Snake Bite Hallucination Duration",
-  "config.roundabout.snakeBiteHallucinationDuration.desc": "Base Hallucination duration from Snake Bite in ticks.",
   "config.roundabout.hallucinationAppliesMelting.name": "Hallucination Applies Melting",
   "config.roundabout.hallucinationAppliesMelting.desc": "Applies an equal level of Melting alongside Hallucination.",
   "config.roundabout.hideHallucinationParticles.name": "Hide Hallucination Particles",
@@ -4693,6 +4716,7 @@
   "config.roundabout.PlanetWavesSettings.name": "Planet Waves",
   "config.roundabout.theWorldSettings.name": "The World",
   "config.roundabout.kingCrimsonSettings.name": "King Crimson",
+  "config.roundabout.d4cSettings.name": "D4C",
   "config.roundabout.whitesnakeSettings.name": "Whitesnake",
   "config.roundabout.starPlatinumSettings.name": "Star Platinum",
   "config.roundabout.oasisSettings.name": "Oasis",

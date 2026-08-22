@@ -70,6 +70,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -118,6 +119,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     public boolean rdbt$canBePickedUp=true;
+    @Unique
+    public UUID rdbt$nativeCopy = null;
 
     @Unique
     private float roundabout$lastDirectDamage = 0;
@@ -169,6 +172,11 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
         $$0.putInt("inForeignWorld",rdbt$inForeignWorld);
+        $$0.putByte("nativeToWorld",rdbt$nativeTo);
+        $$0.putByte("originWorld",rdbt$originWorld);
+        if (rdbt$nativeCopy != null){
+            $$0.putUUID("rdbt$nativeCopy",rdbt$nativeCopy);
+        }
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -178,6 +186,12 @@ public abstract class EntityAndData implements IEntityAndData {
             rdbt$canBePickedUp = $$0.getBoolean("canMobGrab");
         } if ($$0.contains("inForeignWorld")) {
             rdbt$inForeignWorld = $$0.getInt("inForeignWorld");
+        } if ($$0.contains("nativeToWorld")) {
+            rdbt$nativeTo = $$0.getByte("nativeToWorld");
+        } if ($$0.hasUUID("nativeToWorldCopy")) {
+            rdbt$nativeCopy = $$0.getUUID("nativeToWorld");
+        } if ($$0.hasUUID("rdbt$originWorld")) {
+            rdbt$nativeCopy = $$0.getUUID("rdbt$originWorld");
         }
 
     }
@@ -918,13 +932,52 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     public abstract Vec3 position();
 
+    @Shadow
+    public abstract void discard();
+
     @Unique
     private int rdbt$inForeignWorld = 0;
+    @Unique
+    private int rdbt$ticksUntilGone = 0;
+    @Unique
+    private byte rdbt$nativeTo = 0;
+    @Unique
+    private byte rdbt$originWorld = 0;
 
     @Override
     @Unique
     public int rdbt$getForeignWorldTicks(){
         return rdbt$inForeignWorld;
+    }
+    @Override
+    @Unique
+    public int rdbt$getTicksUntilGone(){
+        return rdbt$ticksUntilGone;
+    }
+    @Override
+    @Unique
+    public void rdbt$setTicksUntilGone(int lol){
+        rdbt$ticksUntilGone = lol;
+    }
+    @Override
+    @Unique
+    public byte rdbt$getNativeTo(){
+        return rdbt$nativeTo;
+    }
+    @Override
+    @Unique
+    public void rdbt$setNativeTo(byte lol){
+        rdbt$nativeTo = lol;
+    }
+    @Override
+    @Unique
+    public byte rdbt$getOriginWorld(){
+        return rdbt$originWorld;
+    }
+    @Override
+    @Unique
+    public void rdbt$setOriginWorld(byte lol){
+        rdbt$originWorld = lol;
     }
     @Override
     @Unique
@@ -945,32 +998,42 @@ public abstract class EntityAndData implements IEntityAndData {
         if (!level().isClientSide()) {
             Entity thrs = ((Entity) (Object) this);
             byte world = PowerTypes.getPlaneOfExisting(thrs);
-            if (!(thrs instanceof FollowingStandEntity fs && fs.getFollowing() != null)
-            && !(thrs instanceof StandEntity se && se.getUser() != null)) {
-                if (world != 0) {
-                    int existTime = PowerTypes.getForeignWorldMaxTime(world);
-                    if (existTime != -1) {
-                        int clmp = Mth.clamp(rdbt$inForeignWorld +
-                                        PowersD4C.getDeductionTicks(thrs, position().distanceTo(
-                                                ((IGravityEntity) thrs).rdbt$getExistPlaneStartPoint())
-                                        ),
-                                0, existTime);
-                        rdbt$setForeignWorldTicks(clmp);
-                        if (rdbt$inForeignWorld >= existTime) {
-                            if (PowerTypes.isInD4CWorld(thrs)) {
-                                if (!PowersD4C.ejectFromNearestEntity(thrs)) {
-                                    if (!PowersD4C.ejectFromOGSpot(thrs)) {
+                if (!(thrs instanceof FollowingStandEntity fs && fs.getFollowing() != null)
+                        && !(thrs instanceof StandEntity se && se.getUser() != null)) {
+                    if (rdbt$nativeTo != 0 && rdbt$nativeTo == world){
+                        rdbt$ticksUntilGone--;
+                        if (rdbt$ticksUntilGone <= 0){
+                            discard();
+                        }
+                    } else {
+                        if (rdbt$nativeTo != 0) {
+                            rdbt$nativeTo = 0;
+                        }
+                        if (world != 0) {
+                            int existTime = PowerTypes.getForeignWorldMaxTime(world);
+                            if (existTime != -1) {
+                                int clmp = Mth.clamp(rdbt$inForeignWorld +
+                                                PowersD4C.getDeductionTicks(thrs, position().distanceTo(
+                                                        ((IGravityEntity) thrs).rdbt$getExistPlaneStartPoint())
+                                                ),
+                                        0, existTime);
+                                rdbt$setForeignWorldTicks(clmp);
+                                if (rdbt$inForeignWorld >= existTime) {
+                                    if (PowerTypes.isInD4CWorld(thrs)) {
+                                        if (!PowersD4C.ejectFromNearestEntity(thrs)) {
+                                            if (!PowersD4C.ejectFromOGSpot(thrs)) {
+                                            }
+                                        }
                                     }
+                                    PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
                                 }
                             }
-                            PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
+                        } else {
+                            if (rdbt$inForeignWorld != 0) {
+                                rdbt$setForeignWorldTicks(0);
+                            }
                         }
                     }
-                } else {
-                    if (rdbt$inForeignWorld != 0) {
-                        rdbt$setForeignWorldTicks(0);
-                    }
-                }
             }
         }
     }

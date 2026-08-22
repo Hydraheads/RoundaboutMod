@@ -869,10 +869,14 @@ public class StandPowers extends AbilityScapeBasis {
             return ModSounds.ANUBIS_UNSHEATHE_EVENT;
         }else if (soundChoice == SoundIndex.MANHATTAN_RAIN) {
             return ModSounds.MANHATTAN_DODGING_EVENT;
-        }else if (soundChoice == SoundIndex.BITES_THE_DUST_DETONATE) {
-            return ModSounds.KILLER_QUEEN_BTD_DETONATE_EVENT;
+        }else if (soundChoice == SoundIndex.BITES_THE_DUST_COMBAT) {
+            return ModSounds.BITES_THE_DUST_COMBAT_EVENT;
+        }else if (soundChoice == SoundIndex.BITES_THE_DUST_DAY) {
+            return ModSounds.BITES_THE_DUST_DAY_EVENT;
         } else if (soundChoice == SoundIndex.REVOLVER_RELOAD) {
             return ModSounds.SNUBNOSE_RELOAD_EVENT;
+        } else if (soundChoice == SoundIndex.BITES_THE_DUST_MINESWEEPER) {
+            return ModSounds.KQ_MINESWEEPER_BTD_DETONATE_EVENT;
         } else if (soundChoice == SoundIndex.SNIPER_RELOAD) {
             return ModSounds.JACKAL_RELOAD_EVENT;
         } else if (soundChoice == SoundIndex.COLT_RELOAD) {

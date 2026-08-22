@@ -3,7 +3,6 @@ package net.hydra.jojomod.client.models.stand;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StarPlatinumAnimations;
-import net.hydra.jojomod.client.models.stand.animations.TheWorldAnimations;
 import net.hydra.jojomod.client.models.stand.animations.WhitesnakeAnimations;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -270,8 +269,6 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         this.animate(entity.itemRetract, StandAnimations.RETRACT_ITEM, ageInTicks, 1.25F);
         this.animate(entity.impale, StandAnimations.IMPALE, ageInTicks, 1.04F);
         this.animate(entity.phaseGrab, StandAnimations.PHASE_GRAB, ageInTicks, 0.6F);
-        this.animate(entity.snakeBite, TheWorldAnimations.ASSAULT, ageInTicks, 1.0F);
-        this.animate(entity.snakeBiteImpact, TheWorldAnimations.ASSAULT_PUNCH, ageInTicks, 1.0F);
         if (entity.isRemoteControlled() && !entity.isMeltingModeActive()
                 && entity.getAnimation() == 0 && limbSwingAmount > 0.01F) {
             float pace = entity.isSprinting() ? 0.9F : 0.6662F;
