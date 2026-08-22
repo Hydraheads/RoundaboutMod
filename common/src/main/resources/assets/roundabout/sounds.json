@@ -17,6 +17,18 @@
       "roundabout:summon_d4c"
     ]
   },
+  "d4c_punch": {
+    "subtitle": "sounds.roundabout.d4c_punch",
+    "sounds": [
+      "roundabout:d4c_punch"
+    ]
+  },
+  "d4c_punch_2": {
+    "subtitle": "sounds.roundabout.d4c_punch_2",
+    "sounds": [
+      "roundabout:d4c_punch_2"
+    ]
+  },
   "d4c_portal": {
     "subtitle": "sounds.roundabout.d4c_portal",
     "sounds": [

@@ -1601,6 +1601,22 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.D4C_PUNCH_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.D4C_PUNCH_2_EVENT;
+    }
+    @Override
+    public float getPunchLandPitch(){
+        return 1.0F - 0.05F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 1F;
+    }
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
         if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return this.setPowerFinalAttack();
