@@ -944,7 +944,7 @@ public class PowersGreenDay extends NewPunchingStand {
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Off_hand_entity.flyingTicks = 0;
-        Off_hand_entity.neuteredSpinTicks = 0;
+        Off_hand_entity.neuteredSpinTicks = 15;
     }
 
     public void OffHandSpinAndThrowSlim(){
