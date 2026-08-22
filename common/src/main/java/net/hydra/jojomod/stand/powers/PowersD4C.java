@@ -939,6 +939,12 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
+            case SKILL_2_GUARD -> {
+                switchCloneClient();
+            }
+            case SKILL_2_CROUCH_GUARD -> {
+                replaceBodyClient();
+            }
             case SKILL_3_GUARD -> {
                 betweenVisionClient();
             }
@@ -948,6 +954,13 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+        }
+    }
+
+    public void pullIntoRealityClient(){
+        Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+        if (targetEntity !=null && targetEntity.isAlive()){
+            tryIntPowerPacket(PowerIndex.POWER_2_BONUS,targetEntity.getId());
         }
     }
 
@@ -978,7 +991,24 @@ public class PowersD4C extends NewPunchingStand {
     }
     public boolean seesBetween = false;
     public int seesBetweenTicks = 0;
+    public void switchCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            return;
+        }
+
+    }
+    public void replaceBodyClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
+
+    }
     public void makeCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
         if (!this.onCooldown(PowerIndex.SKILL_2) && isEligable()) {
                 tryPowerPacket(PowerIndex.POWER_2);
         }
@@ -1136,12 +1166,18 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (!(slot == 2 && PowerTypes.isInD4CWorld(self))){
+        boolean dworld = PowerTypes.isInD4CWorld(self);
+        if (!(slot == 2 && dworld)){
             if (slot == 1 || slot == 2 || slot == 4){
-                if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
+                if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
                 }
                 return !isEligable() || super.isAttackIneptVisually(activeP,slot);
+            }
+        } else {
+            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+            if (targetEntity == null){
+                return true;
             }
         }
         return super.isAttackIneptVisually(activeP,slot);
