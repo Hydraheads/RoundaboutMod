@@ -523,7 +523,8 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             return;
         }
 
-        if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1){
+        if (ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1
+                && dimension() == Level.OVERWORLD){
             if (((TimeStop) this).inTimeStopRange(new Vec3i((int) 0, (int) 0, (int) 0))){
                 this.setGameTime(this.levelData.getGameTime() + 1L);
                 ci.cancel();

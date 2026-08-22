@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -531,6 +532,10 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
         LivingEntity user = getUser();
         if (isRemoteControlled() && user != null) {
             Vec3 userVelocity = user.getDeltaMovement();

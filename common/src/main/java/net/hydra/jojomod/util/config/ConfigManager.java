@@ -246,6 +246,11 @@ public abstract class ConfigManager {
             MainUtil.hypnotismMobBlackList.clear();
             MainUtil.hypnotismMobBlackList.addAll(getAdvancedConfig().hypnotismMobBlackList);
         }
+        if (getAdvancedConfig().blackOrWhiteListParallelMobs != null)
+        {
+            MainUtil.blackOrWhiteListParallelMobs.clear();
+            MainUtil.blackOrWhiteListParallelMobs.addAll(getAdvancedConfig().blackOrWhiteListParallelMobs);
+        }
         if (getAdvancedConfig().fleshBudMobBlacklist != null)
         {
             MainUtil.fleshBudMobBlacklist.clear();

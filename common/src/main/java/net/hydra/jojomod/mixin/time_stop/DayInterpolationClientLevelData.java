@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -92,7 +93,8 @@ public abstract class DayInterpolationClientLevelData implements IDayInterpolati
         LocalPlayer LP = Minecraft.getInstance().player;
         if (LP != null && Minecraft.getInstance().level != null &&
                 (((TimeStop)Minecraft.getInstance().level).inTimeStopRange(LP)
-                && !(ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1))) {
+                && !((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1
+                && Minecraft.getInstance().level.dimension() == Level.OVERWORLD)))) {
             if (!this.roundabout$getRoundaboutTimeStopInitialized()){
                 this.roundabout$DayTimeActual = dayTime;
                 this.roundabout$DayTimeTarget = dayTime;

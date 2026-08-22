@@ -236,6 +236,7 @@ public class MainUtil {
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+    public static ArrayList<String> blackOrWhiteListParallelMobs = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
@@ -368,6 +369,15 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isBlackOrWhiteListed(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (blackOrWhiteListParallelMobs != null && !blackOrWhiteListParallelMobs.isEmpty() && rl != null && blackOrWhiteListParallelMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
 
     public static boolean isFleshBudBlacklisted(Entity ent){
         if (ent == null)
@@ -393,6 +403,29 @@ public class MainUtil {
     }
     public static boolean canCopyMob(Entity entity){
         if (entity != null){
+            if (entity instanceof FallenMob fm){
+                return false;
+            }
+            boolean whiteList = ClientNetworking.getAppropriateConfig().d4cSettings.whiteListModdedMobs;
+            String nameSpace = entity.getType().builtInRegistryHolder().key().location().getNamespace();
+            if (whiteList){
+                if (!(nameSpace.equals("minecraft"))){
+                    if (!isBlackOrWhiteListed(entity)){
+                        return false;
+                    }
+                }
+            } else {
+                if (isBlackOrWhiteListed(entity)){
+                    return false;
+                }
+            }
+
+            if (entity instanceof LivingEntity lv && lv.getMaxHealth() >= 60 &&
+                    ClientNetworking.getAppropriateConfig().d4cSettings.blacklistHighHealthMobs){
+                if (!(nameSpace.equals("minecraft"))) {
+                    return false;
+                }
+            }
             if (isBossMob(entity)){
                 return false;
             }

@@ -318,6 +318,13 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:warden"
             )
     );
+
+    public Set<String> blackOrWhiteListParallelMobs = new HashSet<>(
+            Arrays.asList(
+                    "mod_id:add_entry_here",
+                    "mod_id:add_other_entry_here"
+            )
+    );
     public Set<String> hypnotismMobBlackList = new HashSet<>(
             Arrays.asList(
                     "minecraft:ender_dragon",
