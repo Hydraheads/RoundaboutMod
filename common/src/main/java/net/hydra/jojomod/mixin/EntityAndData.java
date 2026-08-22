@@ -1062,7 +1062,7 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickQVec();
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+    protected void roundabout$playSoundEnt(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
         Entity thrs = ((Entity) (Object)this);
         if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
@@ -1091,32 +1091,36 @@ public abstract class EntityAndData implements IEntityAndData {
                 if (thrs.level() instanceof ServerLevel sl) {
                     if (soundEvent != null) {
                         ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
-                        String str = this.getSoundSource().name();
-                        for (ServerPlayer playerInList :
-                                sl.getServer().getPlayerList().getPlayers()) {
+                        if (soundId != null) {
+                            String str = this.getSoundSource().name();
+                            if (str != null) {
+                                for (ServerPlayer playerInList :
+                                        sl.getServer().getPlayerList().getPlayers()) {
 
-                            double range = soundEvent.getRange(g);
-                            double rangeSqr = range * range;
-                            if (playerInList.distanceToSqr(thrs) > rangeSqr) {
-                                continue;
+                                    double range = soundEvent.getRange(g);
+                                    double rangeSqr = range * range;
+                                    if (playerInList.distanceToSqr(thrs) > rangeSqr) {
+                                        continue;
+                                    }
+
+                                    if (PowerTypes.isInADifferentExistenceNoTE(
+                                            thrs,
+                                            playerInList)) {
+                                        continue;
+                                    }
+
+                                    S2CPacketUtil.sendSafeSound(
+                                            playerInList,
+                                            thrs.getX(),
+                                            thrs.getY(),
+                                            thrs.getZ(),
+                                            soundId.toString(),
+                                            str,
+                                            f,
+                                            g
+                                    );
+                                }
                             }
-
-                            if (PowerTypes.isInADifferentExistenceNoTE(
-                                    thrs,
-                                    playerInList)) {
-                                continue;
-                            }
-
-                            S2CPacketUtil.sendSafeSound(
-                                    playerInList,
-                                    thrs.getX(),
-                                    thrs.getY(),
-                                    thrs.getZ(),
-                                    soundId.toString(),
-                                    str,
-                                    f,
-                                    g
-                            );
                         }
                     }
                 }
