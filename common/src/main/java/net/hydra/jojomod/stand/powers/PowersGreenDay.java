@@ -1669,7 +1669,7 @@ public class PowersGreenDay extends NewPunchingStand {
         switch (soundChoice)
         {
             case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SUMMON_GREEN_DAY_EVENT;
+                return ModSounds.GREEN_DAY_MOLD_SPREAD_EVENT;
             }
         }
         return super.getSoundFromByte(soundChoice);
