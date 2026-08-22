@@ -391,6 +391,15 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean canCopyMob(Entity entity){
+        if (entity != null){
+            if (isBossMob(entity)){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
     public static boolean isEdibleToVampires(ItemStack stack){
         if (stack == null || stack.isEmpty())
             return false;

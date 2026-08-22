@@ -72,7 +72,8 @@ public class D4CPortalBlock extends BaseEntityBlock
             BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof D4CPortalBlockEntity portal) {
-                if (portal.worldId != 0 && PowerTypes.getPlaneOfExisting2(entity) != portal.worldId
+                if (portal.worldId != 0 && PowerTypes.getPlaneOfExisting2(entity) == 0 &&
+                        PowerTypes.getPlaneOfExisting2(entity) != portal.worldId
                 && !MainUtil.isBossMob(entity) && portal.ticksUntilRestore > 17 && !(portal.entityList.contains(entity))
                         && !(portal.creator != null &&
                         portal.creator.equals(entity.getUUID()))) {

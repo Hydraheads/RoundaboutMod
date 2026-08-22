@@ -25,6 +25,10 @@ public interface IEntityAndData {
 
     int rdbt$getForeignWorldTicks();
     void rdbt$setForeignWorldTicks(int lol);
+    int rdbt$getTicksUntilGone();
+    byte rdbt$getNativeTo();
+    void rdbt$setNativeTo(byte lol);
+    void rdbt$setTicksUntilGone(int lol);
 
     boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
