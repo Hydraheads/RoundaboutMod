@@ -1588,6 +1588,15 @@ public class PowersD4C extends NewPunchingStand {
                 playSoundsIfNearby(IMPALE_NOISE, 27, false);
                 this.animateStand(D4CEntity.DRAG_2);
                 this.poseStand(OffsetIndex.GUARD);
+                if (self.level() instanceof ServerLevel sl){
+                    Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                    sl.sendParticles(new DustParticleOptions(
+                                    color,
+                                    1.0F
+                            ), targetEntity.getX(),
+                            targetEntity.getY()+targetEntity.getEyeHeight(), targetEntity.getZ(),
+                            20, 0.3, 0.3, 0.3, 0.3);
+                }
             }
         }
     }
