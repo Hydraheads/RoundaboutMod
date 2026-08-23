@@ -2012,7 +2012,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryBlockPlantBomb() {
-    	if (!this.onCooldown(PowerIndex.SKILL_1) && this.activePower == NONE) {
+    	if (!this.onCooldown(PowerIndex.SKILL_1) && this.activePower == NONE && currentBombStatus == BOMB_NONE) {
             bombConfigPacket();
 
     		((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
@@ -2054,7 +2054,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryMobPlantBomb() {
-        if (!this.onCooldown(PowerIndex.SKILL_2) && this.canAttack2()) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && this.canAttack2() && currentBombStatus == BOMB_NONE) {
             bombConfigPacket();
 
             if (this.activePower == PowerIndex.POWER_2) {
@@ -2706,22 +2706,18 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean blockPlantBomb() {
-
-    	if (!this.isClient()) {
+    	if (!this.isClient() && currentBombStatus == BOMB_NONE) {
 			StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 			
-		    if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && this.currentBombStatus == BOMB_NONE) {
-		    	Vec3 vec3d = this.getSelf().getEyePosition(0);
+		    if ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
+		    	float range = hasHandsOut() ? blockPlantRange - 0.75f : blockPlantRange;
+
+                Vec3 vec3d = this.getSelf().getEyePosition(0);
 		        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-		        Vec3 vec3d3 = vec3d.add(vec3d2.x * blockPlantRange, vec3d2.y * blockPlantRange, vec3d2.z * blockPlantRange);
+		        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
 		        
 		        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
                 if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
-
-                if (blockHit.getType() == HitResult.Type.ENTITY) {
-                    Roundabout.LOGGER.info("WAIT WAIT WAIT");
-                    return true;
-                }
 
                 BlockPos pos = blockHit.getBlockPos();
 
@@ -2747,6 +2743,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean mobPlantBomb() {
+        if (currentBombStatus != BOMB_NONE) { return false; }
 
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -2849,7 +2846,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 } else {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.animateStand(KillerQueenEntity.SHA_SEND);
-                    this.poseStand(OffsetIndex.GUARD);
+                    poseStand(OffsetIndex.FOLLOW_NOLEAN);
                 }
 
                 this.setActivePower(PowerIndex.POWER_3);
@@ -4287,7 +4284,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.attackTimeDuring = 0;
         this.setActivePower(ARROW_CHARGE);
         this.animateStand(KillerQueenEntity.ARROW_CHARGE);
-        this.poseStand(OffsetIndex.GUARD);
+        poseStand(OffsetIndex.FOLLOW_NOLEAN);
         return true;
     }
  }
