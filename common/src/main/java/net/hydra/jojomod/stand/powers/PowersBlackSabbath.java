@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
@@ -288,7 +289,7 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public boolean two(){
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
-        Position pn = this.self.getEyePosition().add(lvec.scale(-0.9F));
+        Position pn = this.self.getEyePosition().add(lvec.scale(-0.75F));
         if(moveMode == 0) {
             if (!this.getSelf().level().isClientSide()) {
                 if (blackSelect == null || blackSelect.isRemoved()){
@@ -298,7 +299,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                         blackSelect = stand;
                         if (stand instanceof BlackSabbathEntity BE) {
                             Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
-                            BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.35F), pn.z());
+                            BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), pn.z());
                             BE.setMaster(this.self);
                             BE.setYRot((self.getYRot() % 360) - 180);
                             BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
@@ -605,6 +606,39 @@ public class PowersBlackSabbath extends NewDashPreset {
         getValidPlacement();
 
         super.tickPower();
+    }
+
+    public void tickPowerEnd() {
+        if (blackSelect != null && this.getStandEntity(self) != null) {
+            if (!this.self.level().isClientSide()) {
+                blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+            }
+        }
+    }
+
+    public void blackRotation(BlackSabbathEntity blackSabbathEntity) {
+        transformSabbath(blackSabbathEntity);
+    }
+
+    public void transformSabbath(BlackSabbathEntity value){
+        if (value != null) {
+
+            if (!this.self.level().isClientSide()) {
+                value.setOldPosAndRot();
+            }
+
+            if (this.self.level().isClientSide()) {
+                value.setYRot(value.getUser().getYHeadRot() % 360);
+                value.setXRot(value.getUser().getXRot());
+                value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+            } else {
+                value.setYRot(value.getUser().getYHeadRot() % 360);
+                value.setXRot(value.getUser().getXRot());
+                value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+            }
+        }
     }
 
     @Override
