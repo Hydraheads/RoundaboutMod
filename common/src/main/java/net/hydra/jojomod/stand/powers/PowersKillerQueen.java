@@ -3161,6 +3161,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                         userSelf.roundabout$setStandAnimation(NONE);
                     } else if (animationType == KillerQueenEntity.BLOCK_PLANT && attackTimeDuring >= -1) {
                         userSelf.roundabout$setStandAnimation(NONE);
+                    } else if (animationType == KillerQueenEntity.DETONATE && attackTimeDuring >= -1) {
+                        userSelf.roundabout$setStandAnimation(NONE);
                     }
                 }
             }
@@ -4225,7 +4227,11 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.detonateTimer = 0;
             if (this.getActivePower() == PowerIndex.NONE) {
                 this.poseStand(OffsetIndex.GUARD);
-                this.animateStand(KillerQueenEntity.DETONATE);
+                if (hasHandsOut()) {
+                    getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.DETONATE);
+                }else {
+                    this.animateStand(KillerQueenEntity.DETONATE);
+                }
                 this.setActivePower(DETONATE);
             }
         }

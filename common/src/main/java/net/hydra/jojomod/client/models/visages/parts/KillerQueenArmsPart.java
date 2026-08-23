@@ -146,10 +146,10 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
                     if (animation == KillerQueenEntity.MOB_PLANT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/((float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f);
-                    } else if (animation == KillerQueenEntity.BLOCK_PLANT) {
+                    } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
-                    } else if (animation == KillerQueenEntity.ITEM_THROW) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.THROW_ITEM, partialTicks, speed);
+                    } else if (animation == KillerQueenEntity.DETONATE) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.detonate, partialTicks, speed);
                     } else if (animation == StandPowers.VAULT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
                     }else if (animation == StandPowers.MINING) {
