@@ -29,6 +29,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
     private static final ResourceLocation OCULUS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/oculus.png");
     private static final ResourceLocation BEACH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/beach_sabbath.png");
+    private static final ResourceLocation MAGMA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/magma_sabbath.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
@@ -72,6 +73,9 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         }
         if(BT == BlackSabbathEntity.BEACH){
             return BEACH;
+        }
+        if(BT == BlackSabbathEntity.MAGMA){
+            return MAGMA;
         }
         return ANIME;
     }
