@@ -871,9 +871,9 @@ public class PowersD4C extends NewPunchingStand {
         if (PowerTypes.isInD4CWorldWithRender(target)){
             if (distance >= 15) {
                 return 6;
-            } else if (distance >= 12){
+            } else if (distance >= 14){
                 return 3;
-            } else if (distance >= 10){
+            } else if (distance >= 12){
                 return 2;
             }
         }

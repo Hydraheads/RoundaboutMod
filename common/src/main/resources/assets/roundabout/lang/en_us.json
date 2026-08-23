@@ -3377,7 +3377,7 @@
 
 
   "config.roundabout.dropMode.name": "Drop Mode",
-  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
+  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Monsters drop experience, 2: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",

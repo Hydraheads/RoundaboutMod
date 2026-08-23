@@ -1146,7 +1146,7 @@ public class Config implements Cloneable {
     public static class D4CSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableD4c;
-        @IntOption(group = "inherit", value = 1, min = 0, max = 2)
+        @IntOption(group = "inherit", value = 1, min = 0, max = 3)
         public Integer dropMode;
         @BooleanOption(group = "inherit", value = false)
         public Boolean whiteListModdedMobs;
