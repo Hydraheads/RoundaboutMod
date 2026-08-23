@@ -70,6 +70,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final AnimationState coat_open = new AnimationState();
     public final AnimationState chest_open = new AnimationState();
     public final AnimationState chest_close = new AnimationState();
+    public final AnimationState floating = new AnimationState();
 
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
@@ -83,24 +84,28 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         super.setupAnimationStates();
         if(this.getUser() != null){
             if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                   switch (pb.moveMode) {
-                      case 1 -> {
-                          if (pb.active) {
-                              this.coat_open.stop();
-                              chest_close.stop();
-                              this.chest_open.startIfStopped(this.tickCount);
-                          } else {
-                              this.chest_open.stop();
-                              this.coat_open.stop();
-                              this.chest_close.startIfStopped(this.tickCount);
-                          }
-                      }
-                      case 2 -> {
-                          this.chest_open.stop();
-                          this.chest_close.stop();
-                          this.coat_open.startIfStopped(this.tickCount);
-                      }
-                   }
+                switch (pb.moveMode) {
+                    case 1 -> {
+                        if (pb.active) {
+                            this.coat_open.stop();
+                            chest_close.stop();
+                            this.chest_open.startIfStopped(this.tickCount);
+                        } else {
+                            this.chest_open.stop();
+                            this.coat_open.stop();
+                            this.chest_close.startIfStopped(this.tickCount);
+                        }
+                    }
+                    case 2 -> {
+                        this.chest_open.stop();
+                        this.chest_close.stop();
+                        this.floating.startIfStopped(this.tickCount);
+                        this.coat_open.startIfStopped(this.tickCount);
+                    }
+                    case 3 -> {
+
+                    }
+                }
             }
         } else {
             this.chest_open.stop();
@@ -177,8 +182,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if (this.getUser() != null) {
             if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && pb.moveMode == 2) {
                 Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.9F));
-                positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.35), pn.z());
+                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.75F));
+                positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());
             }
         }
     }
