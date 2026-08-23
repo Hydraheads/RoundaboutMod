@@ -514,6 +514,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.BLOOD_MIST.get(), BloodMistParticle.CosyProvider::new);
         event.registerSpriteSet(ForgeParticles.BUBBLE_POP.get(), SoftBubblePopParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PLUNDER.get(), PlunderParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.MENGER.get(), MengerParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.FRICTIONLESS.get(), FrictionlessParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.EXCLAMATION.get(), ExclamationParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.D4C_LINES.get(), D4CLinesParticle.Provider::new);

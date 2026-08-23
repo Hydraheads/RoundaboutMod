@@ -60,6 +60,7 @@ public class ModParticles {
     public static SimpleParticleType BLOOD_MIST;
     public static SimpleParticleType BUBBLE_POP;
     public static SimpleParticleType PLUNDER;
+    public static SimpleParticleType MENGER;
     public static SimpleParticleType FRICTIONLESS;
     public static SimpleParticleType EXCLAMATION;
     public static SimpleParticleType BABY_CRACKLE;

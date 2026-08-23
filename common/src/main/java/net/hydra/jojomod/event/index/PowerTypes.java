@@ -9,16 +9,22 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -322,6 +328,28 @@ public enum PowerTypes {
 
         }
         return false;
+    }
+
+    public static void tickIsNearAlt(Entity entity, Entity alt){
+        if (alt != null) {
+            if (entity.level() instanceof ServerLevel sl) {
+                double random = (Math.random() * 1.2) - 0.6;
+                double random2 = (Math.random() * 1.2) - 0.6;
+                double random3 = (Math.random() * 1.2) - 0.6;
+                sl.sendParticles(ModParticles.MENGER, alt.getX() + random,
+                        alt.getY() + alt.getEyeHeight() + random2, alt.getZ() + random3,
+                        0,
+                        (entity.getX() - alt.getX()), (entity.getY() - alt.getY() + alt.getEyeHeight()), (entity.getZ() - alt.getZ()),
+                        0.08);
+
+                alt.setDeltaMovement(alt.getDeltaMovement().add(
+                        (entity.getX() - alt.getX()) * 0.018,
+                        0,
+                        (entity.getZ() - alt.getZ()) * 0.018
+                ));
+            }
+        }
+
     }
     public static boolean originatedFromOurWorld(Entity entity){
         if (entity != null){
