@@ -2740,6 +2740,9 @@ public class MainUtil {
         if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
             return true;
         }
+        if (LE instanceof Spider sp && sp.getLightLevelDependentMagicValue() >= 0.5){
+            return true;
+        }
         return false;
     }
 
