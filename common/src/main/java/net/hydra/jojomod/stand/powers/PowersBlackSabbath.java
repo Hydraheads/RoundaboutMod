@@ -177,7 +177,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         return false;
     }
 
-    public int securityTickDown = 10;
+    public int securityTickDown = 60;
     void setSecurityTickDown(int i){securityTickDown = i;}
 
     @Override
@@ -622,21 +622,22 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     public void transformSabbath(BlackSabbathEntity value){
         if (value != null) {
+            if(moveMode == 2) {
+                if (!this.self.level().isClientSide()) {
+                    value.setOldPosAndRot();
+                }
 
-            if (!this.self.level().isClientSide()) {
-                value.setOldPosAndRot();
-            }
-
-            if (this.self.level().isClientSide()) {
-                value.setYRot(value.getUser().getYHeadRot() % 360);
-                value.setXRot(value.getUser().getXRot());
-                value.setYBodyRot(value.getUser().getYHeadRot() % 360);
-                value.setYHeadRot(value.getUser().getYHeadRot() % 360);
-            } else {
-                value.setYRot(value.getUser().getYHeadRot() % 360);
-                value.setXRot(value.getUser().getXRot());
-                value.setYBodyRot(value.getUser().getYHeadRot() % 360);
-                value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                if (this.self.level().isClientSide()) {
+                    value.setYRot(value.getUser().getYHeadRot() % 360);
+                    value.setXRot(value.getUser().getXRot());
+                    value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                    value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                } else {
+                    value.setYRot(value.getUser().getYHeadRot() % 360);
+                    value.setXRot(value.getUser().getXRot());
+                    value.setYBodyRot(value.getUser().getYHeadRot() % 360);
+                    value.setYHeadRot(value.getUser().getYHeadRot() % 360);
+                }
             }
         }
     }
@@ -853,6 +854,9 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale() {
+        if(moveMode == 2){
+            return 32;
+        }
         return 35;
     }
     @Override
