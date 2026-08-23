@@ -749,6 +749,7 @@ public class PowersD4C extends NewPunchingStand {
             copyHorse.setVariant(originalHorse.getVariant());
         }
 
+        ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
 
         if (original instanceof Mob mb && copy instanceof Mob mb2){
             if (original instanceof AgeableMob ag && copy instanceof AgeableMob ag2){

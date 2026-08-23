@@ -25,9 +25,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import org.spongepowered.asm.mixin.Unique;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public enum PowerTypes {
     NONE(new GeneralPowers()),
@@ -329,24 +333,28 @@ public enum PowerTypes {
         }
         return false;
     }
-
     public static void tickIsNearAlt(Entity entity, Entity alt){
         if (alt != null) {
             if (entity.level() instanceof ServerLevel sl) {
-                double random = (Math.random() * 1.2) - 0.6;
-                double random2 = (Math.random() * 1.2) - 0.6;
-                double random3 = (Math.random() * 1.2) - 0.6;
-                sl.sendParticles(ModParticles.MENGER, alt.getX() + random,
-                        alt.getY() + alt.getEyeHeight() + random2, alt.getZ() + random3,
-                        0,
-                        (entity.getX() - alt.getX()), (entity.getY() - alt.getY() + alt.getEyeHeight()), (entity.getZ() - alt.getZ()),
-                        0.08);
+                if (entity.tickCount % 2 == 0) {
+                    double random = (Math.random() * 1.2) - 0.6;
+                    double random2 = (Math.random() * 1.2) - 0.6;
+                    double random3 = (Math.random() * 1.2) - 0.6;
+                    MainUtil.sendParticlesIfPossible(entity, sl,
+                            ModParticles.MENGER, alt.getX() + random,
+                            alt.getY() + alt.getEyeHeight() + random2, alt.getZ() + random3,
+                            0,
+                            (entity.getX() - alt.getX()), (entity.getY() - alt.getY() + alt.getEyeHeight()), (entity.getZ() - alt.getZ()),
+                            0.08);
+                }
 
-                alt.setDeltaMovement(alt.getDeltaMovement().add(
-                        (entity.getX() - alt.getX()) * 0.018,
-                        0,
-                        (entity.getZ() - alt.getZ()) * 0.018
-                ));
+                if (!(alt instanceof Player)) {
+                    alt.setDeltaMovement(alt.getDeltaMovement().add(
+                            (entity.getX() - alt.getX()) * 0.008,
+                            0,
+                            (entity.getZ() - alt.getZ()) * 0.008
+                    ));
+                }
             }
         }
 
@@ -358,6 +366,39 @@ public enum PowerTypes {
 
         }
         return false;
+    }
+
+
+    @Nullable
+    public static Entity findNearbyParallelCopy(Entity entity) {
+        if (!(entity.level() instanceof ServerLevel sl)) {
+            return null;
+        }
+
+        UUID parallelUUID = ((IEntityAndData) entity).rdbt$getNativeCopy();
+
+        if (parallelUUID == null) {
+            return null;
+        }
+
+        AABB box = entity.getBoundingBox().inflate(10.0D);
+
+        List<Entity> nearby = sl.getEntities(
+                entity,
+                box,
+                other ->
+                        other != entity
+                                && other.isAlive()
+                                && (other.getUUID().equals(parallelUUID) ||
+                                (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
+                                        ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
+        );
+
+        if (!nearby.isEmpty()) {
+            return nearby.get(0);
+        }
+
+        return null;
     }
 
     public static int d4cWorldUptime(){

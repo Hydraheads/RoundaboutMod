@@ -2075,6 +2075,8 @@ public class AbilityScapeBasis {
 
     }
 
+
+
     public boolean playSoundIfPossible(Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self) && entity != null) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
