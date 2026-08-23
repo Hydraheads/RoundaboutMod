@@ -177,7 +177,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         return false;
     }
 
-    public int securityTickDown = 10;
+    public int securityTickDown = 60;
     void setSecurityTickDown(int i){securityTickDown = i;}
 
     @Override
@@ -853,6 +853,9 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public int getDisplayPowerInventoryScale() {
+        if(moveMode == 2){
+            return 32;
+        }
         return 35;
     }
     @Override
