@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -277,7 +279,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     true,
                     true
             ));
-            if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
+            if (entity instanceof Mob mb && !MainUtil.isBossMob(mb) &&
+                    !(mb instanceof Spider sp && sp.getLightLevelDependentMagicValue() < 5)
+            && !(mb instanceof AnubisGuardian) && !(mb instanceof JojoNPC)
+                    && !(mb instanceof NeutralMob)){
                 ((IMob)mb).roundabout$setConfusionTicks(60);
             }
         }
