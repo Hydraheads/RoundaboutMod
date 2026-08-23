@@ -279,10 +279,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     true,
                     true
             ));
-            if (entity instanceof Mob mb && !MainUtil.isBossMob(mb) &&
-                    !(mb instanceof Spider sp && sp.getLightLevelDependentMagicValue() < 5)
-            && !(mb instanceof AnubisGuardian) && !(mb instanceof JojoNPC)
-                    && !(mb instanceof NeutralMob)){
+            if (entity instanceof Mob mb && !MainUtil.isBossMob(mb)){
                 ((IMob)mb).roundabout$setConfusionTicks(60);
             }
         }

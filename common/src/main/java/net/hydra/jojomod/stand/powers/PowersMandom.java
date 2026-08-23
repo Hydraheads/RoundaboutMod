@@ -7,9 +7,7 @@ import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.SavedSecond;
@@ -38,10 +36,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -369,10 +365,7 @@ public class PowersMandom extends NewDashPreset {
                     }
                     if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
                         mb.getNavigation().stop();
-                        if (!MainUtil.blockConfusionTicks(mb) &&
-                                !(mb instanceof Spider sp && sp.getLightLevelDependentMagicValue() < 5)
-                                && !(mb instanceof AnubisGuardian) && !(mb instanceof JojoNPC)
-                                && !(mb instanceof NeutralMob)){
+                        if (!MainUtil.blockConfusionTicks(mb)) {
                             ((IMob) mb).roundabout$setConfusionTicks(7);
                         }
                     }
