@@ -6,7 +6,6 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
@@ -30,10 +29,8 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -46,7 +43,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -54,7 +50,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -66,9 +61,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,8 +112,6 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     public boolean rdbt$canBePickedUp=true;
-    @Unique
-    public UUID rdbt$nativeCopy = null;
 
     @Unique
     private float roundabout$lastDirectDamage = 0;
@@ -979,6 +970,32 @@ public abstract class EntityAndData implements IEntityAndData {
     public void rdbt$setOriginWorld(byte lol){
         rdbt$originWorld = lol;
     }
+
+    @Unique
+    private int rdbt$altCheckCooldown = 0;
+
+    @Unique
+    public int rdbt$getAltCheckCooldown() {
+        return rdbt$altCheckCooldown;
+    }
+    @Unique
+    private Entity rdbt$nearAlt = null;
+
+    @Unique
+    public void rdbt$setAltCheckCooldown(int ticks) {
+        rdbt$altCheckCooldown = ticks;
+    }
+    @Unique
+    public UUID rdbt$nativeCopy = null;
+
+    @Unique
+    public UUID rdbt$getNativeCopy(){
+        return rdbt$nativeCopy;
+    }
+    @Unique
+    public void rdbt$setNativeCopy(UUID uuidd){
+        rdbt$nativeCopy = uuidd;
+    }
     @Override
     @Unique
     public void rdbt$setForeignWorldTicks(int lol){
@@ -987,6 +1004,76 @@ public abstract class EntityAndData implements IEntityAndData {
             S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_MERGE_TIME_INT,lol);
         }
     }
+    private void rdbt$tickAltProximity() {
+        if (!(level() instanceof ServerLevel sl)) {
+            return;
+        }
+
+        Entity self = (Entity) (Object) this;
+
+        // Only entities originating from another world
+        if (PowerTypes.originatedFromOurWorld(self)) {
+            rdbt$nearAlt = null;
+            return;
+        }
+
+        // ------------------------------------------------
+        // ALREADY TRACKING A PARALLEL ENTITY
+        // ------------------------------------------------
+
+        if (rdbt$nearAlt != null) {
+
+            Entity alt = rdbt$nearAlt;
+
+            // Cheap checks only.
+            // No entity hitbox query.
+            if (!alt.isAlive()
+                    || alt.level() != self.level()
+                    || PowerTypes.isInADifferentExistenceNoTE(self,alt)
+                    || self.distanceToSqr(alt) > 121.0D) {
+
+                rdbt$nearAlt = null;
+
+                // Don't immediately perform another expensive search.
+                rdbt$altCheckCooldown = 40;
+                return;
+            }
+
+            // They're still close enough.
+                PowerTypes.tickIsNearAlt(self, alt);
+            if (self.isAlive() && alt.isAlive()) {
+                PowerTypes.tickIsNearAlt(alt, self);
+            }
+            return;
+        }
+
+        // ------------------------------------------------
+        // SEARCHING FOR A TARGET
+        // ------------------------------------------------
+
+        if (rdbt$altCheckCooldown > 0) {
+            rdbt$altCheckCooldown--;
+            return;
+        }
+
+        // 40-100 ticks = 2-5 seconds
+        rdbt$altCheckCooldown =
+                40 + (int)(Math.random() * 61);
+
+        Entity alt = PowerTypes.findNearbyParallelCopy(self);
+
+        if (alt != null && !PowerTypes.isInADifferentExistenceNoTE(self,alt)) {
+            rdbt$nearAlt = alt;
+
+            // Immediately run the effect rather than
+            // waiting until the next tick.
+            PowerTypes.tickIsNearAlt(self, alt);
+            if (self.isAlive() && alt.isAlive()) {
+                PowerTypes.tickIsNearAlt(alt, self);
+            }
+        }
+    }
+
 
     @Override
     @Unique
@@ -995,7 +1082,9 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickTrueInvisibility();
         roundabout$tickTrueInvisibilityManhattan();
 
-        if (!level().isClientSide()) {
+        rdbt$tickAltProximity();
+
+        if (!level().isClientSide() && !isRemoved()) {
             Entity thrs = ((Entity) (Object) this);
             byte world = PowerTypes.getPlaneOfExisting(thrs);
                 if (!(thrs instanceof FollowingStandEntity fs && fs.getFollowing() != null)

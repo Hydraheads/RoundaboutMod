@@ -1008,6 +1008,97 @@ public class MainUtil {
         }
         return false;
     }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            int count,
+            double xDist,
+            double yDist,
+            double zDist,
+            double speed
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.sendParticles(
+                        playerInList,
+                        particle,
+                        false,
+                        x,
+                        y,
+                        z,
+                        count,
+                        xDist,
+                        yDist,
+                        zDist,
+                        speed
+                );
+            }
+        }
+
+    }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            double xDist,
+            double yDist,
+            double zDist
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.addParticle(
+                        particle,
+                        x,
+                        y,
+                        z,
+                        xDist,
+                        yDist,
+                        zDist
+                );
+            }
+        }
+
+    }
+
 
     public static boolean confirmIsOre(BlockState state){
         return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));

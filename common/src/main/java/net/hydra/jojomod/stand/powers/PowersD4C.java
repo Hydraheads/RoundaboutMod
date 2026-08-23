@@ -749,6 +749,7 @@ public class PowersD4C extends NewPunchingStand {
             copyHorse.setVariant(originalHorse.getVariant());
         }
 
+        ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
 
         if (original instanceof Mob mb && copy instanceof Mob mb2){
             if (original instanceof AgeableMob ag && copy instanceof AgeableMob ag2){
@@ -871,9 +872,9 @@ public class PowersD4C extends NewPunchingStand {
         if (PowerTypes.isInD4CWorldWithRender(target)){
             if (distance >= 15) {
                 return 6;
-            } else if (distance >= 12){
+            } else if (distance >= 14){
                 return 3;
-            } else if (distance >= 10){
+            } else if (distance >= 12){
                 return 2;
             }
         }

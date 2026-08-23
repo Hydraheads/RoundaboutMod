@@ -61,6 +61,9 @@ public class FabricParticles {
     public static final SimpleParticleType D4C_LINES = FabricParticleTypes.simple();
     public static final SimpleParticleType BUBBLE_POP = FabricParticleTypes.simple();
     public static final SimpleParticleType PLUNDER = FabricParticleTypes.simple();
+
+    public static final SimpleParticleType MENGER = FabricParticleTypes.simple();
+
     public static final SimpleParticleType FRICTIONLESS = FabricParticleTypes.simple();
     public static final SimpleParticleType EXCLAMATION = FabricParticleTypes.simple();
     public static final SimpleParticleType BABY_CRACKLE = FabricParticleTypes.simple();
@@ -155,6 +158,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("hallucinatory_acid_drip"), HALLUCINATORY_ACID_DRIP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("soft_bubble_pop"), BUBBLE_POP);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("plunder"), PLUNDER);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("menger"), MENGER);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("frictionless"), FRICTIONLESS);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("exclamation"), EXCLAMATION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("d4c_lines"), D4C_LINES);
@@ -264,6 +268,7 @@ public class FabricParticles {
         ModParticles.PINK_SMOKE = PINK_SMOKE;
         ModParticles.BLOOD_MIST = BLOOD_MIST;
         ModParticles.BUBBLE_POP = BUBBLE_POP;
+        ModParticles.MENGER = MENGER;
         ModParticles.PLUNDER = PLUNDER;
         ModParticles.FRICTIONLESS = FRICTIONLESS;
         ModParticles.EXCLAMATION = EXCLAMATION;

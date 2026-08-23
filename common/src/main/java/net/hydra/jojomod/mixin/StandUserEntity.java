@@ -3746,9 +3746,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$dropAllDeathLoot(DamageSource $$0, CallbackInfo ci) {
         if (!PowerTypes.originatedFromOurWorld(this)){
             int dropMode = ClientNetworking.getAppropriateConfig().d4cSettings.dropMode;
-            if (dropMode < 2) {
-                if (dropMode == 1){
-                    this.dropExperience();
+            if (dropMode < 3) {
+                if (dropMode == 1 || dropMode == 2){
+                    if (!(!(rdbt$this() instanceof Enemy) && dropMode == 1)) {
+                        this.dropExperience();
+                    }
                 }
                 ci.cancel();
                 return;
