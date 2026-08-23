@@ -4,10 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
+import net.hydra.jojomod.client.models.stand.animations.KillerQueenAnimations;
 import net.hydra.jojomod.client.models.stand.animations.KingCrimsonAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.renderers.KillerQueenRenderer;
 import net.hydra.jojomod.client.models.stand.renderers.TheWorldBaseRenderer;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -142,9 +144,15 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
                     this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
-                    if (animation == StandPowers.VAULT) {
+                    if (animation == KillerQueenEntity.MOB_PLANT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/((float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f);
+                    } else if (animation == KillerQueenEntity.BLOCK_PLANT) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
+                    } else if (animation == KillerQueenEntity.ITEM_THROW) {
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.THROW_ITEM, partialTicks, speed);
+                    } else if (animation == StandPowers.VAULT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
-                    } else if (animation == StandPowers.MINING) {
+                    }else if (animation == StandPowers.MINING) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
                     }
 

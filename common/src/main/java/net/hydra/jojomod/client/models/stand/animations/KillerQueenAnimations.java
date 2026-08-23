@@ -2199,6 +2199,49 @@ public class KillerQueenAnimations {
 			))
 			.build();
 
+	public static final AnimationDefinition mobPlantArms = AnimationDefinition.Builder.withLength(1.6667F)
+			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.875F, KeyframeAnimations.degreeVec(-144.8974F, 4.0941F, 2.8728F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-155.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2917F, KeyframeAnimations.degreeVec(-80.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.4167F, KeyframeAnimations.degreeVec(-82.1548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.5F, KeyframeAnimations.degreeVec(-74.6548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.5833F, KeyframeAnimations.degreeVec(-79.6548F, 14.7668F, 2.664F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.875F, KeyframeAnimations.posVec(0.0F, -1.26F, -0.26F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.1667F, KeyframeAnimations.posVec(0.0F, -1.26F, -0.26F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.2917F, KeyframeAnimations.posVec(0.0F, -2.0F, -2.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("lower_right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.875F, KeyframeAnimations.degreeVec(-40.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-90.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2917F, KeyframeAnimations.degreeVec(-12.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.4167F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.5F, KeyframeAnimations.degreeVec(-7.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.5833F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-44.6689F, 44.3827F, -48.8547F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.2917F, KeyframeAnimations.degreeVec(81.6029F, 11.4539F, 1.3252F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.4167F, KeyframeAnimations.degreeVec(19.7953F, 18.0438F, -15.454F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.POSITION,
+					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.1667F, KeyframeAnimations.posVec(1.0F, -1.0F, 2.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.2917F, KeyframeAnimations.posVec(0.0F, -2.0F, -2.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.4167F, KeyframeAnimations.posVec(0.0F, -1.0F, -1.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("lower_left_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.1667F, KeyframeAnimations.degreeVec(-22.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.build();
+
 		public static final AnimationDefinition FirstBombTouchMob = AnimationDefinition.Builder.withLength(1.6667F)
 			.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION, 
 				new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
