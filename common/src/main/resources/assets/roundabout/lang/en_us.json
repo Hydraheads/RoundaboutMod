@@ -4327,6 +4327,8 @@
   "config.roundabout.sheerHeartAttackThrowExtraCooldown.desc": "Set the extra cooldown on sheer heart attack if he was throwed",
   "config.roundabout.SheerHeartAttackMaxDamage.name": "Sheer Heart Attack maximum damage",
   "config.roundabout.SheerHeartAttackMaxDamage.desc": "Set the maximum amount of damages that a sheer heart attack explosion can give",
+  "config.roundabout.sheerHeartAttackSeenUndeadAndArthropod.name": "Sheer Heart ignores cold mobs",
+  "config.roundabout.sheerHeartAttackSeenUndeadAndArthropod.desc": "Set if sheer heart attack should ignore Undead and Arthropod mobs, as they doesn't emit heat, they still get targeted when on fire.",
   "config.roundabout.killerQueenAttackMultOnPlayers.name": "Killer queen damage multiplier",
   "config.roundabout.killerQueenAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.killerQueenAttackMultOnMobs.name": "Mob Damage Multiplier",
