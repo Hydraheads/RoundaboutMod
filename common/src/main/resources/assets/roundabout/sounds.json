@@ -23,6 +23,18 @@
       "roundabout:d4c_punch"
     ]
   },
+  "d4c_explosion": {
+    "subtitle": "sounds.roundabout.d4c_explosion",
+    "sounds": [
+      "roundabout:d4c_explosion"
+    ]
+  },
+  "d4c_fuse": {
+    "subtitle": "sounds.roundabout.d4c_fuse",
+    "sounds": [
+      "roundabout:d4c_fuse"
+    ]
+  },
   "d4c_punch_2": {
     "subtitle": "sounds.roundabout.d4c_punch_2",
     "sounds": [

@@ -20,13 +20,11 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersPearlJam;
-import net.hydra.jojomod.stand.powers.PowersTusk;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -117,6 +115,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         MetallicaClientRenderer.renderMetalMeterBar(entity, matrixStack, buffer);
         for (PowersPearlJam instance : PowersPearlJam.getInstances()){
             instance.renderEffectIcons(entity, matrixStack, buffer);
+        }
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+            PKQ.bitesTheDustRender(entity, matrixStack, buffer);
         }
     }
 

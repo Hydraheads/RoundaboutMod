@@ -610,8 +610,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     (((IPermaCasting)this.level()).roundabout$inPermaCastFogRange(this)
                             && this.getHealth() < this.getMaxHealth())){
                 if (!PowerTypes.isExistentiallyElsewhere(this)) {
-                    this.level()
-                            .addParticle(
+                    MainUtil.sendParticlesIfPossible(this,level(),
                                     ModParticles.FOG_CHAIN,
                                     vec3d.x,
                                     vec3d.y,
@@ -632,8 +631,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$getBleedLevel() > -1) {
             if (!PowersMetallica.hasAnyFadeActive((LivingEntity) (Object) this)) {
                 if (((IPermaCasting) this.level()).roundabout$inPermaCastFogRange(this)) {
-                    this.level()
-                            .addParticle(
+                    MainUtil.sendParticlesIfPossible(this,level(),
                                     ModParticles.FOG_CHAIN,
                                     vec3d.x,
                                     vec3d.y,
@@ -657,8 +655,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else if (MainUtil.hasBlueBlood(this)) {
                         bloodType = ModParticles.BLUE_BLOOD;
                     }
-                    this.level()
-                            .addParticle(
+                    MainUtil.sendParticlesIfPossible(this,level(),
                                     bloodType,
                                     vec3d2.x,
                                     vec3d2.y,
@@ -1002,7 +999,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     if (this.tickCount % bloodticks == 0) {
 
-                        ((ServerLevel) this.level()).sendParticles(
+                        MainUtil.sendParticlesIfPossible(this,level(),
                                 ParticleTypes.LAVA,
                                 vec3d2.x,
                                 vec3d2.y,
@@ -1026,7 +1023,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     }
                     if (this.tickCount % bloodticks == 0) {
 
-                        ((ServerLevel) this.level()).sendParticles(
+                        MainUtil.sendParticlesIfPossible(this,level(),
                                 ModParticles.MELTING,
                                 vec3d2.x,
                                 vec3d2.y,
@@ -1051,8 +1048,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             bloodticks = 4;
                         }
                         if (this.tickCount % bloodticks == 0) {
-
-                            ((ServerLevel) getStand.level()).sendParticles(
+                            MainUtil.sendParticlesIfPossible(this,getStand.level(),
                                     ModParticles.MELTING,
                                     vec3d2.x,
                                     vec3d2.y,
@@ -1704,7 +1700,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     color = this.roundabout$getStandPowers().getLeapColor();
                 }
                 if (!PowerTypes.isExistentiallyElsewhere(this)) {
-                ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),
+                MainUtil.sendParticlesIfPossible(this,level(),new DustParticleOptions(color, 1f), this.getX(), this.getY(), this.getZ(),
                         1, 0, 0, 0, 0.1);
                 }
             }
@@ -1734,7 +1730,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$destructionModeTrailTicks--;
                 if (!this.level().isClientSide) {
                     if (!PowerTypes.isExistentiallyElsewhere(this)) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE, this.getX(), this.getY(), this.getZ(),
+                        MainUtil.sendParticlesIfPossible(this,level(),ModParticles.AIR_CRACKLE, this.getX(), this.getY(), this.getZ(),
                                 1, 0, 0, 0, 0.1);
                     }
                 }
@@ -1785,7 +1781,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         float height = this.getBbHeight() / 4;
                         float height2 = this.getBbHeight()/2;
                         if (!PowerTypes.isExistentiallyElsewhere(this)) {
-                        ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
+                        MainUtil.sendParticlesIfPossible(this,level(),new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.GASOLINE_SPLATTER.defaultBlockState()), this.getX(), this.getY() + height2, this.getZ(),
                                 1, width, height, width, 0.1);
                         }
                     }
@@ -3746,9 +3742,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$dropAllDeathLoot(DamageSource $$0, CallbackInfo ci) {
         if (!PowerTypes.originatedFromOurWorld(this)){
             int dropMode = ClientNetworking.getAppropriateConfig().d4cSettings.dropMode;
-            if (dropMode < 2) {
-                if (dropMode == 1){
-                    this.dropExperience();
+            if (dropMode < 3) {
+                if (dropMode == 1 || dropMode == 2){
+                    if (!(!(rdbt$this() instanceof Enemy) && dropMode == 1)) {
+                        this.dropExperience();
+                    }
                 }
                 ci.cancel();
                 return;
@@ -3913,9 +3911,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 this.roundabout$setGasolineTime(-1);
                 if (!this.level().isClientSide) {
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    MainUtil.sendParticlesIfPossible(this,level(),ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                             40, 0.0, 0.2, 0.0, 0.2);
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    MainUtil.sendParticlesIfPossible(this,level(),ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                             1, 0.5, 0.5, 0.5, 0.2);
                     MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, power);
                 }
@@ -3926,9 +3924,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 float power = MainUtil.gasDamageMultiplier()*10;
                 this.roundabout$setGasolineTime(-1);
                 if (!this.level().isClientSide) {
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    MainUtil.sendParticlesIfPossible(this,level(),ParticleTypes.FLAME, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                             40, 0.0, 0.2, 0.0, 0.2);
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                    MainUtil.sendParticlesIfPossible(this,level(),ParticleTypes.EXPLOSION, this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                             1, 0.5, 0.5, 0.5, 0.2);
                     MainUtil.gasExplode(null, (ServerLevel) this.level(), this.getOnPos(), 0, 2, 4, power);
                 }
@@ -4188,7 +4186,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 pl.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireZombie1").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD), true);
 
                 if (level() instanceof ServerLevel SL) {
-                    SL.sendParticles(ModParticles.BLOOD_MIST,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BLOOD_MIST,
                             this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                             10, 0.4, 0.4, 0.4, 0.025);
                 }
@@ -4214,10 +4212,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     cir.setReturnValue(true);
                     ((IMob)mb).roundabout$setVampire(true);
                     if (level() instanceof ServerLevel SL) {
-                        SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                        MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BLUE_SPARKLE,
                                 this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                                 50, 0, 0, 0, 0.2);
-                        SL.sendParticles(ModParticles.BLOOD_MIST,
+                        MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BLOOD_MIST,
                                 this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                                 10, 0.4, 0.4, 0.4, 0.025);
                         roundabout$deeplyRemoveAttackTarget();
@@ -4237,7 +4235,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     villagerMinion.convertedByZombie = true;
                 }
                 if (level() instanceof ServerLevel SL) {
-                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BLUE_SPARKLE,
                             this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                             50, 0, 0, 0, 0.2);
                 }
@@ -4254,7 +4252,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 VillagerMinion villagerMinion = lent.convertTo(ModEntities.VILLAGER_MINION, false);
                 villagerMinion.controller2 =controller2;
                 if (level() instanceof ServerLevel SL) {
-                    SL.sendParticles(ModParticles.BLUE_SPARKLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BLUE_SPARKLE,
                             this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                             50, 0, 0, 0, 0.2);
                 }
@@ -4548,7 +4546,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$setBubbleEncased((byte) 0);
                 this.level().playSound(null, $$3, ModSounds.BUBBLE_POP_EVENT,
                         SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BUBBLE_POP,
                         this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                         5, 0.25, 0.25, 0.25, 0.025);
             }
@@ -4762,7 +4760,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!this.level().isClientSide()){
                         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                                 SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BUBBLE_POP,
                                 this.getX(), this.getY() + this.getBbHeight()*0.5, this.getZ(),
                                 5, 0.25, 0.25,0.25, 0.025);
                     }
@@ -4827,7 +4825,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!PowerTypes.isExistentiallyElsewhere(this)) {
                         this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                                 SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                        MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BUBBLE_POP,
                                 this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                                 5, 0.25, 0.25, 0.25, 0.025);
                     }
@@ -5125,24 +5123,24 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
                             0.5F,0.5F));
                     position3 = position3.add(this.getPosition(1));
-                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.FIRE_CRUMBLE,
                             position.x, position.y, position.z,
                             0, 0.2, 0.2, 0.2, 0.1);
-                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.FIRE_CRUMBLE,
                             position2.x, position2.y, position2.z,
                             0, 0.2, 0.2, 0.2, 0.1);
-                    SL.sendParticles(ModParticles.FIRE_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.FIRE_CRUMBLE,
                             position3.x, position3.y, position3.z,
                             0, 0.2, 0.2, 0.2, 0.1);
 
 
-                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                             position.x, position.y, position.z,
                             0, 0.2, 0.5, 0.2, 0.5);
-                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                             position2.x, position2.y, position2.z,
                             0, 0.2, 0.5, 0.2, 0.2);
-                    SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                    MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                             position3.x, position3.y, position3.z,
                             0, 0.2, 0.5, 0.2, 0.2);
 
@@ -5157,23 +5155,23 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                             Vec3 position3 = this.getEyePosition().subtract(this.getPosition(1)).multiply(new Vec3(0.5F,
                                     0.5F, 0.5F));
                             position3 = position3.add(this.getPosition(1));
-                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.SOUL_FIRE_CRUMBLE,
                                     position.x, position.y, position.z,
                                     0, 0.2, 0.2, 0.2, 0.1);
-                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.SOUL_FIRE_CRUMBLE,
                                     position2.x, position2.y, position2.z,
                                     0, 0.2, 0.2, 0.2, 0.1);
-                            SL.sendParticles(ModParticles.SOUL_FIRE_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.SOUL_FIRE_CRUMBLE,
                                     position3.x, position3.y, position3.z,
                                     0, 0.2, 0.2, 0.2, 0.1);
 
-                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                                     position.x, position.y, position.z,
                                     0, 0.2, 0.5, 0.2, 0.5);
-                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                                     position2.x, position2.y, position2.z,
                                     0, 0.2, 0.5, 0.2, 0.2);
-                            SL.sendParticles(ModParticles.DUST_CRUMBLE,
+                            MainUtil.sendParticlesIfPossible(this,level(),ModParticles.DUST_CRUMBLE,
                                     position3.x, position3.y, position3.z,
                                     0, 0.2, 0.5, 0.2, 0.2);
                         }
@@ -5204,7 +5202,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             //Frozen deaths from vampire freeze / ice sculptures / white album
             if (damageSource.getEntity() != null && !damageSource.is(DamageTypes.THORNS) && !damageSource.is(ModDamageTypes.STAND_FIRE)){
                 if (HeatUtil.isBodyFrozen(rdbt$this()) && !level().isClientSide()){
-                    ((ServerLevel) this.level()).sendParticles(
+                    MainUtil.sendParticlesIfPossible(this,level(),
                             new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
                             this.getEyePosition().x,
                             this.getEyePosition().y,
@@ -5327,7 +5325,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 }
                 if (MainUtil.isStandDamage(damageSource) && damageSource.getEntity() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().fullTSChargeBonus()){
                     if (!this.level().isClientSide()){
-                        ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.74F,0.73F,0.98F), 1f), this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
+                        MainUtil.sendParticlesIfPossible(this,level(),new DustParticleOptions(new Vector3f(0.74F,0.73F,0.98F), 1f), this.getX(), this.getY()+this.getEyeHeight(), this.getZ(),
                                 1, 0.3, 0.3, 0.3, 0.3);
                     }
                 } else {
@@ -5672,7 +5670,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$setBubbleEncased((byte) 0);
                 this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                         SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
-                ((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
+                MainUtil.sendParticlesIfPossible(this,level(),ModParticles.BUBBLE_POP,
                         this.getX(), this.getY() + this.getBbHeight() * 0.5, this.getZ(),
                         5, 0.25, 0.25, 0.25, 0.025);
                 roundabout$setBubbleEncased((byte)0);
@@ -6200,7 +6198,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (!PowerTypes.isExistentiallyElsewhere(rdbt$this())) {
                         for (int i = 0; i < 4; i = i + 1) {
                             if (this.tickCount % 20 == 0) {
-                                ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, this.getX(),
+                                MainUtil.sendParticlesIfPossible(this,level(),ModParticles.MOLD_DUST, this.getX(),
                                         this.getY() + 1, this.getZ(),
                                         1,
                                         0, 0, 0,

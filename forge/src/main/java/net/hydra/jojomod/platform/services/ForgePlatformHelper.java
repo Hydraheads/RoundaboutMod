@@ -1,5 +1,8 @@
 package net.hydra.jojomod.platform.services;
 
+import net.hydra.jojomod.Roundabout;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -9,6 +12,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.registries.ForgeRegistries;
 
 
 public class ForgePlatformHelper implements IPlatformHelper {
@@ -30,6 +34,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public TagKey<Block> getOreTag() {
         return Tags.Blocks.ORES;
+    }
+
+    public ResourceLocation soundId(SoundEvent event){
+        Roundabout.LOGGER.info("fgfg");
+        return ForgeRegistries.SOUND_EVENTS.getKey(event);
     }
 
     @Override

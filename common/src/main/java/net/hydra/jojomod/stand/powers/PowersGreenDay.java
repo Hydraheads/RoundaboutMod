@@ -942,13 +942,14 @@ public class PowersGreenDay extends NewPunchingStand {
     public void OffHandSpinAndThrow(){
         OffHandThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Off_hand_entity.setNeuteredSpinTicks(25);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Off_hand_entity.flyingTicks = 0;
-        Off_hand_entity.neuteredSpinTicks = 15;
     }
 
     public void OffHandSpinAndThrowSlim(){
         OffHandThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
+        Off_hand_entity.setNeuteredSpinTicks(25);
         playSoundIfPossible(self.level(),null, Off_hand_entity.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
         Off_hand_entity.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Off_hand_entity.flyingTicks = 0;
@@ -985,14 +986,15 @@ public class PowersGreenDay extends NewPunchingStand {
     public void MainHandSpinAndThrow(){
         MainArmThrowServer(ModEntities.SEPERATED_ARM.create(this.self.level()));
         playSoundIfPossible(self.level(),null,Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Main_arm.setNeuteredSpinTicks(25);
         Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Main_arm.flyingTicks = 0;
-        Main_arm.neuteredSpinTicks = 15;
     }
 
     public void MainHandSpinAndThrowSlim(){
         MainArmThrowServer(ModEntities.SEPERATED_ARM_SLIM.create(this.self.level()));
         playSoundIfPossible(self.level(),null,Main_arm.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1.0F, 2.0F);
+        Main_arm.setNeuteredSpinTicks(25);
         Main_arm.setSpinTicks(ClientNetworking.getAppropriateConfig().greenDaySettings.armSpinDuration);
         Main_arm.flyingTicks = 0;
     }

@@ -681,6 +681,7 @@ public class ForgeEvents {
         ModParticles.BLOOD_MIST = ForgeParticles.BLOOD_MIST.get();
         ModParticles.BUBBLE_POP = ForgeParticles.BUBBLE_POP.get();
         ModParticles.PLUNDER = ForgeParticles.PLUNDER.get();
+        ModParticles.MENGER = ForgeParticles.MENGER.get();
         ModParticles.FRICTIONLESS = ForgeParticles.FRICTIONLESS.get();
         ModParticles.EXCLAMATION = ForgeParticles.EXCLAMATION.get();
         ModParticles.BABY_CRACKLE = ForgeParticles.BABY_CRACKLE.get();

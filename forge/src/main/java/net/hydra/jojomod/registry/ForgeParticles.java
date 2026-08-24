@@ -204,6 +204,10 @@ public class ForgeParticles {
             "plunder",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> MENGER = PARTICLES.register(
+            "menger",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> FRICTIONLESS = PARTICLES.register(
             "frictionless",
             () -> new SimpleParticleType(true)

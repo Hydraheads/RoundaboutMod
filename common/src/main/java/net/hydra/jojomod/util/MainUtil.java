@@ -1008,6 +1008,97 @@ public class MainUtil {
         }
         return false;
     }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            int count,
+            double xDist,
+            double yDist,
+            double zDist,
+            double speed
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.sendParticles(
+                        playerInList,
+                        particle,
+                        false,
+                        x,
+                        y,
+                        z,
+                        count,
+                        xDist,
+                        yDist,
+                        zDist,
+                        speed
+                );
+            }
+        }
+
+    }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            double xDist,
+            double yDist,
+            double zDist
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.addParticle(
+                        particle,
+                        x,
+                        y,
+                        z,
+                        xDist,
+                        yDist,
+                        zDist
+                );
+            }
+        }
+
+    }
+
 
     public static boolean confirmIsOre(BlockState state){
         return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));
@@ -2188,7 +2279,8 @@ public class MainUtil {
 
     // damage types which shouldn't be normally blocked at all
     public static boolean isSpecialDamage(DamageSource source) {
-        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL);
+        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)
+                || source.is(ModDamageTypes.D4C_COLLISION);
     }
 
     public static boolean isStandDamage(DamageSource sauce){
@@ -2645,8 +2737,171 @@ public class MainUtil {
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
 
+
+
+
+
+    public static boolean playSoundIfPossible(Entity self, Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self) && entity != null) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = $$2.getLocation();
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5,
+                                    entity
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound(null,entity,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+    public static boolean playSoundToAll(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if ($$2 != null && level instanceof ServerLevel sl) {
+
+            ResourceLocation soundId = $$2.getLocation();
+            if (soundId != null) {
+                String str = $$3.name();
+                for (ServerPlayer playerInList :
+                        sl.getServer().getPlayerList().getPlayers()) {
+
+                    double range = $$2.getRange($$5);
+                    double rangeSqr = range * range;
+                    if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                        continue;
+                    }
+
+                    S2CPacketUtil.sendSafeSound(
+                            playerInList,
+                            $$1.getX(),
+                            $$1.getY(),
+                            $$1.getZ(),
+                            soundId.toString(),
+                            str,
+                            $$4,
+                            $$5
+                    );
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self)) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+
+                    ResourceLocation soundId = $$2.getLocation();
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1.getX(),
+                                    $$1.getY(),
+                                    $$1.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+    public static void playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
+        if (!PowerTypes.isErasingTime(self)) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$4 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = $$4.getLocation();
+                    if (soundId != null) {
+                        String str = $$5.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$4.getRange($$7);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(new Vec3($$1, $$2, $$3)) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1,
+                                    $$2,
+                                    $$3,
+                                    soundId.toString(),
+                                    str,
+                                    $$6,
+                                    $$7
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
+            }
+        }
+    }
+
     public static boolean blockConfusionTicks(Entity LE){
         if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+            return true;
+        }
+        if (LE instanceof Spider sp && sp.getLightLevelDependentMagicValue() >= 0.5){
             return true;
         }
         return false;

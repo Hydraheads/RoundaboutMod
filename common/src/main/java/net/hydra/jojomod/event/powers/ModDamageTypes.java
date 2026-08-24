@@ -22,6 +22,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> CROSSFIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "crossfire"));
         public static final ResourceKey<DamageType> EXPLOSIVE_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "explosive_stand"));
         public static final ResourceKey<DamageType> GO_BEYOND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "go_beyond"));
+    public static final ResourceKey<DamageType> D4C_COLLISION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "d4c_collision"));
         public static final ResourceKey<DamageType> PENETRATING_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "penetrating_stand"));
         public static final ResourceKey<DamageType> CORPSE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse"));
         public static final ResourceKey<DamageType> HAMON = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hamon"));

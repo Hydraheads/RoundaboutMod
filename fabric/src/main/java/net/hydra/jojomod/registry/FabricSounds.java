@@ -69,6 +69,7 @@ public class FabricSounds {
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
+        addSound(ModSounds.D4C_FUSE_ID, ModSounds.D4C_FUSE_EVENT);
         addSound(ModSounds.WORLD_MERGE_ID, ModSounds.WORLD_MERGE_EVENT);
         addSound(ModSounds.DISC_INSERT_ID, ModSounds.DISC_INSERT_EVENT);
         addSound(ModSounds.DISC_REMOVE_ID, ModSounds.DISC_REMOVE_EVENT);
@@ -599,6 +600,7 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_KING_CRIMSON_ID,ModSounds.SUMMON_KING_CRIMSON_EVENT);
         addSound(ModSounds.EPITAPH_ACTIVATE_ID,ModSounds.EPITAPH_ACTIVATE_EVENT);
         addSound(ModSounds.EPITAPH_FADE_ID,ModSounds.EPITAPH_FADE_EVENT);
+        addSound(ModSounds.D4C_EXPLOSION_ID,ModSounds.D4C_EXPLOSION_EVENT);
         addSound(ModSounds.KING_CRIMSON_IMPALE_ID,ModSounds.KING_CRIMSON_IMPALE_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_ID,ModSounds.KING_CRIMSON_PUNCH_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_2_ID,ModSounds.KING_CRIMSON_PUNCH_2_EVENT);

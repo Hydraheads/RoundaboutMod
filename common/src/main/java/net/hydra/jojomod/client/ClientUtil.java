@@ -452,6 +452,11 @@ public class ClientUtil {
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
+
+        LivingEntity user = ent.getUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
+                PBS.transformSabbath(ent);
+        }
     }
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){

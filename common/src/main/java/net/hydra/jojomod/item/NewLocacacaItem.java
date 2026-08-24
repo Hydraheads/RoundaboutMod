@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersSoftAndWet;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +27,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Iterator;
 import java.util.List;
@@ -67,10 +69,11 @@ public class NewLocacacaItem extends Item {
                             ($$1.getX() - ent.getX()), ($$1.getY() - ent.getY() + ent.getEyeHeight()), ($$1.getZ() - ent.getZ()),
                             0.08);
                 }
+                Vec3 db = RotationUtil.distanceBetween(ent,$$1);
                 ent.setDeltaMovement(ent.getDeltaMovement().add(
-                        ($$1.getX() - ent.getX()) * 0.018,
+                        db.x * -0.018,
                         0,
-                        ($$1.getZ() - ent.getZ()) * 0.018
+                        db.z * -0.018
                 ));
             }
         }

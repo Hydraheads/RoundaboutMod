@@ -1013,6 +1013,10 @@
   "death.attack.barbed_wire.player.item": "%1$s ran into a wire whilst fighting %2$s",
   "death.attack.heart": "%1$s had a change of heart",
   "death.attack.heart.item": "%1$s had a change of heart",
+  "death.attack.d4c_collision": "%1$s was annihilated",
+  "death.attack.d4c_collision.item": "%1$s was annihilated",
+  "death.attack.d4c_collision.player": "%1$s was annihilated whilst fighting %2$s",
+  "death.attack.d4c_collision.player.item": "%1$s was annihilated whilst fighting %2$s",
   "death.attack.heart.player": "%1$s had a change of heart in battle with %2$s",
   "death.attack.heart.player.item": "%1$s had a change of heart in battle with %2$s",
   "death.attack.fusion": "%1$s was fused into %2$s",
@@ -2897,6 +2901,7 @@
   "skins.roundabout.black_sabbath.departure":  "Departure",
   "skins.roundabout.black_sabbath.phantom":  "Phantom",
   "skins.roundabout.black_sabbath.sweet":  "Sweet",
+  "skins.roundabout.black_sabbath.magma": "Magmatic",
   "skins.roundabout.black_sabbath.oculus":  "Oculus",
   "skins.roundabout.black_sabbath.sacthoth": "Sacthoth",
   "skins.roundabout.black_sabbath.beach": "Beach",
@@ -3377,7 +3382,7 @@
 
 
   "config.roundabout.dropMode.name": "Drop Mode",
-  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
+  "config.roundabout.dropMode.desc": "0: Parallel Mobs drop nothing, 1: Parallel Monsters drop experience, 2: Parallel Mobs drop experience, 2: Parallel Mobs drop loot and experience",
 
 
   "config.roundabout.blinkWithCamo.name": "Blink With Camo",
@@ -4317,7 +4322,9 @@
   "config.roundabout.explosionDetonateMaxDamage.name": "Explosion maximum damage",
   "config.roundabout.explosionDetonateMaxDamage.desc": "Set the maximum amount of damages that a Killer Queen explosion can give",
   "config.roundabout.sheerHeartAttackCooldown.name": "Sheer Heart Attack Summon cooldown",
-  "config.roundabout.sheerHeartAttackCooldown.desc": "Set the cooldown which the player can summon sheer heart attack",
+  "config.roundabout.sheerHeartAttackCooldown.desc": "Set the cooldown of sheer heart attack summon",
+  "config.roundabout.sheerHeartAttackThrowExtraCooldown.name": "Sheer Heart Attack Throw Extra cooldown",
+  "config.roundabout.sheerHeartAttackThrowExtraCooldown.desc": "Set the extra cooldown on sheer heart attack if he was throwed",
   "config.roundabout.SheerHeartAttackMaxDamage.name": "Sheer Heart Attack maximum damage",
   "config.roundabout.SheerHeartAttackMaxDamage.desc": "Set the maximum amount of damages that a sheer heart attack explosion can give",
   "config.roundabout.killerQueenAttackMultOnPlayers.name": "Killer queen damage multiplier",
@@ -4348,6 +4355,18 @@
   "config.roundabout.StrayCatAirBubblesDamage.desc": "Set how much damage Stray Cat air bubbles make",
   "config.roundabout.bubbleShootCooldown.name": "AirBubble send cooldown.",
   "config.roundabout.bubbleShootCooldown.desc": "Set the cooldown of Killer Queen Air bubbles send",
+  "config.roundabout.itemPlantCooldown.name": "Item Plant cooldown.",
+  "config.roundabout.itemPlantCooldown.desc": "Set the cooldown of item bomb plant move.",
+
+  "config.roundabout.bitesTheDustCombatMinimunForFullBlow.name": "Minimum Time for full blow.",
+  "config.roundabout.bitesTheDustCombatMinimunForFullBlow.desc": "Set the minimum time needed to a entity marked by bites the dust to get the full blow, any time bellow that will deal damage in a range of 20% to 100% of the full damage",
+  "config.roundabout.bitesTheDustRewindRange.name": "Rewind Range",
+  "config.roundabout.bitesTheDustRewindRange.desc": "Sets the range of bites the dust rewind (the planted bites the dust is the center of that area), everything in that range will have their second saved or rewind",
+  "config.roundabout.bitesTheDustDayCooldownBonus.name": "Bites the dust day cooldown bonus",
+  "config.roundabout.bitesTheDustDayCooldownBonus.desc": "Sets the cooldown bonus put on bites the dust day after it been activated",
+  "config.roundabout.bitesTheDustDayGlobalRewind.name": "Bites the dust Day global rewind",
+  "config.roundabout.bitesTheDustDayGlobalRewind.desc": "Sets if Bites the dust day should rewind all players on the server, disabled by default",
+
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.theWorldAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -4873,6 +4892,8 @@
 
   "sounds.roundabout.summon_pearl_jam": "Stand summoned",
   "sounds.roundabout.pearl_jam_palm_read": "Hmmmmmmmm",
+  "sounds.roundabout.d4c_explosion": "Collision",
+  "sounds.roundabout.d4c_fuse": "Fuse",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",
