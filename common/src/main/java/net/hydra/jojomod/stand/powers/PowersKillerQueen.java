@@ -2923,7 +2923,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean sendOrReturnSHA(boolean shaThrow) {
         if (canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
             if (this.currentShaStatus == SHA_NONE) {
-                if (shaThrow && !hasHandsOut()) {
+                if (shaThrow) {
                     this.animateStand(KillerQueenEntity.ARROW_THROW);
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), getPunchHitSound(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.poseStand(OffsetIndex.ATTACK);
@@ -2931,6 +2931,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
                     this.animateStand(KillerQueenEntity.SHA_SEND);
                     poseStand(OffsetIndex.FOLLOW_NOLEAN);
+
                 }
 
                 this.setActivePower(PowerIndex.POWER_3);
