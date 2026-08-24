@@ -346,7 +346,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public int getMaxGuardPoints(){
-        if (this.canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatShieldLevel())) {
+        if (this.canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatShieldLevel()) && !hasHandsOut()) {
             return getNormalMaxGuardPoints() + ClientNetworking.getAppropriateConfig().killerQueenSettings.airBubbleGuardIncrease;
         }
 
@@ -3336,6 +3336,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectBitedTheDustCombat() {
         bitedTheDustInit();
+        int minSecs = 10;
+        float multiplier =  0.2f + 0.8f* (Math.min(this.btdTicks, 20*minSecs) / minSecs * 20);
+
+
         if (!bitedTheDust.isEmpty()) {
             HashSet<Integer> toRemoveFromList = new HashSet<>();
             for (int id : bitedTheDust.keySet()) {
@@ -3347,15 +3351,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (timeToDust == this.btdTicks) {
                         DamageSource dmg = ModDamageTypes.of(target.level(), ModDamageTypes.BITES_THE_DUST, null);;
 
+
                         if (MainUtil.getReducedDamage(target)) {
                             target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatPlayersDamage);
+                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatPlayersDamage * multiplier);
                         }else {
                             target.hurt(dmg,
-                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage);
+                                    ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMobsDamage * multiplier);
                         }
 
-                        if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
+                        if(!target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
                         ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
                         playSoundIfPossible(self.level(),null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
