@@ -5,6 +5,8 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class MengerParticle extends TextureSheetParticle {
@@ -13,9 +15,9 @@ public class MengerParticle extends TextureSheetParticle {
     MengerParticle(ClientLevel $$0, double $$1, double $$2, double $$3, double $$4, double $$5, double $$6, SpriteSet $$7) {
         super($$0, $$1, $$2, $$3);
         this.sprites = $$7;
-        this.lifetime = 5;
+        this.lifetime = 7;
         this.gravity = 0.008F;
-        this.scale(1.0F);
+        this.scale(0.9F);
         this.setAlpha(0.8F);
         this.xd = $$4;
         this.yd = $$5;
@@ -41,6 +43,11 @@ public class MengerParticle extends TextureSheetParticle {
     }
 
 
+    @Override
+    public int getLightColor(float $$0) {
+        BlockPos $$1 = BlockPos.containing(this.x, this.y, this.z);
+        return this.level.hasChunkAt($$1) ? LevelRenderer.getLightColor(this.level, $$1) : 0;
+    }
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;

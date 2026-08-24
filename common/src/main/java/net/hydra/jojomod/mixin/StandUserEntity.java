@@ -655,6 +655,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     } else if (MainUtil.hasBlueBlood(this)) {
                         bloodType = ModParticles.BLUE_BLOOD;
                     }
+
                     MainUtil.sendParticlesIfPossible(this,level(),
                                     bloodType,
                                     vec3d2.x,

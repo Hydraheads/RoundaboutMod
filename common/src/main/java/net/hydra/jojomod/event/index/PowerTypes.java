@@ -365,16 +365,17 @@ public enum PowerTypes {
 
                 if (!(alt instanceof Player)) {
 
-                    float carryon = Math.min((1+(((float)delayTime)/50f)),5);
+                    float carryon = Math.min((1+(((float)delayTime)/50f)),7);
                     Vec3 db = RotationUtil.distanceBetween(alt,entity);
                     alt.setDeltaMovement(alt.getDeltaMovement().add(
-                            db.x * (-0.009 * carryon),
+                            db.x * (-0.012 * carryon),
                             0,
-                            db.z * (-0.009 * carryon)
+                            db.z * (-0.012 * carryon)
                     ));
                     alt.hurtMarked = true;
                     alt.hasImpulse = true;
-                    if (delayTime > 20 && !PowerTypes.originatedFromOurWorld(alt) && alt.distanceTo(entity) < 1.5){
+                    if (delayTime > 20 && !PowerTypes.originatedFromOurWorld(alt) && (alt.distanceTo(entity) < 1.5 ||
+                            delayTime >= 300)){
                         MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
                                 SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1F);
                         //Hear some of it across dimensions to know a collision happened
@@ -390,19 +391,13 @@ public enum PowerTypes {
                         Vec3 position3 = entity.getEyePosition().subtract(entity.getPosition(1)).multiply(new Vec3(0.5F,
                                 0.5F,0.5F));
 
-                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
-                                position.x, position.y, position.z,
-                                0, 0.2, 0.5, 0.2, 0.5);
-                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
-                                position2.x, position2.y, position2.z,
-                                0, 0.2, 0.5, 0.2, 0.2);
-                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
-                                position3.x, position3.y, position3.z,
-                                0, 0.2, 0.5, 0.2, 0.2);
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ParticleTypes.LARGE_SMOKE,
+                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                                15, 0.3,0.5, 0.3,0.01);
                         //See some of it across dimensions to know a collision happened
                         sl.sendParticles(ModParticles.MENGER,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
-                                10, 0,0, 0,0.1);
+                                20, 0,0, 0,0.07);
                         float dmg= 30;
                         if (entity instanceof Player){
                             dmg = 15;

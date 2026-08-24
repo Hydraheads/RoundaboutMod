@@ -55,6 +55,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -1095,6 +1096,26 @@ public class MainUtil {
                         zDist
                 );
             }
+        } else if (level instanceof ClientLevel cl) {
+            if (PowerTypes.isInADifferentExistenceNoTE(self, ClientUtil.getPlayer())) {
+                return;
+            }
+
+            double range = 120.0D;
+
+            if (ClientUtil.getPlayer().distanceToSqr(x, y, z) > range * range) {
+                return;
+            }
+
+            cl.addParticle(
+                    particle,
+                    x,
+                    y,
+                    z,
+                    xDist,
+                    yDist,
+                    zDist
+            );
         }
 
     }
