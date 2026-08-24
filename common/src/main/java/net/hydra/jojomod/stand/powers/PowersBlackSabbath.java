@@ -76,9 +76,50 @@ public class PowersBlackSabbath extends NewDashPreset {
     static final byte
     CLIENT_SYNC = 100,
     CLIENT_SYNC_TARGET = 101,
-    CLIENT_SYNC_TARGET_LIGHTER = 102;
+    CLIENT_SYNC_TARGET_LIGHTER = 102,
+    CLIENT_SYNC_REMOVE_TARGET = 103;
 
     public int moveMode = 0;
+    public List<LivingEntity> blackSabbathTargets = new ArrayList<>();
+
+    public void cycleThroughBlackSabbathTargets(){
+        if (blackSabbathTargets == null){
+            blackSabbathTargets = new ArrayList<>();
+        }
+        List<LivingEntity> fogControlledEntities2 = new ArrayList<>(blackSabbathTargets) {};
+        if (!fogControlledEntities2.isEmpty()){
+            for (LivingEntity value : fogControlledEntities2) {
+                if (value.isRemoved() || !value.isAlive()) {
+                    removeTargetEntities(value);
+                }
+            }
+        }
+    }
+
+    public List<LivingEntity> queryTargetEntities(){
+        if (blackSabbathTargets == null){
+            blackSabbathTargets = new ArrayList<>();
+        }
+        return blackSabbathTargets;
+    }
+    public List<LivingEntity> addTargetEntities(LivingEntity LE){
+        if (blackSabbathTargets == null){
+            blackSabbathTargets = new ArrayList<>();
+        }
+        blackSabbathTargets.add(LE);
+        return blackSabbathTargets;
+    }
+    public List<LivingEntity> removeTargetEntities(LivingEntity LE){
+        if (blackSabbathTargets == null){
+            blackSabbathTargets = new ArrayList<>();
+        }
+        blackSabbathTargets.remove(LE);
+        return blackSabbathTargets;
+    }
+    public List<LivingEntity> clearTargetEntities(){
+        blackSabbathTargets = new ArrayList<>();
+        return blackSabbathTargets;
+    }
 
     @Override
     public void updatePowerInt(byte activePower, int data) {
@@ -91,6 +132,9 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             case PowersBlackSabbath.CLIENT_SYNC_TARGET_LIGHTER -> {
                 this.EntityTargetOne = self.level().getEntity(data);
+                if(self.level().getEntity(data) instanceof LivingEntity LE) {
+                    this.addTargetEntities(LE);
+                }
             }
         }
         super.updatePowerInt(activePower,data);
@@ -183,11 +227,8 @@ public class PowersBlackSabbath extends NewDashPreset {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         setSkillIcon(context, x, y, 1, StandIcons.POLPO_INVENTORY, PowerIndex.SKILL_1);
-        if(EntityTargetOne != null) {
-            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
-        } else {
-            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
-        }
+
+        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
         setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
         setSkillIcon(context, x, y, 4, StandIcons.BITE_FINGERS_POLPO, PowerIndex.SKILL_4);
 
@@ -217,14 +258,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                 }
             }
             case SKILL_2_NORMAL, SKILL_2_CROUCH -> {
-                if(EntityTargetOne != null){
-                    EntityTargetOne = null;
-                    selectTargetNull();
-                } else {
                     if(!onCooldown(PowerIndex.SKILL_2) && !isAttackIneptVisually(PowerIndex.SKILL_2, 2)) {
                         blackSelectClient();
                     }
-                }
             }
             case SKILL_3_NORMAL, SKILL_3_CROUCH -> {
                 dash();
@@ -579,6 +615,16 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
         }
 
+        String test = "";
+
+        if(this.isClient()){
+            test = "Level is Clientside";
+        } else {
+            test = "Level is Serverside";
+        }
+
+        System.out.println(this.blackSabbathTargets + ". " + test);
+
         if(EntityTargetOne != null) {
             DimensionType T = this.getSelf().level().dimensionType();
             DimensionType t = this.EntityTargetOne.level().dimensionType();
@@ -604,7 +650,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         }
 
         getValidPlacement();
-
+        cycleThroughBlackSabbathTargets();
         super.tickPower();
     }
 
@@ -720,7 +766,11 @@ public class PowersBlackSabbath extends NewDashPreset {
             if (!holdAttack) {
                 holdAttack = true;
                 if (moveMode == 2) {
-                    selectTargetClient();
+                    if(this.isHoldingSneak()){
+                        unselectClient();
+                    } else {
+                        selectTargetClient();
+                    }
                 }
             }
         } else if (holdAttack){
@@ -739,11 +789,26 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
                 if(value != 0) {
-                    if (target != null) {
-                        EntityTargetOne = target;
+                    if (target != null && target instanceof LivingEntity LE) {
+                        if(!blackSabbathTargets.contains(LE)) {
+                            this.addTargetEntities(LE);
+                        }
                     }
-                } else {
-                    EntityTargetOne = null;
+                }
+            }
+            case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
+                this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_TARGET);
+                this.setAttackTime(0);
+                Entity target = this.getSelf().level().getEntity(value);
+                if(value != 0) {
+                    if (target != null && target instanceof LivingEntity LE) {
+                        if(blackSabbathTargets.contains(LE)) {
+                            this.removeTargetEntities(LE);
+                            System.out.println("REMOVING");
+                        } else {
+                            System.out.println("NOT REMOVING");
+                        }
+                    }
                 }
             }
         }
@@ -765,14 +830,31 @@ public class PowersBlackSabbath extends NewDashPreset {
         tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, 0);
     }
 
+    public void unselectClient(){
+        Entity TE = getTarget();
+        if (TE != null) {
+            if (TE instanceof LivingEntity LE) {
+                if(blackSabbathTargets.contains(LE)) {
+                    this.removeTargetEntities(LE);
+                    tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
+                    tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                    this.self.playSound(ModSounds.CKB_NO_EVENT, 10F, 1F);
+                }
+            }
+        }
+    }
+
     public void selectTargetClient(){
         Entity TE = getTarget();
         if (TE != null) {
-            if(EntityTargetOne == null) {
-                int id = TE.getId();
-                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
-                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
-                this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+            if(TE instanceof LivingEntity LE) {
+                if(!blackSabbathTargets.contains(LE)) {
+                    this.addTargetEntities(LE);
+                    int id = LE.getId();
+                    tryIntPower(PowersBlackSabbath.CLIENT_SYNC_TARGET, true, id);
+                    tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_TARGET, id);
+                    this.self.playSound(ModSounds.CKB_YES_EVENT, 10F, 1F);
+                }
             }
         }
     }
