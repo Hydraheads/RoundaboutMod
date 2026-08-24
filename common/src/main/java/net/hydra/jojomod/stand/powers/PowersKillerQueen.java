@@ -767,6 +767,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
     			if (!isHoldingSneak()) {
                     return !canBlockPlantBomb() && !canAddStrayCatto();
+                }else {
+                    return hasArmsOut;
                 }
     		}
     	}
@@ -784,6 +786,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (isHoldingSneak()) { return  !canItemPlantBomb();}
             }
     	}
+
+        if (slot == 4) {
+            if (!isHoldingSneak()) {
+                return hasArmsOut;
+            }
+        }
     		
 		return super.isAttackIneptVisually(activeP, slot);
     }
@@ -1017,7 +1025,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canBlockPlantBomb() { 
     	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 		
-	    if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() && this.currentBombStatus == BOMB_NONE) {
+	    if (standEntity != null && (standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
 	    	float range = getRange(blockPlantRange);
 
 	    	Vec3 vec3d = this.getSelf().getEyePosition(0);
