@@ -599,6 +599,7 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_KING_CRIMSON_ID,ModSounds.SUMMON_KING_CRIMSON_EVENT);
         addSound(ModSounds.EPITAPH_ACTIVATE_ID,ModSounds.EPITAPH_ACTIVATE_EVENT);
         addSound(ModSounds.EPITAPH_FADE_ID,ModSounds.EPITAPH_FADE_EVENT);
+        addSound(ModSounds.D4C_EXPLOSION_ID,ModSounds.D4C_EXPLOSION_EVENT);
         addSound(ModSounds.KING_CRIMSON_IMPALE_ID,ModSounds.KING_CRIMSON_IMPALE_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_ID,ModSounds.KING_CRIMSON_PUNCH_EVENT);
         addSound(ModSounds.KING_CRIMSON_PUNCH_2_ID,ModSounds.KING_CRIMSON_PUNCH_2_EVENT);

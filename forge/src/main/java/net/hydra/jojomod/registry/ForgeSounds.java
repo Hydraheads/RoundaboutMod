@@ -863,6 +863,8 @@ public class ForgeSounds {
             register(ModSounds.EPITAPH_ACTIVATE, ModSounds.EPITAPH_ACTIVATE_ID);
     public static final RegistryObject<SoundEvent> EPITAPH_FADE =
             register(ModSounds.EPITAPH_FADE, ModSounds.EPITAPH_FADE_ID);
+    public static final RegistryObject<SoundEvent> D4C_EXPLOSION =
+            register(ModSounds.D4C_EXPLOSION, ModSounds.D4C_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_IMPALE =
             register(ModSounds.KING_CRIMSON_IMPALE, ModSounds.KING_CRIMSON_IMPALE_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH =

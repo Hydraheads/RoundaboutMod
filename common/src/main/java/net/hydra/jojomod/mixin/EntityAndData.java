@@ -1058,7 +1058,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
         // 40-100 ticks = 2-5 seconds
         rdbt$altCheckCooldown =
-                40 + (int)(Math.random() * 61);
+                20 + (int)(Math.random() * 15);
 
         Entity alt = PowerTypes.findNearbyParallelCopy(self);
 

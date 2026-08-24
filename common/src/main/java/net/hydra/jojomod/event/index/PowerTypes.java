@@ -9,20 +9,28 @@ import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -337,17 +345,20 @@ public enum PowerTypes {
         return false;
     }
     public static void tickIsNearAlt(Entity entity, Entity alt){
-        if (alt != null) {
+        if (alt != null && entity != null) {
             if (entity.level() instanceof ServerLevel sl) {
                 if (entity.tickCount % 2 == 0) {
                     double random = (Math.random() * 1.2) - 0.6;
                     double random2 = (Math.random() * 1.2) - 0.6;
                     double random3 = (Math.random() * 1.2) - 0.6;
+
+                    Vec3 center1 = (entity.getEyePosition().subtract(entity.getPosition(1)).scale(0.5)).add(entity.getPosition(1));
+                    Vec3 center2 = (alt.getEyePosition().subtract(alt.getPosition(1)).scale(0.5)).add(alt.getPosition(1));
                     MainUtil.sendParticlesIfPossible(entity, sl,
-                            ModParticles.MENGER, alt.getX() + random,
-                            alt.getY() + alt.getEyeHeight() + random2, alt.getZ() + random3,
+                            ModParticles.MENGER, center2.x + random,
+                            center2.y + random2, center2.z + random3,
                             0,
-                            (entity.getX() - alt.getX()), (entity.getY() - alt.getY() + alt.getEyeHeight()), (entity.getZ() - alt.getZ()),
+                            (center1.x - center2.x), (center1.y - center2.y), (center1.z - center2.z),
                             0.08);
                 }
 
@@ -355,10 +366,39 @@ public enum PowerTypes {
 
                     Vec3 db = RotationUtil.distanceBetween(alt,entity);
                     alt.setDeltaMovement(alt.getDeltaMovement().add(
-                            db.x * -0.008,
+                            db.x * -0.016,
                             0,
-                            db.z * -0.008
+                            db.z * -0.016
                     ));
+                    if (!PowerTypes.originatedFromOurWorld(alt) && alt.distanceTo(entity) < 1.5){
+                        MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
+                                SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1F);
+                        MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
+                                ModSounds.D4C_EXPLOSION_EVENT, SoundSource.PLAYERS, 3.0F, 1F);
+
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.FIRE_CRUMBLE,
+                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                                5, 0.4,0.4, 0.4,0.01);
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.MENGER,
+                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                                5, 0,0, 0,0.1);
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
+                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                                6, 0.3,0.3, 0.3,0.01);
+                        float dmg= 30;
+                        if (entity instanceof Player){
+                            dmg = 15;
+                        }
+                        entity.hurt(ModDamageTypes.of(entity.level(),ModDamageTypes.D4C_COLLISION),
+                                dmg);
+
+                        alt.discard();
+                    } else {
+                        if (entity instanceof LivingEntity LE && alt instanceof LivingEntity LE2){
+                            MainUtil.makeBleed(LE,0,200,null);
+                            MainUtil.makeBleed(LE2,0,200,null);
+                        }
+                    }
                 }
             }
         }

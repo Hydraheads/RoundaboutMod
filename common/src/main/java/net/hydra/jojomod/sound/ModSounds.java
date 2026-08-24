@@ -1556,6 +1556,9 @@ public class ModSounds {
     public static final String EPITAPH_FADE = "epitaph_fade";
     public static final ResourceLocation EPITAPH_FADE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ EPITAPH_FADE);
     public static SoundEvent EPITAPH_FADE_EVENT = SoundEvent.createVariableRangeEvent(EPITAPH_FADE_ID);
+    public static final String D4C_EXPLOSION = "d4c_explosion";
+    public static final ResourceLocation D4C_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_EXPLOSION);
+    public static SoundEvent D4C_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(D4C_EXPLOSION_ID);
 
 
     public static final String D4C_PUNCH = "d4c_punch";

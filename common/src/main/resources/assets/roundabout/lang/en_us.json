@@ -1013,6 +1013,10 @@
   "death.attack.barbed_wire.player.item": "%1$s ran into a wire whilst fighting %2$s",
   "death.attack.heart": "%1$s had a change of heart",
   "death.attack.heart.item": "%1$s had a change of heart",
+  "death.attack.d4c_collision": "%1$s was annihilated",
+  "death.attack.d4c_collision.item": "%1$s was annihilated",
+  "death.attack.d4c_collision.player": "%1$s was annihilated whilst fighting %2$s",
+  "death.attack.d4c_collision.player.item": "%1$s was annihilated whilst fighting %2$s",
   "death.attack.heart.player": "%1$s had a change of heart in battle with %2$s",
   "death.attack.heart.player.item": "%1$s had a change of heart in battle with %2$s",
   "death.attack.fusion": "%1$s was fused into %2$s",
@@ -4888,6 +4892,7 @@
 
   "sounds.roundabout.summon_pearl_jam": "Stand summoned",
   "sounds.roundabout.pearl_jam_palm_read": "Hmmmmmmmm",
+  "sounds.roundabout.d4c_explosion": "Collision",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",
