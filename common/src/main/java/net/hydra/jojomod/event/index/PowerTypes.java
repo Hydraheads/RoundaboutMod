@@ -353,8 +353,8 @@ public enum PowerTypes {
                     double random2 = (Math.random() * 1.2) - 0.6;
                     double random3 = (Math.random() * 1.2) - 0.6;
 
-                    Vec3 center1 = (entity.getEyePosition().subtract(entity.getPosition(1)).scale(0.5)).add(entity.getPosition(1));
-                    Vec3 center2 = (alt.getEyePosition().subtract(alt.getPosition(1)).scale(0.5)).add(alt.getPosition(1));
+                    Vec3 center1 = (entity.getEyePosition().subtract(entity.getPosition(1)).scale(0.7)).add(entity.getPosition(1));
+                    Vec3 center2 = (alt.getEyePosition().subtract(alt.getPosition(1)).scale(0.7)).add(alt.getPosition(1));
                     MainUtil.sendParticlesIfPossible(entity, sl,
                             ModParticles.MENGER, center2.x + random,
                             center2.y + random2, center2.z + random3,
@@ -381,12 +381,24 @@ public enum PowerTypes {
                         MainUtil.playSoundToAll(entity.level(),null, entity.blockPosition(),
                                 ModSounds.D4C_EXPLOSION_EVENT, SoundSource.PLAYERS, 3.0F, 1F);
 
-                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.FIRE_CRUMBLE,
-                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
-                                5, 0.4,0.4, 0.4,0.01);
+                        //MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.FIRE_CRUMBLE,
+                        //        entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                        //        5, 0.4,0.4, 0.4,0.01);
+
+                        Vec3 position = entity.getPosition(1);
+                        Vec3 position2 = entity.getEyePosition();
+                        Vec3 position3 = entity.getEyePosition().subtract(entity.getPosition(1)).multiply(new Vec3(0.5F,
+                                0.5F,0.5F));
+
                         MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
-                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
-                                6, 0.3,0.3, 0.3,0.01);
+                                position.x, position.y, position.z,
+                                0, 0.2, 0.5, 0.2, 0.5);
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
+                                position2.x, position2.y, position2.z,
+                                0, 0.2, 0.5, 0.2, 0.2);
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
+                                position3.x, position3.y, position3.z,
+                                0, 0.2, 0.5, 0.2, 0.2);
                         //See some of it across dimensions to know a collision happened
                         sl.sendParticles(ModParticles.MENGER,
                                 entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
@@ -440,6 +452,7 @@ public enum PowerTypes {
                 other ->
                         other != entity
                                 && other.isAlive()
+                                && MainUtil.canActuallyHitInvolved2(entity,other)
                                 && (other.getUUID().equals(parallelUUID) ||
                                 (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
                                         ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))

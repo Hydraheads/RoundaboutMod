@@ -15,7 +15,7 @@ public class MengerParticle extends TextureSheetParticle {
         this.sprites = $$7;
         this.lifetime = 5;
         this.gravity = 0.008F;
-        this.scale(1.2F);
+        this.scale(1.0F);
         this.setAlpha(0.8F);
         this.xd = $$4;
         this.yd = $$5;
