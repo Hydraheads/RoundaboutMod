@@ -66,6 +66,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -361,7 +362,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override public boolean canUseMiningStand() {
-        return !inBitesTheDustMode() && super.canUseMiningStand();
+        return !inBitesTheDustMode() && super.canUseMiningStand() && !hasHandsOut();
     }
 
     @Override public float getPickMiningSpeed() { return 12F;}
@@ -705,7 +706,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     	} else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
 
         if (isHoldingSneak() && !(inBitesTheDustMode())){
@@ -922,12 +923,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean interceptAttack(){
-        return !inBitesTheDustMode();
+        return !inBitesTheDustMode() && !hasHandsOut();
     }
 
     @Override
     public boolean interceptGuard(){
-        return !inBitesTheDustMode();
+        return !inBitesTheDustMode() && !hasHandsOut();
     }
 
     @Override
@@ -938,7 +939,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean canGuard(){
     	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == PowerIndex.POWER_3
-                || this.detonateTimer > -1 || inBitesTheDustMode()) {
+                || this.detonateTimer > -1 || inBitesTheDustMode() || hasHandsOut()) {
     		return false;
     	}
         return super.canGuard();
@@ -946,7 +947,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack() {
-    	if (this.detonateTimer > -1 || inBitesTheDustMode()) {
+    	if (this.detonateTimer > -1 || inBitesTheDustMode() || hasHandsOut()) {
     		return false;
     	}
     	
@@ -955,7 +956,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean canAttack2() {
-    	if (inBitesTheDustMode()) {
+    	if (inBitesTheDustMode() || hasHandsOut()) {
     		return false;
     	}
     	
@@ -2111,7 +2112,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void tryMobPlantBomb() {
-        if (!this.onCooldown(PowerIndex.SKILL_2) && this.canAttack2() && currentBombStatus == BOMB_NONE) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && currentBombStatus == BOMB_NONE) {
             bombConfigPacket();
 
             if (this.activePower == PowerIndex.POWER_2) {

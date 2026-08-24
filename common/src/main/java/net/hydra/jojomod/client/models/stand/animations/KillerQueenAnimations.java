@@ -2199,7 +2199,13 @@ public class KillerQueenAnimations {
 			))
 			.build();
 
-	public static final AnimationDefinition mobPlantArms = AnimationDefinition.Builder.withLength(1.6667F)
+	public static final AnimationDefinition hideLeftArm = AnimationDefinition.Builder.withLength(1.0F)
+			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.build();
+
+		public static final AnimationDefinition mobPlantArms = AnimationDefinition.Builder.withLength(1.6667F)
 			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.875F, KeyframeAnimations.degreeVec(-144.8974F, 4.0941F, 2.8728F), AnimationChannel.Interpolations.CATMULLROM),

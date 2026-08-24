@@ -54,6 +54,17 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
         PartDefinition lower_right_arm = right_arm.addOrReplaceChild("lower_right_arm",  CubeListBuilder.create().texOffs(0, 26).addBox(-1.75F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.001F)),
                 PartPose.offset(-2.0F, 5.5F, 0.0F));
 
+        PartDefinition left_arm = base.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offsetAndRotation(5.4F, -24.25F, 0.0F, -0.5105F, -0.1096F, -0.2382F));
+
+        PartDefinition upper_left_arm = left_arm.addOrReplaceChild("upper_left_arm", CubeListBuilder.create().texOffs(16, 31).addBox(-0.25F, -0.75F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.01F))
+                .texOffs(0, 46).addBox(-0.25F, -0.75F, -2.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.2F))
+                .texOffs(-2, -2).addBox(4.0F, -0.75F, -2.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(67, 49).addBox(0.75F, 3.25F, 2.25F, 2.0F, 2.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(-2, -2).addBox(-0.25F, -0.75F, -2.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition lower_left_arm = left_arm.addOrReplaceChild("lower_left_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-2.25F, -0.25F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.001F)),
+                PartPose.offset(2.0F, 5.5F, 0.0F));
+
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
     @Override
@@ -133,6 +144,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
                     this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
+                    this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.hideLeftArm, partialTicks, 1f);
                     if (animation == KillerQueenEntity.MOB_PLANT) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/((float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f);
                     } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
