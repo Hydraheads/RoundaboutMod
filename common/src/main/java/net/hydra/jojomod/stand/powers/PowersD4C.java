@@ -11,6 +11,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -794,6 +795,18 @@ public class PowersD4C extends NewPunchingStand {
             copySheep.setColor(originalSheep.getColor());
         }
 
+        // Parrots
+        if (original instanceof Parrot originalParrot
+                && copy instanceof Parrot copyParrot) {
+
+            copyParrot.setVariant(originalParrot.getVariant());
+        }
+        // Aestheticians
+        if (original instanceof Aesthetician originalAya
+                && copy instanceof Aesthetician copyAya) {
+
+            copyAya.setSkinNumber(originalAya.getSkinNumber());
+        }
         // Rabbits
         if (original instanceof Rabbit originalRabbit
                 && copy instanceof Rabbit copyRabbit) {

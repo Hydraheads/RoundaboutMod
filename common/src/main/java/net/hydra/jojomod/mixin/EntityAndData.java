@@ -1032,6 +1032,7 @@ public abstract class EntityAndData implements IEntityAndData {
             // No entity hitbox query.
             if (!alt.isAlive()
                     || alt.level() != self.level()
+                    || !MainUtil.canActuallyHitInvolved2(self,alt)
                     || PowerTypes.isInADifferentExistenceNoTE(self,alt)
                     || self.distanceToSqr(alt) > 121.0D) {
 
