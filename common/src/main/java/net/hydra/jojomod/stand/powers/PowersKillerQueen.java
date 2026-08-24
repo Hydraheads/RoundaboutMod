@@ -479,6 +479,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         return isRenderingArms && self instanceof Player;
     }
 
+    public int getMaxHandTicks(){
+        return 30;
+    }
+
     @Override
     public void refreshArms(){
         if (!self.level().isClientSide()) {
@@ -672,7 +676,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     	} else if (isGuarding() ) {
             setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_SETIINGS, PowerIndex.NO_CD);
         } else if (this.currentBombStatus != BOMB_NONE ) {
-    		setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
+
     	} else if (isHoldingSneak()){
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_IMPALE, PowerIndex.SKILL_1_SNEAK);
@@ -681,7 +686,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             //setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2_SNEAK);
         } else {
-        	setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
         }
         
     	if (inBitesTheDustMode()) {
@@ -690,7 +695,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BUBBLE_REDIRECT, PowerIndex.NO_CD);
 
         } else if (this.currentBombStatus != BOMB_NONE) {
-        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DEFUSE, PowerIndex.NO_CD);
+            setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_BOMB_DETONATE, PowerIndex.NO_CD);
         } else if (isGuarding()) {
             if (!canExecuteMoveWithLevel(getStrayCatLevel()) || !this.canUseStrayCat()) {
                 setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
@@ -699,13 +704,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         	}
     	} else if (isHoldingSneak()){
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM, PowerIndex.SKILL_2_SNEAK);
-            /*if (canExecuteMoveWithLevel(getImpaleLevel())) {
-                setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_IMPALE, PowerIndex.SKILL_1_SNEAK);
-            } else {
-                setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
-            }*/
         } else {
-        	setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 1, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
 
         if (isHoldingSneak() && !(inBitesTheDustMode())){
@@ -806,9 +806,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (this.canAddStrayCatto()) {
                         addStrayCattoClient();
                     }else if (this.currentBombStatus == BOMB_NONE) {
-	        			tryBlockPlantBomb();
+	        		    tryMobPlantBomb();
 	        		}else {
-	        			detonateClient();
+	        			defuseClient();
 	        		}
         		}else {
                     tryBitesTheDustDay();
@@ -820,15 +820,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (currentBombStatus == NONE) {
                         tryImpale();
                     }else {
-                        detonateClient();
+                        defuseClient();
                     } /// maybe on future kq could be able to impale with bomb as a buff?
-                    /*if (this.currentBombStatus == BOMB_NONE) {
-                        if (this.canItemPlantBomb()) {
-                            tryItemPlantBomb();
-                        }
-                    } else {
-                        detonateClient();
-                    }*/
                 }else {
                     tryBitesTheDustDay();
                 }
@@ -845,9 +838,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (this.activePower == PowerIndex.POWER_2_BLOCK) {
                         airBubbleRedirectClient();
                     } else if (this.currentBombStatus == BOMB_NONE) {
-                        tryMobPlantBomb();
+                        tryBlockPlantBomb();
 	        		}else {
-	        			defuseClient();
+                        detonateClient();
 	        		}
         		}else {
                     tryBitesTheDustCombat();
@@ -860,7 +853,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     } else if (this.currentBombStatus == BOMB_NONE) {
                         tryBubbleSend();
                     } else {
-                        defuseClient();
+                        detonateClient();
                     }
                 }else {
                     tryBitesTheDustCombat();
@@ -874,7 +867,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                             tryItemPlantBomb();
                         }
                     } else {
-                        defuseClient();
+                        detonateClient();
                     }
                 }else {
                     tryBitesTheDustCombat();
@@ -1595,6 +1588,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
+        }
+
         if (hasArmsOut && (move == PowerIndex.BARRAGE || move == PowerIndex.BARRAGE_CHARGE
                 || move == PowerIndex.SNEAK_ATTACK_CHARGE || move == PowerIndex.SNEAK_ATTACK))
             return false;
@@ -1897,7 +1894,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public float getStrenghtFromTime(int charged) {
-        float $$1 = (float)charged / getArrowThrowChargeMax();
+        float $$1 = ((float)charged / getArrowThrowChargeMax()) * 0.75f + 0.25f;
         $$1 = (($$1 * $$1 + $$1 * 2.0F) / 3.0F);
 
         if ($$1 > getArrowThrowStrenght()) { $$1 = getArrowThrowStrenght(); }
@@ -2976,7 +2973,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         SHA = sha;
 
                         if (shaThrow) {
-                            SHA.shoot(getRayBlock(this.self, 4f));
+                            SHA.shoot(getRayBlock(this.self, 4.5f));
                         }
                         this.syncShaStatus(SHA_SEND);
                         if (this.self instanceof ServerPlayer) {
@@ -3927,21 +3924,21 @@ public class PowersKillerQueen extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+ 58 +startPos,topPos+99,getImpaleLevel(), "ability.roundabout.kq_arms_mode",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_HANDS_ACTIVE,4,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+ 58 +startPos,topPos+118,getImpaleLevel(), "ability.roundabout.impale",
-                "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_IMPALE,2,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_IMPALE,1,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+80,0, "ability.roundabout.kq_detonate",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_DETONATE,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_DETONATE,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+99,0, "ability.roundabout.kq_defuse",
                 "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BOMB_DEFUSE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77 + startPos,topPos+118, 0, "ability.roundabout.kq_config",
                 "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BOMB_SETIINGS,1,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+80,0, "ability.roundabout.kq_bomb_block",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK,2,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+99,0, "ability.roundabout.kq_bomb_mob",
-                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB,2,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_PLANT_BOMB_MOB,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96 + startPos,topPos+118, 0, "ability.roundabout.kq_bomb_item",
-                "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM,1,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_PLANT_BOMB_ITEM,2,level,bypas));
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+80, getSheerHeartAttackLevel(), "ability.roundabout.kq_sha_summon",
                 "instruction.roundabout.press_skill_crouch", StandIcons.KILLER_QUEEN_SHA_SUMMON,3,level,bypas));
