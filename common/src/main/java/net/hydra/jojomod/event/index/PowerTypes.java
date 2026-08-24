@@ -18,6 +18,8 @@ import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +28,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Unique;
 
 import javax.annotation.Nullable;
@@ -349,10 +352,12 @@ public enum PowerTypes {
                 }
 
                 if (!(alt instanceof Player)) {
+
+                    Vec3 db = RotationUtil.distanceBetween(alt,entity);
                     alt.setDeltaMovement(alt.getDeltaMovement().add(
-                            (entity.getX() - alt.getX()) * 0.008,
+                            db.x * -0.008,
                             0,
-                            (entity.getZ() - alt.getZ()) * 0.008
+                            db.z * -0.008
                     ));
                 }
             }
