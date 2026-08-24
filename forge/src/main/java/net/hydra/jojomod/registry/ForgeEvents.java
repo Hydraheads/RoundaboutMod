@@ -6,10 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
-import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
-import net.hydra.jojomod.entity.ModEntities;
-import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.mobs.TerrierEntity;
@@ -125,6 +122,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.MODIFIED_NPC.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.FOG_CLONE.get(), PlayerAlexNPC.createAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_CLONE.get(), KingCrimsonCloneEntity.createAttributes().build());
+        event.put(ForgeEntities.D4C_CLONE.get(), D4CCloneEntity.createAttributes().build());
         event.put(ForgeEntities.KING_CRIMSON_PROJECTION.get(), KingCrimsonProjectionEntity.createAttributes().build());
         event.put(ForgeEntities.FALLEN_ZOMBIE.get(), FallenZombie.createAttributes().build());
         event.put(ForgeEntities.FALLEN_SKELETON.get(), FallenSkeleton.createAttributes().build());
@@ -911,6 +909,7 @@ public class ForgeEvents {
         ModEntities.FAKE_ITEM = ForgeEntities.FAKE_ITEM.get();
         ModEntities.BOMB_PLANTED_ITEM = ForgeEntities.BOMB_PLANTED_ITEM.get();
         ModEntities.KING_CRIMSON_CLONE = ForgeEntities.KING_CRIMSON_CLONE.get();
+        ModEntities.D4C_CLONE = ForgeEntities.D4C_CLONE.get();
         ModEntities.KING_CRIMSON_PROJECTION = ForgeEntities.KING_CRIMSON_PROJECTION.get();
 
         ForgeItems.assignStupidForge();
