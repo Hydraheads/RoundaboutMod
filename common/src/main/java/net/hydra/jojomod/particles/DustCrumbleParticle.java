@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
 public class DustCrumbleParticle extends SimpleAnimatedParticle {
@@ -30,6 +32,11 @@ public class DustCrumbleParticle extends SimpleAnimatedParticle {
         this.setLocationFromBoundingbox();
     }
 
+    @Override
+    public int getLightColor(float $$0) {
+        BlockPos $$1 = BlockPos.containing(this.x, this.y, this.z);
+        return this.level.hasChunkAt($$1) ? LevelRenderer.getLightColor(this.level, $$1) : 0;
+    }
     @Override
     public void render(VertexConsumer $$0, Camera $$1, float $$2) {
             super.render($$0, $$1, $$2);
