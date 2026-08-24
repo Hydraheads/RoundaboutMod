@@ -2781,7 +2781,37 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean playSoundToAll(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if ($$2 != null && level instanceof ServerLevel sl) {
 
+            ResourceLocation soundId = $$2.getLocation();
+            if (soundId != null) {
+                String str = $$3.name();
+                for (ServerPlayer playerInList :
+                        sl.getServer().getPlayerList().getPlayers()) {
+
+                    double range = $$2.getRange($$5);
+                    double rangeSqr = range * range;
+                    if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                        continue;
+                    }
+
+                    S2CPacketUtil.sendSafeSound(
+                            playerInList,
+                            $$1.getX(),
+                            $$1.getY(),
+                            $$1.getZ(),
+                            soundId.toString(),
+                            str,
+                            $$4,
+                            $$5
+                    );
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     public static boolean playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self)) {
@@ -2805,7 +2835,6 @@ public class MainUtil {
                                     playerInList)) {
                                 continue;
                             }
-                            Roundabout.LOGGER.info("5");
 
                             S2CPacketUtil.sendSafeSound(
                                     playerInList,

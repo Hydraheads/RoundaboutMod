@@ -50,6 +50,8 @@ public class ForgeSounds {
             register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
     public static final RegistryObject<SoundEvent> D4C_PORTAL =
             register(ModSounds.D4C_PORTAL, ModSounds.D4C_PORTAL_ID);
+    public static final RegistryObject<SoundEvent> D4C_FUSE =
+            register(ModSounds.D4C_FUSE, ModSounds.D4C_FUSE_ID);
     public static final RegistryObject<SoundEvent> DISC_REMOVE_EVENT =
             register(ModSounds.DISC_REMOVE, ModSounds.DISC_REMOVE_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =

@@ -2141,7 +2141,6 @@ public class AbilityScapeBasis {
                                     playerInList)) {
                                 continue;
                             }
-                            Roundabout.LOGGER.info("5");
 
                             S2CPacketUtil.sendSafeSound(
                                     playerInList,

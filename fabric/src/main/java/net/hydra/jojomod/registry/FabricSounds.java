@@ -69,6 +69,7 @@ public class FabricSounds {
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
+        addSound(ModSounds.D4C_FUSE_ID, ModSounds.D4C_FUSE_EVENT);
         addSound(ModSounds.WORLD_MERGE_ID, ModSounds.WORLD_MERGE_EVENT);
         addSound(ModSounds.DISC_INSERT_ID, ModSounds.DISC_INSERT_EVENT);
         addSound(ModSounds.DISC_REMOVE_ID, ModSounds.DISC_REMOVE_EVENT);

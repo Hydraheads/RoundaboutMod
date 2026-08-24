@@ -96,6 +96,7 @@ public class PowersD4C extends NewPunchingStand {
 
     public static final byte WORLD_MERGE = 106;
     public static final byte PORTAL = 107;
+    public static final byte FUSE = 108;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -114,6 +115,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.WORLD_MERGE_EVENT;
         } else if (soundChoice == PORTAL) {
             return ModSounds.D4C_PORTAL_EVENT;
+        } else if (soundChoice == FUSE) {
+            return ModSounds.D4C_FUSE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -1586,7 +1589,7 @@ public class PowersD4C extends NewPunchingStand {
                 PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
                 this.setAttackTimeDuring(-5);
                 this.setActivePower(PowerIndex.POWER_2_BONUS);
-                playSoundsIfNearby(IMPALE_NOISE, 27, false);
+                playSoundsIfNearby(FUSE, 27, false);
                 this.animateStand(D4CEntity.DRAG_2);
                 this.poseStand(OffsetIndex.GUARD);
                 if (self.level() instanceof ServerLevel sl){

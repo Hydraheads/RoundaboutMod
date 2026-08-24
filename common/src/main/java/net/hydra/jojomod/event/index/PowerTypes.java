@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -364,27 +365,32 @@ public enum PowerTypes {
 
                 if (!(alt instanceof Player)) {
 
+                    float carryon = Math.min((1+(((float)delayTime)/50f)),5);
                     Vec3 db = RotationUtil.distanceBetween(alt,entity);
                     alt.setDeltaMovement(alt.getDeltaMovement().add(
-                            db.x * -0.016,
+                            db.x * (-0.009 * carryon),
                             0,
-                            db.z * -0.016
+                            db.z * (-0.009 * carryon)
                     ));
+                    alt.hurtMarked = true;
+                    alt.hasImpulse = true;
                     if (delayTime > 20 && !PowerTypes.originatedFromOurWorld(alt) && alt.distanceTo(entity) < 1.5){
                         MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
                                 SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1F);
-                        MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
+                        //Hear some of it across dimensions to know a collision happened
+                        MainUtil.playSoundToAll(entity.level(),null, entity.blockPosition(),
                                 ModSounds.D4C_EXPLOSION_EVENT, SoundSource.PLAYERS, 3.0F, 1F);
 
                         MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.FIRE_CRUMBLE,
                                 entity.getX(), entity.getY() + 1.0D, entity.getZ(),
                                 5, 0.4,0.4, 0.4,0.01);
-                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.MENGER,
-                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
-                                5, 0,0, 0,0.1);
                         MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.DUST_CRUMBLE,
                                 entity.getX(), entity.getY() + 1.0D, entity.getZ(),
                                 6, 0.3,0.3, 0.3,0.01);
+                        //See some of it across dimensions to know a collision happened
+                        sl.sendParticles(ModParticles.MENGER,
+                                entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                                10, 0,0, 0,0.1);
                         float dmg= 30;
                         if (entity instanceof Player){
                             dmg = 15;
