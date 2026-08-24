@@ -3665,7 +3665,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public SimpleParticleType getExplosionParticle() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.CREEPER) {
-            return ModParticles.SMALL_EXPLOSION;
+            return ParticleTypes.EXPLOSION;
+            //return ModParticles.SMALL_EXPLOSION;
         }
         return ModParticles.KILLER_QUEEN_EXPLOSION;
     }
