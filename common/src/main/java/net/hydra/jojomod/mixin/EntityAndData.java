@@ -36,6 +36,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -973,6 +974,8 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     private int rdbt$altCheckCooldown = 0;
+    @Unique
+    private int rdbt$delayTime = 0;
 
     @Unique
     public int rdbt$getAltCheckCooldown() {
@@ -1022,7 +1025,7 @@ public abstract class EntityAndData implements IEntityAndData {
         // ------------------------------------------------
 
         if (rdbt$nearAlt != null) {
-
+            rdbt$delayTime++;
             Entity alt = rdbt$nearAlt;
 
             // Cheap checks only.
@@ -1040,13 +1043,13 @@ public abstract class EntityAndData implements IEntityAndData {
             }
 
             // They're still close enough.
-                PowerTypes.tickIsNearAlt(self, alt);
+                PowerTypes.tickIsNearAlt(self, alt,rdbt$delayTime);
             if (self.isAlive() && alt.isAlive()) {
-                PowerTypes.tickIsNearAlt(alt, self);
+                PowerTypes.tickIsNearAlt(alt, self,rdbt$delayTime);
             }
             return;
         }
-
+        rdbt$delayTime = 0;
         // ------------------------------------------------
         // SEARCHING FOR A TARGET
         // ------------------------------------------------
@@ -1065,11 +1068,14 @@ public abstract class EntityAndData implements IEntityAndData {
         if (alt != null && !PowerTypes.isInADifferentExistenceNoTE(self,alt)) {
             rdbt$nearAlt = alt;
 
+            MainUtil.playSoundIfPossible(self,self.level(),null, self.blockPosition(),
+                    ModSounds.DING_EVENT, SoundSource.PLAYERS, 1.0F, 0.8F);
+
             // Immediately run the effect rather than
             // waiting until the next tick.
-            PowerTypes.tickIsNearAlt(self, alt);
+            PowerTypes.tickIsNearAlt(self, alt,rdbt$delayTime);
             if (self.isAlive() && alt.isAlive()) {
-                PowerTypes.tickIsNearAlt(alt, self);
+                PowerTypes.tickIsNearAlt(alt, self,rdbt$delayTime);
             }
         }
     }

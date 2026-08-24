@@ -344,7 +344,7 @@ public enum PowerTypes {
         }
         return false;
     }
-    public static void tickIsNearAlt(Entity entity, Entity alt){
+    public static void tickIsNearAlt(Entity entity, Entity alt, int delayTime){
         if (alt != null && entity != null) {
             if (entity.level() instanceof ServerLevel sl) {
                 if (entity.tickCount % 2 == 0) {
@@ -370,7 +370,7 @@ public enum PowerTypes {
                             0,
                             db.z * -0.016
                     ));
-                    if (!PowerTypes.originatedFromOurWorld(alt) && alt.distanceTo(entity) < 1.5){
+                    if (delayTime > 20 && !PowerTypes.originatedFromOurWorld(alt) && alt.distanceTo(entity) < 1.5){
                         MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
                                 SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1F);
                         MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
