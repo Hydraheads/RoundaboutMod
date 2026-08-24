@@ -30,6 +30,24 @@ public abstract class RotationUtil {
         }
     }
 
+    public static Vec3 distanceBetween(Entity target, Entity entity) {
+        Direction gravD =
+                ((IGravityEntity) target).roundabout$getGravityDirection();
+
+        double x = target.getX() - entity.getX();
+        double y = target.getY() - entity.getY();
+        double z = target.getZ() - entity.getZ();
+
+        return switch (gravD) {
+            case DOWN -> new Vec3(x, y, z);
+            case UP -> new Vec3(-x, -y, z);
+            case NORTH -> new Vec3(x, z, -y);
+            case SOUTH -> new Vec3(-x, -z, -y);
+            case WEST -> new Vec3(-z, x, -y);
+            case EAST -> new Vec3(z, -x, -y);
+        };
+    }
+
     public static Direction dirWorldToPlayer(Direction direction, Direction gravityDirection) {
         return DIR_WORLD_TO_PLAYER[gravityDirection.get3DDataValue()][direction.get3DDataValue()];
     }
