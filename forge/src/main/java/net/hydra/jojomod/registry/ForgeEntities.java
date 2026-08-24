@@ -610,7 +610,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
