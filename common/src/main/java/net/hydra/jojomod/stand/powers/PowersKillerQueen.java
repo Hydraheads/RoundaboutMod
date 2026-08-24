@@ -2,6 +2,10 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
@@ -46,6 +50,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -80,6 +88,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -91,6 +100,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.*;
@@ -133,6 +143,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         ARROW_HOLDING = 72,
         ARROW_CHARGE = 73,
         ARROW_THROW = 74,
+        BTD_ENTITY = 76,
 
         HANDS_COOLDOWN = 75,
 
@@ -470,6 +481,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean hasHandsOutRendering(){
         return isRenderingArms && self instanceof Player;
+    }
+
+    @Override
+    public void refreshArms(){
+        if (!self.level().isClientSide()) {
+            isRenderingArms = true;
+            handTicks = getMaxHandTicks();
+        }
+        super.refreshArms();
+    }
+
+    @Override
+    public void retractHands(){
+        //hasArmsOut = false;
+        //flipArmRendering();
     }
 
     @Override
@@ -1673,6 +1699,16 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombEntityID = data;
                 this.bombEntity = this.getSelf().level().getEntity(data);
             }
+            case PowersKillerQueen.BTD_ENTITY -> {
+                if (data == -1) {
+                    bitesTheDustPlantedEntity = null;
+                }else {
+                    Entity ent = this.getSelf().level().getEntity(data);
+                    if (ent instanceof LivingEntity LE) {
+                        this.bitesTheDustPlantedEntity = LE;
+                    }
+                }
+            }
             case PowersKillerQueen.ENTITY_SHA -> {
                 this.SHA = (SheerHeartAttackEntity) this.getSelf().level().getEntity(data);
             }
@@ -1754,6 +1790,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.attackTimeDuring >= getMobPlantWindup()) {
                 this.standMobPlant();
             } else {
+                if (hasHandsOut()) { refreshArms(); }
+
                 if (!this.getSelf().level().isClientSide()) {
                     if(this.attackTimeDuring%4==0) {
                         sendParticlesIfPossible(self.level(),ModParticles.MENACING,
@@ -2152,6 +2190,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
                 bitesTheDustPlantedEntity = null;
+                if (self instanceof ServerPlayer pl) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_ENTITY, -1);
+                }
                 syncBombStatus(BOMB_NONE);
                 this.setPowerNone();
                 syncActivePower();
@@ -2407,6 +2448,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (self instanceof ServerPlayer pl) {
                 //S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BTD_PLANT);
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_ENTITY, bitesTheDustPlantedEntity.getId());
+
             }
 
         }
@@ -2451,7 +2494,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             approved.add(ent);
         }
-        
+
         if (ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayGlobalRewind) {
             ServerLevel serverWorld = ((ServerLevel) this.self.level());
             for (int j = 0; j < serverWorld.players().size(); ++j) {
@@ -2755,6 +2798,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.syncBombStatus(BOMB_BLOCK);
 
                 if (hasHandsOut()) {
+                    refreshArms();
                     getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.BLOCK_PLANT);
                 }else {
                     this.animateStand(KillerQueenEntity.BLOCK_PLANT);
@@ -2863,6 +2907,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.setAttackTimeDuring(-15);
 
                     if (hasHandsOut()) {
+                        refreshArms();
                         getStandUserSelf().roundabout$setStandAnimation(StandEntity.ITEM_THROW);
                     }else {
                         animateStand(StandEntity.ITEM_THROW);
@@ -3773,6 +3818,57 @@ public class PowersKillerQueen extends NewPunchingStand {
         return super.highlightsEntityColor(ent, player);
     }
 
+    public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
+        if (LE != null) {
+            Minecraft mc = Minecraft.getInstance();
+            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024) {
+                if (LE == bitesTheDustPlantedEntity) {
+                    matrixStack.pushPose();
+
+                    // Orient the texture
+                    matrixStack.scale(1, 1, 1);
+                    matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
+                    matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+                    matrixStack.translate(0, 9, 0);
+
+                    // Draw flat quad here
+                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.BITES_THE_DUST_PLANTED)).color(1.0f, 1.0f, 1.0f, 1.0f);
+                    Matrix4f matrix = matrixStack.last().pose();
+
+                    Vector3f normal = mc.gameRenderer.getMainCamera().getLookVector();
+                    normal.normalize();
+
+                    float height = LE.getBbHeight() + 0.25F;
+                    matrixStack.translate(0, height, 0);
+
+                    normal.normalize();
+
+                    /**This ome is good*/
+                    Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
+                    if (normal.y > 0) {
+                        /**This ome needs serial fixing*/
+                        coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
+                        if (normal.y > 0.95) {
+                            coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
+                        }
+                    }
+
+                    float size = 0.5f;
+
+                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+
+
+                    RenderSystem.enableDepthTest();
+                    matrixStack.popPose();
+                }
+            }
+        }
+    }
+
+
     // more GUI things
 
 
@@ -4253,6 +4349,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.getActivePower() == PowerIndex.NONE) {
                 this.poseStand(OffsetIndex.GUARD);
                 if (hasHandsOut()) {
+                    refreshArms();
                     getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.DETONATE);
                 }else {
                     this.animateStand(KillerQueenEntity.DETONATE);
