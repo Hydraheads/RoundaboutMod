@@ -3843,22 +3843,20 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (LE == bitesTheDustPlantedEntity) {
                     matrixStack.pushPose();
 
+
+                    float height = LE.getBbHeight() + 0.25F;
+
                     // Orient the texture
                     matrixStack.scale(1, 1, 1);
                     matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
                     matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                    matrixStack.translate(0, 9, 0);
+                    matrixStack.translate(0, height, 0);
 
                     // Draw flat quad here
                     VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.BITES_THE_DUST_PLANTED)).color(1.0f, 1.0f, 1.0f, 1.0f);
                     Matrix4f matrix = matrixStack.last().pose();
 
                     Vector3f normal = mc.gameRenderer.getMainCamera().getLookVector();
-                    normal.normalize();
-
-                    float height = LE.getBbHeight() + 0.25F;
-                    matrixStack.translate(0, height, 0);
-
                     normal.normalize();
 
                     /**This ome is good*/
@@ -3871,7 +3869,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
 
-                    float size = 0.5f;
+                    float size = 4.0f;
 
                     vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
                     vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
