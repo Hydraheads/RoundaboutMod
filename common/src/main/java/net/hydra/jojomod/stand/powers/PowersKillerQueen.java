@@ -489,6 +489,13 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
+    public void flipArmRendering(){
+        handTicks = 0;
+        isRenderingArms = false;
+        saveDiscAndSync();
+    }
+
+    @Override
     public void retractHands(){
         //hasArmsOut = false;
         //flipArmRendering();
@@ -526,7 +533,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.readAdditionalSaveData($$0);
         if ($$0.contains(strayCatTag)) {
             strayCatData = $$0.getCompound(strayCatTag);
-            this.hasStrayCat = strayCatData != null;
+            this.hasStrayCat = true;
         } else if ($$0.contains(strayCatTagOld)) {
             this.hasStrayCat = $$0.getBoolean(strayCatTag);
         }
@@ -3878,7 +3885,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.KILLER_QUEEN_PUNCH,0,level,bypas));
-        if (canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatShieldLevel())) {
+        if (canUseStrayCat()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos+20 + startPos, topPos + 99, getStrayCatShieldLevel(), "ability.roundabout.kq_guard_bubble",
                     "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES, 0, level, bypas));
         }else {
@@ -3925,7 +3932,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.sha_mining",
                 "instruction.roundabout.press_block", StandIcons.KILLER_QUEEN_SHA_MINE,0,level, bypas));
 
-        if (canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatLevel())) {
+        if (canUseStrayCat()) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 80, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble",
                     "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, 2, level, bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos + 134 + startPos,topPos + 99, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble_redirect",
@@ -3935,7 +3942,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
         }
 
-        if (canBitesTheDust() && canExecuteMoveWithLevel(getBitesTheDustLevel())) {
+        if (canBitesTheDust()) {
             $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
                     "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
