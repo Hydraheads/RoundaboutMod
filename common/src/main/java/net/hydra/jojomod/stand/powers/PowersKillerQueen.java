@@ -304,18 +304,14 @@ public class PowersKillerQueen extends NewPunchingStand {
     private CompoundTag strayCatData = null;
 
     public boolean canUseStrayCat() {
-        return this.hasStrayCat || (this.getSelf() instanceof Player pl && ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
-                pl.isCreative()));
+        return this.hasStrayCat || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
     }
 
 
     private boolean hasBitesTheDust = false;
 
     public boolean canBitesTheDust() {
-        return this.hasBitesTheDust || (this.getSelf() instanceof Player pl && ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
-                pl.isCreative()));
+        return this.hasBitesTheDust || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
     }
 	public boolean wentForCharge = false;
 
@@ -518,6 +514,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             $$0.put(strayCatTag, strayCatData);
             //strayCatData.putBoolean(strayCatPotted, true);
         }
+
         $$0.putBoolean(BitesTheDustTag, this.hasBitesTheDust);
         $$0.putBoolean("hasArmsOut",hasArmsOut);
         $$0.putBoolean("isRenderingArms",isRenderingArms);
@@ -529,7 +526,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         super.readAdditionalSaveData($$0);
         if ($$0.contains(strayCatTag)) {
             strayCatData = $$0.getCompound(strayCatTag);
-            this.hasStrayCat = true;
+            this.hasStrayCat = strayCatData != null;
         } else if ($$0.contains(strayCatTagOld)) {
             this.hasStrayCat = $$0.getBoolean(strayCatTag);
         }
@@ -3881,7 +3878,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.KILLER_QUEEN_PUNCH,0,level,bypas));
-        if (canUseStrayCat()) {
+        if (canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatShieldLevel())) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos+20 + startPos, topPos + 99, getStrayCatShieldLevel(), "ability.roundabout.kq_guard_bubble",
                     "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES, 0, level, bypas));
         }else {
@@ -3928,7 +3925,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115 + startPos,topPos+118, getSheerHeartAttackLevel(), "ability.roundabout.sha_mining",
                 "instruction.roundabout.press_block", StandIcons.KILLER_QUEEN_SHA_MINE,0,level, bypas));
 
-        if (canUseStrayCat()) {
+        if (canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatLevel())) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 80, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble",
                     "instruction.roundabout.press_skill_block", StandIcons.KILLER_QUEEN_BUBBLE_LAUNCH, 2, level, bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos + 134 + startPos,topPos + 99, getStrayCatLevel(), "ability.roundabout.kq_bomb_bubble_redirect",
@@ -3938,7 +3935,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_ADD_STRAY_CAT,1,level, bypas));
         }
 
-        if (canBitesTheDust()) {
+        if (canBitesTheDust() && canExecuteMoveWithLevel(getBitesTheDustLevel())) {
             $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
                     "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
