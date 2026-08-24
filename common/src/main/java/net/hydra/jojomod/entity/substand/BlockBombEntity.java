@@ -46,8 +46,8 @@ import org.joml.Vector3f;
 
 public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
-	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
-			EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Boolean> CONTACT = SynchedEntityData.defineId(BlockBombEntity .class,
+			EntityDataSerializers.BOOLEAN);
 
 
 	private BlockPos bombPos;
@@ -57,6 +57,21 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	private AABB blockBB = null;
 	public int renderFadeIn = 1;
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(CONTACT, false);
+	}
+
+	public void setOnContact(boolean value) {
+		if (level().isClientSide()) {return; }
+		entityData.set(CONTACT, value);
+	}
+
+	public boolean getOnContact() {
+		return entityData.get(CONTACT);
+	}
 
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		super($$0, $$1);
@@ -203,7 +218,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	@Override
     public boolean isPickable() {
-		return (getUser() != null && ((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled());
+		return (getUser() != null && getOnContact());
 	}
 
     @Override

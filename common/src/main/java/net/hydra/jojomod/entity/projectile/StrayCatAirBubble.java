@@ -236,7 +236,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1 + 0.3); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,

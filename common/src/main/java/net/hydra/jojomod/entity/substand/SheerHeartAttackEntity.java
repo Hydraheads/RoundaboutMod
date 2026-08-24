@@ -828,7 +828,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 
 			MobType mobType = LE.getMobType();
-			if (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) || FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
+			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
+					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
 		return points;
 	}
