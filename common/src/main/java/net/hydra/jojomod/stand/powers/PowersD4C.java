@@ -10,7 +10,9 @@ import net.hydra.jojomod.block.D4CPortalBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -660,10 +662,8 @@ public class PowersD4C extends NewPunchingStand {
                 scanBox,
                 entity ->
                         entity.isAlive()
-                                && entity != self
                                 && !(entity instanceof StandEntity)
                                 && !(entity instanceof CloneEntity)
-                                && !(entity instanceof Player)
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
@@ -672,10 +672,34 @@ public class PowersD4C extends NewPunchingStand {
         Collections.shuffle(possibleTargets);
 
         int copied = 0;
+        int copiedPlayers = 0;
 
         for (LivingEntity target : possibleTargets) {
+            if (target instanceof Player pl && self instanceof Player pl2){
+                if (pl.isSpectator() || (pl.isCreative() && !pl2.isCreative())){
+                    continue;
+                }
+                if (copiedPlayers >= maxCopies) {
+                    continue;
+                }
+
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        target,
+                        spawnRadius
+                );
+
+                if (spawnPos == null) {
+                    continue;
+                }
+                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId)) {
+                    copied++;
+                }
+                copiedPlayers++;
+                continue;
+            }
             if (copied >= maxCopies) {
-                break;
+                continue;
             }
 
             Vec3 spawnPos = findWorldMergeSpawnPosition(
@@ -694,6 +718,64 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
+    public boolean createParallelPlayerCopy(
+            ServerLevel level,
+            Player original,
+            Vec3 spawnPos,
+            byte worldId
+    ) {
+        Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
+
+        if (!(copyEntity instanceof D4CCloneEntity copy)) {
+            return false;
+        }
+
+        // -------------------------------------------------
+        // UNIVERSAL STUFF YOU ACTUALLY WANT TO PRESERVE
+        // -------------------------------------------------
+
+        // Name
+        if (original.hasCustomName()) {
+            copy.setCustomName(original.getCustomName());
+            copy.setCustomNameVisible(original.isCustomNameVisible());
+        }
+        copy.setPlayer(original);
+        copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
+        copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
+        copy.setItemSlot(EquipmentSlot.LEGS, original.getItemBySlot(EquipmentSlot.LEGS).copy());
+        copy.setItemSlot(EquipmentSlot.FEET, original.getItemBySlot(EquipmentSlot.FEET).copy());
+        copy.setItemSlot(EquipmentSlot.MAINHAND, original.getMainHandItem().copy());
+        copy.setItemSlot(EquipmentSlot.OFFHAND, original.getOffhandItem().copy());
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            copy.setDropChance(slot, 0.0F);
+        }
+
+        // Rotation
+        copy.setYRot(original.getYRot());
+        copy.setXRot(original.getXRot());
+
+        // -------------------------------------------------
+        // ENTITY-SPECIFIC APPEARANCE
+        // -------------------------------------------------
+
+
+        // Position
+        copy.moveTo(
+                spawnPos.x,
+                spawnPos.y,
+                spawnPos.z,
+                original.getYRot(),
+                original.getXRot()
+        );
+
+        // Alternate universe
+        ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
+        PowerTypes.setPlaneOfExisting(copy, worldId);
+        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+
+        level.addFreshEntity(copy);
+        return true;
+    }
     public boolean createParallelCopy(
             ServerLevel level,
             LivingEntity original,
@@ -794,6 +876,18 @@ public class PowersD4C extends NewPunchingStand {
             copySheep.setColor(originalSheep.getColor());
         }
 
+        // Parrots
+        if (original instanceof Parrot originalParrot
+                && copy instanceof Parrot copyParrot) {
+
+            copyParrot.setVariant(originalParrot.getVariant());
+        }
+        // Aestheticians
+        if (original instanceof Aesthetician originalAya
+                && copy instanceof Aesthetician copyAya) {
+
+            copyAya.setSkinNumber(originalAya.getSkinNumber());
+        }
         // Rabbits
         if (original instanceof Rabbit originalRabbit
                 && copy instanceof Rabbit copyRabbit) {
@@ -1765,8 +1859,6 @@ public class PowersD4C extends NewPunchingStand {
                         }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
-                } else {
-                    knockShield2(entity, 100);
                 }
             }
 

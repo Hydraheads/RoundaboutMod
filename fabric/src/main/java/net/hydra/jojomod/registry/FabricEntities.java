@@ -244,6 +244,13 @@ public class FabricEntities {
                     EntityType.Builder.of(KingCrimsonCloneEntity::new, MobCategory.MISC).
                             sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":king_crimson_clone")
             );
+    public static final EntityType<D4CCloneEntity> D4C_CLONE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "d4c_clone"),
+                    EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).
+                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":d4c_clone")
+            );
     public static final EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1269,6 +1276,7 @@ public class FabricEntities {
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
                 ModEntities.KING_CRIMSON_CLONE = KING_CRIMSON_CLONE;
+                ModEntities.D4C_CLONE = D4C_CLONE;
                 ModEntities.KING_CRIMSON_PROJECTION = KING_CRIMSON_PROJECTION;
 
                 ModEntities.VAN_GOUGH_PAINTING = VAN_GOUGH_PAINTING;
@@ -1307,6 +1315,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MODIFIED_NPC, PlayerModifiedNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(FOG_CLONE, PlayerAlexNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(KING_CRIMSON_CLONE, KingCrimsonCloneEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(D4C_CLONE, D4CCloneEntity.createAttributes());
                 FabricDefaultAttributeRegistry.register(KING_CRIMSON_PROJECTION, KingCrimsonProjectionEntity.createAttributes());
 
                 FabricDefaultAttributeRegistry.register(FALLEN_ZOMBIE, FallenZombie.createAttributes());

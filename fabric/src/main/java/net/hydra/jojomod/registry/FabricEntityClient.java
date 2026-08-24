@@ -184,6 +184,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.MODIFIED_NPC, PlayerModifiedRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FOG_CLONE, FogCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_CLONE, KingCrimsonCloneRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.D4C_CLONE, D4CCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.KING_CRIMSON_PROJECTION, HologramCloneRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_ZOMBIE, FallenZombieRenderer::new);
         EntityRendererRegistry.register(FabricEntities.FALLEN_SKELETON, FallenSkeletonRenderer::new);
