@@ -480,9 +480,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         return isRenderingArms && self instanceof Player;
     }
 
-    public int getMaxHandTicks(){
-        return 30;
-    }
+    public int getMaxHandTicks(){ return 18; }
 
     @Override
     public void refreshArms(){
@@ -767,7 +765,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     			return (!canBitesTheDustDay());
     		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
     			if (isHoldingSneak()) {
-                    
+
                     return hasArmsOut && !canAddStrayCatto();
                 }
     		}
@@ -784,9 +782,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     return !canBubbleTarget(target);
                 }
                 if (isHoldingSneak()) { return  !canItemPlantBomb();}
-                else {
-                    return !canBlockPlantBomb();
-                }
+
+                return !canBlockPlantBomb();
+
             }
     	}
 
@@ -930,7 +928,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean interceptGuard(){
-        return !inBitesTheDustMode() && !hasHandsOut();
+        return !inBitesTheDustMode();
     }
 
     @Override
@@ -941,7 +939,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean canGuard(){
     	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == PowerIndex.POWER_3
-                || this.detonateTimer > -1 || inBitesTheDustMode() || hasHandsOut()) {
+                || this.detonateTimer > -1 || inBitesTheDustMode()) {
     		return false;
     	}
         return super.canGuard();
@@ -1021,19 +1019,16 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canBlockPlantBomb() { 
     	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 		
-	    if (standEntity != null && (standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
+	    if ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
 	    	float range = getRange(blockPlantRange);
 
 	    	Vec3 vec3d = this.getSelf().getEyePosition(0);
 	        Vec3 vec3d2 = this.getSelf().getViewVector(0);
 	        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
 	        
-	        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));       
-	        if (blockHit.getType() != HitResult.Type.BLOCK) { return false; }
-            BlockPos pos = blockHit.getBlockPos();
-	    	BlockState state = this.getSelf().level().getBlockState(pos);
+	        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
 	    	
-	    	return true; //(!ExplosionUtil.isBlockBlackListed(state));
+	    	return blockHit.getType() == HitResult.Type.BLOCK;
 	    }
 	    return false;
     }
@@ -2940,7 +2935,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentShaStatus == SHA_NONE) {
                 if (hasHandsOut()) {
                     refreshArms();
-                    getStandUserSelf().roundabout$setStandAnimation(StandEntity.ITEM_THROW);
+                    getStandUserSelf().roundabout$setStandAnimation(PUNCH_LEFT);
                 }
 
                 if (shaThrow) {
@@ -2952,7 +2947,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.animateStand(KillerQueenEntity.SHA_SEND);
 
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
-                    poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                    poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
                 }
 
                 this.setActivePower(PowerIndex.POWER_3);
