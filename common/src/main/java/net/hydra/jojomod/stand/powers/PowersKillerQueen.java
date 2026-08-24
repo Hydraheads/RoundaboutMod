@@ -766,10 +766,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             if(inBitesTheDustMode()) {
     			return (!canBitesTheDustDay());
     		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
-    			if (!isHoldingSneak()) {
-                    return !canBlockPlantBomb() && !canAddStrayCatto();
-                }else {
-                    return hasArmsOut;
+    			if (isHoldingSneak()) {
+                    
+                    return hasArmsOut && !canAddStrayCatto();
                 }
     		}
     	}
@@ -779,12 +778,15 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             if (this.currentBombStatus == BOMB_NONE) {
                 if (isGuarding()) {
-                    return !canUseStrayCat();
+                    return !canUseStrayCat() || hasArmsOut;
                 } else if (this.currentBombStatus == BOMB_BUBBLE) {
                     Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
                     return !canBubbleTarget(target);
                 }
                 if (isHoldingSneak()) { return  !canItemPlantBomb();}
+                else {
+                    return !canBlockPlantBomb();
+                }
             }
     	}
 
