@@ -2797,7 +2797,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
                 this.bombBlock.setUser(this.self);
                 this.bombBlock.setOnContact(isContactModeEnabled());
-                
+
                 this.bombBlock.setBlockPos(pos);
                 this.self.level().addFreshEntity(this.bombBlock);
                 this.currentBombStatus = BOMB_BLOCK;

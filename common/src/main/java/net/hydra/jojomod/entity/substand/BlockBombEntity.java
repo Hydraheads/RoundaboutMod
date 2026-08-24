@@ -65,6 +65,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	}
 
 	public void setOnContact(boolean value) {
+		if (level().isClientSide()) {return; }
 		entityData.set(CONTACT, value);
 	}
 
