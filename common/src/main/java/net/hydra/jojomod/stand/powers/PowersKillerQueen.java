@@ -3762,7 +3762,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 } else { return ent == this.getBombEntity(); }
             }
             if (this.currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK) {
-                Entity target = this.getTargetEntity(this.self, 30);
+                Entity target = MainUtil.getTargetEntity(this.self, 40);
                 if (this.canBubbleTarget(target)) {
                     return ent == target;
                 }
@@ -3941,16 +3941,13 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (canBitesTheDust()) {
             $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.kq_btd_mode",
                     "instruction.roundabout.press_skill", StandIcons.KILLER_QUEEN_BTD_ACTIVATE,4,level,bypas));
-
-
-        }else {
-            $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
-                    "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
-
             $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+80, getBitesTheDustLevel(), "ability.roundabout.kq_btd_combat",
                     "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_COMBAT,2,level,bypas));
             $$1.add(drawSingleGUIIcon(context,18,leftPos+153 + startPos,topPos+99, getBitesTheDustDayLevel(), "ability.roundabout.kq_btd_day",
                     "instruction.roundabout.press_skill_btd_mode", StandIcons.KILLER_QUEEN_BTD_DAY,1,level,bypas));
+        }else {
+            $$1.add(drawSingleGUIIcon(context,18,leftPos+134 + startPos,topPos+118, getBitesTheDustLevel(), "ability.roundabout.obtain_btd",
+                    "instruction.roundabout.stand_arrow", StandIcons.KILLER_QUEEN_OBTAIN_BTD,0,level, bypas));
         }
 
         return $$1;
