@@ -2413,7 +2413,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void saveCombatEntitiesSeconds(Vec3 pos) {
-        float range = 50.0f;
+        float range = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustRewindRange;
         combatSavedBTDinit();
         clearEntitiesSeconds();
 
@@ -2431,20 +2431,38 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public HashSet<Entity> getDayEntities(Vec3 pos) {
-        float range = 50.0f;
+        float range = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustRewindRange;
         combatSavedBTDinit();
         clearEntitiesSeconds();
 
         List<Entity> entities = MainUtil.genHitbox(this.self.level(),
                 pos.x(), pos.y(), pos.z(), range, range, range);
         HashSet<Entity> approved = new HashSet<>();
+        HashSet<Integer> players = new HashSet<>();
 
         for (Entity ent : entities) {
             int id = ent.getId();
             if (ent instanceof StandEntity || !ent.isAlive() || ent.isRemoved()
                     || approved.contains(id)) { continue; }
 
+            if (ent instanceof Player) {
+                players.add(ent.getId());
+            }
+
             approved.add(ent);
+        }
+        
+        if (ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayGlobalRewind) {
+            ServerLevel serverWorld = ((ServerLevel) this.self.level());
+            for (int j = 0; j < serverWorld.players().size(); ++j) {
+                ServerPlayer serverPlayerEntity = ((ServerLevel) this.self.level()).players().get(j);
+
+                if (((ServerLevel) serverPlayerEntity.level()) != serverWorld) { continue; }
+
+                if (!players.contains(serverPlayerEntity.getId())) {
+                    approved.add(serverPlayerEntity);
+                }
+            }
         }
 
         return approved;
@@ -3336,9 +3354,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectBitedTheDustCombat() {
         bitedTheDustInit();
-        int minSecs = 10;
-        float multiplier =  0.2f + 0.8f* (Math.min(this.btdTicks, 20*minSecs) / minSecs * 20);
-
+        int minSecs = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMinimunForFullBlow * 20;
+        float multiplier = 1.0f;
+        if (minSecs > 0) {
+            multiplier = 0.2f + 0.8f * (Math.min((float)this.btdTicks / (float)minSecs, 1.0f));
+        }
 
         if (!bitedTheDust.isEmpty()) {
             HashSet<Integer> toRemoveFromList = new HashSet<>();
