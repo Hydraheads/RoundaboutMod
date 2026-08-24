@@ -1639,6 +1639,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             this.chargedFinal = chargeTime;
         }else if (move == BOMB_CONFIG) {
             this.bombConfig = chargeTime;
+            if (bombBlock != null) {
+                bombBlock.setOnContact(isContactModeEnabled());
+            }
         } else if (move == ITEM_PLANT) {
             this.plantInventorySlot = chargeTime;
         } else if (move == PowerIndex.POWER_2_EXTRA) {
@@ -2793,7 +2796,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
                 this.bombBlock.setUser(this.self);
-
+                this.bombBlock.setOnContact(isContactModeEnabled());
+                
                 this.bombBlock.setBlockPos(pos);
                 this.self.level().addFreshEntity(this.bombBlock);
                 this.currentBombStatus = BOMB_BLOCK;
