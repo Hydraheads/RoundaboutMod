@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -38,104 +39,67 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class HandBlock extends BaseEntityBlock {
-
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
     private static final int ROTATIONS = MAX + 1;
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
+    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
+    private final HandBlock.Type type;
 
-    /*public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-
-    protected static final VoxelShape WEST_AABB = Block.box(2.0, 0.0, 6.0, 12.0, 4.0, 4.0);*/
-    protected static final VoxelShape NORTH_AABB = Block.box(6.0, 0.0, 2.0, 4.0, 4.0, 12.0);
-
-    public HandBlock(Properties properties) {
-        //PlayerHeadItem
-        //PlayerHeadBlock
-
-        super(properties);
+    public HandBlock(HandBlock.Type t, BlockBehaviour.Properties p_56319_) {
+        super(p_56319_);
+        type = t;
+        this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, Integer.valueOf(0)));
     }
 
-    @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new SkullBlockEntity(blockPos, blockState);
+    public VoxelShape getShape(BlockState p_56331_, BlockGetter p_56332_, BlockPos p_56333_, CollisionContext p_56334_) {
+        return SHAPE;
     }
 
-    public void setPlacedBy(Level $$0, BlockPos $$1, BlockState $$2, @Nullable LivingEntity $$3, ItemStack $$4) {
-        super.setPlacedBy($$0, $$1, $$2, $$3, $$4);
-        BlockEntity $$5 = $$0.getBlockEntity($$1);
-        if ($$5 instanceof SkullBlockEntity $$6) {
-            GameProfile $$7 = null;
-            if ($$4.hasTag()) {
-                CompoundTag $$8 = $$4.getTag();
-                if ($$8.contains("SkullOwner", 10)) {
-                    $$7 = NbtUtils.readGameProfile($$8.getCompound("SkullOwner"));
-                } else if ($$8.contains("SkullOwner", 8) && !Util.isBlank($$8.getString("SkullOwner"))) {
-                    $$7 = new GameProfile((UUID)null, $$8.getString("SkullOwner"));
-                }
-            }
-
-            $$6.setOwner($$7);
-        }
-
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean useShapeForLightOcclusion(BlockState state) {
-        return true; // Ensures custom occlusion shape is used (if applicable)
-    }
-
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
+    public VoxelShape getOcclusionShape(BlockState p_56336_, BlockGetter p_56337_, BlockPos p_56338_) {
         return Shapes.empty();
     }
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean skipRendering(BlockState p_53972_, BlockState p_53973_, Direction p_53974_) {
-        return false;
+
+    public BlockState getStateForPlacement(BlockPlaceContext p_56321_) {
+        return this.defaultBlockState().setValue(ROTATION, Integer.valueOf(RotationSegment.convertToSegment(p_56321_.getRotation())));
     }
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return (BlockState)this.defaultBlockState().setValue(ROTATION, RotationSegment.convertToSegment(blockPlaceContext.getRotation()));
+    public BlockState rotate(BlockState p_56326_, Rotation p_56327_) {
+        return p_56326_.setValue(ROTATION, Integer.valueOf(p_56327_.rotate(p_56326_.getValue(ROTATION), ROTATIONS)));
     }
 
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(ROTATION);
-        super.createBlockStateDefinition(builder);
-    }
-    @SuppressWarnings("deprecation")
-    @Override
-    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
-        return NORTH_AABB;
-        /*switch ((Direction)$$0.getValue(ROTATION)) {
-            case NORTH, SOUTH:
-                return NORTH_AABB;
-
-            case WEST, EAST:
-            default:
-                return WEST_AABB;
-        }*/
+    public BlockState mirror(BlockState p_56323_, Mirror p_56324_) {
+        return p_56323_.setValue(ROTATION, Integer.valueOf(p_56324_.mirror(p_56323_.getValue(ROTATION), ROTATIONS)));
     }
 
-    // @SuppressWarnings("deprecation")
-    //@Override
-    public BlockState rotate(BlockState blockState, Mirror mirror) {
-        return (BlockState)blockState.setValue(ROTATION, mirror.mirror(blockState.getValue(ROTATION), ROTATIONS));
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_56329_) {
+        p_56329_.add(ROTATION);
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public BlockState mirror(BlockState blockState, Mirror mirror) {
-        return (BlockState)blockState.setValue(ROTATION, mirror.mirror(blockState.getValue(ROTATION), ROTATIONS));
+    public interface Type {
     }
 
-    @Override
-    public boolean isPathfindable(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, PathComputationType pathComputationType) {
+    public static enum Types implements HandBlock.Type {
+        PLAYER,
+        ZOMBIE,
+        PIGLIN,
+        VILLAGER,
+        PILLAGER;
+    }
+
+    public BlockEntity newBlockEntity(BlockPos p_151996_, BlockState p_151997_) {
+        return new SkullBlockEntity(p_151996_, p_151997_);
+    }
+
+    @Nullable
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_151992_, BlockState p_151993_, BlockEntityType<T> p_151994_) {
+        return null;
+    }
+
+    public HandBlock.Type getType() {
+        return this.type;
+    }
+
+    public boolean isPathfindable(BlockState p_48750_, BlockGetter p_48751_, BlockPos p_48752_, PathComputationType p_48753_) {
         return false;
     }
 }

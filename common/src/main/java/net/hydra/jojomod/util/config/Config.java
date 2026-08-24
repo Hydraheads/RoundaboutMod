@@ -494,6 +494,8 @@ public class Config implements Cloneable {
         public Integer sheerHeartAttackThrowExtraCooldown;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer sheerHeartAttackMaxExplosions;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean sheerHeartAttackSeenUndeadAndArthropod;
         @IntOption(group = "inherit", value = 40, min = 0, max = 72000)
         public Integer mobPlantDesintegrationDamage;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
@@ -1380,13 +1382,19 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer silverChariotCooldownControlModeToggle;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownArmorShed;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShot;
+        @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierShotInterrupt;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotPlatform;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 1, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer silverChariotMinimumCooldownCrouchAttack;
     }
 
     public static class TimeStopSettings {
