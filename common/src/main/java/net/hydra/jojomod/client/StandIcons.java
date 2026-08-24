@@ -784,6 +784,8 @@ public class StandIcons {
             "textures/gui/icons/black_sabbath/target_manual_selection.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_CONFIRM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/target_manual_selection_confirm.png");
+    public static final ResourceLocation POLPO_SELECTING_TARGET_UNSELECTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/target_manual_unselection.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
