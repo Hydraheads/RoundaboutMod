@@ -76,6 +76,7 @@ public class SeperatedArmEntity extends StandEntity {
     public int neuteredSpinTicks = 0;
 
     public void setSpinTicks(int val){SpinTicks = val;};
+    public void setNeuteredSpinTicks(int val){neuteredSpinTicks = val;}
 
 
 
