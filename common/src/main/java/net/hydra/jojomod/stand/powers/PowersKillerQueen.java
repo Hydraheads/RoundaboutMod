@@ -774,7 +774,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (isGuarding()) {
                     return !canUseStrayCat();
                 } else if (this.currentBombStatus == BOMB_BUBBLE) {
-                    Entity target = this.getTargetEntity(this.self, 30);
+                    Entity target = MainUtil.getTargetEntity(this.getSelf(), 40);
                     return !canBubbleTarget(target);
                 }
                 if (isHoldingSneak()) { return  !canItemPlantBomb();}
@@ -1045,7 +1045,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canBitesTheDustPlant(Entity targetEntity) {
         if (targetEntity == null) {
             return false;
-        }else if (!targetEntity.isAlive() || targetEntity instanceof StandEntity) {
+        } else if (!targetEntity.isAlive() || targetEntity instanceof StandEntity || MainUtil.isBossMob(targetEntity)) {
             return false;
         }
         if (targetEntity instanceof Mob || targetEntity instanceof Player) {
@@ -1055,7 +1055,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
             if (LE.is(this.getSelf()) || !LE.showVehicleHealth() ||
                     LE.isInvulnerable() || (this.self.isPassenger() &&
-                    this.self.getVehicle().getUUID() == LE.getUUID()) || !this.self.hasLineOfSight(LE)) {
+                    this.self.getVehicle() == LE) || !this.self.hasLineOfSight(LE)
+                    || PowerTypes.isExistentiallyElsewhere(LE)) {
                 return false;
             }
         }else {
@@ -2086,7 +2087,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void airBubbleRedirectClient(){
-        Entity ent = this.getTargetEntity(this.self, 30);
+        Entity ent = MainUtil.getTargetEntity(this.getSelf(), 40);
         if (ent != null) {
             int id = ent.getId();
 
@@ -2424,8 +2425,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         for (Entity ent : $$3) {
             float dist = ent.distanceTo(stand);
-            if (canBitesTheDustPlant(ent) && (dist < distRecord) && (ent instanceof Mob|| ent instanceof Player)
-                && !MainUtil.isBossMob(ent) && !(ent instanceof StandEntity)) {
+            if (canBitesTheDustPlant(ent) && (dist < distRecord)) {
                 distRecord = dist;
                 target = (LivingEntity)ent;
             }
@@ -2449,7 +2449,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 //S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_NOISE);
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), BTD_PLANT);
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_ENTITY, bitesTheDustPlantedEntity.getId());
-
             }
 
         }
