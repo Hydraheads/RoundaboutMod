@@ -363,9 +363,11 @@ public enum PowerTypes {
                             0.08);
                 }
 
-                if (!(alt instanceof Player)) {
 
                     float carryon = Math.min((1+(((float)delayTime)/50f)),7);
+                if (alt instanceof Player pl || entity instanceof Player){
+                    carryon *=0.15f;
+                }
                     Vec3 db = RotationUtil.distanceBetween(alt,entity);
                     alt.setDeltaMovement(alt.getDeltaMovement().add(
                             db.x * (-0.012 * carryon),
@@ -412,7 +414,6 @@ public enum PowerTypes {
                             MainUtil.makeBleed(LE2,0,200,null);
                         }
                     }
-                }
             }
         }
 
