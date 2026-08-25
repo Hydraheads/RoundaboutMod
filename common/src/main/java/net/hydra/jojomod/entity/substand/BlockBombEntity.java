@@ -218,7 +218,10 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	@Override
     public boolean isPickable() {
-		return (getUser() != null && getOnContact());
+		return false;
+
+		/// sadly no explode by interact
+		//return (getUser() != null && getOnContact());
 	}
 
     @Override

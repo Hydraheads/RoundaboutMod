@@ -74,6 +74,10 @@ public class MoldSporesEntity extends StandEntity {
                 if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
                     this.discard();
                 }
+            }if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
+                if(((PowersGreenDay)StandUU.roundabout$getStandPowers()).MoldGone){
+                    this.discard();
+                }
             }
             if (!getUser().isAlive()) {
                 this.discard();

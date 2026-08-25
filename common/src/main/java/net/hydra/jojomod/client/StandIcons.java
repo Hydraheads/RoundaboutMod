@@ -475,6 +475,8 @@ public class StandIcons {
 
     public static final ResourceLocation BITES_THE_DUST_PLANTED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_planted.png");
+    public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/bites_the_dust_target.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
@@ -823,6 +825,8 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_MOLD_SPREAD = Roundabout.location("textures/gui/icons/green_day/mold_spread.png");
     public static final ResourceLocation GREEN_DAY_SCULK_ABSORB = Roundabout.location("textures/gui/icons/green_day/sculk_absorb.png");
     public static final ResourceLocation GREEN_DAY_VAULT = Roundabout.location("textures/gui/icons/green_day/stand_ledge_grab.png");
+    public static final  ResourceLocation GREEN_DAY_MOLD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_deactivation.png");
+
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
     public static final ResourceLocation RATT_RECALL = Roundabout.location("textures/gui/icons/ratt/ratt_recall.png");

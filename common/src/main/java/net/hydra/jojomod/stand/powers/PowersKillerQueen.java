@@ -467,6 +467,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public float getArrowThrowChargeMax() {return 20.0F;}
 
 
+    public final float btdRange = 6.0f;
+
     // Data save system:
     static final String strayCatTagOld = "hasStrayCat";
     static final String strayCatTag = "strayCatData";/// Old stray cat save system
@@ -480,9 +482,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         return isRenderingArms && self instanceof Player;
     }
 
-    public int getMaxHandTicks(){
-        return 30;
-    }
+    public int getMaxHandTicks(){ return 18; }
 
     @Override
     public void refreshArms(){
@@ -767,7 +767,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     			return (!canBitesTheDustDay());
     		}else if (this.currentBombStatus == BOMB_NONE && !isGuarding()) {
     			if (isHoldingSneak()) {
-                    
+
                     return hasArmsOut && !canAddStrayCatto();
                 }
     		}
@@ -784,9 +784,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                     return !canBubbleTarget(target);
                 }
                 if (isHoldingSneak()) { return  !canItemPlantBomb();}
-                else {
-                    return !canBlockPlantBomb();
-                }
+
+                return !canBlockPlantBomb();
+
             }
     	}
 
@@ -930,7 +930,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean interceptGuard(){
-        return !inBitesTheDustMode() && !hasHandsOut();
+        return !inBitesTheDustMode();
     }
 
     @Override
@@ -941,7 +941,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean canGuard(){
     	if (this.getActivePower() == PowerIndex.POWER_2_BLOCK || this.getActivePower() == PowerIndex.POWER_3
-                || this.detonateTimer > -1 || inBitesTheDustMode() || hasHandsOut()) {
+                || this.detonateTimer > -1 || inBitesTheDustMode()) {
     		return false;
     	}
         return super.canGuard();
@@ -1021,19 +1021,16 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean canBlockPlantBomb() { 
     	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
 		
-	    if (standEntity != null && (standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
+	    if ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
 	    	float range = getRange(blockPlantRange);
 
 	    	Vec3 vec3d = this.getSelf().getEyePosition(0);
 	        Vec3 vec3d2 = this.getSelf().getViewVector(0);
 	        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
 	        
-	        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));       
-	        if (blockHit.getType() != HitResult.Type.BLOCK) { return false; }
-            BlockPos pos = blockHit.getBlockPos();
-	    	BlockState state = this.getSelf().level().getBlockState(pos);
+	        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
 	    	
-	    	return true; //(!ExplosionUtil.isBlockBlackListed(state));
+	    	return blockHit.getType() == HitResult.Type.BLOCK;
 	    }
 	    return false;
     }
@@ -2718,10 +2715,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectWhoBitedTheDust(Entity target, boolean dayMode) {
         Vec3 pos = target.position();
-        float range = 5.0f;
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
-                pos.x(), pos.y(), pos.z(), range, range, range);
+                pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange);
 
         for (Entity ent : entities) {
             if (ent instanceof Mob || ent instanceof Player) {
@@ -2940,7 +2936,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentShaStatus == SHA_NONE) {
                 if (hasHandsOut()) {
                     refreshArms();
-                    getStandUserSelf().roundabout$setStandAnimation(StandEntity.ITEM_THROW);
+                    getStandUserSelf().roundabout$setStandAnimation(PUNCH_LEFT);
                 }
 
                 if (shaThrow) {
@@ -2952,7 +2948,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.animateStand(KillerQueenEntity.SHA_SEND);
 
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), getKocchiWoMiro(), SoundSource.PLAYERS, 0.9F, 1.0f);
-                    poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                    poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
                 }
 
                 this.setActivePower(PowerIndex.POWER_3);
@@ -3769,6 +3765,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
+        if (inBitesTheDustMode()) {
+            if (canBitesTheDustPlant(ent) && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
+                return true;
+            }
+        }
+
         if (ent == this.SHA) { return this.SHA.getReturnStatus(); }
 
         if (this.getSelf().hasLineOfSight(ent)) {
@@ -3811,6 +3813,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (inBitesTheDustMode()) { return 0x1c1e45; }
+
         if (ent == this.SHA) { return 0xffffff; }
         if((this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB || this.currentBombStatus == ARROW_CONTACT)) {
             if (this.getBombEntity() != null && ent == this.getBombEntity()) {
@@ -3844,26 +3848,28 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
         if (LE != null) {
             Minecraft mc = Minecraft.getInstance();
-            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024) {
+            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024 && bitesTheDustPlantedEntity != null) {
+                ResourceLocation icon = StandIcons.BITES_THE_DUST_TARGET;
                 if (LE == bitesTheDustPlantedEntity) {
+                    icon = StandIcons.BITES_THE_DUST_PLANTED;
+                }
+                if (LE == bitesTheDustPlantedEntity || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange) {
                     matrixStack.pushPose();
+
+                    float height = LE.getBbHeight() + 0.35F;
 
                     // Orient the texture
                     matrixStack.scale(1, 1, 1);
                     matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
                     matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
                     matrixStack.translate(0, 9, 0);
+                    //matrixStack.translate(0, height, 0);
 
                     // Draw flat quad here
-                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.BITES_THE_DUST_PLANTED)).color(1.0f, 1.0f, 1.0f, 1.0f);
+                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(icon)).color(1.0f, 1.0f, 1.0f, 1.0f);
                     Matrix4f matrix = matrixStack.last().pose();
 
                     Vector3f normal = mc.gameRenderer.getMainCamera().getLookVector();
-                    normal.normalize();
-
-                    float height = LE.getBbHeight() + 0.25F;
-                    matrixStack.translate(0, height, 0);
-
                     normal.normalize();
 
                     /**This ome is good*/
@@ -3876,12 +3882,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
 
-                    float size = 0.5f;
+                    float size = 0.2f;
 
-                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, -size + height, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, -size + height, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, size + height, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, size + height, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
                     RenderSystem.enableDepthTest();
