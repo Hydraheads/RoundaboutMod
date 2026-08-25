@@ -1,6 +1,9 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FancyLighterItem;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -14,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -114,7 +118,30 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
 
             if(ownerEntity instanceof ServerPlayer spl){
                        if(stepper.getUUID() != fbe.getOwner()){
-                            bs.selectTargetSecond(stepper);
+                           if(!bs.blackSabbathTargets.contains(stepper)) {
+                               bs.selectTargetSecond(stepper);
+                               bs.setThree();
+
+                               if(bs.blackSelect != null){
+                                   bs.blackSelect.forceDespawnSet = true;
+                               }
+                               if(bs.getStandEntity(bs.self) != null){
+                                   bs.getStandEntity(bs.self).forceDespawnSet = true;
+                               }
+
+                               List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                   return true;
+                               });
+                               if (lvent != null && !lvent.isEmpty()) {
+                                   for (LivingEntity value : lvent) {
+                                       if (value.hasLineOfSight(stepper)) {
+                                           if(!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                                               bs.selectTargetSecond(value);
+                                           }
+                                       }
+                                   }
+                               }
+                           }
                        }
             }
 

@@ -5,6 +5,9 @@ import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.FancyLighterBlockEntity;
 import net.hydra.jojomod.block.FogTrapBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -34,6 +37,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class FancyLighterItem extends BlockItem {
 
@@ -112,7 +117,29 @@ public class FancyLighterItem extends BlockItem {
                                 if (user != null && $$0 != null) {
                                     if(user != $$0){
                                         if(((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
-                                            pbs.selectTargetSecond($$0);
+                                            if(!pbs.blackSabbathTargets.contains($$0)){
+                                                pbs.selectTargetSecond($$0);
+                                                pbs.setThree();
+                                                if(pbs.blackSelect != null){
+                                                    pbs.blackSelect.forceDespawnSet = true;
+                                                }
+                                                if(pbs.getStandEntity(pbs.self) != null){
+                                                    pbs.getStandEntity(pbs.self).forceDespawnSet = true;
+                                                }
+
+                                                List<LivingEntity> lvent = $$0.level().getEntitiesOfClass(LivingEntity.class, $$0.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                                    return true;
+                                                });
+                                                if (lvent != null && !lvent.isEmpty()) {
+                                                    for (LivingEntity value : lvent) {
+                                                        if (value.hasLineOfSight($$0)) {
+                                                            if(!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                                                                pbs.selectTargetSecond(value);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

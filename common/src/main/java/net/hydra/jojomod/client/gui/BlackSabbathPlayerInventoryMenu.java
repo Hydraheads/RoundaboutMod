@@ -77,7 +77,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player $$0) {
         if(((StandUser)$$0).roundabout$getStand() instanceof BlackSabbathEntity be){
-            if(be != null && !be.isRemoved() && be.isAlive() && be.distanceTo($$0) < 2){
+            if(be != null && !be.isRemoved() && be.isAlive() && be.distanceTo($$0) < 2 && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath p && p.moveMode == 1){
                 StandUser user = ((StandUser) $$0);
                 StandPowers powers = user.roundabout$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb && pb.checkIfYouAreInDark()) {
