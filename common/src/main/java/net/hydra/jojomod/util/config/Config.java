@@ -1047,7 +1047,7 @@ public class Config implements Cloneable {
         public Integer walkingHeartCooldownPerHit;
         @IntOption(group = "inherit", value = 30, min = 0, max = 72000)
         public Integer walkingHeartCooldownBase;
-        @IntOption(group = "inherit", value = 5, min = -1, max = 72000)
+        @IntOption(group = "inherit", value = 6, min = -1, max = 72000)
         public Integer walkingHeartMaxHits;
         @BooleanOption(group = "inherit", value = false)
         public Boolean fallProtectionOnRelease;
