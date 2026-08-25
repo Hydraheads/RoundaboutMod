@@ -467,6 +467,8 @@ public class PowersKillerQueen extends NewPunchingStand {
     public float getArrowThrowChargeMax() {return 20.0F;}
 
 
+    public final float btdRange = 6.0f;
+
     // Data save system:
     static final String strayCatTagOld = "hasStrayCat";
     static final String strayCatTag = "strayCatData";/// Old stray cat save system
@@ -2713,10 +2715,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void detectWhoBitedTheDust(Entity target, boolean dayMode) {
         Vec3 pos = target.position();
-        float range = 5.0f;
 
         List<Entity> entities = MainUtil.genHitbox(target.level(),
-                pos.x(), pos.y(), pos.z(), range, range, range);
+                pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange);
 
         for (Entity ent : entities) {
             if (ent instanceof Mob || ent instanceof Player) {
@@ -3764,6 +3765,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
+        if (inBitesTheDustMode()) {
+            if ((ent instanceof Mob || ent instanceof Player) && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
+                return true;
+            }
+        }
+
         if (ent == this.SHA) { return this.SHA.getReturnStatus(); }
 
         if (this.getSelf().hasLineOfSight(ent)) {
@@ -3806,6 +3813,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public int highlightsEntityColor(Entity ent, Player player){
+        if (inBitesTheDustMode()) { return 0x1c1e45; }
+
         if (ent == this.SHA) { return 0xffffff; }
         if((this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB || this.currentBombStatus == ARROW_CONTACT)) {
             if (this.getBombEntity() != null && ent == this.getBombEntity()) {
@@ -3839,12 +3848,15 @@ public class PowersKillerQueen extends NewPunchingStand {
     public void bitesTheDustRender(LivingEntity LE, PoseStack matrixStack, MultiBufferSource bufferSource) {
         if (LE != null) {
             Minecraft mc = Minecraft.getInstance();
-            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024) {
+            if (LE != this.getSelf() && this.getSelf() instanceof Player && this.getSelf().distanceToSqr(LE) <= 1024 && bitesTheDustPlantedEntity != null) {
+                ResourceLocation icon = StandIcons.BITES_THE_DUST_TARGET;
                 if (LE == bitesTheDustPlantedEntity) {
+                    icon = StandIcons.BITES_THE_DUST_PLANTED;
+                }
+                if (LE == bitesTheDustPlantedEntity || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange) {
                     matrixStack.pushPose();
 
-
-                    float height = LE.getBbHeight() + 0.25F;
+                    float height = LE.getBbHeight() + 0.35F;
 
                     // Orient the texture
                     matrixStack.scale(1, 1, 1);
@@ -3853,7 +3865,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     matrixStack.translate(0, height, 0);
 
                     // Draw flat quad here
-                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(StandIcons.BITES_THE_DUST_PLANTED)).color(1.0f, 1.0f, 1.0f, 1.0f);
+                    VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(icon)).color(1.0f, 1.0f, 1.0f, 1.0f);
                     Matrix4f matrix = matrixStack.last().pose();
 
                     Vector3f normal = mc.gameRenderer.getMainCamera().getLookVector();
@@ -3869,7 +3881,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
 
-                    float size = 4.0f;
+                    float size = 0.2f;
 
                     vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
                     vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
