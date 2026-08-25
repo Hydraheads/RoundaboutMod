@@ -509,6 +509,8 @@
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
   "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Stand Level %1$s required)",
 
+  "item.roundabout.stray_cat_item.addStrayCatFail": "You don't own this Stray Cat!",
+
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
   "item.roundabout.hairspray.info": "Creative only",
@@ -2924,6 +2926,7 @@
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.message2" : "Nobody to kill... Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
+
 
   "skins.roundabout.anubis.anime" : "Part 3",
   "skins.roundabout.anubis.evil" : "Evil",

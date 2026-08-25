@@ -2133,12 +2133,15 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean addStrayCatto() {
         if (!this.isClient()) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
+            Player PL = (Player) this.getSelf();
 
             Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
 
+            boolean dontOwn = false;
+
             if (maybeStraycat instanceof StrayCatEntity StrayCatForSure) {
-                if (StrayCatForSure.isTame() && StrayCatForSure.isOwnedBy(this.getSelf()) && !this.hasStrayCat) {
+                dontOwn = !StrayCatForSure.isOwnedBy(this.getSelf());
+                if (StrayCatForSure.isTame() && !dontOwn && !this.hasStrayCat) {
                     this.hasStrayCat = true;
                     CompoundTag data = new CompoundTag();
                     data.putByte(strayCatBreed, StrayCatForSure.getBreed());
@@ -2151,34 +2154,47 @@ public class PowersKillerQueen extends NewPunchingStand {
                     this.saveDiscAndSync();
 
                     StrayCatForSure.discard();
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
                     return true;
                 }
             }
 
             ItemStack item = this.getSelf().getMainHandItem();
-            if (item.getItem() instanceof StrayCatItem && item.hasTag() && StrayCatItem.validateStrayCatOwner(item, self)) {
-                CompoundTag itemTag = item.getTag();
-                CompoundTag data = new CompoundTag();
-                if (itemTag.contains(StrayCatItem.SKIN_TAG)) {
-                    data.putByte(strayCatBreed, itemTag.getByte(StrayCatItem.SKIN_TAG));
+
+
+            if (item.getItem() instanceof StrayCatItem) {
+                dontOwn = !(item.hasTag() && StrayCatItem.validateStrayCatOwner(item, self));
+                if (!dontOwn) {
+                    CompoundTag itemTag = item.getTag();
+                    CompoundTag data = new CompoundTag();
+                    if (itemTag.contains(StrayCatItem.SKIN_TAG)) {
+                        data.putByte(strayCatBreed, itemTag.getByte(StrayCatItem.SKIN_TAG));
+                    }
+
+                    if (item.hasCustomHoverName()) {
+                        data.putString(strayCatCustomName, item.getHoverName().getString());
+                    }
+
+                    strayCatData = data;
+                    hasStrayCat = true;
+
+
+
+                    if (!PL.getAbilities().instabuild) {
+                        item.shrink(1);
+                    }
+
+                    this.hasStrayCat = true;
+                    this.saveDiscAndSync();
+
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.KILLER_QUEEN_BTD_PLANTED_EVENT, SoundSource.PLAYERS, 0.75F, 1.0f);
+                    return true;
                 }
-
-                if (item.hasCustomHoverName()) {
-                    data.putString(strayCatCustomName, item.getHoverName().getString());
-                }
-
-                strayCatData = data;
-                hasStrayCat = true;
-
-                Player PL = (Player)this.getSelf();
-
-                if (!PL.getAbilities().instabuild) { item.shrink(1); }
-
-                this.hasStrayCat = true;
-                this.saveDiscAndSync();
-
-                return true;
             }
+            if (dontOwn) {
+                PL.displayClientMessage(Component.translatable("item.roundabout.stray_cat_item.addStrayCatFail", getBitesTheDustLevel()).withStyle(ChatFormatting.RED), true);
+            }
+
         }
         
         return this.canAddStrayCatto();
