@@ -116,7 +116,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
-    @Override public boolean canUseStandArrow() { return !this.hasBitesTheDust; }
+    @Override public boolean canUseStandArrow() { return !canUseStandArrow(); }
 
 	// TODO Make bomb item (WIP)
 	// TODO Bites The Dust (WIP)
@@ -819,7 +819,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         	case SKILL_1_CROUCH -> {
 
                 if (!this.inBitesTheDustMode()) {
-                    if (currentBombStatus == NONE) {
+                    if (this.canAddStrayCatto()) {
+                        addStrayCattoClient();
+                    }else if (currentBombStatus == NONE) {
                         tryImpale();
                     }else {
                         defuseClient();
@@ -830,7 +832,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         	}
         	case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
                 if (!this.inBitesTheDustMode()) {
-                    this.tryBombConfig();
+                    if (this.canAddStrayCatto()) {
+                        addStrayCattoClient();
+                    }else {
+                        this.tryBombConfig();
+                    }
                 }else {
                     tryBitesTheDustDay();
                 }
@@ -2156,7 +2162,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (itemTag.contains(StrayCatItem.SKIN_TAG)) {
                     data.putByte(strayCatBreed, itemTag.getByte(StrayCatItem.SKIN_TAG));
                 }
-                //data.putBoolean(strayCatPotted, true);
+
                 if (item.hasCustomHoverName()) {
                     data.putString(strayCatCustomName, item.getHoverName().getString());
                 }
@@ -2166,9 +2172,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 Player PL = (Player)this.getSelf();
 
-                if (!PL.getAbilities().instabuild) {
-                    item.shrink(1);
-                }
+                if (!PL.getAbilities().instabuild) { item.shrink(1); }
 
                 this.hasStrayCat = true;
                 this.saveDiscAndSync();
