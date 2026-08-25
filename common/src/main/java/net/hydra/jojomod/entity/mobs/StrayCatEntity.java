@@ -506,6 +506,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             bubble.setSped(0.15f);
             bubble.setOwner(this);
             bubble.setSkin(this.getBubbleSkin());
+            bubble.strayCatEntityMade = true;
             bubble.setTarget(livingEntity);
 
             if (!this.isTame()) { bubble.setDamageMult(2.4f); }
