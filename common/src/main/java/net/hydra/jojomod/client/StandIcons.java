@@ -819,6 +819,8 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_MOLD_SPREAD = Roundabout.location("textures/gui/icons/green_day/mold_spread.png");
     public static final ResourceLocation GREEN_DAY_SCULK_ABSORB = Roundabout.location("textures/gui/icons/green_day/sculk_absorb.png");
     public static final ResourceLocation GREEN_DAY_VAULT = Roundabout.location("textures/gui/icons/green_day/stand_ledge_grab.png");
+    public static final  ResourceLocation GREEN_DAY_MOLD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_deactivation.png");
+
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
     public static final ResourceLocation RATT_RECALL = Roundabout.location("textures/gui/icons/ratt/ratt_recall.png");

@@ -2246,6 +2246,8 @@
   "ability.roundabout.gd_pardon.desc": "Select entities as allies, making them unaffected by your mold.",
   "ability.roundabout.gd_mold_spread":"Mold Spread",
   "ability.roundabout.gd_mold_spread.desc":"Create a cloud of mold spores, affecting all entities caught in them with mold. These spores drift downwards, increasing in range until they hit the floor.",
+  "ability.roundabout.gd_mold_off":"Mold Cancel",
+  "ability.roundabout.gd_mold_off.desc":"Instantly remove any of your clouds of spores.",
 
   "ability.roundabout.kq_fast_kick":"Fast Kick",
   "ability.roundabout.kq_fast_kick.desc":"charge a fast kick that [WIP], fully charge does a heavy punch with high knockback.",
