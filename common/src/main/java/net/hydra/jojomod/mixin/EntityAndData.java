@@ -985,6 +985,12 @@ public abstract class EntityAndData implements IEntityAndData {
     private Entity rdbt$nearAlt = null;
 
     @Unique
+    @Override
+    public Entity rdbt$getNearAlt(){
+        return rdbt$nearAlt;
+    }
+
+    @Unique
     public void rdbt$setAltCheckCooldown(int ticks) {
         rdbt$altCheckCooldown = ticks;
     }
