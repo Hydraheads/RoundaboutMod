@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
@@ -218,6 +219,7 @@ public class FabricBlocks {
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
+    public static final Block HAND = registerBlock("hand_block",ModBlocks.HAND_PROPERTIES);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
     public static final Block CULTIVATED_CHERRY_SAPLING = registerBlockItemless("cultivated_cherry_sapling",ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING));
@@ -267,6 +269,8 @@ public class FabricBlocks {
                     HALLUCINATORY_ACID, HALLUCINATORY_ACID_WALL));
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
+    public static final BlockEntityType<HandBlockEntity> HAND_BLOCK_ENTITY =
+           registerBE("hand_block",BlockEntityType.Builder.of(HandBlockEntity::new, HAND));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
             registerBE("stand_fire",BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE));
     public static final BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY =
@@ -457,6 +461,7 @@ public class FabricBlocks {
         ModBlocks.CEILING_LIGHT = CEILING_LIGHT;
         ModBlocks.MIRROR = MIRROR;
         ModBlocks.STEREO = STEREO;
+        ModBlocks.HAND_BLOCK = HAND;
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
@@ -478,6 +483,7 @@ public class FabricBlocks {
         ModBlocks.DREAD_FIRE = DREAD_FIRE;
         ModBlocks.CREAM_FIRE = CREAM_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
+        ModBlocks.HAND_BLOCK_ENTITY = HAND_BLOCK_ENTITY;
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;

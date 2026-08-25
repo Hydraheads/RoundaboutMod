@@ -4284,8 +4284,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     bPos = new BlockPos(target.getBlockX(), target.getBlockY(), target.getBlockZ());
                     level = target.level();
 
-                    if (target instanceof LivingEntity LE) {
-                        addEXP(bStatus == BOMB_ENTITY ? 6 : 3, LE);
+                    if (target instanceof LivingEntity LE && bStatus == BOMB_ENTITY ) {
+                        addEXP(6, LE);
                     }
 
                     this.bombEntity = null;
@@ -4323,7 +4323,9 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (canDestroyBlocks) {
                 ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true);
             }
-            addEXP(3);
+            if (bStatus != BOMB_ENTITY) {
+                addEXP(2);
+            }
 
             Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 

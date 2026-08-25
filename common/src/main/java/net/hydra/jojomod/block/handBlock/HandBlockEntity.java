@@ -1,4 +1,4 @@
-package net.hydra.jojomod.block;
+package net.hydra.jojomod.block.handBlock;
 
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
@@ -16,7 +16,6 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -88,12 +87,7 @@ public class HandBlockEntity extends BlockEntity {
     }
 
     public static void animation(Level $$0, BlockPos $$1, BlockState $$2, HandBlockEntity $$3) {
-        if ($$0.hasNeighborSignal($$1)) {
-            $$3.isAnimating = true;
-            ++$$3.animationTickCount;
-        } else {
-            $$3.isAnimating = false;
-        }
+
 
     }
 

@@ -749,6 +749,7 @@ public class FabricItems {
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
                     	//entries.accept(ModBlocks.CHESSBOARD_BLOCK);
+                        //entries.accept(ModBlocks.HAND_BLOCK);
                         entries.accept(STAND_DISC_D4C);
                         entries.accept(MAX_STAND_DISC_D4C);
                         entries.accept(STAND_DISC_GREEN_DAY);
