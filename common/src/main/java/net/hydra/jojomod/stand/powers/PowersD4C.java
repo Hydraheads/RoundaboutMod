@@ -973,13 +973,13 @@ public class PowersD4C extends NewPunchingStand {
             if (!(sdi.standPowers instanceof PowersD4C)){
                 float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltStands;
                 if (Math.random() <= randomChance && !ModItems.getPoolForMob(copy).isEmpty()) {
-                        int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob(copy).size()));
-                        ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
-                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
-                            ((StandUser) copy).roundabout$setStandDisc(stack);
-                        }
+                    int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(copy).size()));
+                    ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
+                    if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
+                        ((StandUser) copy).roundabout$setStandDisc(stack);
+                    }
                 } else {
-                    ((StandUser)copy).roundabout$setStandDisc(standDisc);
+                    ((StandUser) copy).roundabout$setStandDisc(standDisc);
                 }
             }
         }
