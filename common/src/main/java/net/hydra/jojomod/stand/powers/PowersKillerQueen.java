@@ -3766,7 +3766,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
         if (inBitesTheDustMode()) {
-            if ((ent instanceof Mob || ent instanceof Player) && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
+            if (canBitesTheDustPlant(ent) && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
                 return true;
             }
         }
@@ -3862,7 +3862,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     matrixStack.scale(1, 1, 1);
                     matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
                     matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                    matrixStack.translate(0, height, 0);
+                    matrixStack.translate(0, 9, 0);
+                    //matrixStack.translate(0, height, 0);
 
                     // Draw flat quad here
                     VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(icon)).color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -3883,10 +3884,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     float size = 0.2f;
 
-                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, -size + height, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, -size + height, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, size, size + height, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, size + height, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
 
 
                     RenderSystem.enableDepthTest();
