@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
+import net.hydra.jojomod.client.models.stand.renderers.WhitesnakeDisguiseRenderer;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -157,7 +158,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             return loc;
         }
 
-        return DefaultPlayerSkin.getDefaultSkin(uuid.get());
+        return DefaultPlayerSkin.getDefaultSkin();
     }
 
     public void renderExtra(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight,
@@ -197,7 +198,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                         if (ER instanceof PlayerRenderer PR && PR.getModel() != null) {
                             this.model = ((PlayerModel) PR.getModel());
                         } else {
-                            this.model = slim;
+                           this.model = slim;
                         }
 //                        if (ER instanceof PlayerRenderer PR && PR.getModel() instanceof PlayerModel<AbstractClientPlayer>) {
 //                            this.model = ((IPlayerModel) PR.getModel()).roundabout$getSlim()? slim : bulk;
