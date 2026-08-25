@@ -116,7 +116,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override public StandPowers generateStandPowers(LivingEntity entity){ return new PowersKillerQueen(entity);}
     @Override public StandEntity getNewStandEntity(){ return ModEntities.KILLER_QUEEN.create(this.getSelf().level());}
 
-    @Override public boolean canUseStandArrow() { return !canUseStandArrow(); }
+    @Override public boolean canUseStandArrow() { return !canBitesTheDust(); }
 
 	// TODO Make bomb item (WIP)
 	// TODO Bites The Dust (WIP)
