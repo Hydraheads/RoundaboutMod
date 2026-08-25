@@ -71,7 +71,14 @@ public class GasolineCanItem extends Item implements Vanishable {
 
         $$2.getCooldowns().addCooldown(Items.FLINT_AND_STEEL, itemcds);
         $$2.getCooldowns().addCooldown(Items.FIRE_CHARGE, itemcds);
+        $$2.getCooldowns().addCooldown(Items.BOW, itemcds);
+        $$2.getCooldowns().addCooldown(Items.SNOWBALL, itemcds);
+        $$2.getCooldowns().addCooldown(Items.EGG, itemcds);
         $$2.getCooldowns().addCooldown(ModItems.MATCH, itemcds);
+        $$2.getCooldowns().addCooldown(ModItems.GASOLINE_BUCKET, itemcds);
+        $$2.getCooldowns().addCooldown(ModItems.IRON_BALL_CROSSBOW, itemcds);
+        $$2.getCooldowns().addCooldown(Items.LAVA_BUCKET, itemcds);
+        $$2.getCooldowns().addCooldown(Items.CROSSBOW, itemcds);
         $$2.getCooldowns().addCooldown(ModItems.MATCH_BUNDLE, itemcds);
                 $$2.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.consume(hand);
