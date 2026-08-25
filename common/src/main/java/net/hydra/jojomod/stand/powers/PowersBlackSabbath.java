@@ -233,7 +233,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         return false;
     }
 
-    public int securityTickDown = 60;
+    public int securityTickDown = 20;
     void setSecurityTickDown(int i){securityTickDown = i;}
 
     @Override
@@ -242,10 +242,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         if(moveMode == 2){
             if(!blackSabbathTargets.isEmpty()) {
-                if (!isHoldingSneak()) {
-                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
+                if(stupidTicksSon < 1) {
+                    if (!isHoldingSneak()) {
+                        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
+                    } else {
+                        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
+                    }
                 } else {
-                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
+                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_UNSELECTION, PowerIndex.SKILL_2);
                 }
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
@@ -254,7 +258,9 @@ public class PowersBlackSabbath extends NewDashPreset {
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
         } else if (moveMode == 1 || moveMode == 0){
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
-        } else {
+        }  else if(!isHoldingSneak() && moveMode == 2 && this.stupidTicksSon > 0){
+            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_UNSELECTION, PowerIndex.SKILL_2);
+        }else {
             if(!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_UNSELECTION, PowerIndex.SKILL_2);
             } else {
@@ -567,7 +573,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return  true;
         }
 
-        if (slot == 2 && ((!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 || this.securityTickDown > 1))) {
+        if (slot == 2 && ((!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
 
