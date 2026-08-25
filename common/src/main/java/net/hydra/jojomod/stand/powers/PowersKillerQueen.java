@@ -2162,6 +2162,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
 
                 strayCatData = data;
+                hasStrayCat = true;
 
                 Player PL = (Player)this.getSelf();
 
