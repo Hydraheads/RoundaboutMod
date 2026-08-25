@@ -3743,6 +3743,8 @@
   "config.roundabout.fingerBiteCooldown.desc":"Cooldown for biting your fingers (skill 4)",
   "config.roundabout.selectionModeUsesNightVision.name":"Target Selection Mode uses Potion Effect",
   "config.roundabout.selectionModeUsesNightVision.desc":"If you have a mod like Bad Optimizations that deletes the vanilla code that selection mode uses to light things up, turn this on so it works regardless.",
+  "config.roundabout.lighterWitnessRange.name":"Lighter witness range",
+  "config.roundabout.lighterWitnessRange.desc":"Select the range in which the entities, who have witnessed the mob who lit or stepped on a lighter, get targeted by your stand.",
 
   "config.roundabout.bitesTheDustOpacity.name":"BTD Opacity",
   "config.roundabout.bitesTheDustOpacity.desc":"How see through Bites The Dust effect is.",

@@ -945,6 +945,8 @@ public class Config implements Cloneable {
         public Boolean selectionModeUsesNightVision;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer fingerBiteCooldown;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer lighterWitnessRange;
     }
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)

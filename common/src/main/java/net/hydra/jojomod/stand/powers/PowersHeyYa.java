@@ -260,8 +260,6 @@ public class PowersHeyYa extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
-    /** if = -1, not melt dodging */
-    public int meltDodgeTicks = -1;
 
     @Override
     public void tickPower() {

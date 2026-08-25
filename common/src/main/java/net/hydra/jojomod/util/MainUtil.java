@@ -1412,7 +1412,8 @@ public class MainUtil {
     }
 
     public static void makeMobBleed(Entity target) {
-        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE)) &&
+        getMobBleed(target)) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {

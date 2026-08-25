@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
+import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.LifeTrackerEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
@@ -233,7 +234,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         return false;
     }
 
-    public int securityTickDown = 60;
+    public int securityTickDown = 20;
     void setSecurityTickDown(int i){securityTickDown = i;}
 
     @Override
@@ -242,10 +243,14 @@ public class PowersBlackSabbath extends NewDashPreset {
 
         if(moveMode == 2){
             if(!blackSabbathTargets.isEmpty()) {
-                if (!isHoldingSneak()) {
-                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
+                if(stupidTicksSon < 1) {
+                    if (!isHoldingSneak()) {
+                        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
+                    } else {
+                        setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
+                    }
                 } else {
-                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_NULL, PowerIndex.SKILL_2);
+                    setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_UNSELECTION, PowerIndex.SKILL_2);
                 }
             } else {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
@@ -567,7 +572,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return  true;
         }
 
-        if (slot == 2 && ((!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 || this.securityTickDown > 1))) {
+        if (slot == 2 && ((!this.checkIfYouAreInDark() || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
 
@@ -708,8 +713,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             test = "Level is Serverside";
         }
 
-      //  System.out.println(this.blackSabbathTargets + ". " + test);
-       // System.out.println(moveMode + ". " + test);
+       // System.out.println(blackSabbathTargets + ". " + test);
+        System.out.println(moveMode + ". " + test);
         if(EntityTargetOne != null) {
             DimensionType T = this.getSelf().level().dimensionType();
             DimensionType t = this.EntityTargetOne.level().dimensionType();
@@ -778,10 +783,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
           if(self != null) {
               if(moveMode == 2 || moveMode == 3 && this.blackSabbathTargets.contains(entity)) {
                   Entity TE = MainUtil.getTargetEntity(self, 100, 10);
-                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible()) {
-                      Vec3 vec3d = self.getEyePosition(0);
-                      Vec3 vec3d2 = self.getViewVector(0);
-                      Vec3 vec3d3 = vec3d.add(vec3d2.x * 100, vec3d2.y * 100, vec3d2.z * 100);
+                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity && !TE.isAttackable()) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
                       return true;
                   }
               }
@@ -901,7 +903,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     private Entity getTarget() {
         Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
         if (target instanceof LivingEntity LE) {
-            if (LE.isInvisible()) {
+            if (LE.isInvisible() || LE instanceof RoadRollerEntity) {
                 return null;
             }
         }
@@ -964,14 +966,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             return true;
         }
         return super.cancelJump();
@@ -979,7 +981,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
+        if (isLarpingOjiroSasame() || moveMode == 1) {
             return true;
         }
         return super.cancelSprintParticles();
