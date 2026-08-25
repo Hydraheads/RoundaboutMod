@@ -1,11 +1,14 @@
 package net.hydra.jojomod.client.models;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -13,15 +16,18 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.RotationSegment;
 
-public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer<T> {
+import javax.annotation.Nullable;
+import java.util.Map;
+
+public class HandRenderer <T extends HandBlockEntity> implements BlockEntityRenderer<T> {
     private final ModelPart hand;
     private final ModelPart hand_slim;
 
@@ -55,32 +61,53 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    private static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
 
-    @Override
-    public void render(T $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
-        Level $$6 = $$0.getLevel();
-        boolean $$7 = $$6 != null;
-        BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.COFFIN_BLOCK.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
-        if ($$8.getBlock() instanceof HandBlock $$11 && $$0 instanceof HandBlockEntity cbe) {
-            //BedPart $$9 = $$8.hasProperty(CoffinBlock.PART) ? $$8.getValue(CoffinBlock.PART) : BedPart.HEAD;
+    public void render(T p_112534_, float p_112535_, PoseStack p_112536_, MultiBufferSource p_112537_, int p_112538_, int p_112539_) {
+        float f = p_112534_.getAnimation(p_112535_);
+        BlockState blockstate = p_112534_.getBlockState();
 
+        Direction direction = null;
+        //int i = flag ? RotationSegment.convertToSegment(direction.getOpposite()) : blockstate.getValue(SkullBlock.ROTATION);
+        int i = blockstate.getValue(SkullBlock.ROTATION);
+        float f1 = RotationSegment.convertToDegrees(i);
+        AbstractHandBlock.Type HandBlock$type = ((AbstractHandBlock)blockstate.getBlock()).getType();
+        //SkullModelBase skullmodelbase = this.modelByType.get(skullblock$type);
 
-            float $$13 = $$8.getValue(CoffinBlock.FACING).toYRot();
-            $$2.pushPose();
-            $$2.translate(0.5F, 0.5F, 0.5F);
-            $$2.mulPose(Axis.YP.rotationDegrees(-$$13));
-            $$2.translate(-0.5F, -0.5F, -0.5F);
-            $$2.mulPose(Axis.ZP.rotationDegrees(180));
-            $$2.translate(-0.5F, 0F, 0.5F);
-            VertexConsumer vertexConsumer = $$3.getBuffer(RenderType.entityCutout(COFFIN));
-
-            /*if ($$9 == BedPart.HEAD) {
-                this.render($$2, vertexConsumer, this.right_bottom, openness, $$4, $$5);
-            } else {*/
-            this.hand.render($$2, vertexConsumer, $$4, $$5);
-            //}
-            $$2.popPose();
+        RenderType rendertype = getRenderType(HandBlock$type, p_112534_.getOwnerProfile());
+        ModelPart modelType = hand;
+        if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
+            modelType = hand_slim;
         }
+
+        renderHand(direction, f1, f, p_112536_, p_112537_, p_112538_, modelType, rendertype);
     }
+
+    public static void renderHand(@Nullable Direction p_173664_, float p_173665_, float p_173666_, PoseStack p_173667_, MultiBufferSource p_173668_, int p_173669_, ModelPart p_173670_, RenderType p_173671_) {
+        p_173667_.pushPose();
+        if (p_173664_ == null) {
+            p_173667_.translate(0.5F, 0.0F, 0.5F);
+        } else {
+            float f = 0.25F;
+            p_173667_.translate(0.5F - (float)p_173664_.getStepX() * 0.25F, 0.25F, 0.5F - (float)p_173664_.getStepZ() * 0.25F);
+        }
+
+        p_173667_.scale(-1.0F, -1.0F, 1.0F);
+        VertexConsumer vertexconsumer = p_173668_.getBuffer(p_173671_);
+        //p_173670_.setupAnim(p_173666_, p_173665_, 0.0F);
+        p_173670_.render(p_173667_, vertexconsumer, p_173669_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        p_173667_.popPose();
+    }
+
+    public static RenderType getRenderType(HandBlock.Type p_112524_, @Nullable GameProfile p_112525_) {
+        //ResourceLocation resourcelocation = SKIN_BY_TYPE.get(p_112524_);
+        //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
+            Minecraft minecraft = Minecraft.getInstance();
+            Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(p_112525_);
+            return map.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(p_112525_)));
+        /*} else {
+            return RenderType.entityCutoutNoCullZOffset(resourcelocation);
+        }*/
+
+    }
+
 }

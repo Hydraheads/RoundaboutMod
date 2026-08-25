@@ -509,6 +509,8 @@
   "item.roundabout.stand_arrow.magnet": "Vibrates near worthy mobs.",
   "item.roundabout.stand_arrow.KillerQueenEXPFail": "You don't have enough levels to unlock this ability! (Stand Level %1$s required)",
 
+  "item.roundabout.stray_cat_item.addStrayCatFail": "You don't own this Stray Cat!",
+
   "item.roundabout.worthy_arrow.info": "Creative only, grants worthiness.",
   "item.roundabout.worthy_arrow.info_2": "If shot in creative, can also remove stands/worth.",
   "item.roundabout.hairspray.info": "Creative only",
@@ -2281,7 +2283,7 @@
   "ability.roundabout.kq_btd_combat":"Bites The Dust Combat mode",
   "ability.roundabout.kq_btd_combat.desc":"Detonates Bites the Dust, everything restarts from the last 20 seconds, the targets are fated to explode when the day reaches the moment of ignition, stand is locked until you unplant bites the dust which save the targets from explosion.",
   "ability.roundabout.add_stray_cat":"Add Stray Cat",
-  "ability.roundabout.add_stray_cat.desc":"Add tamed Stray Cat that you are looking or helding to your killer queen, letting you use stray cat related moves.",
+  "ability.roundabout.add_stray_cat.desc":"Add Stray Cat that you tamed to killer queen, by looking or helding it, letting you use stray cat related moves.",
   "ability.roundabout.obtain_btd":"Obtain Bites the Dust!",
   "ability.roundabout.obtain_btd.desc":"Use stand arrow on yourself to unlock Bites the Dust moves.",
   "ability.roundabout.sha_mining":"Sheer heart attack mining",
@@ -2924,6 +2926,7 @@
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.message2" : "Nobody to kill... Seek out a cleric!",
   "item.roundabout.anubis_item.sword_cleansed": "Anubis Cleansed!",
+
 
   "skins.roundabout.anubis.anime" : "Part 3",
   "skins.roundabout.anubis.evil" : "Evil",
