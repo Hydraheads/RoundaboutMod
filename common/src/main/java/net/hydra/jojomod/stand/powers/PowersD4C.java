@@ -724,7 +724,7 @@ public class PowersD4C extends NewPunchingStand {
         if (this.getSelf().level().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
             float chanceX = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterNewAnimal;
             if (chanceX > 0 && (Math.random() * 1 < chanceX)) {
-                if (FateTypes.isInSunlight(self)) {
+                if (self.level().canSeeSky(self.getOnPos())) {
                     Vec3 spawnPos = findWorldMergeSpawnPosition(
                             sl,
                             spawnRadius
