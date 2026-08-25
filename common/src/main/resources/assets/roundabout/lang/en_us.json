@@ -3292,6 +3292,11 @@
   "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
 
 
+  "config.roundabout.chanceToEncounterNewAnimal.name": "Encounter New Animals",
+  "config.roundabout.chanceToEncounterNewAnimal.desc": "Small chance of seeing a new animal in a parallel world, from 0-1 (1 being 100 percent chance).",
+  "config.roundabout.chanceToEncounterPlayer.name": "Encounter New Players",
+  "config.roundabout.chanceToEncounterPlayer.desc": "Small chance of seeing a new player in a parallel world, from 0-1 (1 being 100 percent chance).",
+
 
   "config.roundabout.bufferServerDistance.name": "Fix Moved Wrongly",
   "config.roundabout.bufferServerDistance.desc": "Provides a buffer to accommodate roundabout movement skills that provide short bursts of speed. Disable if it is causing problems with other mods.",

@@ -1,5 +1,7 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
@@ -14,6 +16,7 @@ import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
 import net.hydra.jojomod.client.models.stand.renderers.WhitesnakeDisguiseRenderer;
 import net.hydra.jojomod.entity.FogCloneEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -47,13 +50,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import org.joml.Vector3f;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T, PlayerModel<T>> {
 
     private final PlayerModel<T> bulk;
     private final PlayerModel<T> slim;
+    private final Map<UUID, SkinData> skins = new ConcurrentHashMap<>();
+    private final Set<UUID> requestedSkins = ConcurrentHashMap.newKeySet();
 
     public CloneRenderer(EntityRendererProvider.Context context) {
         super(context,new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER),false),0.5F);
@@ -148,9 +156,9 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
         Minecraft mc = Minecraft.getInstance();
 
-        PlayerInfo info = mc.getConnection() == null ? null : mc.getConnection().getPlayerInfo(uuid.get());
-        if (info != null) {
-            return info.getSkinLocation();
+        SkinData skin = getSkin(entity);
+        if (skin != null) {
+            return skin.texture();
         }
 
         ResourceLocation loc = roundabout$getTextureLocation(entity);
@@ -158,13 +166,26 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             return loc;
         }
 
-        return DefaultPlayerSkin.getDefaultSkin();
+        return DefaultPlayerSkin.getDefaultSkin(uuid.get());
     }
+
 
     public void renderExtra(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight,
                             PlayerRenderer PR, Player pl){
 
     }
+
+    public PlayerModel getModelFromUUID(UUID uuid){
+        if (uuid == null){
+            return slim;
+        }
+        if (DefaultPlayerSkin.getDefaultSkin(uuid).getPath().contains("wide")){
+            return bulk;
+        } else {
+            return slim;
+        }
+    }
+
 
     @Override
     public void render(T entity, float entityYaw, float partialTick, PoseStack matrices, MultiBufferSource bufferSource, int packedLight) {
@@ -187,9 +208,9 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             UUID uuid = entity.getPlayerUUID().orElse(null);
 
             if (uuid != null && Minecraft.getInstance().getConnection() != null) {
-                PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(uuid);
+                SkinData info = getSkin(entity);
                 if (info != null) {
-                    this.model = "slim".equals(info.getModelName()) ? slim : bulk;
+                    this.model = info.slim ? slim : bulk;
                 } else {
                     Player pl = entity.getPlayer();
                     if (pl instanceof AbstractClientPlayer acp) {
@@ -198,7 +219,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                         if (ER instanceof PlayerRenderer PR && PR.getModel() != null) {
                             this.model = ((PlayerModel) PR.getModel());
                         } else {
-                           this.model = slim;
+                           this.model =  getModelFromUUID(uuid);
                         }
 //                        if (ER instanceof PlayerRenderer PR && PR.getModel() instanceof PlayerModel<AbstractClientPlayer>) {
 //                            this.model = ((IPlayerModel) PR.getModel()).roundabout$getSlim()? slim : bulk;
@@ -206,7 +227,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 //                            this.model = slim;
 //                        }
                     } else {
-                        this.model = slim;
+                        this.model = getModelFromUUID(uuid);
                     }
                 }
             } else {
@@ -217,10 +238,10 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                     if (ER instanceof PlayerRenderer PR && PR.getModel() != null) {
                         this.model = ((PlayerModel) PR.getModel());
                     } else {
-                        this.model = slim;
+                        this.model = getModelFromUUID(uuid);
                     }
                 } else {
-                    this.model = slim;
+                    this.model = getModelFromUUID(uuid);
                 }
             }
 
@@ -449,6 +470,24 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             return false;
         }
         return !ClientUtil.isPlayer($$0.getPlayer());
+    }
+
+    public record SkinData(ResourceLocation texture, boolean slim) {
+    }
+    private SkinData getSkin(CloneEntity entity) {
+        GameProfile profile = entity.getDisguiseProfile();
+        if (profile == null) return new SkinData(DefaultPlayerSkin.getDefaultSkin(), false);
+        UUID id = profile.getId();
+        SkinData current = skins.computeIfAbsent(id, ignored -> new SkinData(
+                DefaultPlayerSkin.getDefaultSkin(id), "slim".equals(DefaultPlayerSkin.getSkinModelName(id))));
+        if (requestedSkins.add(id)) {
+            Minecraft.getInstance().getSkinManager().registerSkins(profile, (type, location, texture) -> {
+                if (type == MinecraftProfileTexture.Type.SKIN) {
+                    skins.put(id, new SkinData(location, "slim".equals(texture.getMetadata("model"))));
+                }
+            }, false);
+        }
+        return current;
     }
 }
 

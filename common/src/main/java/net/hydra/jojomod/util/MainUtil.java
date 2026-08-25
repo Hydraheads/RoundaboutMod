@@ -1411,6 +1411,13 @@ public class MainUtil {
         }
     }
 
+    public static final Map<String, UUID> playerNames = new HashMap<>();
+    static {
+        playerNames.put("Hydraheads", UUID.fromString("bdcdc942-0d38-4630-8249-37a29a0cc60b"));
+        playerNames.put("tuckfxspeed", UUID.fromString("c1f62b1b-0586-4a97-8431-d80e15d9de6f"));
+        playerNames.put("Prisma8", UUID.fromString("dd138670-b51e-47fa-ac93-ca76ab5cc16b"));
+    }
+
     public static void makeMobBleed(Entity target) {
         if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE)) &&
         getMobBleed(target)) {
