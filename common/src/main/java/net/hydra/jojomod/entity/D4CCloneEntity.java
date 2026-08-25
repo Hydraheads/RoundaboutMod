@@ -1,6 +1,8 @@
 package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
+import net.hydra.jojomod.entity.goals.D4CMeleeAttackGoal;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -38,31 +40,64 @@ public class D4CCloneEntity extends CloneEntity {
             EntityDataSerializers.INT);
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(
+                1,
+                new AvoidLearnedAnnihilatorGoal(this)
+        );
+
+        this.goalSelector.addGoal(2, new D4CMeleeAttackGoal(this, 1.0D, false));
+
+        this.goalSelector.addGoal(3, new FloatGoal(this));
+
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0, 0.0F));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        addBehaviourGoals();
     }
 
     public void addBehaviourGoals() {
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false,
-                $$0 -> $$0 instanceof Enemy && !($$0 instanceof Creeper)));
+        this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(
+                this,
+                Mob.class,
+                5,
+                false,
+                false,
+                entity -> entity instanceof Enemy
+                        && !(entity instanceof Creeper)
+                        && canFocusOnFighting(entity)
+        ));
     }
-    private static final int STRATEGY_NORMAL = 0;
-    private static final int STRATEGY_BACKING_AWAY = 1;
-    private static final int STRATEGY_FLEEING = 2;
-    private static final int STRATEGY_ACKNOWLEDGING = 3;
-    private static final int STRATEGY_AVOIDING = 4;
 
-    private int acknowledgeTicks = 0;
-    private int sneakCooldown = 0;
-    private int sneakTicks = 0;
-    private int annihilationTicks = 0;
-    private int jumpCooldown = 20;
+
+    public boolean canFocusOnFighting(@Nullable Entity entity) {
+        if (entity == null) {
+            return false;
+        }
+
+        if (isBeingAnnihilated()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static final int STRATEGY_NORMAL = 0;
+    public static final int STRATEGY_BACKING_AWAY = 1;
+    public static final int STRATEGY_FLEEING = 2;
+    public static final int STRATEGY_ACKNOWLEDGING = 3;
+    public static final int STRATEGY_AVOIDING = 4;
+
+    public int acknowledgeTicks = 0;
+    public int sneakCooldown = 0;
+    public int sneakTicks = 0;
+    public int annihilationTicks = 0;
+    public int jumpCooldown = 20;
 
     @Nullable
     private UUID learnedAnnihilator;
+
+
 
     @Override
     public void tick() {
@@ -139,6 +174,10 @@ public class D4CCloneEntity extends CloneEntity {
         annihilationTicks = 0;
         setStrategy(STRATEGY_NORMAL);
     }
+
+    public boolean figuredItOut(){
+        return annihilationTicks >= 75;
+    }
     private void startAcknowledging() {
         setStrategy(STRATEGY_ACKNOWLEDGING);
 
@@ -179,7 +218,7 @@ public class D4CCloneEntity extends CloneEntity {
     }
     private int sneaksRemaining = 0;
     @Nullable
-    private Entity getLearnedAnnihilator() {
+    public Entity getLearnedAnnihilator() {
         if (learnedAnnihilator == null) {
             return null;
         }
@@ -335,7 +374,7 @@ public class D4CCloneEntity extends CloneEntity {
         if (this.onGround() && jumpCooldown <= 0) {
             this.jumpFromGround();
 
-            jumpCooldown = 8 + this.getRandom().nextInt(35);
+            jumpCooldown = 10 + this.getRandom().nextInt(200);
         }
     }
     private void avoidAnnihilator(Entity entity) {
@@ -343,7 +382,7 @@ public class D4CCloneEntity extends CloneEntity {
 
         // We're comfortably outside the danger zone.
         // Do nothing.
-        if (distance > 11.0D) {
+        if (distance > 8.0D) {
             return;
         }
 
@@ -356,7 +395,7 @@ public class D4CCloneEntity extends CloneEntity {
         away = away.normalize();
 
         // Only move far enough to get back outside the boundary.
-        double distanceToMove = Math.max(1.5D, 11.0D - distance);
+        double distanceToMove = Math.max(1.5D, 8.0D - distance);
 
         double targetX = this.getX() + away.x * distanceToMove;
         double targetZ = this.getZ() + away.z * distanceToMove;
