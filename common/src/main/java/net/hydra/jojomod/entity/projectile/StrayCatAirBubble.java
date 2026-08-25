@@ -345,9 +345,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             }
         }
 
-        MainUtil.makeBleed($$0, 1, 160, user);
+        if (strayCatEntityMade) {
+            MainUtil.makeBleed($$0, 1, 160, user);
+        } else {
+            MainUtil.makeBleed($$0, 0, 160, user);
+        }
     }
 
+    public boolean strayCatEntityMade = false;
     @Override
     protected boolean shouldBurn() {
         return false;
@@ -372,6 +377,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        if (this.isRemoved()){
+            return;
+        }
         if (!this.level().isClientSide()) {
             Entity hitTarget = $$0.getEntity();
             Entity user = this.getOwner();
