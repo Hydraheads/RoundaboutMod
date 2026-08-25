@@ -1000,7 +1000,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canAddStrayCatto() {
-        if (!this.canExecuteMoveWithLevel(getStrayCatLevel()) || hasStrayCat) {
+        if (!this.canExecuteMoveWithLevel(getStrayCatLevel()) || canUseStrayCat()) {
             return false;
         }
         Entity maybeStraycat = getTargetEntity(this.self, 3.5f);
@@ -2061,7 +2061,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void addStrayCattoClient() {
-        if (!this.hasStrayCat) {
+        if (!canUseStrayCat()) {
             ((StandUser) this.getSelf()).roundabout$tryPower(STRAY_CAT_ADD, true);
             tryPowerPacket(STRAY_CAT_ADD);
         }
