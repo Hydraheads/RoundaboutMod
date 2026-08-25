@@ -1162,6 +1162,10 @@ public class Config implements Cloneable {
         public Boolean whiteListModdedMobs;
         @BooleanOption(group = "inherit", value = true)
         public Boolean blacklistHighHealthMobs;
+        @FloatOption(group = "inherit", value = 0.015F, min = 0.0F, max = 1.0F)
+        public Float chanceToEncounterPlayer;
+        @FloatOption(group = "inherit", value = 0.035F, min = 0.0F, max = 1.0F)
+        public Float chanceToEncounterNewAnimal;
     }
 
     public static class KingCrimsonSettings {
