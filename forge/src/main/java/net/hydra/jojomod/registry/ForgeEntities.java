@@ -212,6 +212,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_clone").toString())
             );
+    public static final RegistryObject<EntityType<D4CCloneEntity>> D4C_CLONE =
+            ENTITY_TYPES.register("d4c_clone", () ->
+                    EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c_clone").toString())
+            );
     public static final RegistryObject<EntityType<KingCrimsonProjectionEntity>> KING_CRIMSON_PROJECTION =
             ENTITY_TYPES.register("king_crimson_projection", () ->
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).

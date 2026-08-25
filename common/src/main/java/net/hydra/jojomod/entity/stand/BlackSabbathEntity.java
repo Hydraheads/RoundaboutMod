@@ -129,7 +129,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean hasNoPhysics(){
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2;
+            return pb.moveMode == 2 || this.is(pb.blackSelect);
         }
         return false;
     }
@@ -137,7 +137,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean isNoGravity() {
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2;
+            return pb.moveMode == 2 || this.is(pb.blackSelect);
         }
         return false;
     }
@@ -145,7 +145,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean standHasGravity() {
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode != 2;
+            return pb.moveMode != 2 || !this.is(pb.blackSelect);
         }
         return true;
     }
@@ -180,7 +180,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     public void travelAhead(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
-            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && pb.moveMode == 2) {
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2)) {
                 Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
                 Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.75F));
                 positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());
