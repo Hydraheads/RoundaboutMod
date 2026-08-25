@@ -638,7 +638,7 @@ public class Config implements Cloneable {
         public Integer magicianAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer magicianAttackMultOnPlayers;
-        @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer magiciansRedGuardPoints;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer miningSpeedMultiplierMagiciansRed;
@@ -1166,6 +1166,8 @@ public class Config implements Cloneable {
         public Float chanceToEncounterPlayer;
         @FloatOption(group = "inherit", value = 0.035F, min = 0.0F, max = 1.0F)
         public Float chanceToEncounterNewAnimal;
+        @FloatOption(group = "inherit", value = 0.25F, min = 0.0F, max = 1.0F)
+        public Float chanceForAltStands;
     }
 
     public static class KingCrimsonSettings {

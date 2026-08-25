@@ -25,6 +25,8 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -964,6 +966,22 @@ public class PowersD4C extends NewPunchingStand {
         copy.setItemSlot(EquipmentSlot.OFFHAND, original.getOffhandItem().copy());
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             copy.setDropChance(slot, 0.0F);
+        }
+
+        ItemStack standDisc = ((StandUser)original).roundabout$getStandDisc();
+        if (standDisc != null && !standDisc.isEmpty() && standDisc.getItem() instanceof StandDiscItem sdi){
+            if (!(sdi.standPowers instanceof PowersD4C)){
+                float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltStands;
+                if (Math.random() <= randomChance && !ModItems.getPoolForMob(copy).isEmpty()) {
+                        int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob(copy).size()));
+                        ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
+                        if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
+                            ((StandUser) copy).roundabout$setStandDisc(stack);
+                        }
+                } else {
+                    ((StandUser)copy).roundabout$setStandDisc(standDisc);
+                }
+            }
         }
 
         // Rotation

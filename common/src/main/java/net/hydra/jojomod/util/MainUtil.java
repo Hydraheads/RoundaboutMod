@@ -780,7 +780,7 @@ public class MainUtil {
     }
     public static boolean isHumanoid(LivingEntity LE){
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof Player || LE instanceof Piglin
+        || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
