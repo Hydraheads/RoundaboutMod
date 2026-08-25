@@ -440,7 +440,7 @@ public enum PowerTypes {
             return null;
         }
 
-        AABB box = entity.getBoundingBox().inflate(10.0D);
+        AABB box = entity.getBoundingBox().inflate(7.0D);
 
         List<Entity> nearby = sl.getEntities(
                 entity,
@@ -452,6 +452,7 @@ public enum PowerTypes {
                                 && (other.getUUID().equals(parallelUUID) ||
                                 (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
                                         ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
+                                && other.distanceTo(entity) <= 7
         );
 
         if (!nearby.isEmpty()) {
