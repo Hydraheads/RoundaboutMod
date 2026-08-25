@@ -3767,7 +3767,9 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (inBitesTheDustMode()) {
             if ((ent instanceof Mob || ent instanceof Player) && !(ent instanceof StandEntity)
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
-                return true;
+                LivingEntity LE = (LivingEntity) ent;
+                return LE.hasLineOfSight(bitesTheDustPlantedEntity);
+
             }
         }
 
@@ -3858,7 +3860,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     size = 0.25f;
                 }
 
-                if (LE == bitesTheDustPlantedEntity || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange) {
+                if (LE == bitesTheDustPlantedEntity || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange && LE.hasLineOfSight(bitesTheDustPlantedEntity)) {
                     matrixStack.pushPose();
 
                     float height = (LE.getBbHeight() + 0.43F);
