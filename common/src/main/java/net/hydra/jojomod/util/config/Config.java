@@ -116,15 +116,15 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
+    public WhitesnakeSettings whitesnakeSettings;
+    @NestedOption(group = "modded")
+    public SilverChariotSettings silverChariotSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
-    @NestedOption(group = "modded")
-    public WhitesnakeSettings whitesnakeSettings;
-    @NestedOption(group = "modded")
-    public SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
 
