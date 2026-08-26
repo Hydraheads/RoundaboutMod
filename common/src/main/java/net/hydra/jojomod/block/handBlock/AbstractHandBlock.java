@@ -4,10 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,10 +23,16 @@ import javax.annotation.Nullable;
 
 public class AbstractHandBlock extends BaseEntityBlock {
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
-    private static final int ROTATIONS = MAX + 1;
-    public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
-    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
+    private static final int ROTATIONS;
+    public static final IntegerProperty ROTATION;
+    protected static final VoxelShape SHAPE;
     private final AbstractHandBlock.Type type;
+
+    static {
+        ROTATIONS = MAX + 1;
+        ROTATION = BlockStateProperties.ROTATION_16;
+        SHAPE = Block.box((double)4.0F, (double)0.0F, (double)4.0F, (double)12.0F, (double)8.0F, (double)12.0F);
+    }
 
     public AbstractHandBlock(AbstractHandBlock.Type t, BlockBehaviour.Properties p_56319_) {
         super(p_56319_);

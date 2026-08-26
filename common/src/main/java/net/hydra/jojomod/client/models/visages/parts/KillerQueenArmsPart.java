@@ -31,7 +31,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
    private final ModelPart base;
     private final ModelPart Root;
 
-    private boolean lastWasOnlyLeft = false;
+    private boolean lastWasOnlyRight = false;
 
     public KillerQueenArmsPart() {
         super(RenderType::entityTranslucent);
@@ -145,16 +145,16 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 if (animation == StandPowers.GUARD) {
                     this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
-                    if (animation == StandPowers.PUNCH_LEFT) {
-                        if (lastWasOnlyLeft) {
-                            lastWasOnlyLeft = false;
+                    if (animation == StandPowers.PUNCH_LEFT || animation == StandPowers.VAULT) {
+                        if (lastWasOnlyRight) {
+                            lastWasOnlyRight = false;
                             user.roundabout$getWornStandIdleAnimation().stop();
                         }
                         
                         this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
                     }else {
-                        if (!lastWasOnlyLeft) {
-                            lastWasOnlyLeft = true;
+                        if (!lastWasOnlyRight) {
+                            lastWasOnlyRight = true;
                             user.roundabout$getWornStandIdleAnimation().stop();
                         }
 
