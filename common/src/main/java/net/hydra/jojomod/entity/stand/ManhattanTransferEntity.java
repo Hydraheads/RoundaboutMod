@@ -922,6 +922,15 @@ public class ManhattanTransferEntity extends StandEntity {
                             }
                         }
                     }
+                    if(value instanceof TamableAnimal TA && TA.getOwner() != null && TA.getOwner().is(this.getUser())){
+                        targent.remove(value);
+                        this.setHattanTarget(0);
+                        if (this.getUserData(this.getUser()) != null) {
+                            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                                PM.targetHattan = null;
+                            }
+                        }
+                    }
                     if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 || this.isInWater() || this.isInLava()) {
                         targent.remove(value);
                         this.setHattanTarget(0);
