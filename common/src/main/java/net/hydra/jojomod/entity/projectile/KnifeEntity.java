@@ -1,14 +1,13 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;

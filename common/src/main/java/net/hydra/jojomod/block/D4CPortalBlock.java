@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.util.MainUtil;
@@ -74,6 +75,7 @@ public class D4CPortalBlock extends BaseEntityBlock
 
             if (blockEntity instanceof D4CPortalBlockEntity portal) {
                 if (portal.worldId != 0 && PowerTypes.getPlaneOfExisting2(entity) == 0 &&
+                        !(entity instanceof FallingBannerEntity) &&
                         PowerTypes.getPlaneOfExisting2(entity) != portal.worldId
                         && (PowerTypes.originatedFromOurWorld(entity) || entity.tickCount > PowerTypes.d4cWorldUptime())
                 && !MainUtil.isBossMob(entity) && portal.ticksUntilRestore > 17 && !(portal.entityList.contains(entity))

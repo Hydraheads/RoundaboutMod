@@ -7,6 +7,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -18,7 +19,6 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -46,8 +46,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.List;
 
 public class BloodSplatterEntity extends ThrowableProjectile {
     public BloodSplatterEntity(EntityType<? extends ThrowableProjectile> $$0, Level $$1) {

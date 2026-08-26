@@ -13,6 +13,8 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -25,6 +27,8 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -605,12 +609,26 @@ public class PowersD4C extends NewPunchingStand {
 //                }
 //            }
             populateWorld((byte) worldId);
+            enactEligability2();
             PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
-            enactEligability();
         }
     }
+    public void enactEligability2(){
+        if (!isInBetweenSpace() && !self.isUnderWater()){
+            if (hasBanner()){
 
+                FallingBannerEntity twister = new FallingBannerEntity(
+                        this.self.level(), self.getEyePosition());
+                PowerTypes.copyPlaneOfExisting(self,twister);
+                twister.user = self;
+                twister.setBanner(self.getMainHandItem());
+                twister.lifeSpan = 60;
+                this.getSelf().level().addFreshEntity(twister);
+                useUpBanner(self.getMainHandItem());
+            }
+        }
+    }
     public void populateWorld(byte worldId) {
         if (!(self.level() instanceof ServerLevel sl)) {
             return;
@@ -934,6 +952,8 @@ public class PowersD4C extends NewPunchingStand {
         return null;
     }
 
+    public static final boolean debugCollision = false;
+
     public boolean createParallelPlayerCopy(
             ServerLevel level,
             Player original,
@@ -955,6 +975,10 @@ public class PowersD4C extends NewPunchingStand {
             copy.setCustomName(original.getCustomName());
             copy.setCustomNameVisible(original.isCustomNameVisible());
         }
+
+        if (original.getUUID().equals(self.getUUID())){
+            copy.safeCopy = true;
+        }
         copy.setPlayer(original);
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
         copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
@@ -964,6 +988,22 @@ public class PowersD4C extends NewPunchingStand {
         copy.setItemSlot(EquipmentSlot.OFFHAND, original.getOffhandItem().copy());
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             copy.setDropChance(slot, 0.0F);
+        }
+
+        ItemStack standDisc = ((StandUser)original).roundabout$getStandDisc();
+        if (standDisc != null && !standDisc.isEmpty() && standDisc.getItem() instanceof StandDiscItem sdi){
+            if (!(sdi.standPowers instanceof PowersD4C)){
+                float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltStands;
+                if (Math.random() <= randomChance && !ModItems.getPoolForMob(copy).isEmpty()) {
+                    int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(copy).size()));
+                    ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
+                    if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
+                        ((StandUser) copy).roundabout$setStandDisc(stack);
+                    }
+                } else {
+                    ((StandUser) copy).roundabout$setStandDisc(standDisc);
+                }
+            }
         }
 
         // Rotation

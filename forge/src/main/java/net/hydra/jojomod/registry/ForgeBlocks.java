@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.item.FogBlockItem;
 import net.hydra.jojomod.item.FogCoatBlockItem;
 import net.minecraft.Util;
@@ -379,6 +380,8 @@ public class ForgeBlocks {
     public static final RegistryObject<Block> FOG_TRAP = BLOCKS.register("fog_trap",ModBlocks::getFogTrapBlock);
     public static final RegistryObject<Block> STEREO = BLOCKS.register("stereo",
             () -> ModBlocks.STEREO_PROPERTIES);
+    public static final RegistryObject<Block> HAND_BLOCK = BLOCKS.register("hand_block",
+            () -> ModBlocks.HAND_PROPERTIES);
     public static final RegistryObject<Block> STAND_FIRE = BLOCKS.register("stand_fire",
             () -> ModBlocks.STAND_FIRE_PROPERTIES);
     public static final RegistryObject<Block> BUBBLE_SCAFFOLD = BLOCKS.register("bubble_scaffold",
@@ -410,6 +413,8 @@ public class ForgeBlocks {
             () -> BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "mirror")));
     public static final RegistryObject<BlockEntityType<StereoBlockEntity>> STEREO_BLOCK_ENTITY = BLOCK_ENTITIES.register("stereo",
             () -> BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stereo")));
+    public static final RegistryObject<BlockEntityType<HandBlockEntity>> HAND_BLOCK_ENTITY = BLOCK_ENTITIES.register("hand_block",
+            () -> BlockEntityType.Builder.of(HandBlockEntity::new, HAND_BLOCK.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "hand_block")));
     public static final RegistryObject<BlockEntityType<StandFireBlockEntity>> STAND_FIRE_BLOCK_ENTITY = BLOCK_ENTITIES.register("stand_fire",
             () -> BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE.get()).build(Util.fetchChoiceType(References.BLOCK_ENTITY, "stand_fire")));
     public static final RegistryObject<BlockEntityType<BubbleScaffoldBlockEntity>> BUBBLE_SCAFFOLD_BLOCK_ENTITY = BLOCK_ENTITIES.register("block_scaffold",

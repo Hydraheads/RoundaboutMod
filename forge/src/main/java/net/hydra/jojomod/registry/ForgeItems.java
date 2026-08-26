@@ -400,6 +400,10 @@ public class ForgeItems {
             () -> new BlockItem(ForgeBlocks.STEREO.get(),
                     new Item.Properties().stacksTo(64)
             )));
+    public static final RegistryObject<BlockItem> HAND_ITEM = ITEMS.register("hand_block",
+            () -> new BlockItem(ForgeBlocks.HAND_BLOCK.get(),
+                    new Item.Properties().stacksTo(1)
+            ));
 
     public static final RegistryObject<BlockItem> MELON_PARFAIT_ITEM = addToBuildingTab(ITEMS.register("melon_parfait",
             () -> new BlockItem(ForgeBlocks.MELON_PARFAIT.get(),
