@@ -282,6 +282,7 @@ public class ForgeEvents {
         ModBlocks.FOG_DIRT = ForgeBlocks.FOG_DIRT.get();
         ModBlocks.FOG_TRAP = ForgeBlocks.FOG_TRAP.get();
         ModBlocks.STEREO = ForgeBlocks.STEREO.get();
+        ModBlocks.HAND_BLOCK = ForgeBlocks.HAND_BLOCK.get();
         ModBlocks.STAND_FIRE = ForgeBlocks.STAND_FIRE.get();
         ModBlocks.BUBBLE_SCAFFOLD = ForgeBlocks.BUBBLE_SCAFFOLD.get();
         ModBlocks.OASIS_MUD_BLOCK = ForgeBlocks.OASIS_MUD_BLOCK.get();
@@ -301,6 +302,7 @@ public class ForgeEvents {
         ModBlocks.CREAM_FIRE = ForgeBlocks.CREAM_FIRE.get();
 
         ModBlocks.STEREO_BLOCK_ENTITY = ForgeBlocks.STEREO_BLOCK_ENTITY.get();
+        ModBlocks.HAND_BLOCK_ENTITY = ForgeBlocks.HAND_BLOCK_ENTITY.get();
         ModBlocks.MIRROR_BLOCK_ENTITY = ForgeBlocks.MIRROR_BLOCK_ENTITY.get();
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = ForgeBlocks.STAND_FIRE_BLOCK_ENTITY.get();
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get();
@@ -516,10 +518,6 @@ public class ForgeEvents {
         ModItems.METEORITE = ForgeItems.METEORITE.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
-        //ModItems.HAND = ForgeItems.HAND.get();
-        //ModItems.VILLAGER_HAND = ForgeItems.VILLAGER_HAND.get();
-        //ModItems.ILLAGER_HAND = ForgeItems.ILLAGER_HAND.get();
-        //ModItems.ROTTEN_HAND = ForgeItems.ROTTEN_HAND.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.FANCY_LIGHTER = ForgeItems.FANCY_LIGHTER.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
@@ -817,6 +815,7 @@ public class ForgeEvents {
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.FALLING_BANNER = ForgeEntities.FALLING_BANNER.get();
         ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
         ModEntities.STEP_RULE = ForgeEntities.STEP_RULE.get();
         ModEntities.METALLICA_KNIFE = ForgeEntities.METALLICA_KNIFE.get();

@@ -115,6 +115,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.THROWN_KNIFE, KnifeRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PH_CAPSULE, PHCapsuleRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLOCK_WALL, BlockWallEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.FALLING_BANNER, FallingBannerRenderer::new);
         EntityRendererRegistry.register(FabricEntities.STEP_RULE, StepRuleRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.BLADED_BOWLER_HAT, BladedBowlerHatRenderer::new);
@@ -329,6 +330,7 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.D4C_PORTAL_BLOCK_ENTITY, D4CPortalBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.OASIS_MUD_BLOCK_ENTITY, OasisMudBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.HAND_BLOCK_ENTITY, HandRenderer::new);
         BlockEntityRenderers.register(ModBlocks.HALLUCINATORY_ACID_BLOCK_ENTITY,
                 HallucinatoryAcidBlockEntityRenderer::new);
 

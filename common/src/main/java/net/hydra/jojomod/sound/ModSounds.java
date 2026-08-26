@@ -1197,6 +1197,26 @@ public class ModSounds {
     public static final ResourceLocation SILVER_CHARIOT_FINAL_HIT_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_FINAL_HIT_CRY);
     public static SoundEvent SILVER_CHARIOT_FINAL_HIT_CRY_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_FINAL_HIT_CRY_ID);
 
+    public static final String SILVER_CHARIOT_HIT_1 = "silver_chariot_hit_1";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_1);
+    public static SoundEvent SILVER_CHARIOT_HIT_1_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_1_ID);
+
+    public static final String SILVER_CHARIOT_HIT_2 = "silver_chariot_hit_2";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_2);
+    public static SoundEvent SILVER_CHARIOT_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_2_ID);
+
+    public static final String SILVER_CHARIOT_HIT_3 = "silver_chariot_hit_3";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_3);
+    public static SoundEvent SILVER_CHARIOT_HIT_3_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_3_ID);
+
+    public static final String SILVER_CHARIOT_HIT_4 = "silver_chariot_hit_4";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_4);
+    public static SoundEvent SILVER_CHARIOT_HIT_4_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_4_ID);
+
+    public static final String SILVER_CHARIOT_AFTERIMAGE = "silver_chariot_afterimage";
+    public static final ResourceLocation SILVER_CHARIOT_AFTERIMAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_AFTERIMAGE);
+    public static SoundEvent SILVER_CHARIOT_AFTERIMAGE_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_AFTERIMAGE_ID);
+
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
     public static SoundEvent RATT_SUMMON_EVENT = SoundEvent.createVariableRangeEvent(RATT_SUMMON_ID);

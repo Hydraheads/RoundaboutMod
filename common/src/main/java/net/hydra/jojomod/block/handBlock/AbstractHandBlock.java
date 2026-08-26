@@ -1,19 +1,6 @@
-package net.hydra.jojomod.block;
+package net.hydra.jojomod.block.handBlock;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.Util;
-import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PlayerHeadItem;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,31 +8,33 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-import java.util.UUID;
 
-public class HandBlock extends BaseEntityBlock {
+public class AbstractHandBlock extends BaseEntityBlock {
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
-    private static final int ROTATIONS = MAX + 1;
-    public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
-    protected static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
-    private final HandBlock.Type type;
+    private static final int ROTATIONS;
+    public static final IntegerProperty ROTATION;
+    protected static final VoxelShape SHAPE;
+    private final AbstractHandBlock.Type type;
 
-    public HandBlock(HandBlock.Type t, BlockBehaviour.Properties p_56319_) {
+    static {
+        ROTATIONS = MAX + 1;
+        ROTATION = BlockStateProperties.ROTATION_16;
+        SHAPE = Block.box((double)4.0F, (double)0.0F, (double)4.0F, (double)12.0F, (double)8.0F, (double)12.0F);
+    }
+
+    public AbstractHandBlock(AbstractHandBlock.Type t, BlockBehaviour.Properties p_56319_) {
         super(p_56319_);
         type = t;
         this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, Integer.valueOf(0)));
@@ -78,8 +67,9 @@ public class HandBlock extends BaseEntityBlock {
     public interface Type {
     }
 
-    public static enum Types implements HandBlock.Type {
+    public static enum Types implements AbstractHandBlock.Type {
         PLAYER,
+        PLAYER_SLIM,
         ZOMBIE,
         PIGLIN,
         VILLAGER,
@@ -87,7 +77,7 @@ public class HandBlock extends BaseEntityBlock {
     }
 
     public BlockEntity newBlockEntity(BlockPos p_151996_, BlockState p_151997_) {
-        return new SkullBlockEntity(p_151996_, p_151997_);
+        return new HandBlockEntity(p_151996_, p_151997_);
     }
 
     @Nullable
@@ -95,7 +85,7 @@ public class HandBlock extends BaseEntityBlock {
         return null;
     }
 
-    public HandBlock.Type getType() {
+    public AbstractHandBlock.Type getType() {
         return this.type;
     }
 

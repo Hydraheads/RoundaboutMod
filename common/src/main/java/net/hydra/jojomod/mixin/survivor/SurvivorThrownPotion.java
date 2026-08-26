@@ -1,15 +1,11 @@
 package net.hydra.jojomod.mixin.survivor;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.SurvivorEntity;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
-import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;

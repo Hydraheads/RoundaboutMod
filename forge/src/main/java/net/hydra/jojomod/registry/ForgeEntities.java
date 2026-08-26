@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -23,8 +26,6 @@ import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -633,6 +634,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<FallingBannerEntity>> FALLING_BANNER =
+            ENTITY_TYPES.register("falling_banner", () ->
+                    EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC)
+                            .sized(FallingBannerEntity.xwidth, FallingBannerEntity.xheight).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "falling_banner").toString())
             );
     public static final RegistryObject<EntityType<StepRuleEntity>> STEP_RULE =
             ENTITY_TYPES.register("step_rule", () ->

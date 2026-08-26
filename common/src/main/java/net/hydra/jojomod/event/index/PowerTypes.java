@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -19,6 +20,7 @@ import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
@@ -430,7 +432,10 @@ public enum PowerTypes {
 
     @Nullable
     public static Entity findNearbyParallelCopy(Entity entity) {
-        if (!(entity.level() instanceof ServerLevel sl)) {
+        if (!(entity.level() instanceof ServerLevel sl) ||
+                (entity instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                || (entity instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+        ) {
             return null;
         }
 
@@ -440,7 +445,7 @@ public enum PowerTypes {
             return null;
         }
 
-        AABB box = entity.getBoundingBox().inflate(10.0D);
+        AABB box = entity.getBoundingBox().inflate(7.0D);
 
         List<Entity> nearby = sl.getEntities(
                 entity,
@@ -452,6 +457,9 @@ public enum PowerTypes {
                                 && (other.getUUID().equals(parallelUUID) ||
                                 (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
                                         ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
+                                && other.distanceTo(entity) <= 7
+                                && !(other instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+                                && !(other instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C)
         );
 
         if (!nearby.isEmpty()) {

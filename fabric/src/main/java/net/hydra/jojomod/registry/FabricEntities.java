@@ -11,6 +11,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -22,7 +25,6 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -739,6 +741,14 @@ public class FabricEntities {
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
             );
+
+    public static final EntityType<FallingBannerEntity> FALLING_BANNER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "falling_banner"),
+                    EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC).
+                            sized(FallingBannerEntity.xwidth, FallingBannerEntity.xheight).clientTrackingRange(10).build(Roundabout.MOD_ID+":falling_banner")
+            );
     public static final EntityType<StepRuleEntity> STEP_RULE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1275,6 +1285,7 @@ public class FabricEntities {
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
+        ModEntities.FALLING_BANNER = FALLING_BANNER;
                 ModEntities.KING_CRIMSON_CLONE = KING_CRIMSON_CLONE;
                 ModEntities.D4C_CLONE = D4C_CLONE;
                 ModEntities.KING_CRIMSON_PROJECTION = KING_CRIMSON_PROJECTION;

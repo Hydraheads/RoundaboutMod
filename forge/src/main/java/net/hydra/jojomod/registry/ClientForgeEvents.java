@@ -125,6 +125,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_WALL.get(), BlockWallEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.FALLING_BANNER.get(), FallingBannerRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STEP_RULE.get(), StepRuleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.STRAY_CAT.get(), StrayCatEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.METALLICA_KNIFE.get(), MetallicaKnifeRenderer::new);
@@ -308,6 +309,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK1_NAIL_MODEL, Tusk1NailModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.HAND_BLOCK_LAYER, HandRenderer::createHandLayer);
         event.registerLayerDefinition(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
