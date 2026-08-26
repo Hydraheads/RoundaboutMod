@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RotationSegment;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -37,31 +38,31 @@ public class AbstractHandBlock extends BaseEntityBlock {
     public AbstractHandBlock(AbstractHandBlock.Type t, BlockBehaviour.Properties p_56319_) {
         super(p_56319_);
         type = t;
-        this.registerDefaultState(this.stateDefinition.any().setValue(ROTATION, Integer.valueOf(0)));
+        this.registerDefaultState((BlockState)((BlockState)this.stateDefinition.any()).setValue(ROTATION, 0));
     }
 
-    public VoxelShape getShape(BlockState p_56331_, BlockGetter p_56332_, BlockPos p_56333_, CollisionContext p_56334_) {
+    public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
         return SHAPE;
     }
 
-    public VoxelShape getOcclusionShape(BlockState p_56336_, BlockGetter p_56337_, BlockPos p_56338_) {
+    public VoxelShape getOcclusionShape(BlockState $$0, BlockGetter $$1, BlockPos $$2) {
         return Shapes.empty();
     }
 
-    public BlockState getStateForPlacement(BlockPlaceContext p_56321_) {
-        return this.defaultBlockState().setValue(ROTATION, Integer.valueOf(RotationSegment.convertToSegment(p_56321_.getRotation())));
+    public BlockState getStateForPlacement(BlockPlaceContext $$0) {
+        return (BlockState)this.defaultBlockState().setValue(ROTATION, RotationSegment.convertToSegment($$0.getRotation()));
     }
 
-    public BlockState rotate(BlockState p_56326_, Rotation p_56327_) {
-        return p_56326_.setValue(ROTATION, Integer.valueOf(p_56327_.rotate(p_56326_.getValue(ROTATION), ROTATIONS)));
+    public BlockState rotate(BlockState $$0, Rotation $$1) {
+        return (BlockState)$$0.setValue(ROTATION, $$1.rotate((Integer)$$0.getValue(ROTATION), ROTATIONS));
     }
 
-    public BlockState mirror(BlockState p_56323_, Mirror p_56324_) {
-        return p_56323_.setValue(ROTATION, Integer.valueOf(p_56324_.mirror(p_56323_.getValue(ROTATION), ROTATIONS)));
+    public BlockState mirror(BlockState $$0, Mirror $$1) {
+        return (BlockState)$$0.setValue(ROTATION, $$1.mirror((Integer)$$0.getValue(ROTATION), ROTATIONS));
     }
 
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_56329_) {
-        p_56329_.add(ROTATION);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> $$0) {
+        $$0.add(new Property[]{ROTATION});
     }
 
     public interface Type {

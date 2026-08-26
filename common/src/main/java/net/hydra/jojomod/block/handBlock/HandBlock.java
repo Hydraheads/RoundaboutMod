@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block.handBlock;
 
 
+import net.minecraft.world.level.block.SkullBlock;
 
 public class HandBlock extends AbstractHandBlock {
 
