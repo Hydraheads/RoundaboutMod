@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.entity.objects;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StandFireBlock;

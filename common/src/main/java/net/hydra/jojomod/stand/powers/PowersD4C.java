@@ -13,6 +13,8 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -607,12 +609,26 @@ public class PowersD4C extends NewPunchingStand {
 //                }
 //            }
             populateWorld((byte) worldId);
+            enactEligability2();
             PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
-            enactEligability();
         }
     }
+    public void enactEligability2(){
+        if (!isInBetweenSpace() && !self.isUnderWater()){
+            if (hasBanner()){
 
+                FallingBannerEntity twister = new FallingBannerEntity(
+                        this.self.level(), self.getEyePosition());
+                PowerTypes.copyPlaneOfExisting(self,twister);
+                twister.user = self;
+                twister.setBanner(self.getMainHandItem());
+                twister.lifeSpan = 60;
+                this.getSelf().level().addFreshEntity(twister);
+                useUpBanner(self.getMainHandItem());
+            }
+        }
+    }
     public void populateWorld(byte worldId) {
         if (!(self.level() instanceof ServerLevel sl)) {
             return;
