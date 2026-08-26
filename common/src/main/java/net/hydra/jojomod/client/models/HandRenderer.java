@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -104,14 +105,15 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     }
 
     public static RenderType getRenderType(HandBlock.Type p_112524_, @Nullable GameProfile p_112525_) {
-        //ResourceLocation resourcelocation = SKIN_BY_TYPE.get(p_112524_);
+        ResourceLocation resourcelocation = DefaultPlayerSkin.getDefaultSkin();
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
+        if (p_112525_ != null) {
             Minecraft minecraft = Minecraft.getInstance();
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().getInsecureSkinInformation(p_112525_);
             return map.containsKey(MinecraftProfileTexture.Type.SKIN) ? RenderType.entityTranslucent(minecraft.getSkinManager().registerTexture(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN)) : RenderType.entityCutoutNoCull(DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(p_112525_)));
-        /*} else {
+        } else {
             return RenderType.entityCutoutNoCullZOffset(resourcelocation);
-        }*/
+        }
 
     }
 
