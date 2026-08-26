@@ -952,6 +952,8 @@ public class PowersD4C extends NewPunchingStand {
         return null;
     }
 
+    public static final boolean debugCollision = false;
+
     public boolean createParallelPlayerCopy(
             ServerLevel level,
             Player original,
@@ -972,6 +974,10 @@ public class PowersD4C extends NewPunchingStand {
         if (original.hasCustomName()) {
             copy.setCustomName(original.getCustomName());
             copy.setCustomNameVisible(original.isCustomNameVisible());
+        }
+
+        if (original.getUUID().equals(self.getUUID())){
+            copy.safeCopy = true;
         }
         copy.setPlayer(original);
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());

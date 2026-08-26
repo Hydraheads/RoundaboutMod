@@ -1040,6 +1040,7 @@ public abstract class EntityAndData implements IEntityAndData {
                     || alt.level() != self.level()
                     || !MainUtil.canActuallyHitInvolved2(self,alt)
                     || PowerTypes.isInADifferentExistenceNoTE(self,alt)
+                    || (alt instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
                     || self.distanceTo(alt) >= 10) {
 
                 rdbt$nearAlt = null;

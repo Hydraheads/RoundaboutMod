@@ -4,6 +4,8 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.entity.goals.AvoidLearnedAnnihilatorGoal;
 import net.hydra.jojomod.entity.goals.D4CMeleeAttackGoal;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.item.MaskItem;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -19,6 +21,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -27,6 +30,7 @@ import java.util.UUID;
 
 public class D4CCloneEntity extends CloneEntity {
 
+    public boolean safeCopy = false;
     public int timer = 0;
     public D4CCloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
@@ -68,6 +72,20 @@ public class D4CCloneEntity extends CloneEntity {
                         && canFocusOnFighting(entity)
                 )
         ));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+
+        tag.putBoolean("safeCopy",safeCopy);
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("safeCopy", 10)) {
+            safeCopy = tag.getBoolean("safeCopy");
+        }
     }
 
     private boolean isValidTarget(LivingEntity entity) {
