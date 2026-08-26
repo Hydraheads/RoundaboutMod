@@ -139,7 +139,11 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     public void applyEffect(LivingEntity target) {
         if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)) {
             if (MainUtil.getMobBleed(target)) {
-                MainUtil.makeBleed(target,0,400,getOwner());
+                if (getAmmoType() == TOMMY_GUN){
+                    MainUtil.makeBleed(target,0,180,getOwner());
+                } else {
+                    MainUtil.makeBleed(target,0,400,getOwner());
+                }
             }
         }
     }

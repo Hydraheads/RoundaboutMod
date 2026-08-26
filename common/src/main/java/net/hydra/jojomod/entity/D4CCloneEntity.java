@@ -59,14 +59,48 @@ public class D4CCloneEntity extends CloneEntity {
         this.targetSelector.addGoal(4, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(
                 this,
-                Mob.class,
+                LivingEntity.class,
                 5,
                 false,
                 false,
-                entity -> entity instanceof Enemy
-                        && !(entity instanceof Creeper)
+                entity -> (
+                        isValidTarget(entity)
                         && canFocusOnFighting(entity)
+                )
         ));
+    }
+
+    private boolean isValidTarget(LivingEntity entity) {
+        if (entity == null || entity == this) {
+            return false;
+        }
+
+        if (!canFocusOnFighting(entity)) {
+            return false;
+        }
+
+        // Normal enemies
+        if (entity instanceof Enemy && !(entity instanceof Creeper)) {
+            return true;
+        }
+
+        if (learnedAnnihilator != null) {
+
+            // Something that is attacking the learned player.
+            if (entity.getLastHurtByMob() != null &&
+                    entity.getLastHurtByMob().getUUID().equals(learnedAnnihilator)) {
+                return true;
+            }
+
+            // A clone whose current target is the learned player.
+            if (entity instanceof CloneEntity clone &&
+                    clone.getTarget() != null &&
+                    clone.getTarget().getUUID().equals(learnedAnnihilator)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

@@ -780,7 +780,7 @@ public class MainUtil {
     }
     public static boolean isHumanoid(LivingEntity LE){
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof Player || LE instanceof Piglin
+        || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
@@ -1416,6 +1416,30 @@ public class MainUtil {
         playerNames.put("Hydraheads", UUID.fromString("bdcdc942-0d38-4630-8249-37a29a0cc60b"));
         playerNames.put("tuckfxspeed", UUID.fromString("c1f62b1b-0586-4a97-8431-d80e15d9de6f"));
         playerNames.put("Prisma8", UUID.fromString("dd138670-b51e-47fa-ac93-ca76ab5cc16b"));
+        playerNames.put("urbancase", UUID.fromString("0fa1ab1b-1575-439e-b211-759318c1fc17"));
+        playerNames.put("JohnRoosterRed", UUID.fromString("d2423001-b455-414c-bdf4-0ecefca51f0c"));
+        playerNames.put("Sunkisdreams", UUID.fromString("5daa639e-e4cb-4b4e-bfb8-32b04a8508a6"));
+        playerNames.put("BloodyDoomMan", UUID.fromString("7bb76cc1-bbd2-4313-b923-09983a2ed35d"));
+        playerNames.put("awesomemanvin", UUID.fromString("09a6a39f-aa5d-483e-856e-d5e475b2ccc0"));
+        playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
+        playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
+        playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
+        playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
+        playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));
+        playerNames.put("Chxzym", UUID.fromString("7f00c7d7-1fe6-4082-aba2-9bce2e1cdb14"));
+        playerNames.put("Feu_Ghost", UUID.fromString("9bec323c-8551-4976-b615-66eb78e37ec2"));
+        playerNames.put("LloydGamer10", UUID.fromString("651be236-fb71-4591-99a3-bbc52f7a0f68"));
+        playerNames.put("14Kacper773549", UUID.fromString("252629a7-6000-4147-b511-600899b8d711"));
+        playerNames.put("MiniAstr0naut", UUID.fromString("7cf530de-2457-451a-9a89-5c1e78519bdb"));
+        playerNames.put("KnightDemon", UUID.fromString("7b074877-010a-4941-b8c4-d18dd6705fd1"));
+        playerNames.put("OlivePrincess69", UUID.fromString("7720722c-dee3-4c04-b3ae-22203176e0bc"));
+        playerNames.put("ImaPinHead", UUID.fromString("723a07fb-0ca0-47ce-94c8-7113dd08044f"));
+        playerNames.put("FunkyKing01", UUID.fromString("9d47733b-c110-4207-acce-ebe57ab573a0"));
+        playerNames.put("D4C_Valentine", UUID.fromString("40eec84f-7f8b-4024-ab73-43adc0891419"));
+        playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
+        playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
+        playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
     }
 
     public static void makeMobBleed(Entity target) {
