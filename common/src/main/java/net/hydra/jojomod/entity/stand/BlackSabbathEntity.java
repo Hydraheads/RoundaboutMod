@@ -103,7 +103,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         this.coat_open.startIfStopped(this.tickCount);
                     }
                     case 3 -> {
-
+                        if(!pb.blackSabbathTargets.isEmpty()){
+                            this.coat_open.start(this.tickCount);
+                        } else {
+                            this.chest_open.stop();
+                            this.coat_open.stop();
+                            this.chest_close.startIfStopped(this.tickCount);
+                        }
+                        this.chest_open.stop();
                     }
                 }
             }
@@ -113,6 +120,9 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.coat_open.startIfStopped(this.tickCount);
         }
     }
+
+    public boolean isHunting = false;
+    public void setIsHunting(boolean bool){isHunting = bool;}
 
     @Override
     public boolean forceVisualRotation(){
@@ -157,20 +167,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         float yaw = this.getYRot();
 
 
-        if(shouldFloat && this.getUser() != null){
-            if (!this.level().isClientSide()) {
-                this.setXRot(pitch);
-                this.setYRot(yaw);
-                this.setYBodyRot(yaw);
-                this.xRotO = pitch;
-                this.yRotO = yaw;
-            }
-            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-                if(tickDownSecond > 1){
-                    tickDownSecond--;
+        if(!isHunting) {
+            if (shouldFloat && this.getUser() != null) {
+                if (!this.level().isClientSide()) {
+                    this.setXRot(pitch);
+                    this.setYRot(yaw);
+                    this.setYBodyRot(yaw);
+                    this.xRotO = pitch;
+                    this.yRotO = yaw;
+                }
+                if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+                    if (tickDownSecond > 1) {
+                        tickDownSecond--;
 
-                    if(tickDownSecond == 4){
-                        this.forceDespawnSet = true;
+                        if (tickDownSecond == 4) {
+                            this.forceDespawnSet = true;
+                        }
                     }
                 }
             }
@@ -180,7 +192,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     public void travelAhead(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
-            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2)) {
+            if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2) && !isHunting) {
                 Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
                 Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.75F));
                 positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());

@@ -3698,5 +3698,35 @@
     "sounds": [
       "roundabout:silver_chariot_final_hit_cry"
     ]
+  },
+  "silver_chariot_hit_1": {
+    "subtitle": "sounds.roundabout.silver_chariot_hit_1",
+    "sounds": [
+      "roundabout:silver_chariot_hit_1"
+    ]
+  },
+  "silver_chariot_hit_2": {
+    "subtitle": "sounds.roundabout.silver_chariot_hit_2",
+    "sounds": [
+      "roundabout:silver_chariot_hit_2"
+    ]
+  },
+  "silver_chariot_hit_3": {
+    "subtitle": "sounds.roundabout.silver_chariot_hit_3",
+    "sounds": [
+      "roundabout:silver_chariot_hit_3"
+    ]
+  },
+  "silver_chariot_hit_4": {
+    "subtitle": "sounds.roundabout.silver_chariot_hit_4",
+    "sounds": [
+      "roundabout:silver_chariot_hit_4"
+    ]
+  },
+  "silver_chariot_afterimage": {
+    "subtitle": "sounds.roundabout.silver_chariot_afterimage",
+    "sounds": [
+      "roundabout:silver_chariot_afterimage"
+    ]
   }
 }

@@ -117,24 +117,27 @@ public class FancyLighterItem extends BlockItem {
                                 if (user != null && $$0 != null) {
                                     if(user != $$0){
                                         if(((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
-                                            if(!pbs.blackSabbathTargets.contains($$0)){
-                                                pbs.selectTargetSecond($$0);
-                                                pbs.setThree();
-                                                if(pbs.blackSelect != null){
-                                                    pbs.blackSelect.forceDespawnSet = true;
-                                                }
-                                                if(pbs.getStandEntity(pbs.self) != null){
-                                                    pbs.getStandEntity(pbs.self).forceDespawnSet = true;
-                                                }
+                                            if(pbs.tickDown2 < -9) {
+                                                if (!pbs.blackSabbathTargets.contains($$0)) {
+                                                    pbs.selectTargetSecond($$0);
+                                                    pbs.setThree();
+                                                    pbs.setTickBeforeHunt(20);
+                                                    if (pbs.blackSelect != null) {
+                                                        pbs.blackSelect.forceDespawnSet = true;
+                                                    }
+                                                    if (pbs.getStandEntity(pbs.self) != null) {
+                                                        pbs.getStandEntity(pbs.self).forceDespawnSet = true;
+                                                    }
 
-                                                List<LivingEntity> lvent = $$0.level().getEntitiesOfClass(LivingEntity.class, $$0.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
-                                                    return true;
-                                                });
-                                                if (lvent != null && !lvent.isEmpty()) {
-                                                    for (LivingEntity value : lvent) {
-                                                        if (value.hasLineOfSight($$0)) {
-                                                            if(!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
-                                                                pbs.selectTargetSecond(value);
+                                                    List<LivingEntity> lvent = $$0.level().getEntitiesOfClass(LivingEntity.class, $$0.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                                        return true;
+                                                    });
+                                                    if (lvent != null && !lvent.isEmpty()) {
+                                                        for (LivingEntity value : lvent) {
+                                                            if (value.hasLineOfSight($$0)) {
+                                                                if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                                                                        pbs.selectTargetSecond(value);
+                                                                }
                                                             }
                                                         }
                                                     }

@@ -960,6 +960,16 @@ public class ForgeSounds {
             register(ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT, ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_FINAL_HIT_CRY =
             register(ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY, ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_1 =
+            register(ModSounds.SILVER_CHARIOT_HIT_1, ModSounds.SILVER_CHARIOT_HIT_1_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_2 =
+            register(ModSounds.SILVER_CHARIOT_HIT_2, ModSounds.SILVER_CHARIOT_HIT_2_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_3 =
+            register(ModSounds.SILVER_CHARIOT_HIT_3, ModSounds.SILVER_CHARIOT_HIT_3_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_4 =
+            register(ModSounds.SILVER_CHARIOT_HIT_4, ModSounds.SILVER_CHARIOT_HIT_4_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_AFTERIMAGE =
+            register(ModSounds.SILVER_CHARIOT_AFTERIMAGE, ModSounds.SILVER_CHARIOT_AFTERIMAGE_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);
