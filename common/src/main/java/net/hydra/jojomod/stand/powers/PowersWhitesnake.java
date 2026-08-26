@@ -409,7 +409,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
         meltingHoverExhausted = false;
         meltingCrawlGraceTicks = 0;
         meltingCrawlTransitionTicks = 0;
-        if (meltingMode || !(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return;
+        if (meltingMode) {
+            if (getActivePower() == PowerIndex.ATTACK || isGuarding()) tryPower(PowerIndex.NONE, true);
+            return;
+        }
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return;
         whitesnake.setMeltingHovering(false);
         Direction oldGravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
         ((IGravityEntity) whitesnake).roundabout$setGravityDirection(Direction.DOWN);
@@ -856,7 +860,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 }
             }
             case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
-                if (canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) {
+                if (!isPiloting() && canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) {
                     onReleaseGuard();
                     tryIntPower(WHITESNAKE_INVENTORY, true, 0);
                     tryIntPowerPacket(WHITESNAKE_INVENTORY, 0);
@@ -1460,7 +1464,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (move == CONTROL_DASH) return controlDash(value);
         if (move == WHITESNAKE_INVENTORY) {
-            if (!canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) return false;
+            if (isPiloting() || !canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) return false;
             if (!isClient() && self instanceof ServerPlayer player) {
                 if (isGuarding()) tryPower(PowerIndex.NONE, true);
                 WhitesnakeInventoryMenu.open(player);
@@ -1534,7 +1538,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isMeltingRestrictedPower(int move) {
         return switch (move) {
-            case DISC_STEAL, PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
+            case PowerIndex.ATTACK, PowerIndex.GUARD, DISC_STEAL,
+                    PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
                     PowerIndex.SNEAK_ATTACK_CHARGE, PowerIndex.SNEAK_ATTACK,
                     PowerIndex.POWER_1_SNEAK -> true;
             default -> false;
@@ -2031,11 +2036,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && isControlHovering()) return;
-        if (meltingMode && isHoldingSneak()) {
-            if (!keyIsDown) holdDownClick = false;
+        if (meltingMode) {
+            holdDownClick = false;
             return;
         }
+        if (keyIsDown && isControlHovering()) return;
         if (consumeClickInput) {
             if (!keyIsDown) consumeClickInput = false;
             return;
@@ -2066,7 +2071,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (activePower == PowerIndex.POWER_2_BLOCK) return false;
+        if (meltingMode || activePower == PowerIndex.POWER_2_BLOCK) return false;
         return super.buttonInputGuard(keyIsDown, options);
     }
 
@@ -2777,14 +2782,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         } else if (meltingMode && !isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         } else {
-            int level = isGuarding() ? getWhitesnakeInventoryLevel() : getDiscStealLevel();
+            boolean inventoryContext = isGuarding() && !isPiloting();
+            int level = inventoryContext ? getWhitesnakeInventoryLevel() : getDiscStealLevel();
             byte discSelection = getSelectedDisc();
-            if (canExecuteMoveWithLevel(level) && (isGuarding() || discSelection >= 0)) {
+            if (canExecuteMoveWithLevel(level) && (inventoryContext || discSelection >= 0)) {
                 setSkillIcon(context, x, y, 1,
-                        isGuarding() ? StandIcons.WHITESNAKE_INVENTORY
+                        inventoryContext ? StandIcons.WHITESNAKE_INVENTORY
                                 : isHoldingSneak() ? StandIcons.WHITESNAKE_DISC_TYPES[discSelection]
                                 : StandIcons.WHITESNAKE_DISC_STEAL,
-                        isGuarding() ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
+                        inventoryContext ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
             }
