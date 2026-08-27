@@ -175,6 +175,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimRenderer::new);
         event.registerEntityRenderer(ForgeEntities.MOLD_SPORE.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.PURPLE_SMOKE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
