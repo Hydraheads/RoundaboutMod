@@ -148,6 +148,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_AFTERIMAGE.get(), SilverChariotAfterimageEntity.createStandAttributes().build());
     }
@@ -849,6 +850,7 @@ public class ForgeEvents {
         ModEntities.LEFT_SEPERATED_ARM = ForgeEntities.LEFT_SEPERATED_ARM.get();
         ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
         ModEntities.MOLD_SPORES = ForgeEntities.MOLD_SPORE.get();
+        ModEntities.PURPLE_SMOKE = ForgeEntities.PURPLE_SMOKE.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();
