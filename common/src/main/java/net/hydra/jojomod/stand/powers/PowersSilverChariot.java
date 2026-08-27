@@ -326,6 +326,34 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     @Override
+    public SoundEvent getBrawlPunchSound() {
+        double rand = Math.random();
+        if (rand < 0.25){
+            return ModSounds.SILVER_CHARIOT_HIT_1_EVENT;
+        } else if (rand < 0.5){
+            return ModSounds.SILVER_CHARIOT_HIT_2_EVENT;
+        } else if (rand < 0.75){
+            return ModSounds.SILVER_CHARIOT_HIT_3_EVENT;
+        }
+        return ModSounds.SILVER_CHARIOT_HIT_4_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandSound() {
+        return ModSounds.SILVER_CHARIOT_HIT_3_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchLandLastSound() {
+        return ModSounds.SILVER_CHARIOT_HIT_4_EVENT;
+    }
+
+    @Override
+    public SoundEvent getPunchMissSound() {
+        return super.getPunchMissSound();
+    }
+
+    @Override
     public Byte getLastHitSound() {
         return LAST_HIT_CRY_SOUND;
     }
@@ -664,7 +692,23 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
-        super.playBarrageNoise(hitNumber, entity);
+        if (!this.self.level().isClientSide()) {
+            if (hitNumber % 5 == 0) {
+                double rand = Math.random();
+                // playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_3_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+
+                if (rand < 0.25){
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_1_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                } else if (rand < 0.5){
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_2_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                } else if (rand < 0.75){
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_3_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                } else {
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_HIT_4_EVENT, SoundSource.PLAYERS, 0.9F, (float) (0.9 + (Math.random() * 0.25)));
+                }
+
+            }
+        }
     }
 
     @Override
@@ -2394,6 +2438,10 @@ public class PowersSilverChariot extends NewPunchingStand {
                         GoddessStatueBlock.UPDATE_ALL
                 );
 
+                addEXP(5);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+
                 return true;
             }
         }
@@ -2455,6 +2503,18 @@ public class PowersSilverChariot extends NewPunchingStand {
                         slab.defaultBlockState(),
                         Block.UPDATE_ALL
                 );
+
+                ItemStack stack = new ItemStack(slab, 1);
+                if (this.self instanceof Player player) {
+                    if (!player.getInventory().add(stack)) {
+                        player.drop(stack, false);
+                    }
+                }
+
+                addEXP(1);
+                playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT,
+                        SoundSource.PLAYERS, 1F, 1F);
+
                 return true;
             }
         }

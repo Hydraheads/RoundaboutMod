@@ -53,6 +53,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -101,6 +102,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.nbt.CompoundTag;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -1102,7 +1104,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 return true;
             }else {
-                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.KillerQueenEXPFail", getBitesTheDustLevel()).withStyle(ChatFormatting.DARK_RED), true);
+                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.KillerQueenEXPFail", getBitesTheDustLevel()).withStyle(ChatFormatting.RED), true);
             }
         }
         return false;
@@ -1593,6 +1595,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
+        if (move == BITES_THE_DUST_DEFUSE) {
+            btdTicksMax = 0;
+        }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
         }
@@ -3789,7 +3794,8 @@ public class PowersKillerQueen extends NewPunchingStand {
             if ((ent instanceof Mob || ent instanceof Player) && !(ent instanceof StandEntity)
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
                 LivingEntity LE = (LivingEntity) ent;
-                return LE.hasLineOfSight(bitesTheDustPlantedEntity);
+
+                return LE.hasLineOfSight(bitesTheDustPlantedEntity) && player.hasLineOfSight(LE);
 
             }
         }
@@ -3888,31 +3894,19 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                     // Orient the texture
                     matrixStack.scale(1, 1, 1);
+                    matrixStack.translate(0, height, 0);
                     matrixStack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
                     matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                    matrixStack.translate(0, height, 0);
 
                     // Draw flat quad here
                     VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(icon)).color(1.0f, 1.0f, 1.0f, 1.0f);
                     Matrix4f matrix = matrixStack.last().pose();
+                    Matrix3f normal = matrixStack.last().normal();
 
-                    Vector3f normal = mc.gameRenderer.getMainCamera().getLookVector();
-                    normal.normalize();
-
-                    /**This ome is good*/
-                    Vector3f coursecorrect = new Vector3f(0.577f, 0.577f, 0.577f);
-                    if (normal.y > 0) {
-                        /**This ome needs serial fixing*/
-                        coursecorrect = new Vector3f(0.01f, 1f, 0.01f);
-                        if (normal.y > 0.95) {
-                            coursecorrect = new Vector3f(-0.577f, -0.577f, -0.577f);
-                        }
-                    }
-
-                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
-                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(coursecorrect.x, coursecorrect.y, coursecorrect.z).endVertex();
+                    vertexConsumer.vertex(matrix, -size, -size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+                    vertexConsumer.vertex(matrix, size, -size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 1.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+                    vertexConsumer.vertex(matrix, size, size, 0.0f).color(255, 255, 255, 255).uv(1.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
+                    vertexConsumer.vertex(matrix, -size, size, 0.0f).color(255, 255, 255, 255).uv(0.0f, 0.0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0, 0, -1).endVertex();
 
 
                     RenderSystem.enableDepthTest();
@@ -3934,7 +3928,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20 + startPos,topPos+80,0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.KILLER_QUEEN_PUNCH,0,level,bypas));
-        if (canUseStrayCat()) {
+        if (canUseStrayCat() && canExecuteMoveWithLevel(getStrayCatShieldLevel())) {
             $$1.add(drawSingleGUIIcon(context, 18, leftPos+20 + startPos, topPos + 99, getStrayCatShieldLevel(), "ability.roundabout.kq_guard_bubble",
                     "instruction.roundabout.hold_block", StandIcons.KILLER_QUEEN_GUARD_BUBBLES, 0, level, bypas));
         }else {
