@@ -162,6 +162,10 @@ public class ModSounds {
     public static final ResourceLocation D4C_FUSE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSE);
     public static SoundEvent D4C_FUSE_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSE_ID);
 
+    public static final String D4C_FUSION_START = "d4c_fusion_start";
+    public static final ResourceLocation D4C_FUSION_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSION_START);
+    public static SoundEvent D4C_FUSION_START_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSION_START_ID);
+
     public static final String WORLD_MERGE = "world_merge";
     public static final ResourceLocation WORLD_MERGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WORLD_MERGE);
     public static SoundEvent WORLD_MERGE_EVENT = SoundEvent.createVariableRangeEvent(WORLD_MERGE_ID);

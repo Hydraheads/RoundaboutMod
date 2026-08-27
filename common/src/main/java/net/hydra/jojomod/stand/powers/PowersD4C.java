@@ -755,10 +755,10 @@ public class PowersD4C extends NewPunchingStand {
                     double rand = Math.random() * 1;
                     Entity copyEntity;
 
-                    if (self.level().canSeeSky(self.getOnPos()) || self.level().canSeeSky(self.getOnPos().north()) ||
-                            self.level().canSeeSky(self.getOnPos().west()) ||
-                            self.level().canSeeSky(self.getOnPos().east()) || self.level().canSeeSky(self.getOnPos().south())
-                     || self.level().canSeeSky(self.getOnPos())) {
+                    if (self.level().canSeeSky(self.getOnPos().above()) || self.level().canSeeSky(self.getOnPos().north().above()) ||
+                            self.level().canSeeSky(self.getOnPos().west().above()) ||
+                            self.level().canSeeSky(self.getOnPos().east().above()) || self.level().canSeeSky(self.getOnPos().south().above())) {
+
                         if (rand <= 0.1F) {
                             if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DESERT)) {
                                 copyEntity = EntityType.CAMEL.create(this.getSelf().level());
@@ -796,6 +796,13 @@ public class PowersD4C extends NewPunchingStand {
                                     PowerTypes.getForeignWorldMaxTime(worldId),
                                     worldId
                             );
+                            copyEntity.moveTo(
+                                    spawnPos.x,
+                                    spawnPos.y,
+                                    spawnPos.z,
+                                    self.getYRot(),
+                                    self.getXRot()
+                            );
                             self.level().addFreshEntity(copyEntity);
                         }
                     } else {
@@ -803,6 +810,14 @@ public class PowersD4C extends NewPunchingStand {
                             copyEntity = EntityType.AXOLOTL.create(this.getSelf().level());
 
                             if (copyEntity != null) {
+
+                                copyEntity.moveTo(
+                                        spawnPos.x,
+                                        spawnPos.y,
+                                        spawnPos.z,
+                                        self.getYRot(),
+                                        self.getXRot()
+                                );
                                 PowerTypes.setPlaneOfExisting(copyEntity, worldId);
                                 PowerTypes.setTicksUntilGone(
                                         copyEntity,

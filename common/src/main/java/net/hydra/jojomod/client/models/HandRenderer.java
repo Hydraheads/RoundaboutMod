@@ -4,6 +4,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.block.ChessPieceBlock;
+import net.hydra.jojomod.block.ChessPieceBlockEntity;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlock;
 import net.hydra.jojomod.block.handBlock.HandBlockEntity;
@@ -21,6 +26,8 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,19 +40,24 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     private final ModelPart hand;
     private final ModelPart hand_slim;
 
-    public HandRenderer(BlockEntityRendererProvider.Context $$0) {
-        this.hand = $$0.bakeLayer(ModEntityRendererClient.HAND_BLOCK_LAYER);
-        //this.hand = $$2.getChild("hand");
+    private static final ResourceLocation WIDE_BASE = new ResourceLocation("textures/entity/player/wide/steve.png");
+    private static final ResourceLocation SLIM_BASE = new ResourceLocation("textures/entity/player/slim/alex.png");
 
-        this.hand_slim = $$0.bakeLayer(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER);
-        //this.hand_slim = $$3.getChild("hand");
+    public HandRenderer(BlockEntityRendererProvider.Context $$0) {
+        ModelPart $$2 = $$0.bakeLayer(ModEntityRendererClient.HAND_BLOCK_LAYER);
+        this.hand = $$2.getChild("hand");
+
+        ModelPart $$3 = $$0.bakeLayer(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER);
+        this.hand_slim = $$3.getChild("hand");
     }
 
     public static LayerDefinition createHandLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition hand = partdefinition.addOrReplaceChild("hand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+        PartDefinition hand = partdefinition.addOrReplaceChild("hand", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 2.0F));
 
+        //PartDefinition LeftArm = hand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+        //        .texOffs(40,32).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
         PartDefinition LeftArm = hand.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(40,16).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(40,32).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.25F)), PartPose.offsetAndRotation(-1.0F, 10.0F, 1.0F, -1.5708F, 0.0F, 0.0F));
 
@@ -65,47 +77,48 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     }
 
 
-    public void render(T p_112534_, float p_112535_, PoseStack p_112536_, MultiBufferSource p_112537_, int p_112538_, int p_112539_) {
+    public void render(T $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {
+        Level $$6 = $$0.getLevel();
+        boolean $$7 = $$6 != null;
+        BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.HAND_BLOCK.defaultBlockState();
+        if ($$8.getBlock() instanceof AbstractHandBlock $$11 && $$0 instanceof HandBlockEntity cbe) {
 
-        BlockState blockstate = p_112534_.getBlockState();
+            AbstractHandBlock.Type HandBlock$type = ((AbstractHandBlock) $$8.getBlock()).getType();
 
-        Direction direction = null;
-        //int i = flag ? RotationSegment.convertToSegment(direction.getOpposite()) : blockstate.getValue(SkullBlock.ROTATION);
-        int i = blockstate.getValue(SkullBlock.ROTATION);
-        float f1 = RotationSegment.convertToDegrees(i);
-        AbstractHandBlock.Type HandBlock$type = ((AbstractHandBlock)blockstate.getBlock()).getType();
-        //SkullModelBase skullmodelbase = this.modelByType.get(skullblock$type);
+            float $$13 = RotationSegment.convertToDegrees($$8.getValue(HandBlock.ROTATION));
+            $$2.pushPose();
+            $$2.translate(0.5F, 0.5F, 0.5F);
+            $$2.mulPose(Axis.YP.rotationDegrees(-$$13));
+            $$2.mulPose(Axis.ZP.rotationDegrees(180));
+            $$2.translate(0F, -1F, 0F);
+            VertexConsumer vertexConsumer;
 
-        RenderType rendertype = getRenderType(HandBlock$type, ((HandBlockEntity)p_112534_).getOwnerProfile());
-        ModelPart modelType = hand;
-        if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
-            modelType = hand_slim;
+            vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, ((HandBlockEntity) $$0).getOwnerProfile()));
+
+            ModelPart part = hand;
+            if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
+                part = hand_slim;
+            }
+
+            this.render($$2, vertexConsumer, part, $$4, $$5);
+
+            $$2.popPose();
         }
-
-        renderHand(direction, f1, p_112536_, p_112537_, p_112538_, modelType, rendertype);
     }
 
-    public static void renderHand(@Nullable Direction dir, float p_173665_, PoseStack p_173667_, MultiBufferSource p_173668_, int p_173669_, ModelPart p_173670_, RenderType p_173671_) {
-        p_173667_.pushPose();
-        if (dir == null) {
-            p_173667_.translate(0.5F, 0.0F, 0.5F);
-        } else {
-            float f = 0.25F;
-            p_173667_.translate(0.5F - (float)dir.getStepX() * 0.25F, 0.25F, 0.5F - (float)dir.getStepZ() * 0.25F);
-        }
-
-        p_173667_.scale(-1.0F, -1.0F, 1.0F);
-        VertexConsumer vertexconsumer = p_173668_.getBuffer(p_173671_);
-        //p_173670_.setupAnim(p_173665_, 0.0F);
-        p_173670_.yRot = p_173665_ * ((float)Math.PI / 180F);
-        p_173670_.xRot = 0.0f * ((float)Math.PI / 180F);
-
-        p_173670_.render(p_173667_, vertexconsumer, p_173669_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        p_173667_.popPose();
+    private void render(PoseStack $$0, VertexConsumer $$1, ModelPart $$2,  int $$6, int $$7) {
+        $$2.render($$0, $$1, $$6, $$7);
     }
 
-    public static RenderType getRenderType(HandBlock.Type p_112524_, @Nullable GameProfile p_112525_) {
-        ResourceLocation resourcelocation = DefaultPlayerSkin.getDefaultSkin();
+
+
+
+    public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile p_112525_) {
+        ResourceLocation resourcelocation = WIDE_BASE;
+
+        if (type == AbstractHandBlock.Types.PLAYER_SLIM) {
+            resourcelocation = SLIM_BASE;
+        }
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
         if (p_112525_ != null) {
             Minecraft minecraft = Minecraft.getInstance();

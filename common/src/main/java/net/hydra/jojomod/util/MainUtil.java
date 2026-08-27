@@ -1429,6 +1429,8 @@ public class MainUtil {
         playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
         playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
         playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
+        playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
+        playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
     }
 
     public static void makeMobBleed(Entity target) {
