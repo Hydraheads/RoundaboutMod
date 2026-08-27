@@ -127,7 +127,7 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
                                    if (bs.blackSelect != null) {
                                        bs.blackSelect.forceDespawnSet = true;
                                    }
-                                   if (bs.getStandEntity(bs.self) != null) {
+                                   if (bs.getStandEntity(bs.self) != null && bs.moveMode == 1) {
                                        bs.getStandEntity(bs.self).forceDespawnSet = true;
                                    }
 

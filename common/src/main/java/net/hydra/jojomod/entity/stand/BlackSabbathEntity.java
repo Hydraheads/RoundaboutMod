@@ -9,9 +9,13 @@ import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.stand.powers.PowersCinderella;
+import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
@@ -26,20 +30,28 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -71,7 +83,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public final AnimationState chest_open = new AnimationState();
     public final AnimationState chest_close = new AnimationState();
     public final AnimationState floating = new AnimationState();
-
+    private int BlackSabbathHp = 40;
+    public void setBlackSabbathHp(int i){BlackSabbathHp = i;}
     public boolean shouldFloat = false;
     public void setShouldFloat(boolean bool){shouldFloat = bool;}
     public boolean shouldSelect = false;
@@ -160,6 +173,34 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         return true;
     }
 
+    public boolean isUnderSunlight(){
+        BlockPos pos = this.blockPosition();
+        long timeOfDay = this.level().getDayTime() % 24000L;
+        Vec3 yes = this.getEyePosition();
+        BlockPos atVec = BlockPos.containing(yes);
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
+        if(this.level().getBrightness(LightLayer.BLOCK, pos) < 11){
+            if(isDay){
+                if (this.level().isRaining() || this.level().isThundering()){
+                    return false;
+                } else if ( this.level().getBrightness(LightLayer.SKY, atVec) < 12 ){
+                    return false;
+                }else {
+                    return true;
+                }
+            } else if (!isDay){
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    private int damageImmunityTicks = 10;
+    private void setDamageImmunityTicks(int immun){damageImmunityTicks = immun;}
+
     @Override
     public void tick(){
         validateUUID();
@@ -186,10 +227,45 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     }
                 }
             }
+        } if(isHunting) {
+            if(isUnderSunlight()){
+                    damageImmunityTicks --;
+                    if(damageImmunityTicks < 1){
+                        damageSabbath(1);
+                        setDamageImmunityTicks(10);
+                    }
+            }
         }
+       // System.out.println(damageImmunityTicks);
+       // System.out.println(BlackSabbathHp);
+     //   System.out.println(isUnderSunlight());
         super.tick();
         travelAhead(Entity::setPos);
     }
+    private void damageSabbath(int i){
+       // hurt(DamageType., 1);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
+        if (source.getEntity() != null && source.getEntity() != this.getUser()) {
+            if (this.getUser() != null ) {
+                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath PB) {
+                   // this.getUser().hurt(ModDamageTypes.of(this.level(),ModDamageTypes.STAND,source.getEntity()),(float) Mth.clamp(amount*0.5,0,0.5));
+                   // this.hurt(source, amount);
+                    return true;
+                }
+            }
+
+
+        }
+        return false;
+    }
+
     public void travelAhead(Entity.MoveFunction positionUpdater) {
         if (this.getUser() != null) {
             if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2) && !isHunting) {
@@ -201,13 +277,16 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
 
     @Override
+    public void knockback(double $$0, double $$1, double $$2) {}
+    @Override
+    public boolean canBeHitByProjectile() {return true;}
+    @Override
     public boolean isAttackable() {return true;}
     @Override
     public boolean isPickable() {return true;}
     @Override
     public boolean skipAttackInteraction(Entity $$0) {return false;}
     @Override
-    public void knockback(double $$0, double $$1, double $$2) {}
     public boolean isInvulnerable() {
         return false;
     }
