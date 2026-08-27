@@ -49,10 +49,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
@@ -186,37 +183,38 @@ public class PowersBlackSabbath extends NewDashPreset {
 
     @Override
     public void onStandSummon(boolean desummon) {
-        super.onStandSummon(desummon);
-
-        if (!isClient()) {
-            if (desummon) {
-                if (active) {
-                    active = false;
-                    setTickDown(10);
-                    blackSelect = null;
+        if(this.getSelf() instanceof Player) {
+            if (!isClient()) {
+                if (desummon) {
+                    if (active) {
+                        active = false;
+                        setTickDown(10);
+                        blackSelect = null;
+                    }
+                    if (selecting) {
+                        selecting = false;
+                        blackSelect = null;
+                    }
+                    if (moveMode == 3) {
+                        setNull();
+                    }
                 }
-                if (selecting) {
-                    selecting = false;
-                    blackSelect = null;
+                if (!desummon) {
+                    if (blackSabbathTargets.isEmpty()) {
+                        setNull();
+                        blackSelect = null;
+                    } else {
+                        blackSelectClient();
+                    }
                 }
-                if(moveMode == 3){
-                    setNull();
+            } else {
+                if (desummon && moveMode == 2) {
+                    this.setCooldown(PowerIndex.SKILL_1, 40);
+                    this.setCooldown(PowerIndex.SKILL_2, 40);
                 }
-            }
-            if(!desummon){
-                if(blackSabbathTargets.isEmpty()) {
-                    setNull();
-                    blackSelect = null;
-                } else {
-                    blackSelectClient();
-                }
-            }
-        } else {
-            if(desummon && moveMode == 2){
-                this.setCooldown(PowerIndex.SKILL_1, 40);
-                this.setCooldown(PowerIndex.SKILL_2, 40);
             }
         }
+        super.onStandSummon(desummon);
     }
 
     @Override
@@ -517,7 +515,23 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
     @Override
     public void tickMobAI(LivingEntity attackTarget){
-
+        if(attackTarget != null){
+            System.out.println(moveMode);
+            if(moveMode != 3){
+                moveMode = 3;
+            }
+            if(!blackSabbathTargets.contains(attackTarget)) {
+                if (blackSabbathTargets.isEmpty()) {
+                   // this.blackSabbathTargets.add(attackTarget);
+                    //System.out.println(attackTarget);
+                    this.blackSabbathTargets.add(attackTarget);
+                    this.setTickBeforeHunt(20);
+                    moveMode = 3;
+                } else {
+                    this.blackSabbathTargets.add(attackTarget);
+                }
+            }
+        }
     }
     @Override
     public boolean tryPower(int move, boolean forced) {
@@ -650,6 +664,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
             }
         }
+        if(moveMode == 3){
+            if(this.getStandEntity(self) instanceof BlackSabbathEntity BE && !BE.isHunting){
+                BE.setIsHunting(true);
+            }
+        }
         if(tickDown2 >= -9){
             tickDown2--;
             if(tickDown2 == 35){
@@ -661,8 +680,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 setNull();
             }
         }
-
-      //  System.out.println(blackSabbathTargets.isEmpty());
 
         if(stupidTicksSon > 0){
             stupidTicksSon--;
@@ -754,7 +771,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             test = "Level is Serverside";
         }
 
-        System.out.println(tickDown2 + ". " + test);
+        //System.out.println(tickDown2 + ". " + test);
        // System.out.println(blackSabbathTargets + ". " + test);
         //System.out.println(moveMode + ". " + test);
         if(EntityTargetOne != null) {

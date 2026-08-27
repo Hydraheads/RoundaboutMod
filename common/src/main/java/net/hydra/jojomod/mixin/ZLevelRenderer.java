@@ -33,6 +33,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.material.FogType;
 import net.zetalasis.client.shader.RPostShaderRegistry;
@@ -119,12 +120,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             at = @At(value = "HEAD"),
             cancellable = true)
     private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
-        if (entity instanceof CloneEntity ce){
-            if (ce.getPlayer() != null && !ce.turned &&((IEntityAndData)ce.getPlayer()).rdbt$getSharedFlag(5)){
-                ci.cancel();
-                return;
-            }
-        }
+
 
 
         if (entity != null){
