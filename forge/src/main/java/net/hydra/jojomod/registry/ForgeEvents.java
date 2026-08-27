@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -84,8 +85,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.BEACH_SABBATH.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());

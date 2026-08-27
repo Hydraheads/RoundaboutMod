@@ -52,8 +52,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.LightLayer;
@@ -529,6 +534,20 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     moveMode = 3;
                 } else {
                     this.blackSabbathTargets.add(attackTarget);
+                }
+            }
+        }
+        if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
+            List<Villager> lvent = this.self.level().getEntitiesOfClass(Villager.class, this.getSelf().getBoundingBox().inflate(40), (livingEntity) -> {
+                return true;
+            });
+            if (lvent != null && !lvent.isEmpty()) {
+                for (LivingEntity value : lvent) {
+                    if (value.hasLineOfSight(this.getSelf())) {
+                        if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                            this.selectTargetSecond(value);
+                        }
+                    }
                 }
             }
         }
@@ -1055,14 +1074,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
 
     @Override
     public float inputSpeedModifiers(float basis){
-        if (isLarpingOjiroSasame() || moveMode == 1) {
+        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
             basis*=0.0f;
         }
         return super.inputSpeedModifiers(basis);
     }
     @Override
     public boolean cancelJump(){
-        if (isLarpingOjiroSasame() || moveMode == 1) {
+        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
             return true;
         }
         return super.cancelJump();
@@ -1070,7 +1089,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
 
     @Override
     public boolean cancelSprintParticles(){
-        if (isLarpingOjiroSasame() || moveMode == 1) {
+        if (isLarpingOjiroSasame() || moveMode == 1 || active) {
             return true;
         }
         return super.cancelSprintParticles();
@@ -1101,6 +1120,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return Component.translatable("skins.roundabout.black_sabbath.night");
         } else if (skinId == BlackSabbathEntity.DEPARTURE) {
             return Component.translatable("skins.roundabout.black_sabbath.departure");
+        } else if (skinId == BlackSabbathEntity.DAPPER){
+            return Component.translatable("skins.roundabout.black_sabbath.dapper");
+        } else if (skinId == BlackSabbathEntity.COPPER){
+            return Component.translatable("skins.roundabout.black_sabbath.copper");
         } else if (skinId == BlackSabbathEntity.PHANTOM) {
             return Component.translatable("skins.roundabout.black_sabbath.phantom");
         } else if (skinId == BlackSabbathEntity.SWEET) {
@@ -1164,12 +1187,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             VERDANT_SABBATH_SKIN = 5,
             NIGHT_SKIN = 6,
             DEPARTURE_SKIN = 7,
-            PHANTOM_SKIN = 8,
-            SWEET_SKIN = 9,
-            MAGMA = 10,
-            OCULUS = 11,
-            SACTHOTH_SKIN = 12,
-            BEACH = 13;
+            DAPPER = 8,
+            COPPER = 9,
+            PHANTOM_SKIN = 10,
+            SWEET_SKIN = 11,
+            MAGMA = 12,
+            OCULUS = 13,
+            SACTHOTH_SKIN = 14,
+            BEACH = 15;
 
     @Override
     public List<Byte> getSkinList() {
@@ -1188,6 +1213,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             list.add(VERDANT_SABBATH_SKIN);
             list.add(NIGHT_SKIN);
             list.add(DEPARTURE_SKIN);
+            list.add(DAPPER);
+            list.add(COPPER);
             list.add(PHANTOM_SKIN);
             list.add(SWEET_SKIN);
             list.add(MAGMA);

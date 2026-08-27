@@ -1395,8 +1395,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLAZE_TRANSFER, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(BEACH_SABBATH, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLACK_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BEACH_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
