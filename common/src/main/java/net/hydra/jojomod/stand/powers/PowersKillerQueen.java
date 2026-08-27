@@ -502,10 +502,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
-    public void retractHands(){
-        //hasArmsOut = false;
-        //flipArmRendering();
-    }
+    public void retractHands(){ refreshArms(); }
 
     @Override
     public boolean rendersPlayer(){
@@ -1544,7 +1541,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-
     	if (move == PowerIndex.POWER_1) {
             return this.blockPlantBomb();
         } else if (move == ITEM_PLANT) {
@@ -1595,9 +1591,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public boolean tryPower(int move, boolean forced) {
-        if (move == BITES_THE_DUST_DEFUSE) {
-            btdTicksMax = 0;
-        }
+        if (move == BITES_THE_DUST_DEFUSE) { btdTicksMax = 0; }
+
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.POWER_2) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100,true);
         }
