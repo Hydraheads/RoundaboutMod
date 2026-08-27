@@ -1129,6 +1129,13 @@ public class FabricEntities {
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
                             sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
             );
+    public static final EntityType<PurpleSmokeEntity> PURPLE_SMOKE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "purple_smoke"),
+                    EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).
+                            sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":purple_smoke")
+            );
     public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1211,6 +1218,7 @@ public class FabricEntities {
                 ModEntities.LEFT_SEPERATED_ARM = LEFT_SEPERATED_ARM;
                 ModEntities.LEFT_SEPERATED_ARM_SLIM = LEFT_SEPERATED_ARM_SLIM;
                 ModEntities.MOLD_SPORES = MOLD_SPORE;
+                ModEntities.PURPLE_SMOKE = PURPLE_SMOKE;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
@@ -1405,6 +1413,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageEntity.createStandAttributes());
