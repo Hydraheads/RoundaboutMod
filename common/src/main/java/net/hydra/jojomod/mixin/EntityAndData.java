@@ -1077,7 +1077,7 @@ public abstract class EntityAndData implements IEntityAndData {
             rdbt$nearAlt = alt;
 
             MainUtil.playSoundIfPossible(self,self.level(),null, self.blockPosition(),
-                    ModSounds.DING_EVENT, SoundSource.PLAYERS, 1.0F, 0.8F);
+                    ModSounds.D4C_FUSION_START_EVENT, SoundSource.PLAYERS, 3.0F, 1F+((float)(Math.random()*0.05F)));
 
             // Immediately run the effect rather than
             // waiting until the next tick.
