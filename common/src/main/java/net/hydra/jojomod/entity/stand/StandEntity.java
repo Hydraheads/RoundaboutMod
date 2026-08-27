@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -298,6 +299,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     public boolean forceVisible = false;
 
+    ///  if the stand should be hurt without transfering damage to the user (can use this so someone can kill your stand but not yourself)
+        public boolean canStandBeHurt() {return false;}
 
     public final void setAnimation(byte animation) {
         this.entityData.set(ANIMATION, animation);
@@ -589,9 +592,19 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getUser() != null && MainUtil.isStandDamage(source)){
-            return this.getUser().hurt(source,amount);
+        if(canStandBeHurt()) {
+           return super.hurt(source, amount);
+        } else {
+            if (this.getUser() != null && MainUtil.isStandDamage(source)) {
+                return this.getUser().hurt(source, amount);
+            }
+
+            if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+                discard();
+                return false;
+            }
         }
+
         return false;
     }
 
@@ -657,6 +670,9 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
     public void doPush(Entity $$0) {
     }
 
+    public void forceTick(){
+
+    }
     /** This happens every tick. Basic stand movement/fade code, also see vex code for turning on noclip.*/
     @Override
     public void tick() {

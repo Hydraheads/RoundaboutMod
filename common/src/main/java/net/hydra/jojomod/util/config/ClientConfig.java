@@ -128,6 +128,8 @@ public class ClientConfig implements Cloneable {
         public Boolean alternateEpitaph;
         @BooleanOption(group = "inherit", value = false)
         public Boolean timeEraseRedProjections;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean timeEraseBlocks;
         @BooleanOption(group = "inherit", value = false)
         public Boolean canSeeFatedSelf;
         @FloatOption(group = "inherit", value = 0.6F, min = 0, max = 1)

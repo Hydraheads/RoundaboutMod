@@ -78,7 +78,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
-    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_normal"), "main");
+    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_block"), "main");
     public static final ModelLayerLocation HAND_SLIM_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_slim"), "main");
     
     public static final ModelLayerLocation BLADED_BOWLER_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"), "main");
@@ -86,6 +86,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation ROUNDABOUT_BULLET_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "roundabout_bullet_entity"), "main");
     public static final ModelLayerLocation KNIFE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "knife"), "main");
     public static final ModelLayerLocation RATT_DART_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ratt_dart"), "main");
+    public static final ModelLayerLocation HALLUCINATORY_ACID_PROJECTILE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hallucinatory_acid_projectile"), "main");
     public static final ModelLayerLocation TUSK1_NAIL_MODEL = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk1_nail"), "main");
     public static final ModelLayerLocation CROSSFIRE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane"), "main");
     public static final ModelLayerLocation CROSSFIRE_FIRESTORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_firestorm"), "main");
@@ -121,4 +122,5 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation BIRTH_OF_VENUS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "venus"), "main");
 
     public static final ModelLayerLocation SHEER_HEART_ATTACK_LAYER =  new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "sheer_heart_attack"), "main");
+    public static final ModelLayerLocation SILVER_CHARIOT_AFTERIMAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chart_afterimage"), "main");
 }

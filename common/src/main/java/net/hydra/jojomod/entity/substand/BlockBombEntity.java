@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -45,8 +46,8 @@ import org.joml.Vector3f;
 
 public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
-	protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(BlockBombEntity .class,
-			EntityDataSerializers.INT);
+	protected static final EntityDataAccessor<Boolean> CONTACT = SynchedEntityData.defineId(BlockBombEntity .class,
+			EntityDataSerializers.BOOLEAN);
 
 
 	private BlockPos bombPos;
@@ -56,6 +57,21 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	private AABB blockBB = null;
 	public int renderFadeIn = 1;
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(CONTACT, false);
+	}
+
+	public void setOnContact(boolean value) {
+		if (level().isClientSide()) {return; }
+		entityData.set(CONTACT, value);
+	}
+
+	public boolean getOnContact() {
+		return entityData.get(CONTACT);
+	}
 
 	public BlockBombEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
 		super($$0, $$1);
@@ -202,7 +218,10 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	@Override
     public boolean isPickable() {
-		return (getUser() != null && ((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled());
+		return false;
+
+		/// sadly no explode by interact
+		//return (getUser() != null && getOnContact());
 	}
 
     @Override
@@ -221,7 +240,12 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
     public boolean canCollideWith(Entity $$0) { return false;}
 
     @Override
-    public boolean hurt(DamageSource source, float amount) { return false;}
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
+        return false;}
 	
     @Override
     public boolean canBeHitByProjectile() { return false;}

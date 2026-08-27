@@ -1,4 +1,4 @@
-package net.hydra.jojomod.entity.projectile;
+package net.hydra.jojomod.entity.objects;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientUtil;
@@ -21,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 
 
 public class IceTwisterEntity extends WhiteAlbumFreezingEntity {

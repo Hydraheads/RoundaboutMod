@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.*;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.Util;
@@ -247,6 +248,7 @@ public class FabricBlocks {
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
     public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
     public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
+    public static final Block HAND = registerHandBlock("hand_block", HAND_PROPERTIES);
     public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
     public static final HallucinatoryAcidBlock HALLUCINATORY_ACID = (HallucinatoryAcidBlock) registerBlockItemless(
             "hallucinatory_acid", new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
@@ -267,6 +269,8 @@ public class FabricBlocks {
                     HALLUCINATORY_ACID, HALLUCINATORY_ACID_WALL));
     public static final BlockEntityType<StereoBlockEntity> STEREO_BLOCK_ENTITY =
            registerBE("stereo",BlockEntityType.Builder.of(StereoBlockEntity::new, STEREO));
+    public static final BlockEntityType<HandBlockEntity> HAND_BLOCK_ENTITY =
+           registerBE("hand_block",BlockEntityType.Builder.of(HandBlockEntity::new, HAND));
     public static final BlockEntityType<StandFireBlockEntity> STAND_FIRE_BLOCK_ENTITY =
             registerBE("stand_fire",BlockEntityType.Builder.of(StandFireBlockEntity::new, STAND_FIRE));
     public static final BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY =
@@ -354,6 +358,11 @@ public class FabricBlocks {
     private static Block registerFancyLighter(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+
+    private static Block registerHandBlock(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+
     /*private static Block registerChessBoardBlock(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }*/
@@ -457,6 +466,7 @@ public class FabricBlocks {
         ModBlocks.CEILING_LIGHT = CEILING_LIGHT;
         ModBlocks.MIRROR = MIRROR;
         ModBlocks.STEREO = STEREO;
+        ModBlocks.HAND_BLOCK = HAND;
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
@@ -478,6 +488,7 @@ public class FabricBlocks {
         ModBlocks.DREAD_FIRE = DREAD_FIRE;
         ModBlocks.CREAM_FIRE = CREAM_FIRE;
         ModBlocks.STEREO_BLOCK_ENTITY = STEREO_BLOCK_ENTITY;
+        ModBlocks.HAND_BLOCK_ENTITY = HAND_BLOCK_ENTITY;
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;

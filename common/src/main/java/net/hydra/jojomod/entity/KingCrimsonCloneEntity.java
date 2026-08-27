@@ -24,7 +24,9 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +59,8 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public void addBehaviourGoals() {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false,
+                $$0 -> $$0 instanceof Enemy));
     }
     public final void setIsJumping(boolean jumping) {
         this.entityData.set(JUMPING, jumping);

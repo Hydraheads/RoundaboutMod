@@ -381,6 +381,8 @@ public interface StandUser {
     /** Purple Haze :) **/
     void SetInPurpleHazeTicks(int e);
     int getPurpleHazeTicks();
+    void SetInDistortionHazeTicks(int e);
+    int getDistortionHazeTicks();
 
 
     boolean rdbt$isForceCrawl();

@@ -20,13 +20,11 @@ import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.stand.powers.PowersAnubis;
-import net.hydra.jojomod.stand.powers.PowersPearlJam;
-import net.hydra.jojomod.stand.powers.PowersTusk;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -118,6 +116,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         for (PowersPearlJam instance : PowersPearlJam.getInstances()){
             instance.renderEffectIcons(entity, matrixStack, buffer);
         }
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+            PKQ.bitesTheDustRender(entity, matrixStack, buffer);
+        }
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
@@ -177,8 +180,6 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             return $$3 ? RenderType.outline($$4) : null;
         }
     }
-
-    @Unique
 
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
     private void roundabout$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {

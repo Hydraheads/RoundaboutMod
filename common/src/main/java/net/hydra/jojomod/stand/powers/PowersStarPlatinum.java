@@ -850,6 +850,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                activePower = PowerIndex.POWER_2;
                                 if (AA.pickup.equals(AbstractArrow.Pickup.ALLOWED)) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -872,6 +873,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                activePower = PowerIndex.POWER_2;
                                 if (TO.places) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -886,6 +888,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                                 S2CPacketUtil.sendSimpleByteToClientPacket(PE,
                                         PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK);
                                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                activePower = PowerIndex.POWER_2;
                                 if (TP.getOwner() == null || TP.getOwner() instanceof Player) {
                                     SE.canAcquireHeldItem = true;
                                 } else {
@@ -1109,8 +1112,12 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
                 for (Entity value2 : hitEntities) {
                     if (value2.is(SE.getUser())) {
                         hitEntities2.remove(value);
+                        continue;
                     }
                 }
+            }
+            if (PowerTypes.isInADifferentExistence(self,value)){
+                hitEntities2.remove(value);
             }
         }
         return hitEntities2;

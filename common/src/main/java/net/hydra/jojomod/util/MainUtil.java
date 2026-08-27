@@ -13,7 +13,6 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
@@ -25,14 +24,12 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
-import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -43,8 +40,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.fates.powers.ZombieFate;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -55,6 +50,7 @@ import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
@@ -75,7 +71,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -104,10 +99,7 @@ import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.food.Foods;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -121,7 +113,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.spongepowered.asm.mixin.Unique;
 
 
 import javax.annotation.Nullable;
@@ -235,6 +226,7 @@ public class MainUtil {
     public static ArrayList<String> naturalStandUserMobBlacklist = Lists.newArrayList();
     public static ArrayList<String> discEntityBlacklist = Lists.newArrayList();
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
+    public static ArrayList<String> blackOrWhiteListParallelMobs = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
@@ -367,6 +359,15 @@ public class MainUtil {
         }
         return false;
     }
+    public static boolean isBlackOrWhiteListed(Entity ent){
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (blackOrWhiteListParallelMobs != null && !blackOrWhiteListParallelMobs.isEmpty() && rl != null && blackOrWhiteListParallelMobs.contains(rl.toString())){
+            return true;
+        }
+        return false;
+    }
 
     public static boolean isFleshBudBlacklisted(Entity ent){
         if (ent == null)
@@ -386,6 +387,38 @@ public class MainUtil {
             return false;
         if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
 
+            return true;
+        }
+        return false;
+    }
+    public static boolean canCopyMob(Entity entity){
+        if (entity != null){
+            if (entity instanceof FallenMob fm){
+                return false;
+            }
+            boolean whiteList = ClientNetworking.getAppropriateConfig().d4cSettings.whiteListModdedMobs;
+            String nameSpace = entity.getType().builtInRegistryHolder().key().location().getNamespace();
+            if (whiteList){
+                if (!(nameSpace.equals("minecraft"))){
+                    if (!isBlackOrWhiteListed(entity)){
+                        return false;
+                    }
+                }
+            } else {
+                if (isBlackOrWhiteListed(entity)){
+                    return false;
+                }
+            }
+
+            if (entity instanceof LivingEntity lv && lv.getMaxHealth() >= 60 &&
+                    ClientNetworking.getAppropriateConfig().d4cSettings.blacklistHighHealthMobs){
+                if (!(nameSpace.equals("minecraft"))) {
+                    return false;
+                }
+            }
+            if (isBossMob(entity)){
+                return false;
+            }
             return true;
         }
         return false;
@@ -736,7 +769,7 @@ public class MainUtil {
     }
     public static boolean isHumanoid(LivingEntity LE){
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof Player || LE instanceof Piglin
+        || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
@@ -965,6 +998,117 @@ public class MainUtil {
         }
         return false;
     }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            int count,
+            double xDist,
+            double yDist,
+            double zDist,
+            double speed
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.sendParticles(
+                        playerInList,
+                        particle,
+                        false,
+                        x,
+                        y,
+                        z,
+                        count,
+                        xDist,
+                        yDist,
+                        zDist,
+                        speed
+                );
+            }
+        }
+
+    }
+    public static <T extends ParticleOptions> void sendParticlesIfPossible(
+            Entity self,
+            Level level,
+            T particle,
+            double x,
+            double y,
+            double z,
+            double xDist,
+            double yDist,
+            double zDist
+    ) {
+        if (level instanceof ServerLevel sl) {
+            if (PowerTypes.isErasingTime(self)) {
+                return;
+            }
+
+            for (ServerPlayer playerInList :
+                    level.getServer().getPlayerList().getPlayers()) {
+
+                if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
+                    continue;
+                }
+
+                double range = 120.0D;
+
+                if (playerInList.distanceToSqr(x, y, z) > range * range) {
+                    continue;
+                }
+
+                sl.addParticle(
+                        particle,
+                        x,
+                        y,
+                        z,
+                        xDist,
+                        yDist,
+                        zDist
+                );
+            }
+        } else if (level instanceof ClientLevel cl) {
+            if (PowerTypes.isInADifferentExistenceNoTE(self, ClientUtil.getPlayer())) {
+                return;
+            }
+
+            double range = 120.0D;
+
+            if (ClientUtil.getPlayer().distanceToSqr(x, y, z) > range * range) {
+                return;
+            }
+
+            cl.addParticle(
+                    particle,
+                    x,
+                    y,
+                    z,
+                    xDist,
+                    yDist,
+                    zDist
+            );
+        }
+
+    }
+
 
     public static boolean confirmIsOre(BlockState state){
         return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));
@@ -1256,8 +1400,42 @@ public class MainUtil {
         }
     }
 
+    public static final Map<String, UUID> playerNames = new HashMap<>();
+    static {
+        playerNames.put("Hydraheads", UUID.fromString("bdcdc942-0d38-4630-8249-37a29a0cc60b"));
+        playerNames.put("tuckfxspeed", UUID.fromString("c1f62b1b-0586-4a97-8431-d80e15d9de6f"));
+        playerNames.put("Prisma8", UUID.fromString("dd138670-b51e-47fa-ac93-ca76ab5cc16b"));
+        playerNames.put("urbancase", UUID.fromString("0fa1ab1b-1575-439e-b211-759318c1fc17"));
+        playerNames.put("JohnRoosterRed", UUID.fromString("d2423001-b455-414c-bdf4-0ecefca51f0c"));
+        playerNames.put("Sunkisdreams", UUID.fromString("5daa639e-e4cb-4b4e-bfb8-32b04a8508a6"));
+        playerNames.put("BloodyDoomMan", UUID.fromString("7bb76cc1-bbd2-4313-b923-09983a2ed35d"));
+        playerNames.put("awesomemanvin", UUID.fromString("09a6a39f-aa5d-483e-856e-d5e475b2ccc0"));
+        playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
+        playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
+        playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
+        playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
+        playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));
+        playerNames.put("Chxzym", UUID.fromString("7f00c7d7-1fe6-4082-aba2-9bce2e1cdb14"));
+        playerNames.put("Feu_Ghost", UUID.fromString("9bec323c-8551-4976-b615-66eb78e37ec2"));
+        playerNames.put("LloydGamer10", UUID.fromString("651be236-fb71-4591-99a3-bbc52f7a0f68"));
+        playerNames.put("14Kacper773549", UUID.fromString("252629a7-6000-4147-b511-600899b8d711"));
+        playerNames.put("MiniAstr0naut", UUID.fromString("7cf530de-2457-451a-9a89-5c1e78519bdb"));
+        playerNames.put("KnightDemon", UUID.fromString("7b074877-010a-4941-b8c4-d18dd6705fd1"));
+        playerNames.put("OlivePrincess69", UUID.fromString("7720722c-dee3-4c04-b3ae-22203176e0bc"));
+        playerNames.put("ImaPinHead", UUID.fromString("723a07fb-0ca0-47ce-94c8-7113dd08044f"));
+        playerNames.put("FunkyKing01", UUID.fromString("9d47733b-c110-4207-acce-ebe57ab573a0"));
+        playerNames.put("D4C_Valentine", UUID.fromString("40eec84f-7f8b-4024-ab73-43adc0891419"));
+        playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
+        playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
+        playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
+        playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
+        playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
+    }
+
     public static void makeMobBleed(Entity target) {
-        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE)) &&
+        getMobBleed(target)) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -1933,11 +2111,11 @@ public class MainUtil {
                         if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
                             MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
                             ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                             ((LivingEntity)value).addEffect(instance);
                         } else {
-                            np*=0.97f;
+                            np*=1.1f;
                             value.hurt($$5,np);
                         }
                     }
@@ -2025,6 +2203,9 @@ public class MainUtil {
 
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
+        }
+        if (PowerTypes.isInADifferentExistenceNoTE(User,targetEntity)){
+            targetEntity = null;
         }
         return targetEntity;
     }
@@ -2142,7 +2323,8 @@ public class MainUtil {
 
     // damage types which shouldn't be normally blocked at all
     public static boolean isSpecialDamage(DamageSource source) {
-        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL);
+        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)
+                || source.is(ModDamageTypes.D4C_COLLISION);
     }
 
     public static boolean isStandDamage(DamageSource sauce){
@@ -2158,6 +2340,7 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_POSSESS)
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
+                || sauce.is(ModDamageTypes.KQ_EXPLOSION)
                 || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
@@ -2474,47 +2657,20 @@ public class MainUtil {
         if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
             return true;
         }
-        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
 
-        BlockHitResult result = self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-
-        Vec3 from2 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
-        Vec3 to2 = self.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result2 = self.level().clip(new ClipContext(
-                from2,
-                to2,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                self
-        ));
-        boolean isBlocked2 = result2.getType() != HitResult.Type.MISS &&
-                result2.getLocation().distanceTo(from2) < to2.distanceTo(from2);
-
-
-        Vec3 from3 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
-        Vec3 to3 = self.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result3 = self.level().clip(new ClipContext(
-                from3,
-                to2,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                self
-        ));
-        boolean isBlocked3 = result3.getType() != HitResult.Type.MISS &&
-                result3.getLocation().distanceTo(from3) < to3.distanceTo(from3);
-
-        return !isBlocked || !isBlocked2 || !isBlocked3;
+        if (self == null){
+            return false;
+        }
+        if (entity == null){
+            return false;
+        }
+        if (self instanceof LivingEntity LE){
+            if (LE.hasLineOfSight(entity)){
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     public static boolean canActuallyHit(Entity self, Entity entity){
@@ -2625,8 +2781,171 @@ public class MainUtil {
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
 
+
+
+
+
+    public static boolean playSoundIfPossible(Entity self, Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self) && entity != null) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = $$2.getLocation();
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(entity) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5,
+                                    entity
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound(null,entity,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+    public static boolean playSoundToAll(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if ($$2 != null && level instanceof ServerLevel sl) {
+
+            ResourceLocation soundId = $$2.getLocation();
+            if (soundId != null) {
+                String str = $$3.name();
+                for (ServerPlayer playerInList :
+                        sl.getServer().getPlayerList().getPlayers()) {
+
+                    double range = $$2.getRange($$5);
+                    double rangeSqr = range * range;
+                    if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                        continue;
+                    }
+
+                    S2CPacketUtil.sendSafeSound(
+                            playerInList,
+                            $$1.getX(),
+                            $$1.getY(),
+                            $$1.getZ(),
+                            soundId.toString(),
+                            str,
+                            $$4,
+                            $$5
+                    );
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+        if (!PowerTypes.isErasingTime(self)) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$2 != null && self.level() instanceof ServerLevel sl) {
+
+                    ResourceLocation soundId = $$2.getLocation();
+                    if (soundId != null) {
+                        String str = $$3.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$2.getRange($$5);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr($$1.getCenter()) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1.getX(),
+                                    $$1.getY(),
+                                    $$1.getZ(),
+                                    soundId.toString(),
+                                    str,
+                                    $$4,
+                                    $$5
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+            }
+            return true;
+        }
+        return false;
+    }
+    public static void playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
+        if (!PowerTypes.isErasingTime(self)) {
+            if (PowerTypes.isExistentiallyElsewhere(self)){
+                if ($$4 != null && self.level() instanceof ServerLevel sl) {
+                    ResourceLocation soundId = $$4.getLocation();
+                    if (soundId != null) {
+                        String str = $$5.name();
+                        for (ServerPlayer playerInList :
+                                sl.getServer().getPlayerList().getPlayers()) {
+
+                            double range = $$4.getRange($$7);
+                            double rangeSqr = range * range;
+                            if (playerInList.distanceToSqr(new Vec3($$1, $$2, $$3)) > rangeSqr) {
+                                continue;
+                            }
+
+                            if (PowerTypes.isInADifferentExistenceNoTE(
+                                    self,
+                                    playerInList)) {
+                                continue;
+                            }
+
+                            S2CPacketUtil.sendSafeSound(
+                                    playerInList,
+                                    $$1,
+                                    $$2,
+                                    $$3,
+                                    soundId.toString(),
+                                    str,
+                                    $$6,
+                                    $$7
+                            );
+                        }
+                    }
+                }
+            } else {
+                level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
+            }
+        }
+    }
+
     public static boolean blockConfusionTicks(Entity LE){
         if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+            return true;
+        }
+        if (LE instanceof Spider sp && sp.getLightLevelDependentMagicValue() >= 0.5){
             return true;
         }
         return false;
@@ -3593,6 +3912,44 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
+    public static Entity pick(Entity self, double distance){
+        double $$2 = distance;
+        float choose = 1;
+        if (self.level().isClientSide()){
+            choose = ClientUtil.getFrameTime() % 1;
+        }
+        HitResult pick = self.pick($$2, choose, false);
+        Vec3 $$3 = self.getEyePosition(choose);
+        boolean $$4 = false;
+        int $$5 = 3;
+        double $$6 = $$2;
+        if ($$2 > 3.0) {
+            $$4 = true;
+        }
+
+        $$6 *= $$6;
+        if (pick != null) {
+            $$6 = pick.getLocation().distanceToSqr($$3);
+        }
+
+        Vec3 $$7 = self.getViewVector(1.0F);
+        Vec3 $$8 = $$3.add($$7.x * $$2, $$7.y * $$2, $$7.z * $$2);
+        AABB $$10 = self.getBoundingBox().expandTowards($$7.scale($$2)).inflate(1.0, 1.0, 1.0);
+        EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10, $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
+                && !$$0x.hasPassenger(self), $$6);
+        if ($$11 != null) {
+            Entity $$12 = $$11.getEntity();
+            Vec3 $$13 = $$11.getLocation();
+            double $$14 = $$3.distanceToSqr($$13);
+            if ($$4 && $$14 > 9.0) {
+                pick = BlockHitResult.miss($$13, Direction.getNearest($$7.x, $$7.y, $$7.z), BlockPos.containing($$13));
+            } else if ($$14 < $$6 || pick == null) {
+                return $$12;
+            }
+        }
+        return  null;
+    }
+
 
     public static boolean isHoldingRoadRoller(Entity ent){
         if (ent instanceof LivingEntity LE){
@@ -3614,6 +3971,12 @@ public class MainUtil {
     public static Boolean isInPurpleHaze(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             return ((StandUser) LE).getPurpleHazeTicks() > 0;
+        }
+        return false;
+    }
+    public static Boolean isInDistortionHaze(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getDistortionHazeTicks() > 0;
         }
         return false;
     }
@@ -3804,7 +4167,9 @@ public class MainUtil {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {
-                        return true;
+                        if (!PowerTypes.isInD4CWorld(entity)) {
+                            return true;
+                        }
                     }
                 }
             }

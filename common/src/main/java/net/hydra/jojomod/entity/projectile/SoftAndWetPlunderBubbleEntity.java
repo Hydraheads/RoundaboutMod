@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.FireProjectile;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.StoredSoundInstance;
 import net.hydra.jojomod.event.index.PacketDataIndex;

@@ -723,6 +723,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         poseStack.mulPose(Axis.XP.rotation(entity.getXRot() * Mth.DEG_TO_RAD));
         ModStrayModels.kingCrimsonArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, 1);
+        ModStrayModels.killerQueenArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, 1);
         ModStrayModels.theWorldArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, 1);
         ModStrayModels.starPlatinumArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,

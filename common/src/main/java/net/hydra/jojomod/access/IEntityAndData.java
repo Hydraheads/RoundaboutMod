@@ -8,6 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
+import java.util.UUID;
 
 public interface IEntityAndData {
 
@@ -22,7 +23,19 @@ public interface IEntityAndData {
     boolean rdbt$returnPickup();
     void roundabout$setNoGravTicks(int ticks);
     int roundabout$getNoGravTicks();
-
+    int rdbt$getAltCheckCooldown();
+    void rdbt$setAltCheckCooldown(int ticks);
+    UUID rdbt$getNativeCopy();
+    void rdbt$setNativeCopy(UUID uuidd);
+    int rdbt$getForeignWorldTicks();
+    void rdbt$setForeignWorldTicks(int lol);
+    int rdbt$getTicksUntilGone();
+    byte rdbt$getNativeTo();
+    void rdbt$setNativeTo(byte lol);
+    void rdbt$setOriginWorld(byte lol);
+    byte rdbt$getOriginWorld();
+    void rdbt$setTicksUntilGone(int lol);
+    Entity rdbt$getNearAlt();
     boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 

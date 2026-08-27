@@ -22,6 +22,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> CROSSFIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "crossfire"));
         public static final ResourceKey<DamageType> EXPLOSIVE_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "explosive_stand"));
         public static final ResourceKey<DamageType> GO_BEYOND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "go_beyond"));
+    public static final ResourceKey<DamageType> D4C_COLLISION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "d4c_collision"));
         public static final ResourceKey<DamageType> PENETRATING_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "penetrating_stand"));
         public static final ResourceKey<DamageType> CORPSE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "corpse"));
         public static final ResourceKey<DamageType> HAMON = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "hamon"));
@@ -45,6 +46,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> STAND_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_virus"));
         public static final ResourceKey<DamageType> STAND_FIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_fire"));
         public static final ResourceKey<DamageType> DISINTEGRATION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "disintegration"));
+        public static final ResourceKey<DamageType> KQ_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "kq_explosion"));
     public static final ResourceKey<DamageType> IRON_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_ball"));
         public static final ResourceKey<DamageType> MELTING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "melting"));
         public static final ResourceKey<DamageType> HEEL_SPIKE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "heel_spike"));

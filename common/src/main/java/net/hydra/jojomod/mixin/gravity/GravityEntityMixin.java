@@ -147,11 +147,24 @@ public abstract class GravityEntityMixin implements IGravityEntity {
             EntityDataSerializers.BYTE);
 
     @Unique
+    private Vec3 rdb$existPlaneStartPoint = Vec3.ZERO;
+    @Unique
+    @Override
+    public Vec3 rdbt$getExistPlaneStartPoint(){
+        return rdb$existPlaneStartPoint;
+    }
+    @Unique
     @Override
     public void roundabout$setExistPlane(byte adj) {
+        roundabout$setExistVec(adj,this.position());
+    }
+    @Unique
+    @Override
+    public void roundabout$setExistVec(byte adj, Vec3 exist) {
         if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
             this.getEntityData().set(ROUNDABOUT$EXIST_PLANE, adj);
         }
+        rdb$existPlaneStartPoint = exist;
     }
     @Unique
     @Override

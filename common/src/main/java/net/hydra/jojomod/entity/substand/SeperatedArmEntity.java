@@ -73,8 +73,10 @@ public class SeperatedArmEntity extends StandEntity {
     public int SpinTicks = 0;
     public BlockPos MiningPos = new BlockPos(0,-60,0);
     public String userUUID;
+    public int neuteredSpinTicks = 0;
 
     public void setSpinTicks(int val){SpinTicks = val;};
+    public void setNeuteredSpinTicks(int val){neuteredSpinTicks = val;}
 
 
 
@@ -201,13 +203,22 @@ public class SeperatedArmEntity extends StandEntity {
         return Checkpos;
     }
     public int flyingTicks=0;
-
+    @Override
+    public boolean isValid(boolean userActive, LivingEntity thisStand, LivingEntity userEntity){
+        return userEntity.isAlive() && !userEntity.isRemoved() && (!needsActive() || userActive) && validatePowers(userEntity);
+    }
+    @Override
+    public void handleTickDownIfDupe(LivingEntity thisStand){
+        TickDown();
+    }
+    @Override
+    public boolean needsActive(){
+        return false;
+    }
 
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
-
-
         tickeffects();
     }
 
@@ -359,6 +370,11 @@ public class SeperatedArmEntity extends StandEntity {
     public boolean hasUsedItem = false;
 
     public void removearm(){
+        if(userUUID == null){
+            spawnAtLocation(this.getMainHandItem());
+            discard();
+            return;
+        }
         if((level().getPlayerByUUID(UUID.fromString(userUUID)) != null)) {
             if ((level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
                     && (level().getPlayerByUUID(UUID.fromString(userUUID)).getInventory().getFreeSlot() > -1)) {
@@ -374,67 +390,72 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public void doSpin(){
-        if(SpinTicks > 0){
-            if(IsArmContactingBlock() != null) {
-                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof LeverBlock) {
-                    ((LeverBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).pull(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
-                }
-                if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof ButtonBlock) {
-                    ((ButtonBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).press(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
-                }
-            }
-            for(int i = 0; i < 1; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                        ), 2f),
-                        this.getX() + randX,
-                        this.getY() + randY,
-                        this.getZ() + randZ,
-                        0,0,0.2,0,0);
 
-            }
-            SpinTicks --;
-            Can_activate_special = true;
+        if(SpinTicks > 0){
             this.setYRot(this.getYRot() + 25);
             this.setYHeadRot(this.getYHeadRot() + 45);
+            if(neuteredSpinTicks == 0) {
+                if (IsArmContactingBlock() != null) {
+                    if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof LeverBlock) {
+                        ((LeverBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).pull(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                    }
+                    if (level().getBlockState(IsArmContactingBlock()).getBlock() instanceof ButtonBlock) {
+                        ((ButtonBlock) level().getBlockState(IsArmContactingBlock()).getBlock()).press(level().getBlockState(IsArmContactingBlock()), this.level(), IsArmContactingBlock());
+                    }
+                }
+                for (int i = 0; i < 1; i = i + 1) {
+                    double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                    double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                    double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                    ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
+                            ), 2f),
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            0, 0, 0.2, 0, 0);
 
-            if(getMainHandItem().getItem() instanceof SplashPotionItem SPI || getMainHandItem().getItem() instanceof LingeringPotionItem){
-                ThrownPotion pot = new ThrownPotion(level(),this.getX(),this.getY(),this.getZ());
-                pot.setDeltaMovement(0,-1,0);
-                pot.setItem(getMainHandItem());
-                level().addFreshEntity(pot);
-                this.getMainHandItem().setCount(0);
+                }
+                SpinTicks--;
+                Can_activate_special = true;
 
-            }else if(getMainHandItem().getItem() instanceof BlockItem){
-                Block block = ((BlockItem) getMainHandItem().getItem()).getBlock();
-                if(block instanceof WebBlock && !hasUsedItem && level().getBlockState(this.getOnPos()).isAir()){
-                    this.setDeltaMovement(0,0,0);
-                    level().setBlockAndUpdate(this.getOnPos(),block.defaultBlockState());
-                    this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+
+                if (getMainHandItem().getItem() instanceof SplashPotionItem SPI || getMainHandItem().getItem() instanceof LingeringPotionItem) {
+                    ThrownPotion pot = new ThrownPotion(level(), this.getX(), this.getY(), this.getZ());
+                    pot.setDeltaMovement(0, -1, 0);
+                    pot.setItem(getMainHandItem());
+                    level().addFreshEntity(pot);
+                    this.getMainHandItem().setCount(0);
+
+                } else if (getMainHandItem().getItem() instanceof BlockItem) {
+                    Block block = ((BlockItem) getMainHandItem().getItem()).getBlock();
+                    if (block instanceof WebBlock && !hasUsedItem && level().getBlockState(this.getOnPos()).isAir()) {
+                        this.setDeltaMovement(0, 0, 0);
+                        level().setBlockAndUpdate(this.getOnPos(), block.defaultBlockState());
+                        this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
+                        hasUsedItem = true;
+                    }
+
+                }
+                if (getMainHandItem().getItem() instanceof EnderpearlItem EPI && !hasUsedItem) {
+                    for (int i = 1; i < 44; i++) {
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.PORTAL, this.getX() + Roundabout.RANDOM.nextDouble(-1, 1),
+                                this.getY() + Roundabout.RANDOM.nextDouble(-1, 1), this.getZ() + Roundabout.RANDOM.nextDouble(-1, 1),
+                                1,
+                                0, 0, 0,
+                                3);
+                    }
+                    if (!level().isClientSide()) {
+                        User.teleportTo(this.getX(), this.getY(), this.getZ());
+                        level().playSound(null, this.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        level().playSound(null, this.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    }
                     hasUsedItem = true;
+                    // this.getUser().moveTo(new Vec3(getX(),getY(),getZ()));
+                    this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
                 }
-
+            }else{
+                neuteredSpinTicks --;
             }
-            if (getMainHandItem().getItem() instanceof EnderpearlItem EPI && !hasUsedItem){
-                for(int i =1; i<44; i++) {
-                    ((ServerLevel) this.level()).sendParticles(ParticleTypes.PORTAL, this.getX() + Roundabout.RANDOM.nextDouble(-1, 1),
-                            this.getY() + Roundabout.RANDOM.nextDouble(-1, 1), this.getZ() + Roundabout.RANDOM.nextDouble(-1, 1),
-                            1,
-                            0, 0, 0,
-                            3);
-                }
-                if(!level().isClientSide()) {
-                    User.teleportTo(this.getX(), this.getY(), this.getZ());
-                    level().playSound(null, this.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    level().playSound(null, this.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
-                }
-                hasUsedItem = true;
-               // this.getUser().moveTo(new Vec3(getX(),getY(),getZ()));
-                this.getMainHandItem().setCount(this.getMainHandItem().getCount() - 1);
-            }
-
         }else{
             hasUsedItem = false;
             this.getHeldItem();

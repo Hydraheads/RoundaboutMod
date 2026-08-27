@@ -1,7 +1,11 @@
-package net.hydra.jojomod.block;
+package net.hydra.jojomod.block.handBlock;
 
+import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.properties.Property;
+import net.hydra.jojomod.block.ModBlocks;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -37,7 +41,7 @@ public class HandBlockEntity extends BlockEntity {
     private boolean isAnimating;
 
     public HandBlockEntity(BlockPos $$0, BlockState $$1) {
-        super(BlockEntityType.SKULL, $$0, $$1);
+        super(ModBlocks.HAND_BLOCK_ENTITY, $$0, $$1);
     }
 
     public static void setup(Services $$0, Executor $$1) {
@@ -83,7 +87,14 @@ public class HandBlockEntity extends BlockEntity {
 
     }
 
+    public static void animation(Level $$0, BlockPos $$1, BlockState $$2, HandBlockEntity $$3) {
 
+
+    }
+
+    public float getAnimation(float $$0) {
+        return this.isAnimating ? (float)this.animationTickCount + $$0 : (float)this.animationTickCount;
+    }
 
     @Nullable
     public GameProfile getOwnerProfile() {
@@ -104,24 +115,22 @@ public class HandBlockEntity extends BlockEntity {
     }
 
     public void setOwner(@Nullable GameProfile $$0) {
-        /*synchronized(this) {
+        synchronized(this) {
             this.owner = $$0;
-        }*/
+        }
 
         this.updateOwnerProfile();
     }
 
     private void updateOwnerProfile() {
-        /*updateGameprofile(this.owner, ($$0) -> {
+        updateGameprofile(this.owner, ($$0) -> {
             this.owner = $$0;
             this.setChanged();
-        });*/
+        });
     }
 
     public static void updateGameprofile(@Nullable GameProfile $$0, Consumer<GameProfile> $$1) {
-
-
-        /*if ($$0 != null && !StringUtil.isNullOrEmpty($$0.getName()) && (!$$0.isComplete() || !$$0.getProperties().containsKey("textures")) && profileCache != null && sessionService != null) {
+        if ($$0 != null && !StringUtil.isNullOrEmpty($$0.getName()) && (!$$0.isComplete() || !$$0.getProperties().containsKey("textures")) && profileCache != null && sessionService != null) {
             profileCache.getAsync($$0.getName(), ($$2) -> Util.backgroundExecutor().execute(() -> Util.ifElse($$2, ($$1x) -> {
                 Property $$2x = (Property) Iterables.getFirst($$1x.getProperties().get("textures"), (Object)null);
                 if ($$2x == null) {
@@ -137,9 +146,9 @@ public class HandBlockEntity extends BlockEntity {
                 if ($$5 != null) {
                     GameProfile final$$1x = $$1x;
                     $$5.execute(() -> {
-                        GameProfileCache $$6 = profileCache;
-                        if ($$6 != null) {
-                            $$6.add(final$$1x);
+                        GameProfileCache $$3x = profileCache;
+                        if ($$3x != null) {
+                            $$3x.add(final$$1x);
                             $$1.accept(final$$1x);
                         }
 
@@ -155,6 +164,6 @@ public class HandBlockEntity extends BlockEntity {
             })));
         } else {
             $$1.accept($$0);
-        }*/
+        }
     }
 }

@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -149,7 +152,9 @@ public class ModEntities {
     public static EntityType<TuskNailEntity> TUSK_NAIL;
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
     public static EntityType<MoldSporesEntity> MOLD_SPORES;
+    public static EntityType<PurpleSmokeEntity> PURPLE_SMOKE;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
+    public static EntityType<PHCapsuleEntity> PH_CAPSULE;
 
     public static EntityType<GoBeyondEntity> GO_BEYOND;
     public static EntityType<EncasementBubbleEntity> ENCASEMENT_BUBBLE;
@@ -182,7 +187,9 @@ public class ModEntities {
     public static EntityType<PlayerModifiedNPC> MODIFIED_NPC;
     public static EntityType<FogCloneEntity> FOG_CLONE;
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
+    public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
+    public static EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
@@ -192,6 +199,7 @@ public class ModEntities {
 
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<StepRuleEntity> STEP_RULE;
+    public static EntityType<FallingBannerEntity> FALLING_BANNER;
 
     public static EntityType<StrayCatEntity> STRAY_CAT;
 

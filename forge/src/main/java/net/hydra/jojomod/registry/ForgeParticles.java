@@ -204,6 +204,10 @@ public class ForgeParticles {
             "plunder",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<SimpleParticleType> MENGER = PARTICLES.register(
+            "menger",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> FRICTIONLESS = PARTICLES.register(
             "frictionless",
             () -> new SimpleParticleType(true)
@@ -310,6 +314,10 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true)
     );
 
+    public static final RegistryObject<SimpleParticleType> DISTORTION_SMOKE = PARTICLES.register(
+            "distortion_smoke",
+            () -> new SimpleParticleType(true)
+    );
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

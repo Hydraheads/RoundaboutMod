@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -23,6 +24,7 @@ import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.HarpoonItem;
 import net.hydra.jojomod.item.KnifeItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.networking.ModPacketHandler;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.TWAndSPSharedPowers;
@@ -626,7 +628,7 @@ public class AbilityScapeBasis {
         }
         baseTickPower();
 
-        if (activePower == PowerIndex.NONE && attackTime > -1 && (attackTime < attackTimeMax) && !kickStarted &&
+        if (activePower == PowerIndex.NONE && attackTime > -1  && !kickStarted &&
         self.level().isClientSide()){
             kickStarted = true;
         }
@@ -2073,11 +2075,13 @@ public class AbilityScapeBasis {
 
     }
 
+
+
     public boolean playSoundIfPossible(Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
         if (!PowerTypes.isErasingTime(self) && entity != null) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+                    ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
                         for (ServerPlayer playerInList :
@@ -2119,7 +2123,8 @@ public class AbilityScapeBasis {
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$2);
+
+                    ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
                         for (ServerPlayer playerInList :
@@ -2161,7 +2166,7 @@ public class AbilityScapeBasis {
         if (!PowerTypes.isErasingTime(self)) {
             if (PowerTypes.isExistentiallyElsewhere(self)){
                 if ($$4 != null && self.level() instanceof ServerLevel sl) {
-                    ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey($$4);
+                    ResourceLocation soundId = $$4.getLocation();
                     if (soundId != null) {
                         String str = $$5.name();
                         for (ServerPlayer playerInList :
@@ -2450,8 +2455,10 @@ public class AbilityScapeBasis {
         Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
         List<Entity> listE = StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                 pointVec.z, halfReach, halfReach, halfReach), distMax);
+        boolean test = false;
         if (targetEntity == null) {
             targetEntity = StandAttackHitboxNear(User,listE,angle);
+            test = true;
         }
         if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
 
@@ -2464,6 +2471,11 @@ public class AbilityScapeBasis {
             targetEntity = EDP.parentMob;
         }
 
+        if (targetEntity != null && test && !canActuallyHit(targetEntity)) {
+            storeEnt = null;
+            return new ArrayList<>() {
+            };
+        }
         storeEnt = targetEntity;
 
         return listE;
@@ -2500,6 +2512,7 @@ public class AbilityScapeBasis {
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
+
 
         return targetEntity;
     }
@@ -2568,24 +2581,18 @@ public class AbilityScapeBasis {
             targetEntity = null;
         }
 
+        boolean test = false;
         /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
         if (targetEntity == null) {
+            test = true;
             float halfReach = (float) (distMax*0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = StandAttackHitboxNear(User,StandGrabHitbox(User,DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
                     pointVec.z, halfReach, halfReach, halfReach), distMax),angle);
         }
-        if (targetEntity instanceof StandEntity SE && SE.redirectKnockbackToUser()){
-
-            if (SE.getUser() != null){
-                //This code doesn't play nicely with server distance checks or countering assault
-                //targetEntity = SE.getUser();
-            }
-        }
         if (targetEntity instanceof EnderDragonPart EDP){
             targetEntity = EDP.parentMob;
         }
-
 
         if (targetEntity != null && distMax > 0){
             double distSq = targetEntity.getBoundingBox().distanceToSqr(User.position());
@@ -2596,6 +2603,9 @@ public class AbilityScapeBasis {
         }
 
         if (PowerTypes.isInADifferentExistence(targetEntity,User)){
+            return null;
+        }
+        if (test && !canActuallyHit(targetEntity)) {
             return null;
         }
 
@@ -2804,7 +2814,7 @@ public class AbilityScapeBasis {
     }
     /** This code grabs an entity in front of you at the specified range, raycasting is used*/
     public Entity rayCastEntity(LivingEntity User, float reach){
-        Entity entityHitResult = MainUtil.raytraceEntityStand(User.level(),User,reach);
+        Entity entityHitResult = MainUtil.pick(User,reach);
         if (entityHitResult != null){
             if (entityHitResult.isAlive() && !entityHitResult.isRemoved() && !entityHitResult.is(User) &&
                     !(User instanceof StandEntity SE2 && SE2.getUser() != null &&  SE2.getUser().isPassenger() &&
@@ -2926,36 +2936,16 @@ public class AbilityScapeBasis {
 
     /**This function is a sanity check so mobs can't be hit behind doors*/
     public boolean canActuallyHit(Entity entity){
+        if (entity == null){
+            return false;
+        }
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners){
             return true;
         }
-        Vec3 from = new Vec3(this.self.getX(), this.self.getY(), this.self.getZ()); // your position
-        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-        BlockHitResult result = this.self.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this.self
-        ));
-        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-                result.getLocation().distanceTo(from) < to.distanceTo(from);
-        if (isBlocked){
-            from = this.self.getEyePosition(1); // your position
-            to = entity.getEyePosition(1.0F); // where the entity's eyes are
-
-            result = this.self.level().clip(new ClipContext(
-                    from,
-                    to,
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
-                    this.self
-            ));
-            isBlocked = result.getType() != HitResult.Type.MISS &&
-                    result.getLocation().distanceTo(from) < to.distanceTo(from);
+        if (self.hasLineOfSight(entity)){
+            return true;
         }
-        return !isBlocked;
+         return false;
     }
 
     /**disables stand guard amd shield guard, this is simplified in the next function*/

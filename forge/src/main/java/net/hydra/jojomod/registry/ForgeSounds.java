@@ -50,6 +50,10 @@ public class ForgeSounds {
             register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
     public static final RegistryObject<SoundEvent> D4C_PORTAL =
             register(ModSounds.D4C_PORTAL, ModSounds.D4C_PORTAL_ID);
+    public static final RegistryObject<SoundEvent> D4C_FUSE =
+            register(ModSounds.D4C_FUSE, ModSounds.D4C_FUSE_ID);
+    public static final RegistryObject<SoundEvent> D4C_FUSION_START =
+            register(ModSounds.D4C_FUSION_START, ModSounds.D4C_FUSION_START_ID);
     public static final RegistryObject<SoundEvent> DISC_REMOVE_EVENT =
             register(ModSounds.DISC_REMOVE, ModSounds.DISC_REMOVE_ID);
     public static final RegistryObject<SoundEvent> STAR_SUMMON_SOUND_EVENT =
@@ -353,6 +357,12 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_SUMMON, ModSounds.KILLER_QUEEN_SUMMON_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_SELECT_EVENT =
             register(ModSounds.KILLER_QUEEN_BUBBLE_SELECT, ModSounds.KILLER_QUEEN_BUBBLE_SELECT_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_COMBAT_EVENT =
+            register(ModSounds.BITES_THE_DUST_COMBAT, ModSounds.BITES_THE_DUST_COMBAT_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_DAY_EVENT =
+        register(ModSounds.BITES_THE_DUST_DAY, ModSounds.BITES_THE_DUST_DAY_ID);
+    public static final RegistryObject<SoundEvent> BITES_THE_DUST_ARROW =
+        register(ModSounds.BITES_THE_DUST_ARROW, ModSounds.BITES_THE_DUST_ARROW_ID);
 
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_PUNCH_1_EVENT =
             register(ModSounds.KQ_MINESWEEPER_PUNCH_1, ModSounds.KQ_MINESWEEPER_PUNCH_1_ID);
@@ -364,6 +374,8 @@ public class ForgeSounds {
             register(ModSounds.KQ_MINESWEEPER_KICK, ModSounds.KQ_MINESWEEPER_KICK_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT =
             register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
+    public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_EVENT =
+            register(ModSounds.KQ_MINESWEEPER_AIRBUBBLE_REDIRECT, ModSounds.KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_BARRAGE_EVENT =
             register(ModSounds.KQ_MINESWEEPER_BARRAGE, ModSounds.KQ_MINESWEEPER_BARRAGE_ID);
     public static final RegistryObject<SoundEvent> KQ_MINESWEEPER_IMPALE_EVENT =
@@ -389,6 +401,14 @@ public class ForgeSounds {
             register(ModSounds.KILLER_QUEEN_SUMMON_DARK, ModSounds.KILLER_QUEEN_SUMMON_DARK_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_EVENT =
             register(ModSounds.KILLER_QUEEN_EXPLOSION, ModSounds.KILLER_QUEEN_EXPLOSION_ID);
+
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_1_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_1, ModSounds.KILLER_QUEEN_EXPLOSION_1_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_2_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_2, ModSounds.KILLER_QUEEN_EXPLOSION_2_ID);
+    public static final RegistryObject<SoundEvent> KILLER_QUEEN_EXPLOSION_3_EVENT =
+            register(ModSounds.KILLER_QUEEN_EXPLOSION_3, ModSounds.KILLER_QUEEN_EXPLOSION_3_ID);
+
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_DETONATE_EVENT =
             register(ModSounds.KILLER_QUEEN_DETONATE, ModSounds.KILLER_QUEEN_DETONATE_ID);
     public static final RegistryObject<SoundEvent> KILLER_QUEEN_BUBBLE_LAUNCH_EVENT =
@@ -847,6 +867,8 @@ public class ForgeSounds {
             register(ModSounds.EPITAPH_ACTIVATE, ModSounds.EPITAPH_ACTIVATE_ID);
     public static final RegistryObject<SoundEvent> EPITAPH_FADE =
             register(ModSounds.EPITAPH_FADE, ModSounds.EPITAPH_FADE_ID);
+    public static final RegistryObject<SoundEvent> D4C_EXPLOSION =
+            register(ModSounds.D4C_EXPLOSION, ModSounds.D4C_EXPLOSION_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_IMPALE =
             register(ModSounds.KING_CRIMSON_IMPALE, ModSounds.KING_CRIMSON_IMPALE_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH =
@@ -859,6 +881,10 @@ public class ForgeSounds {
             register(ModSounds.KING_CRIMSON_PUNCH_4, ModSounds.KING_CRIMSON_PUNCH_4_ID);
     public static final RegistryObject<SoundEvent> KING_CRIMSON_PUNCH_5 =
             register(ModSounds.KING_CRIMSON_PUNCH_5, ModSounds.KING_CRIMSON_PUNCH_5_ID);
+    public static final RegistryObject<SoundEvent> D4C_PUNCH =
+            register(ModSounds.D4C_PUNCH, ModSounds.D4C_PUNCH_ID);
+    public static final RegistryObject<SoundEvent> D4C_PUNCH_2 =
+            register(ModSounds.D4C_PUNCH_2, ModSounds.D4C_PUNCH_2_ID);
     public static final RegistryObject<SoundEvent> ZOMBIE_CHARGE =
             register(ModSounds.ZOMBIE_CHARGE, ModSounds.ZOMBIE_CHARGE_ID);
     public static final RegistryObject<SoundEvent> GOAT_CHARGE =
@@ -936,6 +962,16 @@ public class ForgeSounds {
             register(ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT, ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_FINAL_HIT_CRY =
             register(ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY, ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_1 =
+            register(ModSounds.SILVER_CHARIOT_HIT_1, ModSounds.SILVER_CHARIOT_HIT_1_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_2 =
+            register(ModSounds.SILVER_CHARIOT_HIT_2, ModSounds.SILVER_CHARIOT_HIT_2_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_3 =
+            register(ModSounds.SILVER_CHARIOT_HIT_3, ModSounds.SILVER_CHARIOT_HIT_3_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_HIT_4 =
+            register(ModSounds.SILVER_CHARIOT_HIT_4, ModSounds.SILVER_CHARIOT_HIT_4_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_AFTERIMAGE =
+            register(ModSounds.SILVER_CHARIOT_AFTERIMAGE, ModSounds.SILVER_CHARIOT_AFTERIMAGE_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);

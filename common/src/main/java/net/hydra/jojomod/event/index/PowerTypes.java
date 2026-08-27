@@ -1,26 +1,51 @@
 package net.hydra.jojomod.event.index;
 
+import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.powers.power_types.StandGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.client.renderer.EffectInstance;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Unique;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public enum PowerTypes {
     NONE(new GeneralPowers()),
@@ -279,6 +304,13 @@ public enum PowerTypes {
         }
         return 0;
     }
+    public static void setTicksUntilGone(Entity entity, int ticks, byte worldId){
+        if (entity != null){
+            ((IEntityAndData)entity).rdbt$setTicksUntilGone(ticks);
+            ((IEntityAndData)entity).rdbt$setNativeTo(worldId);
+            ((IEntityAndData)entity).rdbt$setOriginWorld(worldId);
+        }
+    }
     public static void setPlaneOfExisting(Entity entity, byte plane){
         if (entity != null){
             ((IGravityEntity)entity).roundabout$setExistPlane(plane);
@@ -298,7 +330,143 @@ public enum PowerTypes {
         if (from != null && to != null){
             ((IGravityEntity)to).roundabout$setExistPlane(
                     ((IGravityEntity)from).roundabout$getExistPlane());
+            ((IEntityAndData)to).rdbt$setForeignWorldTicks(
+                    ((IEntityAndData)from).rdbt$getForeignWorldTicks());
+            ((IEntityAndData)to).rdbt$setTicksUntilGone(
+                    ((IEntityAndData)from).rdbt$getTicksUntilGone());
+            ((IEntityAndData)to).rdbt$setNativeTo(
+                    ((IEntityAndData)from).rdbt$getNativeTo());
+
         }
+    }
+    public static boolean isNativeToOurWorld(Entity entity){
+        if (entity != null){
+
+            return ((IEntityAndData)entity).rdbt$getNativeTo() == 0;
+
+        }
+        return false;
+    }
+    public static void tickIsNearAlt(Entity entity, Entity alt, int delayTime){
+        if (alt != null && entity != null) {
+            if (entity.level() instanceof ServerLevel sl) {
+                if (entity.tickCount % 2 == 0) {
+                    double random = (Math.random() * 1.2) - 0.6;
+                    double random2 = (Math.random() * 1.2) - 0.6;
+                    double random3 = (Math.random() * 1.2) - 0.6;
+
+                    Vec3 center1 = (entity.getEyePosition().subtract(entity.getPosition(1)).scale(0.7)).add(entity.getPosition(1));
+                    Vec3 center2 = (alt.getEyePosition().subtract(alt.getPosition(1)).scale(0.7)).add(alt.getPosition(1));
+                    MainUtil.sendParticlesIfPossible(entity, sl,
+                            ModParticles.MENGER, center2.x + random,
+                            center2.y + random2, center2.z + random3,
+                            0,
+                            (center1.x - center2.x), (center1.y - center2.y), (center1.z - center2.z),
+                            0.08);
+                }
+
+
+                    float carryon = Math.min((1+(((float)delayTime)/50f)),7);
+                if (alt instanceof Player pl || entity instanceof Player){
+                    carryon *=0.15f;
+                }
+                    Vec3 db = RotationUtil.distanceBetween(alt,entity);
+                    alt.setDeltaMovement(alt.getDeltaMovement().add(
+                            db.x * (-0.012 * carryon),
+                            0,
+                            db.z * (-0.012 * carryon)
+                    ));
+                    alt.hurtMarked = true;
+                    alt.hasImpulse = true;
+                    if (delayTime > 20 && !PowerTypes.originatedFromOurWorld(alt) && (alt.distanceTo(entity) < 1.5 ||
+                            delayTime >= 300)){
+                        MainUtil.playSoundIfPossible(entity,entity.level(),null, entity.blockPosition(),
+                                SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1F);
+                        //Hear some of it across dimensions to know a collision happened
+                        MainUtil.playSoundToAll(entity.level(),null, entity.blockPosition(),
+                                ModSounds.D4C_EXPLOSION_EVENT, SoundSource.PLAYERS, 3.0F, 1F);
+
+                        //MainUtil.sendParticlesIfPossible(entity,entity.level(),ModParticles.FIRE_CRUMBLE,
+                        //        entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                        //        5, 0.4,0.4, 0.4,0.01);
+
+                        Vec3 position = entity.getPosition(1);
+                        Vec3 position2 = entity.getEyePosition();
+                        Vec3 position3 = entity.getEyePosition().subtract(entity.getPosition(1)).multiply(new Vec3(0.5F,
+                                0.5F,0.5F));
+
+                        MainUtil.sendParticlesIfPossible(entity,entity.level(),ParticleTypes.LARGE_SMOKE,
+                                entity.getX(), entity.getY() + 1.0D, entity.getZ(),
+                                15, 0.3,0.5, 0.3,0.01);
+                        //See some of it across dimensions to know a collision happened
+                        sl.sendParticles(ModParticles.MENGER,
+                                entity.getEyePosition().x, entity.getEyePosition().y, entity.getEyePosition().z,
+                                20, 0,0, 0,0.07);
+                        float dmg= 30;
+                        if (entity instanceof Player){
+                            dmg = 15;
+                        }
+                        entity.hurt(ModDamageTypes.of(entity.level(),ModDamageTypes.D4C_COLLISION),
+                                dmg);
+
+                        alt.discard();
+                    } else {
+                        if (entity instanceof LivingEntity LE && alt instanceof LivingEntity LE2){
+                            MainUtil.makeBleed(LE,0,200,null);
+                            MainUtil.makeBleed(LE2,0,200,null);
+                        }
+                    }
+            }
+        }
+
+    }
+    public static boolean originatedFromOurWorld(Entity entity){
+        if (entity != null){
+
+            return ((IEntityAndData)entity).rdbt$getNativeTo() == 0 && ((IEntityAndData)entity).rdbt$getOriginWorld() == 0;
+
+        }
+        return false;
+    }
+
+
+    @Nullable
+    public static Entity findNearbyParallelCopy(Entity entity) {
+        if (!(entity.level() instanceof ServerLevel sl) ||
+                (entity instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                || (entity instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+        ) {
+            return null;
+        }
+
+        UUID parallelUUID = ((IEntityAndData) entity).rdbt$getNativeCopy();
+
+        if (parallelUUID == null) {
+            return null;
+        }
+
+        AABB box = entity.getBoundingBox().inflate(7.0D);
+
+        List<Entity> nearby = sl.getEntities(
+                entity,
+                box,
+                other ->
+                        other != entity
+                                && other.isAlive()
+                                && MainUtil.canActuallyHitInvolved2(entity,other)
+                                && (other.getUUID().equals(parallelUUID) ||
+                                (((IEntityAndData) other).rdbt$getNativeCopy() != null &&
+                                        ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
+                                && other.distanceTo(entity) <= 7
+                                && !(other instanceof D4CCloneEntity dce && dce.safeCopy && !PowersD4C.debugCollision)
+                                && !(other instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C)
+        );
+
+        if (!nearby.isEmpty()) {
+            return nearby.get(0);
+        }
+
+        return null;
     }
 
     public static int d4cWorldUptime(){

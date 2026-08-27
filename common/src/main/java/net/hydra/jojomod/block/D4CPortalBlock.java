@@ -1,6 +1,10 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.stand.powers.PowersD4C;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -57,6 +61,37 @@ public class D4CPortalBlock extends BaseEntityBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
+    }
+
+    @Override
+    public void entityInside(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Entity entity
+    ) {
+        if (!level.isClientSide) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            if (blockEntity instanceof D4CPortalBlockEntity portal) {
+                if (portal.worldId != 0 && PowerTypes.getPlaneOfExisting2(entity) == 0 &&
+                        !(entity instanceof FallingBannerEntity) &&
+                        PowerTypes.getPlaneOfExisting2(entity) != portal.worldId
+                        && (PowerTypes.originatedFromOurWorld(entity) || entity.tickCount > PowerTypes.d4cWorldUptime())
+                && !MainUtil.isBossMob(entity) && portal.ticksUntilRestore > 17 && !(portal.entityList.contains(entity))
+                        && !(portal.creator != null &&
+                        portal.creator.equals(entity.getUUID()))) {
+                    ((IEntityAndData)entity).rdbt$setForeignWorldTicks(
+                            PowerTypes.getForeignWorldMaxTime((byte) portal.worldId) - portal.ticksUntilRestore);
+                    PowerTypes.setPlaneOfExisting(entity, (byte) portal.worldId);
+                    portal.entityList.add(entity);
+                    // Entity is on the same plane.
+                    // Do your portal behavior here.
+                }
+            }
+        }
+
+        super.entityInside(state, level, pos, entity);
     }
 
     @SuppressWarnings("deprecation")

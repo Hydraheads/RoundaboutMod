@@ -1,13 +1,13 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;

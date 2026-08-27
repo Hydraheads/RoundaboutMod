@@ -23,6 +23,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,6 +72,10 @@ public class MoldSporesEntity extends StandEntity {
         } else {
             if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
                 if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
+                    this.discard();
+                }
+            }if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)){
+                if(((PowersGreenDay)StandUU.roundabout$getStandPowers()).MoldGone){
                     this.discard();
                 }
             }
@@ -229,6 +234,10 @@ public class MoldSporesEntity extends StandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
         return false;
     }
 

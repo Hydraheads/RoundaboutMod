@@ -206,16 +206,15 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             this.soundEffectCooldown--;
             if (this.soundEffectCooldown <= 0) {
 
-                SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
+                SoundEvent SE;
                 if (getSkin() == 4) {
-                    
+                    SE = ModSounds.KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_EVENT;
+                }else {
+                    SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_1_EVENT;
+                    if (Math.random() > 0.5) {
+                        SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT;
+                    }
                 }
-                //SoundEvent SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT;
-                if (Math.random() > 0.5) {
-                    SE = ModSounds.STRAY_CAT_BUBBLE_SOUND_2_EVENT;
-                 //   SE = ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT;
-                }
-
                 this.level().playSound(null, this.blockPosition(), SE,
                         SoundSource.PLAYERS, 0.7F, (float)(0.58+(Math.random()*0.04)));
                 this.soundEffectCooldown = soundEffectCooldownMax + this.random.nextInt(0, 50);
@@ -237,7 +236,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1 + 0.1); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1 + 0.3); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,
@@ -346,9 +345,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             }
         }
 
-        MainUtil.makeBleed($$0, 1, 160, user);
+        if (strayCatEntityMade) {
+            MainUtil.makeBleed($$0, 1, 160, user);
+        } else {
+            MainUtil.makeBleed($$0, 0, 160, user);
+        }
     }
 
+    public boolean strayCatEntityMade = false;
     @Override
     protected boolean shouldBurn() {
         return false;
@@ -373,6 +377,9 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
+        if (this.isRemoved()){
+            return;
+        }
         if (!this.level().isClientSide()) {
             Entity hitTarget = $$0.getEntity();
             Entity user = this.getOwner();

@@ -10,7 +10,6 @@ import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.WhitesnakeControlClient;
 import net.hydra.jojomod.client.gui.WhitesnakeInventoryMenu;
-import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.HallucinatoryAcidProjectile;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -31,7 +30,6 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.hydra.jojomod.event.powers.OldEffect;
 import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.PucciVoice;
@@ -101,7 +99,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte WHITESNAKE_INVENTORY = 93;
     private static final byte ACID_TOSS = 94;
     private static final byte CONTROL_DASH = 95;
-    public static final byte SNAKE_BITE = 96;
     private static final byte MELTING_MODE = 97;
     private static final byte MELTING_HOVER = 98;
     private static final byte MELTING_GRAVITY = 99;
@@ -116,15 +113,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte ACID_CHARGE_NOISE = 123;
     private static final byte DISC_STEAL_CHARGE_NOISE = 124;
-    private static final byte SNAKE_BITE_NOISE = 125;
     private static final float CONTROL_PUNCH_RANGE = 3.0F;
     private static final double FORWARD_BARRAGE_RANGE = 10.0D;
-    private Vec3 snakeBiteOffset = Vec3.ZERO;
-    private Vec3 snakeBiteStart = Vec3.ZERO;
     private Vec3 phaseGrabOffset = Vec3.ZERO;
-    private int snakeBiteHallucinationCharge;
-    private int snakeBiteFreezeTicks;
-    private boolean snakeBitePiloted;
     private boolean meltingMode;
     private boolean meltingHoverExhausted;
     private int meltingCrawlGraceTicks;
@@ -312,10 +303,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         StandEntity stand = getStandEntity(self);
         if (!isUsableStand(stand)) return;
-        if (getActivePower() == SNAKE_BITE) {
-            tryPower(PowerIndex.NONE, true);
-            tryPowerPacket(PowerIndex.NONE);
-        }
         boolean wasPiloting = isPiloting();
         setAutoMode(true);
         tryIntPowerPacket(AUTO_MODE, 1);
@@ -381,9 +368,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         Entity selected = self.level().getEntity(id);
         boolean entering = stand != null && selected != null && selected.is(stand);
         boolean leavingAutoMode = entering && autoMode;
-        if (entering && getActivePower() == SNAKE_BITE) {
-            stopSnakeBiteAtCurrentPosition(stand, true);
-        } else if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
+        if (entering && getActivePower() == PowerIndex.POWER_2_BLOCK) {
             stopPhaseGrabAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
@@ -424,7 +409,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
         meltingHoverExhausted = false;
         meltingCrawlGraceTicks = 0;
         meltingCrawlTransitionTicks = 0;
-        if (meltingMode || !(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return;
+        if (meltingMode) {
+            if (getActivePower() == PowerIndex.ATTACK || isGuarding()) tryPower(PowerIndex.NONE, true);
+            return;
+        }
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return;
         whitesnake.setMeltingHovering(false);
         Direction oldGravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
         ((IGravityEntity) whitesnake).roundabout$setGravityDirection(Direction.DOWN);
@@ -448,11 +437,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isUsableStand(StandEntity stand) {
         return stand != null && stand.isAlive() && !stand.isRemoved();
-    }
-
-    private void stopSnakeBiteAtCurrentPosition(StandEntity stand, boolean stopSound) {
-        if (stopSound) stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
-        stopPowerAtCurrentPosition(stand);
     }
 
     private void stopPhaseGrabAtCurrentPosition(StandEntity stand) {
@@ -599,10 +583,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void pilotStandControls(KeyboardPilotInput input, LivingEntity entity) {
         if (!(entity instanceof WhitesnakeEntity whitesnake)) return;
-        if (getActivePower() == SNAKE_BITE) {
-            whitesnake.clearControlInput();
-            return;
-        }
         whitesnake.setControlInput(input.leftImpulse, input.forwardImpulse);
         entity.setShiftKeyDown(input.shiftKeyDown);
         entity.setPose(input.shiftKeyDown ? Pose.CROUCHING : Pose.STANDING);
@@ -872,8 +852,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         switch (context) {
             case SKILL_1_NORMAL -> {
-                if (meltingMode) snakeBiteClient();
-                else if (!clientForwardBarrage()) discStealClient();
+                if (!meltingMode && !clientForwardBarrage()) discStealClient();
             }
             case SKILL_1_CROUCH -> {
                 if (!meltingMode && canExecuteMoveWithLevel(getDiscStealLevel())) {
@@ -881,7 +860,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 }
             }
             case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
-                if (canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) {
+                if (!isPiloting() && canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) {
                     onReleaseGuard();
                     tryIntPower(WHITESNAKE_INVENTORY, true, 0);
                     tryIntPowerPacket(WHITESNAKE_INVENTORY, 0);
@@ -1015,16 +994,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 getBundleAccuracy(), getThrowAngle(), getThrowAngle2(), getThrowAngle3(),
                 getCanPlace(), getThrowStyleType(), stand.getXRot(), stand.getYRot(), origin,
                 true, 1.0F, true);
-    }
-
-    // Snake Bite
-    private void snakeBiteClient() {
-        if (!meltingMode || !canExecuteMoveWithLevel(getSnakeBiteLevel())
-                || onCooldown(PowerIndex.SKILL_2) || !canImpale() || hasBlock() || hasEntity()
-                || isThrowableDisc(self.getMainHandItem()) || isGuarding()) return;
-        byte move = getActivePower() == SNAKE_BITE ? PowerIndex.NONE : SNAKE_BITE;
-        tryPower(move, true);
-        tryPowerPacket(move);
     }
 
     // Acid Toss
@@ -1193,158 +1162,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (self instanceof ServerPlayer player) {
             S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
         }
-    }
-
-    private boolean startSnakeBite() {
-        if (!meltingMode || !canExecuteMoveWithLevel(getSnakeBiteLevel())) return false;
-        StandEntity stand = getStandEntity(self);
-        if (!isUsableStand(stand)) return false;
-        snakeBiteHallucinationCharge = 0;
-        snakeBiteFreezeTicks = 0;
-        snakeBitePiloted = isPiloting();
-        setAttackTimeDuring(0);
-        setActivePower(SNAKE_BITE);
-        playSoundsIfNearby(SNAKE_BITE_NOISE, 27, false);
-        animateStand(WhitesnakeEntity.SNAKE_BITE);
-        poseStand(OffsetIndex.LOOSE);
-
-        LivingEntity origin = actionOrigin();
-        Vec2 look = new Vec2(origin.getYHeadRot() % 360, origin.getXRot());
-        Direction gravity = ((IGravityEntity) self).roundabout$getGravityDirection();
-        Vec2 worldLook = RotationUtil.rotPlayerToWorld(look, gravity);
-        Vec3 lift = RotationUtil.vecPlayerToWorld(new Vec3(0, 0.25, 0), gravity);
-        snakeBiteStart = origin.position();
-        snakeBiteOffset = snakeBitePiloted ? Vec3.ZERO
-                : DamageHandler.getRotationVector(worldLook.y, worldLook.x).scale(1.8).add(lift);
-        stand.setYRot(look.x);
-        stand.setXRot(look.y);
-        stand.setPos(snakeBiteStart.add(snakeBiteOffset));
-        return true;
-    }
-
-    private void updateSnakeBite() {
-        if (self.level().isClientSide() || attackTimeDuring < 0) return;
-        if (attackTimeDuring >= 108) {
-            finishSnakeBiteWithoutHit();
-            return;
-        }
-        StandEntity stand = getStandEntity(self);
-        if (!isUsableStand(stand)) {
-            finishSnakeBiteWithoutHit();
-            return;
-        }
-
-        AABB previousBounds = stand.getBoundingBox();
-        LivingEntity viewSource = snakeBitePiloted ? stand : self;
-        Vec3 travelOrigin = snakeBitePiloted ? stand.position() : viewSource.getEyePosition(0);
-        Vec3 target = travelOrigin.add(viewSource.getViewVector(0).scale(15));
-        double speed = snakeBiteTravelSpeed(attackTimeDuring);
-
-        Vec3 nextPosition;
-        if (snakeBitePiloted) {
-            nextPosition = stand.position().add(target.subtract(stand.position()).normalize().scale(speed));
-        } else {
-            snakeBiteOffset = snakeBiteOffset.add(
-                    target.subtract(self.position().add(snakeBiteOffset)).normalize().scale(speed));
-            nextPosition = self.position().add(snakeBiteOffset);
-        }
-
-        double distanceToTarget = stand.position().distanceTo(target);
-        if (distanceToTarget < 1.5D) {
-            stand.setYRot(viewSource.getYHeadRot() % 360);
-            stand.setXRot(viewSource.getXRot());
-        } else {
-            Direction gravity = ((IGravityEntity) self).roundabout$getGravityDirection();
-            Vec2 rotation = RotationUtil.rotWorldToPlayer(new Vec2(
-                    getLookAtPlaceYaw(stand, target), getLookAtPlacePitch(stand, target)), gravity);
-            stand.setYRot(rotation.x);
-            stand.setXRot(rotation.y);
-        }
-        stand.setPos(distanceToTarget < 0.4D ? target : nextPosition);
-
-        if (distanceToTarget > 1.0D) {
-            if (snakeBiteFreezeTicks > 0) snakeBiteFreezeTicks--;
-            else snakeBiteHallucinationCharge++;
-        } else {
-            snakeBiteFreezeTicks = 5;
-        }
-
-        double rangeFromOrigin = snakeBitePiloted
-                ? stand.position().distanceTo(snakeBiteStart)
-                : stand.position().distanceTo(self.position());
-        if (stand.isTechnicallyInImpassableWall() || rangeFromOrigin > 12.0D) {
-            stopSoundsIfNearby(SNAKE_BITE_NOISE, 32, false);
-            finishSnakeBiteWithoutHit();
-            return;
-        }
-        if (attackTimeDuring > 0 && attackTimeDuring % 20 == 0) {
-            HallucinatoryAcidProjectile drip = new HallucinatoryAcidProjectile(self, self.level(), 1);
-            drip.setPos(stand.getX(), stand.getBoundingBox().minY + 0.1D, stand.getZ());
-            drip.setDeltaMovement(0.0D, -0.08D, 0.0D);
-            self.level().addFreshEntity(drip);
-        }
-        trySnakeBiteHit(stand, previousBounds, stand.getBoundingBox());
-    }
-
-    public static double snakeBiteTravelSpeed(int attackTime) {
-        return 0.1D + (attackTime > 10 ? Math.pow(attackTime - 10, 1.4D) / 1000.0D : 0.0D);
-    }
-
-    private void finishSnakeBiteWithoutHit() {
-        tryPower(PowerIndex.NONE, true);
-        if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendActivePowerPacket(player, PowerIndex.NONE);
-            S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_INT_ATD, -1);
-        }
-    }
-
-    private boolean trySnakeBiteHit(StandEntity stand, AABB previousBounds, AABB currentBounds) {
-        AABB hitArea = previousBounds.inflate(1.6F).minmax(currentBounds.inflate(1.6F));
-        for (Entity target : stand.level().getEntities(stand, hitArea)) {
-            boolean validTarget = attackTimeDuring > 11 && target instanceof LivingEntity
-                    && !target.is(self) && target.showVehicleHealth() && !target.isInvulnerable()
-                    && target.isAlive() && !(self.isPassenger() && self.getVehicle().is(target))
-                    && stand.getSensing().hasLineOfSight(target)
-                    && !(target instanceof FollowingStandEntity following
-                    && (OffsetIndex.OffsetStyle(following.getOffsetType()) == OffsetIndex.FOLLOW_STYLE
-                    || OffsetIndex.OffsetStyle(following.getOffsetType()) == OffsetIndex.FIXED_STYLE));
-            if (!(validTarget || target instanceof BlockWallEntity) || target.distanceTo(stand) >= 3.0F) continue;
-
-            hitParticlesCenter(target);
-            if (StandDamageEntityAttack(target, getSnakeBiteDamage(target), 0.4F, self)
-                    && target instanceof LivingEntity living) {
-                addEXP(3, living);
-                living.addEffect(HallucinationEffect.createInstance(
-                        ClientNetworking.getAppropriateConfig().whitesnakeSettings.snakeBiteHallucinationDuration,
-                        getSnakeBiteHallucinationLevel() - 1));
-            }
-
-            stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
-            stand.setYRot(getLookAtEntityYaw(stand, target));
-            stand.setXRot(getLookAtEntityPitch(stand, target));
-            playSoundIfPossible(self.level(),null, stand.blockPosition(), ModSounds.PUNCH_4_SOUND_EVENT,
-                    SoundSource.PLAYERS, 0.95F, 1.3F);
-            int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.snakeBiteCooldown;
-            setCooldown(PowerIndex.SKILL_2, cooldown);
-            if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
-            }
-            setAttackTimeDuring(-12);
-            animateStand(WhitesnakeEntity.SNAKE_BITE_IMPACT);
-            return true;
-        }
-        return false;
-    }
-
-    private int getSnakeBiteHallucinationLevel() {
-        return snakeBiteHallucinationCharge >= 60 ? 3 : snakeBiteHallucinationCharge >= 30 ? 2 : 1;
-    }
-
-    private float getSnakeBiteDamage(Entity target) {
-        if (getReducedDamage(target)) {
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
-        }
-        return levelupDamageMod(multiplyPowerByStandConfigMobs(3.0F));
     }
 
     // Time Spark
@@ -1547,10 +1364,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealCooldown;
     }
 
-    private int getSnakeBiteLevel() {
-        return 2;
-    }
-
     private int getWhitesnakeInventoryLevel() {
         return 3;
     }
@@ -1592,8 +1405,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return startDiscSteal();
         } else if (move == ACID_TOSS) {
             return startAcidToss();
-        } else if (move == SNAKE_BITE) {
-            return startSnakeBite();
         } else if (move == PowerIndex.POWER_1_SNEAK) {
             return impale();
         } else if (move == PowerIndex.POWER_2_BLOCK) {
@@ -1653,7 +1464,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (move == CONTROL_DASH) return controlDash(value);
         if (move == WHITESNAKE_INVENTORY) {
-            if (!canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) return false;
+            if (isPiloting() || !canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) return false;
             if (!isClient() && self instanceof ServerPlayer player) {
                 if (isGuarding()) tryPower(PowerIndex.NONE, true);
                 WhitesnakeInventoryMenu.open(player);
@@ -1696,7 +1507,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void updateUniqueMoves() {
         if (getActivePower() == DISC_STEAL) updateDiscSteal();
         else if (getActivePower() == ACID_TOSS) updateAcidToss();
-        else if (getActivePower() == SNAKE_BITE) updateSnakeBite();
         else if (getActivePower() == PowerIndex.POWER_1_SNEAK) updateImpale();
         else if (getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) updateFinalAttackCharge();
         else if (getActivePower() == PowerIndex.SNEAK_ATTACK) updateFinalAttack();
@@ -1709,12 +1519,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (move != PowerIndex.POWER_2_BLOCK && stand != null) stand.setFadePercent(100);
         if (moveStarted) moveStarted = false;
         if (move == PowerIndex.BARRAGE_CHARGE_2 || move == PowerIndex.BARRAGE_2) return false;
-        if (move == SNAKE_BITE && !meltingMode) return false;
         if (isControlHovering() && isHoverRestrictedPower(move)) return false;
         if (meltingMode && isMeltingRestrictedPower(move)) return false;
-        if (getActivePower() == SNAKE_BITE && move != SNAKE_BITE) {
-            stopSoundsIfNearby(SNAKE_BITE_NOISE, 100, false);
-        }
         if (!self.level().isClientSide() && getActivePower() == ACID_TOSS && move != ACID_TOSS) {
             stopSoundsIfNearby(ACID_CHARGE_NOISE, 100, false);
         }
@@ -1725,14 +1531,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return switch (move) {
             case PowerIndex.ATTACK, PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
                     PowerIndex.SNEAK_ATTACK_CHARGE, PowerIndex.SNEAK_ATTACK,
-                    PowerIndex.POWER_1_SNEAK, DISC_STEAL, SNAKE_BITE, ACID_TOSS -> true;
+                    PowerIndex.POWER_1_SNEAK, DISC_STEAL, ACID_TOSS -> true;
             default -> false;
         };
     }
 
     private static boolean isMeltingRestrictedPower(int move) {
         return switch (move) {
-            case DISC_STEAL, PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
+            case PowerIndex.ATTACK, PowerIndex.GUARD, DISC_STEAL,
+                    PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
                     PowerIndex.SNEAK_ATTACK_CHARGE, PowerIndex.SNEAK_ATTACK,
                     PowerIndex.POWER_1_SNEAK -> true;
             default -> false;
@@ -2208,14 +2015,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             applyImpaleCooldown();
             return true;
         }
-        if (getActivePower() == SNAKE_BITE) {
-            int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.snakeBiteCooldown;
-            setCooldown(PowerIndex.SKILL_2, cooldown);
-            if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
-            }
-            return true;
-        }
         if (getActivePower() == DISC_STEAL) {
             applyDiscStealCooldown();
             return true;
@@ -2237,11 +2036,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (keyIsDown && isControlHovering()) return;
-        if (meltingMode && isHoldingSneak()) {
-            if (!keyIsDown) holdDownClick = false;
+        if (meltingMode) {
+            holdDownClick = false;
             return;
         }
+        if (keyIsDown && isControlHovering()) return;
         if (consumeClickInput) {
             if (!keyIsDown) consumeClickInput = false;
             return;
@@ -2272,7 +2071,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (activePower == PowerIndex.POWER_2_BLOCK) return false;
+        if (meltingMode || activePower == PowerIndex.POWER_2_BLOCK) return false;
         return super.buttonInputGuard(keyIsDown, options);
     }
 
@@ -2549,6 +2348,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public boolean canActuallyHit(Entity entity) {
+        if (entity == null) return false;
         if (!isPiloting() && !autoMode) return super.canActuallyHit(entity);
         if (ClientNetworking.getAppropriateConfig().generalStandSettings.standPunchesGoThroughDoorsAndCorners) {
             return true;
@@ -2880,8 +2680,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return ModSounds.IMPALE_CHARGE_EVENT;
         } else if (soundChoice == DISC_STEAL_CHARGE_NOISE) {
             return ModSounds.WHITESNAKE_DISC_STEAL_CHARGE_EVENT;
-        } else if (soundChoice == SNAKE_BITE_NOISE) {
-            return ModSounds.THE_WORLD_ASSAULT_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING) {
             return ModSounds.TIME_STOP_TICKING_EVENT;
         } else if (soundChoice == ROUNDABOUT_DODGE_NOISE) {
@@ -2945,9 +2743,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, getAcidTossLevel(),
                 "ability.roundabout.whitesnake_acid_toss", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_ACID_TOSS, 2, level, bypass));
-        icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getSnakeBiteLevel(),
-                "ability.roundabout.whitesnake_snake_bite", "instruction.roundabout.press_skill",
-                StandIcons.WHITESNAKE_SNAKE_BITE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, 0,
                 "ability.roundabout.whitesnake_control_mode", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_CONTROL_MODE, 4, level, bypass));
@@ -2984,21 +2779,18 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (isBarrageAttacking()) {
             setSkillIcon(context, x, y, 1, StandIcons.WHITESNAKE_FORWARD_BARRAGE, PowerIndex.NO_CD);
-        } else if (meltingMode && !isGuarding() && !isHoldingSneak()) {
-            setSkillIcon(context, x, y, 1, canExecuteMoveWithLevel(getSnakeBiteLevel())
-                    ? StandIcons.WHITESNAKE_SNAKE_BITE : StandIcons.LOCKED,
-                    PowerIndex.SKILL_2, !canExecuteMoveWithLevel(getSnakeBiteLevel()));
-        } else if (meltingMode && isHoldingSneak() && !isGuarding()) {
+        } else if (meltingMode && !isGuarding()) {
             setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         } else {
-            int level = isGuarding() ? getWhitesnakeInventoryLevel() : getDiscStealLevel();
+            boolean inventoryContext = isGuarding() && !isPiloting();
+            int level = inventoryContext ? getWhitesnakeInventoryLevel() : getDiscStealLevel();
             byte discSelection = getSelectedDisc();
-            if (canExecuteMoveWithLevel(level) && (isGuarding() || discSelection >= 0)) {
+            if (canExecuteMoveWithLevel(level) && (inventoryContext || discSelection >= 0)) {
                 setSkillIcon(context, x, y, 1,
-                        isGuarding() ? StandIcons.WHITESNAKE_INVENTORY
+                        inventoryContext ? StandIcons.WHITESNAKE_INVENTORY
                                 : isHoldingSneak() ? StandIcons.WHITESNAKE_DISC_TYPES[discSelection]
                                 : StandIcons.WHITESNAKE_DISC_STEAL,
-                        isGuarding() ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
+                        inventoryContext ? PowerIndex.NO_CD : PowerIndex.SKILL_1);
             } else {
                 setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
             }

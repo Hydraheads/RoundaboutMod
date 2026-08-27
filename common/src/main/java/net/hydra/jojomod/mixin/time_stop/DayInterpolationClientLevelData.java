@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,6 +27,18 @@ public abstract class DayInterpolationClientLevelData implements IDayInterpolati
     private boolean roundabout$TimeStopInitialized = false;
     @Unique
     private boolean roundabout$InterpolatingDaytime = false;
+
+    @Unique
+    long roundabout$interpolationMaxStep = 50;
+
+    /// will be used for Made In Heaven Time acceleration
+    public void roundabout$setInterpolationMaxStep(long value) {
+        this.roundabout$interpolationMaxStep = value;
+    }
+
+    public long roundabout$getInterpolationMaxStep() {
+        return this.roundabout$interpolationMaxStep;
+    }
 
     @Unique
     @Override
@@ -80,7 +93,8 @@ public abstract class DayInterpolationClientLevelData implements IDayInterpolati
         LocalPlayer LP = Minecraft.getInstance().player;
         if (LP != null && Minecraft.getInstance().level != null &&
                 (((TimeStop)Minecraft.getInstance().level).inTimeStopRange(LP)
-                && !(ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1))) {
+                && !((ClientNetworking.getAppropriateConfig().timeStopSettings.blockRangeNegativeOneIsInfinite == -1
+                && Minecraft.getInstance().level.dimension() == Level.OVERWORLD)))) {
             if (!this.roundabout$getRoundaboutTimeStopInitialized()){
                 this.roundabout$DayTimeActual = dayTime;
                 this.roundabout$DayTimeTarget = dayTime;

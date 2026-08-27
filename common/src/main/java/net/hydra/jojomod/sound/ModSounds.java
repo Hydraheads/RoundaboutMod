@@ -158,6 +158,14 @@ public class ModSounds {
     public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
     public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
 
+    public static final String D4C_FUSE = "d4c_fuse";
+    public static final ResourceLocation D4C_FUSE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSE);
+    public static SoundEvent D4C_FUSE_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSE_ID);
+
+    public static final String D4C_FUSION_START = "d4c_fusion_start";
+    public static final ResourceLocation D4C_FUSION_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSION_START);
+    public static SoundEvent D4C_FUSION_START_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSION_START_ID);
+
     public static final String WORLD_MERGE = "world_merge";
     public static final ResourceLocation WORLD_MERGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WORLD_MERGE);
     public static SoundEvent WORLD_MERGE_EVENT = SoundEvent.createVariableRangeEvent(WORLD_MERGE_ID);
@@ -741,6 +749,9 @@ public class ModSounds {
     public static final String KQ_MINESWEEPER_AIRBUBBLE_SEND = "kq_minesweeper_bubble_send";
     public static final ResourceLocation KQ_MINESWEEPER_AIRBUBBLE_SEND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_AIRBUBBLE_SEND);
     public static SoundEvent KQ_MINESWEEPER_AIRBUBBLE_SEND_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_AIRBUBBLE_SEND_ID);
+    public static final String KQ_MINESWEEPER_AIRBUBBLE_REDIRECT = "kq_minesweeper_redirect";
+    public static final ResourceLocation KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KQ_MINESWEEPER_AIRBUBBLE_REDIRECT);
+    public static SoundEvent KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_EVENT = SoundEvent.createVariableRangeEvent(KQ_MINESWEEPER_AIRBUBBLE_REDIRECT_ID);
 
     public static final String KILLER_QUEEN_PUNCH_1 = "killer_queen_punch_1";
     public static final ResourceLocation KILLER_QUEEN_PUNCH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_PUNCH_1);
@@ -857,6 +868,26 @@ public class ModSounds {
     public static final String KILLER_QUEEN_BUBBLE_SELECT = "killer_queen_select";
     public static final ResourceLocation KILLER_QUEEN_BUBBLE_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_BUBBLE_SELECT);
     public static SoundEvent KILLER_QUEEN_BUBBLE_SELECT_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_BUBBLE_SELECT_ID);
+
+    public static final String BITES_THE_DUST_COMBAT = "btd_normal_reset";
+    public static final ResourceLocation BITES_THE_DUST_COMBAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BITES_THE_DUST_COMBAT);
+    public static SoundEvent BITES_THE_DUST_COMBAT_EVENT = SoundEvent.createVariableRangeEvent(BITES_THE_DUST_COMBAT_ID);
+    public static final String BITES_THE_DUST_DAY = "btd_full_reset";
+    public static final ResourceLocation BITES_THE_DUST_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BITES_THE_DUST_DAY);
+    public static SoundEvent BITES_THE_DUST_DAY_EVENT = SoundEvent.createVariableRangeEvent(BITES_THE_DUST_DAY_ID);
+    public static final String BITES_THE_DUST_ARROW = "btd_arrow";
+    public static final ResourceLocation BITES_THE_DUST_ARROW_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BITES_THE_DUST_ARROW);
+    public static SoundEvent BITES_THE_DUST_ARROW_EVENT = SoundEvent.createVariableRangeEvent(BITES_THE_DUST_ARROW_ID);
+
+    public static final String KILLER_QUEEN_EXPLOSION_1 = "killer_queen_explosion_1";
+    public static final ResourceLocation KILLER_QUEEN_EXPLOSION_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_EXPLOSION_1);
+    public static SoundEvent KILLER_QUEEN_EXPLOSION_1_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_EXPLOSION_1_ID);
+    public static final String KILLER_QUEEN_EXPLOSION_2 = "killer_queen_explosion_2";
+    public static final ResourceLocation KILLER_QUEEN_EXPLOSION_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_EXPLOSION_2);
+    public static SoundEvent KILLER_QUEEN_EXPLOSION_2_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_EXPLOSION_2_ID);
+    public static final String KILLER_QUEEN_EXPLOSION_3 = "killer_queen_explosion_3";
+    public static final ResourceLocation KILLER_QUEEN_EXPLOSION_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KILLER_QUEEN_EXPLOSION_3);
+    public static SoundEvent KILLER_QUEEN_EXPLOSION_3_EVENT = SoundEvent.createVariableRangeEvent(KILLER_QUEEN_EXPLOSION_3_ID);
 
     public static final String SHA_JUMP = "sha_jump";
     public static final ResourceLocation SHA_JUMP_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SHA_JUMP);
@@ -1169,6 +1200,26 @@ public class ModSounds {
     public static final String SILVER_CHARIOT_FINAL_HIT_CRY = "silver_chariot_final_hit_cry";
     public static final ResourceLocation SILVER_CHARIOT_FINAL_HIT_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_FINAL_HIT_CRY);
     public static SoundEvent SILVER_CHARIOT_FINAL_HIT_CRY_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_FINAL_HIT_CRY_ID);
+
+    public static final String SILVER_CHARIOT_HIT_1 = "silver_chariot_hit_1";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_1);
+    public static SoundEvent SILVER_CHARIOT_HIT_1_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_1_ID);
+
+    public static final String SILVER_CHARIOT_HIT_2 = "silver_chariot_hit_2";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_2);
+    public static SoundEvent SILVER_CHARIOT_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_2_ID);
+
+    public static final String SILVER_CHARIOT_HIT_3 = "silver_chariot_hit_3";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_3);
+    public static SoundEvent SILVER_CHARIOT_HIT_3_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_3_ID);
+
+    public static final String SILVER_CHARIOT_HIT_4 = "silver_chariot_hit_4";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_4);
+    public static SoundEvent SILVER_CHARIOT_HIT_4_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_4_ID);
+
+    public static final String SILVER_CHARIOT_AFTERIMAGE = "silver_chariot_afterimage";
+    public static final ResourceLocation SILVER_CHARIOT_AFTERIMAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_AFTERIMAGE);
+    public static SoundEvent SILVER_CHARIOT_AFTERIMAGE_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_AFTERIMAGE_ID);
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);
@@ -1533,7 +1584,17 @@ public class ModSounds {
     public static final String EPITAPH_FADE = "epitaph_fade";
     public static final ResourceLocation EPITAPH_FADE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ EPITAPH_FADE);
     public static SoundEvent EPITAPH_FADE_EVENT = SoundEvent.createVariableRangeEvent(EPITAPH_FADE_ID);
+    public static final String D4C_EXPLOSION = "d4c_explosion";
+    public static final ResourceLocation D4C_EXPLOSION_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_EXPLOSION);
+    public static SoundEvent D4C_EXPLOSION_EVENT = SoundEvent.createVariableRangeEvent(D4C_EXPLOSION_ID);
 
+
+    public static final String D4C_PUNCH = "d4c_punch";
+    public static final ResourceLocation D4C_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_PUNCH);
+    public static SoundEvent D4C_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(D4C_PUNCH_ID);
+    public static final String D4C_PUNCH_2 = "d4c_punch_2";
+    public static final ResourceLocation D4C_PUNCH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ D4C_PUNCH_2);
+    public static SoundEvent D4C_PUNCH_2_EVENT = SoundEvent.createVariableRangeEvent(D4C_PUNCH_2_ID);
 
     public static final String KING_CRIMSON_PUNCH = "king_crimson_punch";
     public static final ResourceLocation KING_CRIMSON_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ KING_CRIMSON_PUNCH);

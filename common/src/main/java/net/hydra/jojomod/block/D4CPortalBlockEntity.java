@@ -27,6 +27,7 @@ public class D4CPortalBlockEntity extends BlockEntity {
     public int worldId = 0;
     public UUID creator = null;
     public Entity getCreator = null;
+    public List<Entity> entityList = new ArrayList<>();
     @Override
     public Level getLevel() {
         return super.getLevel();

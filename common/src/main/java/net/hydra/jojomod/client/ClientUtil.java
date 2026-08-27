@@ -452,6 +452,11 @@ public class ClientUtil {
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
+
+        LivingEntity user = ent.getUser();
+        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
+                PBS.transformSabbath(ent);
+        }
     }
     public static void preRenderCrossfire(CrossfireHurricaneEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6){
             if (((TimeStop)ent.level()).inTimeStopRange(ent)){
@@ -1148,6 +1153,8 @@ public class ClientUtil {
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboAmt(data);
             }
+        } else if (context == PacketDataIndex.S2C_MERGE_TIME_INT){
+            ((IEntityAndData)player).rdbt$setForeignWorldTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_COMBO_SEC_LEFT){
             if (((IPowersPlayer) player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp){
                 pgp.setComboExpireTicks(data);
@@ -2140,14 +2147,15 @@ public class ClientUtil {
             timeSkipTicker = 0;
         } else if (context == PacketDataIndex.BITES_THE_DUST){
             bitesTheDustTicker = 0;
+            if (!ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayModeAffectGlobalTime) {
+                IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData) player.level().getLevelData());
 
-            IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData) player.level().getLevelData());
+                long dayTime = levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
+                long targetDayTime = dayTime - (dayTime % 24000);
 
-            long dayTime = levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
-            long targetDayTime = dayTime - (dayTime % 24000);
-
-            levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
-            levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);
+                levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
+                levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);
+            }
         } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
         } else if (context == PacketDataIndex.S2C_SOFT){
@@ -2352,6 +2360,8 @@ public class ClientUtil {
                 ModStrayModels.theWorldArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
                 ModStrayModels.starPlatinumArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
+                ModStrayModels.killerQueenArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
                 stack.popPose();
             }

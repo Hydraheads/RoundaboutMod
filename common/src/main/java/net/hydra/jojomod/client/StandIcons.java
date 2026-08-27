@@ -20,7 +20,6 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_DISC_THROW = whitesnakeIcon("disc_throw");
     public static final ResourceLocation WHITESNAKE_PHASE_GRAB = whitesnakeIcon("phase_grab");
     public static final ResourceLocation WHITESNAKE_DISC_STEAL = whitesnakeIcon("disc_steal");
-    public static final ResourceLocation WHITESNAKE_SNAKE_BITE = whitesnakeIcon("snake_bite");
     public static final ResourceLocation WHITESNAKE_ACID_TOSS = whitesnakeIcon("acid_toss");
     public static final ResourceLocation WHITESNAKE_MELTING_MODE = whitesnakeIcon("melting_mode");
     public static final ResourceLocation WHITESNAKE_CONTROL_MODE = whitesnakeIcon("control_mode");
@@ -469,6 +468,15 @@ public class StandIcons {
             "textures/gui/icons/killer_queen/guard_bubbles.png");
     public static final ResourceLocation KILLER_QUEEN_FAST_KICK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/fast_kick.png");
+    public static final ResourceLocation KILLER_QUEEN_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/mining.png");
+    public static final ResourceLocation KILLER_QUEEN_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/hands_active.png");
+
+    public static final ResourceLocation BITES_THE_DUST_PLANTED = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/bites_the_dust_planted.png");
+    public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/bites_the_dust_target.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
@@ -776,6 +784,10 @@ public class StandIcons {
             "textures/gui/icons/black_sabbath/black_sabbath_chest.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_MODE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/target_manual_selection.png");
+    public static final ResourceLocation POLPO_SELECTING_TARGET_CONFIRM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/target_manual_selection_confirm.png");
+    public static final ResourceLocation POLPO_SELECTING_TARGET_UNSELECTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/target_manual_unselection.png");
 
     public static final ResourceLocation D4C_BETWEEN_VISION = Roundabout.location("textures/gui/icons/d4c/between_vision.png");
     public static final ResourceLocation D4C_DIMENSION_KIDNAP = Roundabout.location("textures/gui/icons/d4c/dimension_kidnap.png");
@@ -791,6 +803,7 @@ public class StandIcons {
     public static final ResourceLocation D4C_PARALLEL_RUNNING = Roundabout.location("textures/gui/icons/d4c/parallel_running.png");
     public static final ResourceLocation MERGING_RETURN = Roundabout.location("textures/gui/icons/d4c/merging_return.png");
     public static final ResourceLocation D4C_PARALLEL_GRAB = Roundabout.location("textures/gui/icons/d4c/parallel_grab.png");
+    public static final ResourceLocation D4C_PARALLEL_GRAB_2 = Roundabout.location("textures/gui/icons/d4c/parallel_grab_2.png");
     public static final ResourceLocation D4C_CHOP = Roundabout.location("textures/gui/icons/d4c/chop.png");
     public static final ResourceLocation D4C_SHIELD_STAND = Roundabout.location("textures/gui/icons/d4c/shield_stand.png");
     public static final ResourceLocation D4C_SHIELD_SHIELD = Roundabout.location("textures/gui/icons/d4c/shield_shield.png");
@@ -812,6 +825,8 @@ public class StandIcons {
     public static final ResourceLocation GREEN_DAY_MOLD_SPREAD = Roundabout.location("textures/gui/icons/green_day/mold_spread.png");
     public static final ResourceLocation GREEN_DAY_SCULK_ABSORB = Roundabout.location("textures/gui/icons/green_day/sculk_absorb.png");
     public static final ResourceLocation GREEN_DAY_VAULT = Roundabout.location("textures/gui/icons/green_day/stand_ledge_grab.png");
+    public static final  ResourceLocation GREEN_DAY_MOLD_OFF = Roundabout.location("textures/gui/icons/green_day/mold_deactivation.png");
+
 
     public static final ResourceLocation RATT_PLACE = Roundabout.location("textures/gui/icons/ratt/ratt_place.png");
     public static final ResourceLocation RATT_RECALL = Roundabout.location("textures/gui/icons/ratt/ratt_recall.png");

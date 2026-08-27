@@ -1,6 +1,8 @@
 package net.hydra.jojomod.platform.services;
 
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -27,6 +29,8 @@ public interface IPlatformHelper {
      */
     boolean isModLoaded(String modId);
 
+
+    ResourceLocation soundId(SoundEvent event);
     /**
      * Check if the game is currently in a development environment.
      *

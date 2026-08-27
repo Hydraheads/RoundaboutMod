@@ -1,14 +1,13 @@
 package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Sets;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -193,13 +192,13 @@ public class KnifeEntity extends AbstractArrow {
         float $$2;
 
         if ($$1 instanceof Player || $$1 instanceof CloneEntity) {
-            $$2 = (float) (2.1F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
+            $$2 = (float) (1.8F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnPlayers *0.01));
 
             if(isHattanKnife){
                 this.doBonusKnifeDamageHattan($$1);
             }
         } else {
-            $$2 = (float) (3.5F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
+            $$2 = (float) (3F * (ClientNetworking.getAppropriateConfig().itemSettings.knifeDamageOnMobs *0.01));;
         }
 
         if ($$1 instanceof LivingEntity $$3) {

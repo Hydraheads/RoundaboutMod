@@ -1,5 +1,8 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -129,6 +132,7 @@ public class ModBlocks {
     public static Block CEILING_LIGHT;
     public static Block MIRROR;
     public static Block STEREO;
+    public static Block HAND_BLOCK;
     public static Block FANCY_LIGHTER_BLOCK;
 
     public static Block MINING_ALERT_BLOCK;
@@ -157,7 +161,6 @@ public class ModBlocks {
     public static Block OASIS_MUD_BLOCK;
 
     public static Block CLIMBING_WIRE;
-
 
     public static Block FROZEN_DIRT;
     public static Block FROZEN_STONE;
@@ -211,6 +214,8 @@ public class ModBlocks {
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
     public static BlockEntityType<HallucinatoryAcidBlockEntity> HALLUCINATORY_ACID_BLOCK_ENTITY;
+    public static BlockEntityType<HandBlockEntity> HAND_BLOCK_ENTITY;
+
     //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
 
     public static Block WHITE_ALBUM_ICE_BLOCK_PROPERTIES =
@@ -785,6 +790,14 @@ public class ModBlocks {
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
+    public static HandBlock HAND_PROPERTIES = new HandBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE).
+                    instrument(NoteBlockInstrument.BANJO)
+                    .strength(0.3F, 0.4F)
+                    .sound(SoundType.STONE)
+    );
+
     public static MiningAlertBlock MINING_ALERT_BLOCK_PROPERTIES = new MiningAlertBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).pushReaction(PushReaction.DESTROY).lightLevel((p_152607_) -> {

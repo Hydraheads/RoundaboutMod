@@ -2,6 +2,8 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -25,6 +27,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.BlockItem;
@@ -54,6 +57,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     public GasolineCanEntity(LivingEntity living, Level $$1) {
         super(ModEntities.GASOLINE_CAN, living, $$1);
+        setLauncher(living.getId());
     }
 
 
@@ -61,12 +65,14 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     public void addAdditionalSaveData(CompoundTag $$0){
         $$0.putBoolean("roundabout.Finished",done);
         $$0.putInt("roundabout.Bounces",bounces);
+        $$0.putBoolean("roundabout.Launched",getLaunched());
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.done = $$0.getBoolean("roundabout.Finished");
         this.bounces = $$0.getInt("roundabout.Bounces");
+        setLaunched($$0.getBoolean("roundabout.Launched"));
         super.readAdditionalSaveData($$0);
     }
 
@@ -176,11 +182,25 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     }
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$LAUNCHED = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$LAUNCHER = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.INT);
     public void starThrowInit(){
         this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
 
+    public void setLauncher(int launcher) {
+        this.getEntityData().set(ROUNDABOUT$LAUNCHER,launcher);
+    }
+    public void setLaunched(boolean launched) {
+        this.getEntityData().set(ROUNDABOUT$LAUNCHED,launched);
+    }
+    public int getLauncher() {
+        return this.getEntityData().get(ROUNDABOUT$LAUNCHER);
+    }
+    public boolean getLaunched() {
+        return this.getEntityData().get(ROUNDABOUT$LAUNCHED);
+    }
     public boolean getSuperThrow() {
         return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
     }
@@ -204,8 +224,35 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         if (this.isInvulnerableTo($$0)) {
             return false;
         } else {
+// Launch slightly away from whatever directly caused the damage
+            if (!getLaunched() && hurter != null && hurter.getId() != getLauncher()) {
+                if (!this.level().isClientSide) {
+                    this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,false);
+                    Vec3 launchDirection = this.position()
+                            .subtract(hurter.position());
+
+                    // Avoid normalizing a zero-length vector
+                    if (launchDirection.lengthSqr() > 0.0001) {
+                        launchDirection = launchDirection.normalize();
+
+                        // Horizontal/overall launch strength
+                        double strength = 0.7;
+
+                        this.setDeltaMovement(
+                                new Vec3(
+                                        launchDirection.x * strength,
+                                        launchDirection.y * strength + 0.15,
+                                        launchDirection.z * strength
+                                )
+                        );
+
+                        this.hasImpulse = true;
+                    }
+                    setLaunched(true);
+                }
+            }
             this.markHurt();
-            return false;
+            return super.hurt($$0,$$1);
         }
     }
 
@@ -213,6 +260,9 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
+        if (!($$1 instanceof BlockWallEntity || $$1 instanceof Shulker)){
+            return;
+        }
         float $$2 = 2.0f;
 
         Entity $$4 = this.getOwner();
@@ -243,6 +293,8 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
             super.defineSynchedData();
             this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
+            this.getEntityData().define(ROUNDABOUT$LAUNCHED, false);
+            this.getEntityData().define(ROUNDABOUT$LAUNCHER, 0);
         }
     }
 
@@ -395,6 +447,16 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         this.setXRot((float)(Mth.atan2($$5.y, $$6) * 180.0F / (float)Math.PI));
         this.yRotO = this.getYRot();
         this.xRotO = this.getXRot();
+    }
+
+    public boolean isPickable() {
+        if (this.level().isClientSide()){
+            if (ClientUtil.getPlayer().getId() == getLauncher()){
+                return false;
+            }
+            return true;
+        }
+        return true;
     }
 
     public void shootFromRotationWithVariance(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {

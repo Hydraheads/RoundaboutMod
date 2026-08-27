@@ -13,6 +13,7 @@ import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -21,6 +22,7 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
@@ -813,6 +815,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
         return false;
     }
+    public int delay = 0;
     public void tickMobAINotClone(LivingEntity attackTarget){
         if (activePower == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_2_SNEAK)){
             if (self instanceof Mob mb) {
@@ -848,12 +851,17 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
 
             boolean upAiNow = upAi(attackTarget);
+            if (delay > 0){
+                delay--;
+                return;
+            }
             if (upAiNow && distanceTo > 5 && !onCooldown(PowerIndex.SKILL_3) &&
             MainUtil.getMobBleed(self) && !(MainUtil.hasBlueBlood(self))
                     && !(MainUtil.hasEnderBlood(self))) {
                 if (this.attackTimeDuring <= -1) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
                     setCooldown(PowerIndex.SKILL_2_SNEAK,60);
+                    delay = 55;
                 }
             } else {
                 Entity targetEntity = getTargetEntity(this.self, -1);

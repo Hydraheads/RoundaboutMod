@@ -4,6 +4,9 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
 import net.fabricmc.fabric.impl.datagen.FabricTagBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,5 +40,8 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return FabricLoader.getInstance().isDevelopmentEnvironment();
     }
 
+    public ResourceLocation soundId(SoundEvent event){
+        return BuiltInRegistries.SOUND_EVENT.getKey(event);
+    }
 
 }

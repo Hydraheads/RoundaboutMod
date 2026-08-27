@@ -1,7 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
@@ -9,16 +8,14 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.projectile.ColdBlastProjectile;
-import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
-import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
-import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.item.MaxStandDiscItem;

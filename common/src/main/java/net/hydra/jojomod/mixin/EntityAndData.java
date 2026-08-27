@@ -6,12 +6,13 @@ import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
-import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
 import net.hydra.jojomod.event.SavedSecond;
+import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -22,31 +23,27 @@ import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.stand.powers.PowersAchtungBaby;
-import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
-import net.hydra.jojomod.stand.powers.PowersMetallica;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
+import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -54,7 +51,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -66,10 +62,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(value = Entity.class,priority = 100)
 public abstract class EntityAndData implements IEntityAndData {
@@ -168,6 +163,12 @@ public abstract class EntityAndData implements IEntityAndData {
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
     public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         $$0.putBoolean("canMobGrab",rdbt$canBePickedUp);
+        $$0.putInt("inForeignWorld",rdbt$inForeignWorld);
+        $$0.putByte("nativeToWorld",rdbt$nativeTo);
+        $$0.putByte("originWorld",rdbt$originWorld);
+        if (rdbt$nativeCopy != null){
+            $$0.putUUID("rdbt$nativeCopy",rdbt$nativeCopy);
+        }
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -175,6 +176,14 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
         if ($$0.contains("canMobGrab")) {
             rdbt$canBePickedUp = $$0.getBoolean("canMobGrab");
+        } if ($$0.contains("inForeignWorld")) {
+            rdbt$inForeignWorld = $$0.getInt("inForeignWorld");
+        } if ($$0.contains("nativeToWorld")) {
+            rdbt$nativeTo = $$0.getByte("nativeToWorld");
+        } if ($$0.hasUUID("nativeToWorldCopy")) {
+            rdbt$nativeCopy = $$0.getUUID("nativeToWorld");
+        } if ($$0.hasUUID("rdbt$originWorld")) {
+            rdbt$nativeCopy = $$0.getUUID("rdbt$originWorld");
         }
 
     }
@@ -912,8 +921,173 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     protected abstract AABB getBoundingBoxForPose(Pose pose);
 
+    @Shadow
+    public abstract Vec3 position();
+
+    @Shadow
+    public abstract void discard();
+
     @Unique
     private int rdbt$inForeignWorld = 0;
+    @Unique
+    private int rdbt$ticksUntilGone = 0;
+    @Unique
+    private byte rdbt$nativeTo = 0;
+    @Unique
+    private byte rdbt$originWorld = 0;
+
+    @Override
+    @Unique
+    public int rdbt$getForeignWorldTicks(){
+        return rdbt$inForeignWorld;
+    }
+    @Override
+    @Unique
+    public int rdbt$getTicksUntilGone(){
+        return rdbt$ticksUntilGone;
+    }
+    @Override
+    @Unique
+    public void rdbt$setTicksUntilGone(int lol){
+        rdbt$ticksUntilGone = lol;
+    }
+    @Override
+    @Unique
+    public byte rdbt$getNativeTo(){
+        return rdbt$nativeTo;
+    }
+    @Override
+    @Unique
+    public void rdbt$setNativeTo(byte lol){
+        rdbt$nativeTo = lol;
+    }
+    @Override
+    @Unique
+    public byte rdbt$getOriginWorld(){
+        return rdbt$originWorld;
+    }
+    @Override
+    @Unique
+    public void rdbt$setOriginWorld(byte lol){
+        rdbt$originWorld = lol;
+    }
+
+    @Unique
+    private int rdbt$altCheckCooldown = 0;
+    @Unique
+    private int rdbt$delayTime = 0;
+
+    @Unique
+    public int rdbt$getAltCheckCooldown() {
+        return rdbt$altCheckCooldown;
+    }
+    @Unique
+    private Entity rdbt$nearAlt = null;
+
+    @Unique
+    @Override
+    public Entity rdbt$getNearAlt(){
+        return rdbt$nearAlt;
+    }
+
+    @Unique
+    public void rdbt$setAltCheckCooldown(int ticks) {
+        rdbt$altCheckCooldown = ticks;
+    }
+    @Unique
+    public UUID rdbt$nativeCopy = null;
+
+    @Unique
+    public UUID rdbt$getNativeCopy(){
+        return rdbt$nativeCopy;
+    }
+    @Unique
+    public void rdbt$setNativeCopy(UUID uuidd){
+        rdbt$nativeCopy = uuidd;
+    }
+    @Override
+    @Unique
+    public void rdbt$setForeignWorldTicks(int lol){
+        rdbt$inForeignWorld = lol;
+        if (((Entity)(Object)this) instanceof ServerPlayer player){
+            S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.S2C_MERGE_TIME_INT,lol);
+        }
+    }
+    private void rdbt$tickAltProximity() {
+        if (!(level() instanceof ServerLevel sl)) {
+            return;
+        }
+
+        Entity self = (Entity) (Object) this;
+
+        // Only entities originating from another world
+        if (PowerTypes.originatedFromOurWorld(self)) {
+            rdbt$nearAlt = null;
+            return;
+        }
+
+        // ------------------------------------------------
+        // ALREADY TRACKING A PARALLEL ENTITY
+        // ------------------------------------------------
+
+        if (rdbt$nearAlt != null) {
+            rdbt$delayTime++;
+            Entity alt = rdbt$nearAlt;
+
+            // Cheap checks only.
+            // No entity hitbox query.
+            if (!alt.isAlive()
+                    || alt.level() != self.level()
+                    || !MainUtil.canActuallyHitInvolved2(self,alt)
+                    || PowerTypes.isInADifferentExistenceNoTE(self,alt)
+                    || (alt instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                    || self.distanceTo(alt) >= 9) {
+
+                rdbt$nearAlt = null;
+
+                // Don't immediately perform another expensive search.
+                rdbt$altCheckCooldown = 40;
+                return;
+            }
+
+            // They're still close enough.
+                PowerTypes.tickIsNearAlt(self, alt,rdbt$delayTime);
+            if (self.isAlive() && alt.isAlive()) {
+                PowerTypes.tickIsNearAlt(alt, self,rdbt$delayTime);
+            }
+            return;
+        }
+        rdbt$delayTime = 0;
+        // ------------------------------------------------
+        // SEARCHING FOR A TARGET
+        // ------------------------------------------------
+
+        if (rdbt$altCheckCooldown > 0) {
+            rdbt$altCheckCooldown--;
+            return;
+        }
+
+        // 40-100 ticks = 2-5 seconds
+        rdbt$altCheckCooldown =
+                20 + (int)(Math.random() * 15);
+
+        Entity alt = PowerTypes.findNearbyParallelCopy(self);
+
+        if (alt != null && !PowerTypes.isInADifferentExistenceNoTE(self,alt)) {
+            rdbt$nearAlt = alt;
+
+            MainUtil.playSoundIfPossible(self,self.level(),null, self.blockPosition(),
+                    ModSounds.D4C_FUSION_START_EVENT, SoundSource.PLAYERS, 3.0F, 1F+((float)(Math.random()*0.05F)));
+
+            // Immediately run the effect rather than
+            // waiting until the next tick.
+            PowerTypes.tickIsNearAlt(self, alt,rdbt$delayTime);
+            if (self.isAlive() && alt.isAlive()) {
+                PowerTypes.tickIsNearAlt(alt, self,rdbt$delayTime);
+            }
+        }
+    }
+
 
     @Override
     @Unique
@@ -922,22 +1096,52 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickTrueInvisibility();
         roundabout$tickTrueInvisibilityManhattan();
 
-        Entity thrs = ((Entity) (Object)this);
-        byte world = PowerTypes.getPlaneOfExisting(thrs);
-        if (world != 0){
-            int existTime = PowerTypes.getForeignWorldMaxTime(world);
-            if (existTime != -1){
-                rdbt$inForeignWorld++;
-                if (rdbt$inForeignWorld > existTime){
-                    PowerTypes.setPlaneOfExisting(thrs,(byte) 0);
-                }
-            }
-        } else {
-            if (rdbt$inForeignWorld != 0){
-                rdbt$inForeignWorld = 0;
+        rdbt$tickAltProximity();
+
+        if (!level().isClientSide() && !isRemoved()) {
+            Entity thrs = ((Entity) (Object) this);
+            byte world = PowerTypes.getPlaneOfExisting(thrs);
+                if (!(thrs instanceof FollowingStandEntity fs && fs.getFollowing() != null)
+                        && !(thrs instanceof StandEntity se && se.getUser() != null)) {
+                    if (rdbt$nativeTo != 0 && rdbt$nativeTo == world){
+                        rdbt$ticksUntilGone--;
+                        if (rdbt$ticksUntilGone <= 0){
+                            discard();
+                        }
+                    } else {
+                        if (rdbt$nativeTo != 0) {
+                            rdbt$nativeTo = 0;
+                        }
+                        if (world != 0) {
+                            int existTime = PowerTypes.getForeignWorldMaxTime(world);
+                            if (existTime != -1) {
+                                int clmp = Mth.clamp(rdbt$inForeignWorld +
+                                                PowersD4C.getDeductionTicks(thrs, position().distanceTo(
+                                                        ((IGravityEntity) thrs).rdbt$getExistPlaneStartPoint())
+                                                ),
+                                        0, existTime);
+                                rdbt$setForeignWorldTicks(clmp);
+                                if (rdbt$inForeignWorld >= existTime) {
+                                    if (PowerTypes.isInD4CWorld(thrs)) {
+                                        if (!PowersD4C.ejectFromNearestEntity(thrs)) {
+                                            if (!PowersD4C.ejectFromOGSpot(thrs)) {
+                                            }
+                                        }
+                                    }
+                                    PowerTypes.setPlaneOfExisting(thrs, (byte) 0);
+                                }
+                            }
+                        } else {
+                            if (rdbt$inForeignWorld != 0) {
+                                rdbt$setForeignWorldTicks(0);
+                            }
+                        }
+                    }
             }
         }
     }
+
+
 
     @Unique
     private int lastDay = -1;
@@ -961,7 +1165,7 @@ public abstract class EntityAndData implements IEntityAndData {
         roundabout$tickQVec();
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+    protected void roundabout$playSoundEnt(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
         Entity thrs = ((Entity) (Object)this);
         if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
             SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
@@ -989,33 +1193,37 @@ public abstract class EntityAndData implements IEntityAndData {
             if (PowerTypes.isExistentiallyElsewhere(thrs)){
                 if (thrs.level() instanceof ServerLevel sl) {
                     if (soundEvent != null) {
-                        ResourceLocation soundId = BuiltInRegistries.SOUND_EVENT.getKey(soundEvent);
-                        String str = this.getSoundSource().name();
-                        for (ServerPlayer playerInList :
-                                sl.getServer().getPlayerList().getPlayers()) {
+                        ResourceLocation soundId = soundEvent.getLocation();
+                        if (soundId != null) {
+                            String str = this.getSoundSource().name();
+                            if (str != null) {
+                                for (ServerPlayer playerInList :
+                                        sl.getServer().getPlayerList().getPlayers()) {
 
-                            double range = soundEvent.getRange(g);
-                            double rangeSqr = range * range;
-                            if (playerInList.distanceToSqr(thrs) > rangeSqr) {
-                                continue;
+                                    double range = soundEvent.getRange(g);
+                                    double rangeSqr = range * range;
+                                    if (playerInList.distanceToSqr(thrs) > rangeSqr) {
+                                        continue;
+                                    }
+
+                                    if (PowerTypes.isInADifferentExistenceNoTE(
+                                            thrs,
+                                            playerInList)) {
+                                        continue;
+                                    }
+
+                                    S2CPacketUtil.sendSafeSound(
+                                            playerInList,
+                                            thrs.getX(),
+                                            thrs.getY(),
+                                            thrs.getZ(),
+                                            soundId.toString(),
+                                            str,
+                                            f,
+                                            g
+                                    );
+                                }
                             }
-
-                            if (PowerTypes.isInADifferentExistenceNoTE(
-                                    thrs,
-                                    playerInList)) {
-                                continue;
-                            }
-
-                            S2CPacketUtil.sendSafeSound(
-                                    playerInList,
-                                    thrs.getX(),
-                                    thrs.getY(),
-                                    thrs.getZ(),
-                                    soundId.toString(),
-                                    str,
-                                    f,
-                                    g
-                            );
                         }
                     }
                 }

@@ -35,6 +35,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -151,7 +152,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 15;
+	static final int attackTickMax = 45;
 	int jumpTick = 0;
 	static final int jumpTickMax = 68;
 	int explosionMiningTicks = 0;
@@ -202,7 +203,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public BlockPos blockTarget = null;
 	public int ticksUntilNextPathRecalculation = 15;
 	public int returnTicks = 0;
-	private static final int returnMaxTicks = 300;
+	private static final int returnMaxTicks = 200;
 	public int inativeTicks = 0;
 	private static final int inativeMaxTicks = 240;
 
@@ -218,7 +219,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public boolean getHaveToReturn() {
 		return this.haveToReturn || (this.explosions >= getMaxExplosions() && getMaxExplosions() != 0)
-				|| this.inativeTicks >= inativeMaxTicks && !getTorchStatus();
+				|| (this.inativeTicks >= inativeMaxTicks && !getTorchStatus());
 	}
 
 	public void setHaveToReturn(boolean value) {
@@ -344,6 +345,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					if (this.onGround() || this.onClimbable() || this.wasTouchingWater
 							|| this.wasInPowderSnow || this.getDeltaMovement().length() < 0.8) {
 						throwStatus = HAS_BEEN;
+						stunTicks = 70;
 					}else {
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
@@ -644,7 +646,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.setTargetType(NONE);
 		}
 
-		stunTicks = 10;
+		if (stunTicks < 10) {
+			stunTicks = 10;
+		}
 		this.attackTick = attackTickMax;
 	}
 
@@ -824,7 +828,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 
 			MobType mobType = LE.getMobType();
-			if (mobType.equals(MobType.UNDEAD) || FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
+			if (ClientNetworking.getAppropriateConfig().killerQueenSettings.sheerHeartAttackSeenUndeadAndArthropod
+					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
+					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
 		return points;
 	}
@@ -907,10 +913,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 	}
 
     @Override public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
+            discard();
+            return false;
+        }
 		Entity causer = source.getEntity();
 		if (!(causer == this.getUser() || causer instanceof StandEntity SE && SE.getUser() == this.getUser())
 				&& MainUtil.isStandDamage(source)) {
-			stunTicks = 14;
+			if (stunTicks < 30) { stunTicks = 30; }
 			if (jumpTick < 16) { jumpTick = 16; }
 			if (attackTick < 10) { jumpTick = 10; }
 

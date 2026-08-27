@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -23,8 +26,6 @@ import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -212,11 +213,23 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_clone").toString())
             );
+    public static final RegistryObject<EntityType<D4CCloneEntity>> D4C_CLONE =
+            ENTITY_TYPES.register("d4c_clone", () ->
+                    EntityType.Builder.of(D4CCloneEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "d4c_clone").toString())
+            );
     public static final RegistryObject<EntityType<KingCrimsonProjectionEntity>> KING_CRIMSON_PROJECTION =
             ENTITY_TYPES.register("king_crimson_projection", () ->
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_projection").toString())
+            );
+    public static final RegistryObject<EntityType<SilverChariotAfterimageEntity>> SILVER_CHARIOT_AFTERIMAGE =
+            ENTITY_TYPES.register("silver_chariot_afterimage", () ->
+                    EntityType.Builder.of(SilverChariotAfterimageEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_afterimage").toString())
             );
     public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
             ENTITY_TYPES.register("fallen_zombie", () ->
@@ -604,7 +617,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
@@ -621,6 +634,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<FallingBannerEntity>> FALLING_BANNER =
+            ENTITY_TYPES.register("falling_banner", () ->
+                    EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC)
+                            .sized(FallingBannerEntity.xwidth, FallingBannerEntity.xheight).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "falling_banner").toString())
             );
     public static final RegistryObject<EntityType<StepRuleEntity>> STEP_RULE =
             ENTITY_TYPES.register("step_rule", () ->
@@ -933,5 +954,18 @@ public class ForgeEntities {
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
+            );
+    public static final RegistryObject<EntityType<PurpleSmokeEntity>> PURPLE_SMOKE =
+            ENTITY_TYPES.register("purple_smoke", () ->
+                    EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "purple_smoke").toString())
+            );
+    public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
+            ENTITY_TYPES.register("ph_capsule", () ->
+                    EntityType.Builder.<PHCapsuleEntity>of(PHCapsuleEntity::new, MobCategory.MISC).
+                            sized(PHCapsuleEntity.eWidth, PHCapsuleEntity.eHeight).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "ph_capsule").toString())
             );
 }

@@ -14,7 +14,6 @@ import net.hydra.jojomod.event.powers.VisageStoreEntry;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.ModificationMaskItem;
 import net.hydra.jojomod.networking.ClientToServerPackets;
-import net.hydra.jojomod.networking.ModPacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.GuiGraphics;

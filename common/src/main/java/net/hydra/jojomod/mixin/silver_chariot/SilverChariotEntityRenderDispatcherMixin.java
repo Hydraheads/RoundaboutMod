@@ -49,6 +49,10 @@ public class SilverChariotEntityRenderDispatcherMixin {
             return;
         }
 
+        if (entity == controlEntity) {
+            return;
+        }
+
         if (!SilverChariotRenderClient.shouldBeVisibleToUser(player, entity, partialTick)) {
             ci.cancel();
         }

@@ -10,17 +10,25 @@ import net.hydra.jojomod.block.D4CPortalBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -33,7 +41,9 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -44,19 +54,26 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -64,10 +81,10 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class PowersD4C extends NewPunchingStand {
     public PowersD4C(LivingEntity self) {
@@ -81,7 +98,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     /**Override to add disable config*/
     public boolean isStandEnabled() {
-        return ClientNetworking.getAppropriateConfig().kingCrimsonSettings.enableKingCrimson;
+        return ClientNetworking.getAppropriateConfig().d4cSettings.enableD4c;
     }
     @Override
     protected Byte getSummonSound() {
@@ -90,6 +107,7 @@ public class PowersD4C extends NewPunchingStand {
 
     public static final byte WORLD_MERGE = 106;
     public static final byte PORTAL = 107;
+    public static final byte FUSE = 108;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -108,6 +126,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.WORLD_MERGE_EVENT;
         } else if (soundChoice == PORTAL) {
             return ModSounds.D4C_PORTAL_EVENT;
+        } else if (soundChoice == FUSE) {
+            return ModSounds.D4C_FUSE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -590,10 +610,663 @@ public class PowersD4C extends NewPunchingStand {
 //                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
 //                }
 //            }
+            populateWorld((byte) worldId);
+            enactEligability2();
             PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
-            enactEligability();
         }
+    }
+    public void enactEligability2(){
+        if (!isInBetweenSpace() && !self.isUnderWater()){
+            if (hasBanner()){
+
+                FallingBannerEntity twister = new FallingBannerEntity(
+                        this.self.level(), self.getEyePosition());
+                PowerTypes.copyPlaneOfExisting(self,twister);
+                twister.user = self;
+                twister.setBanner(self.getMainHandItem());
+                twister.lifeSpan = 60;
+                this.getSelf().level().addFreshEntity(twister);
+                useUpBanner(self.getMainHandItem());
+            }
+        }
+    }
+    public void populateWorld(byte worldId) {
+        if (!(self.level() instanceof ServerLevel sl)) {
+            return;
+        }
+
+        int maxCopies = 8;
+        double scanRadius = 15.0D;
+        double scanRadius2 = 70.0D;
+        double spawnRadius = 10.0D;
+
+        AABB scanBox = self.getBoundingBox().inflate(scanRadius);
+        AABB scanBox2 = self.getBoundingBox().inflate(scanRadius2);
+
+        // -------------------------------------------------
+        // FIRST: Check if this alternate world is already
+        // populated in this area.
+        // -------------------------------------------------
+
+        List<LivingEntity> existingParallelEntities =
+                sl.getEntitiesOfClass(
+                        LivingEntity.class,
+                        scanBox2,
+                        entity ->
+                                entity.isAlive()
+                                        && entity != self
+                                        && PowerTypes.getPlaneOfExisting(entity) == worldId
+                                        && !PowerTypes.isNativeToOurWorld(entity)
+                );
+
+        // If this universe already has its population here,
+        // refresh all of their lifetimes and do not create
+        // any new copies.
+        if (!existingParallelEntities.isEmpty()) {
+
+            for (LivingEntity entity : existingParallelEntities) {
+                PowerTypes.setTicksUntilGone(
+                        entity,
+                        PowerTypes.getForeignWorldMaxTime(worldId),
+                        worldId
+                );
+            }
+
+            return;
+        }
+
+        // -------------------------------------------------
+        // OTHERWISE: Populate it normally.
+        // -------------------------------------------------
+
+        List<LivingEntity> possibleTargets = sl.getEntitiesOfClass(
+                LivingEntity.class,
+                scanBox,
+                entity ->
+                        entity.isAlive()
+                                && !(entity instanceof StandEntity)
+                                && !(entity instanceof CloneEntity)
+                                && MainUtil.canCopyMob(entity)
+                                && PowerTypes.originatedFromOurWorld(entity)
+                                && PowerTypes.getPlaneOfExisting(entity) == 0
+        );
+
+        Collections.shuffle(possibleTargets);
+
+        int copied = 0;
+        int copiedPlayers = 0;
+
+        for (LivingEntity target : possibleTargets) {
+            if (target instanceof Player pl && self instanceof Player pl2) {
+                if (pl.isSpectator() || (pl.isCreative() && !pl2.isCreative())) {
+                    continue;
+                }
+                if (copiedPlayers >= maxCopies) {
+                    continue;
+                }
+
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        target,
+                        spawnRadius
+                );
+
+                if (spawnPos == null) {
+                    continue;
+                }
+                if (createParallelPlayerCopy(sl, pl, spawnPos, worldId)) {
+                    copied++;
+                }
+                copiedPlayers++;
+                continue;
+            }
+            if (copied >= maxCopies) {
+                continue;
+            }
+
+            Vec3 spawnPos = findWorldMergeSpawnPosition(
+                    sl,
+                    target,
+                    spawnRadius
+            );
+
+            if (spawnPos == null) {
+                continue;
+            }
+
+            if (createParallelCopy(sl, target, spawnPos, worldId)) {
+                copied++;
+            }
+        }
+
+
+        if (this.getSelf().level().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+            float chanceX = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterNewAnimal;
+            if (chanceX > 0 && (Math.random() * 1 < chanceX)) {
+
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        spawnRadius
+                );
+
+                if (spawnPos != null) {
+
+                    double rand = Math.random() * 1;
+                    Entity copyEntity;
+
+                    if (self.level().canSeeSky(self.getOnPos().above()) || self.level().canSeeSky(self.getOnPos().north().above()) ||
+                            self.level().canSeeSky(self.getOnPos().west().above()) ||
+                            self.level().canSeeSky(self.getOnPos().east().above()) || self.level().canSeeSky(self.getOnPos().south().above())) {
+
+                        if (rand <= 0.1F) {
+                            if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DESERT)) {
+                                copyEntity = EntityType.CAMEL.create(this.getSelf().level());
+                            } else {
+                                copyEntity = EntityType.HORSE.create(this.getSelf().level());
+                            }
+                        } else if (rand <= 0.3F) {
+                            Holder<Biome> biome = self.level().getBiome(this.getSelf().getOnPos());
+                            if (biome.is(Biomes.BAMBOO_JUNGLE)) {
+                                copyEntity = EntityType.PANDA.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.DESERT)) {
+                                copyEntity = ModEntities.TERRIER_DOG.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.TAIGA)) {
+                                copyEntity = EntityType.WOLF.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.JUNGLE) ||
+                                    biome.is(Biomes.SPARSE_JUNGLE)) {
+                                copyEntity = EntityType.PARROT.create(this.getSelf().level());
+                            } else {
+                                copyEntity = EntityType.COW.create(this.getSelf().level());
+                            }
+                        } else if (rand <= 0.4F) {
+                            copyEntity = EntityType.COW.create(this.getSelf().level());
+                        } else if (rand <= 0.45F) {
+                            copyEntity = EntityType.CAT.create(this.getSelf().level());
+                        } else if (rand <= 0.7F) {
+                            copyEntity = EntityType.SHEEP.create(this.getSelf().level());
+                        } else {
+                            copyEntity = EntityType.PIG.create(this.getSelf().level());
+                        }
+
+                        if (copyEntity != null) {
+                            PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                            PowerTypes.setTicksUntilGone(
+                                    copyEntity,
+                                    PowerTypes.getForeignWorldMaxTime(worldId),
+                                    worldId
+                            );
+                            copyEntity.moveTo(
+                                    spawnPos.x,
+                                    spawnPos.y,
+                                    spawnPos.z,
+                                    self.getYRot(),
+                                    self.getXRot()
+                            );
+                            self.level().addFreshEntity(copyEntity);
+                        }
+                    } else {
+                        if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DRIPSTONE_CAVES)) {
+                            copyEntity = EntityType.AXOLOTL.create(this.getSelf().level());
+
+                            if (copyEntity != null) {
+
+                                copyEntity.moveTo(
+                                        spawnPos.x,
+                                        spawnPos.y,
+                                        spawnPos.z,
+                                        self.getYRot(),
+                                        self.getXRot()
+                                );
+                                PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                                PowerTypes.setTicksUntilGone(
+                                        copyEntity,
+                                        PowerTypes.getForeignWorldMaxTime(worldId),
+                                        worldId
+                                );
+                                self.level().addFreshEntity(copyEntity);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Spawn a random listed player
+        if (copiedPlayers <= 1) {
+            float chance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterPlayer;
+            if (chance > 0 && (Math.random()*1 < chance)) {
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        spawnRadius
+                );
+
+                if (spawnPos == null) {
+                    return;
+                }
+
+                Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
+
+                if (!(copyEntity instanceof D4CCloneEntity copy)) {
+                    return;
+                }
+
+                if (MainUtil.playerNames == null || MainUtil.playerNames.isEmpty()) {
+                    return;
+                }
+
+                List<Map.Entry<String, UUID>> players =
+                        new ArrayList<>(MainUtil.playerNames.entrySet());
+
+                Map.Entry<String, UUID> randomPlayer =
+                        players.get(this.getSelf().getRandom().nextInt(players.size()));
+                if (randomPlayer == null) {
+                    return;
+                }
+
+                String playerName = randomPlayer.getKey();
+                UUID playerUUID = randomPlayer.getValue();
+                if (playerUUID != null && playerUUID.equals(self.getUUID())) {
+                    //I don't want to spawn 2 of myself lol
+                    return;
+                }
+
+                copy.setDisguiseName(playerName);
+                copy.setCustomName(Component.literal(playerName));
+                copy.setCustomNameVisible(true);
+                copy.setPlayerUUID(playerUUID);
+
+                copy.moveTo(
+                        spawnPos.x,
+                        spawnPos.y,
+                        spawnPos.z,
+                        self.getYRot(),
+                        self.getXRot()
+                );
+
+                // Alternate universe
+                ((IEntityAndData) copy).rdbt$setNativeCopy(playerUUID);
+
+                PowerTypes.setPlaneOfExisting(copy, worldId);
+                PowerTypes.setTicksUntilGone(
+                        copy,
+                        PowerTypes.getForeignWorldMaxTime(worldId),
+                        worldId
+                );
+
+                self.level().addFreshEntity(copy);
+            }
+        }
+    }
+
+    @Nullable
+    public Vec3 findWorldMergeSpawnPositionAnimal(
+            ServerLevel level,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (0.5);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB yesbox = EntityType.HORSE.getAABB(self.getX(),self.getY(),self.getZ());
+
+                AABB testBox = yesbox.move(
+                        candidate.x - self.getX(),
+                        candidate.y - self.getY(),
+                        candidate.z - self.getZ()
+                );
+
+                if (level.noCollision(self, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+    @Nullable
+    public Vec3 findWorldMergeSpawnPosition(
+            ServerLevel level,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (0.5);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB yesbox = EntityType.PLAYER.getAABB(self.getX(),self.getY(),self.getZ());
+
+                AABB testBox = yesbox.move(
+                        candidate.x - self.getX(),
+                        candidate.y - self.getY(),
+                        candidate.z - self.getZ()
+                );
+
+                if (level.noCollision(self, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static final boolean debugCollision = false;
+
+    public boolean createParallelPlayerCopy(
+            ServerLevel level,
+            Player original,
+            Vec3 spawnPos,
+            byte worldId
+    ) {
+        Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
+
+        if (!(copyEntity instanceof D4CCloneEntity copy)) {
+            return false;
+        }
+
+        // -------------------------------------------------
+        // UNIVERSAL STUFF YOU ACTUALLY WANT TO PRESERVE
+        // -------------------------------------------------
+
+        // Name
+        if (original.hasCustomName()) {
+            copy.setCustomName(original.getCustomName());
+            copy.setCustomNameVisible(original.isCustomNameVisible());
+        }
+
+        if (original.getUUID().equals(self.getUUID())){
+            copy.safeCopy = true;
+        }
+        copy.setPlayer(original);
+        copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
+        copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
+        copy.setItemSlot(EquipmentSlot.LEGS, original.getItemBySlot(EquipmentSlot.LEGS).copy());
+        copy.setItemSlot(EquipmentSlot.FEET, original.getItemBySlot(EquipmentSlot.FEET).copy());
+        copy.setItemSlot(EquipmentSlot.MAINHAND, original.getMainHandItem().copy());
+        copy.setItemSlot(EquipmentSlot.OFFHAND, original.getOffhandItem().copy());
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            copy.setDropChance(slot, 0.0F);
+        }
+
+        ItemStack standDisc = ((StandUser)original).roundabout$getStandDisc();
+        if (standDisc != null && !standDisc.isEmpty() && standDisc.getItem() instanceof StandDiscItem sdi){
+            if (!(sdi.standPowers instanceof PowersD4C)){
+                float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltStands;
+                if (Math.random() <= randomChance && !ModItems.getPoolForMob(copy).isEmpty()) {
+                    int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(copy).size()));
+                    ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
+                    if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
+                        ((StandUser) copy).roundabout$setStandDisc(stack);
+                    }
+                } else {
+                    ((StandUser) copy).roundabout$setStandDisc(standDisc);
+                }
+            }
+        }
+
+        // Rotation
+        copy.setYRot(original.getYRot());
+        copy.setXRot(original.getXRot());
+
+        // -------------------------------------------------
+        // ENTITY-SPECIFIC APPEARANCE
+        // -------------------------------------------------
+
+
+        // Position
+        copy.moveTo(
+                spawnPos.x,
+                spawnPos.y,
+                spawnPos.z,
+                original.getYRot(),
+                original.getXRot()
+        );
+
+        // Alternate universe
+        ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
+        PowerTypes.setPlaneOfExisting(copy, worldId);
+        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+
+        level.addFreshEntity(copy);
+        return true;
+    }
+    public boolean createParallelCopy(
+            ServerLevel level,
+            LivingEntity original,
+            Vec3 spawnPos,
+            byte worldId
+    ) {
+        Entity copyEntity = original.getType().create(level);
+
+        if (!(copyEntity instanceof LivingEntity copy)) {
+            return false;
+        }
+
+        // -------------------------------------------------
+        // UNIVERSAL STUFF YOU ACTUALLY WANT TO PRESERVE
+        // -------------------------------------------------
+
+        // Name
+        if (original.hasCustomName()) {
+            copy.setCustomName(original.getCustomName());
+            copy.setCustomNameVisible(original.isCustomNameVisible());
+        }
+
+        // Rotation
+        copy.setYRot(original.getYRot());
+        copy.setXRot(original.getXRot());
+
+        // -------------------------------------------------
+        // ENTITY-SPECIFIC APPEARANCE
+        // -------------------------------------------------
+
+        copyMobAppearance(original, copy);
+
+        // Position
+        copy.moveTo(
+                spawnPos.x,
+                spawnPos.y,
+                spawnPos.z,
+                original.getYRot(),
+                original.getXRot()
+        );
+
+        // Alternate universe
+        PowerTypes.setPlaneOfExisting(copy, worldId);
+        PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+
+        level.addFreshEntity(copy);
+
+        return true;
+    }
+    public void copyMobAppearance(LivingEntity original, LivingEntity copy) {
+
+        // Horses
+        if (original instanceof Horse originalHorse
+                && copy instanceof Horse copyHorse) {
+
+            copyHorse.setVariant(originalHorse.getVariant());
+        }
+
+        ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
+
+        if (original instanceof Mob mb && copy instanceof Mob mb2){
+            if (original instanceof AgeableMob ag && copy instanceof AgeableMob ag2){
+                ag2.setAge(ag.getAge());
+            }
+            mb2.setBaby(mb.isBaby());
+
+            mb2.setItemSlot(EquipmentSlot.HEAD, mb.getItemBySlot(EquipmentSlot.HEAD).copy());
+            mb2.setItemSlot(EquipmentSlot.CHEST, mb.getItemBySlot(EquipmentSlot.CHEST).copy());
+            mb2.setItemSlot(EquipmentSlot.LEGS, mb.getItemBySlot(EquipmentSlot.LEGS).copy());
+            mb2.setItemSlot(EquipmentSlot.FEET, mb.getItemBySlot(EquipmentSlot.FEET).copy());
+            mb2.setItemSlot(EquipmentSlot.MAINHAND, mb.getMainHandItem().copy());
+            mb2.setItemSlot(EquipmentSlot.OFFHAND, mb.getOffhandItem().copy());
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                mb2.setDropChance(slot, 0.0F);
+            }
+
+        }
+        // Cats
+        if (original instanceof Cat originalCat
+                && copy instanceof Cat copyCat) {
+
+            copyCat.setVariant(originalCat.getVariant());
+        }
+        if (original instanceof Phantom originalPhantom
+                && copy instanceof Phantom copyPhantom) {
+
+            copyPhantom.setPhantomSize(originalPhantom.getPhantomSize());
+        }
+        if (original instanceof Slime originalSlime
+                && copy instanceof Slime copySlime) {
+
+            copySlime.setSize(originalSlime.getSize(), true);
+        }
+        // Sheep
+        if (original instanceof Sheep originalSheep
+                && copy instanceof Sheep copySheep) {
+
+            copySheep.setColor(originalSheep.getColor());
+        }
+
+        // Parrots
+        if (original instanceof Parrot originalParrot
+                && copy instanceof Parrot copyParrot) {
+
+            copyParrot.setVariant(originalParrot.getVariant());
+        }
+        // Aestheticians
+        if (original instanceof Aesthetician originalAya
+                && copy instanceof Aesthetician copyAya) {
+
+            copyAya.setSkinNumber(originalAya.getSkinNumber());
+        }
+        // Rabbits
+        if (original instanceof Rabbit originalRabbit
+                && copy instanceof Rabbit copyRabbit) {
+
+            copyRabbit.setVariant(originalRabbit.getVariant());
+        }
+
+        // Foxes
+        if (original instanceof Fox originalFox
+                && copy instanceof Fox copyFox) {
+
+            copyFox.setVariant(originalFox.getVariant());
+        }
+
+        // Axolotls
+        if (original instanceof Axolotl originalAxolotl
+                && copy instanceof Axolotl copyAxolotl) {
+
+            copyAxolotl.setVariant(originalAxolotl.getVariant());
+        }
+
+        // Frogs
+        if (original instanceof Frog originalFrog
+                && copy instanceof Frog copyFrog) {
+
+            copyFrog.setVariant(originalFrog.getVariant());
+        }
+
+        // Tropical fish
+        if (original instanceof TropicalFish originalFish
+                && copy instanceof TropicalFish copyFish) {
+
+            copyFish.setVariant(originalFish.getVariant());
+        }
+    }
+
+    @Nullable
+    public Vec3 findWorldMergeSpawnPosition(
+            ServerLevel level,
+            LivingEntity entity,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (entity.getBbWidth()/2);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB testBox = entity.getBoundingBox().move(
+                        candidate.x - entity.getX(),
+                        candidate.y - entity.getY(),
+                        candidate.z - entity.getZ()
+                );
+
+                if (level.noCollision(entity, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+    public static int getDeductionTicks(Entity target, double distance){
+        if (PowerTypes.isInD4CWorldWithRender(target)){
+            if (distance >= 15) {
+                return 6;
+            } else if (distance >= 14){
+                return 3;
+            } else if (distance >= 12){
+                return 2;
+            }
+        }
+        return 1;
     }
     public void isekaiTarget(Entity target){
         if (isEligable()) {
@@ -603,7 +1276,7 @@ public class PowersD4C extends NewPunchingStand {
                 MainUtil.isBossMob(target)) {
                     target = null;
                 }
-                int worldId = ((int) (Math.random() * 3)) + 5;
+                int worldId = ((int) (Math.random() * 2)) + 6;
                 PowerTypes.setPlaneOfExisting(target, (byte) worldId);
                 playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             }
@@ -655,6 +1328,12 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
+            case SKILL_2_GUARD -> {
+                switchCloneClient();
+            }
+            case SKILL_2_CROUCH_GUARD -> {
+                replaceBodyClient();
+            }
             case SKILL_3_GUARD -> {
                 betweenVisionClient();
             }
@@ -664,6 +1343,13 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+        }
+    }
+
+    public void pullIntoRealityClient(){
+        Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+        if (targetEntity !=null && targetEntity.isAlive()){
+            tryIntPowerPacket(PowerIndex.POWER_2_BONUS,targetEntity.getId());
         }
     }
 
@@ -694,7 +1380,24 @@ public class PowersD4C extends NewPunchingStand {
     }
     public boolean seesBetween = false;
     public int seesBetweenTicks = 0;
+    public void switchCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            return;
+        }
+
+    }
+    public void replaceBodyClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
+
+    }
     public void makeCloneClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            pullIntoRealityClient();
+            return;
+        }
         if (!this.onCooldown(PowerIndex.SKILL_2) && isEligable()) {
                 tryPowerPacket(PowerIndex.POWER_2);
         }
@@ -827,7 +1530,9 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 1, StandIcons.D4C_PARALLEL_GRAB, PowerIndex.SKILL_1_SNEAK);
         }
 
-        if (!isHoldingSneak()){
+        if (PowerTypes.isInD4CWorld(self)){
+            LockedOrNot(context, x, y, 2, StandIcons.D4C_PARALLEL_GRAB_2, PowerIndex.SKILL_EXTRA_2,0);
+        } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SUMMON, PowerIndex.SKILL_2,0);
         } else {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
@@ -850,11 +1555,19 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot){
-        if (slot == 1 || slot == 2 || slot == 4){
-            if (slot == 1 && !isGuarding() && PowerTypes.isInD4CWorld(self)){
-                return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+        boolean dworld = PowerTypes.isInD4CWorld(self);
+        if (!(slot == 2 && dworld)){
+            if (slot == 1 || slot == 2 || slot == 4){
+                if (slot == 1 && !isGuarding() && dworld){
+                    return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+                }
+                return !isEligable() || super.isAttackIneptVisually(activeP,slot);
             }
-            return !isEligable() || super.isAttackIneptVisually(activeP,slot);
+        } else {
+            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+            if (targetEntity == null){
+                return true;
+            }
         }
         return super.isAttackIneptVisually(activeP,slot);
     }
@@ -927,6 +1640,188 @@ public class PowersD4C extends NewPunchingStand {
                 }
             }
         }
+    }
+
+    public static boolean hasNoBlockCollision(
+            Entity entity,
+            AABB box
+    ) {
+        Level level = entity.level();
+
+        // Check block collisions
+        for (VoxelShape shape : level.getBlockCollisions(entity, box)) {
+            if (!shape.isEmpty()) {
+                return false;
+            }
+        }
+
+        // Preserve vanilla world border collision
+        VoxelShape border = borderCollision(level,entity, box);
+
+        return border == null
+                || !Shapes.joinIsNotEmpty(
+                border,
+                Shapes.create(box),
+                BooleanOp.AND
+        );
+    }
+    private static VoxelShape borderCollision(Level lvl, Entity $$0, AABB $$1) {
+        WorldBorder $$2 = lvl.getWorldBorder();
+        return $$2.isInsideCloseToBorder($$0, $$1) ? $$2.getCollisionShape() : null;
+    }
+    @Unique
+    public static boolean ejectFromOGSpot(Entity self) {
+        if (self == null){
+            return false;
+        }
+        Vec3 fallback =
+                ((IGravityEntity) self).rdbt$getExistPlaneStartPoint();
+        if (fallback != null) {
+
+            AABB fallbackBox = self.getBoundingBox()
+                    .move(fallback.subtract(self.position()));
+
+            if (hasNoBlockCollision(self, fallbackBox)) {
+
+                if (self instanceof ServerPlayer player && player.level() instanceof ServerLevel sl) {
+                    player.teleportTo(
+                            sl,
+                            fallback.x,
+                            fallback.y,
+                            fallback.z,
+                            player.getYRot(),
+                            player.getXRot()
+                    );
+                } else {
+                    self.teleportTo(
+                            fallback.x,
+                            fallback.y,
+                            fallback.z
+                    );
+                }
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Unique
+    public static boolean ejectFromNearestEntity(Entity self) {
+        if (self == null || !MainUtil.isActuallyALivingEntityNoCap(self)){
+            return false;
+        }
+        Level level = self.level();
+
+        double range = 10.0D;
+
+        AABB searchBox = self.getBoundingBox().inflate(range);
+
+        Entity target = level.getEntities(
+                        self,
+                        searchBox,
+                        entity ->
+                                ((entity instanceof Mob
+                                        || entity instanceof Player) && PowerTypes.getPlaneOfExisting2(entity) == 0
+                                && !(entity instanceof StandEntity))
+                ).stream()
+                .filter(entity -> entity != self)
+                .filter(Entity::isAlive)
+                .min(Comparator.comparingDouble(self::distanceToSqr))
+                .orElse(null);
+
+        if (target == null) {
+            return false;
+        }
+
+        // Horizontal direction the target is facing.
+        Vec3 forward = target.getLookAngle()
+                .multiply(1.0D, 0.0D, 1.0D);
+
+        if (forward.lengthSqr() < 0.001D) {
+            return false;
+        }
+
+        forward = forward.normalize();
+
+        // "Back" of the target.
+        Vec3 backward = forward.scale(-1.0D);
+
+        // Try several positions behind them.
+        for (double distance = 0.8D; distance <= 2.5D; distance += 0.2D) {
+
+            Vec3 candidatePos = new Vec3(
+                    target.getX() + backward.x * distance,
+                    target.getY(),
+                    target.getZ() + backward.z * distance
+            );
+
+            // Keep the ejecting entity's current dimensions.
+            AABB candidateBox = self.getBoundingBox()
+                    .move(candidatePos.subtract(self.position()));
+
+            // Check whether the entity can physically fit there.
+            if (!hasNoBlockCollision(self, candidateBox)) {
+                continue;
+            }
+
+            float yaw = target.getYRot() + 180.0F;
+
+            if (self instanceof ServerPlayer player && player.level() instanceof ServerLevel sl) {
+
+                player.teleportTo(sl,
+                        candidatePos.x,
+                        candidatePos.y,
+                        candidatePos.z,
+                        yaw,
+                        player.getXRot()
+                );
+
+            } else {
+
+                self.teleportTo(
+                        candidatePos.x,
+                        candidatePos.y,
+                        candidatePos.z
+                );
+
+                self.setYRot(yaw);
+                self.setYHeadRot(yaw);
+                self.setYBodyRot(yaw);
+
+                self.yRotO = yaw;
+            }
+
+            // Small push outward from the target.
+            Vec3 push = backward.scale(0.15D);
+
+            self.setDeltaMovement(
+                    push.x,
+                    0.08D,
+                    push.z
+            );
+            self.hurtMarked = true;
+            self.hasImpulse = true;
+
+            // A few cloud particles.
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        ParticleTypes.CLOUD,
+                        candidatePos.x,
+                        candidatePos.y + self.getBbHeight() * 0.5D,
+                        candidatePos.z,
+                        4,
+                        0.15D,
+                        0.2D,
+                        0.15D,
+                        0.02D
+                );
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -1060,12 +1955,55 @@ public class PowersD4C extends NewPunchingStand {
             isekaiTarget(target);
         }
     }
+    public int dragTarget = 0;
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime){
         if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedFinal = chargeTime;
         }
+        if (move == PowerIndex.SNEAK_ATTACK) {
+            this.dragTarget = chargeTime;
+        }
         return super.tryIntPower(move, forced, chargeTime);
+    }
+    public void grabMobIntoWorld(){
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.nonNull(stand)){
+            Entity targetEntity = getTargetEntity(this.self,-1);
+            if (targetEntity != null && !PowerTypes.isNativeToOurWorld(targetEntity)) {
+                PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
+                this.setAttackTimeDuring(-5);
+                this.setActivePower(PowerIndex.POWER_2_BONUS);
+                playSoundsIfNearby(FUSE, 27, false);
+                this.animateStand(D4CEntity.DRAG_2);
+                this.poseStand(OffsetIndex.GUARD);
+                if (self.level() instanceof ServerLevel sl){
+                    Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                    sl.sendParticles(new DustParticleOptions(
+                                    color,
+                                    1.0F
+                            ), targetEntity.getX(),
+                            targetEntity.getY()+targetEntity.getEyeHeight(), targetEntity.getZ(),
+                            20, 0.3, 0.3, 0.3, 0.3);
+                }
+            }
+        }
+    }
+    @Override
+    public SoundEvent getPunchLandSound(){
+        return ModSounds.D4C_PUNCH_EVENT;
+    }
+    @Override
+    public SoundEvent getPunchLandLastSound(){
+        return ModSounds.D4C_PUNCH_2_EVENT;
+    }
+    @Override
+    public float getPunchLandPitch(){
+        return 1.0F - 0.05F * activePowerPhase;
+    }
+    @Override
+    public float getPunchLandLastPitch(){
+        return 1F;
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
@@ -1073,6 +2011,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
+        } else if (move == PowerIndex.POWER_2_BONUS) {
+            this.grabMobIntoWorld();
+            return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
         } else if (move == PowerIndex.POWER_2) {
@@ -1209,8 +2150,6 @@ public class PowersD4C extends NewPunchingStand {
                         }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
-                } else {
-                    knockShield2(entity, 100);
                 }
             }
 

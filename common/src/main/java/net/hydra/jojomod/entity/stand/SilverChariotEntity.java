@@ -27,13 +27,21 @@ public class SilverChariotEntity extends FollowingStandEntity {
             DEFAULT_SILVER_CHARIOT = 1;
 
     public static final byte
-            CONTROL_MODE_REMOTE = 0,
+            CONTROL_MODE_NONE = 0,
             CONTROL_MODE_SELF_CARRY = 1,
-            CONTROL_MODE_NONE = 2;
+            CONTROL_MODE_REMOTE = 2;
 
     private static final EntityDataAccessor<Byte> CONTROL_MODE = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BYTE
     );
+    private static final EntityDataAccessor<Boolean> IS_ARMOURED = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+    private static final EntityDataAccessor<Boolean> HAS_RAPIER = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+
+
 
     private boolean controlDimensionsActive;
 
@@ -46,7 +54,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     public static final byte
             SC_ = 40,
-            SC_BLOCK = 41,
             SC_BARRAGE_CHARGE = 42,
             SC_BARRAGE = 43,
             SC_ATTACK_1 = 44,
@@ -56,12 +63,17 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_IDLE_2 = 48,
             SC_IDLE_3 = 49,
             SC_IDLE_4 = 50,
-            SC_BLOCK_BROKEN = 51,
             SC_BARRAGE_DAMAGE = 52,
             SC_MINING = 53,
             SC_ARMOR_SHED = 54,
             SC_RAPIER_SHOT = 55,
-            SC_FALL_BRACE = 56;
+            SC_FALL_BRACE = 56,
+            SC_ARMOR_SHED_GUARD_BROKEN = 57,
+            SC_VAULT = 58,
+            SC_SELF_GRAB = 59,
+            SC_SELF_THROW = 60,
+            SC_RAPIER_SHOT_CHARGE = 61,
+            SC_OFFHAND_WEAPON_SWIPE = 62;
 
     public boolean isArmored = false;
 
@@ -91,10 +103,62 @@ public class SilverChariotEntity extends FollowingStandEntity {
             } else {
                 this.scBarrageDamage.stop();
             }
+            if (animationState == MINING_BARRAGE) {
+
+            } else {
+
+            }
+            if (animationState == BROKEN_GUARD) {
+
+            } else {
+
+            }
             if (animationState == SC_FALL_BRACE) {
                 this.scFallBrace.startIfStopped(this.tickCount);
             } else {
                 this.scFallBrace.stop();
+            }
+
+            if (animationState == SC_) {
+
+            } else {
+
+            }
+
+            if (animationState == SC_VAULT) {
+
+            } else {
+
+            }
+            if (animationState == SC_SELF_GRAB) {
+
+            } else {
+
+            }
+            if (animationState == SC_SELF_THROW) {
+
+            } else {
+
+            }
+            if (animationState == SC_ARMOR_SHED) {
+
+            } else {
+
+            }
+            if (animationState == SC_ARMOR_SHED_GUARD_BROKEN) {
+
+            } else {
+
+            }
+            if (animationState == SC_RAPIER_SHOT) {
+
+            } else {
+
+            }
+            if (animationState == SC_RAPIER_SHOT_CHARGE) {
+
+            } else {
+
             }
         }
     }
@@ -103,6 +167,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         entityData.define(CONTROL_MODE, CONTROL_MODE_NONE);
+        entityData.define(IS_ARMOURED, true);
+        entityData.define(HAS_RAPIER, true);
+
     }
 
     private float controlStrafe;
@@ -144,6 +211,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
             return;
         }
         */
+
+        // TODO: Remove the teleporting camera for control mode when moving out of max range, as suggested by DOGael.
+
         super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
@@ -305,6 +375,32 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         refreshDimensions();
         controlDimensionsActive = controlled;
+    }
+
+    public boolean getIsArmoured() {
+        if (this.getEntityData().hasItem(IS_ARMOURED)) {
+            return this.getEntityData().get(IS_ARMOURED);
+        }
+        return true;
+    }
+
+    public void setIsArmoured(boolean isArmoured) {
+        if (this.getEntityData().hasItem(IS_ARMOURED)) {
+            this.getEntityData().set(IS_ARMOURED, isArmoured);
+        }
+    }
+
+    public boolean getHasRapier() {
+        if (this.getEntityData().hasItem(HAS_RAPIER)) {
+            return this.getEntityData().get(HAS_RAPIER);
+        }
+        return true;
+    }
+
+    public void setHasRapier(boolean hasRapier) {
+        if (this.getEntityData().hasItem(HAS_RAPIER)) {
+            this.getEntityData().set(HAS_RAPIER, hasRapier);
+        }
     }
 
     @Override

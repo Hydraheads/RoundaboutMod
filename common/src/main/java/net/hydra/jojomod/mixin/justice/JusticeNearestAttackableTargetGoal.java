@@ -129,7 +129,9 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
                                 && mob.hasLineOfSight(nearestClone)) {
                             if (targetConditions.test(this.mob, nearestClone) || (nearestClone.getPlayer() != null &&
                                     targetConditions.test(this.mob, nearestClone.getPlayer()))) {
-                                this.target = nearestClone;
+                                if (!(this.mob instanceof Zombie && FateTypes.isVampire(nearestClone))){
+                                    this.target = nearestClone;
+                                }
                             }
                         }
                     }

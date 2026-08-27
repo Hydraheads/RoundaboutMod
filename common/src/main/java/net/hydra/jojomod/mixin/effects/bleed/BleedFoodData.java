@@ -38,7 +38,7 @@ public class BleedFoodData implements IFoodData {
     }
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$foodData(Player $$0, CallbackInfo ci) {
-        if (PowerTypes.isErasingTime($$0)){
+        if (PowerTypes.isErasingTime($$0) || PowerTypes.isInD4CWorld($$0)){
             ci.cancel();
             return;
         }

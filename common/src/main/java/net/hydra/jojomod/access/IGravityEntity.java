@@ -1,6 +1,7 @@
 package net.hydra.jojomod.access;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 
 public interface IGravityEntity {
 
@@ -16,6 +17,8 @@ public interface IGravityEntity {
     void rdbdt$setTaggedForFlip(boolean flip);
     int roundabout$getSuffocationTicks();
 
+    void roundabout$setExistVec(byte adj, Vec3 exist);
+    Vec3 rdbt$getExistPlaneStartPoint();
     void roundabout$setExistPlane(byte adj);
     byte roundabout$getExistPlane();
 
