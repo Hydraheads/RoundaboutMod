@@ -17,4 +17,6 @@ public class HandBlock extends AbstractHandBlock {
         return new HandBlockEntity(p_151996_, p_151997_);
     }
 
+
+
 }

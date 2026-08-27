@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
+import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -512,6 +513,7 @@ public class ForgeEvents {
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_YIELD.get()).referenceItem = ForgeItems.STREET_SIGN_YIELD_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DANGER.get()).referenceItem = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get().getDefaultInstance();
         ((FancyLighterBlock)ForgeBlocks.FANCY_LIGHTER_BLOCK.get()).referenceItem = ForgeItems.FANCY_LIGHTER.get().getDefaultInstance();
+        ((AbstractHandBlock)ForgeBlocks.HAND_BLOCK.get()).referenceItem = ForgeItems.HAND_ITEM.get().getDefaultInstance();
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_STOP_BLOCK_ITEM = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get();

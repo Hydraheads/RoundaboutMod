@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block.handBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,6 +35,8 @@ public class AbstractHandBlock extends BaseEntityBlock {
         ROTATION = BlockStateProperties.ROTATION_16;
         SHAPE = Block.box((double)2.0F, (double)0.0F, (double)2.0F, (double)14.0F, (double)4.0F, (double)14.0F);
     }
+
+    public ItemStack referenceItem;
 
     public AbstractHandBlock(AbstractHandBlock.Type t, BlockBehaviour.Properties p_56319_) {
         super(p_56319_);

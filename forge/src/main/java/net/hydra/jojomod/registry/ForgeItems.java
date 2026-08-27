@@ -216,6 +216,8 @@ public class ForgeItems {
             () -> new CoffinBlockItem(DyeColor.BLACK, ForgeBlocks.COFFIN_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
             )));
+
+
     /*public static final RegistryObject<BlockItem> CHESSBOARD_BLOCK_ITEM = addToWIPTab(ITEMS.register("chessboard_block",
             () -> new ChessBoardBlockItem(ForgeBlocks.CHESSBOARD_BLOCK.get(),
                     new Item.Properties().stacksTo(1)
