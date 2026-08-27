@@ -1609,6 +1609,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         StandEntity stand = getStandEntity(this.self);
 
         if (!isClient()) {
+            if (this.getActivePower() == BITES_THE_DUST_CHASE && !inBitesTheDustMode()) {
+                if (Objects.nonNull(stand) && stand instanceof KillerQueenEntity && move != BITES_THE_DUST_CHASE){
+                    stand.setFadePercent(100);
+                }
+            }
+
             if (move == PowerIndex.GUARD && this.getActivePower() == BITES_THE_DUST_CHASE
                     || move != BITES_THE_DUST_CHASE && (this.getActivePower() == BITES_THE_DUST_CHASE && this.currentBombStatus == BOMB_NONE)) {
                 if (this.self instanceof ServerPlayer pl) {
