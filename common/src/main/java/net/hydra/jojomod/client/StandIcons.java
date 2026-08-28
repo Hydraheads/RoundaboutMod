@@ -520,6 +520,10 @@ public class StandIcons {
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/rapier_slash.png");
 
+
+    public static final ResourceLocation D4C_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/d4c/stand_ledge_grab.png");
+
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
     public static final ResourceLocation KING_CRIMSON_FINAL_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
