@@ -1534,6 +1534,11 @@ public class PowersD4C extends NewPunchingStand {
             }
         }
     }
+
+    @Override
+    public boolean phaseThroughProjectile(Entity ent){
+        return this.getActivePower() == PowerIndex.POWER_3_BLOCK;
+    }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
@@ -1861,8 +1866,24 @@ public class PowersD4C extends NewPunchingStand {
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             updateFinalAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.POWER_3_BLOCK) {
+            updateMeltDodge();
         }
         super.updateUniqueMoves();
+    }
+
+    public void updateMeltDodge(){
+        if (!self.level().isClientSide()){
+            if (attackTimeDuring >= 95){
+
+                xTryPower(PowerIndex.NONE,true);
+            } else {
+                Vec3 posTIon = (self.getEyePosition().subtract(self.getPosition(1)).scale(0.7)).add(self.getPosition(1));
+                sendParticlesIfPossible(self.level(),ModParticles.MENGER,
+                        posTIon.x, posTIon.y, posTIon.z,
+                        3, 0.25, 0.25, 0.25, 0.00);
+            }
+        }
     }
 
     public void updateChop(){
@@ -2096,9 +2117,11 @@ public class PowersD4C extends NewPunchingStand {
     }
     public void meltDodge(){
         if (isEligable()) {
+            getStandUserSelf().roundabout$setStandAnimation(MELT_DODGE_ANIM);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_3_BLOCK);
             playStandUserOnlySoundsIfNearby(MELT_DODGE, 50, false, false);
+            enactEligability();
         }
     }
     public void standDragServer(){
