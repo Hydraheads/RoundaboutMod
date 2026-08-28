@@ -1502,19 +1502,23 @@ public class PowersD4C extends NewPunchingStand {
         tickBetween();
     }
     public void dashOrBlockSwitchClient(){
+        if (!doVault()) {
             dash();
+        }
     }
     public void chopClient(){
-        if (!canImpale()){
-            return;
-        }
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            if (this.activePower == PowerIndex.POWER_3_SNEAK) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
-                tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+        if (!doVault()) {
+            if (!canImpale()) {
+                return;
+            }
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                if (this.activePower == PowerIndex.POWER_3_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+                }
             }
         }
     }
@@ -1538,15 +1542,17 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
         }
 
-        if (!isHoldingSneak()) {
-            if (isGuarding()){
-                setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
-            } else {
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
+        } else if (canVault()) {
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_LEDGE_GRAB,
+                    PowerIndex.GLOBAL_DASH);
+        } else if (!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-            }
         } else {
             LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
+
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
         } else {
@@ -2007,7 +2013,9 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (move == PowerIndex.VAULT){
+            return this.vault();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
