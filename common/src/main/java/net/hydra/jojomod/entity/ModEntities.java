@@ -102,6 +102,7 @@ public class ModEntities {
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
+    public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
