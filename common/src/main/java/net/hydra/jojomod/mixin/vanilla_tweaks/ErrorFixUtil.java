@@ -24,6 +24,7 @@ public class ErrorFixUtil {
                 || $$1.contains("chess_piece")
                 || $$1.contains("king_bed_block")
                 || $$1.contains("bubble_scaffold")
+                || $$1.contains("hand_block")
                 || $$1.contains("fancy_lighter_block")){
             cir.setReturnValue(null);
         }

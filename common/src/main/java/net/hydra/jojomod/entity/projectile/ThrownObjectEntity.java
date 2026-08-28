@@ -573,20 +573,12 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             }
             for (int i = 0; i < length; i++) {
                 BlockPos pos = origin.relative(dir, i);
-                InteractionResult result = ((BlockItem) ModBlocks.CLIMBING_WIRE.asItem()).place(new SafePlaceContext(
-                        this.level(),
-                        P,
-                        pos,
-                        dir,
-                        ModBlocks.CLIMBING_WIRE.asItem().getDefaultInstance(),
-                        dir
-                ));
-                if (result.equals(InteractionResult.CONSUME)) {
-                    this.level().setBlock(pos,
+
+                if (this.level().getBlockState(pos).canBeReplaced()) {
+                    this.level().setBlockAndUpdate(pos,
                             ModBlocks.CLIMBING_WIRE.defaultBlockState()
-                                    .setValue(ClimbingWireBlock.OPEN,dir == Direction.DOWN)
-                                    .setValue(HorizontalDirectionalBlock.FACING,$$0.getDirection()),
-                            5
+                                    .setValue(ClimbingWireBlock.OPEN, dir == Direction.DOWN)
+                                    .setValue(HorizontalDirectionalBlock.FACING, $$0.getDirection())
                     );
                 }
 

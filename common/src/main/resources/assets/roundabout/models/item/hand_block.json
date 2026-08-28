@@ -1,3 +1,6 @@
 {
-  "parent": "roundabout:block/hand_block"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "roundabout:item/player_hand"
+  }
 }

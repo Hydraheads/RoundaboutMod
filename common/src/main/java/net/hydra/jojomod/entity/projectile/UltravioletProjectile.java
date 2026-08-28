@@ -4,6 +4,7 @@ import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
@@ -155,9 +156,8 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                 } else {
                     lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 100, 0));
                 }
-            } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton){
+            } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton || lv instanceof BlackSabbathEntity bs && bs.isAttackable()){
                 lv.setSecondsOnFire(8);
-
             }
         }
         alreadyHitEntities.add(entity);

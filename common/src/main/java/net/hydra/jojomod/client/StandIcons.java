@@ -868,6 +868,7 @@ public class StandIcons {
     public static final ResourceLocation PH_SWITCH = Roundabout.location("textures/gui/icons/purple_haze/switch.png");
     public static final ResourceLocation PH_FORWARD_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/forwardbarrage.png");
     public static final ResourceLocation PH_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/punch.png");
+    public static final ResourceLocation VIRUS_SPIT = Roundabout.location("textures/gui/icons/purple_haze/virus_spit.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");
