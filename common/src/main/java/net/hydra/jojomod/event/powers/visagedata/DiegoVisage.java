@@ -10,6 +10,10 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class DiegoVisage extends VisageData {
+    // ~173
+    // steve is 185
+    // Vector3f(0.9375F, 0.9375F, 0.9375F);
+    //0.9375F * (165 / 185.0F) = 0.836
     public DiegoVisage(LivingEntity self) {
         super(self);
     }
@@ -31,7 +35,7 @@ public class DiegoVisage extends VisageData {
     }
     @Override
     public Vector3f scale(){
-        return new Vector3f(0.80F, 0.81F, 0.80F);
+        return new Vector3f(0.836F, 0.846F, 0.836F);
     }
     @Override
     public float getNametagHeight(){
