@@ -12,7 +12,10 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.event.ModEffects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
@@ -36,10 +39,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -129,6 +135,7 @@ public class PurpleSmokeEntity extends StandEntity {
         }
         if (!client) {
             tickeffect();
+            tickBlockDecay();
 
             byte skin = 0;
             if (user != null && StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
@@ -146,6 +153,78 @@ public class PurpleSmokeEntity extends StandEntity {
             Roundabout.LOGGER.info("ServerRange= " + range);
         }*/
         super.tick();
+    }
+    private void tickBlockDecay() {
+        if (!(this.level() instanceof ServerLevel sl)) return;
+
+        int r = Mth.ceil(range);
+        BlockPos center = this.blockPosition();
+
+        int attempts = Mth.clamp((int) (range * 4F), 15, 120);
+
+        for (int i = 0; i < attempts; i++) {
+            int dx = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+            int dy = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+            int dz = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+
+            BlockPos pos = center.offset(dx, dy, dz);
+
+            double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (dist > range) continue;
+
+            BlockState state = sl.getBlockState(pos);
+            BlockState decayed = getDecayedState(state);
+
+            if (decayed != null) {
+                sl.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        20, 0.3, 0.3, 0.3, 0.08);
+
+                sl.setBlockAndUpdate(pos, decayed);
+            }
+        }
+    }
+
+    @Nullable
+    private BlockState getDecayedState(BlockState state) {
+        Block block = state.getBlock();
+
+        if (block == Blocks.GRASS_BLOCK || block == Blocks.MYCELIUM || block == Blocks.PODZOL) {
+            if (Roundabout.RANDOM.nextFloat() < 0.45F) {
+                return Blocks.DIRT.defaultBlockState();
+            }
+            return null;
+        }
+
+        if (block instanceof FlowerBlock
+                || block instanceof TallGrassBlock
+                || block instanceof DoublePlantBlock
+                || block instanceof SaplingBlock
+                || block instanceof MushroomBlock
+                || block == Blocks.FERN
+                || block == Blocks.LARGE_FERN
+                || block == Blocks.DEAD_BUSH) {
+            if (Roundabout.RANDOM.nextFloat() < 0.6F) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return null;
+        }
+
+        if (block instanceof LeavesBlock) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return null;
+        }
+
+        if (block == Blocks.FARMLAND) {
+            if (Roundabout.RANDOM.nextFloat() < 0.45F) {
+                return Blocks.DIRT.defaultBlockState();
+            }
+            return null;
+        }
+
+        return null;
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
