@@ -947,6 +947,8 @@ public class Config implements Cloneable {
         public Integer fingerBiteCooldown;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer lighterWitnessRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean uvCanDamageStand;
     }
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1083,6 +1085,8 @@ public class Config implements Cloneable {
         public Boolean invisibilityPotionAsWell;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesArmor;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean hidesElytra;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesHeldItems;
         @BooleanOption(group = "inherit", value = true)
