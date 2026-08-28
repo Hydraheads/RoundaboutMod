@@ -258,7 +258,7 @@
   "item.roundabout.sight_disc": "Sight Disc",
   "item.roundabout.hearing_disc": "Hearing Disc",
   "ability.roundabout.whitesnake_disc_steal": "Disc Steal",
-  "ability.roundabout.whitesnake_disc_steal.desc": "A windup strike that seals the selected disc. For each level of Hallucination on the target, increases the duration of the seal. At Hallucination 5, eject the disc as an item.",
+  "ability.roundabout.whitesnake_disc_steal.desc": "A windup strike that seals the selected disc. For each level of Hallucination on the target, increases the duration of the seal. At Hallucination 3, eject the disc as an item.",
   "roundabout.whitesnake.stand_disc": "Steal Stand Disc",
   "roundabout.whitesnake.memory_disc": "Steal Memory Disc",
   "roundabout.whitesnake.sight_disc": "Steal Sight Disc",

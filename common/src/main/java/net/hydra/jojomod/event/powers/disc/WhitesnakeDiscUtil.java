@@ -3,6 +3,7 @@ package net.hydra.jojomod.event.powers.disc;
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
@@ -268,6 +269,7 @@ public final class WhitesnakeDiscUtil {
 
     public static int hallucinationLevel(LivingEntity target) {
         MobEffectInstance hallucination = target.getEffect(ModEffects.HALLUCINATION);
-        return hallucination == null ? 0 : Math.min(5, hallucination.getAmplifier() + 1);
+        return hallucination == null ? 0 : Math.min(
+                HallucinationEffect.MAX_LEVEL, hallucination.getAmplifier() + 1);
     }
 }
