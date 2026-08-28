@@ -7,6 +7,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -74,7 +75,7 @@ public final class DiscSealController {
         int duration = duration(type, config);
         MobEffectInstance hallucination = target.getEffect(ModEffects.HALLUCINATION);
         if (hallucination == null || duration <= 0) return duration;
-        int level = Math.min(5, hallucination.getAmplifier() + 1);
+        int level = Math.min(HallucinationEffect.MAX_LEVEL, hallucination.getAmplifier() + 1);
         int extraPercent = Math.min(100, level * config.discSealHallucinationMultiplierPerLevel);
         return Math.round(duration * (1.0F + extraPercent * 0.01F));
     }

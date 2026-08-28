@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.HallucinatoryAcidColors;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -124,7 +125,7 @@ public final class HallucinatoryAcidBlockEntityRenderer
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return false;
         MobEffectInstance effect = minecraft.player.getEffect(ModEffects.HALLUCINATION);
-        return effect != null;
+        return HallucinationEffect.hasDistortion(effect);
     }
 
     private static void renderCube(VertexConsumer vertices, PoseStack.Pose pose,

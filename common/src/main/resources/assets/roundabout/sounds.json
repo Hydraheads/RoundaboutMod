@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "d4c_fusion_start": {
+    "subtitle": "sounds.roundabout.d4c_fusion_start",
+    "sounds": [
+      "roundabout:d4c_fusion_start"
+    ]
+  },
   "summon_d4c": {
     "subtitle": "sounds.roundabout.summon_d4c",
     "sounds": [

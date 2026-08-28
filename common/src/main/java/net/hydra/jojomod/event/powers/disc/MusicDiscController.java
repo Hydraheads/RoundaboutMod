@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
@@ -24,7 +23,7 @@ public final class MusicDiscController {
     }
 
     public static boolean implant(ItemStack stack, LivingEntity target, LivingEntity thrower) {
-        if (!(stack.getItem() instanceof RecordItem) || !(target instanceof Mob)
+        if (!(stack.getItem() instanceof RecordItem)
                 || WhitesnakeDiscUtil.isDiscBlacklisted(target)) return false;
         if (target.level().isClientSide()) return true;
         DiscBearer bearer = (DiscBearer) target;

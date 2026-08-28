@@ -41,6 +41,7 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -66,6 +67,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
@@ -742,16 +744,20 @@ public class PowersD4C extends NewPunchingStand {
         if (this.getSelf().level().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
             float chanceX = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterNewAnimal;
             if (chanceX > 0 && (Math.random() * 1 < chanceX)) {
-                if (self.level().canSeeSky(self.getOnPos())) {
-                    Vec3 spawnPos = findWorldMergeSpawnPosition(
-                            sl,
-                            spawnRadius
-                    );
 
-                    if (spawnPos != null) {
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        spawnRadius
+                );
 
-                        double rand = Math.random() * 1;
-                        Entity copyEntity;
+                if (spawnPos != null) {
+
+                    double rand = Math.random() * 1;
+                    Entity copyEntity;
+
+                    if (self.level().canSeeSky(self.getOnPos().above()) || self.level().canSeeSky(self.getOnPos().north().above()) ||
+                            self.level().canSeeSky(self.getOnPos().west().above()) ||
+                            self.level().canSeeSky(self.getOnPos().east().above()) || self.level().canSeeSky(self.getOnPos().south().above())) {
 
                         if (rand <= 0.1F) {
                             if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DESERT)) {
@@ -760,16 +766,15 @@ public class PowersD4C extends NewPunchingStand {
                                 copyEntity = EntityType.HORSE.create(this.getSelf().level());
                             }
                         } else if (rand <= 0.3F) {
-                            if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DRIPSTONE_CAVES)) {
-                                copyEntity = EntityType.AXOLOTL.create(this.getSelf().level());
-                            } else if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.BAMBOO_JUNGLE)) {
+                            Holder<Biome> biome = self.level().getBiome(this.getSelf().getOnPos());
+                            if (biome.is(Biomes.BAMBOO_JUNGLE)) {
                                 copyEntity = EntityType.PANDA.create(this.getSelf().level());
-                            } else if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DESERT)) {
+                            } else if (biome.is(Biomes.DESERT)) {
                                 copyEntity = ModEntities.TERRIER_DOG.create(this.getSelf().level());
-                            } else if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.TAIGA)) {
+                            } else if (biome.is(Biomes.TAIGA)) {
                                 copyEntity = EntityType.WOLF.create(this.getSelf().level());
-                            } else if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.JUNGLE) ||
-                                    self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.SPARSE_JUNGLE)) {
+                            } else if (biome.is(Biomes.JUNGLE) ||
+                                    biome.is(Biomes.SPARSE_JUNGLE)) {
                                 copyEntity = EntityType.PARROT.create(this.getSelf().level());
                             } else {
                                 copyEntity = EntityType.COW.create(this.getSelf().level());
@@ -791,7 +796,36 @@ public class PowersD4C extends NewPunchingStand {
                                     PowerTypes.getForeignWorldMaxTime(worldId),
                                     worldId
                             );
+                            copyEntity.moveTo(
+                                    spawnPos.x,
+                                    spawnPos.y,
+                                    spawnPos.z,
+                                    self.getYRot(),
+                                    self.getXRot()
+                            );
                             self.level().addFreshEntity(copyEntity);
+                        }
+                    } else {
+                        if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DRIPSTONE_CAVES)) {
+                            copyEntity = EntityType.AXOLOTL.create(this.getSelf().level());
+
+                            if (copyEntity != null) {
+
+                                copyEntity.moveTo(
+                                        spawnPos.x,
+                                        spawnPos.y,
+                                        spawnPos.z,
+                                        self.getYRot(),
+                                        self.getXRot()
+                                );
+                                PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                                PowerTypes.setTicksUntilGone(
+                                        copyEntity,
+                                        PowerTypes.getForeignWorldMaxTime(worldId),
+                                        worldId
+                                );
+                                self.level().addFreshEntity(copyEntity);
+                            }
                         }
                     }
                 }
@@ -1468,19 +1502,23 @@ public class PowersD4C extends NewPunchingStand {
         tickBetween();
     }
     public void dashOrBlockSwitchClient(){
+        if (!doVault()) {
             dash();
+        }
     }
     public void chopClient(){
-        if (!canImpale()){
-            return;
-        }
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            if (this.activePower == PowerIndex.POWER_3_SNEAK) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
-                tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+        if (!doVault()) {
+            if (!canImpale()) {
+                return;
+            }
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                if (this.activePower == PowerIndex.POWER_3_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+                }
             }
         }
     }
@@ -1504,15 +1542,17 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
         }
 
-        if (!isHoldingSneak()) {
-            if (isGuarding()){
-                setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
-            } else {
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
+        } else if (canVault()) {
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_LEDGE_GRAB,
+                    PowerIndex.GLOBAL_DASH);
+        } else if (!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-            }
         } else {
             LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
+
         if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
         } else {
@@ -1973,7 +2013,9 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (move == PowerIndex.VAULT){
+            return this.vault();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();

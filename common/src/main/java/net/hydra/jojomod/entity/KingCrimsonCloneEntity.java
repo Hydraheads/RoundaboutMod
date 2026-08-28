@@ -60,7 +60,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false,
-                $$0 -> $$0 instanceof Enemy && !($$0 instanceof Creeper)));
+                $$0 -> $$0 instanceof Enemy));
     }
     public final void setIsJumping(boolean jumping) {
         this.entityData.set(JUMPING, jumping);

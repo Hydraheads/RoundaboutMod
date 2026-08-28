@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.FancyLighterBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StreetSignBlock;
+import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -84,8 +86,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.MANHATTAN_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.POLLINATION_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.BLACK_SABBATH.get(), StandEntity.createStandAttributes().build());
-        event.put(ForgeEntities.BEACH_SABBATH.get(), StandEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -148,6 +150,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.LEFT_SEPERATED_ARM.get(), LeftSeperatedArmEntity.createStandAttributes().build());
         event.put(ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get(), LeftSeperatedArmSlimEntity.createStandAttributes().build());
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
+        event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
         event.put(ForgeEntities.SILVER_CHARIOT_AFTERIMAGE.get(), SilverChariotAfterimageEntity.createStandAttributes().build());
     }
@@ -510,6 +513,7 @@ public class ForgeEvents {
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_YIELD.get()).referenceItem = ForgeItems.STREET_SIGN_YIELD_BLOCK_ITEM.get().getDefaultInstance();
         ((StreetSignBlock)ForgeBlocks.STREET_SIGN_DANGER.get()).referenceItem = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get().getDefaultInstance();
         ((FancyLighterBlock)ForgeBlocks.FANCY_LIGHTER_BLOCK.get()).referenceItem = ForgeItems.FANCY_LIGHTER.get().getDefaultInstance();
+        ((AbstractHandBlock)ForgeBlocks.HAND_BLOCK.get()).referenceItem = ForgeItems.HAND_ITEM.get().getDefaultInstance();
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = ForgeItems.STREET_SIGN_DIO_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = ForgeItems.STREET_SIGN_RIGHT_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_STOP_BLOCK_ITEM = ForgeItems.STREET_SIGN_STOP_BLOCK_ITEM.get();
@@ -850,6 +854,7 @@ public class ForgeEvents {
         ModEntities.LEFT_SEPERATED_ARM = ForgeEntities.LEFT_SEPERATED_ARM.get();
         ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
         ModEntities.MOLD_SPORES = ForgeEntities.MOLD_SPORE.get();
+        ModEntities.PURPLE_SMOKE = ForgeEntities.PURPLE_SMOKE.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();

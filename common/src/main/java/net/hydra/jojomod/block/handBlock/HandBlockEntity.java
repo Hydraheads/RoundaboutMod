@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
+import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -40,7 +41,7 @@ public class HandBlockEntity extends BlockEntity {
     private boolean isAnimating;
 
     public HandBlockEntity(BlockPos $$0, BlockState $$1) {
-        super(BlockEntityType.SKULL, $$0, $$1);
+        super(ModBlocks.HAND_BLOCK_ENTITY, $$0, $$1);
     }
 
     public static void setup(Services $$0, Executor $$1) {

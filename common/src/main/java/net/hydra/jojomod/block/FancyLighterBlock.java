@@ -119,24 +119,27 @@ public class FancyLighterBlock extends BaseEntityBlock implements CancelDataDriv
             if(ownerEntity instanceof ServerPlayer spl){
                        if(stepper.getUUID() != fbe.getOwner()){
                            if(!bs.blackSabbathTargets.contains(stepper)) {
-                               bs.selectTargetSecond(stepper);
-                               bs.setThree();
+                               if(bs.tickDown2 == -10) {
+                                   bs.selectTargetSecond(stepper);
+                                   bs.setThree();
+                                   bs.setTickBeforeHunt(20);
 
-                               if(bs.blackSelect != null){
-                                   bs.blackSelect.forceDespawnSet = true;
-                               }
-                               if(bs.getStandEntity(bs.self) != null){
-                                   bs.getStandEntity(bs.self).forceDespawnSet = true;
-                               }
+                                   if (bs.blackSelect != null) {
+                                       bs.blackSelect.forceDespawnSet = true;
+                                   }
+                                   if (bs.getStandEntity(bs.self) != null && bs.moveMode == 1) {
+                                       bs.getStandEntity(bs.self).forceDespawnSet = true;
+                                   }
 
-                               List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
-                                   return true;
-                               });
-                               if (lvent != null && !lvent.isEmpty()) {
-                                   for (LivingEntity value : lvent) {
-                                       if (value.hasLineOfSight(stepper)) {
-                                           if(!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
-                                               bs.selectTargetSecond(value);
+                                   List<LivingEntity> lvent = stepper.level().getEntitiesOfClass(LivingEntity.class, stepper.getBoundingBox().inflate(ClientNetworking.getAppropriateConfig().blackSabbathSettings.lighterWitnessRange), (livingEntity) -> {
+                                       return true;
+                                   });
+                                   if (lvent != null && !lvent.isEmpty()) {
+                                       for (LivingEntity value : lvent) {
+                                           if (value.hasLineOfSight(stepper)) {
+                                               if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                                                   bs.selectTargetSecond(value);
+                                               }
                                            }
                                        }
                                    }

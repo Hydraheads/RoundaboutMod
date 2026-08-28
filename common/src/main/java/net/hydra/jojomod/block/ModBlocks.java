@@ -794,8 +794,8 @@ public class ModBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.NONE).
                     instrument(NoteBlockInstrument.BANJO)
-                    .strength(1.0F, 1.0F)
-                    .sound(SoundType.HONEY_BLOCK)
+                    .strength(0.3F, 0.4F)
+                    .sound(SoundType.STONE)
     );
 
     public static MiningAlertBlock MINING_ALERT_BLOCK_PROPERTIES = new MiningAlertBlock(

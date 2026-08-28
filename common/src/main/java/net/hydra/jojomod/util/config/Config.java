@@ -116,15 +116,15 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
     @NestedOption(group = "modded")
+    public WhitesnakeSettings whitesnakeSettings;
+    @NestedOption(group = "modded")
+    public SilverChariotSettings silverChariotSettings;
+    @NestedOption(group = "modded")
     public KingCrimsonSettings kingCrimsonSettings;
     @NestedOption(group = "modded")
     public TheWorldSettings theWorldSettings;
     @NestedOption(group = "modded")
     public StarPlatinumSettings starPlatinumSettings;
-    @NestedOption(group = "modded")
-    public WhitesnakeSettings whitesnakeSettings;
-    @NestedOption(group = "modded")
-    public SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
     public TimeStopSettings timeStopSettings;
 
@@ -1308,7 +1308,7 @@ public class Config implements Cloneable {
         public Boolean hearingDiscStealEnabled;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealHealthRequirementAffectsMobs;
-        @IntOption(group = "inherit", value = 5, min = 0, max = 5)
+        @IntOption(group = "inherit", value = 3, min = 0, max = 3)
         public Integer hallucinationAllowsDiscSteal;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;

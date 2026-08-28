@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.StandFireType;
@@ -274,6 +275,12 @@ public abstract class ZEntityRenderDispatcher {
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
     private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
+        if ($$2 instanceof CloneEntity ce){
+            if (ce.getPlayer() != null && (!ce.turned) &&((IEntityAndData)ce.getPlayer()).rdbt$getSharedFlag(5)){
+                ci.cancel();
+                return;
+            }
+        }
         if (!((IEntityAndData)$$2).roundabout$getShadow()){
             ((IEntityAndData)$$2).roundabout$setShadow(true);
             ci.cancel();

@@ -961,6 +961,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
             );
+    public static final RegistryObject<EntityType<PurpleSmokeEntity>> PURPLE_SMOKE =
+            ENTITY_TYPES.register("purple_smoke", () ->
+                    EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "purple_smoke").toString())
+            );
     public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
             ENTITY_TYPES.register("ph_capsule", () ->
                     EntityType.Builder.<PHCapsuleEntity>of(PHCapsuleEntity::new, MobCategory.MISC).

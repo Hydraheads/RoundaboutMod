@@ -299,6 +299,8 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     public boolean forceVisible = false;
 
+    ///  if the stand should be hurt without transfering damage to the user (can use this so someone can kill your stand but not yourself)
+        public boolean canStandBeHurt() {return false;}
 
     public final void setAnimation(byte animation) {
         this.entityData.set(ANIMATION, animation);
@@ -590,13 +592,17 @@ public abstract class StandEntity extends Mob implements NoVibrationEntity {
 
     /** Stand does not take damage under normal circumstances.*/
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getUser() != null && MainUtil.isStandDamage(source)){
-            return this.getUser().hurt(source,amount);
-        }
+        if(canStandBeHurt()) {
+           return super.hurt(source, amount);
+        } else {
+            if (this.getUser() != null && MainUtil.isStandDamage(source)) {
+                return this.getUser().hurt(source, amount);
+            }
 
-        if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)){
-            discard();
-            return false;
+            if (source.is(DamageTypes.GENERIC_KILL) || source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+                discard();
+                return false;
+            }
         }
 
         return false;

@@ -219,7 +219,6 @@ public class FabricBlocks {
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
-    public static final Block HAND = registerBlock("hand_block",ModBlocks.HAND_PROPERTIES);
     public static final Block STEREO = registerBlock("stereo",ModBlocks.STEREO_PROPERTIES);
     public static final Block CULTIVATION_POT = registerBlock("cultivation_pot",ModBlocks.cultivationPot(Blocks.AIR));
     public static final Block CULTIVATED_CHERRY_SAPLING = registerBlockItemless("cultivated_cherry_sapling",ModBlocks.cultivationPot(Blocks.CHERRY_SAPLING));
@@ -249,6 +248,7 @@ public class FabricBlocks {
     public static final Block COFFIN_BLOCK = registerCoffinBlock("coffin_block", COFFIN_BLOCK_PROPERTIES);
     public static final Block KING_BED_BLOCK = registerBlockItemless("king_bed_block", KING_BED_BLOCK_PROPERTIES);
     public static final Block FANCY_LIGHTER_BLOCK = registerFancyLighter("fancy_lighter_block", FANCY_LIGHTER_PROPRETIES);
+    public static final Block HAND = registerHandBlock("hand_block", HAND_PROPERTIES);
     public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
     public static final HallucinatoryAcidBlock HALLUCINATORY_ACID = (HallucinatoryAcidBlock) registerBlockItemless(
             "hallucinatory_acid", new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
@@ -358,6 +358,11 @@ public class FabricBlocks {
     private static Block registerFancyLighter(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }
+
+    private static Block registerHandBlock(String name, Block block){
+        return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
+    }
+
     /*private static Block registerChessBoardBlock(String name, Block block){
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Roundabout.MOD_ID, name), block);
     }*/
