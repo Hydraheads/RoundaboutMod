@@ -60,6 +60,7 @@ import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
@@ -108,6 +109,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte WORLD_MERGE = 106;
     public static final byte PORTAL = 107;
     public static final byte FUSE = 108;
+    public static final byte MELT_DODGE = 109;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -128,6 +130,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_PORTAL_EVENT;
         } else if (soundChoice == FUSE) {
             return ModSounds.D4C_FUSE_EVENT;
+        } else if (soundChoice == MELT_DODGE) {
+            return ModSounds.MELT_DODGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -1319,6 +1323,9 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
+                betweenVisionClient();
+            }
             case SKILL_1_NORMAL -> {
                 worldMergingClient();
             }
@@ -1334,8 +1341,8 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_CROUCH_GUARD -> {
                 replaceBodyClient();
             }
-            case SKILL_3_GUARD -> {
-                betweenVisionClient();
+            case SKILL_3_GUARD,SKILL_3_CROUCH_GUARD -> {
+                meltDodgeClient();
             }
             case SKILL_3_NORMAL -> {
                 dashOrBlockSwitchClient();
@@ -1346,6 +1353,11 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
+    public void meltDodgeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
+            tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+        }
+    }
     public void pullIntoRealityClient(){
         Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
         if (targetEntity !=null && targetEntity.isAlive()){
@@ -1525,7 +1537,7 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
         } else if (PowerTypes.isInD4CWorld(self)){
             LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NONE,0);
         } else if (!isHoldingSneak()){
@@ -1543,7 +1555,7 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         if (isGuarding()){
-            setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
         } else if (canVault()) {
             setSkillIcon(context, x, y, 3, StandIcons.D4C_LEDGE_GRAB,
                     PowerIndex.GLOBAL_DASH);
@@ -1563,7 +1575,7 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         boolean dworld = PowerTypes.isInD4CWorld(self);
         if (!(slot == 2 && dworld)){
-            if (slot == 1 || slot == 2 || slot == 4){
+            if ((slot == 1 && !isGuarding()) || slot == 2 || slot == 4 || (slot == 3 && isGuarding())){
                 if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
                 }
@@ -1585,12 +1597,20 @@ public class PowersD4C extends NewPunchingStand {
     public boolean cancelSprintJump(){
         byte ap = this.getActivePower();
         if (ap == PowerIndex.SNEAK_ATTACK_CHARGE ||
-                ap == PowerIndex.POWER_3_SNEAK ||
+                ap == PowerIndex.POWER_3_SNEAK ||  ap == PowerIndex.POWER_3_BLOCK ||
                 ap == PowerIndex.POWER_1_SNEAK
         ){
             return true;
         }
         return super.cancelSprintJump();
+    }
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (this.getActivePower() == PowerIndex.POWER_3_BLOCK) {
+            stopSoundsIfNearby(MELT_DODGE, 100, false);
+
+        }
+        return super.tryPower(move,forced);
     }
 
     public boolean setPowerFinalAttack() {
@@ -1906,8 +1926,21 @@ public class PowersD4C extends NewPunchingStand {
                 float g = 1/f;
                 basis *= g;
             }
+        } else if (this.activePower == PowerIndex.POWER_3_BLOCK && !(this.getSelf() instanceof Creeper)){
+            basis *= 0.2f;
         }
         return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (this.activePower == PowerIndex.POWER_3_BLOCK)
+            return true;
+        return super.cancelJump();
+    }
+    public boolean cancelSprintParticles(){
+        if (this.activePower == PowerIndex.POWER_3_BLOCK)
+            return true;
+        return super.cancelSprintParticles();
     }
 
     //hold input
@@ -2024,6 +2057,9 @@ public class PowersD4C extends NewPunchingStand {
             return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
+        } else if (move == PowerIndex.POWER_3_BLOCK){
+             this.meltDodge();
+            return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
             return false;
@@ -2040,7 +2076,31 @@ public class PowersD4C extends NewPunchingStand {
         }
         return super.setPowerOther(move,lastMove);
     }
-
+    @Override
+    public boolean cancelItemUse() {
+        return (this.activePower == PowerIndex.POWER_3_BLOCK) || super.cancelItemUse();
+    }
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.POWER_3_BLOCK) {
+            return true;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
+    @Override
+    public boolean clickRelease(){
+        if (this.getActivePower() == PowerIndex.POWER_3_BLOCK){
+            return true;
+        }
+        return super.clickRelease();
+    }
+    public void meltDodge(){
+        if (isEligable()) {
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_3_BLOCK);
+            playStandUserOnlySoundsIfNearby(MELT_DODGE, 50, false, false);
+        }
+    }
     public void standDragServer(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
