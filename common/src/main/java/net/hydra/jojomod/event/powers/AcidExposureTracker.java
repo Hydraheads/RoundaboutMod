@@ -32,7 +32,8 @@ public final class AcidExposureTracker {
 
         exposure.ticks = 0;
         MobEffectInstance current = living.getEffect(ModEffects.HALLUCINATION);
-        int amplifier = current == null ? 0 : Math.min(4, current.getAmplifier() + 1);
+        int amplifier = current == null ? 0 : Math.min(
+                HallucinationEffect.MAX_LEVEL - 1, current.getAmplifier() + 1);
         int duration = (current == null ? 0 : current.getDuration()) + 200;
         living.addEffect(HallucinationEffect.createInstance(Math.max(200, duration), amplifier));
     }

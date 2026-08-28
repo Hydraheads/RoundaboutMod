@@ -274,8 +274,6 @@
     "whitesnake.BlankMemoryMobAiMixin",
     "whitesnake.DiscItemLifetimeMixin",
     "whitesnake.DiscMeleeImplantMixin",
-    "whitesnake.HallucinationJumpMixin",
-    "whitesnake.HallucinationPathNavigationMixin",
     "whitesnake.HallucinatoryAcidFallingBlockMixin",
     "whitesnake.HallucinatoryAcidFluidMixin",
     "whitesnake.HorseMemoryRavagerMixin",
