@@ -102,6 +102,7 @@ public class PurpleSmokeEntity extends StandEntity {
             int elapsedTicks = totalDuration - lifetime;
             float expansionProgress = Math.min(1.0F, (float) elapsedTicks / 60);
             range = 1.0F + (8.0F - 1.0F) * expansionProgress;
+            range = Math.max(range, 1.0F);
         }
         List<Entity> damages = MainUtil.genHitbox(
                 this.level(),
@@ -156,8 +157,11 @@ public class PurpleSmokeEntity extends StandEntity {
     }
     private void tickBlockDecay() {
         if (!(this.level() instanceof ServerLevel sl)) return;
+        if (range < 1.0F) return;
 
         int r = Mth.ceil(range);
+        if (r <= 0) return;
+
         BlockPos center = this.blockPosition();
 
         int attempts = Mth.clamp((int) (range * 4F), 15, 120);
