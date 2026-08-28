@@ -302,6 +302,10 @@ public class ModSounds {
     public static final ResourceLocation ICE_RISES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_RISES);
     public static SoundEvent ICE_RISES_EVENT = SoundEvent.createVariableRangeEvent(ICE_RISES_ID);
 
+    public static final String MELT_DODGE = "melt_dodge";
+    public static final ResourceLocation MELT_DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MELT_DODGE);
+    public static SoundEvent MELT_DODGE_EVENT = SoundEvent.createVariableRangeEvent(MELT_DODGE_ID);
+
     public static final String BLOCK_FREEZE = "block_freeze";
     public static final ResourceLocation BLOCK_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_FREEZE);
     public static SoundEvent BLOCK_FREEZE_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_FREEZE_ID);

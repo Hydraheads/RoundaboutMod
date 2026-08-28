@@ -339,18 +339,22 @@ public class PowersTusk extends NewDashPreset {
 
 
     @Override
+    public boolean setPowerAttack() {
+        if (!isCharging()) {
+            byte anim = this.getStandUserSelf().roundabout$getStandAnimation();
+            if (anim != PowersTusk.FIRE_NAIL && anim != PowersTusk.FIRE_BOTH_NAILS) {
+                this.setAnimation(PowersTusk.SHOOT_MODE, false);
+            }
+            this.setActivePower(PowersTusk.SHOOT_MODE);
+        }
+        return true;
+    }
+
+
+    @Override
     public boolean setPowerOther(int move, int lastMove) {
 
         switch (move) {
-            case PowersTusk.SHOOT_MODE -> {
-                if (!isCharging()) {
-                    byte anim = this.getStandUserSelf().roundabout$getStandAnimation();
-                    if (anim != PowersTusk.FIRE_NAIL && anim != PowersTusk.FIRE_BOTH_NAILS) {
-                        this.setAnimation(PowersTusk.SHOOT_MODE, false);
-                    }
-                    this.setActivePower(PowersTusk.SHOOT_MODE);
-                }
-            }
 
             case PowersTusk.CHARGE_NAILS -> {
                 this.getSelf().level().playSound(null, this.getSelf().blockPosition(), ModSounds.TUSK_1_CHARGE_EVENT, SoundSource.PLAYERS, 1F, 0.8f + nailCharge * 0.15F);
@@ -1817,6 +1821,9 @@ public class PowersTusk extends NewDashPreset {
             this.setPowerNone();
             this.nailCharge = 0;
         } else if (!desummon) {
+            if (this.getSelf().isUsingItem()) {
+                this.getSelf().stopUsingItem();
+            }
             this.setNailColor(this.nailColor.x,this.nailColor.y,this.nailColor.z);
             if (this.getSelf() instanceof Player P) {
                 int level = P.isCreative() || getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem

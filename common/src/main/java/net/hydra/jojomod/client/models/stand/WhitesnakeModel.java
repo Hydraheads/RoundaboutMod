@@ -26,6 +26,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
     private final ModelPart leftArm;
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
+    private final ModelPart torso;
+    private final ModelPart legs;
     private final StandPowers power = new PowersWhitesnake(null);
     private final Vector3f animationVectorCache = new Vector3f();
     private float controlHeadYaw;
@@ -37,8 +39,9 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         this.body = stand.getChild("stand2").getChild("body");
         ModelPart stand2 = root.getChild("stand").getChild("stand2");
         ModelPart body2 = stand2.getChild("body").getChild("body2");
-        ModelPart upperChest = body2.getChild("torso").getChild("upper_chest");
-        ModelPart legs = body2.getChild("legs");
+        this.torso = body2.getChild("torso");
+        ModelPart upperChest = torso.getChild("upper_chest");
+        this.legs = body2.getChild("legs");
         this.rightArm = upperChest.getChild("right_arm");
         this.leftArm = upperChest.getChild("left_arm");
         this.rightHand = rightArm.getChild("lower_right_arm");
@@ -280,6 +283,19 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
             rightArm.xRot += left * 0.7F;
             leftArm.xRot += right * 0.7F;
         }
+        if (entity.isControlModeActive() && !entity.isMeltingModeActive() && entity.isCrouching()) {
+            applyControlModeCrouch();
+        }
+    }
+
+    private void applyControlModeCrouch() {
+        torso.xRot += 0.5F;
+        torso.y += 3.2F;
+        rightArm.xRot += 0.4F;
+        leftArm.xRot += 0.4F;
+        legs.y += 0.2F;
+        legs.z += 4.0F;
+        head.y += 4.2F;
     }
 
     @Override

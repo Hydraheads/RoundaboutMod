@@ -631,6 +631,12 @@ public class ForgeEntities {
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
+    public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
+            ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(16).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
+            );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
