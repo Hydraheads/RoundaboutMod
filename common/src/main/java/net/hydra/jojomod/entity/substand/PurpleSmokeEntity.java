@@ -308,7 +308,7 @@ public class PurpleSmokeEntity extends StandEntity {
             }
         }
     }
-
+    private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
     public void tickeffect() {
         List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
         LivingEntity user = this.getUser();
@@ -321,18 +321,22 @@ public class PurpleSmokeEntity extends StandEntity {
             if (!(entity instanceof LivingEntity living)) continue;
 
             int effectDuration = living instanceof Player ? 200 : 300;
+            boolean isSelf = living == user;
+
             if (isDistortionMode()) {
-                boolean already = living.hasEffect(ModEffects.DISTORTION_VIRUS);
+                boolean alreadyHasVirus = living.hasEffect(ModEffects.DISTORTION_VIRUS);
                 living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration));
                 ((StandUser) living).SetInDistortionHazeTicks(5);
-                if (living != user && !already) {
+
+                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(2);
                 }
             } else {
-                boolean already = living.hasEffect(ModEffects.HAZE_VIRUS);
+                boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                 ((StandUser) living).SetInPurpleHazeTicks(5);
                 living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 300));
-                if (living != user && !already) {
+
+                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
                     ((StandUser) user).roundabout$getStandPowers().addEXP(3);
                 }
             }
