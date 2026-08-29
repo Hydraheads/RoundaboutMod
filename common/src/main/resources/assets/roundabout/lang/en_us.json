@@ -4488,6 +4488,8 @@
   "config.roundabout.postTESoften.name": "Post TE Soften",
   "config.roundabout.postTESoften.desc": "If ending time erase makes certain damage after it ends weaker like time stop does. Good to prevent rushdown abuse.",
 
+  "config.roundabout.nerfedTEDamage.name": "Nerfed TE PVP",
+  "config.roundabout.nerfedTEDamage.desc": "Makes the fated self less physically strong with its punches by a small amount for balancing.",
 
   "config.roundabout.vampireAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.vampireAttackMultOnPlayers.desc": "How much damage vampires deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

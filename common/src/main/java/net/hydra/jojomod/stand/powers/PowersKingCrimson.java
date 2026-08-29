@@ -3339,7 +3339,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     double rangeSqr = range * range;
                     for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
                         if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
-                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 48;
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 68;
                         }
                     }
                 }
@@ -4129,7 +4129,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+            if (entity instanceof KingCrimsonCloneEntity &&
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
+            } else {
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+            }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -4137,7 +4142,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+            if (entity instanceof KingCrimsonCloneEntity &&
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+            } else {
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+            }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }
