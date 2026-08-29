@@ -53,11 +53,12 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public static final byte SILVER_SKIN = 9;
     public static final byte COTTON_CANDY_SKIN = 10;
     public static final byte ASBR_SKIN = 11;
-    public static final byte JOJOVELLER_SKIN = 12;
+    public static final byte AGOGO_SKIN = 12;
     public static final byte DARK_SKIN = 13;
     public static final byte SOUR_CANDY_SKIN = 14;
     public static final byte EDGY_GOLD_SKIN = 15;
     public static final byte GOLD_TRIMMED_SKIN = 16;
+    public static final byte SANDSNAKE_SKIN = 17;
     public static final byte CHOP_ATTACK = 82;
     public static final byte CHOP_CHARGED = 83;
     public static final byte DISC_STEAL_WINDUP = 88;

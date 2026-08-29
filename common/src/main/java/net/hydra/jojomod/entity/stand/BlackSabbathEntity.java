@@ -328,9 +328,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     if (damageImmunityTicks < 1) {
                         if(pb.moveMode == 3) {
                             this.setSecondsOnFire(2);
-                            if (this.getHealth() >= 1) {
-
-                            }
                             setDamageImmunityTicks(10);
                         }
                     }
@@ -456,7 +453,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if (source.getEntity() != null && source.getEntity() != this.getUser()) {
             if (this.getUser() != null ) {
                 if(source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.LAVA)) {
-                    setDamageImmunityTicks(0);
                     return super.hurt(source, amount + 2);
                 } else if (source.is(ModDamageTypes.GO_BEYOND)){
                     return super.hurt(source, amount * 30);

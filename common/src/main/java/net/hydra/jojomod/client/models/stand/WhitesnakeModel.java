@@ -28,6 +28,8 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
     private final ModelPart leftLeg;
     private final ModelPart torso;
     private final ModelPart legs;
+    private final ModelPart upperChestOverlay;
+    private final ModelPart sandsnakeDetails;
     private final StandPowers power = new PowersWhitesnake(null);
     private final Vector3f animationVectorCache = new Vector3f();
     private float controlHeadYaw;
@@ -38,9 +40,12 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         this.head = stand.getChild("stand2").getChild("head");
         this.body = stand.getChild("stand2").getChild("body");
         ModelPart stand2 = root.getChild("stand").getChild("stand2");
+        ModelPart head2 = this.head.getChild("head2");
         ModelPart body2 = stand2.getChild("body").getChild("body2");
         this.torso = body2.getChild("torso");
         ModelPart upperChest = torso.getChild("upper_chest");
+        this.upperChestOverlay = upperChest.getChild("upper_chest_only").getChild("upper_chest_overlay");
+        this.sandsnakeDetails = head2.getChild("sandsnake_details");
         this.legs = body2.getChild("legs");
         this.rightArm = upperChest.getChild("right_arm");
         this.leftArm = upperChest.getChild("left_arm");
@@ -66,6 +71,12 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
                 .texOffs(0, 16).addBox(-4.0F, -10.1F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.1F))
                 .texOffs(0, 32).addBox(-3.5F, -6.6F, -3.825F, 7.0F, 6.0F, 7.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        head2.addOrReplaceChild("sandsnake_details", CubeListBuilder.create()
+                .texOffs(-2, -2).addBox(-4.0F, -7.7F, -3.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(-2, -2).addBox(4.0F, -7.7F, -3.0F, 0.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-5.0F, -3.7F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(3.0F, -3.7F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.ZERO);
+
         PartDefinition body = stand2.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -24.0F, 0.0F));
 
         PartDefinition body2 = body.addOrReplaceChild("body2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
@@ -75,8 +86,10 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
         PartDefinition upper_chest = torso.addOrReplaceChild("upper_chest", CubeListBuilder.create(), PartPose.offset(0.0F, 6.0F, 0.0F));
 
         PartDefinition upper_chest_only = upper_chest.addOrReplaceChild("upper_chest_only", CubeListBuilder.create()
-                .texOffs(32, 0).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(32, 20).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(32, 0).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        upper_chest_only.addOrReplaceChild("upper_chest_overlay", CubeListBuilder.create()
+                .texOffs(32, 20).addBox(-4.0F, -6.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.1F)), PartPose.ZERO);
 
         PartDefinition right_arm = upper_chest.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-4.0F, -5.25F, 0.0F));
 
@@ -254,6 +267,9 @@ public class WhitesnakeModel extends StandModel<WhitesnakeEntity> {
                           float ageInTicks, float netHeadYaw, float headPitch) {
         Minecraft minecraft = Minecraft.getInstance();
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        boolean sandsnake = entity.getSkin() == WhitesnakeEntity.SANDSNAKE_SKIN;
+        sandsnakeDetails.visible = sandsnake;
+        upperChestOverlay.visible = !sandsnake;
         controlHeadYaw = netHeadYaw;
         controlHeadPitch = headPitch;
         defaultModifiers(entity);
