@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -416,7 +417,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
         if (!canPredictIdles() || !isGravityNormal(liv) ||
                 (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))
-        || liv instanceof FallenMob || liv instanceof BaseMinion
+        || liv instanceof FallenMob || liv instanceof BaseMinion || liv instanceof StrayCatEntity ||
+                (liv instanceof Mob mb && mb.isNoAi())
         ){
             return liv.position();
         }
