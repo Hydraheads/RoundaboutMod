@@ -58,7 +58,7 @@ public class PurpleSmokeEntity extends StandEntity {
     public PurpleSmokeEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
-
+    public int ticksAlive = 0;
     @Override
     public void tick() {
 
@@ -75,9 +75,12 @@ public class PurpleSmokeEntity extends StandEntity {
             }
         }
         lifetime--;
+        ticksAlive++;
+        if (!client && !isDistortionMode()) {
+            lifetime -= getLightDecayAmount();
+        }
         if (lifetime < 1) {
             this.discard();
-
         }
 
         if (user == null) {
@@ -99,8 +102,7 @@ public class PurpleSmokeEntity extends StandEntity {
             this.setDeltaMovement(0, -0.2, 0);
         }
         if (!client) {
-            int elapsedTicks = totalDuration - lifetime;
-            float expansionProgress = Math.min(1.0F, (float) elapsedTicks / 60);
+            float expansionProgress = Math.min(1.0F, (float) ticksAlive / 60);
             range = 1.0F + (8.0F - 1.0F) * expansionProgress;
             range = Math.max(range, 1.0F);
         }
@@ -154,6 +156,20 @@ public class PurpleSmokeEntity extends StandEntity {
             Roundabout.LOGGER.info("ServerRange= " + range);
         }*/
         super.tick();
+    }
+    private int getLightDecayAmount() {
+        if (!(this.level() instanceof ServerLevel sl)) return 0;
+
+        int light = sl.getMaxLocalRawBrightness(this.blockPosition());
+
+
+        int threshold = 7; // 7 its pretty dark so it could be ok as the minimum
+        if (light <= threshold) {
+            return 0;
+        }
+
+
+        return Mth.floor((light - threshold) / 4.0F); // if we increment the divisor we cn make it a softer scaling
     }
     private void tickBlockDecay() {
         if (!(this.level() instanceof ServerLevel sl)) return;
