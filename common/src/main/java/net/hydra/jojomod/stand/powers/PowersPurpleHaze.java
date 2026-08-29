@@ -588,6 +588,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private static final int MAX_PODS = 6;
     private static final int POD_RECHARGE_TIME = 800;
     private int podRechargeTicks = 0;
+    private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
         return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
@@ -844,19 +845,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
+
+            if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
+                podsSyncedOnJoin = true;
+                S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
+            }
         }
 
-            if (capsuleEatingTick > 0) {
-                capsuleEatingTick--;
+        if (capsuleEatingTick > 0) {
+            capsuleEatingTick--;
 
-                if (capsuleEatingTick == 0) {
-                    if (self instanceof ServerPlayer pl) {
-                        this.setAttackTimeDuring(0);
-                        ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
-                    }
+            if (capsuleEatingTick == 0) {
+                if (self instanceof ServerPlayer pl) {
+                    this.setAttackTimeDuring(0);
+                    ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
                 }
             }
         }
+    }
     public boolean purpleHazeFieldGone = false;
 
     public void serverEndPurpleHazeField(){

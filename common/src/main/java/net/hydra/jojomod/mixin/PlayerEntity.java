@@ -1317,7 +1317,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         compoundtag.putByte("shapeShift",roundabout$getShapeShift());
         compoundtag.putByte("shapeShiftExtra",roundabout$getShapeShiftExtraData());
         compoundtag.putInt("zombieFish",rdbt$getZombieFish());
-
+        compoundtag.putByte("purpleHazePods", purpleHazePods);
+        compoundtag.putLong("purpleHazePodResetDay", purpleHazePodResetDay);
 
         compoundtag.putFloat("guard",((StandUser)this).roundabout$getGuardPoints());
         compoundtag.putBoolean("guard_break",((StandUser)this).roundabout$getGuardBroken());
@@ -1435,7 +1436,12 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (compoundtag2.contains("zombieFish")) {
             rdbt$setZombieFish(compoundtag2.getInt("zombieFish"));
         }
-
+        if (compoundtag2.contains("purpleHazePods")) {
+            purpleHazePods = compoundtag2.getByte("purpleHazePods");
+        }
+        if (compoundtag2.contains("purpleHazePodResetDay")) {
+            purpleHazePodResetDay = compoundtag2.getLong("purpleHazePodResetDay");
+        }
 
         if (ClientNetworking.getAppropriateConfig().vampireSettings.vampireLeveling) {
             CompoundTag vampire = $$0.getCompound("roundaboutVampire");
