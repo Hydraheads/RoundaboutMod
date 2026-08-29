@@ -99,8 +99,10 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.POLLINATION_TRANSFER, PollinationTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLAZE_TRANSFER, BlazeTransferRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BLACK_SABBATH, BlackSabbathRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.PEARL_JAM, PearlJamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BEACH_SABBATH, BeachSabbathRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SANTA_SABBATH, BlackSantaSabbathRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.COWBOY_SABBATH, CowboySabbathRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.PEARL_JAM, PearlJamRenderer::new);
         EntityRendererRegistry.register(FabricEntities.WALKING_HEART, WalkingHeartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.DARK_MIRAGE, DarkMirageRenderer::new);
         EntityRendererRegistry.register(FabricEntities.TUSK_A1, TuskAct1Renderer::new);
@@ -277,6 +279,8 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLAZE_TRANSFER_LAYER, BlazeTransferModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLACK_SABBATH_LAYER, BlackSabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BEACH_SABBATH_LAYER, BeachSabbathModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SANTA_SABBATH_LAYER, BlackSantaSabbathModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.COWBOY_SABBATH_LAYER, CowboySabbathModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);

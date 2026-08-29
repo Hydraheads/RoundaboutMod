@@ -535,19 +535,29 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
             );
-    public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
-            ENTITY_TYPES.register("pearl_jam", () ->
-                    EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
-                            clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
-            );
-
-
     public static final RegistryObject<EntityType<BeachSabbathEntity>> BEACH_SABBATH =
             ENTITY_TYPES.register("beach_sabbath", () ->
                     EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<BlackSantaSabbathEntity>> SANTA_SABBATH =
+            ENTITY_TYPES.register("santa_sabbath", () ->
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<CowboySabbathEntity>> COWBOY_SABBATH =
+            ENTITY_TYPES.register("cowboy_sabbath", () ->
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
+            ENTITY_TYPES.register("pearl_jam", () ->
+                    EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
             );
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->

@@ -88,6 +88,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SANTA_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.COWBOY_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -802,6 +804,8 @@ public class ForgeEvents {
         ModEntities.BLAZE_TRANSFER = ForgeEntities.BLAZE_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();
         ModEntities.BEACH_SABBATH = ForgeEntities.BEACH_SABBATH.get();
+        ModEntities.SANTA_SABBATH = ForgeEntities.SANTA_SABBATH.get();
+        ModEntities.COWBOY_SABBATH = ForgeEntities.COWBOY_SABBATH.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
