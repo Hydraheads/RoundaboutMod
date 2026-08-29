@@ -63,12 +63,15 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class PowersBlackSabbath extends NewDashPreset {
@@ -681,8 +684,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(tickBeforeHunt > 0){
             tickBeforeHunt--;
             if(tickBeforeHunt == 1){
-                if(!this.isClient()){
-                    createTheMightyHunterOfTheShadows();
+                if(!this.isClient() && this.spawnTarget() != null && this.self.level() instanceof ServerLevel sl){
+                    createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl,spawnTarget(), 15D)));
                 }
             }
         }
@@ -850,18 +853,105 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
     }
 
+    @Nullable
+    public Vec3 findBlackSabbathSpawnPosition(
+            ServerLevel level,
+            LivingEntity lent,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (0.5);
+        Vec3 vecTest = null;
+        for (int i = 0; i < attempts; i++) {
 
-    public void createTheMightyHunterOfTheShadows(){
-        Position pn = null;
-        Random spawn = new Random();
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = lent.getX() + Math.cos(angle) * distance;
+            double z = lent.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(lent.getY());
+
+            for (int yOffset = -1; yOffset <= 10; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+                BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                var blockState = this.self.level().getBlockState(bpos);
+
+                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(),lent.getY(),lent.getZ());
+
+                AABB testBox = yesbox.move(
+                        candidate.x - lent.getX(),
+                        candidate.y - lent.getY(),
+                        candidate.z - lent.getZ()
+                );
+
+                if (level.noCollision(lent, testBox) && !blockState.isAir()) {
+                    return candidate;
+                } else if (i == 39){
+                    for (int yOffset2 = -2; yOffset2 >= -10; yOffset2--) {
+
+                        double y2 = baseY + yOffset2;
+
+                        Vec3 candidate2 = new Vec3(x, y2, z);
+                        BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
+                        var blockState2 = this.self.level().getBlockState(bpos2);
+
+                        AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(),lent.getY(),lent.getZ());
+
+                        AABB testBox2 = yesbox2.move(
+                                candidate2.x - lent.getX(),
+                                candidate2.y - lent.getY(),
+                                candidate2.z - lent.getZ()
+                        );
+
+                        if (level.noCollision(lent, testBox2) && !blockState2.isAir()) {
+                            return candidate2;
+                        }
+                    }
+                }
+            }
+          /*  if(i == 39){
+                for (int yOffset = -2; yOffset >= -10; yOffset--) {
+
+                    double y = baseY + yOffset;
+
+                    Vec3 candidate = new Vec3(x, y, z);
+                    BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
+                    var blockState = this.self.level().getBlockState(bpos);
+
+                    AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(),lent.getY(),lent.getZ());
+
+                    AABB testBox = yesbox.move(
+                            candidate.x - lent.getX(),
+                            candidate.y - lent.getY(),
+                            candidate.z - lent.getZ()
+                    );
+
+                    if (level.noCollision(lent, testBox) && !blockState.isAir()) {
+                        return candidate;
+                    }
+                }
+            }*/
+        }
+        return null;
+    }
+
+    private LivingEntity spawnTarget(){
         if(!this.blackSabbathTargets.isEmpty()){
             LivingEntity lv = this.getSelf().level().getNearestEntity(blackSabbathTargets, MainUtil.OFFER_TARGER_CONTEXT, null,
                     this.self.getX(), this.self.getY(), this.self.getZ());
-
-            if(lv != null && lv.getPosition(1) != null) {
-                pn = lv.getPosition(1);
-            }
+            return lv;
         }
+        return null;
+    }
+
+    public void createTheMightyHunterOfTheShadows(Vec3 pos){
         if(isHunting()) {
             Random bandom = new Random();
             Integer randomInt = bandom.nextInt(361);
@@ -870,7 +960,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     StandEntity stand = this.getNewStandEntity();
                     if (stand != null) {
                         if (stand instanceof BlackSabbathEntity BE) {
-                            BE.absMoveTo(self.getX(), self.getY(), self.getZ());
+                            if(pos != null) {
+                                BE.absMoveTo(pos.x(), pos.y(), pos.z());
+                            } else {
+                                BE.absMoveTo(self.getX(), self.getY(), self.getZ());
+                            }
                             BE.setYRot(randomInt);
                             BE.setMaster(this.self);
                             BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
