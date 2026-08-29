@@ -619,6 +619,20 @@ public class FabricEntities {
                             sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":beach_sabbath")
             );
 
+    public static final EntityType<BlackSantaSabbathEntity> SANTA_SABBATH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath"),
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).
+                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":santa_sabbath")
+            );
+    public static final EntityType<CowboySabbathEntity> COWBOY_SABBATH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"),
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).
+                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cowboy_sabbath")
+            );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -694,7 +708,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
                         EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
+                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_rapier")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -1187,6 +1201,8 @@ public class FabricEntities {
                 ModEntities.BLAZE_TRANSFER = BLAZE_TRANSFER;
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
                 ModEntities.BEACH_SABBATH = BEACH_SABBATH;
+                ModEntities.SANTA_SABBATH = SANTA_SABBATH;
+                ModEntities.COWBOY_SABBATH = COWBOY_SABBATH;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1397,6 +1413,8 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(BLAZE_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLACK_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BEACH_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SANTA_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(COWBOY_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());

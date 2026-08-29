@@ -9,8 +9,10 @@ import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +26,11 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation VERDANT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/green.png");
     private static final ResourceLocation NIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/night.png");
     private static final ResourceLocation DEPARTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/shadow_departure.png");
+    private static final ResourceLocation CHERRY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/cherry.png");
+    private static final ResourceLocation GRAPE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/grape.png");
+    private static final ResourceLocation MINT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/mint.png");
+    private static final ResourceLocation TACO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/taco.png");
+    private static final ResourceLocation WOOL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/woven.png");
     private static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/phantom.png");
     private static final ResourceLocation SWEET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sweet.png");
     private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
@@ -32,6 +39,8 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation MAGMA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/magma_sabbath.png");
     private static final ResourceLocation DAPPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/dapper_sabbath.png");
     private static final ResourceLocation COPPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/copper_sabbath.png");
+    private static final ResourceLocation SANTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/santabbath.png");
+    private static final ResourceLocation COWBOY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/western.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
@@ -61,6 +70,21 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         if (BT == BlackSabbathEntity.DEPARTURE) {
             return DEPARTURE;
         }
+        if (BT == BlackSabbathEntity.CHERRY) {
+            return CHERRY;
+        }
+        if (BT == BlackSabbathEntity.GRAPE) {
+            return GRAPE;
+        }
+        if (BT == BlackSabbathEntity.MINT) {
+            return MINT;
+        }
+        if (BT == BlackSabbathEntity.TACO) {
+            return TACO;
+        }
+        if (BT == BlackSabbathEntity.WOOL) {
+            return WOOL;
+        }
         if (BT == BlackSabbathEntity.DAPPER) {
             return DAPPER;
         }
@@ -79,11 +103,17 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         if(BT == BlackSabbathEntity.SACTHOTH){
             return SACTHOTH;
         }
+        if(BT == BlackSabbathEntity.COWBOY){
+            return COWBOY;
+        }
         if(BT == BlackSabbathEntity.BEACH){
             return BEACH;
         }
         if(BT == BlackSabbathEntity.MAGMA){
             return MAGMA;
+        }
+        if (BT == BlackSabbathEntity.SANTA) {
+            return SANTA;
         }
         return ANIME;
     }
@@ -105,5 +135,11 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         ResourceLocation $$4 = this.getTextureLocation(entity);
         return RenderType.entityTranslucent($$4);
     }
-
+    @Override
+    public boolean shouldRender(BlackSabbathEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
+        if ($$0.getCrippled()){
+            return false;
+        }
+        return super.shouldRender($$0,$$1,$$2,$$3,$$4);
+    }
 }

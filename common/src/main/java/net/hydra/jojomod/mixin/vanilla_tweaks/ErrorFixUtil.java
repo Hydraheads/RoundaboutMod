@@ -17,6 +17,7 @@ public class ErrorFixUtil {
                 || $$1.contains("invisible_block")
                 || $$1.contains("d4c")
                 || $$1.contains("fog_trap")
+                || $$1.contains("hand_block")
                 || $$1.contains("coffin")
                 || $$1.contains("hallucinatory_acid")
                 || $$1.contains("oasis_mud_block")

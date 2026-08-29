@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.resources.model.BakedModel;
@@ -29,6 +30,6 @@ public abstract class HallucinationAcidModelRenderMixin {
         if (minecraft.player == null || !(state.is(ModBlocks.HALLUCINATORY_ACID)
                 || state.is(ModBlocks.HALLUCINATORY_ACID_WALL))) return;
         MobEffectInstance effect = minecraft.player.getEffect(ModEffects.HALLUCINATION);
-        if (effect != null) ci.cancel();
+        if (HallucinationEffect.hasDistortion(effect)) ci.cancel();
     }
 }

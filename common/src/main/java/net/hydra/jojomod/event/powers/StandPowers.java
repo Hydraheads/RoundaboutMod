@@ -436,6 +436,10 @@ public class StandPowers extends AbilityScapeBasis {
     /**When you eat food, intercept or run code based off of it*/
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
     }
+
+    public boolean phaseThroughProjectile(Entity ent){
+        return false;
+    }
     /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
      * Currently it supports abstract arrows but this can be expanded*/
     public boolean dealWithProjectile(Entity ent, HitResult res){
@@ -2017,8 +2021,8 @@ public class StandPowers extends AbilityScapeBasis {
                     if (activePower != PowerIndex.VAULT){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
-                } else if (animationType == MINING) {
-                    if (activePower != PowerIndex.MINING){
+                } else if (animationType == MELT_DODGE_ANIM) {
+                    if (activePower != PowerIndex.POWER_3_BLOCK){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
                 }

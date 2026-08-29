@@ -277,6 +277,7 @@ public class D4CCloneEntity extends CloneEntity {
 
         return ((ServerLevel) this.level()).getEntity(learnedAnnihilator);
     }
+
     private void faceEntity(Entity entity) {
         Vec3 look = entity.getEyePosition().subtract(this.getEyePosition());
 
@@ -428,6 +429,12 @@ public class D4CCloneEntity extends CloneEntity {
 
             jumpCooldown = 10 + this.getRandom().nextInt(200);
         }
+    }
+
+
+    public void aiStep() {
+        this.updateSwingTime();
+        super.aiStep();
     }
     private void avoidAnnihilator(Entity entity) {
         double distance = this.distanceTo(entity);

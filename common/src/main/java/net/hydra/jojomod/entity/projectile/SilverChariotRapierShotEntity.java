@@ -15,8 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -24,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public class SilverChariotRapierShotEntity extends AbstractArrow implements UnburnableProjectile {
+public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile implements UnburnableProjectile {
     private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
@@ -41,6 +40,10 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
 
     public SilverChariotRapierShotEntity(LivingEntity $$0, Level $$1) {
         this(ModEntities.SILVER_CHARIOT_RAPIER, $$0.getX(), $$0.getY(), $$0.getZ(), $$1);
+    }
+
+    public void alignRapier(LivingEntity livingEntity) {
+
     }
 
     public LivingEntity standUser;
@@ -107,16 +110,12 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
     }
 
     @Override
-    protected ItemStack getPickupItem() {
-        return null;
-    }
-
-    @Override
     protected void onHitBlock(BlockHitResult $$0) {
         // super.onHitBlock($$0);
         if (!this.level().isClientSide()) {
             if (this.getRapierShotType() == PLATFORM) {
-
+                this.createPlatform($$0.getLocation());
+                this.discard();
             } else if (this.getRapierShotType() == BASE && this.getBounces() > 0) {
                 this.setBounces(this.getBounces() - 1);
 
@@ -133,6 +132,17 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
                 Vec3 pushOut = normal.scale(0.2);
                 this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
             }
+        }
+    }
+
+    private void createPlatform(Vec3 position) {
+        SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
+                ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM,
+                this.level()
+        );
+
+        if (platform == null) {
+            return;
         }
     }
 
@@ -196,7 +206,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
 
     @Override
     public boolean canBeHitByProjectile() {
-        return super.canBeHitByProjectile();
+        return false;
     }
 
     @Override

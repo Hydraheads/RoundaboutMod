@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
@@ -156,7 +157,7 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
                 } else {
                     lv.addEffect(new MobEffectInstance(ModEffects.SINGE, 100, 0));
                 }
-            } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton || lv instanceof BlackSabbathEntity bs && bs.isAttackable()){
+            } else if ((lv instanceof Zombie zb && !(zb instanceof Husk)) || lv instanceof Phantom || lv instanceof Skeleton || lv instanceof BlackSabbathEntity bs && bs.isAttackable() && ClientNetworking.getAppropriateConfig().blackSabbathSettings.uvCanDamageStand){
                 lv.setSecondsOnFire(8);
             }
         }

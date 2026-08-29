@@ -17,6 +17,12 @@
       "roundabout:d4c_fusion_start"
     ]
   },
+  "melt_dodge": {
+    "subtitle": "sounds.roundabout.melt_dodge",
+    "sounds": [
+      "roundabout:melt_dodge"
+    ]
+  },
   "summon_d4c": {
     "subtitle": "sounds.roundabout.summon_d4c",
     "sounds": [
