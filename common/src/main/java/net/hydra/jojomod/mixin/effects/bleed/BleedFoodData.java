@@ -75,8 +75,8 @@ public class BleedFoodData implements IFoodData {
                     if (this.tickTimer >= 80) {
                         if (amp < 2) {
                             $$0.heal(multiplier);
-                            this.addExhaustion(6.0F);
                         }
+                        this.addExhaustion(6.0F);
                         this.tickTimer = 0;
                     }
                     ci.cancel();
