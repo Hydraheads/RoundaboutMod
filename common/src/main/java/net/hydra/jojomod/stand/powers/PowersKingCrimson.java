@@ -943,7 +943,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             BlockState state = player.level().getBlockState(pos);
 
-            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.ICE_SPIKE) || state.is(ModBlocks.COLD_AIR)
                     || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
                 inTimeLockBlock = true;
                 break;
@@ -2453,10 +2453,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     int skipRange = 50;
     public int getSkipRange(){
-        return 50;
+        return skipRange;
     }
     public int getSkipBonusRange(){
-        return getSkipRange()+25;
+        return getSkipRange()+8;
     }
     public final void packetNearby2() {
         if (!this.self.level().isClientSide) {

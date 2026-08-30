@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.D4CPortalBlock;
 import net.hydra.jojomod.block.D4CPortalBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
@@ -42,6 +43,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -66,10 +68,12 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -77,6 +81,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -1350,7 +1356,59 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+            case SKILL_4_NORMAL -> {
+                worldHopClient();
+            }
+            case SKILL_4_CROUCH -> {
+                worldHop2Client();
+            }
         }
+    }
+
+    public void worldHopClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            altBlockGrabClient();
+            return;
+        }
+    }
+    public void worldHop2Client(){
+        if (PowerTypes.isInD4CWorld(self)){
+            altBlockGrabClient();
+            return;
+        }
+    }
+    public void altBlockGrabClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            BlockPos blockPos = getPickBlock();
+            if (blockPos != null){
+                tryBlockPosPowerPacket(PowerIndex.POWER_4_EXTRA,blockPos);
+            }
+        }
+    }
+
+    BlockPos altBlockPos = null;
+    BlockState altState = null;
+    @SuppressWarnings("deprecation")
+    public void altBlockGrab(){
+        if (!self.level().isClientSide()) {
+            if (grabBlock != null) {
+                StandEntity stand = getStandEntity(this.self);
+                if (Objects.nonNull(stand)) {
+                    BlockState state = self.level().getBlockState(grabBlock);
+                    if (state != null && state.isSolid()) {
+                        altState = state;
+                        altBlockPos = grabBlock;
+                        saveDiscAndSync();
+                    }
+                }
+            }
+        }
+    }
+
+    public BlockPos grabBlock = null;
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+        this.grabBlock = blockPos;
+        return tryPower(move, forced);
     }
 
     public void meltDodgeClient(){
@@ -1570,7 +1628,15 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
 
-        if (!isHoldingSneak()) {
+        if (PowerTypes.isInD4CWorld(self)) {
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_COPY, PowerIndex.SKILL_4_SNEAK);
+        } else if (altBlockPos != null){
+            if (!isHoldingSneak()) {
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_MERGE, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_RELEASE, PowerIndex.SKILL_4);
+            }
+        } else if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
@@ -1580,9 +1646,12 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         boolean dworld = PowerTypes.isInD4CWorld(self);
         if (!(slot == 2 && dworld)){
-            if ((slot == 1 && !isGuarding()) || slot == 2 || slot == 4 || (slot == 3 && isGuarding())){
+            if ((slot == 1 && !isGuarding()) || slot == 2 || (slot == 4 && altBlockPos == null) || (slot == 3 && isGuarding())){
                 if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+                }
+                if (slot == 4 && dworld){
+                    return !hasPickBlock() || super.isAttackIneptVisually(activeP,slot);
                 }
                 return !isEligable() || super.isAttackIneptVisually(activeP,slot);
             }
@@ -2078,8 +2147,11 @@ public class PowersD4C extends NewPunchingStand {
             return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
-        } else if (move == PowerIndex.POWER_3_BLOCK){
-             this.meltDodge();
+        } else if (move == PowerIndex.POWER_3_BLOCK) {
+            this.meltDodge();
+            return false;
+        } else if (move == PowerIndex.POWER_4_EXTRA){
+            altBlockGrab();
             return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
@@ -2284,6 +2356,50 @@ public class PowersD4C extends NewPunchingStand {
             Entity targetEntity = getTargetEntity(this.self,-1);
             finalAttackImpact(targetEntity);
         }
+    }
+
+    public boolean hasPickBlock(){
+        if (self.level().isClientSide()){
+            BlockHitResult result = getSolidBlockHit(self,5);
+            if (result != null){
+                return true;
+            }
+        }
+        return false;
+    }
+    public BlockPos getPickBlock(){
+        if (self.level().isClientSide()){
+            BlockHitResult result = getSolidBlockHit(self,5);
+            if (result != null){
+                return result.getBlockPos();
+            }
+        }
+        return BlockPos.ZERO;
+    }
+
+    public static BlockHitResult getSolidBlockHit(LivingEntity player, double distance) {
+        Vec3 start = player.getEyePosition(1.0F);
+        Vec3 look = player.getViewVector(1.0F);
+        Vec3 end = start.add(look.scale(distance));
+
+        BlockHitResult hit = player.level().clip(new ClipContext(
+                start,
+                end,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hit.getBlockPos();
+            BlockState state = player.level().getBlockState(pos);
+
+            if (!state.isAir() && !state.getCollisionShape(player.level(), pos).isEmpty()) {
+                return hit;
+            }
+        }
+
+        return null;
     }
 
     public float getFinalAttackKnockback(){
@@ -2550,6 +2666,15 @@ public class PowersD4C extends NewPunchingStand {
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("canHoldBanner",canHoldBanner);
+        if (altBlockPos != null){
+            $$0.putInt("altBlockX",altBlockPos.getX());
+            $$0.putInt("altBlockY",altBlockPos.getY());
+            $$0.putInt("altBlockZ",altBlockPos.getZ());
+        } else {
+            $$0.remove("altBlockX");
+            $$0.remove("altBlockY");
+            $$0.remove("altBlockZ");
+        }
 
     }
 
@@ -2559,6 +2684,13 @@ public class PowersD4C extends NewPunchingStand {
 
         if ($$0.contains("canHoldBanner")) {
             canHoldBanner = $$0.getBoolean("canHoldBanner");
+        }
+        if ($$0.contains("altBlockX") && $$0.contains("altBlockY") && $$0.contains("altBlockZ")) {
+            altBlockPos = new BlockPos(
+                    $$0.getInt("altBlockX"),
+                    $$0.getInt("altBlockY"),
+                    $$0.getInt("altBlockZ")
+            );
         }
 
     }

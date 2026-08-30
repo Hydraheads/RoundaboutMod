@@ -58,6 +58,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.FOG_TRAP,
                 ModBlocks.POISON_TRAIL_MUSHROOM,
                 ModBlocks.GLASS_DOOR,
+                ModBlocks.ICE_SPIKE,
                 ModBlocks.CLIMBING_WIRE,
                 ModBlocks.CHAMOMILE,
                 ModBlocks.MINT,
