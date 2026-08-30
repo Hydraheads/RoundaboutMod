@@ -1283,19 +1283,13 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
         public Integer whitesnakeGuardPoints;
 
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
-        public Integer discStealCooldown;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealDealsDamage;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
-        public Integer hallucinatoryDisguiseCooldown;
         @IntOption(group = "inherit", value = 320, min = 0, max = 72000)
         public Integer acidTossCooldown;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer timeSparkCooldown;
 
-        @BooleanOption(group = "inherit", value = true)
-        public Boolean doDiscsDespawn;
         @IntOption(group = "inherit", value = 100, min = 0, max = 100)
         public Integer standDiscStealHealthRequirement;
         @IntOption(group = "inherit", value = 100, min = 0, max = 100)
@@ -1318,10 +1312,6 @@ public class Config implements Cloneable {
         public Integer hallucinationAllowsDiscSteal;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean discSealingPlayersOnly;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean discSealRequiresHallucination;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer standDiscSealTime;
         @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
@@ -1347,8 +1337,6 @@ public class Config implements Cloneable {
         public Float hallucinatoryAcidEffectRange;
         @FloatOption(group = "inherit", value = 20.0F, min = 0.0F, max = 256.0F)
         public Float hallucinatoryAcidDespawnPauseRange;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean hallucinatoryAcidDisappearsOnDesummon;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinatoryAcidDripsCreateBlocks;
         @BooleanOption(group = "inherit", value = true)
@@ -1360,14 +1348,10 @@ public class Config implements Cloneable {
 
         @FloatOption(group = "inherit", value = 5.0F, min = 0.0F, max = 1000.0F)
         public Float explosiveDiscDamage;
-        @IntOption(group = "inherit", value = 41, min = 0, max = 2304)
-        public Integer discInventoryLimit;
         @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
         public Integer controlModeRange;
         @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
         public Integer controlModeVerticalRange;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean controlModeCanHover;
         @IntOption(group = "inherit", value = 20, min = 1, max = 72000)
         public Integer meltingModeHoverDuration;
     }

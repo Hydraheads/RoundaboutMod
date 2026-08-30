@@ -1,7 +1,5 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.client.ClientNetworking;
-
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.ProfileLookupCallback;
@@ -23,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 public final class WhitesnakeDisguiseService {
+    private static final int DISGUISE_COOLDOWN = 100;
     private static final Pattern USERNAME = Pattern.compile("[A-Za-z0-9_]{3,16}");
 
     private WhitesnakeDisguiseService() {
@@ -76,8 +75,7 @@ public final class WhitesnakeDisguiseService {
         player.level().playSound(null, whitesnake.blockPosition(), ModSounds.WHITESNAKE_HALLUCINATION_DISGUISE_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
         PowersWhitesnake powers = (PowersWhitesnake) ((StandUser) player).roundabout$getStandPowers();
-        int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryDisguiseCooldown;
-        powers.setCooldown(PowerIndex.SKILL_4, cooldown);
-        S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_4, cooldown);
+        powers.setCooldown(PowerIndex.SKILL_4, DISGUISE_COOLDOWN);
+        S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_4, DISGUISE_COOLDOWN);
     }
 }

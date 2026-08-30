@@ -114,6 +114,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte ACID_CHARGE_NOISE = 123;
     private static final byte DISC_STEAL_CHARGE_NOISE = 124;
+    private static final int DISC_STEAL_COOLDOWN = 300;
     private static final float CONTROL_PUNCH_RANGE = 3.0F;
     private static final double FORWARD_BARRAGE_RANGE = 10.0D;
     private Vec3 phaseGrabOffset = Vec3.ZERO;
@@ -632,8 +633,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (whitesnake.getMeltingHoverCharge() <= 0) meltingHoverExhausted = true;
         if (!input.jumping) meltingHoverExhausted = false;
         Direction gravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
-        boolean hoverEnabled = meltingMode || ClientNetworking.getAppropriateConfig().whitesnakeSettings.controlModeCanHover;
-        boolean hovering = hoverEnabled && input.jumping && !meltingHoverExhausted
+        boolean hovering = meltingMode && input.jumping && !meltingHoverExhausted
                 && whitesnake.getMeltingHoverCharge() > 0
                 && (whitesnake.isMeltingHovering() || gravity != Direction.DOWN
                 || entity.getDeltaMovement().y <= 0.0D);
@@ -655,7 +655,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             meltingCrawlGraceTicks = 0;
             meltingCrawlTransitionTicks = 0;
         }
-        if (!hoverEnabled && !swimming && !inLava && input.jumping && entity.onGround()) {
+        if (!meltingMode && !swimming && !inLava && input.jumping && entity.onGround()) {
             whitesnake.controlJump();
         }
     }
@@ -1083,7 +1083,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private boolean usesControlHoverMeter() {
-        return meltingMode || ClientNetworking.getAppropriateConfig().whitesnakeSettings.controlModeCanHover;
+        return meltingMode;
     }
 
     private boolean isControlHovering() {
@@ -1384,15 +1384,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void applyDiscStealCooldown() {
-        int cooldown = getDiscStealCooldown();
         if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_1, cooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_1, DISC_STEAL_COOLDOWN);
         }
-        setCooldown(PowerIndex.SKILL_1, cooldown);
-    }
-
-    private int getDiscStealCooldown() {
-        return ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealCooldown;
+        setCooldown(PowerIndex.SKILL_1, DISC_STEAL_COOLDOWN);
     }
 
     private int getMeltingModeLevel() {
@@ -1474,8 +1469,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (move == MELTING_HOVER) {
             if (!(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return false;
-            boolean hoverEnabled = meltingMode || ClientNetworking.getAppropriateConfig().whitesnakeSettings.controlModeCanHover;
-            boolean hovering = value != 0 && hoverEnabled && isPiloting()
+            boolean hovering = value != 0 && meltingMode && isPiloting()
                     && whitesnake.getMeltingHoverCharge() > 0;
             whitesnake.setMeltingHovering(hovering);
             return true;
