@@ -32,19 +32,11 @@ public final class WhitesnakeDiscUtil {
     }
 
     public static boolean ejectDisc(LivingEntity target, byte type) {
-        return ejectDisc(target, type, false);
-    }
-
-    public static boolean ejectDisc(LivingEntity target, byte type, boolean ignoreHealthRequirement) {
         if (isDiscBlacklisted(target)) return false;
         if (!isDiscStealEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
-        if (target instanceof Mob && !config.discStealHealthRequirementAffectsMobs) {
-            ignoreHealthRequirement = true;
-        }
-        int hallucinationLevel = hallucinationLevel(target);
-        if ((!ignoreHealthRequirement && !meetsHealthRequirement(target, type))
-                || hallucinationLevel < config.hallucinationAllowsDiscSteal) {
+        boolean lowHealthSteal = config.stealDiscWhenLowHealth && target.getHealth() < 2.0F;
+        if (!lowHealthSteal && hallucinationLevel(target) < config.hallucinationAllowsDiscSteal) {
             return DiscSealController.seal(target, type);
         }
         return switch (type) {
@@ -254,17 +246,6 @@ public final class WhitesnakeDiscUtil {
             if (isDiscStealEnabled(type) && selected-- == 0) return type;
         }
         return -1;
-    }
-
-    public static boolean meetsHealthRequirement(LivingEntity target, byte type) {
-        Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
-        int percent = switch (type) {
-            case SIGHT -> config.sightDiscStealHealthRequirement;
-            case MEMORY -> config.memoryDiscStealHealthRequirement;
-            case HEARING -> config.hearingDiscStealHealthRequirement;
-            default -> config.standDiscStealHealthRequirement;
-        };
-        return target.getHealth() <= target.getMaxHealth() * (percent * 0.01F);
     }
 
     public static int hallucinationLevel(LivingEntity target) {

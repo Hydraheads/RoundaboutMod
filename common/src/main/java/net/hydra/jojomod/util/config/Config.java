@@ -1290,14 +1290,6 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer timeSparkCooldown;
 
-        @IntOption(group = "inherit", value = 100, min = 0, max = 100)
-        public Integer standDiscStealHealthRequirement;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 100)
-        public Integer sightDiscStealHealthRequirement;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 100)
-        public Integer memoryDiscStealHealthRequirement;
-        @IntOption(group = "inherit", value = 100, min = 0, max = 100)
-        public Integer hearingDiscStealHealthRequirement;
         @BooleanOption(group = "inherit", value = true)
         public Boolean standDiscStealEnabled;
         @BooleanOption(group = "inherit", value = true)
@@ -1306,10 +1298,10 @@ public class Config implements Cloneable {
         public Boolean sightDiscStealEnabled;
         @BooleanOption(group = "inherit", value = false)
         public Boolean hearingDiscStealEnabled;
-        @BooleanOption(group = "inherit", value = false)
-        public Boolean discStealHealthRequirementAffectsMobs;
         @IntOption(group = "inherit", value = 3, min = 0, max = 3)
         public Integer hallucinationAllowsDiscSteal;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean stealDiscWhenLowHealth;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)

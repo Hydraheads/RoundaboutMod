@@ -1339,14 +1339,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
             hitParticles(entity);
             boolean dealsDamage = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealDealsDamage;
-            float healthBefore = entity instanceof LivingEntity living ? living.getHealth() : -1.0F;
             boolean hit = dealsDamage ? damageWithDiscSteal(entity) : canApplyDiscSteal(entity);
             if (hit) {
                 if (entity instanceof LivingEntity living) {
                     addEXP(5, living);
-                    boolean forcedMobSteal = dealsDamage && living instanceof Mob && healthBefore > 1.0F
-                            && living.getHealth() <= 1.0001F;
-                    WhitesnakeDiscUtil.ejectDisc(living, getSelectedDisc(), forcedMobSteal);
+                    WhitesnakeDiscUtil.ejectDisc(living, getSelectedDisc());
                 }
                 if (dealsDamage) takeDeterminedKnockback(origin, entity, getImpaleKnockback());
             } else {
