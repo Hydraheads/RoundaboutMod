@@ -259,7 +259,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
 
     @Override
     public void addToCombo(Entity targ){
-        HeatUtil.addHeat(targ, -2);
+        if (!HeatUtil.isLegsFrozen(targ)) {
+            HeatUtil.addHeat(targ, -2);
+        }
         super.addToCombo(targ);
     }
 
