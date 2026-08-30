@@ -2456,7 +2456,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
         return skipRange;
     }
     public int getSkipBonusRange(){
-        return getSkipRange()+10;
+        return getSkipRange()+15;
     }
     public final void packetNearby2() {
         if (!this.self.level().isClientSide) {
