@@ -1,7 +1,16 @@
 package net.hydra.jojomod.block.handBlock;
 
+import net.hydra.jojomod.access.CancelDataDrivenDropLimits;
+import net.hydra.jojomod.block.FancyLighterBlock;
+import net.hydra.jojomod.block.FancyLighterBlockEntity;
+import net.hydra.jojomod.item.FancyLighterItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PlayerHeadItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,8 +31,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AbstractHandBlock extends BaseEntityBlock {
+public class AbstractHandBlock extends BaseEntityBlock implements CancelDataDrivenDropLimits {
     public static final int MAX = RotationSegment.getMaxSegmentIndex();
     private static final int ROTATIONS;
     public static final IntegerProperty ROTATION;
@@ -96,4 +107,40 @@ public class AbstractHandBlock extends BaseEntityBlock {
     public boolean isPathfindable(BlockState p_48750_, BlockGetter p_48751_, BlockPos p_48752_, PathComputationType p_48753_) {
         return false;
     }
+
+    public List<ItemStack> dropGen(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be){
+        if (state.getBlock() instanceof AbstractHandBlock) {
+            List<ItemStack> drops = new ArrayList<>();
+            ItemStack stack = referenceItem.copy();
+
+            if (sl.getBlockEntity(bpos) instanceof HandBlockEntity FE) {
+                CompoundTag compoundtag = stack.getTagElement("ownerInfo");
+                if (!stack.hasTag()) {
+                    if(compoundtag == null || !compoundtag.contains("HandOwner")) {
+                        if (FE.getOwnerProfile() != null) {
+                            CompoundTag $$1 = new CompoundTag();
+                            NbtUtils.writeGameProfile($$1, FE.getOwnerProfile());
+                            compoundtag.put("HandOwner", $$1);
+                        }
+                    }
+                }
+            }
+
+            drops.add(stack);
+            return drops;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be) {
+        return dropGen(state,sl,bpos,be);
+    }
+
+    @Override
+    public List<ItemStack> getRealDrops(BlockState state, ServerLevel sl, BlockPos bpos, @Nullable BlockEntity be, @Nullable Entity p_49879_, ItemStack p_49880_) {
+        return dropGen(state,sl,bpos,be);
+    }
+
 }
+
