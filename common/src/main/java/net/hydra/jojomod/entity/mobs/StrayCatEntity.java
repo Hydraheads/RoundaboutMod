@@ -479,8 +479,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             BlockPos atVec = BlockPos.containing(yes);
             boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
             //if (level.getBrightness(LightLayer.BLOCK, pos) < 11) {
+            level.getSkyDarken()
 
-                if ((level.isRaining() || level.isThundering() || level.getBrightness(LightLayer.SKY, atVec) < 12)) {
+                if ((level.isRaining() || level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
                     return false;
                 } else {
                     return isDay;
