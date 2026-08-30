@@ -444,7 +444,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         LivingEntity user = getUser();
         boolean hoverEnabled = controlled && user != null
                 && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
-                && (powers.isMeltingMode() || ClientNetworking.getAppropriateConfig().whitesnakeSettings.controlModeCanHover);
+                && powers.isMeltingMode();
         boolean hovering = hoverEnabled && isMeltingHovering() && getMeltingHoverCharge() > 0;
         if (isMeltingHovering() != hovering) entityData.set(MELTING_HOVERING, hovering);
         int charge = getMeltingHoverCharge();

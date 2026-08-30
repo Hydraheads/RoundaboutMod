@@ -5,7 +5,6 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.event.powers.disc.DiscItemData;
-import net.hydra.jojomod.event.powers.disc.DiscInventoryLimit;
 import net.hydra.jojomod.event.powers.disc.DreamingMemoryController;
 import net.hydra.jojomod.event.powers.disc.MemoryPersonality;
 import net.hydra.jojomod.event.powers.disc.MemoryAiController;
@@ -219,7 +218,6 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
         if (roundabout$hasMemoryDisc()) CommandDiscController.tick(living);
         MusicDiscController.tick(living);
         if (living instanceof ServerPlayer player) {
-            DiscInventoryLimit.enforce(player);
             roundabout$updateMemoryDevelopment(player);
         }
         if (!level().isClientSide()) {
