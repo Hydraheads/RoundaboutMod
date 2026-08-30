@@ -174,13 +174,16 @@ public class StrayCatItem extends Item {
     }
 
     static boolean isSleeping(Level level, LivingEntity user) {
-        long dayTime = level.getDayTime() % 24000;
-        boolean canSeeSun = true;
+        //long dayTime = level.getDayTime() % 24000;
+        boolean result = false;
         if (user != null) {
-            canSeeSun = level.canSeeSky(user.blockPosition());
+            return !StrayCatEntity.isUnderLight(user);
+            //canSeeSun = level.canSeeSky(user.blockPosition());
+            //isRainning = level.isRainingAt(user.blockPosition());
         }
 
-        return dayTime >= 13000 && dayTime <= 23750 || !canSeeSun;
+        return result;
+        //return dayTime >= 13000 && dayTime <= 23750 && (!canSeeSun || isRainning);
     }
 
 
