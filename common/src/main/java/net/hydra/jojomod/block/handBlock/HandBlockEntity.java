@@ -15,8 +15,10 @@ import net.minecraft.server.Services;
 import net.minecraft.server.players.GameProfileCache;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -25,7 +27,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class HandBlockEntity extends BlockEntity {
-    public static final String TAG_SKULL_OWNER = "SkullOwner";
+    public static final String TAG_SKULL_OWNER = "HandOwner";
     public static final String TAG_NOTE_BLOCK_SOUND = "note_block_sound";
     @Nullable
     private static GameProfileCache profileCache;
@@ -61,7 +63,7 @@ public class HandBlockEntity extends BlockEntity {
         if (this.owner != null) {
             CompoundTag $$1 = new CompoundTag();
             NbtUtils.writeGameProfile($$1, this.owner);
-            $$0.put("SkullOwner", $$1);
+            $$0.put("HandOwner", $$1);
         }
 
         if (this.noteBlockSound != null) {
@@ -69,11 +71,10 @@ public class HandBlockEntity extends BlockEntity {
         }
 
     }
-
     public void load(CompoundTag $$0) {
         super.load($$0);
-        if ($$0.contains("SkullOwner", 10)) {
-            this.setOwner(NbtUtils.readGameProfile($$0.getCompound("SkullOwner")));
+        if ($$0.contains("HandOwner", 10)) {
+            this.setOwner(NbtUtils.readGameProfile($$0.getCompound("HandOwner")));
         } else if ($$0.contains("ExtraType", 8)) {
             String $$1 = $$0.getString("ExtraType");
             if (!StringUtil.isNullOrEmpty($$1)) {
@@ -88,7 +89,6 @@ public class HandBlockEntity extends BlockEntity {
     }
 
     public static void animation(Level $$0, BlockPos $$1, BlockState $$2, HandBlockEntity $$3) {
-
 
     }
 

@@ -4374,11 +4374,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target instanceof Player pl) {
                     if (!pl.isCreative()) {
-                        if (playersHitkill) { pl.hurt(desintegrationDmg, pl.getMaxHealth()); }
+                        if (playersHitkill) { pl.hurt(desintegrationDmg, pl.getMaxHealth() + 4); }
                         else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
                 } else {
-                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
+                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth() + 4);}
                     else {target.hurt(desintegrationDmg, hitPoints);}
                 }
             }
@@ -4394,9 +4394,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         this.detonateTimer = -1;
 		this.syncBombStatus(BOMB_NONE);
-        if (this.getActivePower() == DETONATE) {
-            this.setPowerNone();
-        }
+        if (this.getActivePower() == DETONATE) { this.setPowerNone(); }
     	return true;
     }
     
