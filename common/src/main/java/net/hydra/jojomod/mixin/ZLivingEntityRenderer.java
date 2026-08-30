@@ -3,7 +3,6 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.ILivingEntityRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -18,7 +17,9 @@ import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.util.MainUtil;
@@ -86,6 +87,22 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"))
     private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+
+        if (((StandUser)entity).roundabout$getStandAnimation() == StandPowers.MELT_DODGE_ANIM
+        && !((TimeStop) entity.level()).CanTimeStopEntity(entity)){
+            float animTime = entity.tickCount + partialTicks;
+
+            float xDistortion = Mth.sin(animTime * 0.31F) * 0.045F;
+            float yDistortion = Mth.sin(animTime * 0.43F + 1.2F) * 0.025F;
+            float zDistortion = Mth.sin(animTime * 0.37F + 2.4F) * 0.045F;
+
+            poseStack.scale(
+                    1.0F + xDistortion,
+                    1.0F + yDistortion,
+                    1.0F + zDistortion
+            );
+        }
+
 
         if (PowersMetallica.hasAnyFadeActive(entity)) {
             Minecraft mc = Minecraft.getInstance();

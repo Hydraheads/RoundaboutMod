@@ -109,6 +109,8 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BLAZE_TRANSFER.get(), BlazeTransferRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BEACH_SABBATH.get(), BeachSabbathRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SANTA_SABBATH.get(), BlackSantaSabbathRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.COWBOY_SABBATH.get(), CowboySabbathRenderer::new);
         event.registerEntityRenderer(ForgeEntities.WALKING_HEART.get(), WalkingHeartRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS.get(), AnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JUSTICE_PIRATE.get(), JusticePirateRenderer::new);
@@ -297,6 +299,8 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.BLAZE_TRANSFER_LAYER, BlazeTransferModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.BLACK_SABBATH_LAYER,BlackSabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.BEACH_SABBATH_LAYER,BeachSabbathModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.SANTA_SABBATH_LAYER,BlackSantaSabbathModel::getTexturedModelData);
+        event.registerLayerDefinition(ModEntityRendererClient.COWBOY_SABBATH_LAYER,CowboySabbathModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.DARK_MIRAGE_LAYER, DarkMirageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A1_LAYER, TuskAct1Model::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_A2_LAYER, TuskAct2Model::createBodyLayer);
@@ -306,6 +310,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.DIVER_DOWN_LAYER, DiverDownModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_AFTERIMAGE_LAYER, SilverChariotAfterimageModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);

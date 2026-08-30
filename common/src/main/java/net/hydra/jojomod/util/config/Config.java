@@ -947,6 +947,8 @@ public class Config implements Cloneable {
         public Integer fingerBiteCooldown;
         @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
         public Integer lighterWitnessRange;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean uvCanDamageStand;
     }
     public static class CenturyBoySettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1084,6 +1086,8 @@ public class Config implements Cloneable {
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesArmor;
         @BooleanOption(group = "inherit", value = true)
+        public Boolean hidesElytra;
+        @BooleanOption(group = "inherit", value = true)
         public Boolean hidesHeldItems;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hidesShotProjectiles;
@@ -1219,6 +1223,8 @@ public class Config implements Cloneable {
         public Boolean skipPastDeath;
         @BooleanOption(group = "inherit", value = true)
         public Boolean postTESoften;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean nerfedTEDamage;
     }
     public static class TheWorldSettings {
         @BooleanOption(group = "inherit", value = true)
@@ -1308,7 +1314,7 @@ public class Config implements Cloneable {
         public Boolean hearingDiscStealEnabled;
         @BooleanOption(group = "inherit", value = false)
         public Boolean discStealHealthRequirementAffectsMobs;
-        @IntOption(group = "inherit", value = 5, min = 0, max = 5)
+        @IntOption(group = "inherit", value = 3, min = 0, max = 3)
         public Integer hallucinationAllowsDiscSteal;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;

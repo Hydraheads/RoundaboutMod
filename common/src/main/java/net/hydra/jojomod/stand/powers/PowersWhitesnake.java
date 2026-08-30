@@ -36,6 +36,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.PucciVoice;
 import net.hydra.jojomod.item.AbstractBodyDiscItem;
 import net.hydra.jojomod.item.CommandDiscItem;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.MemoryDiscItem;
 import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
@@ -189,15 +190,44 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public List<Byte> getSkinList() {
-        return List.of(WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.MANGA_SKIN,
-                WhitesnakeEntity.ASBR_SKIN,
-                WhitesnakeEntity.ANIME_PURPLE_SKIN, WhitesnakeEntity.ANIME_GREEN_SKIN,
-                WhitesnakeEntity.ANIME_YELLOW_SKIN, WhitesnakeEntity.ANIME_AQUA_SKIN,
-                WhitesnakeEntity.MANGA_PURPLE_SKIN, WhitesnakeEntity.MANGA_RED_SKIN,
-                WhitesnakeEntity.SILVER_SKIN, WhitesnakeEntity.GOLD_SKIN,
-                WhitesnakeEntity.GOLD_TRIMMED_SKIN, WhitesnakeEntity.EDGY_GOLD_SKIN,
-                WhitesnakeEntity.COTTON_CANDY_SKIN, WhitesnakeEntity.SOUR_CANDY_SKIN,
-                WhitesnakeEntity.DARK_SKIN, WhitesnakeEntity.JOJOVELLER_SKIN);
+        List<Byte> skins = Lists.newArrayList();
+        skins.add(WhitesnakeEntity.ANIME_SKIN);
+        skins.add(WhitesnakeEntity.MANGA_SKIN);
+        if (self instanceof Player player) {
+            byte level = ((IPlayerEntity) player).roundabout$getStandLevel();
+            ItemStack disc = ((StandUser) player).roundabout$getStandDisc();
+            boolean bypass = player.isCreative()
+                    || !disc.isEmpty() && disc.getItem() instanceof MaxStandDiscItem;
+            if (level > 1 || bypass) {
+                skins.add(WhitesnakeEntity.ANIME_PURPLE_SKIN);
+                skins.add(WhitesnakeEntity.ANIME_GREEN_SKIN);
+                skins.add(WhitesnakeEntity.ANIME_YELLOW_SKIN);
+                skins.add(WhitesnakeEntity.ANIME_AQUA_SKIN);
+                skins.add(WhitesnakeEntity.MANGA_PURPLE_SKIN);
+                skins.add(WhitesnakeEntity.MANGA_RED_SKIN);
+            }
+            if (level > 2 || bypass) {
+                skins.add(WhitesnakeEntity.ASBR_SKIN);
+                skins.add(WhitesnakeEntity.AGOGO_SKIN);
+            }
+            if (level > 3 || bypass) {
+                skins.add(WhitesnakeEntity.COTTON_CANDY_SKIN);
+                skins.add(WhitesnakeEntity.SOUR_CANDY_SKIN);
+            }
+            if (level > 4 || bypass) {
+                skins.add(WhitesnakeEntity.DARK_SKIN);
+            }
+            if (level > 5 || bypass) {
+                skins.add(WhitesnakeEntity.SILVER_SKIN);
+                skins.add(WhitesnakeEntity.GOLD_SKIN);
+            }
+            if (level > 6 || bypass) {
+                skins.add(WhitesnakeEntity.GOLD_TRIMMED_SKIN);
+                skins.add(WhitesnakeEntity.EDGY_GOLD_SKIN);
+                skins.add(WhitesnakeEntity.SANDSNAKE_SKIN);
+            }
+        }
+        return skins;
     }
 
     @Override
@@ -214,11 +244,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
             case WhitesnakeEntity.SILVER_SKIN -> "skins.roundabout.whitesnake.silver";
             case WhitesnakeEntity.COTTON_CANDY_SKIN -> "skins.roundabout.whitesnake.cotton_candy";
             case WhitesnakeEntity.ASBR_SKIN -> "skins.roundabout.whitesnake.asbr";
-            case WhitesnakeEntity.JOJOVELLER_SKIN -> "skins.roundabout.whitesnake.jojoveller";
+            case WhitesnakeEntity.AGOGO_SKIN -> "skins.roundabout.whitesnake.agogo";
             case WhitesnakeEntity.DARK_SKIN -> "skins.roundabout.whitesnake.dark";
             case WhitesnakeEntity.SOUR_CANDY_SKIN -> "skins.roundabout.whitesnake.sour_candy";
             case WhitesnakeEntity.EDGY_GOLD_SKIN -> "skins.roundabout.whitesnake.edgy_gold";
             case WhitesnakeEntity.GOLD_TRIMMED_SKIN -> "skins.roundabout.whitesnake.gold_trimmed";
+            case WhitesnakeEntity.SANDSNAKE_SKIN -> "skins.roundabout.whitesnake.sandsnake";
             default -> "skins.roundabout.whitesnake.anime";
         };
         return Component.translatable(key);
@@ -860,7 +891,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 }
             }
             case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
-                if (!isPiloting() && canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) {
+                if (!isPiloting()) {
                     onReleaseGuard();
                     tryIntPower(WHITESNAKE_INVENTORY, true, 0);
                     tryIntPowerPacket(WHITESNAKE_INVENTORY, 0);
@@ -1364,28 +1395,24 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealCooldown;
     }
 
-    private int getWhitesnakeInventoryLevel() {
-        return 3;
-    }
-
     private int getMeltingModeLevel() {
-        return 4;
+        return 2;
     }
 
     public int getHallucinatoryDisguiseLevel() {
-        return 4;
+        return 3;
     }
 
     private int getAcidTossLevel() {
-        return 5;
+        return 4;
     }
 
     public int getImpaleLevel() {
-        return 5;
+        return 6;
     }
 
     private int getDiscStealLevel() {
-        return 6;
+        return 5;
     }
 
     private int getTimeSparkLevel() {
@@ -1464,7 +1491,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (move == CONTROL_DASH) return controlDash(value);
         if (move == WHITESNAKE_INVENTORY) {
-            if (isPiloting() || !canExecuteMoveWithLevel(getWhitesnakeInventoryLevel())) return false;
+            if (isPiloting()) return false;
             if (!isClient() && self instanceof ServerPlayer player) {
                 if (isGuarding()) tryPower(PowerIndex.NONE, true);
                 WhitesnakeInventoryMenu.open(player);
@@ -2734,7 +2761,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, getDiscStealLevel(),
                 "ability.roundabout.whitesnake_disc_steal", "instruction.roundabout.press_skill",
                 StandIcons.WHITESNAKE_DISC_STEAL, 1, level, bypass));
-        icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, getWhitesnakeInventoryLevel(),
+        icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0,
                 "ability.roundabout.whitesnake_inventory", "instruction.roundabout.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_INVENTORY, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0,
@@ -2783,9 +2810,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
             setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
         } else {
             boolean inventoryContext = isGuarding() && !isPiloting();
-            int level = inventoryContext ? getWhitesnakeInventoryLevel() : getDiscStealLevel();
             byte discSelection = getSelectedDisc();
-            if (canExecuteMoveWithLevel(level) && (inventoryContext || discSelection >= 0)) {
+            if (inventoryContext || (canExecuteMoveWithLevel(getDiscStealLevel()) && discSelection >= 0)) {
                 setSkillIcon(context, x, y, 1,
                         inventoryContext ? StandIcons.WHITESNAKE_INVENTORY
                                 : isHoldingSneak() ? StandIcons.WHITESNAKE_DISC_TYPES[discSelection]

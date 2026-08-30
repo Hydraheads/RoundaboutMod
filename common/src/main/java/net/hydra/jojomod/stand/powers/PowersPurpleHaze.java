@@ -268,7 +268,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
-            case PowerIndex.POWER_1_BONUS ->
+            case PowerIndex.POWER_1_BONUS -> //Virus Spit
                 attemptVirusSpit();
             case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode Change
                 attemptDistortionModeChange();
@@ -415,7 +415,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
-                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.POWER_1_BONUS);
+                    setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
                 }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
@@ -459,7 +459,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
                 "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
-                "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.distortion_spit", StandIcons.VIRUS_SPIT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
@@ -508,6 +508,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
+            if(getPods()< MAX_PODS){
+                setPods(getPods()+1);
+            }
             if (level == 5) {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
@@ -526,6 +529,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     }
                 }
                 super.levelUp();
+
             }
         }
     }
@@ -584,6 +588,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private static final int MAX_PODS = 6;
     private static final int POD_RECHARGE_TIME = 800;
     private int podRechargeTicks = 0;
+    private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
         return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
@@ -711,9 +716,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
-            saveDiscAndSync(); // add this
-            // FEU I CANT FIGURE THIS OUT
-            //i dont know how to make it remain when leaving and re entering
+            saveDiscAndSync();
 
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
@@ -842,19 +845,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
+
+            if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
+                podsSyncedOnJoin = true;
+                S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
+            }
         }
 
-            if (capsuleEatingTick > 0) {
-                capsuleEatingTick--;
+        if (capsuleEatingTick > 0) {
+            capsuleEatingTick--;
 
-                if (capsuleEatingTick == 0) {
-                    if (self instanceof ServerPlayer pl) {
-                        this.setAttackTimeDuring(0);
-                        ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
-                    }
+            if (capsuleEatingTick == 0) {
+                if (self instanceof ServerPlayer pl) {
+                    this.setAttackTimeDuring(0);
+                    ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
                 }
             }
         }
+    }
     public boolean purpleHazeFieldGone = false;
 
     public void serverEndPurpleHazeField(){

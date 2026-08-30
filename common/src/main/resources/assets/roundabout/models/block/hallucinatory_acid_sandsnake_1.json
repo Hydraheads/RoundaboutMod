@@ -1,0 +1,7 @@
+{
+  "parent": "roundabout:block/hallucinatory_acid_1",
+  "textures": {
+    "particle": "minecraft:block/sand",
+    "acid": "roundabout:block/hallucinatory_acid_sandsnake"
+  }
+}

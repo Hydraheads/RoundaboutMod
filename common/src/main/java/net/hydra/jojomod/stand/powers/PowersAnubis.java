@@ -394,7 +394,7 @@ public class PowersAnubis extends NewDashPreset {
     }
     public void RagingLightServer() {
         this.setCooldown(PowerIndex.SKILL_2_SNEAK,200);
-        this.addEXP(AnubisItem.aggroOnto(this.getSelf()) );
+        this.addEXP(Math.min(5,AnubisItem.aggroOnto(this.getSelf())) );
     }
 
 
