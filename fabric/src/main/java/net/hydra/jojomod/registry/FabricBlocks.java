@@ -94,6 +94,8 @@ public class FabricBlocks {
     );
     public static final Block STICKY_ICE_BLOCK = registerBlockItemless("sticky_ice", STICKY_ICE_PROPERTIES
     );
+    public static final Block ICE_SPIKE = registerBlockItemless("ice_spike", ICE_SPIKE_PROPERTIES
+    );
     public static final Block SHINY_QUARTZ_TILES = registerBlock("shiny_quartz_tiles", ModBlocks.SHINY_QUARTZ_TILES_PROPERTIES
     );
     public static final Block REGAL_FLOOR = registerBlock("regal_floor", ModBlocks.REGAL_FLOOR_PROPERTIES
@@ -401,6 +403,7 @@ public class FabricBlocks {
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = WHITE_ALBUM_ICE_WALL_BLOCK;
         ModBlocks.WHITE_ALBUM_ICE_SLAB = WHITE_ALBUM_ICE_SLAB;
         ModBlocks.STICKY_ICE = STICKY_ICE_BLOCK;
+        ModBlocks.ICE_SPIKE = ICE_SPIKE;
         ModBlocks.SHINY_QUARTZ_TILES = SHINY_QUARTZ_TILES;
         ModBlocks.REGAL_FLOOR = REGAL_FLOOR;
         ModBlocks.REGAL_WALL = REGAL_WALL;

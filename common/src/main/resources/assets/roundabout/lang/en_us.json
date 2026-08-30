@@ -686,6 +686,7 @@
   "entity.roundabout.ocelot_minion": "Zombie Minion",
   "entity.roundabout.parrot_minion": "Zombie Minion",
 
+  "block.roundabout.ice_spike": "Ice Spike",
   "block.roundabout.meteor_block": "Meteorite Block",
   "block.roundabout.aja_ore": "Aja Ore",
   "block.roundabout.climbing_wire": "Climbing Wire",
@@ -1750,8 +1751,8 @@
   "ability.roundabout.full_accel.desc": "If you build up maximum acceleration with your skates active, the final icon's border will become yellow. If you jump while this is active, you do a trick jump and twirl around, going slightly further. If you instead attack an opponent in this state, it is a critical hit and deals significant knockback.",
 
 
-  "ability.roundabout.cold_blast": "Cold Air Blast",
-  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile that freezes the blocks it passes by into stand ice. Mobs it passes through become colder. Makes sticky ice where it lands.",
+  "ability.roundabout.cold_blast": "Freeze Blast",
+  "ability.roundabout.cold_blast.desc": "Must activate brawling to use! Release interact after the meter reaches the end to fire a projectile of stand energy that freezes the blocks it passes by into stand ice. Mobs it passes through become colder. Makes sticky ice where it lands. If sneaking upon releasing or on crouch toggle mode, it makes ice spikes where it lands which also can inflict bleed.",
 
   "ability.roundabout.sweep_kick": "Sweep/Stomp",
   "ability.roundabout.sweep_kick.desc": "Throws a kick in a short range directly in front of you. The knockback is quite high. If used in the air, it instead makes you slam into the ground, briefly dazing mobs it hits.",
