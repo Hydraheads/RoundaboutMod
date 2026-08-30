@@ -11,7 +11,6 @@ import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 
 public final class DiscSealController {
     private DiscSealController() {
@@ -20,9 +19,7 @@ public final class DiscSealController {
     public static boolean seal(LivingEntity target, byte type) {
         if (!WhitesnakeDiscUtil.isBodyDiscEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
-        if (!config.discSealing || (config.discSealingPlayersOnly && !(target instanceof Player))) return false;
-        if (config.discSealRequiresHallucination
-                && !target.hasEffect(ModEffects.HALLUCINATION)) return false;
+        if (!config.discSealing) return false;
         int duration = duration(target, type, config);
         if (duration <= 0) return false;
         if (type == WhitesnakeDiscUtil.STAND) {

@@ -272,7 +272,6 @@
     "vanilla_tweaks.TameAbstractHorse",
     "white_album.SkatingMagmaBlock",
     "whitesnake.BlankMemoryMobAiMixin",
-    "whitesnake.DiscItemLifetimeMixin",
     "whitesnake.DiscMeleeImplantMixin",
     "whitesnake.HallucinatoryAcidFallingBlockMixin",
     "whitesnake.HallucinatoryAcidFluidMixin",

@@ -798,6 +798,9 @@ public class StandIcons {
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");
     public static final ResourceLocation D4C_CLONE_SWAP = Roundabout.location("textures/gui/icons/d4c/clone_swap.png");
     public static final ResourceLocation D4C_MELT_DODGE = Roundabout.location("textures/gui/icons/d4c/melt_dodge.png");
+    public static final ResourceLocation D4C_BLOCK_COPY = Roundabout.location("textures/gui/icons/d4c/block_copy.png");
+    public static final ResourceLocation D4C_BLOCK_MERGE = Roundabout.location("textures/gui/icons/d4c/block_merge.png");
+    public static final ResourceLocation D4C_BLOCK_RELEASE = Roundabout.location("textures/gui/icons/d4c/block_release.png");
     public static final ResourceLocation D4C_DIMENSION_HOP = Roundabout.location("textures/gui/icons/d4c/dimension_hop.png");
     public static final ResourceLocation D4C_DIMENSION_HOP_2 = Roundabout.location("textures/gui/icons/d4c/dimension_hop_2.png");
     public static final ResourceLocation D4C_DIMENSION_RETURN = Roundabout.location("textures/gui/icons/d4c/dimension_hop_return.png");

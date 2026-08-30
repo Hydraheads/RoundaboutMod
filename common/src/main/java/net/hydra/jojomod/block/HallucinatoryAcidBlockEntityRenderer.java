@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.HallucinatoryAcidColors;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.powers.HallucinationEffect;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class HallucinatoryAcidBlockEntityRenderer
         implements BlockEntityRenderer<HallucinatoryAcidBlockEntity> {
+    private static final ResourceLocation ACID_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/block/hallucinatory_acid_inner.png");
+    private static final ResourceLocation SAND_TEXTURE = new ResourceLocation("minecraft",
+            "textures/block/sand.png");
+
     public HallucinatoryAcidBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -36,11 +42,12 @@ public final class HallucinatoryAcidBlockEntityRenderer
             case 3 -> 11.0F;
             default -> 15.0F;
         } / 16.0F;
-        ResourceLocation innerTexture = new ResourceLocation(Roundabout.MOD_ID,
-                "textures/block/hallucinatory_acid_inner.png");
+        ResourceLocation innerTexture = skin == WhitesnakeEntity.SANDSNAKE_SKIN
+                ? SAND_TEXTURE : ACID_TEXTURE;
         VertexConsumer vertices = buffers.getBuffer(RenderType.entityCutoutNoCull(innerTexture));
         PoseStack.Pose pose = poseStack.last();
-        int color = HallucinatoryAcidColors.tint(skin);
+        int color = skin == WhitesnakeEntity.SANDSNAKE_SKIN
+                ? 0xFFFFFF : HallucinatoryAcidColors.tint(skin);
         renderCube(vertices, pose, 0.125F, 0.0F, 0.125F, 0.875F, height, 0.875F,
                 packedLight, packedOverlay, color);
 

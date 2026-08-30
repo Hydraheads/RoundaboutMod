@@ -1782,6 +1782,7 @@ public class MainUtil {
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.ICE_SPIKE)
                 || state.is(ModBlocks.STAND_FIRE)
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)

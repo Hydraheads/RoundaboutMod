@@ -1900,6 +1900,18 @@ public class ClientUtil {
         stack.popPose();
     }
 
+
+    public static BlockHitResult getHitResult(){
+        //Roundabout.LOGGER.info("Case Pop "+caseNumber);
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.hitResult instanceof BlockHitResult blockHit) {
+            return blockHit;
+        }
+        return null;
+    }
+
+
     public static boolean roundabout$configButtonSelected = false;
 
     public static String[] splitIntoLine(String input, int maxCharInLine){
