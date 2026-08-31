@@ -174,7 +174,6 @@ public class PurpleSmokeEntity extends StandEntity {
     @Nullable
     private BlockState getDecayedState(BlockState state) {
         Block block = state.getBlock();
-        Roundabout.LOGGER.debug("SKLEEBORP: {}", block);
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
                 return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
