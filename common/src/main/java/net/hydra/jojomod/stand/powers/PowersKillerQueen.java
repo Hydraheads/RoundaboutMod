@@ -2563,7 +2563,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        combatActivations++;
+        if (combatActivations < 12)  { combatActivations++; }
 
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
                 ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
