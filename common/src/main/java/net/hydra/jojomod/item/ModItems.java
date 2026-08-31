@@ -151,6 +151,7 @@ public class ModItems {
     public static Item HAIRSPRAY;
 
     public static Item FANCY_LIGHTER;
+    public static Item HAND;
 
     public static Item GASOLINE_CAN;
     public static Item GASOLINE_BUCKET;

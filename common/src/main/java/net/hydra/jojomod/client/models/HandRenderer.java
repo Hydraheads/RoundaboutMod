@@ -17,6 +17,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -91,12 +93,24 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
             $$2.translate(0F, -1F, 0F);
             VertexConsumer vertexConsumer;
 
-            vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, ((HandBlockEntity) $$0).getOwnerProfile()));
+            GameProfile pfp = ((HandBlockEntity) $$0).getOwnerProfile();
+
+            vertexConsumer = $$3.getBuffer(getRenderType(HandBlock$type, pfp));
 
             ModelPart part = hand;
-            if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
-                part = hand_slim;
+
+            if (Minecraft.getInstance().getConnection() != null && pfp != null) {
+                PlayerInfo playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(pfp.getId());
+                if (playerInfo != null) {
+                    if (!playerInfo.getModelName().equals("default")) {
+                        part = hand_slim;
+                    }
+                }
             }
+
+            //if (HandBlock$type == AbstractHandBlock.Types.PLAYER_SLIM) {
+
+            //}
 
             this.render($$2, vertexConsumer, part, $$4, $$5);
 
@@ -114,9 +128,6 @@ public class HandRenderer <T extends BlockEntity> implements BlockEntityRenderer
     public static RenderType getRenderType(HandBlock.Type type, @Nullable GameProfile p_112525_) {
         ResourceLocation resourcelocation = WIDE_BASE;
 
-        if (type == AbstractHandBlock.Types.PLAYER_SLIM) {
-            resourcelocation = SLIM_BASE;
-        }
         //if (/*p_112524_ == SkullBlock.Types.PLAYER &&*/ p_112525_ != null) {
         if (p_112525_ != null) {
             Minecraft minecraft = Minecraft.getInstance();

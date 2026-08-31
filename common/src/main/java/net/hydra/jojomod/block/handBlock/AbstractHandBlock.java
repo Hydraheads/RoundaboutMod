@@ -84,7 +84,6 @@ public class AbstractHandBlock extends BaseEntityBlock implements CancelDataDriv
 
     public static enum Types implements AbstractHandBlock.Type {
         PLAYER,
-        PLAYER_SLIM,
         ZOMBIE,
         PIGLIN,
         VILLAGER,
