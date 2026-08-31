@@ -179,14 +179,13 @@ public class PurpleSmokeEntity extends StandEntity {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
-                Block replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block);
-                BlockState replacementState = replacement.defaultBlockState();
+                BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
                 for (Property<?> prop : state.getProperties()) {
-                    if (replacementState.hasProperty(prop)) {
-                        replacementState = MainUtil.copyBlockStateProperty(state, replacementState, prop);
+                    if (replacement.hasProperty(prop)) {
+                        replacement = MainUtil.copyBlockStateProperty(state, replacement, prop);
                     }
                 }
-                return replacementState;
+                return replacement;
             }
         }
         return null;
