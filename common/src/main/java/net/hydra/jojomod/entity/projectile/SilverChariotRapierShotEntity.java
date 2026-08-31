@@ -27,12 +27,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.UUID;
 
@@ -373,23 +371,7 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
     @Override
     public void tick() {
-        Vec3 velocity = this.getDeltaMovement();
-
-        double horizontal = Math.sqrt(
-                velocity.x * velocity.x +
-                        velocity.z * velocity.z
-        );
-
-        this.setYRot(
-                (float) (Mth.atan2(velocity.z, velocity.x)
-                        * (180.0 / Math.PI)) - 90.0F
-        );
-
-        this.setXRot(
-                (float) -(Mth.atan2(velocity.y, horizontal)
-                        * (180.0 / Math.PI))
-        );
-
+        /*
         boolean client = this.level().isClientSide();
         if (!client) {
             if (this.getStandUser() != null){
@@ -401,7 +383,6 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
                 this.discard();
             }
         }
-        /*
 
         LivingEntity le = this.getStandUser();
         if (le != null) {
@@ -416,23 +397,68 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         }
         */
 
+        // this.tickRotateFromVelocity();
+
         super.tick();
 
-        this.life += 1;
+        this.tickRotateFromVelocity();
 
         if (this.getRapierShotType() == BASE) {
-            if (this.life > 600) {
+            if (this.tickCount > 600) {
                 this.discard();
             }
         } else if (this.getRapierShotType() == PLATFORM) {
-            if (this.life > 1200) {
+            if (this.tickCount > 1200) {
                 this.discard();
             }
         }
     }
 
+    public void initRotateFromVelocity(float velMagnitude) {
+        // "origin" will be used instead of the user for when Silver Chariot shoots
+        // it's rapier towards an enemy while in control mode.
+        LivingEntity origin = this.standUser;
+
+        Vec3 dir = origin.getLookAngle();
+
+        Vec3 vel = dir.normalize().scale(velMagnitude);
+
+        this.setDeltaMovement(vel);
+
+        float newYaw   = (float) (Mth.atan2(vel.x, vel.z) * (180F / Math.PI));
+        float newPitch = -(float) (Mth.atan2(vel.y, Math.sqrt(vel.x * vel.x + vel.z * vel.z)) * (180F / Math.PI));
+
+        this.setYRot(newYaw);
+        this.setXRot(newPitch);
+
+        this.yRotO = newYaw;
+        this.xRotO = newPitch;
+    }
+
+    private void tickRotateFromVelocity() {
+        Vec3 vel = this.getDeltaMovement();
+
+        if (vel.lengthSqr() == 1.0E-7D) {
+            return;
+        }
+
+        float newYaw   = (float) (Mth.atan2(vel.x, vel.z) * (180F / Math.PI));
+        float newPitch = -(float) (Mth.atan2(vel.y, Math.sqrt(vel.x * vel.x + vel.z * vel.z)) * (180F / Math.PI));
+
+        this.setYRot(newYaw);
+        this.setXRot(newPitch);
+
+        this.yRotO = newYaw;
+        this.xRotO = newPitch;
+    }
+
     @Override
-    protected boolean shouldBurn() {
-        return false;
+    protected float getInertia() {
+        return 1.0F;
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
     }
 }

@@ -2941,10 +2941,15 @@ public class PowersSilverChariot extends NewPunchingStand {
                 rapier.absMoveTo(origin.getX(), origin.getY(), origin.getZ());
                 rapier.setUser(origin);
                 rapier.setOwner(this.self);
+
+                float speed = 2.0F;
+
+                rapier.initRotateFromVelocity(speed);
+
                 self.level().addFreshEntity(rapier);
                 rapier.setPos(origin.getEyePosition().x, origin.getEyePosition().y, origin.getEyePosition().z);
                 rapier.setXRot(origin.getXRot()%360);
-                rapier.shootFromRotationDeltaAgnostic(origin, origin.getXRot(), origin.getYRot(), 0F, 4.0F, 1F);
+                rapier.shootFromRotationDeltaAgnostic(origin, origin.getXRot(), origin.getYRot(), 0F, speed, 1F);
                 playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.BLOCK_THROW_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);
                 // SCE.setHasRapier(false);

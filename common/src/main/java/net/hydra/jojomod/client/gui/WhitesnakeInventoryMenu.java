@@ -4,7 +4,7 @@ import net.hydra.jojomod.access.WhitesnakeInventoryAccess;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
-import net.hydra.jojomod.stand.powers.WhitesnakeControlInventory;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

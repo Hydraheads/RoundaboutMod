@@ -4642,8 +4642,6 @@
 
   "config.roundabout.enableWhitesnake.name": "Enable Stand",
   "config.roundabout.enableWhitesnake.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
-  "config.roundabout.acidTossCooldown.name": "Acid Toss Cooldown",
-  "config.roundabout.acidTossCooldown.desc": "Acid Toss cooldown in ticks.",
   "config.roundabout.timeSparkCooldown.name": "Time Spark Cooldown",
   "config.roundabout.timeSparkCooldown.desc": "Time Spark cooldown in ticks.",
   "config.roundabout.hallucinationAppliesMelting.name": "Hallucination Applies Melting",

@@ -30,8 +30,9 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.OldEffect;
-import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
+import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
+import net.hydra.jojomod.event.powers.whitesnake.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.PucciVoice;
 import net.hydra.jojomod.item.AbstractBodyDiscItem;
 import net.hydra.jojomod.item.CommandDiscItem;
@@ -112,9 +113,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte CONTROL_MODE_FROM_AUTO = 107;
     private static final byte ROUNDABOUT_DODGE_NOISE = 59;
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
+    private static final byte PHASE_GRAB_COOLDOWN = PowerIndex.SKILL_EXTRA_2;
     private static final byte ACID_CHARGE_NOISE = 123;
     private static final byte DISC_STEAL_CHARGE_NOISE = 124;
+    private static final int ACID_TOSS_COOLDOWN_TICKS = 120;
     private static final int DISC_STEAL_COOLDOWN = 300;
+    private static final int DISC_STEAL_MISS_COOLDOWN = 60;
     private static final float CONTROL_PUNCH_RANGE = 3.0F;
     private static final double FORWARD_BARRAGE_RANGE = 10.0D;
     private Vec3 phaseGrabOffset = Vec3.ZERO;
@@ -861,7 +865,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (hasBlock() || hasEntity() || activePower == PowerIndex.POWER_2_BLOCK) {
             return;
         }
-        if (!onCooldown(PowerIndex.SKILL_2)) {
+        if (!onCooldown(PHASE_GRAB_COOLDOWN)) {
             ((StandUser) self).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
@@ -946,7 +950,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void autoModeAttackClient() {
-        Entity target = rayCastEntity(self, getMaxPilotRange());
+        Entity target = MainUtil.raytraceEntityStand(self.level(), self, getMaxPilotRange());
         StandEntity stand = getStandEntity(self);
         if (!(target instanceof LivingEntity) || target.is(self) || target.is(stand)) return;
         tryIntPower(AUTO_MODE_ATTACK, true, target.getId());
@@ -1188,10 +1192,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void applyAcidTossCooldown() {
-        int cooldown = ClientNetworking.getAppropriateConfig().whitesnakeSettings.acidTossCooldown;
-        setCooldown(PowerIndex.SKILL_2, cooldown);
+        setCooldown(PowerIndex.SKILL_2, ACID_TOSS_COOLDOWN_TICKS);
         if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, cooldown);
+            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, ACID_TOSS_COOLDOWN_TICKS);
         }
     }
 
@@ -1330,6 +1333,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (activePower != DISC_STEAL) return;
         setAttackTimeDuring(-20);
         LivingEntity origin = actionOrigin();
+        boolean successfulHit = false;
         if (entity != null && entity.distanceTo(origin) > impaleRange + 0.75F) entity = null;
         if (entity != null) {
             if (!self.level().isClientSide()) {
@@ -1341,6 +1345,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             boolean dealsDamage = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discStealDealsDamage;
             boolean hit = dealsDamage ? damageWithDiscSteal(entity) : canApplyDiscSteal(entity);
             if (hit) {
+                successfulHit = true;
                 if (entity instanceof LivingEntity living) {
                     addEXP(5, living);
                     WhitesnakeDiscUtil.ejectDisc(living, getSelectedDisc());
@@ -1350,7 +1355,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 knockShield2(entity, 100);
             }
         }
-        applyDiscStealCooldown();
+        applyDiscStealCooldown(successfulHit);
         if (entity == null && !self.level().isClientSide()) {
             playSoundIfPossible(self.level(),null, self.blockPosition(), ModSounds.PUNCH_2_SOUND_EVENT,
                     SoundSource.PLAYERS, 0.95F, 1.0F);
@@ -1363,7 +1368,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private boolean damageWithDiscSteal(Entity entity) {
-        float power = getImpalePunchStrength(entity) * 0.5F;
+        float power;
+        if (getReducedDamage(entity)) {
+            power = levelupDamageMod(multiplyPowerByStandConfigPlayers(1.5F));
+        } else {
+            power = levelupDamageMod(multiplyPowerByStandConfigMobs(8.5F));
+        }
+        return nonlethalStandAttack(entity, power);
+    }
+
+    private boolean nonlethalStandAttack(Entity entity, float power) {
         if (entity instanceof LivingEntity living) {
             power = Math.min(power, Math.max(0.0F, living.getHealth() - 1.0F));
         }
@@ -1380,11 +1394,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return !living.isInvulnerableTo(source) && !living.isDamageSourceBlocked(source);
     }
 
-    private void applyDiscStealCooldown() {
+    private void applyDiscStealCooldown(boolean successfulHit) {
+        int cooldown = successfulHit ? DISC_STEAL_COOLDOWN : DISC_STEAL_MISS_COOLDOWN;
         if (self instanceof ServerPlayer player) {
-            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_1, DISC_STEAL_COOLDOWN);
+            S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_1, cooldown);
         }
-        setCooldown(PowerIndex.SKILL_1, DISC_STEAL_COOLDOWN);
+        setCooldown(PowerIndex.SKILL_1, cooldown);
     }
 
     private int getMeltingModeLevel() {
@@ -1643,9 +1658,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
         if (stand.isTechnicallyInImpassableWall() || stand.position().distanceTo(self.position()) > 15.0D) {
             if (self instanceof ServerPlayer player) {
-                S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_2, 7);
+                S2CPacketUtil.sendCooldownSyncPacket(player, PHASE_GRAB_COOLDOWN, 7);
             }
-            setCooldown(PowerIndex.SKILL_2, 5);
+            setCooldown(PHASE_GRAB_COOLDOWN, 5);
             ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
             return;
         }
@@ -2034,7 +2049,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return true;
         }
         if (getActivePower() == DISC_STEAL) {
-            applyDiscStealCooldown();
+            applyDiscStealCooldown(false);
             return true;
         }
         return super.canInterruptPower(source, interrupter);
@@ -2815,7 +2830,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
         if (isGuarding()) {
             if (!isPiloting()) {
-                setSkillIcon(context, x, y, 2, StandIcons.WHITESNAKE_PHASE_GRAB, PowerIndex.SKILL_2);
+                setSkillIcon(context, x, y, 2, StandIcons.WHITESNAKE_PHASE_GRAB, PHASE_GRAB_COOLDOWN);
             } else if (canExecuteMoveWithLevel(getMeltingModeLevel())) {
                 setSkillIcon(context, x, y, 2, StandIcons.WHITESNAKE_MELTING_MODE, PowerIndex.NO_CD);
             } else {
