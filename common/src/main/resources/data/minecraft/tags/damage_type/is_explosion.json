@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "roundabout:corpse_explosion",
-    "roundabout:kq_explosion"
+    "roundabout:corpse_explosion"
   ]
 }
