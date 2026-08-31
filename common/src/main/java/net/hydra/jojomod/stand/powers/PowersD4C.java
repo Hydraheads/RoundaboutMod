@@ -1386,7 +1386,7 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
-    BlockPos altBlockPos = null;
+    public BlockPos altBlockPos = null;
     BlockState altState = null;
     @SuppressWarnings("deprecation")
     public void altBlockGrab(){

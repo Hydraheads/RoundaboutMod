@@ -5,7 +5,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.client.ClientEffectUtil;
+import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -139,6 +143,46 @@ public class ZWorldRenderer {
                 } else {
                     levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(false);
                 }
+            }
+        }
+
+
+    }
+
+    @Inject(
+            method = "renderLevel",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/debug/DebugRenderer;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;DDD)V",
+            shift = At.Shift.BEFORE)
+    )
+    private void roundabout$renderPurpleBox(
+            PoseStack poseStack,
+            float partialTick,
+            long finishTimeNano,
+            boolean renderBlockOutline,
+            Camera camera,
+            GameRenderer gameRenderer,
+            LightTexture lightTexture,
+            Matrix4f projectionMatrix,
+            CallbackInfo ci
+    ) {
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.level == null) {
+            return;
+        }
+
+
+        if (ClientUtil.getPlayer() != null && ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers()
+        instanceof PowersD4C pd4){
+            if (pd4.altBlockPos != null){
+                ClientEffectUtil.
+                        renderPurpleBox(
+                                poseStack,
+                                mc.renderBuffers().bufferSource(),
+                                camera,
+                                pd4.altBlockPos,
+                                pd4.altBlockPos
+                        );
             }
         }
     }
