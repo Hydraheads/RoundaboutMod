@@ -8,7 +8,7 @@ import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
-import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
+import net.hydra.jojomod.event.powers.whitesnake.disc.WhitesnakeDiscUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

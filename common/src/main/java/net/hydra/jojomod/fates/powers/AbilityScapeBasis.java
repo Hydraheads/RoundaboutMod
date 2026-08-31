@@ -34,7 +34,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;

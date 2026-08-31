@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.HallucinationEffect;
+import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffectInstance;

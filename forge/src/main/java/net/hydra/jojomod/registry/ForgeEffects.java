@@ -1,9 +1,9 @@
 package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.event.powers.DreamingEffect;
-import net.hydra.jojomod.event.powers.HallucinationEffect;
-import net.hydra.jojomod.event.powers.OldEffect;
+import net.hydra.jojomod.event.powers.whitesnake.DreamingEffect;
+import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
+import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

@@ -2,9 +2,9 @@ package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.access.DiscBearer;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
-import net.hydra.jojomod.event.powers.disc.DreamingMemoryController;
-import net.hydra.jojomod.event.powers.disc.MemoryPersonality;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DreamingMemoryController;
+import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryPersonality;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
