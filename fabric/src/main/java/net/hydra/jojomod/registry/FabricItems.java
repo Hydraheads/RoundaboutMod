@@ -990,6 +990,7 @@ public class FabricItems {
         ((FancyLighterBlock)FabricBlocks.FANCY_LIGHTER_BLOCK).referenceItem = FANCY_LIGHTER.getDefaultInstance();
         ((AbstractHandBlock)FabricBlocks.HAND).referenceItem = HAND_BLOCK_ITEM.getDefaultInstance();
         ModItems.FANCY_LIGHTER = FANCY_LIGHTER;
+        ModItems.HAND = HAND_BLOCK_ITEM;
         ModItems.STREET_SIGN_DIO_BLOCK_ITEM = STREET_SIGN_DIO_BLOCK_ITEM;
         ModItems.STREET_SIGN_RIGHT_BLOCK_ITEM = STREET_SIGN_RIGHT_BLOCK_ITEM;
         ModItems.STREET_SIGN_STOP_BLOCK_ITEM = STREET_SIGN_STOP_BLOCK_ITEM;

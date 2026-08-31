@@ -9,6 +9,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FancyLighterBlock;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -32,6 +33,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
@@ -2561,7 +2563,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             return true;
         }
 
-        combatActivations++;
+        if (combatActivations < 12)  { combatActivations++; }
 
         this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
                 ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
@@ -4374,11 +4376,24 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 if (target instanceof Player pl) {
                     if (!pl.isCreative()) {
-                        if (playersHitkill) { pl.hurt(desintegrationDmg, pl.getMaxHealth() + 4); }
+                        if (playersHitkill) { pl.hurt(desintegrationDmg, pl.getMaxHealth()); }
                         else { pl.hurt(desintegrationDmg, hitPoints); }
                     }
+
+                    /*
+                    if (!pl.isAlive()) {
+                        ItemStack skull = new ItemStack(ModItems.HAND);
+                        skull.setTag(new CompoundTag());
+                        //PlayerHeadItem
+                        CompoundTag tag = skull.getTag();
+                        tag.putString("HandOwner",pl.getName().getString());
+                        skull.setTag(tag);
+                        target.spawnAtLocation(skull);
+                    }
+                    */
+
                 } else {
-                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth() + 4);}
+                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
                     else {target.hurt(desintegrationDmg, hitPoints);}
                 }
             }
