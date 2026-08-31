@@ -3456,6 +3456,12 @@
       "roundabout:purple_haze_distortion_smoke"
     ]
   },
+  "purple_haze_pod_bite": {
+    "subtitle": "sounds.roundabout.purple_haze_pod_bite",
+    "sounds": [
+      "roundabout:purple_haze_pod_bite"
+    ]
+  },
   "planet_waves_summon": {
     "subtitle": "sounds.roundabout.planet_waves_summon",
     "sounds": [

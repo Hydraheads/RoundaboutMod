@@ -618,7 +618,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         );*/
         IPlayerEntity playerData = (IPlayerEntity) self;
 
-        if (timeOfDay >= 200 &&
+        if (timeOfDay >= 50 &&
                 playerData.roundabout$getPurpleHazePodResetDay() != day) {
 
             setPods(MAX_PODS);
@@ -663,7 +663,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void Distortion() {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_POD_BITE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.addEffect(new MobEffectInstance(
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
