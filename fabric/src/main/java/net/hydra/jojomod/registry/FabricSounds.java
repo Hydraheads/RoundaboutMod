@@ -70,6 +70,7 @@ public class FabricSounds {
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
         addSound(ModSounds.D4C_FUSE_ID, ModSounds.D4C_FUSE_EVENT);
+        addSound(ModSounds.D4C_FUSION_START_ID, ModSounds.D4C_FUSION_START_EVENT);
         addSound(ModSounds.WORLD_MERGE_ID, ModSounds.WORLD_MERGE_EVENT);
         addSound(ModSounds.DISC_INSERT_ID, ModSounds.DISC_INSERT_EVENT);
         addSound(ModSounds.DISC_REMOVE_ID, ModSounds.DISC_REMOVE_EVENT);
@@ -128,6 +129,7 @@ public class FabricSounds {
         addSound(ModSounds.ICE_SKATING_ID, ModSounds.ICE_SKATING_EVENT);
         addSound(ModSounds.SKATING_LAND_ID, ModSounds.SKATING_LAND_EVENT);
         addSound(ModSounds.ICE_RISES_ID, ModSounds.ICE_RISES_EVENT);
+        addSound(ModSounds.MELT_DODGE_ID, ModSounds.MELT_DODGE_EVENT);
         addSound(ModSounds.BLOCK_FREEZE_ID, ModSounds.BLOCK_FREEZE_EVENT);
         addSound(ModSounds.ICE_BLAST_CHARGE_ID, ModSounds.ICE_BLAST_CHARGE_EVENT);
         addSound(ModSounds.COLD_SHOT_ID, ModSounds.COLD_SHOT_EVENT);
@@ -657,6 +659,11 @@ public class FabricSounds {
         addSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ID,ModSounds.SILVER_CHARIOT_RAPIER_SHOT_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID,ModSounds.SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT);
         addSound(ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_ID,ModSounds.SILVER_CHARIOT_FINAL_HIT_CRY_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_HIT_1_ID,ModSounds.SILVER_CHARIOT_HIT_1_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_HIT_2_ID,ModSounds.SILVER_CHARIOT_HIT_2_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_HIT_3_ID,ModSounds.SILVER_CHARIOT_HIT_3_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_HIT_4_ID,ModSounds.SILVER_CHARIOT_HIT_4_EVENT);
+        addSound(ModSounds.SILVER_CHARIOT_AFTERIMAGE_ID,ModSounds.SILVER_CHARIOT_AFTERIMAGE_EVENT);
 
         addSound(ModSounds.EMPEROR_SUMMON_ID,ModSounds.EMPEROR_SUMMON_EVENT);
         addSound(ModSounds.EMPEROR_IMPACT_ID,ModSounds.EMPEROR_IMPACT_EVENT);

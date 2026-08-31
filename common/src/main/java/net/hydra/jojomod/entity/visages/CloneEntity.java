@@ -1,8 +1,10 @@
 package net.hydra.jojomod.entity.visages;
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.ActiveCloneManager;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
+import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
 import net.hydra.jojomod.item.MaskItem;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Unique;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +36,8 @@ public class CloneEntity extends PathfinderMob {
             EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<ItemStack> VISAGE = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<String> DISGUISE_NAME = SynchedEntityData.defineId(
+            CloneEntity.class, EntityDataSerializers.STRING);
 
     public boolean isBackingUp = false;
     public boolean isMovingForward = false;
@@ -41,6 +46,12 @@ public class CloneEntity extends PathfinderMob {
     public boolean runaway = false;
     public boolean runawayTrue = false;
 
+    public String getDisguiseName(){
+        return entityData.get(DISGUISE_NAME);
+    }
+    public void setDisguiseName(String visage){
+        entityData.set(DISGUISE_NAME,visage);
+    }
     public ItemStack getVisage(){
         return entityData.get(VISAGE);
     }
@@ -94,7 +105,9 @@ public class CloneEntity extends PathfinderMob {
         this.player = player;
         setPlayerUUID(player.getUUID());
         this.name = player.getDisplayName();
+        setDisguiseName(String.valueOf(this.name));
     }
+
     public Player getPlayer(){
         if (this.player == null && this.getPlayerUUID().isPresent()){
             this.player = this.level().getPlayerByUUID(this.getPlayerUUID().get());
@@ -113,6 +126,7 @@ public class CloneEntity extends PathfinderMob {
             super.defineSynchedData();
             this.entityData.define(PLAYER, Optional.empty());
             this.entityData.define(VISAGE, ItemStack.EMPTY);
+            this.entityData.define(DISGUISE_NAME, "Player");
         }
     }
     @Override
@@ -221,7 +235,12 @@ public class CloneEntity extends PathfinderMob {
     protected CloneEntity(EntityType<? extends PathfinderMob> $$0, Level $$1) {
         super($$0, $$1);
     }
-
+    @javax.annotation.Nullable
+    public GameProfile getDisguiseProfile() {
+        Optional<UUID> id = getPlayerUUID();
+        String name = entityData.get(DISGUISE_NAME);
+        return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
+    }
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.ATTACK_DAMAGE, 1).

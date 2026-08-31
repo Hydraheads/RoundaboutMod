@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -23,8 +26,6 @@ import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -534,19 +535,29 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
             );
-    public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
-            ENTITY_TYPES.register("pearl_jam", () ->
-                    EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
-                            clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
-            );
-
-
     public static final RegistryObject<EntityType<BeachSabbathEntity>> BEACH_SABBATH =
             ENTITY_TYPES.register("beach_sabbath", () ->
                     EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<BlackSantaSabbathEntity>> SANTA_SABBATH =
+            ENTITY_TYPES.register("santa_sabbath", () ->
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<CowboySabbathEntity>> COWBOY_SABBATH =
+            ENTITY_TYPES.register("cowboy_sabbath", () ->
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
+            ENTITY_TYPES.register("pearl_jam", () ->
+                    EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
             );
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
@@ -620,6 +631,12 @@ public class ForgeEntities {
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
             );
+    public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
+            ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                            clientTrackingRange(16).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
+            );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->
                     EntityType.Builder.<KnifeEntity>of(KnifeEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
@@ -633,6 +650,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<FallingBannerEntity>> FALLING_BANNER =
+            ENTITY_TYPES.register("falling_banner", () ->
+                    EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC)
+                            .sized(FallingBannerEntity.xwidth, FallingBannerEntity.xheight).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "falling_banner").toString())
             );
     public static final RegistryObject<EntityType<StepRuleEntity>> STEP_RULE =
             ENTITY_TYPES.register("step_rule", () ->
@@ -945,6 +970,12 @@ public class ForgeEntities {
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "molds_spores").toString())
+            );
+    public static final RegistryObject<EntityType<PurpleSmokeEntity>> PURPLE_SMOKE =
+            ENTITY_TYPES.register("purple_smoke", () ->
+                    EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).sized(0.01f, 0.01f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "purple_smoke").toString())
             );
     public static final RegistryObject<EntityType<PHCapsuleEntity>> PH_CAPSULE =
             ENTITY_TYPES.register("ph_capsule", () ->

@@ -9,21 +9,27 @@ import net.hydra.jojomod.block.D4CPortalBlock;
 import net.hydra.jojomod.block.D4CPortalBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -36,6 +42,8 @@ import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -54,12 +62,18 @@ import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.horse.Horse;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -67,6 +81,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -99,6 +115,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte WORLD_MERGE = 106;
     public static final byte PORTAL = 107;
     public static final byte FUSE = 108;
+    public static final byte MELT_DODGE = 109;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -119,6 +136,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_PORTAL_EVENT;
         } else if (soundChoice == FUSE) {
             return ModSounds.D4C_FUSE_EVENT;
+        } else if (soundChoice == MELT_DODGE) {
+            return ModSounds.MELT_DODGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -602,12 +621,26 @@ public class PowersD4C extends NewPunchingStand {
 //                }
 //            }
             populateWorld((byte) worldId);
+            enactEligability2();
             PowerTypes.setPlaneOfExisting(self,(byte)worldId);
             playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
-            enactEligability();
         }
     }
+    public void enactEligability2(){
+        if (!isInBetweenSpace() && !self.isUnderWater()){
+            if (hasBanner()){
 
+                FallingBannerEntity twister = new FallingBannerEntity(
+                        this.self.level(), self.getEyePosition());
+                PowerTypes.copyPlaneOfExisting(self,twister);
+                twister.user = self;
+                twister.setBanner(self.getMainHandItem());
+                twister.lifeSpan = 60;
+                this.getSelf().level().addFreshEntity(twister);
+                useUpBanner(self.getMainHandItem());
+            }
+        }
+    }
     public void populateWorld(byte worldId) {
         if (!(self.level() instanceof ServerLevel sl)) {
             return;
@@ -675,8 +708,8 @@ public class PowersD4C extends NewPunchingStand {
         int copiedPlayers = 0;
 
         for (LivingEntity target : possibleTargets) {
-            if (target instanceof Player pl && self instanceof Player pl2){
-                if (pl.isSpectator() || (pl.isCreative() && !pl2.isCreative())){
+            if (target instanceof Player pl && self instanceof Player pl2) {
+                if (pl.isSpectator() || (pl.isCreative() && !pl2.isCreative())) {
                     continue;
                 }
                 if (copiedPlayers >= maxCopies) {
@@ -716,7 +749,254 @@ public class PowersD4C extends NewPunchingStand {
                 copied++;
             }
         }
+
+
+        if (this.getSelf().level().getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+            float chanceX = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterNewAnimal;
+            if (chanceX > 0 && (Math.random() * 1 < chanceX)) {
+
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        spawnRadius
+                );
+
+                if (spawnPos != null) {
+
+                    double rand = Math.random() * 1;
+                    Entity copyEntity;
+
+                    if (self.level().canSeeSky(self.getOnPos().above()) || self.level().canSeeSky(self.getOnPos().north().above()) ||
+                            self.level().canSeeSky(self.getOnPos().west().above()) ||
+                            self.level().canSeeSky(self.getOnPos().east().above()) || self.level().canSeeSky(self.getOnPos().south().above())) {
+
+                        if (rand <= 0.1F) {
+                            if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DESERT)) {
+                                copyEntity = EntityType.CAMEL.create(this.getSelf().level());
+                            } else {
+                                copyEntity = EntityType.HORSE.create(this.getSelf().level());
+                            }
+                        } else if (rand <= 0.3F) {
+                            Holder<Biome> biome = self.level().getBiome(this.getSelf().getOnPos());
+                            if (biome.is(Biomes.BAMBOO_JUNGLE)) {
+                                copyEntity = EntityType.PANDA.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.DESERT)) {
+                                copyEntity = ModEntities.TERRIER_DOG.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.TAIGA)) {
+                                copyEntity = EntityType.WOLF.create(this.getSelf().level());
+                            } else if (biome.is(Biomes.JUNGLE) ||
+                                    biome.is(Biomes.SPARSE_JUNGLE)) {
+                                copyEntity = EntityType.PARROT.create(this.getSelf().level());
+                            } else {
+                                copyEntity = EntityType.COW.create(this.getSelf().level());
+                            }
+                        } else if (rand <= 0.4F) {
+                            copyEntity = EntityType.COW.create(this.getSelf().level());
+                        } else if (rand <= 0.45F) {
+                            copyEntity = EntityType.CAT.create(this.getSelf().level());
+                        } else if (rand <= 0.7F) {
+                            copyEntity = EntityType.SHEEP.create(this.getSelf().level());
+                        } else {
+                            copyEntity = EntityType.PIG.create(this.getSelf().level());
+                        }
+
+                        if (copyEntity != null) {
+                            PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                            PowerTypes.setTicksUntilGone(
+                                    copyEntity,
+                                    PowerTypes.getForeignWorldMaxTime(worldId),
+                                    worldId
+                            );
+                            copyEntity.moveTo(
+                                    spawnPos.x,
+                                    spawnPos.y,
+                                    spawnPos.z,
+                                    self.getYRot(),
+                                    self.getXRot()
+                            );
+                            self.level().addFreshEntity(copyEntity);
+                        }
+                    } else {
+                        if (self.level().getBiome(this.getSelf().getOnPos()).is(Biomes.DRIPSTONE_CAVES)) {
+                            copyEntity = EntityType.AXOLOTL.create(this.getSelf().level());
+
+                            if (copyEntity != null) {
+
+                                copyEntity.moveTo(
+                                        spawnPos.x,
+                                        spawnPos.y,
+                                        spawnPos.z,
+                                        self.getYRot(),
+                                        self.getXRot()
+                                );
+                                PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                                PowerTypes.setTicksUntilGone(
+                                        copyEntity,
+                                        PowerTypes.getForeignWorldMaxTime(worldId),
+                                        worldId
+                                );
+                                self.level().addFreshEntity(copyEntity);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Spawn a random listed player
+        if (copiedPlayers <= 1) {
+            float chance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceToEncounterPlayer;
+            if (chance > 0 && (Math.random()*1 < chance)) {
+                Vec3 spawnPos = findWorldMergeSpawnPosition(
+                        sl,
+                        spawnRadius
+                );
+
+                if (spawnPos == null) {
+                    return;
+                }
+
+                Entity copyEntity = ModEntities.D4C_CLONE.create(this.getSelf().level());
+
+                if (!(copyEntity instanceof D4CCloneEntity copy)) {
+                    return;
+                }
+
+                if (MainUtil.playerNames == null || MainUtil.playerNames.isEmpty()) {
+                    return;
+                }
+
+                List<Map.Entry<String, UUID>> players =
+                        new ArrayList<>(MainUtil.playerNames.entrySet());
+
+                Map.Entry<String, UUID> randomPlayer =
+                        players.get(this.getSelf().getRandom().nextInt(players.size()));
+                if (randomPlayer == null) {
+                    return;
+                }
+
+                String playerName = randomPlayer.getKey();
+                UUID playerUUID = randomPlayer.getValue();
+                if (playerUUID != null && playerUUID.equals(self.getUUID())) {
+                    //I don't want to spawn 2 of myself lol
+                    return;
+                }
+
+                copy.setDisguiseName(playerName);
+                copy.setCustomName(Component.literal(playerName));
+                copy.setCustomNameVisible(true);
+                copy.setPlayerUUID(playerUUID);
+
+                copy.moveTo(
+                        spawnPos.x,
+                        spawnPos.y,
+                        spawnPos.z,
+                        self.getYRot(),
+                        self.getXRot()
+                );
+
+                // Alternate universe
+                ((IEntityAndData) copy).rdbt$setNativeCopy(playerUUID);
+
+                PowerTypes.setPlaneOfExisting(copy, worldId);
+                PowerTypes.setTicksUntilGone(
+                        copy,
+                        PowerTypes.getForeignWorldMaxTime(worldId),
+                        worldId
+                );
+
+                self.level().addFreshEntity(copy);
+            }
+        }
     }
+
+    @Nullable
+    public Vec3 findWorldMergeSpawnPositionAnimal(
+            ServerLevel level,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (0.5);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB yesbox = EntityType.HORSE.getAABB(self.getX(),self.getY(),self.getZ());
+
+                AABB testBox = yesbox.move(
+                        candidate.x - self.getX(),
+                        candidate.y - self.getY(),
+                        candidate.z - self.getZ()
+                );
+
+                if (level.noCollision(self, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+    @Nullable
+    public Vec3 findWorldMergeSpawnPosition(
+            ServerLevel level,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 2.5D+ (0.5);
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            // Random distance between minDistance and radius
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                double y = baseY + yOffset;
+
+                Vec3 candidate = new Vec3(x, y, z);
+
+                AABB yesbox = EntityType.PLAYER.getAABB(self.getX(),self.getY(),self.getZ());
+
+                AABB testBox = yesbox.move(
+                        candidate.x - self.getX(),
+                        candidate.y - self.getY(),
+                        candidate.z - self.getZ()
+                );
+
+                if (level.noCollision(self, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static final boolean debugCollision = false;
 
     public boolean createParallelPlayerCopy(
             ServerLevel level,
@@ -739,6 +1019,10 @@ public class PowersD4C extends NewPunchingStand {
             copy.setCustomName(original.getCustomName());
             copy.setCustomNameVisible(original.isCustomNameVisible());
         }
+
+        if (original.getUUID().equals(self.getUUID())){
+            copy.safeCopy = true;
+        }
         copy.setPlayer(original);
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
         copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
@@ -748,6 +1032,22 @@ public class PowersD4C extends NewPunchingStand {
         copy.setItemSlot(EquipmentSlot.OFFHAND, original.getOffhandItem().copy());
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             copy.setDropChance(slot, 0.0F);
+        }
+
+        ItemStack standDisc = ((StandUser)original).roundabout$getStandDisc();
+        if (standDisc != null && !standDisc.isEmpty() && standDisc.getItem() instanceof StandDiscItem sdi){
+            if (!(sdi.standPowers instanceof PowersD4C)){
+                float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltStands;
+                if (Math.random() <= randomChance && !ModItems.getPoolForMob(copy).isEmpty()) {
+                    int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(copy).size()));
+                    ItemStack stack = ModItems.getPoolForMob(copy).get(index).getDefaultInstance();
+                    if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
+                        ((StandUser) copy).roundabout$setStandDisc(stack);
+                    }
+                } else {
+                    ((StandUser) copy).roundabout$setStandDisc(standDisc);
+                }
+            }
         }
 
         // Rotation
@@ -923,6 +1223,7 @@ public class PowersD4C extends NewPunchingStand {
             copyFish.setVariant(originalFish.getVariant());
         }
     }
+
     @Nullable
     public Vec3 findWorldMergeSpawnPosition(
             ServerLevel level,
@@ -1028,6 +1329,9 @@ public class PowersD4C extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context)
         {
+            case SKILL_1_GUARD, SKILL_1_CROUCH_GUARD -> {
+                betweenVisionClient();
+            }
             case SKILL_1_NORMAL -> {
                 worldMergingClient();
             }
@@ -1043,8 +1347,8 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_CROUCH_GUARD -> {
                 replaceBodyClient();
             }
-            case SKILL_3_GUARD -> {
-                betweenVisionClient();
+            case SKILL_3_GUARD,SKILL_3_CROUCH_GUARD -> {
+                meltDodgeClient();
             }
             case SKILL_3_NORMAL -> {
                 dashOrBlockSwitchClient();
@@ -1052,9 +1356,66 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_3_CROUCH -> {
                 chopClient();
             }
+            case SKILL_4_NORMAL -> {
+                worldHopClient();
+            }
+            case SKILL_4_CROUCH -> {
+                worldHop2Client();
+            }
         }
     }
 
+    public void worldHopClient(){
+        if (PowerTypes.isInD4CWorld(self)){
+            altBlockGrabClient();
+            return;
+        }
+    }
+    public void worldHop2Client(){
+        if (PowerTypes.isInD4CWorld(self)){
+            altBlockGrabClient();
+            return;
+        }
+    }
+    public void altBlockGrabClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            BlockPos blockPos = getPickBlock();
+            if (blockPos != null){
+                tryBlockPosPowerPacket(PowerIndex.POWER_4_EXTRA,blockPos);
+            }
+        }
+    }
+
+    public BlockPos altBlockPos = null;
+    BlockState altState = null;
+    @SuppressWarnings("deprecation")
+    public void altBlockGrab(){
+        if (!self.level().isClientSide()) {
+            if (grabBlock != null) {
+                StandEntity stand = getStandEntity(this.self);
+                if (Objects.nonNull(stand)) {
+                    BlockState state = self.level().getBlockState(grabBlock);
+                    if (state != null && state.isSolid()) {
+                        altState = state;
+                        altBlockPos = grabBlock;
+                        saveDiscAndSync();
+                    }
+                }
+            }
+        }
+    }
+
+    public BlockPos grabBlock = null;
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos){
+        this.grabBlock = blockPos;
+        return tryPower(move, forced);
+    }
+
+    public void meltDodgeClient(){
+        if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
+            tryPowerPacket(PowerIndex.POWER_3_BLOCK);
+        }
+    }
     public void pullIntoRealityClient(){
         Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
         if (targetEntity !=null && targetEntity.isAlive()){
@@ -1211,26 +1572,35 @@ public class PowersD4C extends NewPunchingStand {
         tickBetween();
     }
     public void dashOrBlockSwitchClient(){
+        if (!doVault()) {
             dash();
+        }
     }
     public void chopClient(){
-        if (!canImpale()){
-            return;
-        }
-        if (!this.onCooldown(PowerIndex.SKILL_3)) {
-            if (this.activePower == PowerIndex.POWER_3_SNEAK) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                tryPowerPacket(PowerIndex.NONE);
-            } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
-                tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+        if (!doVault()) {
+            if (!canImpale()) {
+                return;
+            }
+            if (!this.onCooldown(PowerIndex.SKILL_3)) {
+                if (this.activePower == PowerIndex.POWER_3_SNEAK) {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    tryPowerPacket(PowerIndex.NONE);
+                } else {
+                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
+                    tryPowerPacket(PowerIndex.POWER_3_SNEAK);
+                }
             }
         }
+    }
+
+    @Override
+    public boolean phaseThroughProjectile(Entity ent){
+        return this.getActivePower() == PowerIndex.POWER_3_BLOCK;
     }
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
         } else if (PowerTypes.isInD4CWorld(self)){
             LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NONE,0);
         } else if (!isHoldingSneak()){
@@ -1247,16 +1617,26 @@ public class PowersD4C extends NewPunchingStand {
             LockedOrNot(context, x, y, 2, StandIcons.D4C_CLONE_SWAP, PowerIndex.SKILL_2_SNEAK,0);
         }
 
-        if (!isHoldingSneak()) {
-            if (isGuarding()){
-                setSkillIcon(context, x, y, 3, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
-            } else {
+        if (isGuarding()){
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_MELT_DODGE, PowerIndex.SKILL_EXTRA);
+        } else if (canVault()) {
+            setSkillIcon(context, x, y, 3, StandIcons.D4C_LEDGE_GRAB,
+                    PowerIndex.GLOBAL_DASH);
+        } else if (!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 3, StandIcons.DODGE, PowerIndex.GLOBAL_DASH);
-            }
         } else {
             LockedOrNot(context, x, y, 3, StandIcons.D4C_CHOP, PowerIndex.SKILL_3,0);
         }
-        if (!isHoldingSneak()) {
+
+        if (PowerTypes.isInD4CWorld(self)) {
+            setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_COPY, PowerIndex.SKILL_4_SNEAK);
+        } else if (altBlockPos != null){
+            if (!isHoldingSneak()) {
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_MERGE, PowerIndex.SKILL_4);
+            } else {
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_RELEASE, PowerIndex.SKILL_4);
+            }
+        } else if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
         } else {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP, PowerIndex.SKILL_4);
@@ -1266,9 +1646,12 @@ public class PowersD4C extends NewPunchingStand {
     public boolean isAttackIneptVisually(byte activeP, int slot){
         boolean dworld = PowerTypes.isInD4CWorld(self);
         if (!(slot == 2 && dworld)){
-            if (slot == 1 || slot == 2 || slot == 4){
+            if ((slot == 1 && !isGuarding()) || slot == 2 || (slot == 4 && altBlockPos == null) || (slot == 3 && isGuarding())){
                 if (slot == 1 && !isGuarding() && dworld){
                     return !isEligableForExit() || super.isAttackIneptVisually(activeP,slot);
+                }
+                if (slot == 4 && dworld){
+                    return !hasPickBlock() || super.isAttackIneptVisually(activeP,slot);
                 }
                 return !isEligable() || super.isAttackIneptVisually(activeP,slot);
             }
@@ -1288,12 +1671,20 @@ public class PowersD4C extends NewPunchingStand {
     public boolean cancelSprintJump(){
         byte ap = this.getActivePower();
         if (ap == PowerIndex.SNEAK_ATTACK_CHARGE ||
-                ap == PowerIndex.POWER_3_SNEAK ||
+                ap == PowerIndex.POWER_3_SNEAK ||  ap == PowerIndex.POWER_3_BLOCK ||
                 ap == PowerIndex.POWER_1_SNEAK
         ){
             return true;
         }
         return super.cancelSprintJump();
+    }
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (this.getActivePower() == PowerIndex.POWER_3_BLOCK) {
+            stopSoundsIfNearby(MELT_DODGE, 100, false);
+
+        }
+        return super.tryPower(move,forced);
     }
 
     public boolean setPowerFinalAttack() {
@@ -1544,8 +1935,24 @@ public class PowersD4C extends NewPunchingStand {
             updateFinalAttack();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             updateFinalAttackCharge();
+        } else if (this.getActivePower() == PowerIndex.POWER_3_BLOCK) {
+            updateMeltDodge();
         }
         super.updateUniqueMoves();
+    }
+
+    public void updateMeltDodge(){
+        if (!self.level().isClientSide()){
+            if (attackTimeDuring >= 95){
+
+                xTryPower(PowerIndex.NONE,true);
+            } else {
+                Vec3 posTIon = (self.getEyePosition().subtract(self.getPosition(1)).scale(0.7)).add(self.getPosition(1));
+                sendParticlesIfPossible(self.level(),ModParticles.MENGER,
+                        posTIon.x, posTIon.y, posTIon.z,
+                        3, 0.25, 0.25, 0.25, 0.00);
+            }
+        }
     }
 
     public void updateChop(){
@@ -1609,8 +2016,21 @@ public class PowersD4C extends NewPunchingStand {
                 float g = 1/f;
                 basis *= g;
             }
+        } else if (this.activePower == PowerIndex.POWER_3_BLOCK && !(this.getSelf() instanceof Creeper)){
+            basis *= 0.2f;
         }
         return super.inputSpeedModifiers(basis);
+    }
+    @Override
+    public boolean cancelJump(){
+        if (this.activePower == PowerIndex.POWER_3_BLOCK)
+            return true;
+        return super.cancelJump();
+    }
+    public boolean cancelSprintParticles(){
+        if (this.activePower == PowerIndex.POWER_3_BLOCK)
+            return true;
+        return super.cancelSprintParticles();
     }
 
     //hold input
@@ -1716,7 +2136,9 @@ public class PowersD4C extends NewPunchingStand {
     }
     @Override
     public boolean setPowerOther(int move, int lastMove) {
-        if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
+        if (move == PowerIndex.VAULT){
+            return this.vault();
+        } else if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
             return this.setPowerFinalAttack();
         } else if (move == PowerIndex.SNEAK_ATTACK) {
             return this.setPowerSuperHit();
@@ -1725,6 +2147,12 @@ public class PowersD4C extends NewPunchingStand {
             return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
+        } else if (move == PowerIndex.POWER_3_BLOCK) {
+            this.meltDodge();
+            return false;
+        } else if (move == PowerIndex.POWER_4_EXTRA){
+            altBlockGrab();
+            return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
             return false;
@@ -1741,7 +2169,33 @@ public class PowersD4C extends NewPunchingStand {
         }
         return super.setPowerOther(move,lastMove);
     }
-
+    @Override
+    public boolean cancelItemUse() {
+        return (this.activePower == PowerIndex.POWER_3_BLOCK) || super.cancelItemUse();
+    }
+    @Override
+    public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.activePower == PowerIndex.POWER_3_BLOCK) {
+            return true;
+        }
+        return super.buttonInputGuard(keyIsDown,options);
+    }
+    @Override
+    public boolean clickRelease(){
+        if (this.getActivePower() == PowerIndex.POWER_3_BLOCK){
+            return true;
+        }
+        return super.clickRelease();
+    }
+    public void meltDodge(){
+        if (isEligable()) {
+            getStandUserSelf().roundabout$setStandAnimation(MELT_DODGE_ANIM);
+            this.setAttackTimeDuring(0);
+            this.setActivePower(PowerIndex.POWER_3_BLOCK);
+            playStandUserOnlySoundsIfNearby(MELT_DODGE, 50, false, false);
+            enactEligability();
+        }
+    }
     public void standDragServer(){
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
@@ -1902,6 +2356,50 @@ public class PowersD4C extends NewPunchingStand {
             Entity targetEntity = getTargetEntity(this.self,-1);
             finalAttackImpact(targetEntity);
         }
+    }
+
+    public boolean hasPickBlock(){
+        if (self.level().isClientSide()){
+            BlockHitResult result = getSolidBlockHit(self,5);
+            if (result != null){
+                return true;
+            }
+        }
+        return false;
+    }
+    public BlockPos getPickBlock(){
+        if (self.level().isClientSide()){
+            BlockHitResult result = getSolidBlockHit(self,5);
+            if (result != null){
+                return result.getBlockPos();
+            }
+        }
+        return BlockPos.ZERO;
+    }
+
+    public static BlockHitResult getSolidBlockHit(LivingEntity player, double distance) {
+        Vec3 start = player.getEyePosition(1.0F);
+        Vec3 look = player.getViewVector(1.0F);
+        Vec3 end = start.add(look.scale(distance));
+
+        BlockHitResult hit = player.level().clip(new ClipContext(
+                start,
+                end,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+
+        if (hit.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hit.getBlockPos();
+            BlockState state = player.level().getBlockState(pos);
+
+            if (!state.isAir() && !state.getCollisionShape(player.level(), pos).isEmpty()) {
+                return hit;
+            }
+        }
+
+        return null;
     }
 
     public float getFinalAttackKnockback(){
@@ -2168,6 +2666,15 @@ public class PowersD4C extends NewPunchingStand {
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("canHoldBanner",canHoldBanner);
+        if (altBlockPos != null){
+            $$0.putInt("altBlockX",altBlockPos.getX());
+            $$0.putInt("altBlockY",altBlockPos.getY());
+            $$0.putInt("altBlockZ",altBlockPos.getZ());
+        } else {
+            $$0.remove("altBlockX");
+            $$0.remove("altBlockY");
+            $$0.remove("altBlockZ");
+        }
 
     }
 
@@ -2177,6 +2684,13 @@ public class PowersD4C extends NewPunchingStand {
 
         if ($$0.contains("canHoldBanner")) {
             canHoldBanner = $$0.getBoolean("canHoldBanner");
+        }
+        if ($$0.contains("altBlockX") && $$0.contains("altBlockY") && $$0.contains("altBlockZ")) {
+            altBlockPos = new BlockPos(
+                    $$0.getInt("altBlockX"),
+                    $$0.getInt("altBlockY"),
+                    $$0.getInt("altBlockZ")
+            );
         }
 
     }

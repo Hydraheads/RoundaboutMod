@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
-import net.hydra.jojomod.stand.powers.WhitesnakeControlInventory;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;

@@ -260,8 +260,6 @@ public class PowersHeyYa extends NewDashPreset {
         return super.isAttackIneptVisually(activeP, slot);
     }
 
-    /** if = -1, not melt dodging */
-    public int meltDodgeTicks = -1;
 
     @Override
     public void tickPower() {
@@ -291,16 +289,18 @@ public class PowersHeyYa extends NewDashPreset {
 
     @Override
     public void reactToAggro(Mob mob){
-        if (dangerYappingOn()) {
-            /**If a mob tries to set its attack target to you again, does not repeat yapping*/
-            if (!(mob.getTarget() != null && mob.getTarget().is(this.self)) && !(mob.getLastHurtByMob() != null && mob.getLastHurtByMob().is(this.self))) {
-                /**This function assures the aggro isn't passive mob aggro like animals running*/
-                if (MainUtil.getIfMobIsAttacking(mob)) {
-                    yapSounds();
-                    if (isEvilYapper()){
-                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
-                    } else {
-                        ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines)+1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+        if (!self.level().isClientSide()) {
+            if (dangerYappingOn()) {
+                /**If a mob tries to set its attack target to you again, does not repeat yapping*/
+                if (!(mob.getTarget() != null && mob.getTarget().is(this.self)) && !(mob.getLastHurtByMob() != null && mob.getLastHurtByMob().is(this.self))) {
+                    /**This function assures the aggro isn't passive mob aggro like animals running*/
+                    if (MainUtil.getIfMobIsAttacking(mob)) {
+                        yapSounds();
+                        if (isEvilYapper()) {
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                        } else {
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                        }
                     }
                 }
             }

@@ -38,6 +38,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -466,13 +467,24 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             return false;
         }
 
-        long dayTime = this.level().getDayTime() % 24000;
+        return !isUnderLight(this);
+    }
 
+    public static boolean isUnderLight(LivingEntity LE){
+        BlockPos pos = LE.blockPosition();
+        Level level = LE.level();
+        if (level == null) { return true; }
 
-        if ((dayTime >= 13000 && dayTime <= 23750) || this.level().isRainingAt(pos) || !this.level().canSeeSky(this.blockPosition())) {
-            return true;
+        long timeOfDay = level.getDayTime() % 24000L;
+        Vec3 yes = LE.getEyePosition();
+        BlockPos atVec = BlockPos.containing(yes);
+        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
+
+        if ((level.isRaining() || level.isThundering() || (level.getBrightness(LightLayer.SKY, atVec) - level.getSkyDarken()) < 10)) {
+            return false;
+        } else {
+            return isDay;
         }
-        return false;
     }
 
     public boolean canBeLeashed(Player $$0) { return false; }
@@ -506,6 +518,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             bubble.setSped(0.15f);
             bubble.setOwner(this);
             bubble.setSkin(this.getBubbleSkin());
+            bubble.strayCatEntityMade = true;
             bubble.setTarget(livingEntity);
 
             if (!this.isTame()) { bubble.setDamageMult(2.4f); }

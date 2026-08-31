@@ -162,6 +162,10 @@ public class ModSounds {
     public static final ResourceLocation D4C_FUSE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSE);
     public static SoundEvent D4C_FUSE_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSE_ID);
 
+    public static final String D4C_FUSION_START = "d4c_fusion_start";
+    public static final ResourceLocation D4C_FUSION_START_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSION_START);
+    public static SoundEvent D4C_FUSION_START_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSION_START_ID);
+
     public static final String WORLD_MERGE = "world_merge";
     public static final ResourceLocation WORLD_MERGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+WORLD_MERGE);
     public static SoundEvent WORLD_MERGE_EVENT = SoundEvent.createVariableRangeEvent(WORLD_MERGE_ID);
@@ -297,6 +301,10 @@ public class ModSounds {
     public static final String ICE_RISES = "ice_wall";
     public static final ResourceLocation ICE_RISES_ID = new ResourceLocation(Roundabout.MOD_ID+":"+ICE_RISES);
     public static SoundEvent ICE_RISES_EVENT = SoundEvent.createVariableRangeEvent(ICE_RISES_ID);
+
+    public static final String MELT_DODGE = "melt_dodge";
+    public static final ResourceLocation MELT_DODGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+MELT_DODGE);
+    public static SoundEvent MELT_DODGE_EVENT = SoundEvent.createVariableRangeEvent(MELT_DODGE_ID);
 
     public static final String BLOCK_FREEZE = "block_freeze";
     public static final ResourceLocation BLOCK_FREEZE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_FREEZE);
@@ -1196,6 +1204,26 @@ public class ModSounds {
     public static final String SILVER_CHARIOT_FINAL_HIT_CRY = "silver_chariot_final_hit_cry";
     public static final ResourceLocation SILVER_CHARIOT_FINAL_HIT_CRY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_FINAL_HIT_CRY);
     public static SoundEvent SILVER_CHARIOT_FINAL_HIT_CRY_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_FINAL_HIT_CRY_ID);
+
+    public static final String SILVER_CHARIOT_HIT_1 = "silver_chariot_hit_1";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_1);
+    public static SoundEvent SILVER_CHARIOT_HIT_1_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_1_ID);
+
+    public static final String SILVER_CHARIOT_HIT_2 = "silver_chariot_hit_2";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_2);
+    public static SoundEvent SILVER_CHARIOT_HIT_2_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_2_ID);
+
+    public static final String SILVER_CHARIOT_HIT_3 = "silver_chariot_hit_3";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_3);
+    public static SoundEvent SILVER_CHARIOT_HIT_3_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_3_ID);
+
+    public static final String SILVER_CHARIOT_HIT_4 = "silver_chariot_hit_4";
+    public static final ResourceLocation SILVER_CHARIOT_HIT_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_HIT_4);
+    public static SoundEvent SILVER_CHARIOT_HIT_4_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_HIT_4_ID);
+
+    public static final String SILVER_CHARIOT_AFTERIMAGE = "silver_chariot_afterimage";
+    public static final ResourceLocation SILVER_CHARIOT_AFTERIMAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_AFTERIMAGE);
+    public static SoundEvent SILVER_CHARIOT_AFTERIMAGE_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_AFTERIMAGE_ID);
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);

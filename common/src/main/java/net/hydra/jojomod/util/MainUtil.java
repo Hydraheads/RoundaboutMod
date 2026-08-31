@@ -13,7 +13,6 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
@@ -25,14 +24,12 @@ import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
-import net.hydra.jojomod.entity.projectile.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.entity.substand.EncasementBubbleEntity;
-import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.ModEffects;
@@ -43,8 +40,6 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
-import net.hydra.jojomod.fates.powers.ZombieFate;
-import net.hydra.jojomod.mixin.PlayerEntity;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -76,7 +71,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -95,7 +89,6 @@ import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -106,10 +99,7 @@ import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.food.Foods;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -123,7 +113,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
-import org.spongepowered.asm.mixin.Unique;
 
 
 import javax.annotation.Nullable;
@@ -780,7 +769,7 @@ public class MainUtil {
     }
     public static boolean isHumanoid(LivingEntity LE){
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof Player || LE instanceof Piglin
+        || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
@@ -1411,8 +1400,43 @@ public class MainUtil {
         }
     }
 
+    public static final Map<String, UUID> playerNames = new HashMap<>();
+    static {
+        playerNames.put("Hydraheads", UUID.fromString("bdcdc942-0d38-4630-8249-37a29a0cc60b"));
+        playerNames.put("tuckfxspeed", UUID.fromString("c1f62b1b-0586-4a97-8431-d80e15d9de6f"));
+        playerNames.put("Prisma8", UUID.fromString("dd138670-b51e-47fa-ac93-ca76ab5cc16b"));
+        playerNames.put("urbancase", UUID.fromString("0fa1ab1b-1575-439e-b211-759318c1fc17"));
+        playerNames.put("JohnRoosterRed", UUID.fromString("d2423001-b455-414c-bdf4-0ecefca51f0c"));
+        playerNames.put("Sunkisdreams", UUID.fromString("5daa639e-e4cb-4b4e-bfb8-32b04a8508a6"));
+        playerNames.put("BloodyDoomMan", UUID.fromString("7bb76cc1-bbd2-4313-b923-09983a2ed35d"));
+        playerNames.put("awesomemanvin", UUID.fromString("09a6a39f-aa5d-483e-856e-d5e475b2ccc0"));
+        playerNames.put("That_Brit_Trash", UUID.fromString("f861fb4c-6cfc-4f19-82ee-65cc8edd2c30"));
+        playerNames.put("Talonios1", UUID.fromString("9b42b60e-731b-4942-8a09-24307173a1ac"));
+        playerNames.put("GenericName", UUID.fromString("e16801d1-d6c4-495c-9cc9-024645cc13a5"));
+        playerNames.put("ValidFish", UUID.fromString("d9db8b8b-c14e-4d22-bad7-c595140c151a"));
+        playerNames.put("Blugnib", UUID.fromString("4eefa46e-eaf0-4170-8ef4-307e8745f2f7"));
+        playerNames.put("DarkkJon", UUID.fromString("e3cf5756-2795-4256-92cd-a1c2284865dc"));
+        playerNames.put("Chxzym", UUID.fromString("7f00c7d7-1fe6-4082-aba2-9bce2e1cdb14"));
+        playerNames.put("Feu_Ghost", UUID.fromString("9bec323c-8551-4976-b615-66eb78e37ec2"));
+        playerNames.put("LloydGamer10", UUID.fromString("651be236-fb71-4591-99a3-bbc52f7a0f68"));
+        playerNames.put("14Kacper773549", UUID.fromString("252629a7-6000-4147-b511-600899b8d711"));
+        playerNames.put("MiniAstr0naut", UUID.fromString("7cf530de-2457-451a-9a89-5c1e78519bdb"));
+        playerNames.put("KnightDemon", UUID.fromString("7b074877-010a-4941-b8c4-d18dd6705fd1"));
+        playerNames.put("OlivePrincess69", UUID.fromString("7720722c-dee3-4c04-b3ae-22203176e0bc"));
+        playerNames.put("ImaPinHead", UUID.fromString("723a07fb-0ca0-47ce-94c8-7113dd08044f"));
+        playerNames.put("FunkyKing01", UUID.fromString("9d47733b-c110-4207-acce-ebe57ab573a0"));
+        playerNames.put("D4C_Valentine", UUID.fromString("40eec84f-7f8b-4024-ab73-43adc0891419"));
+        playerNames.put("Gyro_Zeppeli", UUID.fromString("d07c2758-de5c-4388-a104-c69c1262e054"));
+        playerNames.put("wojtonix", UUID.fromString("da472ff1-040f-4fd6-9d9d-25722fcf6408"));
+        playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
+        playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
+        playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
+        playerNames.put("NashorSenpai", UUID.fromString("e7d78d2b-01c8-4e46-ae87-9905d1261847"));
+    }
+
     public static void makeMobBleed(Entity target) {
-        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE))) {
+        if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE)) &&
+        getMobBleed(target)) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -1758,6 +1782,7 @@ public class MainUtil {
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.ICE_SPIKE)
                 || state.is(ModBlocks.STAND_FIRE)
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)

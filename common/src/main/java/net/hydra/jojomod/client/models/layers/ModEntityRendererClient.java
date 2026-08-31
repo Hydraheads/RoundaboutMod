@@ -63,8 +63,10 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation POLLINATION_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pollination_transfer"), "main");
     public static final ModelLayerLocation BLAZE_TRANSFER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "blaze_transfer"), "main");
     public static final ModelLayerLocation BLACK_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"), "main");
-    public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation BEACH_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath"), "main");
+    public static final ModelLayerLocation SANTA_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath"), "main");
+    public static final ModelLayerLocation COWBOY_SABBATH_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"), "main");
+    public static final ModelLayerLocation PEARL_JAM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam"), "main");
     public static final ModelLayerLocation JUSTICE_PIRATE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "justice_pirate"), "main");
     public static final ModelLayerLocation DARK_MIRAGE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage"), "main");
     public static final ModelLayerLocation TUSK_A1_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_a1"), "main");
@@ -76,9 +78,10 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation DIVER_DOWN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "diver_down"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier"), "main");
+    public static final ModelLayerLocation SILVER_CHARIOT_RAPIER_PLATFORM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform"), "main");
     public static final ModelLayerLocation HARPOON_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
     //public static final ModelLayerLocation CHESSBOARD_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "chessboard"), "main");
-    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_normal"), "main");
+    public static final ModelLayerLocation HAND_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_block"), "main");
     public static final ModelLayerLocation HAND_SLIM_BLOCK_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "hand_slim"), "main");
     
     public static final ModelLayerLocation BLADED_BOWLER_HAT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "bladed_bowler_hat"), "main");

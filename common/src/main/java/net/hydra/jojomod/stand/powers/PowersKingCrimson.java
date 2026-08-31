@@ -14,6 +14,7 @@ import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.BloodSplatterEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
@@ -416,7 +417,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
     public Vec3 predictIdle(LivingEntity liv, int ticks) {
         if (!canPredictIdles() || !isGravityNormal(liv) ||
                 (liv instanceof TamableAnimal ti && (ti.isTame() || ti.isInSittingPose()))
-        || liv instanceof FallenMob || liv instanceof BaseMinion
+        || liv instanceof FallenMob || liv instanceof BaseMinion || liv instanceof StrayCatEntity ||
+                (liv instanceof Mob mb && mb.isNoAi())
         ){
             return liv.position();
         }
@@ -941,7 +943,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
 
             BlockState state = player.level().getBlockState(pos);
 
-            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+            if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.ICE_SPIKE) || state.is(ModBlocks.COLD_AIR)
                     || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
                 inTimeLockBlock = true;
                 break;
@@ -2451,10 +2453,10 @@ public class PowersKingCrimson extends BlockGrabPreset {
     }
     int skipRange = 50;
     public int getSkipRange(){
-        return 50;
+        return skipRange;
     }
     public int getSkipBonusRange(){
-        return getSkipRange()+25;
+        return getSkipRange()+8;
     }
     public final void packetNearby2() {
         if (!this.self.level().isClientSide) {
@@ -3339,7 +3341,7 @@ public class PowersKingCrimson extends BlockGrabPreset {
                     double rangeSqr = range * range;
                     for (ServerPlayer player : ((ServerLevel) self.level()).players()) {
                         if (player.getId() != self.getId() && player.distanceToSqr(self) <= rangeSqr) {
-                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 48;
+                            ((StandUser)player).roundabout$getStandPowers().softenTicks = 68;
                         }
                     }
                 }
@@ -4129,7 +4131,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+            if (entity instanceof KingCrimsonCloneEntity &&
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.1F));
+            } else {
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.35F));
+            }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(5));
         }
@@ -4137,7 +4144,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
     @Override
     public float getHeavyPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+            if (entity instanceof KingCrimsonCloneEntity &&
+                    ClientNetworking.getAppropriateConfig().kingCrimsonSettings.nerfedTEDamage){
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+            } else {
+                return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.89F));
+            }
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(6F));
         }

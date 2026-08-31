@@ -985,6 +985,12 @@ public abstract class EntityAndData implements IEntityAndData {
     private Entity rdbt$nearAlt = null;
 
     @Unique
+    @Override
+    public Entity rdbt$getNearAlt(){
+        return rdbt$nearAlt;
+    }
+
+    @Unique
     public void rdbt$setAltCheckCooldown(int ticks) {
         rdbt$altCheckCooldown = ticks;
     }
@@ -1034,7 +1040,8 @@ public abstract class EntityAndData implements IEntityAndData {
                     || alt.level() != self.level()
                     || !MainUtil.canActuallyHitInvolved2(self,alt)
                     || PowerTypes.isInADifferentExistenceNoTE(self,alt)
-                    || self.distanceToSqr(alt) > 121.0D) {
+                    || (alt instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                    || self.distanceTo(alt) >= 9) {
 
                 rdbt$nearAlt = null;
 
@@ -1070,7 +1077,7 @@ public abstract class EntityAndData implements IEntityAndData {
             rdbt$nearAlt = alt;
 
             MainUtil.playSoundIfPossible(self,self.level(),null, self.blockPosition(),
-                    ModSounds.DING_EVENT, SoundSource.PLAYERS, 1.0F, 0.8F);
+                    ModSounds.D4C_FUSION_START_EVENT, SoundSource.PLAYERS, 3.0F, 1F+((float)(Math.random()*0.05F)));
 
             // Immediately run the effect rather than
             // waiting until the next tick.

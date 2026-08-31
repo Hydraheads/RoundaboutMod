@@ -5,7 +5,9 @@ import net.hydra.jojomod.access.PenetratableWithProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.UnburnableProjectile;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.Direction;
@@ -117,7 +119,7 @@ public class PHCapsuleEntity extends ThrowableProjectile implements UnburnablePr
     public static float eHeight=0.4f;
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.fixed(eWidth, eHeight); // Width, Height
+        return EntityDimensions.fixed(eWidth, eHeight);
     }
     @Override
     public boolean canBeHitByProjectile() {
@@ -139,6 +141,7 @@ public class PHCapsuleEntity extends ThrowableProjectile implements UnburnablePr
     protected boolean shouldBurn() {
         return false;
     }
+
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         popBubble();
@@ -148,13 +151,11 @@ public class PHCapsuleEntity extends ThrowableProjectile implements UnburnablePr
         popBubble();
     }
     public void popBubble(){
-        //this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
-                //SoundSource.PLAYERS, 2F, (float)(0.98+(Math.random()*0.04)));
-        //if (!this.level().isClientSide()){
-            //((ServerLevel) this.level()).sendParticles(ModParticles.BUBBLE_POP,
-                    //this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
-                    //1, 0, 0,0, 0.015);
-        //}
+        if (!this.level().isClientSide() && this.standUser != null) {
+            if (((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
+                ph.onPodLanded(this.position());
+            }
+        }
         this.discard();
     }
     @Override

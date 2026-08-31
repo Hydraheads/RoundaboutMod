@@ -475,6 +475,8 @@ public class StandIcons {
 
     public static final ResourceLocation BITES_THE_DUST_PLANTED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_planted.png");
+    public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/killer_queen/bites_the_dust_target.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
@@ -517,6 +519,10 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/offhand_weapon.png");
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/rapier_slash.png");
+
+
+    public static final ResourceLocation D4C_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/d4c/stand_ledge_grab.png");
 
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
@@ -792,6 +798,9 @@ public class StandIcons {
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");
     public static final ResourceLocation D4C_CLONE_SWAP = Roundabout.location("textures/gui/icons/d4c/clone_swap.png");
     public static final ResourceLocation D4C_MELT_DODGE = Roundabout.location("textures/gui/icons/d4c/melt_dodge.png");
+    public static final ResourceLocation D4C_BLOCK_COPY = Roundabout.location("textures/gui/icons/d4c/block_copy.png");
+    public static final ResourceLocation D4C_BLOCK_MERGE = Roundabout.location("textures/gui/icons/d4c/block_merge.png");
+    public static final ResourceLocation D4C_BLOCK_RELEASE = Roundabout.location("textures/gui/icons/d4c/block_release.png");
     public static final ResourceLocation D4C_DIMENSION_HOP = Roundabout.location("textures/gui/icons/d4c/dimension_hop.png");
     public static final ResourceLocation D4C_DIMENSION_HOP_2 = Roundabout.location("textures/gui/icons/d4c/dimension_hop_2.png");
     public static final ResourceLocation D4C_DIMENSION_RETURN = Roundabout.location("textures/gui/icons/d4c/dimension_hop_return.png");
@@ -862,6 +871,7 @@ public class StandIcons {
     public static final ResourceLocation PH_SWITCH = Roundabout.location("textures/gui/icons/purple_haze/switch.png");
     public static final ResourceLocation PH_FORWARD_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/forwardbarrage.png");
     public static final ResourceLocation PH_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/punch.png");
+    public static final ResourceLocation VIRUS_SPIT = Roundabout.location("textures/gui/icons/purple_haze/virus_spit.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

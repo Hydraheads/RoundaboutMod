@@ -15,6 +15,8 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
+import org.joml.Vector3f;
 
 public class SilverChariotModel<T extends SilverChariotEntity> extends StandModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -43,6 +45,11 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 	private final ModelPart left_leg;
 	private final ModelPart upper_left_leg;
 	private final ModelPart lower_left_leg;
+
+	private final StandPowers power = new PowersSilverChariot(null);
+	private final Vector3f animationVectorCache = new Vector3f();
+	public float controlHeadYaw;
+	public float controlHeadPitch;
 
 	public SilverChariotModel(ModelPart root) {
 		this.stand = root.getChild("stand");
@@ -185,8 +192,6 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		return this.head2;
 	}
 
-	StandPowers Power = new PowersSilverChariot(null);
-
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
@@ -207,5 +212,29 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 	@Override
 	public ModelPart root() {
 		return stand;
+	}
+
+	@Override
+	public void rotateHead(T entity, ModelPart head, float tickDelta) {
+		// super.rotateHead(entity, head, tickDelta);
+		if (!entity.isRemoteControlled()) {
+			super.rotateHead(entity, head, tickDelta);
+			return;
+		}
+		float pitch = Mth.clamp(controlHeadPitch, -90.0F, 90.0F) * Mth.DEG_TO_RAD;
+		float yaw = Mth.clamp(Mth.wrapDegrees(controlHeadYaw), -85.0F, 85.0F) * Mth.DEG_TO_RAD;
+		setHeadRotations(pitch, yaw);
+	}
+
+	@Override
+	public void rotateBody(T entity, ModelPart body, float tickDelta) {
+		// super.rotateBody(entity, body, tickDelta);
+		if (!entity.isRemoteControlled()) {
+			super.rotateBody(entity, body, tickDelta);
+			return;
+		}
+		entity.setBodyRotationX(0.0F);
+		entity.setBodyRotationY(0.0F);
+		setBodyRotations(0.0F, 0.0F);
 	}
 }

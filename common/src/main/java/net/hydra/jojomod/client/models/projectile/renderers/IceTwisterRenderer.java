@@ -5,20 +5,16 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.IceTwisterModel;
-import net.hydra.jojomod.client.models.projectile.UVModel;
 import net.hydra.jojomod.client.models.visages.parts.RipperEyesAnimation;
-import net.hydra.jojomod.entity.projectile.IceTwisterEntity;
-import net.hydra.jojomod.entity.projectile.UltravioletProjectile;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {

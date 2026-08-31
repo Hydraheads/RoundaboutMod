@@ -11,6 +11,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -22,7 +25,6 @@ import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
 import net.hydra.jojomod.entity.visages.mobs.*;
-import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.zombie_minion.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -617,6 +619,20 @@ public class FabricEntities {
                             sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":beach_sabbath")
             );
 
+    public static final EntityType<BlackSantaSabbathEntity> SANTA_SABBATH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath"),
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).
+                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":santa_sabbath")
+            );
+    public static final EntityType<CowboySabbathEntity> COWBOY_SABBATH =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"),
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).
+                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cowboy_sabbath")
+            );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -692,7 +708,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
                         EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot")
+                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_rapier")
                 );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
@@ -738,6 +754,14 @@ public class FabricEntities {
                             sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions)
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
+            );
+
+    public static final EntityType<FallingBannerEntity> FALLING_BANNER =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "falling_banner"),
+                    EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC).
+                            sized(FallingBannerEntity.xwidth, FallingBannerEntity.xheight).clientTrackingRange(10).build(Roundabout.MOD_ID+":falling_banner")
             );
     public static final EntityType<StepRuleEntity> STEP_RULE =
             Registry.register(
@@ -1119,6 +1143,13 @@ public class FabricEntities {
                     EntityType.Builder.of(MoldSporesEntity::new, MobCategory.CREATURE).
                             sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":molds_pore")
             );
+    public static final EntityType<PurpleSmokeEntity> PURPLE_SMOKE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "purple_smoke"),
+                    EntityType.Builder.of(PurpleSmokeEntity::new, MobCategory.CREATURE).
+                            sized(0.01f, 0.01f).clientTrackingRange(50).build(Roundabout.MOD_ID+":purple_smoke")
+            );
     public static final EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1170,6 +1201,8 @@ public class FabricEntities {
                 ModEntities.BLAZE_TRANSFER = BLAZE_TRANSFER;
                 ModEntities.BLACK_SABBATH = BLACK_SABBATH;
                 ModEntities.BEACH_SABBATH = BEACH_SABBATH;
+                ModEntities.SANTA_SABBATH = SANTA_SABBATH;
+                ModEntities.COWBOY_SABBATH = COWBOY_SABBATH;
                 ModEntities.WALKING_HEART = WALKING_HEART;
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
@@ -1201,6 +1234,7 @@ public class FabricEntities {
                 ModEntities.LEFT_SEPERATED_ARM = LEFT_SEPERATED_ARM;
                 ModEntities.LEFT_SEPERATED_ARM_SLIM = LEFT_SEPERATED_ARM_SLIM;
                 ModEntities.MOLD_SPORES = MOLD_SPORE;
+                ModEntities.PURPLE_SMOKE = PURPLE_SMOKE;
                 ModEntities.STAND_FIREBALL = STAND_FIREBALL;
                 ModEntities.EVIL_AURA_PROJECTILE = EVIL_AURA_PROJECTILE;
                 ModEntities.RIPPER_EYES_PROJECTILE = RIPPER_EYES_PROJECTILE;
@@ -1275,6 +1309,7 @@ public class FabricEntities {
                 ModEntities.ALEX_NPC = ALEX_NPC;
                 ModEntities.MODIFIED_NPC = MODIFIED_NPC;
                 ModEntities.FOG_CLONE = FOG_CLONE;
+        ModEntities.FALLING_BANNER = FALLING_BANNER;
                 ModEntities.KING_CRIMSON_CLONE = KING_CRIMSON_CLONE;
                 ModEntities.D4C_CLONE = D4C_CLONE;
                 ModEntities.KING_CRIMSON_PROJECTION = KING_CRIMSON_PROJECTION;
@@ -1376,8 +1411,10 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(MANHATTAN_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(POLLINATION_TRANSFER, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(BLAZE_TRANSFER, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(BLACK_SABBATH, StandEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(BEACH_SABBATH, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BLACK_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(BEACH_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(SANTA_SABBATH, BlackSabbathEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(COWBOY_SABBATH, BlackSabbathEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(WALKING_HEART, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DIVER_DOWN, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
@@ -1394,6 +1431,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LEFT_SEPERATED_ARM_SLIM, SeperatedArmEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(MOLD_SPORE, MoldSporesEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageEntity.createStandAttributes());

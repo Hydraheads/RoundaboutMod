@@ -55,13 +55,13 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
 
     public static int itemSkin(ItemStack stack) {
         return stack.hasTag() ? Mth.clamp(stack.getTag().getInt(SKIN_TAG),
-                WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.GOLD_TRIMMED_SKIN) : WhitesnakeEntity.ANIME_SKIN;
+                WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.SANDSNAKE_SKIN) : WhitesnakeEntity.ANIME_SKIN;
     }
 
     private static ItemStack createSkinItem(int skin) {
         ItemStack stack = new ItemStack(ModItems.HALLUCINATORY_ACID_GLOB);
         stack.getOrCreateTag().putInt(SKIN_TAG, Mth.clamp(skin,
-                WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.GOLD_TRIMMED_SKIN));
+                WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.SANDSNAKE_SKIN));
         return stack;
     }
 
@@ -262,7 +262,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     private static int ownerSkin(Entity owner) {
         if (owner instanceof StandUser standUser) {
             return Mth.clamp(standUser.roundabout$getStandSkin(),
-                    WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.GOLD_TRIMMED_SKIN);
+                    WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.SANDSNAKE_SKIN);
         }
         return WhitesnakeEntity.ANIME_SKIN;
     }

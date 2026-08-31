@@ -8,6 +8,9 @@ import net.hydra.jojomod.entity.mobs.TerrierEntity;
 import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
+import net.hydra.jojomod.entity.objects.FallingBannerEntity;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.objects.IceTwisterEntity;
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
@@ -80,6 +83,8 @@ public class ModEntities {
     public static EntityType<BlazeTransferEntity> BLAZE_TRANSFER;
     public static EntityType<BlackSabbathEntity> BLACK_SABBATH;
     public static EntityType<BeachSabbathEntity> BEACH_SABBATH;
+    public static EntityType<BlackSantaSabbathEntity> SANTA_SABBATH;
+    public static EntityType<CowboySabbathEntity> COWBOY_SABBATH;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -99,6 +104,7 @@ public class ModEntities {
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
+    public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
@@ -149,6 +155,7 @@ public class ModEntities {
     public static EntityType<TuskNailEntity> TUSK_NAIL;
     public static EntityType<TuskHoleEntity> TUSK_HOLE;
     public static EntityType<MoldSporesEntity> MOLD_SPORES;
+    public static EntityType<PurpleSmokeEntity> PURPLE_SMOKE;
     public static EntityType<StrayCatAirBubble> STRAY_CAT_AIRBUBBLE;
     public static EntityType<PHCapsuleEntity> PH_CAPSULE;
 
@@ -195,6 +202,7 @@ public class ModEntities {
 
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<StepRuleEntity> STEP_RULE;
+    public static EntityType<FallingBannerEntity> FALLING_BANNER;
 
     public static EntityType<StrayCatEntity> STRAY_CAT;
 

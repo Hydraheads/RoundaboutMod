@@ -19,6 +19,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -156,6 +157,9 @@ public class AnubisItem extends Item {
                 pos.y + LE.getEyeHeight(),
                 pos.z,
                 30, 0, 0, 0, 0.4);
+        entities.removeIf(e -> {
+            return !(e instanceof NeutralMob || e instanceof Monster);
+        });
         return entities.size();
     }
 }

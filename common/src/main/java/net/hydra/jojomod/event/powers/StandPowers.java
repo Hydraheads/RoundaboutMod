@@ -18,7 +18,7 @@ import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
@@ -435,6 +435,10 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**When you eat food, intercept or run code based off of it*/
     public void eatEffectIntercept(ItemStack $$0, Level $$1, LivingEntity $$2){
+    }
+
+    public boolean phaseThroughProjectile(Entity ent){
+        return false;
     }
     /**When you are about to be hit by a projectile, intercept or run code based off of it, or potentially cancel it
      * Currently it supports abstract arrows but this can be expanded*/
@@ -2017,8 +2021,8 @@ public class StandPowers extends AbilityScapeBasis {
                     if (activePower != PowerIndex.VAULT){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
-                } else if (animationType == MINING) {
-                    if (activePower != PowerIndex.MINING){
+                } else if (animationType == MELT_DODGE_ANIM) {
+                    if (activePower != PowerIndex.POWER_3_BLOCK){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
                 }

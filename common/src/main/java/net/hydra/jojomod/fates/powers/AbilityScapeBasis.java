@@ -34,7 +34,7 @@ import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -413,7 +413,8 @@ public class AbilityScapeBasis {
             PUNCH_RIGHT = 31,
             GUARD = 32,
             VAULT = 33,
-            MINING = 34;
+            MINING = 34,
+            MELT_DODGE_ANIM = 35;
 
     public float guardMod(){
         return 0.2f;

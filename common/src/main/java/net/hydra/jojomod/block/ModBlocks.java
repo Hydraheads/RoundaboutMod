@@ -1,5 +1,8 @@
 package net.hydra.jojomod.block;
 
+import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlock;
+import net.hydra.jojomod.block.handBlock.HandBlockEntity;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -129,6 +132,7 @@ public class ModBlocks {
     public static Block CEILING_LIGHT;
     public static Block MIRROR;
     public static Block STEREO;
+    public static Block HAND_BLOCK;
     public static Block FANCY_LIGHTER_BLOCK;
 
     public static Block MINING_ALERT_BLOCK;
@@ -158,7 +162,6 @@ public class ModBlocks {
 
     public static Block CLIMBING_WIRE;
 
-
     public static Block FROZEN_DIRT;
     public static Block FROZEN_STONE;
     public static Block FROZEN_COBBLESTONE;
@@ -186,6 +189,7 @@ public class ModBlocks {
     public static Block WHITE_ALBUM_ICE_WALL_BLOCK;
     public static Block WHITE_ALBUM_ICE_SLAB;
     public static Block STICKY_ICE;
+    public static Block ICE_SPIKE;
 
     public static Block EQUIPPABLE_STONE_MASK_BLOCK;
     public static Block BLOODY_STONE_MASK_BLOCK;
@@ -211,6 +215,8 @@ public class ModBlocks {
     public static BlockEntityType<FogTrapBlockEntity> FOG_TRAP_BLOCK_ENTITY;
     public static BlockEntityType<ProtectionBlockEntity> PROTECTION_BLOCK_ENTITY;
     public static BlockEntityType<HallucinatoryAcidBlockEntity> HALLUCINATORY_ACID_BLOCK_ENTITY;
+    public static BlockEntityType<HandBlockEntity> HAND_BLOCK_ENTITY;
+
     //public static BlockEntityType<ChessBoardBlockEntity> CHESSBOARD_BLOCK_ENTITY;
 
     public static Block WHITE_ALBUM_ICE_BLOCK_PROPERTIES =
@@ -231,6 +237,13 @@ public class ModBlocks {
                         return 1;
                     }).
                     randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).replaceable().
+                    noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static Block ICE_SPIKE_PROPERTIES =
+            new IceSpikeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).friction(0.98F)
+                    .lightLevel((L) -> {
+                        return 1;
+                    }).
+                    randomTicks().friction(0.98F).strength(0.5F).forceSolidOff().sound(SoundType.GLASS).
                     noCollission().noOcclusion().pushReaction(PushReaction.DESTROY));
 
     public static Block OASIS_MUD_BLOCK_PROPERTIES =
@@ -785,6 +798,14 @@ public class ModBlocks {
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).
                     instrument(NoteBlockInstrument.BASS).strength(1.0F, 6.0F));
+    public static HandBlock HAND_PROPERTIES = new HandBlock(
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE).
+                    instrument(NoteBlockInstrument.BANJO)
+                    .strength(0.3F, 0.4F)
+                    .sound(SoundType.STONE)
+    );
+
     public static MiningAlertBlock MINING_ALERT_BLOCK_PROPERTIES = new MiningAlertBlock(
 
             BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).pushReaction(PushReaction.DESTROY).lightLevel((p_152607_) -> {

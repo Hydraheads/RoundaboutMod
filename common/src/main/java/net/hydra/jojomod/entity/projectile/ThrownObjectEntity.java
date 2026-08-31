@@ -1,19 +1,19 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.event.powers.disc.MusicDiscController;
+import net.hydra.jojomod.event.powers.whitesnake.disc.MusicDiscController;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.HeatUtil;
@@ -573,20 +573,12 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             }
             for (int i = 0; i < length; i++) {
                 BlockPos pos = origin.relative(dir, i);
-                InteractionResult result = ((BlockItem) ModBlocks.CLIMBING_WIRE.asItem()).place(new SafePlaceContext(
-                        this.level(),
-                        P,
-                        pos,
-                        dir,
-                        ModBlocks.CLIMBING_WIRE.asItem().getDefaultInstance(),
-                        dir
-                ));
-                if (result.equals(InteractionResult.CONSUME)) {
-                    this.level().setBlock(pos,
+
+                if (this.level().getBlockState(pos).canBeReplaced()) {
+                    this.level().setBlockAndUpdate(pos,
                             ModBlocks.CLIMBING_WIRE.defaultBlockState()
-                                    .setValue(ClimbingWireBlock.OPEN,dir == Direction.DOWN)
-                                    .setValue(HorizontalDirectionalBlock.FACING,$$0.getDirection()),
-                            5
+                                    .setValue(ClimbingWireBlock.OPEN, dir == Direction.DOWN)
+                                    .setValue(HorizontalDirectionalBlock.FACING, $$0.getDirection())
                     );
                 }
 

@@ -35,7 +35,7 @@ public interface IEntityAndData {
     void rdbt$setOriginWorld(byte lol);
     byte rdbt$getOriginWorld();
     void rdbt$setTicksUntilGone(int lol);
-
+    Entity rdbt$getNearAlt();
     boolean rdbt$getSharedFlag(int flag);
     float roundabout$getStepHeight();
 

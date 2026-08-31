@@ -4,15 +4,22 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.RoundaboutLoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.mixin.PlayerEntity;
+import net.hydra.jojomod.event.ModEffects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.hydra.jojomod.mixin.justice.JusticeCreeper;
 import net.hydra.jojomod.mixin.justice.JusticeZombie;
-import net.hydra.jojomod.stand.powers.PowersGreenDay;
+import net.hydra.jojomod.stand.powers.PowersPurpleHaze;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.Holder;
@@ -32,10 +39,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,11 +53,12 @@ public class PurpleSmokeEntity extends StandEntity {
     public float range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldDefaultRange;
     public int lifetime = 600;
     public int lifetime_add = 150;
+    public int totalDuration = 0;
 
     public PurpleSmokeEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
-
+    public int ticksAlive = 0;
     @Override
     public void tick() {
 
@@ -57,14 +68,19 @@ public class PurpleSmokeEntity extends StandEntity {
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser) user;
         if (StandUU != null) {
-            if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
+            if (!(StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze)) {
+                this.discard();
+            } else if (((PowersPurpleHaze) StandUU.roundabout$getStandPowers()).purpleHazeFieldGone) {
                 this.discard();
             }
         }
         lifetime--;
+        ticksAlive++;
+        if (!client && !isDistortionMode()) {
+            lifetime -= getLightDecayAmount();
+        }
         if (lifetime < 1) {
             this.discard();
-
         }
 
         if (user == null) {
@@ -86,13 +102,9 @@ public class PurpleSmokeEntity extends StandEntity {
             this.setDeltaMovement(0, -0.2, 0);
         }
         if (!client) {
-            if (!onGround()) {
-                range += (float) (0.09 * ((double) ClientNetworking.getAppropriateConfig().greenDaySettings.moldGrowthRate / 100));
-                //this.setDeltaMovement(0,-0.4,0);
-            }
-            if (range > ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize) {
-                range = ClientNetworking.getAppropriateConfig().greenDaySettings.moldMaxSize;
-            }
+            float expansionProgress = Math.min(1.0F, (float) ticksAlive / 60);
+            range = 1.0F + (8.0F - 1.0F) * expansionProgress;
+            range = Math.max(range, 1.0F);
         }
         List<Entity> damages = MainUtil.genHitbox(
                 this.level(),
@@ -104,121 +116,246 @@ public class PurpleSmokeEntity extends StandEntity {
                 range
         );
 
-        if (client) {
+        /*if (client) {
             Roundabout.LOGGER.info(
                     "[PURPLE DEBUG] CLIENT smoke tick | range=" + range
                             + " | entities found=" + damages.size()
                             + " | user=" + this.getUser()
             );
-        }
+        }*/
 
         for (int j = 0; j < damages.size(); j++) {
-
             if (Objects.nonNull(this.getUser())) {
-
                 Entity entity = damages.get(j);
-
                 if (entity instanceof LivingEntity) {
-                    ((StandUser) entity).SetInPurpleHazeTicks(5);
-                }
-                if (entity instanceof LivingEntity) {
-                    ((StandUser) entity).SetInDistortionHazeTicks(5);
+                    if (isDistortionMode()) {
+                        ((StandUser) entity).SetInDistortionHazeTicks(5);
+                    } else {
+                        ((StandUser) entity).SetInPurpleHazeTicks(5);
+                    }
                 }
             }
         }
         if (!client) {
             tickeffect();
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    (int) (((int) range ^ 3) * 0.5) + 1, range / 2, range / 2, range / 2, 0.005);
+            tickBlockDecay();
 
-            ((ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F), 2f),
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    (int) (((int) range ^ 3) * 0.125) + 1, range / 2, range / 2, range / 2, 0.005);
+            byte skin = 0;
+            if (user != null && StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
+                skin = ph.getStandSkin();
+            }
+            spawnFieldParticles(skin);
+
             S2CPacketUtil.sync_mold_duration(lifetime, this.getId());
             S2CPacketUtil.sync_mold_range(range, this.getId());
         }
 
-        if(client){
+        /*if(client){
             Roundabout.LOGGER.info("ClientRange= " + range);
         }else{
             Roundabout.LOGGER.info("ServerRange= " + range);
-        }
+        }*/
         super.tick();
     }
+    private int getLightDecayAmount() {
+        if (!(this.level() instanceof ServerLevel sl)) return 0;
+
+        int light = sl.getMaxLocalRawBrightness(this.blockPosition());
 
 
-    public void tickeffect() {
-        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
-        for (int j = 0; j < damages.size(); j++) {
-            if (Objects.nonNull(this.getUser())) {
-                Entity entity = damages.get(j);
+        int threshold = 7; // 7 its pretty dark so it could be ok as the minimum
+        if (light <= threshold) {
+            return 0;
+        }
 
 
-                //boolean down = previousYpos > entity.getY() + 0.1;
+        return Mth.floor((light - threshold) / 4.0F); // if we increment the divisor we cn make it a softer scaling
+    }
+    private void tickBlockDecay() {
+        if (!(this.level() instanceof ServerLevel sl)) return;
+        if (range < 1.0F) return;
 
-                boolean isStand = (entity instanceof StandEntity);
-                boolean isBoss = (MainUtil.isBossMob(entity));
+        int r = Mth.ceil(range);
+        if (r <= 0) return;
 
-                if (entity instanceof LivingEntity) {
+        BlockPos center = this.blockPosition();
 
-                    if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
-                            && !((StandUser) entity).roundabout$isBubbleEncased()
-                            && !isStand
-                            && !(PowerTypes.isInADifferentExistence(entity,this))
-                            && !isBoss
-                            && ((StandUser) entity).GoingDown()
-                            && !(entity instanceof FallenMob)
-                            && ((StandUser) entity).getJumpImmunityTicks() < 1
-                            && !entity.equals(User)) {
-                        if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
+        int attempts = Mth.clamp((int) (range * 8F), 15, 120);
 
-                            double width = entity.getBbWidth() / 2;
-                            double height = entity.getBbHeight() / 2;
-                            ((ServerLevel) level()).sendParticles(ModParticles.MOLD
-                                    , entity.getX(),
-                                    (entity.getY() + height / 2),
-                                    entity.getZ(),
-                                    13, width, height, width, 0)
-                            ;
+        for (int i = 0; i < attempts; i++) {
+            int dx = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+            int dy = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+            int dz = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
 
+            BlockPos pos = center.offset(dx, dy, dz);
 
-                            //((StandUser) entity).DoMoldTick();
-                            // if(((LivingEntity) entity).getHealth() <= 4){
-                            //     lifetime += 200;
-                            //     range += 4;
-                            //}
-                            double damage = 0;
-                            if (MainUtil.getReducedDamage(entity)) {
-                                damage = 4;
-                            } else {
-                                damage = 8;
-                            }
-                            damage = (int) (damage * ((((StandUser) entity).getStaringYPos() - entity.getY()) * 0.6F));
-                            if (((StandUser) entity).getStaringYPos() - entity.getY() < 1) {
-                                damage = damage * 0.25;
-                            }
-                            entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
-                            if (!entity.isAlive()) {
-                                range += 2;
-                                if (lifetime_add > 0) {
-                                    lifetime += lifetime_add;
-                                    lifetime_add -= 10;
-                                }
-                                entity.discard();
-                            }
-                            if (Math.random() < 0.2) {
-                                ((StandUser) User).roundabout$getStandPowers().addEXP(1);
-                            }
-                        }
-                    }
+            double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (dist > range) continue;
+
+            BlockState state = sl.getBlockState(pos);
+            BlockState decayed = getDecayedState(state);
+
+            if (decayed != null) {
+                sl.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        20, 0.3, 0.3, 0.3, 0.08);
+
+                sl.setBlockAndUpdate(pos, decayed);
+            }
+        }
+    }
+
+    @Nullable
+    private BlockState getDecayedState(BlockState state) {
+        Block block = state.getBlock();
+
+        if (block == Blocks.GRASS_BLOCK || block == Blocks.MYCELIUM || block == Blocks.PODZOL || block == Blocks.FARMLAND || block == Blocks.ROOTED_DIRT) {
+            if (Roundabout.RANDOM.nextFloat() < 0.45F) {
+                return Blocks.DIRT.defaultBlockState();
+            }
+            return null;
+        }
+
+        if (block instanceof FlowerBlock
+                || block instanceof TallGrassBlock
+                || block instanceof DoublePlantBlock
+                || block instanceof MushroomBlock
+                || block == Blocks.SUGAR_CANE
+                || block == Blocks.FERN
+                || block == Blocks.LARGE_FERN
+                || block == Blocks.DEAD_BUSH
+                || block == Blocks.BONE_BLOCK
+                || block == Blocks.SNIFFER_EGG
+                || block == Blocks.TURTLE_EGG
+                || block == Blocks.MANGROVE_ROOTS
+                || block == Blocks.MOSS_BLOCK
+                || block == Blocks.MOSS_CARPET
+                || block instanceof VineBlock
+                || block instanceof RootsBlock
+                || block == Blocks.BIG_DRIPLEAF
+                || block == Blocks.BIG_DRIPLEAF_STEM
+                || block == Blocks.SMALL_DRIPLEAF
+                || block == Blocks.LILY_PAD
+                || block instanceof CropBlock
+                || block instanceof SeaPickleBlock
+                || block instanceof KelpPlantBlock
+                || block instanceof KelpBlock) {
+            if(block != Blocks.WITHER_ROSE){
+            if (Roundabout.RANDOM.nextFloat() < 0.6F) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return null;
+            }
+        }
+
+        if (block instanceof LeavesBlock || block == Blocks.WARPED_WART_BLOCK|| block == Blocks.NETHER_WART_BLOCK || block == Blocks.SHROOMLIGHT) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.AIR.defaultBlockState();
+            }
+            return null;
+        }
+        if (block == Blocks.DIRT_PATH) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.FARMLAND.defaultBlockState();
+            }
+            return null;
+        }
+        if (block == Blocks.CRYING_OBSIDIAN) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.OBSIDIAN.defaultBlockState();
+            }
+            return null;
+        }
+        if (block == Blocks.WARPED_NYLIUM|| block == Blocks.CRIMSON_NYLIUM) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.NETHERRACK.defaultBlockState();
+            }
+            return null;
+        }
+        if (block == Blocks.MUDDY_MANGROVE_ROOTS) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.MUD.defaultBlockState();
+            }
+            return null;
+        }
+        if (block instanceof SaplingBlock) {
+            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
+                return Blocks.DEAD_BUSH.defaultBlockState();
+            }
+            return null;
+        }
+
+        return null;
+    }
+    private void spawnFieldParticles(byte skin) {
+        if (!(this.level() instanceof ServerLevel sl)) return;
+        double x = this.getX();
+        double y = this.getY() + 1.0;
+        double z = this.getZ();
+
+        switch (skin) {
+            case PurpleHazeEntity.BLAZING_HAZE -> {
+                if (isDistortionMode()) {
+                    sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
+                } else {
+                    sl.sendParticles(ParticleTypes.LARGE_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
                 }
             }
+            case PurpleHazeEntity.GREEN -> {
+                sl.sendParticles(ParticleTypes.SNEEZE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
+                if (isDistortionMode()) {
+                    sl.sendParticles(new DustParticleOptions(new Vector3f(0.0F, 0.0F, 0.0F), 1.5F),
+                            x, y, z, 45, range / 2, 1.5, range / 2, 0.02);
+                }
+            }
+            case PurpleHazeEntity.NETHERITE -> {
+                sl.sendParticles(ParticleTypes.SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
+                if (isDistortionMode()) {
+                    sl.sendParticles(new DustParticleOptions(new Vector3f(0.0F, 0.0F, 0.0F), 1.5F),
+                            x, y, z, 45, range / 2, 1.5, range / 2, 0.02);
+                }
+            }
+            default -> {
+                if (isDistortionMode()) {
+                    sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
+                } else {
+                    sl.sendParticles(ModParticles.PURPLE_HAZE_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
+                }
+            }
+        }
+    }
+    private final java.util.Set<Integer> expGrantedTo = new java.util.HashSet<>();
+    public void tickeffect() {
+        List<Entity> damages = MainUtil.genHitbox(this.level(), this.getX(), this.getY(), this.getZ(), range, range, range);
+        LivingEntity user = this.getUser();
+        if (user == null) return;
 
+        int elapsedTicks = totalDuration - lifetime;
+        if (elapsedTicks < 40) return;
+
+        for (Entity entity : damages) {
+            if (!(entity instanceof LivingEntity living)) continue;
+
+            int effectDuration = living instanceof Player ? 200 : 300;
+            boolean isSelf = living == user;
+
+            if (isDistortionMode()) {
+                boolean alreadyHasVirus = living.hasEffect(ModEffects.DISTORTION_VIRUS);
+                living.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, effectDuration));
+                ((StandUser) living).SetInDistortionHazeTicks(5);
+
+                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
+                    ((StandUser) user).roundabout$getStandPowers().addEXP(2);
+                }
+            } else {
+                boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
+                ((StandUser) living).SetInPurpleHazeTicks(5);
+                living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 300));
+
+                if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
+                    ((StandUser) user).roundabout$getStandPowers().addEXP(3);
+                }
+            }
         }
     }
 
@@ -240,8 +377,20 @@ public class PurpleSmokeEntity extends StandEntity {
      */
     protected static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SeperatedLegsEntity.class,
             EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> DISTORTION_MODE =
+            SynchedEntityData.defineId(PurpleSmokeEntity.class, EntityDataSerializers.BOOLEAN);
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DISTORTION_MODE, false);
+    }
+    public boolean isDistortionMode() {
+        return this.entityData.get(DISTORTION_MODE);
+    }
 
-
+    public void setDistortionMode(boolean value) {
+        this.entityData.set(DISTORTION_MODE, value);
+    }
     @Override
     public boolean hasNoPhysics() {
         return false;

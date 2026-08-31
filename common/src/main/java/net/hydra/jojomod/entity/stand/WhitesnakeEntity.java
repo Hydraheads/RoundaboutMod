@@ -8,7 +8,7 @@ import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
-import net.hydra.jojomod.stand.powers.WhitesnakeControlInventory;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,11 +53,12 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public static final byte SILVER_SKIN = 9;
     public static final byte COTTON_CANDY_SKIN = 10;
     public static final byte ASBR_SKIN = 11;
-    public static final byte JOJOVELLER_SKIN = 12;
+    public static final byte AGOGO_SKIN = 12;
     public static final byte DARK_SKIN = 13;
     public static final byte SOUR_CANDY_SKIN = 14;
     public static final byte EDGY_GOLD_SKIN = 15;
     public static final byte GOLD_TRIMMED_SKIN = 16;
+    public static final byte SANDSNAKE_SKIN = 17;
     public static final byte CHOP_ATTACK = 82;
     public static final byte CHOP_CHARGED = 83;
     public static final byte DISC_STEAL_WINDUP = 88;
@@ -443,7 +444,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         LivingEntity user = getUser();
         boolean hoverEnabled = controlled && user != null
                 && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
-                && (powers.isMeltingMode() || ClientNetworking.getAppropriateConfig().whitesnakeSettings.controlModeCanHover);
+                && powers.isMeltingMode();
         boolean hovering = hoverEnabled && isMeltingHovering() && getMeltingHoverCharge() > 0;
         if (isMeltingHovering() != hovering) entityData.set(MELTING_HOVERING, hovering);
         int charge = getMeltingHoverCharge();

@@ -1863,9 +1863,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
 
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_SKIN = SynchedEntityData.defineId(LivingEntity.class,
-            EntityDataSerializers.BYTE);
-    @Unique
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STAND_ANIMATION = SynchedEntityData.defineId(LivingEntity.class,
             EntityDataSerializers.BYTE);
     @Unique

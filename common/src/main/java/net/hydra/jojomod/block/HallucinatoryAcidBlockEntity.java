@@ -2,8 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.powers.AcidExposureTracker;
-import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.event.powers.whitesnake.AcidExposureTracker;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -84,10 +83,6 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
         if (acid.expiresAt == 0L) {
             acid.expiresAt = time + ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDespawnTime;
         }
-        if (acid.ownerDesummoned(server)) {
-            server.removeBlock(pos, false);
-            return;
-        }
         if (acid.ownerWithinPauseRange(server, pos)) {
             acid.expiresAt++;
         } else if (time >= acid.expiresAt) {
@@ -150,12 +145,6 @@ public final class HallucinatoryAcidBlockEntity extends BlockEntity {
 
     private static int dissolveCrackId(BlockPos pos) {
         return pos.hashCode() ^ 0x57534E4B;
-    }
-
-    private boolean ownerDesummoned(ServerLevel server) {
-        if (!ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinatoryAcidDisappearsOnDesummon || owner == null) return false;
-        Entity entity = server.getEntity(owner);
-        return entity instanceof LivingEntity && !((StandUser) entity).roundabout$getActive();
     }
 
     private boolean ownerWithinPauseRange(ServerLevel server, BlockPos pos) {

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "roundabout:block/ice_spike"
+    },
+    "age=1": {
+      "model": "roundabout:block/ice_spike"
+    },
+    "age=2": {
+      "model": "roundabout:block/ice_spike"
+    },
+    "age=3": {
+      "model": "roundabout:block/ice_spike"
+    }
+  }
+}
