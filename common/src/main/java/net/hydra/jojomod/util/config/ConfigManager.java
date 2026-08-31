@@ -100,6 +100,7 @@ public abstract class ConfigManager {
                 }
             }
         }
+
         if (getAdvancedConfig().freezableBlocksFlintAndSteel != null)
         {
             MainUtil.FREEZABLE_BLOCK_ITEMS.clear();
@@ -150,6 +151,29 @@ public abstract class ConfigManager {
                     MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse whole block to slab block entry '{}'", entry, e);
+                }
+            }
+        }
+
+        if (getAdvancedConfig().purpleHazeDecayBlocksAndRates != null) {
+            MainUtil.PURPLE_HAZE_DECAY_BLOCKS.clear();
+            for (String entry : getAdvancedConfig().purpleHazeDecayBlocksAndRates) {
+                try {
+                    String[] split = entry.split(":");
+                    if (split.length != 5) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
+                    ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
+                    Float decayRate = Float.parseFloat(split[4]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    MainUtil.PURPLE_HAZE_DECAY_BLOCKS.put(sourceBlock, targetBlock);
+                    MainUtil.PURPLE_HAZE_DECAY_RATE.put(sourceBlock, decayRate);
+                }
+                catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse Purple Haze block decay entry '{}'", entry, e);
                 }
             }
         }
