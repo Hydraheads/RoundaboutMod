@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.ClientNetworking;
-import net.hydra.jojomod.event.powers.AcidExposureTracker;
+import net.hydra.jojomod.event.powers.whitesnake.AcidExposureTracker;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
