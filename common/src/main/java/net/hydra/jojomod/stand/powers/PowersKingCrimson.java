@@ -163,6 +163,25 @@ public class PowersKingCrimson extends BlockGrabPreset {
         }
     }
 
+
+
+    @Override
+    public float getPickMiningSpeed() {
+        return 14F;
+    }
+    @Override
+    public float getAxeMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getSwordMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getShovelMiningSpeed() {
+        return 8F;
+    }
+
     public static final byte EPITAPH_NOISE = 106;
     public static final byte EPITAPH_FADE_NOISE = 107;
     public static final byte EPITAPH_PROJECTION = 108;
