@@ -171,6 +171,18 @@ public class PurpleSmokeEntity extends StandEntity {
 
         return Mth.floor((light - threshold) / 4.0F); // if we increment the divisor we cn make it a softer scaling
     }
+    @Nullable
+    private BlockState getDecayedState(BlockState state) {
+        Block block = state.getBlock();
+        Roundabout.LOGGER.debug("SKLEEBORP: {}", block);
+        if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
+            if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
+                return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+            }
+        }
+        return null;
+    }
+
     private void tickBlockDecay() {
         if (!(this.level() instanceof ServerLevel sl)) return;
         if (range < 1.0F) return;
@@ -203,89 +215,6 @@ public class PurpleSmokeEntity extends StandEntity {
                 sl.setBlockAndUpdate(pos, decayed);
             }
         }
-    }
-
-    @Nullable
-    private BlockState getDecayedState(BlockState state) {
-        Block block = state.getBlock();
-
-        if (block == Blocks.GRASS_BLOCK || block == Blocks.MYCELIUM || block == Blocks.PODZOL || block == Blocks.FARMLAND || block == Blocks.ROOTED_DIRT) {
-            if (Roundabout.RANDOM.nextFloat() < 0.45F) {
-                return Blocks.DIRT.defaultBlockState();
-            }
-            return null;
-        }
-
-        if (block instanceof FlowerBlock
-                || block instanceof TallGrassBlock
-                || block instanceof DoublePlantBlock
-                || block instanceof MushroomBlock
-                || block == Blocks.SUGAR_CANE
-                || block == Blocks.FERN
-                || block == Blocks.LARGE_FERN
-                || block == Blocks.DEAD_BUSH
-                || block == Blocks.BONE_BLOCK
-                || block == Blocks.SNIFFER_EGG
-                || block == Blocks.TURTLE_EGG
-                || block == Blocks.MANGROVE_ROOTS
-                || block == Blocks.MOSS_BLOCK
-                || block == Blocks.MOSS_CARPET
-                || block instanceof VineBlock
-                || block instanceof RootsBlock
-                || block == Blocks.BIG_DRIPLEAF
-                || block == Blocks.BIG_DRIPLEAF_STEM
-                || block == Blocks.SMALL_DRIPLEAF
-                || block == Blocks.LILY_PAD
-                || block instanceof CropBlock
-                || block instanceof SeaPickleBlock
-                || block instanceof KelpPlantBlock
-                || block instanceof KelpBlock) {
-            if(block != Blocks.WITHER_ROSE){
-            if (Roundabout.RANDOM.nextFloat() < 0.6F) {
-                return Blocks.AIR.defaultBlockState();
-            }
-            return null;
-            }
-        }
-
-        if (block instanceof LeavesBlock || block == Blocks.WARPED_WART_BLOCK|| block == Blocks.NETHER_WART_BLOCK || block == Blocks.SHROOMLIGHT) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.AIR.defaultBlockState();
-            }
-            return null;
-        }
-        if (block == Blocks.DIRT_PATH) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.FARMLAND.defaultBlockState();
-            }
-            return null;
-        }
-        if (block == Blocks.CRYING_OBSIDIAN) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.OBSIDIAN.defaultBlockState();
-            }
-            return null;
-        }
-        if (block == Blocks.WARPED_NYLIUM|| block == Blocks.CRIMSON_NYLIUM) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.NETHERRACK.defaultBlockState();
-            }
-            return null;
-        }
-        if (block == Blocks.MUDDY_MANGROVE_ROOTS) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.MUD.defaultBlockState();
-            }
-            return null;
-        }
-        if (block instanceof SaplingBlock) {
-            if (Roundabout.RANDOM.nextFloat() < 0.3F) {
-                return Blocks.DEAD_BUSH.defaultBlockState();
-            }
-            return null;
-        }
-
-        return null;
     }
     private void spawnFieldParticles(byte skin) {
         if (!(this.level() instanceof ServerLevel sl)) return;
