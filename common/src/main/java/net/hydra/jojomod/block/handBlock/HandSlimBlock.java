@@ -18,6 +18,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class HandSlimBlock extends AbstractHandBlock {
 
     public HandSlimBlock(Properties p_56319_) {
-        super(Types.PLAYER_SLIM, p_56319_);
+        super(Types.PLAYER, p_56319_);
     }
 }

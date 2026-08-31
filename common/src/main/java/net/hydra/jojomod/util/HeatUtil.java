@@ -146,10 +146,8 @@ public class HeatUtil {
             int heat = su.roundabout$getHeat();
             if (heat < 0){
                 boolean rate = entity.tickCount%10==0;
-                if (entity.isInLava()){
-                    rate = true;
-                } else if (entity.isOnFire() || su.roundabout$isOnStandFire()){
-                    rate = entity.tickCount%3==0;
+                if (entity.isOnFire() || su.roundabout$isOnStandFire() || entity.isInLava()){
+                    rate = entity.tickCount%4==0;
                 }
                 if (rate){
                     int sub = 1;

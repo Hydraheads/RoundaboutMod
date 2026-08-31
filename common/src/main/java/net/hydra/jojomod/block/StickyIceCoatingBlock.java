@@ -50,7 +50,11 @@ public class StickyIceCoatingBlock
                     PowerTypes.hasStandActive(LE))) {
                 if (LE.onGround()) {
                     if (FateTypes.isVampire(LE)) {
-                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
+                        if (this instanceof IceSpikeBlock){
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.6F, (double) 0.9F, (double) 0.6F));
+                        } else {
+                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.3F, (double) 0.8F, (double) 0.3F));
+                        }
                     } else {
                         if (LE instanceof Player || LE instanceof CloneEntity) {
                             if ((LE.hurtTime <= 3) ||
@@ -69,11 +73,19 @@ public class StickyIceCoatingBlock
                                 if (!(LE.level().getBlockState(
                                         BlockPos.containing(LE.getPosition(1).subtract(0, 0.5f, 0))).getBlock() instanceof FrozenBlock)
                                 ) {
-                                    $$3.makeStuckInBlock($$0, new Vec3((double) 0.46F, (double) 0.8F, (double) 0.46F));
+                                    if (this instanceof IceSpikeBlock){
+                                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.66F, (double) 0.9F, (double) 0.66F));
+                                    } else {
+                                        $$3.makeStuckInBlock($$0, new Vec3((double) 0.46F, (double) 0.8F, (double) 0.46F));
+                                    }
                                 }
                             }
                         } else {
-                            $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
+                            if (this instanceof IceSpikeBlock){
+                                $$3.makeStuckInBlock($$0, new Vec3((double) 0.9F, (double) 0.9F, (double) 0.9F));
+                            } else {
+                                $$3.makeStuckInBlock($$0, new Vec3((double) 0.8F, (double) 0.8F, (double) 0.8F));
+                            }
                         }
                     }
                 }
@@ -82,6 +94,10 @@ public class StickyIceCoatingBlock
                 //HeatUtil.addHeat($$3,-1);
             }
         }
+    }
+
+    public float apM(float input){
+        return input;
     }
     @SuppressWarnings("deprecation")
     @Override

@@ -236,6 +236,9 @@ public class MainUtil {
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
 
+    public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
+    public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
+
     public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
     public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
     public static final Map<Item, List<String>> specialFoodRemoves = new HashMap<>();
@@ -1782,6 +1785,7 @@ public class MainUtil {
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.ICE_SPIKE)
                 || state.is(ModBlocks.STAND_FIRE)
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)

@@ -285,9 +285,14 @@ public class BlockGrabPreset extends NewPunchingStand {
                         }
                     }
 
-            if (hasEntity() && getActivePower() != PowerIndex.POWER_2_EXTRA) {
-                if (standEntity != null){
-                    standEntity.ejectPassengers();
+            if (hasEntity()) {
+                if (standEntity != null) {
+                    if (standEntity.getFirstPassenger() instanceof LivingEntity LE && LE.distanceTo(standEntity) > 40){
+                        standEntity.ejectPassengers();
+                    }
+                    if ((getActivePower() != PowerIndex.POWER_2_EXTRA)) {
+                          standEntity.ejectPassengers();
+                    }
                 }
             }
         }

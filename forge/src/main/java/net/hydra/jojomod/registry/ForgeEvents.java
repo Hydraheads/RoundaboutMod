@@ -251,6 +251,7 @@ public class ForgeEvents {
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();
         ModBlocks.WHITE_ALBUM_ICE_SLAB = ForgeBlocks.WHITE_ALBUM_ICE_SLAB.get();
         ModBlocks.STICKY_ICE = ForgeBlocks.STICKY_ICE_BLOCK.get();
+        ModBlocks.ICE_SPIKE = ForgeBlocks.ICE_SPIKE.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -526,6 +527,7 @@ public class ForgeEvents {
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.FANCY_LIGHTER = ForgeItems.FANCY_LIGHTER.get();
+        ModItems.HAND = ForgeItems.HAND_ITEM.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
