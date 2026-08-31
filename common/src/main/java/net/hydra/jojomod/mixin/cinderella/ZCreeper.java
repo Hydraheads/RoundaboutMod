@@ -70,7 +70,7 @@ public abstract class ZCreeper extends Monster {
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
     protected void roundabout$registerGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(3, new AvoidEntityGoal(this, OcelotMinion.class, 6.0F, (double)1.0F, 1.2));
-        this.goalSelector.addGoal(3, new AvoidCatHeadGoal<>(this, BaseMinion.class, 6.0F, (double)1.0F, 1.2));
+        this.goalSelector.addGoal(3, new AvoidCatHeadGoal<>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));
     }
 
