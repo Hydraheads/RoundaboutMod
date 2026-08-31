@@ -11,6 +11,12 @@
       "roundabout:summon_oasis"
     ]
   },
+  "d4c_copy_block": {
+    "subtitle": "sounds.roundabout.d4c_copy_block",
+    "sounds": [
+      "roundabout:d4c_copy_block"
+    ]
+  },
   "d4c_fusion_start": {
     "subtitle": "sounds.roundabout.d4c_fusion_start",
     "sounds": [

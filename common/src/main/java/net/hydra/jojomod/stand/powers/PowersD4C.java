@@ -44,6 +44,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -116,6 +117,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte PORTAL = 107;
     public static final byte FUSE = 108;
     public static final byte MELT_DODGE = 109;
+    public static final byte COPY_BLOCK = 110;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -136,6 +138,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_PORTAL_EVENT;
         } else if (soundChoice == FUSE) {
             return ModSounds.D4C_FUSE_EVENT;
+        } else if (soundChoice == COPY_BLOCK) {
+            return ModSounds.D4C_COPY_BLOCK_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
         }
@@ -1399,6 +1403,14 @@ public class PowersD4C extends NewPunchingStand {
                         altState = state;
                         altBlockPos = grabBlock;
                         saveDiscAndSync();
+                        this.setAttackTimeDuring(-5);
+                        this.setActivePower(PowerIndex.POWER_2_BONUS);
+                        playSoundsIfNearby(COPY_BLOCK, 27, false);
+                        this.animateStand(D4CEntity.DRAG_2);
+                        this.poseStand(OffsetIndex.GUARD);
+                        sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(grabBlock)),
+                                grabBlock.getX()+0.5, grabBlock.getY()+0.5F, grabBlock.getZ()+0.5F,
+                                30, 1, 1, 1, 0.4);
                     }
                 }
             }
