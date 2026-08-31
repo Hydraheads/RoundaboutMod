@@ -41,12 +41,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PurpleSmokeEntity extends StandEntity {
@@ -176,7 +179,14 @@ public class PurpleSmokeEntity extends StandEntity {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
-                return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                Block replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block);
+                BlockState replacementState = replacement.defaultBlockState();
+                if (block.getClass().equals(replacement.getClass())) {
+                    for (Property<?> prop : state.getProperties()) {
+                        replacementState = MainUtil.copyBlockStateProperty(state, replacementState, prop);
+                    }
+                }
+                return replacementState;
             }
         }
         return null;
