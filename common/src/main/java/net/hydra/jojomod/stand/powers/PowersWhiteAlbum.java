@@ -1395,7 +1395,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 if (replacement != null) {
                                     BlockState replacementState = replacement.defaultBlockState();
                                     for (Property<?> prop : state.getProperties()) {
-                                        replacementState = MainUtil.copyBlockStateProperty(state, replacementState, prop);
+                                        if (replacementState.hasProperty(prop)) {
+                                            replacementState = MainUtil.copyBlockStateProperty(state, replacementState, prop);
+                                        }
                                     }
                                     if (self instanceof Player pl) {
                                         self.level().setBlock(
