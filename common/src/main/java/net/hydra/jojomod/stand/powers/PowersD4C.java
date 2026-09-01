@@ -1104,7 +1104,7 @@ public class PowersD4C extends NewPunchingStand {
         }
 
         if (copyEntity instanceof Monster mn){
-            ((IMob)mn).roundabout$setConfusionTicks(20);
+            ((IMob)mn).roundabout$setConfusionTicks(15);
         }
 
         // -------------------------------------------------
