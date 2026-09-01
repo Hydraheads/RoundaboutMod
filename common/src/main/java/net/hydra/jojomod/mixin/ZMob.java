@@ -3,10 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.access.ITargetGoal;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.Zombiefish;
@@ -53,10 +50,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.ExpirableValue;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -756,6 +750,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
     public void roundabout$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
             ((ITargetGoal) tg).roundabout$removeTarget();
+        } else if (goal instanceof SwellGoal sg){
+            sg.stop();
         } else if (goal instanceof PanicGoal tg) {
             tg.stop();
         }

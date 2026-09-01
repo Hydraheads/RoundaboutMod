@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
+import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -64,6 +65,7 @@ import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
@@ -660,7 +662,8 @@ public class PowersD4C extends NewPunchingStand {
         int maxCopies = 8;
         double scanRadius = 15.0D;
         double scanRadius2 = 70.0D;
-        double spawnRadius = 10.0D;
+        double spawnRadius = 13.0D;
+        double spawnRadiusPlayers = 10.0D;
 
         AABB scanBox = self.getBoundingBox().inflate(scanRadius);
         AABB scanBox2 = self.getBoundingBox().inflate(scanRadius2);
@@ -731,7 +734,7 @@ public class PowersD4C extends NewPunchingStand {
                 Vec3 spawnPos = findWorldMergeSpawnPosition(
                         sl,
                         target,
-                        spawnRadius
+                        spawnRadiusPlayers
                 );
 
                 if (spawnPos == null) {
@@ -860,7 +863,7 @@ public class PowersD4C extends NewPunchingStand {
             if (chance > 0 && (Math.random()*1 < chance)) {
                 Vec3 spawnPos = findWorldMergeSpawnPosition(
                         sl,
-                        spawnRadius
+                        spawnRadiusPlayers
                 );
 
                 if (spawnPos == null) {
@@ -1100,6 +1103,10 @@ public class PowersD4C extends NewPunchingStand {
             return false;
         }
 
+        if (copyEntity instanceof Monster mn){
+            ((IMob)mn).roundabout$setConfusionTicks(20);
+        }
+
         // -------------------------------------------------
         // UNIVERSAL STUFF YOU ACTUALLY WANT TO PRESERVE
         // -------------------------------------------------
@@ -1243,7 +1250,7 @@ public class PowersD4C extends NewPunchingStand {
             double radius
     ) {
         int attempts = 40;
-        double minDistance = 2.5D+ (entity.getBbWidth()/2);
+        double minDistance = 3.5D+ (entity.getBbWidth()/2);
 
         for (int i = 0; i < attempts; i++) {
 
