@@ -207,7 +207,11 @@ public class BlockD4CEntity extends Entity {
                         );
 
                         if (canGrief){
-                            level().removeBlock(getStartPos(),true);
+                            BlockState state = level().getBlockState(getStartPos());
+                            if (MainUtil.isDestructible(level(),getStartPos(), state)
+                                    && !MainUtil.isBlockDestructionBlacklisted(state)) {
+                                level().removeBlock(getStartPos(), true);
+                            }
                         }
 
                         discard();

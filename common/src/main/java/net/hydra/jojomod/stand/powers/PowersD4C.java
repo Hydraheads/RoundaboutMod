@@ -5,9 +5,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.D4CPortalBlock;
-import net.hydra.jojomod.block.D4CPortalBlockEntity;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -76,9 +74,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
@@ -1436,17 +1432,29 @@ public class PowersD4C extends NewPunchingStand {
                 if (Objects.nonNull(stand)) {
                     BlockState state = self.level().getBlockState(grabBlock);
                     if (state != null && state.isSolid()) {
-                        altState = state;
-                        altBlockPos = grabBlock;
-                        saveDiscAndSync();
-                        this.setAttackTimeDuring(-5);
-                        this.setActivePower(PowerIndex.POWER_2_BONUS);
-                        playSoundsIfNearby(COPY_BLOCK, 27, false);
-                        this.animateStand(D4CEntity.DRAG_2);
-                        this.poseStand(OffsetIndex.GUARD);
-                        sendParticlesIfPossible(self.level(),new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(grabBlock)),
-                                grabBlock.getX()+0.5, grabBlock.getY()+0.5F, grabBlock.getZ()+0.5F,
-                                30, 1, 1, 1, 0.4);
+                        if (!(state.getBlock() instanceof D4CPortalBlock) &&
+                                !(state.getBlock() instanceof NetherPortalBlock) &&
+                                !(state.getBlock() instanceof EndGatewayBlock) &&
+                                !(state.getBlock() instanceof EndPortalBlock) &&
+                                !(state.getBlock() instanceof DoorBlock) &&
+                                !(state.getBlock() instanceof CoffinBlock) &&
+                                !(state.getBlock() instanceof BedBlock) &&
+                                !(state.getBlock() instanceof GoddessStatueBlock) &&
+                                !(state.getBlock() instanceof BarrierBlock) &&
+                                !(self.level().getBlockEntity(altBlockPos) != null) &&
+                                !(state.getBlock() instanceof LightBlock)) {
+                            altState = state;
+                            altBlockPos = grabBlock;
+                            saveDiscAndSync();
+                            this.setAttackTimeDuring(-5);
+                            this.setActivePower(PowerIndex.POWER_2_BONUS);
+                            playSoundsIfNearby(COPY_BLOCK, 27, false);
+                            this.animateStand(D4CEntity.DRAG_2);
+                            this.poseStand(OffsetIndex.GUARD);
+                            sendParticlesIfPossible(self.level(), new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(grabBlock)),
+                                    grabBlock.getX() + 0.5, grabBlock.getY() + 0.5F, grabBlock.getZ() + 0.5F,
+                                    30, 1, 1, 1, 0.4);
+                        }
                     }
                 }
             }

@@ -13,7 +13,6 @@ import net.hydra.jojomod.util.config.annotation.*;
 import net.hydra.jojomod.util.option.ConfigOptionReference;
 import net.hydra.jojomod.util.option.Reflection;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -198,10 +197,10 @@ public abstract class ConfigManager {
             MainUtil.standBlockGrabBlacklist.clear();
             MainUtil.standBlockGrabBlacklist.addAll(getAdvancedConfig().standBlockGrabBlacklist);
         }
-        if (getAdvancedConfig().standDestructionBlacklist != null)
+        if (getAdvancedConfig().standDestructionBlacklistv2 != null)
         {
             MainUtil.standDestructionBlacklist.clear();
-            MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklist);
+            MainUtil.standDestructionBlacklist.addAll(getAdvancedConfig().standDestructionBlacklistv2);
         }
         if (getAdvancedConfig().standBlockExplosionBlacklist != null)
         {
