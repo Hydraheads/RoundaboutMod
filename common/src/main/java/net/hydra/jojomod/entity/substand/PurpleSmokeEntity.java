@@ -183,7 +183,7 @@ public class PurpleSmokeEntity extends StandEntity {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
                 BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
                 if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED)
-                        && replacement.getBlock() != Blocks.AIR) {
+                        && replacement.getBlock() == Blocks.AIR) {
                     return Blocks.WATER.defaultBlockState();
                 }
                 for (Property<?> prop : state.getProperties()) {
