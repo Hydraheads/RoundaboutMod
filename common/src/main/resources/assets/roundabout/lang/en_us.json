@@ -559,6 +559,7 @@
   "entity.roundabout.terrier": "Boston Terrier",
   "entity.roundabout.anubis_guardian": "Anubis Guardian",
   "entity.roundabout.anubis": "Anubis",
+  "entity.roundabout.block_d4c_entity": "Parallel Block",
   "entity.roundabout.cold_twister": "Cold Twister",
   "entity.roundabout.gently_weeps": "Gently Weeps",
   "entity.roundabout.block_wall_entity": "Block Wall",
@@ -882,6 +883,7 @@
   "sounds.roundabout.ding": "Ready",
   "sounds.roundabout.melt_dodge": "Body Shifting",
   "sounds.roundabout.d4c_fusion_start": "Merging",
+  "sounds.roundabout.block_attract": "Pull",
   "sounds.roundabout.heart_sparkle": "Ding",
   "sounds.roundabout.magic_ding": "Ding",
   "sounds.roundabout.ckb_steal": "Memory vanishes...",
@@ -1635,6 +1637,9 @@
   "sounds.roundabout.silver_chariot_hit_3": "Sword jab",
   "sounds.roundabout.silver_chariot_hit_4": "Sword jab",
   "sounds.roundabout.silver_chariot_afterimage": "Silver Chariot afterimage creation",
+  "sounds.roundabout.silver_chariot_rapier_shot_redirect": "Rapier shot bounce",
+  "sounds.roundabout.silver_chariot_rapier_shot_block_impact": "Rapier shot block hit",
+  "sounds.roundabout.silver_chariot_rapier_shot_entity_impact": "Rapier shot entity hit",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
@@ -2865,6 +2870,7 @@
   "skins.roundabout.killer_queen.notw": "NOTW",
   "skins.roundabout.killer_queen.memento": "M.oh Memento",
   "skins.roundabout.killer_queen.stardust": "Stardust!",
+  "skins.roundabout.killer_queen.minuet": "Minuet",
 
   "skins.roundabout.diver_down.base": "Part 6",
   "skins.roundabout.diver_down.lavadiver": "Lava Diver",
@@ -4343,8 +4349,8 @@
   "config.roundabout.moldMaxSize.name": "Green Day Maximum Mold Range",
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
 
-  "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
-  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (enabled by default)",
+  "config.roundabout.canUseBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
+  "config.roundabout.canUseBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (enabled by default)",
   "config.roundabout.bitesTheDustDayModeAffectGlobalTime.name": "Bites the dust Day Mode rewinds global time",
   "config.roundabout.bitesTheDustDayModeAffectGlobalTime.desc": "Turn on/off if Bites the Dust Day mode can change the global time (disabled by default), when disabled, it will interpolate the sky on client side instead like how timestop does",
   "config.roundabout.bitesTheDustPlantCooldown.name": "Bites the Dust plant cooldown",
@@ -4914,6 +4920,7 @@
   "sounds.roundabout.pearl_jam_palm_read": "Hmmmmmmmm",
   "sounds.roundabout.d4c_explosion": "Collision",
   "sounds.roundabout.d4c_fuse": "Fuse",
+  "sounds.roundabout.d4c_copy_block": "Capture",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",

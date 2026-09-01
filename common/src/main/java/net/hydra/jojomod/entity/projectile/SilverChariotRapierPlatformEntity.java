@@ -9,12 +9,18 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 
 public class SilverChariotRapierPlatformEntity extends Entity {
-    private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierPlatformEntity.class, EntityDataSerializers.BYTE);
+    // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierPlatformEntity.class, EntityDataSerializers.BYTE);
 
     public SilverChariotRapierPlatformEntity(EntityType<? extends SilverChariotRapierPlatformEntity> $$0, Level $$1) {
         super($$0, $$1);
     }
 
+    public SilverChariotRapierPlatformEntity(Level $$1) {
+        this(ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM, $$1);
+        this.life = 0;
+    }
+
+    /*
     public byte getSkin() {
         return this.getEntityData().get(SKIN);
     }
@@ -22,6 +28,7 @@ public class SilverChariotRapierPlatformEntity extends Entity {
     public void setSkin(byte skin) {
         this.getEntityData().set(SKIN, skin);
     }
+     */
 
     @Override
     public boolean alwaysAccepts() {
@@ -40,9 +47,21 @@ public class SilverChariotRapierPlatformEntity extends Entity {
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
     }
 
+    /*
     @Override
     public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.fixed(0.5F, 0.5F);
+        return EntityDimensions.fixed(1.0F, 0.2F);
+    }
+     */
+
+    private int life;
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.tickCount > 600) {
+            this.discard();
+        }
     }
 
     @Override
@@ -58,5 +77,15 @@ public class SilverChariotRapierPlatformEntity extends Entity {
     @Override
     public boolean isPushable() {
         return false;
+    }
+
+    @Override
+    public boolean isIgnoringBlockTriggers() {
+        return super.isIgnoringBlockTriggers();
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
     }
 }

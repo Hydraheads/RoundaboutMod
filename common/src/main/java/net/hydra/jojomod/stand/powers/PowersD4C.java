@@ -5,12 +5,12 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
-import net.hydra.jojomod.block.D4CPortalBlock;
-import net.hydra.jojomod.block.D4CPortalBlockEntity;
-import net.hydra.jojomod.block.ModBlocks;
+import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockD4CEntity;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -44,6 +44,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -73,9 +74,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
@@ -116,6 +115,8 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte PORTAL = 107;
     public static final byte FUSE = 108;
     public static final byte MELT_DODGE = 109;
+    public static final byte COPY_BLOCK = 110;
+    public static final byte BLOCK_ATTRACT = 111;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -136,6 +137,10 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_PORTAL_EVENT;
         } else if (soundChoice == FUSE) {
             return ModSounds.D4C_FUSE_EVENT;
+        } else if (soundChoice == COPY_BLOCK) {
+            return ModSounds.D4C_COPY_BLOCK_EVENT;
+        } else if (soundChoice == BLOCK_ATTRACT) {
+            return ModSounds.BLOCK_ATTRACT_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
         }
@@ -555,6 +560,12 @@ public class PowersD4C extends NewPunchingStand {
             tickBetween();
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
+            if (altBlockPos != null) {
+                if (altState == null || !(self.level().getBlockState(altBlockPos).is(altState.getBlock()))) {
+                    altBlockPos = null;
+                    saveDiscAndSync();
+                }
+            }
             if (!canHoldBanner){
                 rech++;
                 if (rech >= getRechargeTime()){
@@ -700,6 +711,7 @@ public class PowersD4C extends NewPunchingStand {
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
+                                && entity.getY() >= self.getY()-2
         );
 
         Collections.shuffle(possibleTargets);
@@ -1370,11 +1382,47 @@ public class PowersD4C extends NewPunchingStand {
             altBlockGrabClient();
             return;
         }
+        if (altBlockPos != null){
+            tryPowerPacket(PowerIndex.POWER_4_BONUS);
+        }
     }
     public void worldHop2Client(){
         if (PowerTypes.isInD4CWorld(self)){
             altBlockGrabClient();
             return;
+        }
+        if (altBlockPos != null){
+
+        }
+    }
+
+    public void spawnAltBlock(){
+        if (altBlockPos != null) {
+            if (altState != null) {
+                Vec3 vecPos = self.getEyePosition().add(self.getForward());
+                BlockD4CEntity wall =
+                        // slightly off to not z-fight
+
+                        new BlockD4CEntity(
+                                self.level(),
+                                vecPos.x,
+                                vecPos.y,
+                                vecPos.z,
+                                altState
+                        );
+                wall.setStartPos(altBlockPos);
+                wall.timing = 200;
+                wall.user = self;
+                wall.tsmove = true;
+                wall.isWhiteAlbumWall = true;
+                wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+                PowerTypes.copyPlaneOfExisting(self, wall);
+                self.level().addFreshEntity(wall);
+                playStandUserOnlySoundsIfNearby(BLOCK_ATTRACT, 27, false,false);
+            }
+            altBlockPos = null;
+            altState = null;
+            saveDiscAndSync();
         }
     }
     public void altBlockGrabClient(){
@@ -1396,9 +1444,29 @@ public class PowersD4C extends NewPunchingStand {
                 if (Objects.nonNull(stand)) {
                     BlockState state = self.level().getBlockState(grabBlock);
                     if (state != null && state.isSolid()) {
-                        altState = state;
-                        altBlockPos = grabBlock;
-                        saveDiscAndSync();
+                        if (!(state.getBlock() instanceof D4CPortalBlock) &&
+                                !(state.getBlock() instanceof NetherPortalBlock) &&
+                                !(state.getBlock() instanceof EndGatewayBlock) &&
+                                !(state.getBlock() instanceof EndPortalBlock) &&
+                                !(state.getBlock() instanceof DoorBlock) &&
+                                !(state.getBlock() instanceof CoffinBlock) &&
+                                !(state.getBlock() instanceof BedBlock) &&
+                                !(state.getBlock() instanceof GoddessStatueBlock) &&
+                                !(state.getBlock() instanceof BarrierBlock) &&
+                                self.level().getBlockEntity(grabBlock) == null &&
+                                !(state.getBlock() instanceof LightBlock)) {
+                            altState = state;
+                            altBlockPos = grabBlock;
+                            saveDiscAndSync();
+                            this.setAttackTimeDuring(-5);
+                            this.setActivePower(PowerIndex.POWER_2_BONUS);
+                            playStandUserOnlySoundsIfNearby(COPY_BLOCK, 27, false,false);
+                            this.animateStand(D4CEntity.DRAG_2);
+                            this.poseStand(OffsetIndex.GUARD);
+                            sendParticlesIfPossible(self.level(), new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(grabBlock)),
+                                    grabBlock.getX() + 0.5, grabBlock.getY() + 0.5F, grabBlock.getZ() + 0.5F,
+                                    30, 1, 1, 1, 0.4);
+                        }
                     }
                 }
             }
@@ -1821,9 +1889,10 @@ public class PowersD4C extends NewPunchingStand {
                         self,
                         searchBox,
                         entity ->
-                                ((entity instanceof Mob
+                                (((entity instanceof Mob
                                         || entity instanceof Player) && PowerTypes.getPlaneOfExisting2(entity) == 0
-                                && !(entity instanceof StandEntity))
+                                && !(entity instanceof StandEntity)) && entity.getY() >= self.getY()-2 &&
+                                        MainUtil.canActuallyHitInvolved(self,entity))
                 ).stream()
                 .filter(entity -> entity != self)
                 .filter(Entity::isAlive)
@@ -2103,7 +2172,7 @@ public class PowersD4C extends NewPunchingStand {
                 PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
                 this.setAttackTimeDuring(-5);
                 this.setActivePower(PowerIndex.POWER_2_BONUS);
-                playSoundsIfNearby(FUSE, 27, false);
+                playStandUserOnlySoundsIfNearby(FUSE, 27, false,false);
                 this.animateStand(D4CEntity.DRAG_2);
                 this.poseStand(OffsetIndex.GUARD);
                 if (self.level() instanceof ServerLevel sl){
@@ -2152,6 +2221,9 @@ public class PowersD4C extends NewPunchingStand {
             return false;
         } else if (move == PowerIndex.POWER_4_EXTRA){
             altBlockGrab();
+            return false;
+        } else if (move == PowerIndex.POWER_4_BONUS){
+            spawnAltBlock();
             return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
@@ -2691,6 +2763,8 @@ public class PowersD4C extends NewPunchingStand {
                     $$0.getInt("altBlockY"),
                     $$0.getInt("altBlockZ")
             );
+        } else {
+            altBlockPos = null;
         }
 
     }

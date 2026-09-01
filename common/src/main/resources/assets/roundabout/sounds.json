@@ -11,6 +11,18 @@
       "roundabout:summon_oasis"
     ]
   },
+  "d4c_copy_block": {
+    "subtitle": "sounds.roundabout.d4c_copy_block",
+    "sounds": [
+      "roundabout:d4c_copy_block"
+    ]
+  },
+  "block_attract": {
+    "subtitle": "sounds.roundabout.block_attract",
+    "sounds": [
+      "roundabout:block_attract"
+    ]
+  },
   "d4c_fusion_start": {
     "subtitle": "sounds.roundabout.d4c_fusion_start",
     "sounds": [
@@ -3745,6 +3757,24 @@
     "subtitle": "sounds.roundabout.silver_chariot_afterimage",
     "sounds": [
       "roundabout:silver_chariot_afterimage"
+    ]
+  },
+  "silver_chariot_rapier_shot_redirect": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_shot_redirect",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_shot_redirect"
+    ]
+  },
+  "silver_chariot_rapier_shot_block_impact": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_shot_block_impact",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_shot_block_impact"
+    ]
+  },
+  "silver_chariot_rapier_shot_entity_impact": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_shot_entity_impact",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_shot_entity_impact"
     ]
   }
 }
