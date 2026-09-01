@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.zetalasis.hjson.JsonValue;
 
 import java.io.IOException;
@@ -168,6 +169,10 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
                     Float decayRate = Float.parseFloat(split[4]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceBlock == Blocks.AIR && !split[0].equals("minecraft") && !split[1].equals("air")) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
+                        continue;
+                    }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
                     MainUtil.PURPLE_HAZE_DECAY_BLOCKS.put(sourceBlock, targetBlock);
                     MainUtil.PURPLE_HAZE_DECAY_RATE.put(sourceBlock, decayRate);
