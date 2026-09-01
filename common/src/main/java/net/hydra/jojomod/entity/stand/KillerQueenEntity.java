@@ -65,6 +65,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
 	        case KillerQueenEntity.NOTW -> {return Component.translatable("skins.roundabout.killer_queen.notw");}
 	        case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
 	        case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
+	        case KillerQueenEntity.MINUET -> {return Component.translatable("skins.roundabout.killer_queen.minuet");}
 	    }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
@@ -89,7 +90,8 @@ public class KillerQueenEntity extends FollowingStandEntity {
     		MINESWEEPER = 16,
     		NOTW = 17,
     		MEMENTO = 18,
-    		STARDUST = 19;
+    		STARDUST = 19,
+            MINUET = 20;
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();

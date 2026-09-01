@@ -158,6 +158,14 @@ public class ModSounds {
     public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
     public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
 
+    public static final String BLOCK_ATTRACT = "block_attract";
+    public static final ResourceLocation BLOCK_ATTRACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_ATTRACT);
+    public static SoundEvent BLOCK_ATTRACT_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_ATTRACT_ID);
+
+    public static final String D4C_COPY_BLOCK = "d4c_copy_block";
+    public static final ResourceLocation D4C_COPY_BLOCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_COPY_BLOCK);
+    public static SoundEvent D4C_COPY_BLOCK_EVENT = SoundEvent.createVariableRangeEvent(D4C_COPY_BLOCK_ID);
+
     public static final String D4C_FUSE = "d4c_fuse";
     public static final ResourceLocation D4C_FUSE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSE);
     public static SoundEvent D4C_FUSE_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSE_ID);
@@ -1228,6 +1236,18 @@ public class ModSounds {
     public static final String SILVER_CHARIOT_AFTERIMAGE = "silver_chariot_afterimage";
     public static final ResourceLocation SILVER_CHARIOT_AFTERIMAGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_AFTERIMAGE);
     public static SoundEvent SILVER_CHARIOT_AFTERIMAGE_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_AFTERIMAGE_ID);
+
+    public static final String SILVER_CHARIOT_RAPIER_SHOT_REDIRECT = "silver_chariot_rapier_shot_redirect";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SHOT_REDIRECT);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_ID);
+
+    public static final String SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT = "silver_chariot_rapier_shot_block_impact";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_ID);
+
+    public static final String SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT = "silver_chariot_rapier_shot_entity_impact";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_ID);
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);

@@ -437,7 +437,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     partialTicks, path, r, g, b, heyFull);
                         }
 
-                        if (visage.getItem() instanceof MaskItem MI) {
+                        if (visage != null && visage.getItem() instanceof MaskItem MI) {
                             VisageData vd = MI.visageData.generateVisageData(entity);
                             if (vd.rendersBreast() ||
                                     vd.rendersPlayerBreastPart()) {

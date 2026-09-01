@@ -3612,8 +3612,8 @@
   "config.roundabout.moldMaxSize.name": "Green Day Maximum Mold Range",
   "config.roundabout.moldMaxSize.desc": "Controls the maximum range of green day's mold fields",
 
-  "config.roundabout.enableBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
-  "config.roundabout.enableBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
+  "config.roundabout.canUseBitesTheDustDayMode.name": "Enable Bites the dust (Day Mode)",
+  "config.roundabout.canUseBitesTheDustDayMode.desc": "Turn on/off the Bites the Dust Day mode, that restart the day of the game when detonating (disabled by default)",
   "config.roundabout.bombOverlayHideOnF1.name": "Bomb Overlays hides on F1",
   "config.roundabout.bombOverlayHideOnF1.desc": "Turn on/off the action of hiding the bomb overlay when pressing F1",
   "config.roundabout.blocksDestruction.name": "Blocks Explode",

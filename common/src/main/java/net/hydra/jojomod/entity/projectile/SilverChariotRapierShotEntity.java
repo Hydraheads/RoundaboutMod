@@ -26,19 +26,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.*;
 
 import java.util.UUID;
 
-public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile implements UnburnableProjectile {
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+public class SilverChariotRapierShotEntity extends AbstractArrow implements UnburnableProjectile {
+    // private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+    // private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
+    // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
+    // private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
 
     public SilverChariotRapierShotEntity(EntityType<? extends SilverChariotRapierShotEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -51,8 +53,12 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
     public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type) {
         this(ModEntities.SILVER_CHARIOT_RAPIER, $$1, $$2, $$3, $$4);
-        this.setOwner($$0);
         this.setRapierShotType(type);
+        if (type == BASE) {
+            this.setBounces(1);
+        } else  {
+            this.setBounces(0);
+        }
     }
 
     public final float speed = 3.0F;
@@ -75,9 +81,10 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
     }
 
-    public LivingEntity standUser;
-    public UUID standUserUUID;
+    // public LivingEntity standUser;
+    // public UUID standUserUUID;
 
+    /*
     public int getUserID() {
         return this.getEntityData().get(USER_ID);
     }
@@ -91,6 +98,30 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
             }
         }
     }
+
+     */
+
+    private byte shotType;
+
+    public void setRapierShotType(byte type) {
+        this.shotType = type;
+    }
+
+    public byte getRapierShotType() {
+        return this.shotType;
+    }
+
+    private int bounces;
+
+    public void setBounces(int bounces) {
+        this.bounces = bounces;
+    }
+
+    public int getBounces() {
+        return this.bounces;
+    }
+
+    /*
 
     public void setUser(LivingEntity user) {
         standUser = user;
@@ -126,12 +157,18 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         }
     }
 
+     */
+
+    /*
+
     public byte getSkin() {
         return this.getEntityData().get(SKIN);
     }
     public void setSkin(byte skin) {
         this.getEntityData().set(SKIN, skin);
     }
+
+     */
 
     @Override
     public boolean alwaysAccepts() {
@@ -143,36 +180,48 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         // super.onHitBlock($$0);
         if (!this.level().isClientSide()) {
             if (this.getRapierShotType() == PLATFORM) {
-                this.createPlatform($$0.getLocation());
+                this.createPlatform($$0);
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
             } else if (this.getRapierShotType() == BASE && this.getBounces() > 0) {
-                this.setBounces(this.getBounces() - 1);
+                // this.setBounces(this.getBounces() - 1);
 
                 Vec3 velocity = this.getDeltaMovement();
                 Direction hitDir = $$0.getDirection();
                 Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
 
                 Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
-                // reflected = reflected.scale(1.0);
+                reflected = reflected.scale(1.0);
+
+                Vec3 hitLoc = $$0.getLocation();
+                Vec3 pushOut = normal.scale(0.02);
+                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
                 this.setDeltaMovement(reflected);
 
-                Vec3 hitLoc = $$0.getLocation();
-                Vec3 pushOut = normal.scale(0.2);
-                this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+
+                this.setBounces(this.getBounces() - 1);
+
+                this.inGround = false;
+                this.shakeTime = 0;
+            } else {
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             }
         }
     }
 
-    private void createPlatform(Vec3 position) {
+    private void createPlatform(BlockHitResult $$0) {
         SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
-                ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM,
                 this.level()
         );
 
-        if (platform == null) {
-            return;
-        }
+        platform.setPos($$0.getLocation());
+
+        platform.setYRot(this.getYRot());
+        platform.setXRot(this.getXRot());
+
+        this.level().addFreshEntity(platform);
     }
 
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
@@ -203,7 +252,7 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         // super.onHitEntity($$0);
 
         Entity $$1 = $$0.getEntity();
-        if (!MainUtil.isMobOrItsMounts($$1, getUser())) {
+        if (!MainUtil.isMobOrItsMounts($$1, this.getOwner())) {
             if ($$1 instanceof LivingEntity LE) {
                 this.rapierHit(LE);
             }
@@ -243,7 +292,7 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
     public void rapierHit(LivingEntity livingEntity) {
         if (!this.level().isClientSide()) {
-            LivingEntity user = this.getStandUser();
+            Entity user = this.getOwner();
             if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
                 PSC.addEXP(2);
                 this.level().playSound(null, this.blockPosition(), ModSounds.RATT_DART_IMPACT_EVENT,
@@ -255,7 +304,7 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         }
     }
 
-    public static void damageEntity(Entity gotten, Entity proj, LivingEntity user, PowersSilverChariot PSC) {
+    public void damageEntity(Entity gotten, Entity proj, LivingEntity user, PowersSilverChariot PSC) {
         if (PowerTypes.isInADifferentExistence(gotten,proj)){
             return;
         }
@@ -274,32 +323,44 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         }
         float dmg = 1;
         float strength = 0.85F;
-        // strength*=multi;
+        strength *= 2F;
+
+        if (gotten instanceof Player player && player.isCreative()) {
+            strength = 0;
+        }
+        if (gotten instanceof LivingEntity livingEntity && MainUtil.isKnockbackResilient(livingEntity)) {
+            strength = 0;
+        }
 
         dmg = PSC.getRapierShotDamage(gotten);
-        strength *= 2F;
 
         if (gotten.hurt(ModDamageTypes.of(gotten.level(), ModDamageTypes.STAND, user), dmg)) {
             if (gotten instanceof LivingEntity le) {
                 PSC.addEXP(2, le);
             }
+            this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         } else if (gotten instanceof LivingEntity le && le.isBlocking()) {
             int breakShield = 160;
             MainUtil.knockShield(le, breakShield);
         }
 
         float degrees = MainUtil.getLookAtEntityYaw(proj, gotten);
-        MainUtil.takeKnockbackWithY(gotten, strength,
-                Mth.sin(degrees * ((float) Math.PI / 180)),
-                Mth.sin(-17 * ((float) Math.PI / 180)),
-                -Mth.cos(degrees * ((float) Math.PI / 180)));
+        if (strength > 0) {
+            MainUtil.takeKnockbackWithY(gotten, strength,
+                    Mth.sin(degrees * ((float) Math.PI / 180)),
+                    Mth.sin(-17 * ((float) Math.PI / 180)),
+                    -Mth.cos(degrees * ((float) Math.PI / 180)));
+        }
     }
 
     public void getEntity(Entity gotten, PowersSilverChariot PSC) {
-        if (gotten != null && getUser() != null && !MainUtil.isMobOrItsMounts(gotten, getUser())) {
-            damageEntity(gotten, this, this.standUser, PSC);
+        Entity user = this.getOwner();
+        if (gotten != null && user instanceof LivingEntity livingEntity && !MainUtil.isMobOrItsMounts(gotten, user)) {
+            this.damageEntity(gotten, this, livingEntity, PSC);
         }
     }
+
+    /*
 
     public LivingEntity getUser(){
         if (this.level().getEntity(this.getUserID()) instanceof LivingEntity LE){
@@ -308,10 +369,15 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         return null;
     }
 
+     */
+
+    /*
     @Override
     protected ParticleOptions getTrailParticle() {
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());
     }
+
+     */
 
     public static final byte
                 BASE = (byte) 1,
@@ -319,20 +385,50 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
     @Override
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(USER_ID)) {
-            super.defineSynchedData();
-            this.entityData.define(USER_ID, -1);
+        super.defineSynchedData();
+        /*
+        if (!this.getEntityData().hasItem(USER_ID)) {
+            this.getEntityData().define(USER_ID, -1);
+            this.getEntityData().define(ROUNDABOUT$TYPE, BASE);
+            this.getEntityData().define(ROUNDABOUT$BOUNCES, 0);
         }
+
+         */
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
+
+        /*
+        if ($$0.contains("bounces")) {
+            this.entityData.set(ROUNDABOUT$BOUNCES, $$0.getInt("bounces"));
+        }
+        if ($$0.contains("type")) {
+            this.entityData.set(ROUNDABOUT$TYPE, $$0.getByte("type"));
+        }
+
+         */
+    }
+
+    @Override
+    protected ItemStack getPickupItem() {
+        return ItemStack.EMPTY;
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
+
+        /*
+        if ($$0.contains("bounces")) {
+            $$0.putInt("bounces", this.entityData.get(ROUNDABOUT$BOUNCES));
+        }
+        if ($$0.contains("type")) {
+            $$0.putByte("type", this.entityData.get(ROUNDABOUT$TYPE));
+        }
+
+         */
     }
 
     @Override
@@ -340,6 +436,7 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         return false;
     }
 
+    /*
     public LivingEntity getStandUser(){
         if (standUser != null){
             return standUser;
@@ -354,6 +451,8 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         }
         return standUser;
     }
+
+     */
 
     @Override
     public boolean fireImmune() {
@@ -399,16 +498,26 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
 
         // this.tickRotateFromVelocity();
 
+        this.pickup = Pickup.DISALLOWED;
+
+        Vec3 delta =  getDeltaMovement();
+
+        this.inGround = false;
+
         super.tick();
+
+        if (!level().isClientSide()){
+            if (inGround){
+                discard();
+            }
+        }
 
         this.tickRotateFromVelocity();
 
+        this.setDeltaMovement(this.getDeltaMovement());
+
         if (this.getRapierShotType() == BASE) {
-            if (this.tickCount > 600) {
-                this.discard();
-            }
-        } else if (this.getRapierShotType() == PLATFORM) {
-            if (this.tickCount > 1200) {
+            if (this.tickCount > 300) {
                 this.discard();
             }
         }
@@ -417,28 +526,30 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
     public void initRotateFromVelocity(float velMagnitude) {
         // "origin" will be used instead of the user for when Silver Chariot shoots
         // it's rapier towards an enemy while in control mode.
-        LivingEntity origin = this.standUser;
+        LivingEntity origin = ((LivingEntity) this.getOwner());
+        Vec3 vel = this.getDeltaMovement();
 
-        Vec3 dir = origin.getLookAngle();
+        if (vel.lengthSqr() < 1E-7D) {
+            return;
+        }
 
-        Vec3 vel = dir.normalize().scale(velMagnitude);
+        // Vec3 dir = origin.getLookAngle();
 
-        this.setDeltaMovement(vel);
+        // Vec3 vel = dir.normalize().scale(velMagnitude);
+
+        // this.setDeltaMovement(vel);
 
         float newYaw   = (float) (Mth.atan2(vel.x, vel.z) * (180F / Math.PI));
         float newPitch = -(float) (Mth.atan2(vel.y, Math.sqrt(vel.x * vel.x + vel.z * vel.z)) * (180F / Math.PI));
 
         this.setYRot(newYaw);
         this.setXRot(newPitch);
-
-        this.yRotO = newYaw;
-        this.xRotO = newPitch;
     }
 
     private void tickRotateFromVelocity() {
         Vec3 vel = this.getDeltaMovement();
 
-        if (vel.lengthSqr() == 1.0E-7D) {
+        if (vel.lengthSqr() < 1.0E-7D) {
             return;
         }
 
@@ -448,14 +559,17 @@ public class SilverChariotRapierShotEntity extends AbstractHurtingProjectile imp
         this.setYRot(newYaw);
         this.setXRot(newPitch);
 
-        this.yRotO = newYaw;
-        this.xRotO = newPitch;
+        // this.yRotO = newYaw;
+        // this.xRotO = newPitch;
     }
 
+    /*
     @Override
     protected float getInertia() {
         return 1.0F;
     }
+
+     */
 
     @Override
     public boolean isNoGravity() {
