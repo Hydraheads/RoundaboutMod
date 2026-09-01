@@ -169,7 +169,7 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
                     Float decayRate = Float.parseFloat(split[4]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
-                    if (sourceBlock == Blocks.AIR && !split[0].equals("minecraft") && !split[1].equals("air")) {
+                    if (sourceBlock == Blocks.AIR && !(split[0].equals("minecraft") && split[1].equals("air"))) {
                         Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
                         continue;
                     }
