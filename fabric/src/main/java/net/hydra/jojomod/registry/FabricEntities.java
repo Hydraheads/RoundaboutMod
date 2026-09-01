@@ -755,6 +755,15 @@ public class FabricEntities {
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
             );
+    public static final EntityType<BlockD4CEntity> D4C_BLOCK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "block_d4c_entity"),
+                    EntityType.Builder.<BlockD4CEntity>of(BlockD4CEntity::new, MobCategory.MISC).
+                            sized(BlockD4CEntity.dimensions, BlockD4CEntity.dimensions)
+                            .updateInterval(1).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":block_d4c_entity")
+            );
 
     public static final EntityType<FallingBannerEntity> FALLING_BANNER =
             Registry.register(
@@ -1220,6 +1229,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
+                ModEntities.D4C_BLOCK = D4C_BLOCK;
                 ModEntities.STEP_RULE = STEP_RULE;
                 ModEntities.STRAY_CAT = STRAY_CAT;
                 ModEntities.RATT_DART = RATT_DART;

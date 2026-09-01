@@ -11,6 +11,8 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
+import net.hydra.jojomod.entity.BlockD4CEntity;
+import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
@@ -1374,11 +1376,45 @@ public class PowersD4C extends NewPunchingStand {
             altBlockGrabClient();
             return;
         }
+        if (altBlockPos != null){
+            tryPowerPacket(PowerIndex.POWER_4_BONUS);
+        }
     }
     public void worldHop2Client(){
         if (PowerTypes.isInD4CWorld(self)){
             altBlockGrabClient();
             return;
+        }
+        if (altBlockPos != null){
+
+        }
+    }
+
+    public void spawnAltBlock(){
+        if (altBlockPos != null) {
+            if (altState != null) {
+                Vec3 vecPos = self.getEyePosition().add(self.getForward());
+                BlockD4CEntity wall =
+                        // slightly off to not z-fight
+
+                        new BlockD4CEntity(
+                                self.level(),
+                                vecPos.x,
+                                vecPos.y,
+                                vecPos.z,
+                                altState
+                        );
+                wall.setStartPos(altBlockPos);
+                wall.timing = 200;
+                wall.tsmove = true;
+                wall.isWhiteAlbumWall = true;
+                wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
+                PowerTypes.copyPlaneOfExisting(self, wall);
+                self.level().addFreshEntity(wall);
+            }
+            altBlockPos = null;
+            altState = null;
+            saveDiscAndSync();
         }
     }
     public void altBlockGrabClient(){
@@ -2165,6 +2201,9 @@ public class PowersD4C extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_4_EXTRA){
             altBlockGrab();
             return false;
+        } else if (move == PowerIndex.POWER_4_BONUS){
+            spawnAltBlock();
+            return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
             return false;
@@ -2703,6 +2742,8 @@ public class PowersD4C extends NewPunchingStand {
                     $$0.getInt("altBlockY"),
                     $$0.getInt("altBlockZ")
             );
+        } else {
+            altBlockPos = null;
         }
 
     }

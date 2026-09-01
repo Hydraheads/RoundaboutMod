@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,6 +11,7 @@ import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -83,15 +85,11 @@ public class BlockD4CEntity extends Entity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
-    @Override
     public void push(Entity $$0) {
     }
 
     public boolean isAttackable() {
-        return true;
+        return false;
     }
 
     public void setStartPos(BlockPos $$0) {
@@ -118,27 +116,9 @@ public class BlockD4CEntity extends Entity {
     }
 
     public boolean isPickable() {
-        return !this.isRemoved();
+        return false;
     }
 
-    public float distanceToClearWhileTicked(){
-        return 0.3f;
-    }
-    private int lerpSteps;
-    private double lerpX;
-    private double lerpY;
-    private double lerpZ;
-
-    public boolean updated = false;
-    @Override
-    public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
-        this.lerpX = $$0;
-        this.lerpY = $$1;
-        this.lerpZ = $$2;
-        this.setRot($$3, $$4);
-        this.lerpSteps = $$5;
-        updated = true;
-    }
 
     public void breakAndDiscard(){
         level().levelEvent(
@@ -153,69 +133,99 @@ public class BlockD4CEntity extends Entity {
 
     @Override
     public boolean hurt(DamageSource $$0, float damage) {
-        if ($$0.getEntity() != null){
-            if (!level().isClientSide() && isWhiteAlbumWall && $$0.getEntity() instanceof LivingEntity LE &&
-                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa
-            && $$0.is(ModDamageTypes.STAND_BRAWL)){
-                Vec3 current = position();
-                Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
-                Vec3 delta = target.subtract(current);
-                double distance = delta.length();
-                if (distance <= distanceToClearWhileTicked()) {
-                    ThrownObjectEntity thrownBlockOrItem = new ThrownObjectEntity(LE, LE.level(),
-                            Blocks.PACKED_ICE.asItem().getDefaultInstance().copy(),
-                            false);
 
-                    thrownBlockOrItem.heat = PowersWhiteAlbum.coldFromBlockLaunch;
-                    thrownBlockOrItem.standDamageMob = pwa.getIceDamageMob();
-                    thrownBlockOrItem.standDamagePlayer = pwa.getIceDamagePlayer();
-                    thrownBlockOrItem.shootFromRotation(LE, LE.getXRot(),
-                            LE.getYRot(), -8.0F, 0.8F, 0.1F);
-                    thrownBlockOrItem.setPos(position().add(0,0.5F,0));
-                    thrownBlockOrItem.setStyle(ThrownObjectEntity.STAND_DAMAGE);
-                    PowerTypes.copyPlaneOfExisting(LE,thrownBlockOrItem);
-                    LE.level().addFreshEntity(thrownBlockOrItem);
-                    this.discard();
-                }
-                return true;
-            }
-        }
-
-        if (this.isInvulnerableTo($$0)) {
-            return false;
-        } else {
-            if ((damage > 3 || MainUtil.isStandDamage($$0)) &&
-                    !$$0.is(ModDamageTypes.KNIFE) && !this.level().isClientSide()){
-                breakAndDiscard();
-            }
-            //This true is import
-            return true;
-        }
+        return super.hurt($$0,damage);
     }
 
+    private int lerpSteps;
+    private double lerpX;
+    private double lerpY;
+    private double lerpZ;
+    public boolean updated = false;
+    @Override
+    public void lerpTo(double $$0, double $$1, double $$2, float $$3, float $$4, int $$5, boolean $$6) {
+        this.lerpX = $$0;
+        this.lerpY = $$1;
+        this.lerpZ = $$2;
+        this.setRot($$3, $$4);
+        this.lerpSteps = $$5;
+        updated = true;
+    }
     Vec3 finPos = Vec3.ZERO;
+    public int existTime = 0;
     @Override
     public void tick() {
+        existTime++;
 
         if (!level().isClientSide()) {
-            if (timing > -1 && !((TimeStop)level()).inTimeStopRange(this)){
-                timing--;
-                if (timing <= 0){
-                    breakAndDiscard();
-                }
-            }
-            Vec3 current = position();
-            Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);
-            refreshDimensions();
-            Vec3 delta = target.subtract(current);
-            double distance = delta.length();
+            if (level().getBlockState(getStartPos()).is(getBlockState().getBlock())){
+                if (existTime > 5) {
+                    Vec3 start = this.position();
+                    Vec3 target = getStartPos().getCenter().subtract(0, 0.5, 0);
 
-            if (distance <= distanceToClearWhileTicked()) {
-                setPos(target);
+                    Vec3 direction = target.subtract(start).normalize();
+
+                    double speed = 0.7D;
+
+                    MainUtil.sendParticlesIfPossible(
+                            this,
+                            level(),
+                            ModParticles.MENGER,
+                            this.position().x,
+                            this.position().y + 0.5,
+                            this.position().z,
+                            0,
+                            (float) (direction.x * speed),
+                            (float) (direction.y * speed),
+                            (float) (direction.z * speed),
+                            speed
+                    );
+                }
+                if (existTime > 15) {
+
+                    Vec3 currentPos = getPosition(1);
+                    Vec3 finPos = getStartPos().getCenter().subtract(0,0.5,0);
+
+                    Vec3 difference = finPos.subtract(currentPos);
+                    double distance = difference.length();
+
+                    // Speed per tick
+                    double spd = 1D;
+
+                    if (distance <= spd) {
+                        // We reached the target
+                        setPos(finPos.x, finPos.y, finPos.z);
+
+                        // Explode
+                        level().explode(
+                                this,
+                                getX(),
+                                getY(),
+                                getZ(),
+                                2.0F,
+                                Level.ExplosionInteraction.NONE
+                        );
+
+                        if (canGrief){
+                            level().removeBlock(getStartPos(),true);
+                        }
+
+                        discard();
+                    } else {
+                        // Move toward target at a constant speed
+                        Vec3 movement = difference.normalize().scale(spd);
+
+                        setPos(
+                                getX() + movement.x,
+                                getY() + movement.y,
+                                getZ() + movement.z
+                        );
+                    }
+                } else {
+
+                }
             } else {
-                setPos(current.add(
-                        delta.normalize().scale(distanceToClearWhileTicked())
-                ));
+                discard();
             }
         } else {
             if (this.lerpSteps > 0) {
@@ -230,61 +240,12 @@ public class BlockD4CEntity extends Entity {
                 }
             }
         }
+
         super.tick();
-        refreshDimensions();
-
-        AABB wallBox = this.getBoundingBox();
-
-        for (LivingEntity mob : level().getEntitiesOfClass(
-                LivingEntity.class,
-                wallBox.inflate(0.1))) {
-
-            if (mob.getBoundingBox().intersects(wallBox)) {
-                if (mob.isControlledByLocalInstance()) {
-                    mob.push(0, 0.2, 0);
-                }
-            }
-        }
-
-    }
-    public void callOnBrokenAfterFall(Block $$0, BlockPos $$1) {
     }
 
-    public boolean causeFallDamage(float $$0, float $$1, DamageSource $$2) {
-        if (!this.hurtEntities) {
-            return false;
-        } else {
-            int $$3 = Mth.ceil($$0 - 1.0F);
-            if ($$3 < 0) {
-                return false;
-            } else {
-                Predicate<Entity> $$4 = EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(EntitySelector.LIVING_ENTITY_STILL_ALIVE);
-                Block var8 = this.blockState.getBlock();
-                DamageSource var10000;
-                if (var8 instanceof Fallable) {
-                    Fallable $$5 = (Fallable)var8;
-                    var10000 = $$5.getFallDamageSource(this);
-                } else {
-                    var10000 = this.damageSources().fallingBlock(this);
-                }
 
-                DamageSource $$6 = var10000;
-                float $$7 = (float)Math.min(Mth.floor((float)$$3 * this.fallDamagePerDistance), this.fallDamageMax);
-                this.level().getEntities(this, this.getBoundingBox(), $$4).forEach(($$2x) -> $$2x.hurt($$6, $$7));
-                boolean $$8 = this.blockState.is(BlockTags.ANVIL);
-                if ($$8 && $$7 > 0.0F && this.random.nextFloat() < 0.05F + (float)$$3 * 0.05F) {
-                    BlockState $$9 = AnvilBlock.damage(this.blockState);
-                    if ($$9 == null) {
-                        this.cancelDrop = true;
-                    } else {
-                        this.blockState = $$9;
-                    }
-                }
 
-                return false;
-            }
-        }
-    }
 
     protected void addAdditionalSaveData(CompoundTag $$0) {
         $$0.put("BlockState", NbtUtils.writeBlockState(this.blockState));
@@ -342,15 +303,7 @@ public class BlockD4CEntity extends Entity {
 
     }
 
-    public void setHurtsEntities(float $$0, int $$1) {
-        this.hurtEntities = true;
-        this.fallDamagePerDistance = $$0;
-        this.fallDamageMax = $$1;
-    }
 
-    public void disableDrop() {
-        this.cancelDrop = true;
-    }
 
     public boolean displayFireAnimation() {
         return false;
