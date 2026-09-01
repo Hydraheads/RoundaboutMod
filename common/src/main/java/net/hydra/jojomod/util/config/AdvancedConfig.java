@@ -251,8 +251,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:dark_oak_sapling:minecraft:dead_bush:0.3",
                     "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
                     "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:oak_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:oak_slab:minecraft:air:1.0"
+                    "minecraft:oak_sapling:minecraft:dead_bush:0.3"
             )
     );
 
