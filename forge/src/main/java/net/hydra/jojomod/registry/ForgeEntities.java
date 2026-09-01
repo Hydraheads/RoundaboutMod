@@ -651,6 +651,14 @@ public class ForgeEntities {
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
             );
+    public static final RegistryObject<EntityType<BlockD4CEntity>> D4C_BLOCK =
+            ENTITY_TYPES.register("block_d4c_entity", () ->
+                    EntityType.Builder.<BlockD4CEntity>of(BlockD4CEntity::new, MobCategory.MISC)
+                            .sized(BlockD4CEntity.dimensions, BlockD4CEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "block_d4c_entity").toString())
+            );
     public static final RegistryObject<EntityType<FallingBannerEntity>> FALLING_BANNER =
             ENTITY_TYPES.register("falling_banner", () ->
                     EntityType.Builder.<FallingBannerEntity>of(FallingBannerEntity::new, MobCategory.MISC)

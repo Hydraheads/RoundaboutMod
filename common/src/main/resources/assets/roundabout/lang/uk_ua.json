@@ -4612,8 +4612,6 @@
   "config.roundabout.whitesnakeGuardPoints.desc": "The amount of damage Whitesnake can guard before breaking.",
   "config.roundabout.discStealDealsDamage.name": "Disc Steal Deals Damage",
   "config.roundabout.discStealDealsDamage.desc": "Whether Disc Steal also damages its target.",
-  "config.roundabout.acidTossCooldown.name": "Acid Toss Cooldown",
-  "config.roundabout.acidTossCooldown.desc": "Acid Toss cooldown in ticks.",
   "config.roundabout.timeSparkCooldown.name": "Time Spark Cooldown",
   "config.roundabout.timeSparkCooldown.desc": "Time Spark cooldown in ticks.",
   "config.roundabout.standDiscStealEnabled.name": "Enable Stand Disc Steal",

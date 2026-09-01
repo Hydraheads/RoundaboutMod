@@ -6,7 +6,7 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.HallucinatoryAcidColors;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.event.powers.HallucinationEffect;
+import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

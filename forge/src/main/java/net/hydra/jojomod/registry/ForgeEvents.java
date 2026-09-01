@@ -826,6 +826,7 @@ public class ForgeEvents {
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.D4C_BLOCK = ForgeEntities.D4C_BLOCK.get();
         ModEntities.FALLING_BANNER = ForgeEntities.FALLING_BANNER.get();
         ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
         ModEntities.STEP_RULE = ForgeEntities.STEP_RULE.get();

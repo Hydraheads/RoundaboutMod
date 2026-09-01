@@ -18,9 +18,9 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
-import net.hydra.jojomod.event.powers.disc.MemoryDiscConversionService;
-import net.hydra.jojomod.stand.powers.WhitesnakeDisguiseService;
-import net.hydra.jojomod.stand.powers.WhitesnakeGunService;
+import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryDiscConversionService;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
+import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeDisguiseService;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -677,7 +677,7 @@ public class ClientToServerPackets {
                     WhitesnakeDisguiseService.request(sender, (String) vargs[0]);
                 }
                 if (message.equals(MESSAGES.WhitesnakeGunReload.value)) {
-                    WhitesnakeGunService.reload(sender);
+                    WhitesnakeControlInventory.reload(sender);
                 }
                 if (message.equals(MESSAGES.WhitesnakeMemoryDiscConversion.value)) {
                     InteractionHand hand = (boolean) vargs[0]

@@ -1713,8 +1713,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if ($$6.dot($$5) < 0.0) {
                         IProjectileAccess ipa = (IProjectileAccess) pr;
                         if (!ipa.roundabout$getIsDeflected()){
-                            if (pr instanceof RoundaboutBulletEntity) {
-                                return false;
+                            if (pr instanceof RoundaboutBulletEntity PE) {
+                                PE.setSuperThrown(false);
+                                PE.setOwner(self);
                             }
 
 
