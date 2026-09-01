@@ -2004,7 +2004,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustDay() {
-        return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.canUseBitesTheDustDayMode;
     }
     public boolean canBitesTheDustCombat() {
         return currentBombStatus != BITES_THE_DUST_BIGGER;
@@ -2635,7 +2635,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustDayActivate() {
-        if (!ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode) {
+        if (!canBitesTheDustDay()) {
             return false;
         }
 

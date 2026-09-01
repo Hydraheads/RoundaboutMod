@@ -465,7 +465,7 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer killerQueenAttackMultOnMobs;
     	@BooleanOption(group = "inherit", value = true)
-        public Boolean enableBitesTheDustDayMode;
+        public Boolean canUseBitesTheDustDayMode;
         @BooleanOption(group = "inherit", value = false)
         public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
