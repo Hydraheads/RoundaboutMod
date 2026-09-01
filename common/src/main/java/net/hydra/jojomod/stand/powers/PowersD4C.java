@@ -560,6 +560,12 @@ public class PowersD4C extends NewPunchingStand {
             tickBetween();
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
+            if (altBlockPos != null) {
+                if (altState == null || !(self.level().getBlockState(altBlockPos).is(altState.getBlock()))) {
+                    altBlockPos = null;
+                    saveDiscAndSync();
+                }
+            }
             if (!canHoldBanner){
                 rech++;
                 if (rech >= getRechargeTime()){
@@ -705,6 +711,7 @@ public class PowersD4C extends NewPunchingStand {
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
+                                && entity.getY() >= self.getY()-2
         );
 
         Collections.shuffle(possibleTargets);
@@ -1881,9 +1888,10 @@ public class PowersD4C extends NewPunchingStand {
                         self,
                         searchBox,
                         entity ->
-                                ((entity instanceof Mob
+                                (((entity instanceof Mob
                                         || entity instanceof Player) && PowerTypes.getPlaneOfExisting2(entity) == 0
-                                && !(entity instanceof StandEntity))
+                                && !(entity instanceof StandEntity)) && entity.getY() >= self.getY()-2 &&
+                                        MainUtil.canActuallyHitInvolved(self,entity))
                 ).stream()
                 .filter(entity -> entity != self)
                 .filter(Entity::isAlive)

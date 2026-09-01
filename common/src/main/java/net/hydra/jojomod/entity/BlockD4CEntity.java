@@ -22,6 +22,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -157,7 +158,7 @@ public class BlockD4CEntity extends Entity {
     public void tick() {
         existTime++;
 
-        if (!level().isClientSide()) {
+        if (!level().isClientSide() && level() instanceof ServerLevel sl) {
             if (level().getBlockState(getStartPos()).is(getBlockState().getBlock())){
                 if (existTime > 5) {
                     Vec3 start = this.position();
@@ -205,6 +206,10 @@ public class BlockD4CEntity extends Entity {
                                 2.0F,
                                 Level.ExplosionInteraction.NONE
                         );
+
+                        sl.sendParticles(ModParticles.MENGER,
+                                this.getEyePosition().x, this.getEyePosition().y, this.getEyePosition().z,
+                                70, 0,0, 0,0.3);
 
                         if (canGrief){
                             BlockState state = level().getBlockState(getStartPos());
