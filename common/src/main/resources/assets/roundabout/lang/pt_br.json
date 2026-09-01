@@ -975,7 +975,7 @@
   "config.roundabout.killerQueenAttackMultOnPlayers.desc": "Quando de dano o stand causa em Players, e potencialmente mobs usuarios de stand. O valor base de 100 significa x1.0.",
   "config.roundabout.killerQueenAttackMultOnMobs.name": "Multiplicador de dano em Mobs",
   "config.roundabout.killerQueenAttackMultOnMobs.desc": "Quando de dano o stand causa em Mobs, mesma matematica que o multiplicador para players.",
-  
+
   "roundabout.warden_ts_movement": "Aquilo Não parou ?!",
   "roundabout.warning.fabulous_graphics.v2": "§eNote: Alguns shaders não funcionam com o fabuloso ativado nos graficos.§r"
 }
