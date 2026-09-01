@@ -978,6 +978,12 @@ public class ForgeSounds {
             register(ModSounds.SILVER_CHARIOT_HIT_4, ModSounds.SILVER_CHARIOT_HIT_4_ID);
     public static final RegistryObject<SoundEvent> SILVER_CHARIOT_AFTERIMAGE =
             register(ModSounds.SILVER_CHARIOT_AFTERIMAGE, ModSounds.SILVER_CHARIOT_AFTERIMAGE_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SHOT_REDIRECT =
+            register(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT, ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT =
+            register(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT, ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_ID);
+    public static final RegistryObject<SoundEvent> SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT =
+            register(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT, ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_ID);
 
     public static final RegistryObject<SoundEvent> EMPEROR_SUMMON =
             register(ModSounds.EMPEROR_SUMMON, ModSounds.EMPEROR_SUMMON_ID);

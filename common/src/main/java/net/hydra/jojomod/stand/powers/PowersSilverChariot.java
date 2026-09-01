@@ -253,7 +253,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     // Windup
     public int rapierShotWindup() {
-        return 8;
+        return 3;
     }
 
 
@@ -787,19 +787,19 @@ public class PowersSilverChariot extends NewPunchingStand {
 
         // Rapier shot
         $$1.add(drawSingleGUIIcon(context,18,leftPos+134+startPos,topPos+99,getRapierShotLevel(), "ability.roundabout.silver_chariot_rapier_shot",
-                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,4,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.SILVER_CHARIOT_RAPIER_SHOT,4,level,bypas));
 
         // Rapier shot platform
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,getRapierShotPlatformLevel(), "ability.roundabout.silver_chariot_rapier_shot_platform",
-                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_SINGLE,4,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.SILVER_CHARIOT_RAPIER_SHOT_PLATFORM,4,level,bypas));
 
         // Self grab
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+118,getSelfGrabLevel(), "ability.roundabout.silver_chariot_self_grab",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STAR_PLATINUM_GRAB_MOB,3,level,bypas));
+                "instruction.roundabout.press_skill_crouch", StandIcons.SILVER_CHARIOT_SELF_GRAB,3,level,bypas));
 
         // Control mode
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,getControlModeLevel(), "ability.roundabout.silver_chariot_control_mode",
-                "instruction.roundabout.press_skill", StandIcons.CONTROL_MODE_ON,2,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.SILVER_CHARIOT_CONTROL_MODE_ON,2,level,bypas));
 
         // Rapier slash
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99, getRapierSlashLevel(), "ability.roundabout.silver_chariot_rapier_slash",
@@ -807,11 +807,11 @@ public class PowersSilverChariot extends NewPunchingStand {
 
         // Rapier spin
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80, getRapierSpinLevel(), "ability.roundabout.silver_chariot_rapier_spin",
-                "instruction.roundabout.press_skill", StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.SILVER_CHARIOT_RAPIER_SPIN,1,level,bypas));
 
         // Rebound leap
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118, getSelfGrabLevel(), "ability.roundabout.stand_leap_rebound",
-                "instruction.roundabout.press_skill_rebound", StandIcons.STAND_LEAP_REBOUND_STAR_PLATINUM,3,level,bypas));
+                "instruction.roundabout.press_skill_rebound", StandIcons.SILVER_CHARIOT_STAND_LEAP_REBOUND,3,level,bypas));
 
         return $$1;
     }
@@ -832,13 +832,13 @@ public class PowersSilverChariot extends NewPunchingStand {
                 setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
 
                 if (canExecuteMoveWithLevel(getSelfGrabLevel())) {
-                    setSkillIcon(context, x, y, 3, StandIcons.STAR_PLATINUM_GRAB_MOB, PowerIndex.NO_CD,true);
+                    setSkillIcon(context, x, y, 3, StandIcons.SILVER_CHARIOT_SELF_GRAB, PowerIndex.POWER_3_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
 
                 if (canExecuteMoveWithLevel(getRapierShotPlatformLevel())) {
-                    setSkillIcon(context, x, y, 4, StandIcons.RATT_SINGLE, PowerIndex.NO_CD,true);
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_RAPIER_SHOT_PLATFORM, PowerIndex.POWER_4_SNEAK);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD, true);
                 }
@@ -884,19 +884,19 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
 
                 if (canExecuteMoveWithLevel(getRapierSpinLevel())) {
-                    setSkillIcon(context, x, y, 1, StandIcons.GREEN_DAY_MOLD_SPIN_RIGHT, PowerIndex.POWER_1);
+                    setSkillIcon(context, x, y, 1, StandIcons.SILVER_CHARIOT_RAPIER_SPIN, PowerIndex.POWER_1);
                 } else {
                     setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
 
                 if (canExecuteMoveWithLevel(getControlModeLevel())) {
-                    setSkillIcon(context, x, y, 2, StandIcons.CONTROL_MODE_ON, PowerIndex.POWER_2);
+                    setSkillIcon(context, x, y, 2, StandIcons.SILVER_CHARIOT_CONTROL_MODE_ON, PowerIndex.POWER_2);
                 } else {
                     setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
 
                 if (this.canExecuteMoveWithLevel(this.getRapierShotLevel())) {
-                    setSkillIcon(context, x, y, 4, StandIcons.RATT_SINGLE, PowerIndex.POWER_4);
+                    setSkillIcon(context, x, y, 4, StandIcons.SILVER_CHARIOT_RAPIER_SHOT, PowerIndex.POWER_4);
                 } else {
                     setSkillIcon(context, x, y, 4, StandIcons.LOCKED, PowerIndex.NO_CD,true);
                 }
@@ -1049,7 +1049,7 @@ public class PowersSilverChariot extends NewPunchingStand {
             }
             case SKILL_4_CROUCH -> {
                 // TODO: Implement platform rapier shot ability
-                // rapierShotPlatformClient();
+                rapierShotPlatformClient();
             }
             case SKILL_4_GUARD -> {
                 // TODO: Implement statue cutting ability
@@ -2981,7 +2981,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // rapier.setRapierShotType(SilverChariotRapierShotEntity.BASE);
                 // rapier.setBounces(1);
                 // rapier.pickup = AbstractArrow.Pickup.DISALLOWED;
-                float speed = 1.5F;
+                float speed = 2.0F;
 
                 // rapier.setPos(origin.getEyePosition().x, origin.getEyePosition().y, origin.getEyePosition().z);
                 // rapier.setXRot(origin.getXRot()%360);
@@ -3057,25 +3057,22 @@ public class PowersSilverChariot extends NewPunchingStand {
             StandEntity standEntity = this.getStandEntity(this.self);
             if (standEntity instanceof SilverChariotEntity SCE) {
                 origin = isPiloting() ? self : self;
-                SilverChariotRapierShotEntity rapier = new SilverChariotRapierShotEntity(origin, origin.getX(), origin.getEyeY() - 0.1F, origin.getZ(), this.self.level(), SilverChariotRapierShotEntity.PLATFORM);
+                SilverChariotRapierShotEntity rapier = new SilverChariotRapierShotEntity(origin, origin.getEyePosition().x, origin.getEyePosition().y, origin.getEyePosition().z, this.self.level(), SilverChariotRapierShotEntity.PLATFORM);
                 // rapier.setPos(origin.getX(), origin.getEyeY() - 0.1D, origin.getZ());
                 // rapier.absMoveTo(origin.getX(), origin.getY(), origin.getZ());
                 // rapier.setUser(origin);
-                rapier.setOwner(origin);
+                rapier.setOwner(self);
                 // rapier.setRapierShotType(SilverChariotRapierShotEntity.BASE);
-                // rapier.setBounces(0);
+                // rapier.setBounces(1);
                 // rapier.pickup = AbstractArrow.Pickup.DISALLOWED;
+                float speed = 2.0F;
 
-                float speed = 1.5F;
-
-                // rapier.initRotateFromVelocity(speed);
-
-                self.level().addFreshEntity(rapier);
                 // rapier.setPos(origin.getEyePosition().x, origin.getEyePosition().y, origin.getEyePosition().z);
                 // rapier.setXRot(origin.getXRot()%360);
                 rapier.shootFromRotationDeltaAgnostic(origin, origin.getXRot(), origin.getYRot(), 0F, speed, 1F);
                 rapier.initRotateFromVelocity(speed);
 
+                self.level().addFreshEntity(rapier);
                 playSoundIfPossible(self.level(),null, origin.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SHOT_EVENT,
                         SoundSource.PLAYERS, 1.0F, 1.0F);
                 SCE.setHasRapier(false);

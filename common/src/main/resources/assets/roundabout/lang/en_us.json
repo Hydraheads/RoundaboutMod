@@ -1637,6 +1637,9 @@
   "sounds.roundabout.silver_chariot_hit_3": "Sword jab",
   "sounds.roundabout.silver_chariot_hit_4": "Sword jab",
   "sounds.roundabout.silver_chariot_afterimage": "Silver Chariot afterimage creation",
+  "sounds.roundabout.silver_chariot_rapier_shot_redirect": "Rapier shot bounce",
+  "sounds.roundabout.silver_chariot_rapier_shot_block_impact": "Rapier shot block hit",
+  "sounds.roundabout.silver_chariot_rapier_shot_entity_impact": "Rapier shot entity hit",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
