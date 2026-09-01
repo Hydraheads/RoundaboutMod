@@ -225,8 +225,8 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:melon_stem:minecraft:air:0.6",
                     "minecraft:torchflower_crop:minecraft:air:0.6",
                     "minecraft:sea_pickle:minecraft:air:0.6",
-                    "minecraft:kelp_plant:minecraft:air:0.6",
-                    "minecraft:kelp:minecraft:air:0.6",
+                    "minecraft:kelp_plant:minecraft:water:0.6",
+                    "minecraft:kelp:minecraft:water:0.6",
                     "minecraft:acacia_leaves:minecraft:air:0.3",
                     "minecraft:azalea_leaves:minecraft:air:0.3",
                     "minecraft:birch_leaves:minecraft:air:0.3",
@@ -252,7 +252,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
                     "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
                     "minecraft:oak_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+                    "minecraft:oak_slab:minecraft:air:1.0"
             )
     );
 
