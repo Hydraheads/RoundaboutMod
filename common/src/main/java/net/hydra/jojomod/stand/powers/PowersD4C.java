@@ -1441,7 +1441,7 @@ public class PowersD4C extends NewPunchingStand {
                                 !(state.getBlock() instanceof BedBlock) &&
                                 !(state.getBlock() instanceof GoddessStatueBlock) &&
                                 !(state.getBlock() instanceof BarrierBlock) &&
-                                !(self.level().getBlockEntity(altBlockPos) != null) &&
+                                self.level().getBlockEntity(altBlockPos) == null &&
                                 !(state.getBlock() instanceof LightBlock)) {
                             altState = state;
                             altBlockPos = grabBlock;
