@@ -166,6 +166,12 @@ public class PowersKillerQueen extends NewPunchingStand {
         DETONATE_NOISE = 114,
         BTD_PLANT = 115,
         BUBBLE_TARGET = 116,
+        MINESWEEPER_EXPLOSION = 117,
+        CREEPER_EXPLOSION = 118,
+        BASE_EXPLOSION_1 = 119,
+        BASE_EXPLOSION_2 = 120,
+        BASE_EXPLOSION_3 = 121,
+        BASE_EXPLOSION_4 = 122,
 
     // Bomb Status things
 		BOMB_NONE=0,
@@ -587,7 +593,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 		MINESWEEPER = 16,
 		NOTW = 17,
 		MEMENTO = 18,
-		STARDUST = 19;
+		STARDUST = 19,
+        MINUET = 20;
     
     @Override
     public List<Byte> getSkinList() {
@@ -601,6 +608,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 l.add(MANGA);
                 l.add(GOGO);
                 l.add(JOJOLION);
+                l.add(MINUET);
             }
             if (Level > 2 || bypass){
                 l.add(ARTWORK);
@@ -2004,8 +2012,9 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean canBitesTheDustDay() {
-        return ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode;
+        return ClientNetworking.getAppropriateConfig().killerQueenSettings.canUseBitesTheDustDayMode;
     }
+
     public boolean canBitesTheDustCombat() {
         return currentBombStatus != BITES_THE_DUST_BIGGER;
     }
@@ -2635,7 +2644,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean bitesTheDustDayActivate() {
-        if (!ClientNetworking.getAppropriateConfig().killerQueenSettings.enableBitesTheDustDayMode) {
+        if (!canBitesTheDustDay()) {
             return false;
         }
 
@@ -3242,8 +3251,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 Vec3 unhandledBubbblePos = new Vec3(
                         (KQE.getRandom().nextFloat() * 0.4) - 0.2,
-                        (KQE.getRandom().nextFloat() * 0.2) - 0.2 + 1,
-                        0.7
+                        (KQE.getRandom().nextFloat() * 0.2) - 0.2 + 0.9,
+                        0.65
                 );
                 Vec3 bubblePos = unhandledBubbblePos
                         .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
@@ -3474,7 +3483,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                         if(!target.isAlive() && !MainUtil.isBossMob(target)){ target.discard(); }
 
                         ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
-                        playSoundIfPossible(self.level(),null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                        if (this.self instanceof ServerPlayer pl) {
+                            S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
+                        }
                     }
                 }else {
                     toRemoveFromList.add(id);
@@ -3520,7 +3531,9 @@ public class PowersKillerQueen extends NewPunchingStand {
                             }
 
                             ExplosionUtil.explodeEffects(target.position(), target.level(), getExplosionParticle(), 0.35f);
-                            playSoundIfPossible(self.level(),null, target.getOnPos(), getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+                            if (this.self instanceof ServerPlayer pl) {
+                                S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
+                            }
                         }
                     }
                 }else {
@@ -3686,6 +3699,49 @@ public class PowersKillerQueen extends NewPunchingStand {
         return ModSounds.KILLER_QUEEN_BUBBLE_LAUNCH_EVENT;
     }
 
+    public byte getExplosionByteSound() {
+        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        if (skn == KillerQueenEntity.MINESWEEPER) {
+            return MINESWEEPER_EXPLOSION;
+        }else if (skn == KillerQueenEntity.CREEPER) {
+            return CREEPER_EXPLOSION;
+        }
+
+        float rnd = (float) Math.random();
+
+        if (rnd <= 0.25)  {
+            return BASE_EXPLOSION_1;
+        }else if (rnd <= 0.5)  {
+            return BASE_EXPLOSION_2;
+        }else if (rnd <= 0.75)  {
+            return BASE_EXPLOSION_3;
+        }
+
+        return BASE_EXPLOSION_4;
+    }
+
+    public SoundEvent getExplosionSoundFromByte(byte value) {
+        switch (value) {
+            case MINESWEEPER_EXPLOSION -> {
+                return ModSounds.KQ_MINESWEEPER_EXPLOSION_EVENT;
+            }
+            case CREEPER_EXPLOSION -> {
+                return SoundEvents.GENERIC_EXPLODE;
+            }
+            case BASE_EXPLOSION_1 -> {
+                return ModSounds.KILLER_QUEEN_EXPLOSION_1_EVENT;
+            }
+            case BASE_EXPLOSION_2 -> {
+                return ModSounds.KILLER_QUEEN_EXPLOSION_2_EVENT;
+            }
+            case BASE_EXPLOSION_3 -> {
+                return ModSounds.KILLER_QUEEN_EXPLOSION_3_EVENT;
+            }
+        }
+
+        return ModSounds.KILLER_QUEEN_EXPLOSION_EVENT;
+    }
+
     public SoundEvent getExplosionSound() {
         byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
         if (skn == KillerQueenEntity.MINESWEEPER) {
@@ -3734,6 +3790,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
         if (soundChoice == BUBBLE_TARGET) { return 0.3f; }
 
+        if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
+            return 0.8f;
+        }
+
         return super.getSoundVolumeFromByte(soundChoice);
     }
 
@@ -3780,12 +3840,12 @@ public class PowersKillerQueen extends NewPunchingStand {
             return getBitesTheDustNoiseSound();
         }else if (soundChoice == BTD_PLANT) {
             return getBitesTheDustPlantSound();
-        }else if (soundChoice == SoundIndex.BITES_THE_DUST_COMBAT) {
-            //return getBitesTheDustSound();
         }else if (soundChoice == BUBBLE_TARGET) {
             return ModSounds.JUSTICE_SELECT_EVENT;
         }else if (soundChoice == SUMMON_ARMS) {
             return ModSounds.SUMMON_SOUND_EVENT;
+        }else if (soundChoice >= MINESWEEPER_EXPLOSION && soundChoice <= BASE_EXPLOSION_4) {
+            return getExplosionSoundFromByte(soundChoice);
         }
 
         return super.getSoundFromByte(soundChoice);
@@ -4154,6 +4214,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             case KillerQueenEntity.NOTW -> {return Component.translatable("skins.roundabout.killer_queen.notw");}
             case KillerQueenEntity.MEMENTO -> {return Component.translatable("skins.roundabout.killer_queen.memento");}
             case KillerQueenEntity.STARDUST -> {return Component.translatable("skins.roundabout.killer_queen.stardust");}
+            case KillerQueenEntity.MINUET -> {return Component.translatable("skins.roundabout.killer_queen.minuet");}
         }
         return Component.translatable("skins.roundabout.killer_queen.anime");
     }
@@ -4168,7 +4229,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                  KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
             case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
                  KillerQueenEntity.ARTWORK, KillerQueenEntity.GUNPOWDER,
-                 KillerQueenEntity.UMBRA-> {return 3;}
+                 KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET-> {return 3;}
             case KillerQueenEntity.MINESWEEPER -> {return 4;}
             
             default -> {return 0;}
@@ -4404,7 +4465,10 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             ExplosionUtil.explodeEffects(vPos, level, getExplosionParticle(), 0.55f);
-            playSoundIfPossible(self.level(),null, bPos, getExplosionSound(), SoundSource.PLAYERS, 0.3F, 1.0f);
+            if (this.self instanceof ServerPlayer pl) {
+                S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), getExplosionByteSound());
+            }
+
         }
 
         this.detonateTimer = -1;

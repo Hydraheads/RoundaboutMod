@@ -708,8 +708,15 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
                         EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.5f, 0.5f).clientTrackingRange(14).build(Roundabout.MOD_ID+":silver_chariot_rapier")
+                                sized(0.2f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
                 );
+    public static final EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("silver_chariot_rapier_platform"),
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).
+                            sized(1.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
+            );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -754,6 +761,15 @@ public class FabricEntities {
                             sized(BlockWallEntity.dimensions, BlockWallEntity.dimensions)
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
+            );
+    public static final EntityType<BlockD4CEntity> D4C_BLOCK =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "block_d4c_entity"),
+                    EntityType.Builder.<BlockD4CEntity>of(BlockD4CEntity::new, MobCategory.MISC).
+                            sized(BlockD4CEntity.dimensions, BlockD4CEntity.dimensions)
+                            .updateInterval(1).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":block_d4c_entity")
             );
 
     public static final EntityType<FallingBannerEntity> FALLING_BANNER =
@@ -1220,6 +1236,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
+                ModEntities.D4C_BLOCK = D4C_BLOCK;
                 ModEntities.STEP_RULE = STEP_RULE;
                 ModEntities.STRAY_CAT = STRAY_CAT;
                 ModEntities.RATT_DART = RATT_DART;
@@ -1269,6 +1286,7 @@ public class FabricEntities {
                 ModEntities.TUSK_NAIL = TUSK_NAIL;
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
+                ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;

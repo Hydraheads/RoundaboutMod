@@ -359,7 +359,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:stray_cat_entity:0"
             )
     );
-    public Set<String> standDestructionBlacklist = new HashSet<>(
+    public Set<String> standDestructionBlacklistv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:diamond_block",
                     "minecraft:gold_block",
@@ -367,7 +367,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:emerald_block",
                     "minecraft:redstone_block",
                     "minecraft:cobblestone_wall",
-                    "minecraft:reinforced_deepslate"
+                    "minecraft:reinforced_deepslate",
+                    "minecraft:nether_portal",
+                    "minecraft:end_portal",
+                    "roundabout:d4c_portal",
+                    "minecraft:light_block"
             )
     );
     public Set<String> unbreakableThrownItems = new HashSet<>(
