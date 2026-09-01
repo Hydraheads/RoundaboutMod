@@ -593,7 +593,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 		MINESWEEPER = 16,
 		NOTW = 17,
 		MEMENTO = 18,
-		STARDUST = 19;
+		STARDUST = 19,
+        MINUET = 20;
     
     @Override
     public List<Byte> getSkinList() {
@@ -607,6 +608,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 l.add(MANGA);
                 l.add(GOGO);
                 l.add(JOJOLION);
+                l.add(MINUET);
             }
             if (Level > 2 || bypass){
                 l.add(ARTWORK);
@@ -3249,8 +3251,8 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 Vec3 unhandledBubbblePos = new Vec3(
                         (KQE.getRandom().nextFloat() * 0.4) - 0.2,
-                        (KQE.getRandom().nextFloat() * 0.2) - 0.2 + 1,
-                        0.7
+                        (KQE.getRandom().nextFloat() * 0.2) - 0.2 + 0.9,
+                        0.65
                 );
                 Vec3 bubblePos = unhandledBubbblePos
                         .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
@@ -4226,7 +4228,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                  KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
             case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
                  KillerQueenEntity.ARTWORK, KillerQueenEntity.GUNPOWDER,
-                 KillerQueenEntity.UMBRA-> {return 3;}
+                 KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET-> {return 3;}
             case KillerQueenEntity.MINESWEEPER -> {return 4;}
             
             default -> {return 0;}

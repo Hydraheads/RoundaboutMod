@@ -35,6 +35,7 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
     private static final ResourceLocation NOTW_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/notw.png");
     private static final ResourceLocation MEMENTO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/mementomorioh.png");
     private static final ResourceLocation STARDUST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/stardust.png");
+    private static final ResourceLocation MINUET_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/minuet.png");
 
     static public ResourceLocation getSkin(byte BT) {
         if (BT == KillerQueenEntity.PART_4) {
@@ -77,8 +78,9 @@ public class KillerQueenRenderer extends StandRenderer<KillerQueenEntity>{
             return MEMENTO_SKIN;
         } else if (BT == KillerQueenEntity.STARDUST) {
             return STARDUST_SKIN;
+        } else if (BT == KillerQueenEntity.MINUET) {
+            return MINUET_SKIN;
         }
-
 
         return PART_4_SKIN;
     }
