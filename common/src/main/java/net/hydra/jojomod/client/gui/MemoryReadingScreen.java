@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
-import net.hydra.jojomod.event.powers.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;

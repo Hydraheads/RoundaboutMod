@@ -50,6 +50,10 @@ public class ForgeSounds {
             register(ModSounds.DISC_INSERT, ModSounds.DISC_INSERT_ID);
     public static final RegistryObject<SoundEvent> D4C_PORTAL =
             register(ModSounds.D4C_PORTAL, ModSounds.D4C_PORTAL_ID);
+    public static final RegistryObject<SoundEvent> BLOCK_ATTRACT =
+            register(ModSounds.BLOCK_ATTRACT, ModSounds.BLOCK_ATTRACT_ID);
+    public static final RegistryObject<SoundEvent> D4C_COPY_BLOCK =
+            register(ModSounds.D4C_COPY_BLOCK, ModSounds.D4C_COPY_BLOCK_ID);
     public static final RegistryObject<SoundEvent> D4C_FUSE =
             register(ModSounds.D4C_FUSE, ModSounds.D4C_FUSE_ID);
     public static final RegistryObject<SoundEvent> D4C_FUSION_START =

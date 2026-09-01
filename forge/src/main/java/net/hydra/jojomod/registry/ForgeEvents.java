@@ -527,6 +527,7 @@ public class ForgeEvents {
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.FANCY_LIGHTER = ForgeItems.FANCY_LIGHTER.get();
+        ModItems.HAND = ForgeItems.HAND_ITEM.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
@@ -825,6 +826,7 @@ public class ForgeEvents {
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.D4C_BLOCK = ForgeEntities.D4C_BLOCK.get();
         ModEntities.FALLING_BANNER = ForgeEntities.FALLING_BANNER.get();
         ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
         ModEntities.STEP_RULE = ForgeEntities.STEP_RULE.get();

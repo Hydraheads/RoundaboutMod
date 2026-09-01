@@ -11,6 +11,18 @@
       "roundabout:summon_oasis"
     ]
   },
+  "d4c_copy_block": {
+    "subtitle": "sounds.roundabout.d4c_copy_block",
+    "sounds": [
+      "roundabout:d4c_copy_block"
+    ]
+  },
+  "block_attract": {
+    "subtitle": "sounds.roundabout.block_attract",
+    "sounds": [
+      "roundabout:block_attract"
+    ]
+  },
   "d4c_fusion_start": {
     "subtitle": "sounds.roundabout.d4c_fusion_start",
     "sounds": [
@@ -3454,6 +3466,12 @@
     "subtitle": "sounds.roundabout.purple_haze_distortion_smoke",
     "sounds": [
       "roundabout:purple_haze_distortion_smoke"
+    ]
+  },
+  "purple_haze_pod_bite": {
+    "subtitle": "sounds.roundabout.purple_haze_pod_bite",
+    "sounds": [
+      "roundabout:purple_haze_pod_bite"
     ]
   },
   "planet_waves_summon": {

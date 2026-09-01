@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.EntitySelector;
@@ -56,7 +57,7 @@ public class AvoidCatHeadGoal<T extends LivingEntity> extends Goal {
 
     public boolean canUse() {
         T LE = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.avoidClass, this.mob.getBoundingBox().inflate((double)this.maxDist, (double)3.0F, (double)this.maxDist), ($$0x) -> true), this.avoidEntityTargeting, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
-        if (LE instanceof BaseMinion bm && bm.getHeadItem() != null && bm.getHeadItem().is(ModItems.CAT_REMAINS)) {
+        if ((LE instanceof BaseMinion bm && bm.getHeadItem() != null && bm.getHeadItem().is(ModItems.CAT_REMAINS)) || LE instanceof StrayCatEntity sce && !sce.getSleeping()) {
             this.toAvoid = LE;
             Vec3 $$0 = DefaultRandomPos.getPosAway(this.mob, 16, 7, this.toAvoid.position());
             if ($$0 == null) {

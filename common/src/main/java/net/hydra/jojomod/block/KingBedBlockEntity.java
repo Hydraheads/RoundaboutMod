@@ -1,6 +1,7 @@
 package net.hydra.jojomod.block;
 
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -83,7 +84,8 @@ public class KingBedBlockEntity extends BlockEntity {
         Entity entity = ((ServerLevel) level).getEntity(uuid);
 
         if (entity instanceof CaliforniaKingBedEntity ckb){
-            if (ckb.bedUUID == null || !ckb.bedUUID.equals(bed.getBedUUID())){
+            if (ckb.bedUUID == null || !ckb.bedUUID.equals(bed.getBedUUID())
+            || OffsetIndex.OffsetStyle(ckb.getOffsetType()) != OffsetIndex.LOOSE_STYLE){
                 removeBed(level, pos, state);
             }
         } else {
