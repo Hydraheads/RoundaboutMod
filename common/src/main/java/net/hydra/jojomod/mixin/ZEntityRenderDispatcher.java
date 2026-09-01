@@ -10,6 +10,7 @@ import net.hydra.jojomod.access.NoHitboxRendering;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -139,6 +140,9 @@ public abstract class ZEntityRenderDispatcher {
                     ci.cancel();
                 }
             }
+        }
+        if($$2 instanceof BlackSabbathEntity bs && bs.getRiding()){
+            ci.cancel();
         }
     }
 
