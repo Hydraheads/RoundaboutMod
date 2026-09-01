@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import com.mojang.logging.LogUtils;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
+import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -23,6 +24,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -152,6 +155,8 @@ public class BlockD4CEntity extends Entity {
         this.lerpSteps = $$5;
         updated = true;
     }
+
+    public LivingEntity user = null;
     Vec3 finPos = Vec3.ZERO;
     public int existTime = 0;
     @Override
@@ -198,14 +203,85 @@ public class BlockD4CEntity extends Entity {
                         setPos(finPos.x, finPos.y, finPos.z);
 
                         // Explode
-                        level().explode(
+                        Vec3 center = position();
+
+// Sound
+                        MainUtil.playSoundIfPossible(
                                 this,
-                                getX(),
-                                getY(),
-                                getZ(),
-                                2.0F,
-                                Level.ExplosionInteraction.NONE
+                                this.level(),
+                                null,
+                                center.x,
+                                center.y,
+                                center.z,
+                                SoundEvents.GENERIC_EXPLODE,
+                                SoundSource.BLOCKS,
+                                1.0F,
+                                1.0F
                         );
+
+// Small amount of particles
+                        if (level() instanceof ServerLevel serverLevel) {
+                            MainUtil.sendParticlesIfPossible(
+                                    this,
+                                    this.level(),
+                                    ParticleTypes.EXPLOSION,
+                                    center.x,
+                                    center.y,
+                                    center.z,
+                                    4,       // particle count
+                                    0.2D,    // X spread
+                                    0.2D,    // Y spread
+                                    0.2D,    // Z spread
+                                    0.1D    // speed
+                            );
+                        }
+
+                        Vec3 center2 = position();
+
+                        float radius = 1.5F;
+
+                        AABB area = new AABB(
+                                center2.x - radius,
+                                center2.y - radius,
+                                center2.z - radius,
+                                center2.x + radius,
+                                center2.y + radius,
+                                center2.z + radius
+                        );
+
+                        for (Entity entity : level().getEntities(this, area)) {
+
+                            if (entity instanceof StandEntity) {
+                                continue;
+                            }
+
+                            double distance2 = entity.distanceToSqr(center2);
+
+                            if (distance2 > radius * radius) {
+                                continue;
+                            }
+
+                            // Damage
+                            if (entity instanceof LivingEntity living) {
+                                living.hurt(
+                                        ModDamageTypes.of(this.level(),ModDamageTypes.EXPLOSIVE_STAND,user),
+                                        4.0F
+                                );
+                            }
+
+                            // Optional knockback
+                            Vec3 direction = entity.position().subtract(center2);
+
+                            if (direction.lengthSqr() > 0.0001D) {
+                                direction = direction.normalize();
+
+                                entity.push(
+                                        direction.x * 0.3D,
+                                        0.25D,
+                                        direction.z * 0.3D
+                                );
+                            }
+                        }
 
                         sl.sendParticles(ModParticles.MENGER,
                                 this.getEyePosition().x, this.getEyePosition().y, this.getEyePosition().z,

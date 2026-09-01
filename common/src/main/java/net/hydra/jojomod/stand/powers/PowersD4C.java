@@ -1412,6 +1412,7 @@ public class PowersD4C extends NewPunchingStand {
                         );
                 wall.setStartPos(altBlockPos);
                 wall.timing = 200;
+                wall.user = self;
                 wall.tsmove = true;
                 wall.isWhiteAlbumWall = true;
                 wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
