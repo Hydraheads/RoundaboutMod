@@ -17,6 +17,12 @@
       "roundabout:d4c_copy_block"
     ]
   },
+  "block_attract": {
+    "subtitle": "sounds.roundabout.block_attract",
+    "sounds": [
+      "roundabout:block_attract"
+    ]
+  },
   "d4c_fusion_start": {
     "subtitle": "sounds.roundabout.d4c_fusion_start",
     "sounds": [

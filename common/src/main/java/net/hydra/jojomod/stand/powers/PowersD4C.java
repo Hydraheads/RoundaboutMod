@@ -116,6 +116,7 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte FUSE = 108;
     public static final byte MELT_DODGE = 109;
     public static final byte COPY_BLOCK = 110;
+    public static final byte BLOCK_ATTRACT = 111;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -138,6 +139,8 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_FUSE_EVENT;
         } else if (soundChoice == COPY_BLOCK) {
             return ModSounds.D4C_COPY_BLOCK_EVENT;
+        } else if (soundChoice == BLOCK_ATTRACT) {
+            return ModSounds.BLOCK_ATTRACT_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
         }
@@ -1407,6 +1410,7 @@ public class PowersD4C extends NewPunchingStand {
                 wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                 PowerTypes.copyPlaneOfExisting(self, wall);
                 self.level().addFreshEntity(wall);
+                playStandUserOnlySoundsIfNearby(BLOCK_ATTRACT, 27, false,false);
             }
             altBlockPos = null;
             altState = null;
@@ -1441,14 +1445,14 @@ public class PowersD4C extends NewPunchingStand {
                                 !(state.getBlock() instanceof BedBlock) &&
                                 !(state.getBlock() instanceof GoddessStatueBlock) &&
                                 !(state.getBlock() instanceof BarrierBlock) &&
-                                self.level().getBlockEntity(altBlockPos) == null &&
+                                self.level().getBlockEntity(grabBlock) == null &&
                                 !(state.getBlock() instanceof LightBlock)) {
                             altState = state;
                             altBlockPos = grabBlock;
                             saveDiscAndSync();
                             this.setAttackTimeDuring(-5);
                             this.setActivePower(PowerIndex.POWER_2_BONUS);
-                            playSoundsIfNearby(COPY_BLOCK, 27, false);
+                            playStandUserOnlySoundsIfNearby(COPY_BLOCK, 27, false,false);
                             this.animateStand(D4CEntity.DRAG_2);
                             this.poseStand(OffsetIndex.GUARD);
                             sendParticlesIfPossible(self.level(), new BlockParticleOption(ParticleTypes.BLOCK, this.getSelf().level().getBlockState(grabBlock)),
@@ -2159,7 +2163,7 @@ public class PowersD4C extends NewPunchingStand {
                 PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
                 this.setAttackTimeDuring(-5);
                 this.setActivePower(PowerIndex.POWER_2_BONUS);
-                playSoundsIfNearby(FUSE, 27, false);
+                playStandUserOnlySoundsIfNearby(FUSE, 27, false,false);
                 this.animateStand(D4CEntity.DRAG_2);
                 this.poseStand(OffsetIndex.GUARD);
                 if (self.level() instanceof ServerLevel sl){

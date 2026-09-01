@@ -158,6 +158,10 @@ public class ModSounds {
     public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
     public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
 
+    public static final String BLOCK_ATTRACT = "block_attract";
+    public static final ResourceLocation BLOCK_ATTRACT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+BLOCK_ATTRACT);
+    public static SoundEvent BLOCK_ATTRACT_EVENT = SoundEvent.createVariableRangeEvent(BLOCK_ATTRACT_ID);
+
     public static final String D4C_COPY_BLOCK = "d4c_copy_block";
     public static final ResourceLocation D4C_COPY_BLOCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_COPY_BLOCK);
     public static SoundEvent D4C_COPY_BLOCK_EVENT = SoundEvent.createVariableRangeEvent(D4C_COPY_BLOCK_ID);
