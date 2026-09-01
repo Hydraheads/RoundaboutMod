@@ -711,7 +711,7 @@ public class PowersD4C extends NewPunchingStand {
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
                                 && PowerTypes.getPlaneOfExisting(entity) == 0
-                                && entity.getY() >= self.getY()-2
+                                && entity.getY() >= self.getY()-3
         );
 
         Collections.shuffle(possibleTargets);
@@ -1279,15 +1279,27 @@ public class PowersD4C extends NewPunchingStand {
         return null;
     }
     public static int getDeductionTicks(Entity target, double distance){
-        if (PowerTypes.isInD4CWorldWithRender(target)){
-            if (distance >= 15) {
-                return 6;
-            } else if (distance >= 14){
-                return 3;
-            } else if (distance >= 12){
-                return 2;
+        if (target instanceof Player pl) {
+            int now = pl.tickCount;
+            if (pl.getLastHurtByMob() instanceof Player pl2){
+                boolean recentlyInCombat =
+                        now - pl.getLastHurtByMobTimestamp() < 600 ||
+                                now - pl.getLastHurtMobTimestamp() < 600;
+
+                if (recentlyInCombat){
+                    if (PowerTypes.isInD4CWorldWithRender(target)){
+                        if (distance >= 15) {
+                            return 6;
+                        } else if (distance >= 14){
+                            return 3;
+                        } else if (distance >= 12){
+                            return 2;
+                        }
+                    }
+                }
             }
         }
+
         return 1;
     }
     public void isekaiTarget(Entity target){
