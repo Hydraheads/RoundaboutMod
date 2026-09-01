@@ -2334,9 +2334,23 @@ public class PowersD4C extends NewPunchingStand {
     }
     public float getChopStrength(Entity entity){
         if (this.getReducedDamage(entity)){
-            return levelupDamageMod(multiplyPowerByStandConfigPlayers((1F )));
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1F ));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs((6F )));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(6F ));
+        }
+    }
+    public float getMergeHitStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(3F ));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(12.0F ));
+        }
+    }
+    public float getMergeBlastStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(5F ));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(20.3F ));
         }
     }
 
