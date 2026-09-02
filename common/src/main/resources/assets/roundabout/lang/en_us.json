@@ -4934,6 +4934,8 @@
   "sounds.roundabout.d4c_explosion": "Collision",
   "sounds.roundabout.d4c_fuse": "Fuse",
   "sounds.roundabout.d4c_copy_block": "Capture",
+  "sounds.roundabout.dojyan_1": "Ta Da",
+  "sounds.roundabout.dojyan_2": "Ta Da",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",

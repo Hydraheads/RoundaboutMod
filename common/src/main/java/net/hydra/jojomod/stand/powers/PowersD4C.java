@@ -116,6 +116,8 @@ public class PowersD4C extends NewPunchingStand {
     public static final byte MELT_DODGE = 109;
     public static final byte COPY_BLOCK = 110;
     public static final byte BLOCK_ATTRACT = 111;
+    public static final byte DOJONE = 112;
+    public static final byte DOJTWO = 113;
     @Override
     public float getSoundPitchFromByte(byte soundChoice){
         if (soundChoice == IMPALE_NOISE) {
@@ -140,6 +142,10 @@ public class PowersD4C extends NewPunchingStand {
             return ModSounds.D4C_COPY_BLOCK_EVENT;
         } else if (soundChoice == BLOCK_ATTRACT) {
             return ModSounds.BLOCK_ATTRACT_EVENT;
+        } else if (soundChoice == DOJONE) {
+            return ModSounds.DOJYAN_1_EVENT;
+        } else if (soundChoice == DOJTWO) {
+            return ModSounds.DOJYAN_2_EVENT;
         } else if (soundChoice == MELT_DODGE) {
             return ModSounds.MELT_DODGE_EVENT;
         }
@@ -1404,10 +1410,10 @@ public class PowersD4C extends NewPunchingStand {
             case SKILL_2_NORMAL -> {
                 makeCloneClient();
             }
-            case SKILL_2_GUARD -> {
+            case SKILL_2_GUARD,SKILL_2_CROUCH_GUARD -> {
                 switchCloneClient();
             }
-            case SKILL_2_CROUCH_GUARD -> {
+            case SKILL_2_CROUCH -> {
                 replaceBodyClient();
             }
             case SKILL_3_GUARD,SKILL_3_CROUCH_GUARD -> {
@@ -1630,6 +1636,10 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
 
+        if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK) && isEligable()) {
+
+            tryPowerPacket(PowerIndex.POWER_2_SNEAK);
+        }
     }
     public void makeCloneClient(){
         if (PowerTypes.isInD4CWorld(self)){
@@ -2276,6 +2286,29 @@ public class PowersD4C extends NewPunchingStand {
         }
         return super.tryIntPower(move, forced, chargeTime);
     }
+
+    public void replaceBody(){
+        if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
+            if (self.level() instanceof ServerLevel sl) {
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                sl.sendParticles(new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), self.getX(),
+                        self.getY() + self.getEyeHeight(), self.getZ(),
+                        20, 0.3, 0.3, 0.3, 0.3);
+                self.setHealth(self.getMaxHealth());
+                self.getActiveEffects().clear();
+                setCooldown(PowerIndex.SKILL_2_SNEAK,100);
+//                if (Math.random() < 0.5F){
+//                    playSoundsIfNearby(DOJONE, 27, false, true);
+//                } else {
+//                    playSoundsIfNearby(DOJTWO, 27, false, true);
+//                }
+                playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
+            }
+        }
+    }
     public void grabMobIntoWorld(){
         if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
             StandEntity stand = getStandEntity(this.self);
@@ -2328,6 +2361,9 @@ public class PowersD4C extends NewPunchingStand {
             return this.setPowerSuperHit();
         } else if (move == PowerIndex.POWER_2_BONUS) {
             this.grabMobIntoWorld();
+            return false;
+        } else if (move == PowerIndex.POWER_2_SNEAK){
+            this.replaceBody();
             return false;
         } else if (move == PowerIndex.POWER_3_SNEAK){
             return this.chopAttack();
