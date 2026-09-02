@@ -229,6 +229,7 @@ public class MainUtil {
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> blackOrWhiteListParallelMobs = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> standMobGrabBlacklist = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
     public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
@@ -318,6 +319,10 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static boolean isMobGrabBlacklisted(Entity ent) {
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        return standMobGrabBlacklist != null && !standMobGrabBlacklist.isEmpty() && rl != null && standMobGrabBlacklist.contains(rl.toString());
     }
     public static boolean isEffectBanishable(MobEffectInstance mei){
         ResourceLocation rl = BuiltInRegistries.MOB_EFFECT.getKey(mei.getEffect());
