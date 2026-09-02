@@ -35,6 +35,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -261,7 +262,6 @@ public class PowersBlackSabbath extends NewDashPreset {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
             }
         } else if (!blackSabbathTargets.isEmpty() && moveMode < 2){
-           // setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_CONFIRM, PowerIndex.SKILL_2);
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
         } else if (moveMode == 1 || moveMode == 0){
             setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
@@ -479,11 +479,11 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         Vec3 yes = $$0.getEyePosition();
         BlockPos atVec = BlockPos.containing(yes);
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
-        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 11){
+        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 12){
             if(isDay){
                  if ($$0.level().isRaining() || $$0.level().isThundering()){
                     return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 12 ){
+                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 14){
                     return true;
                 }else {
                     return false;
@@ -506,7 +506,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(isDay){
                 if ($$0.level().isRaining() || $$0.level().isThundering()){
                     return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, yes) < 13){
+                } else if ( $$0.level().getBrightness(LightLayer.SKY, yes) < 15){
                     return true;
                 }else {
                     return false;
@@ -835,7 +835,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             LivingEntity lent,
             double radius
     ) {
-        int attempts = 60;
+        int attempts = 100;
         double minDistance = 2.5D+ (0.5);
         for (int i = 0; i < attempts; i++) {
             double angle = Math.random() * Math.PI * 2.0D;
@@ -844,7 +844,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             double x = lent.getX() + Math.cos(angle) * distance;
             double z = lent.getZ() + Math.sin(angle) * distance;
             int baseY = Mth.floor(lent.getY());
-            for (int yOffset = -1; yOffset <= 10; yOffset++) {
+            for (int yOffset = 0; yOffset <= 10; yOffset++) {
                 double y = baseY + yOffset;
                 Vec3 candidate = new Vec3(x, y, z);
                 BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
@@ -858,7 +858,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 if (level.noCollision(lent, testBox) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
                 } else {
-                    for (int yOffset2 = -2; yOffset2 >= -10; yOffset2--) {
+                    for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
                         double y2 = baseY + yOffset2;
                         Vec3 candidate2 = new Vec3(x, y2, z);
                         BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
@@ -948,9 +948,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                       return true;
                   }
               }
-           /*   if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                  return true;
-              }*/
+              if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
+             //     return true;
+              }
           }
         return false;
     }
@@ -1191,6 +1191,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return Component.translatable("skins.roundabout.black_sabbath.beach");
         } else if (skinId == BlackSabbathEntity.SANTA) {
             return Component.translatable("skins.roundabout.black_sabbath.santa");
+        }else if (skinId == BlackSabbathEntity.CRIMSON) {
+            return Component.translatable("skins.roundabout.black_sabbath.crimson");
+        }else if (skinId == BlackSabbathEntity.FUNGUS) {
+            return Component.translatable("skins.roundabout.black_sabbath.mushroom");
         }
         return Component.translatable("skins.roundabout.black_sabbath.anime");
     }
@@ -1250,16 +1254,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             MINT = 10,
             TACO = 11,
             WOVEN = 12,
-            DAPPER = 13,
-            COPPER = 14,
-            PHANTOM_SKIN = 15,
-            SWEET_SKIN = 16,
-            MAGMA = 17,
-            OCULUS = 18,
-            SACTHOTH_SKIN = 19,
-            COWBOY = 20,
-            BEACH = 21,
-            SANTA = 22;
+            FUNGUS = 13,
+            DAPPER = 14,
+            COPPER = 15,
+            PHANTOM_SKIN = 16,
+            SWEET_SKIN = 17,
+            MAGMA = 18,
+            OCULUS = 19,
+            CRIMSON = 20,
+            SACTHOTH_SKIN = 21,
+            COWBOY = 22,
+            BEACH = 23,
+            SANTA = 24;
     @Override
     public List<Byte> getSkinList() {
         if (isPlaced()) {
@@ -1284,10 +1290,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             list.add(WOVEN);
             list.add(DAPPER);
             list.add(COPPER);
+            list.add(FUNGUS);
             list.add(PHANTOM_SKIN);
             list.add(SWEET_SKIN);
             list.add(MAGMA);
             list.add(OCULUS);
+            list.add(CRIMSON);
             list.add(SACTHOTH_SKIN);
             list.add(COWBOY);
             list.add(BEACH);

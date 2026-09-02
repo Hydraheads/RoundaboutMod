@@ -2410,8 +2410,15 @@ public class MainUtil {
     }
 
     public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
-        if (confirmIsOre(state) && !state.hasBlockEntity())
+        if (confirmIsOre(state) || state.hasBlockEntity())
             return false;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness >= 0 && hardness < 50) {
+            return true;
+        }
+        return false;
+    }
+    public static boolean isDestructible2(Level level, BlockPos pos, BlockState state){
         float hardness = state.getDestroySpeed(level, pos);
         if (hardness >= 0 && hardness < 50) {
             return true;

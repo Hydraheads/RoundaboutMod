@@ -1637,6 +1637,9 @@
   "sounds.roundabout.silver_chariot_hit_3": "Sword jab",
   "sounds.roundabout.silver_chariot_hit_4": "Sword jab",
   "sounds.roundabout.silver_chariot_afterimage": "Silver Chariot afterimage creation",
+  "sounds.roundabout.silver_chariot_rapier_shot_redirect": "Rapier shot bounce",
+  "sounds.roundabout.silver_chariot_rapier_shot_block_impact": "Rapier shot block hit",
+  "sounds.roundabout.silver_chariot_rapier_shot_entity_impact": "Rapier shot entity hit",
 
   "sounds.roundabout.blood_suck":  "Blood",
   "sounds.roundabout.blood_suck_crit":  "Blood",
@@ -2934,6 +2937,8 @@
   "skins.roundabout.black_sabbath.woven": "Woven",
   "skins.roundabout.black_sabbath.santa": "Santa",
   "skins.roundabout.black_sabbath.cowboy": "Cowboy",
+  "skins.roundabout.black_sabbath.crimson": "Cyclops",
+  "skins.roundabout.black_sabbath.mushroom": "Mushroom",
 
   "skins.roundabout.purple_haze.anime": "Anime",
   "skins.roundabout.purple_haze.blazing_haze": "Blazing Haze",
@@ -3834,6 +3839,7 @@
   "config.roundabout.creamVoidTime.name": "Void Time",
   "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
 
+
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
@@ -4501,6 +4507,18 @@
   "config.roundabout.vampireAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.vampireAttackMultOnMobs.desc": "How much damage vampires deals to every other mob, same math as above.",
 
+  "config.roundabout.d4cAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.d4cAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.d4cAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.d4cAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.d4cGuardPoints.name": "Guard Points",
+  "config.roundabout.d4cGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.miningSpeedMultiplierD4c.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierD4c.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierD4c.name": "Mining Tier",
+  "config.roundabout.getMiningTierD4c.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
+
+
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.starPlatinumAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.starPlatinumAttackMultOnMobs.name": "Mob Damage Multiplier",
@@ -4918,6 +4936,8 @@
   "sounds.roundabout.d4c_explosion": "Collision",
   "sounds.roundabout.d4c_fuse": "Fuse",
   "sounds.roundabout.d4c_copy_block": "Capture",
+  "sounds.roundabout.dojyan_1": "Ta Da",
+  "sounds.roundabout.dojyan_2": "Ta Da",
 
   "config.roundabout.usePreciseMath.name": "Use Precise Sphere Math",
   "config.roundabout.usePreciseMath.desc": "If you want the bubble of time stop to accurately cover the radius of the completed sphere rather than just being a simple box calculation. By default it is true because time stop prevents lots of things from ticking and saves performance as is.",

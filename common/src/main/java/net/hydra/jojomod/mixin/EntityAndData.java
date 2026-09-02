@@ -425,7 +425,7 @@ public abstract class EntityAndData implements IEntityAndData {
     public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
         Entity ent = (Entity) (Object) this;
         if (PowerTypes.isExistentiallyElsewhere(ent)){
-            if (!(this.level().isClientSide() &&
+            if ((this.level().isClientSide() || PowerTypes.isErasingTime(ent)) && !(this.level().isClientSide() &&
                     !PowerTypes.isInADifferentExistence(ent,ClientUtil.getPlayer()))){
                 if (!(this.level().isClientSide() && (ClientUtil.isPlayer(ent)
                 || (ent instanceof KingCrimsonCloneEntity kcc && ClientUtil.isPlayer(kcc.getPlayer()) &&
