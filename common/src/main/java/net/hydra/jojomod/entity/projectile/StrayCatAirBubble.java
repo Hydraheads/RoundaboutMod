@@ -236,7 +236,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 Vec3 nextPos = currentPos.add(this.getDeltaMovement());
                 AABB sweptBox = this.getBoundingBox()
                         .expandTowards(this.getDeltaMovement())
-                        .inflate(this.getBbWidth() * 1 + 0.3); // Adjust as needed
+                        .inflate(this.getBbWidth() * 1.1 + 0.275); // Adjust as needed
 
                 EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
                         this.level(), this, currentPos, nextPos, sweptBox,
@@ -274,6 +274,11 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                     0, 0, 0);
         }
         super.tick();
+    }
+
+    protected boolean canHitEntity(Entity ent) {
+        return super.canHitEntity(ent) && (ent == target || target == null) && ent != getOwner()
+                && (!(getOwner() != null && getOwner().getVehicle() == ent));
     }
 
     public boolean distancePops(){
