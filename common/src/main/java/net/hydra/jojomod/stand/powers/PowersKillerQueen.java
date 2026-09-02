@@ -2418,7 +2418,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (direction != Direction.DOWN) {
                     addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
                 }
-                Vec3 pos = user.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(user.getForward().scale(user.getBbWidth() * 1));
+                Vec3 pos = user.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z)/*.add(user.getForward().scale(user.getBbWidth() * 0.5f))*/;
                 bubble.setPos(pos.x(), pos.y(), pos.z());
                 bubble.shootFromRotationDeltaAgnostic(user, user.getXRot(), user.getYRot(), 1.0F, getStrayCatAirBubbleSpeed(), 0);
 
@@ -2574,9 +2574,13 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (combatActivations < 12)  { combatActivations++; }
 
-        this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
-                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
-        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown);
+        int btdCombatActivationCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
+        int btdCombatExtraCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus;
+
+        int btdDayCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
+
+        this.setCooldown(PowerIndex.SKILL_EXTRA_2, btdCombatActivationCooldown + btdCombatExtraCooldown * combatActivations);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
 
         combatSavedBTDinit();
 
@@ -2626,6 +2630,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                         StandPowers powers = user.roundabout$getStandPowers();
                         if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > mandomRewindCooldown)){
                             PM.setCooldown(PowerIndex.SKILL_2,mandomRewindCooldown);
+                        } else if (powers instanceof PowersKillerQueen PKQ){
+                            if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA_2) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA_2).time > (btdCombatActivationCooldown + (btdCombatExtraCooldown * PKQ.combatActivations)))) {
+                                PKQ.setCooldown(PowerIndex.SKILL_EXTRA_2,(btdCombatActivationCooldown + (btdCombatExtraCooldown * PKQ.combatActivations)));
+                            }
+                            if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
+                                PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
+                            }
+
                         }
                     }
                 }
@@ -2667,6 +2679,16 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         btdTicks = 0;
 
+        int btdCombatActivationCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown;
+        int btdCombatExtraCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus;
+
+        int btdDayCooldown = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
+                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus;
+
+
+        this.setCooldown(PowerIndex.SKILL_EXTRA_2, btdCombatActivationCooldown + btdCombatExtraCooldown * combatActivations);
+        this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
+
         if (!list.isEmpty()) {
             int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
 
@@ -2693,7 +2715,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                     if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
                         mb.getNavigation().stop();
                         if (!MainUtil.blockConfusionTicks(mb)) {
-                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                            ((IMob) mb).roundabout$setConfusionTicks(10);
                         }
                     }
 
@@ -2702,6 +2724,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                         StandPowers powers = user.roundabout$getStandPowers();
                         if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > mandomRewindCooldown)){
                             PM.setCooldown(PowerIndex.SKILL_2,mandomRewindCooldown);
+                        } else if (powers instanceof PowersKillerQueen PKQ){
+                            if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA_2) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA_2).time > (btdCombatActivationCooldown + (btdCombatExtraCooldown * PKQ.combatActivations)))) {
+                                PKQ.setCooldown(PowerIndex.SKILL_EXTRA_2,(btdCombatActivationCooldown + (btdCombatExtraCooldown * PKQ.combatActivations)));
+                            }
+                            if (!(PKQ.onCooldown(PowerIndex.SKILL_EXTRA) && PKQ.getCooldown(PowerIndex.SKILL_EXTRA).time > btdDayCooldown)) {
+                                PKQ.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
+                            }
+
                         }
                     }
 
@@ -2717,10 +2747,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             ((ServerLevel) this.self.level()).setDayTime(targetDayTime);
         }
 
-        this.setCooldown(PowerIndex.SKILL_EXTRA_2, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
-                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatCooldownBonus * combatActivations);
-        this.setCooldown(PowerIndex.SKILL_EXTRA, ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatActivationCooldown +
-                ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayCooldownBonus);
 
         if (this.self instanceof ServerPlayer pl) {
             S2CPacketUtil.sendCancelSoundPacket(pl, this.self.getId(), BTD_PLANT);
@@ -3009,7 +3035,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         SHA = sha;
 
                         if (shaThrow) {
-                            SHA.shoot(getRayBlock(this.self, 4.5f));
+                            SHA.shoot(getRayBlock(this.self, 6.5f));
                         }
                         this.syncShaStatus(SHA_SEND);
                         if (this.self instanceof ServerPlayer) {
@@ -4076,8 +4102,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             int maxSeconds = (int)(this.btdTicksMax / 20.0);
 
             renderBitesTheDustTimer(context, Minecraft.getInstance(), screenWidth, screenHeight, x,
-                    seconds, Math.max(maxSeconds, seconds),
-                    StandIcons.JOJO_ICONS, 0, 70, 0xab93e0);
+                    btdTicks, Math.max(this.btdTicksMax, btdTicks));
         }else if (this.SHA != null && !this.SHA.isRemoved()) {
             double distance = SHA.distanceTo(getSelf());
             StandHudRender.renderNumberHUD(context, Minecraft.getInstance(), screenWidth, screenHeight, x, distance, 100, StandIcons.JOJO_ICONS, 0, 161, 0xe2badf);
@@ -4085,8 +4110,21 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public static void renderBitesTheDustTimer(GuiGraphics context, Minecraft client, int scaledWidth, int scaledHeight,
-                                       int x, double value, double max, ResourceLocation file, int bx, int by, int color) {
+                                       int x, double value, double max) {
         // Letting this here for possible improvements on the timer? (time marks)
+
+        ResourceLocation file = StandIcons.JOJO_ICONS;
+        int bx = 0;
+        int by = 70;
+        int color = 0xab93e0;
+
+        int minSecs = ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustCombatMinimunForFullBlow * 20;
+
+        if (value >= minSecs) {
+            by = 161;
+            color = 0xb161a9;
+        }
+
 
         int l;
         int k;
@@ -4104,7 +4142,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         int y = color;
         Font renderer = client.font;
-        String $$6 = (int)value + "";
+        String $$6 = (int)(value / 20.0) + "";
         int $$7 = (scaledWidth - renderer.width($$6)) / 2;
         int $$8 = scaledHeight - 31 - 4;
         context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
