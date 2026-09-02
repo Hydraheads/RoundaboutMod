@@ -1705,7 +1705,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             mspeed /= 5.0F;
         }
 
-        if (this.isCrouching() && $$0.getBlock() instanceof DropExperienceBlock && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
+        if (this.isCrouching() && MainUtil.confirmIsOre($$0) && ClientNetworking.getAppropriateConfig().generalStandSettings.crouchingStopsStandsFromMiningOres) {
             mspeed = 0.0F;
         }
 
