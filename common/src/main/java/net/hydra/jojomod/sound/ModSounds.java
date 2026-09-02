@@ -166,6 +166,13 @@ public class ModSounds {
     public static final ResourceLocation D4C_COPY_BLOCK_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_COPY_BLOCK);
     public static SoundEvent D4C_COPY_BLOCK_EVENT = SoundEvent.createVariableRangeEvent(D4C_COPY_BLOCK_ID);
 
+    public static final String DOJYAN_1 = "dojyan_1";
+    public static final ResourceLocation DOJYAN_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DOJYAN_1);
+    public static SoundEvent DOJYAN_1_EVENT = SoundEvent.createVariableRangeEvent(DOJYAN_1_ID);
+    public static final String DOJYAN_2 = "dojyan_2";
+    public static final ResourceLocation DOJYAN_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DOJYAN_2);
+    public static SoundEvent DOJYAN_2_EVENT = SoundEvent.createVariableRangeEvent(DOJYAN_2_ID);
+
     public static final String D4C_FUSE = "d4c_fuse";
     public static final ResourceLocation D4C_FUSE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_FUSE);
     public static SoundEvent D4C_FUSE_EVENT = SoundEvent.createVariableRangeEvent(D4C_FUSE_ID);

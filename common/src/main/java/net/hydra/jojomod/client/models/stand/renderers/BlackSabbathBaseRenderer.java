@@ -41,6 +41,8 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     private static final ResourceLocation COPPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/copper_sabbath.png");
     private static final ResourceLocation SANTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/santabbath.png");
     private static final ResourceLocation COWBOY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/western.png");
+    private static final ResourceLocation CRIMSON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/crimsoncrimson.png");
+    private static final ResourceLocation FUNGUS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/mushroom_skin.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);
@@ -115,6 +117,12 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
         if (BT == BlackSabbathEntity.SANTA) {
             return SANTA;
         }
+        if (BT == BlackSabbathEntity.CRIMSON) {
+            return CRIMSON;
+        }
+        if (BT == BlackSabbathEntity.FUNGUS) {
+            return FUNGUS;
+        }
         return ANIME;
     }
 
@@ -137,7 +145,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     }
     @Override
     public boolean shouldRender(BlackSabbathEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
-        if ($$0.getCrippled()){
+        if ($$0.getCrippled() || $$0.getUnrender()){
             return false;
         }
         return super.shouldRender($$0,$$1,$$2,$$3,$$4);

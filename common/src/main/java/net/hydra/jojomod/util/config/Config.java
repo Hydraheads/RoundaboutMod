@@ -1172,6 +1172,16 @@ public class Config implements Cloneable {
         public Float chanceToEncounterNewAnimal;
         @FloatOption(group = "inherit", value = 0.25F, min = 0.0F, max = 1.0F)
         public Float chanceForAltStands;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer d4cAttackMultOnMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer d4cAttackMultOnPlayers;
+        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        public Integer d4cGuardPoints;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer miningSpeedMultiplierD4c;
+        @IntOption(group = "inherit", value = 0, min = 0, max = 4)
+        public Integer getMiningTierD4c;
     }
 
     public static class KingCrimsonSettings {
