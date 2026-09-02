@@ -35,6 +35,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -948,7 +949,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                   }
               }
               if(this.getStandEntity(self) != null && entity.is(this.getStandEntity(self))){
-                  return true;
+             //     return true;
               }
           }
         return false;
@@ -1190,6 +1191,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return Component.translatable("skins.roundabout.black_sabbath.beach");
         } else if (skinId == BlackSabbathEntity.SANTA) {
             return Component.translatable("skins.roundabout.black_sabbath.santa");
+        }else if (skinId == BlackSabbathEntity.CRIMSON) {
+            return Component.translatable("skins.roundabout.black_sabbath.crimson");
+        }else if (skinId == BlackSabbathEntity.FUNGUS) {
+            return Component.translatable("skins.roundabout.black_sabbath.mushroom");
         }
         return Component.translatable("skins.roundabout.black_sabbath.anime");
     }
@@ -1249,16 +1254,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             MINT = 10,
             TACO = 11,
             WOVEN = 12,
-            DAPPER = 13,
-            COPPER = 14,
-            PHANTOM_SKIN = 15,
-            SWEET_SKIN = 16,
-            MAGMA = 17,
-            OCULUS = 18,
-            SACTHOTH_SKIN = 19,
-            COWBOY = 20,
-            BEACH = 21,
-            SANTA = 22;
+            FUNGUS = 13,
+            DAPPER = 14,
+            COPPER = 15,
+            PHANTOM_SKIN = 16,
+            SWEET_SKIN = 17,
+            MAGMA = 18,
+            OCULUS = 19,
+            CRIMSON = 20,
+            SACTHOTH_SKIN = 21,
+            COWBOY = 22,
+            BEACH = 23,
+            SANTA = 24;
     @Override
     public List<Byte> getSkinList() {
         if (isPlaced()) {
@@ -1283,10 +1290,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             list.add(WOVEN);
             list.add(DAPPER);
             list.add(COPPER);
+            list.add(FUNGUS);
             list.add(PHANTOM_SKIN);
             list.add(SWEET_SKIN);
             list.add(MAGMA);
             list.add(OCULUS);
+            list.add(CRIMSON);
             list.add(SACTHOTH_SKIN);
             list.add(COWBOY);
             list.add(BEACH);

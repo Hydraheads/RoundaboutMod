@@ -5,8 +5,8 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.*;
 
-public class AutomaticStandNavigation extends GroundPathNavigation {
-    public AutomaticStandNavigation(Mob $$0, Level $$1) {
+public class BlackSabbathNavigation extends GroundPathNavigation {
+    public BlackSabbathNavigation(Mob $$0, Level $$1) {
         super($$0, $$1);
     }
 
