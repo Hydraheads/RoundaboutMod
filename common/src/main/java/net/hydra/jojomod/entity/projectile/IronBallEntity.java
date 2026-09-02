@@ -121,6 +121,9 @@ public class IronBallEntity extends AbstractArrow {
                 return;
             }
         }
+        if (isRemoved()){
+            return;
+        }
         float pow = 9;
         if (this.isCritArrow()) {
             pow = 11;
@@ -186,9 +189,9 @@ public class IronBallEntity extends AbstractArrow {
             }
 
 
-            float knockbackStrength = 2.9F;
+            float knockbackStrength = 3.3F;
             if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
-                knockbackStrength = 3.3F;
+                knockbackStrength = 3.5F;
             }
             if (getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID()){
                 if (PE.onGround()){
@@ -215,9 +218,9 @@ public class IronBallEntity extends AbstractArrow {
             if (pl > 0 && !bl) {
                 //reduced kb
                 if (!(getOwner() instanceof Player PE && entity.getUUID() == PE.getUUID())) {
-                    float knockbackStrength = 0.9F;
+                    float knockbackStrength = 1.8F;
                     if (getOwner() instanceof Player PE && PE.distanceTo(this) < 10) {
-                        knockbackStrength = 1.8F;
+                        knockbackStrength = 2.2F;
                     }
                     MainUtil.takeKnockback(entity, knockbackStrength,
                             between.x,

@@ -598,42 +598,54 @@ public class PowersD4C extends NewPunchingStand {
         return false;
     }
     public void worldMergingServer(){
-        if (isEligable()){
-            Direction dir = RotationUtil.getGravityDirection(self);
-            BlockPos basePos = self.getOnPos().relative(dir.getOpposite());
-            if (dir != Direction.DOWN){
-                basePos = self.getOnPos();
-            }
-            int worldId = ((int) (Math.random()*4))+1;
-            if (placeOne(basePos,worldId)) {
-                placeOne(basePos.relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.north(),worldId)){
-                placeOne(basePos.north().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.south(),worldId)){
-                placeOne(basePos.south().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.east(),worldId)){
-                placeOne(basePos.east().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.west(),worldId)) {
-                placeOne(basePos.west().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.above(),worldId)){
-                    placeOne(basePos.above().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.below(),worldId)){
-                    placeOne(basePos.below().relative(dir.getOpposite()),worldId);
-            } else if (placeOne(basePos.relative(dir.getOpposite()),worldId)){
-                placeOne(basePos.relative(dir.getOpposite()).relative(dir.getOpposite()),worldId);
-           } else {
-                return;
-            }
+        if (!this.onCooldown(PowerIndex.SKILL_1)) {
+            if (isEligable()) {
+                Direction dir = RotationUtil.getGravityDirection(self);
+                BlockPos basePos = self.getOnPos().relative(dir.getOpposite());
+                if (dir != Direction.DOWN) {
+                    basePos = self.getOnPos();
+                }
+                int worldId = ((int) (Math.random() * 4)) + 1;
+                if (placeOne(basePos, worldId)) {
+                    placeOne(basePos.relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.north(), worldId)) {
+                    placeOne(basePos.north().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.south(), worldId)) {
+                    placeOne(basePos.south().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.east(), worldId)) {
+                    placeOne(basePos.east().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.west(), worldId)) {
+                    placeOne(basePos.west().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.above(), worldId)) {
+                    placeOne(basePos.above().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.below(), worldId)) {
+                    placeOne(basePos.below().relative(dir.getOpposite()), worldId);
+                } else if (placeOne(basePos.relative(dir.getOpposite()), worldId)) {
+                    placeOne(basePos.relative(dir.getOpposite()).relative(dir.getOpposite()), worldId);
+                } else {
+                    return;
+                }
 
 //            for (LivingEntity target : self.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(),self,self.getBoundingBox().inflate(20))) {
 //                if (!target.equals(self) && target.isAlive()) {
 //                    PowerTypes.forcePlaneOfExisting(target,(byte)1);
 //                }
 //            }
-            populateWorld((byte) worldId);
-            enactEligability2();
-            PowerTypes.setPlaneOfExisting(self,(byte)worldId);
-            playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
+                setCooldown(PowerIndex.SKILL_1,500);
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                MainUtil.sendParticlesIfPossible(self, self.level(),
+                        new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), self.getEyePosition().x,
+                        self.getEyePosition().y, self.getEyePosition().z,
+                        20, 0.3, 0.3, 0.3, 0.3);
+                populateWorld((byte) worldId);
+                enactEligability2();
+                PowerTypes.setPlaneOfExisting(self, (byte) worldId);
+                playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
+
+            }
         }
     }
     public void enactEligability2(){
@@ -1318,17 +1330,27 @@ public class PowersD4C extends NewPunchingStand {
     }
     public void isekaiTarget(Entity target){
         if (isEligable()) {
+            setCooldown(PowerIndex.SKILL_1_SNEAK,300);
             this.setAttackTimeDuring(-7);
             if (target != null && !target.isRemoved()){
                 if (target.distanceTo(self) > grabRange+0.75F ||
                 MainUtil.isBossMob(target)) {
                     target = null;
                 }
+                Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
                 int worldId = ((int) (Math.random() * 2)) + 6;
                 PowerTypes.setPlaneOfExisting(target, (byte) worldId);
-                if (target instanceof Player pl) {
-                    populateWorld((byte) worldId);
+                if (target instanceof Player pl){
+                populateWorld((byte) worldId);
                 }
+
+                MainUtil.sendParticlesIfPossible(self,self.level(),
+                        new DustParticleOptions(
+                                color,
+                                1.0F
+                        ), target.getEyePosition().x,
+                        target.getEyePosition().y, target.getEyePosition().z,
+                        20, 0.3, 0.3, 0.3, 0.3);
                 playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             }
             if (target == null){
@@ -1561,9 +1583,11 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
     public void pullIntoRealityClient(){
-        Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
-        if (targetEntity !=null && targetEntity.isAlive()){
-            tryIntPowerPacket(PowerIndex.POWER_2_BONUS,targetEntity.getId());
+        if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+            Entity targetEntity = MainUtil.getTargetEntity(this.getSelf(), getReach());
+            if (targetEntity != null && targetEntity.isAlive()) {
+                tryIntPowerPacket(PowerIndex.POWER_2_BONUS, targetEntity.getId());
+            }
         }
     }
 
@@ -1575,7 +1599,7 @@ public class PowersD4C extends NewPunchingStand {
     public void worldTakingClient(){
         if (PowerTypes.isInD4CWorld(self)){
             exitD4CClient();
-        } else if (!this.onCooldown(PowerIndex.SKILL_EXTRA) && isEligable()) {
+        } else if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK) && isEligable()) {
             if (this.activePower == PowerIndex.POWER_1_SNEAK) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
@@ -1756,9 +1780,9 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
-            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NONE);
+            setSkillIcon(context, x, y, 1, StandIcons.D4C_BETWEEN_VISION, PowerIndex.NO_CD);
         } else if (PowerTypes.isInD4CWorld(self)){
-            LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NONE,0);
+            LockedOrNot(context, x, y, 1, StandIcons.MERGING_RETURN, PowerIndex.NO_CD,0);
         } else if (!isHoldingSneak()){
             LockedOrNot(context, x, y, 1, StandIcons.D4C_PARALLEL_RUNNING, PowerIndex.SKILL_1,0);
         } else {
@@ -2253,24 +2277,27 @@ public class PowersD4C extends NewPunchingStand {
         return super.tryIntPower(move, forced, chargeTime);
     }
     public void grabMobIntoWorld(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            Entity targetEntity = getTargetEntity(this.self,-1);
-            if (targetEntity != null && !PowerTypes.isNativeToOurWorld(targetEntity)) {
-                PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
-                this.setAttackTimeDuring(-5);
-                this.setActivePower(PowerIndex.POWER_2_BONUS);
-                playStandUserOnlySoundsIfNearby(FUSE, 27, false,false);
-                this.animateStand(D4CEntity.DRAG_2);
-                this.poseStand(OffsetIndex.GUARD);
-                if (self.level() instanceof ServerLevel sl){
-                    Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
-                    sl.sendParticles(new DustParticleOptions(
-                                    color,
-                                    1.0F
-                            ), targetEntity.getX(),
-                            targetEntity.getY()+targetEntity.getEyeHeight(), targetEntity.getZ(),
-                            20, 0.3, 0.3, 0.3, 0.3);
+        if (!onCooldown(PowerIndex.SKILL_EXTRA_2)) {
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)) {
+                Entity targetEntity = getTargetEntity(this.self, -1);
+                if (targetEntity != null && !PowerTypes.isNativeToOurWorld(targetEntity)) {
+                    PowerTypes.setPlaneOfExisting(targetEntity, (byte) 0);
+                    this.setAttackTimeDuring(-5);
+                    setCooldown(PowerIndex.SKILL_EXTRA_2,10);
+                    this.setActivePower(PowerIndex.POWER_2_BONUS);
+                    playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
+                    this.animateStand(D4CEntity.DRAG_2);
+                    this.poseStand(OffsetIndex.GUARD);
+                    if (self.level() instanceof ServerLevel sl) {
+                        Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
+                        sl.sendParticles(new DustParticleOptions(
+                                        color,
+                                        1.0F
+                                ), targetEntity.getX(),
+                                targetEntity.getY() + targetEntity.getEyeHeight(), targetEntity.getZ(),
+                                20, 0.3, 0.3, 0.3, 0.3);
+                    }
                 }
             }
         }
@@ -2351,22 +2378,25 @@ public class PowersD4C extends NewPunchingStand {
         return super.clickRelease();
     }
     public void meltDodge(){
-        if (isEligable()) {
+        if (isEligable() && !onCooldown(PowerIndex.SKILL_EXTRA)) {
             getStandUserSelf().roundabout$setStandAnimation(MELT_DODGE_ANIM);
             this.setAttackTimeDuring(0);
+            setCooldown(PowerIndex.SKILL_EXTRA,140);
             this.setActivePower(PowerIndex.POWER_3_BLOCK);
             playStandUserOnlySoundsIfNearby(MELT_DODGE, 50, false, false);
             enactEligability();
         }
     }
     public void standDragServer(){
-        StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)){
-            if (isEligable()) {
-                this.setAttackTimeDuring(0);
-                this.setActivePower(PowerIndex.POWER_1_SNEAK);
-                this.animateStand(D4CEntity.DRAG);
-                this.poseStand(OffsetIndex.GUARD);
+        if (!onCooldown(PowerIndex.POWER_1_SNEAK)){
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                if (isEligable()) {
+                    this.setAttackTimeDuring(0);
+                    this.setActivePower(PowerIndex.POWER_1_SNEAK);
+                    this.animateStand(D4CEntity.DRAG);
+                    this.poseStand(OffsetIndex.GUARD);
+                }
             }
         }
     }
@@ -2448,14 +2478,14 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public boolean canInterruptPower(DamageSource sauce, Entity interrupter) {
         if (this.getActivePower() == PowerIndex.POWER_1_SNEAK){
-            int cdr = 25;
+            int cdr = 40;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, cdr);
             }
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, cdr);
             return true;
         } else if (this.getActivePower() == PowerIndex.POWER_3_SNEAK){
-            int cdr = 25;
+            int cdr = 35;
             if (this.getSelf() instanceof Player) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_3, cdr);
             }
