@@ -4489,14 +4489,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
     @Inject(method = "canBeSeenAsEnemy", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             cir.setReturnValue(false);
             return;
         }
     }
     @Inject(method = "canBeSeenByAnyone", at = @At(value = "HEAD"), cancellable = true, require = 0)
     protected void roundabout$canBeSeenByAnyone(CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isExistentiallyElsewhere(this)){
+        if (PowerTypes.isErasingTime(this)){
             cir.setReturnValue(false);
             return;
         }

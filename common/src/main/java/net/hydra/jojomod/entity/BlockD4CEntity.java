@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import com.mojang.logging.LogUtils;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.PowersD4C;
 import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.CrashReportCategory;
@@ -33,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.Block;
@@ -40,11 +43,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class BlockD4CEntity extends Entity {
@@ -198,6 +204,11 @@ public class BlockD4CEntity extends Entity {
                     // Speed per tick
                     double spd = 1D;
 
+
+
+                    /**this below is the
+                     * final explosion damage, not the same as general collision damage
+                     */
                     if (distance <= spd) {
                         // We reached the target
                         setPos(finPos.x, finPos.y, finPos.z);
@@ -254,6 +265,9 @@ public class BlockD4CEntity extends Entity {
                             if (entity instanceof StandEntity) {
                                 continue;
                             }
+                            if (PowerTypes.isInADifferentExistence(entity,this) ){
+                                continue;
+                            }
 
                             double distance2 = entity.distanceToSqr(center2);
 
@@ -263,10 +277,15 @@ public class BlockD4CEntity extends Entity {
 
                             // Damage
                             if (entity instanceof LivingEntity living) {
-                                living.hurt(
-                                        ModDamageTypes.of(this.level(),ModDamageTypes.EXPLOSIVE_STAND,user),
-                                        4.0F
-                                );
+                                float dmg = 1;
+                                if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof
+                                        PowersD4C pd4){
+                                    dmg = pd4.getMergeBlastStrength(entity);
+                                    living.hurt(
+                                            ModDamageTypes.of(this.level(),ModDamageTypes.EXPLOSIVE_STAND,user),
+                                            dmg
+                                    );
+                                }
                             }
 
                             // Optional knockback
@@ -289,9 +308,11 @@ public class BlockD4CEntity extends Entity {
 
                         if (canGrief){
                             BlockState state = level().getBlockState(getStartPos());
-                            if (MainUtil.isDestructible(level(),getStartPos(), state)
+                            if (MainUtil.isDestructible2(level(),getStartPos(), state)
                                     && !MainUtil.isBlockDestructionBlacklisted(state)) {
-                                level().removeBlock(getStartPos(), true);
+                                if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims) {
+                                    level().removeBlock(getStartPos(), true);
+                                }
                             }
                         }
 
@@ -326,11 +347,63 @@ public class BlockD4CEntity extends Entity {
             }
         }
 
+
+        //first check
+        if (!this.isRemoved() && !this.level().isClientSide()){
+            Vec3 currentPos = this.position();
+            Vec3 nextPos = currentPos.add(this.getDeltaMovement());
+
+// Make the projectile's path a swept AABB with thickness
+            // Enlarge sweep area to cover fast motion & small entities
+            AABB sweptBox = this.getBoundingBox()
+                    .expandTowards(this.getDeltaMovement())
+                    .inflate(this.getBbWidth() * 1 + 0.1); //
+            EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(
+                    this.level(), this, currentPos, nextPos, sweptBox,
+                    this::canHitEntity
+            );
+
+            if (entityHitResult != null) {
+                this.onHitEntity(entityHitResult);
+            }
+
+            AABB box = this.getBoundingBox().inflate(0.2); // Slight growth
+            for (Entity e : level().getEntities(this, box, this::canHitEntity)) {
+                this.onHitEntity(new EntityHitResult(e));
+            }
+        }
+
         super.tick();
+
+        // second check
+        if (!this.isRemoved() && !this.level().isClientSide()){
+
+        }
     }
 
+    public List<Entity> alreadyHitEntities = new ArrayList<>();
+    public boolean alreadyHitEntity(Entity entity){
+        return alreadyHitEntities.contains(entity);
+    }
 
-
+    protected void onHitEntity(EntityHitResult $$0) {
+        if (!this.level().isClientSide()) {
+            if (!alreadyHitEntity($$0.getEntity())) {
+                if ($$0.getEntity() instanceof LivingEntity living) {
+                    float dmg = 1;
+                    if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof
+                            PowersD4C pd4) {
+                        dmg = pd4.getMergeHitStrength($$0.getEntity());
+                        living.hurt(
+                                ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, user),
+                                dmg
+                        );
+                    }
+                }
+                alreadyHitEntities.add($$0.getEntity());
+            }
+        }
+    }
 
     protected void addAdditionalSaveData(CompoundTag $$0) {
         $$0.put("BlockState", NbtUtils.writeBlockState(this.blockState));
@@ -411,6 +484,21 @@ public class BlockD4CEntity extends Entity {
         return true;
     }
 
+    protected boolean canHitEntity(Entity $$0) {
+        if (!$$0.canBeHitByProjectile()) {
+            return false;
+        } else {
+            if (PowerTypes.isInADifferentExistence($$0,this) ||
+                    ($$0 instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().phaseThroughProjectile(this))){
+                return false;
+            }
+
+            if (user != null){
+                return !$$0.isPassengerOfSameVehicle(user);
+            }
+            return true;
+        }
+    }
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return new ClientboundAddEntityPacket(this, Block.getId(this.getBlockState()));
     }

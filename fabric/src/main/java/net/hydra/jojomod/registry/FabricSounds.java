@@ -71,6 +71,8 @@ public class FabricSounds {
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
         addSound(ModSounds.BLOCK_ATTRACT_ID, ModSounds.BLOCK_ATTRACT_EVENT);
         addSound(ModSounds.D4C_COPY_BLOCK_ID, ModSounds.D4C_COPY_BLOCK_EVENT);
+        addSound(ModSounds.DOJYAN_1_ID, ModSounds.DOJYAN_1_EVENT);
+        addSound(ModSounds.DOJYAN_2_ID, ModSounds.DOJYAN_2_EVENT);
         addSound(ModSounds.D4C_FUSE_ID, ModSounds.D4C_FUSE_EVENT);
         addSound(ModSounds.D4C_FUSION_START_ID, ModSounds.D4C_FUSION_START_EVENT);
         addSound(ModSounds.WORLD_MERGE_ID, ModSounds.WORLD_MERGE_EVENT);

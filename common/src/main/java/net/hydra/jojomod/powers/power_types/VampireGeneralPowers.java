@@ -1320,7 +1320,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             setDazed(LE,(byte) 4);
                         }
-                        HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
+                        if (HeatUtil.getHeat(entity) > -97 || !(entity instanceof Player)){
+                            HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
+                        }
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
