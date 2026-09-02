@@ -2,10 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.access.IEntityAndData;
-import net.hydra.jojomod.access.IGravityEntity;
-import net.hydra.jojomod.access.IMob;
-import net.hydra.jojomod.access.IPlayerEntity;
+import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -740,6 +737,13 @@ public class PowersD4C extends NewPunchingStand {
                 if (spawnPos == null) {
                     continue;
                 }
+
+                if (FateTypes.takesSunlightDamage(self) && pl.getUUID() == self.getUUID()){
+                    if (FateTypes.isInSunlight(self,spawnPos)){
+                        continue;
+                    }
+                }
+
                 if (createParallelPlayerCopy(sl, pl, spawnPos, worldId)) {
                     copied++;
                 }
@@ -1035,10 +1039,12 @@ public class PowersD4C extends NewPunchingStand {
             copy.setCustomNameVisible(original.isCustomNameVisible());
         }
 
+
         if (original.getUUID().equals(self.getUUID())){
             copy.safeCopy = true;
         }
         copy.setPlayer(original);
+        ((IMob)copy).roundabout$setFate(((IPlayerEntity)original).roundabout$getFate());
         copy.setItemSlot(EquipmentSlot.HEAD, original.getItemBySlot(EquipmentSlot.HEAD).copy());
         copy.setItemSlot(EquipmentSlot.CHEST, original.getItemBySlot(EquipmentSlot.CHEST).copy());
         copy.setItemSlot(EquipmentSlot.LEGS, original.getItemBySlot(EquipmentSlot.LEGS).copy());
@@ -1087,6 +1093,7 @@ public class PowersD4C extends NewPunchingStand {
         ((IEntityAndData)copy).rdbt$setNativeCopy(original.getUUID());
         PowerTypes.setPlaneOfExisting(copy, worldId);
         PowerTypes.setTicksUntilGone(copy, PowerTypes.getForeignWorldMaxTime(worldId),worldId);
+
 
         level.addFreshEntity(copy);
         return true;
@@ -1319,6 +1326,9 @@ public class PowersD4C extends NewPunchingStand {
                 }
                 int worldId = ((int) (Math.random() * 2)) + 6;
                 PowerTypes.setPlaneOfExisting(target, (byte) worldId);
+                if (target instanceof Player pl) {
+                    populateWorld((byte) worldId);
+                }
                 playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
             }
             if (target == null){
@@ -1396,13 +1406,46 @@ public class PowersD4C extends NewPunchingStand {
         }
     }
 
+    @Override
+    public float getPickMiningSpeed() {
+        return 12F;
+    }
+    @Override
+    public float getAxeMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getSwordMiningSpeed() {
+        return 8F;
+    }
+    @Override
+    public float getShovelMiningSpeed() {
+        return 8F;
+    }
+
+    @Override
+    public float getMiningMultiplier() {
+        return (float) (1F*(ClientNetworking.getAppropriateConfig().
+                d4cSettings.miningSpeedMultiplierD4c *0.01));
+    }
+    @Override
+    public int getMiningLevel() {
+        return ClientNetworking.getAppropriateConfig().d4cSettings.getMiningTierD4c;
+    }
+    @Override
+    public int getMaxGuardPoints(){
+        return ClientNetworking.getAppropriateConfig().d4cSettings.d4cGuardPoints;
+    }
     public void worldHopClient(){
         if (PowerTypes.isInD4CWorld(self)){
             altBlockGrabClient();
             return;
         }
         if (altBlockPos != null){
-            tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                tryPowerPacket(PowerIndex.POWER_4_BONUS);
+            }
+            return;
         }
     }
     public void worldHop2Client(){
@@ -1411,12 +1454,24 @@ public class PowersD4C extends NewPunchingStand {
             return;
         }
         if (altBlockPos != null){
-
+            if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+                tryPowerPacket(PowerIndex.POWER_4_SNEAK_EXTRA);
+            }
+            return;
+        }
+    }
+    public void removeAltBlock() {
+        if (altBlockPos != null && !onCooldown(PowerIndex.SKILL_4_SNEAK)) {
+            altBlockPos = null;
+            altState = null;
+            setCooldown(PowerIndex.SKILL_4_SNEAK,15);
+            saveDiscAndSync();
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.DING_EVENT, SoundSource.PLAYERS, 0.95F, 0.9F);
         }
     }
 
     public void spawnAltBlock(){
-        if (altBlockPos != null) {
+        if (altBlockPos != null && !onCooldown(PowerIndex.SKILL_4_SNEAK)) {
             if (altState != null) {
                 Vec3 vecPos = self.getEyePosition().add(self.getForward());
                 BlockD4CEntity wall =
@@ -1433,6 +1488,7 @@ public class PowersD4C extends NewPunchingStand {
                 wall.timing = 200;
                 wall.user = self;
                 wall.tsmove = true;
+                setCooldown(PowerIndex.SKILL_4_SNEAK,15);
                 wall.isWhiteAlbumWall = true;
                 wall.canGrief = MainUtil.getIsGamemodeApproriateForGrief(self);
                 PowerTypes.copyPlaneOfExisting(self, wall);
@@ -1457,7 +1513,7 @@ public class PowersD4C extends NewPunchingStand {
     BlockState altState = null;
     @SuppressWarnings("deprecation")
     public void altBlockGrab(){
-        if (!self.level().isClientSide()) {
+        if (!self.level().isClientSide() && !onCooldown(PowerIndex.SKILL_4_SNEAK)) {
             if (grabBlock != null) {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand)) {
@@ -1474,6 +1530,7 @@ public class PowersD4C extends NewPunchingStand {
                                 !(state.getBlock() instanceof BarrierBlock) &&
                                 self.level().getBlockEntity(grabBlock) == null &&
                                 !(state.getBlock() instanceof LightBlock)) {
+                            setCooldown(PowerIndex.SKILL_4_SNEAK,15);
                             altState = state;
                             altBlockPos = grabBlock;
                             saveDiscAndSync();
@@ -1684,6 +1741,18 @@ public class PowersD4C extends NewPunchingStand {
     public boolean phaseThroughProjectile(Entity ent){
         return this.getActivePower() == PowerIndex.POWER_3_BLOCK;
     }
+
+    @Override
+    public boolean isServerControlledCooldown(byte num){
+        if (num == PowerIndex.SKILL_1 || num == PowerIndex.SKILL_1_SNEAK
+                || num == PowerIndex.SKILL_EXTRA_2|| num == PowerIndex.SKILL_2
+                || num == PowerIndex.SKILL_2_SNEAK|| num == PowerIndex.SKILL_EXTRA
+                || num == PowerIndex.SKILL_4_SNEAK || num == PowerIndex.SKILL_4) {
+            return true;
+        }
+        return super.isServerControlledCooldown(num);
+    }
+
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
         if (isGuarding()) {
@@ -1719,9 +1788,9 @@ public class PowersD4C extends NewPunchingStand {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_COPY, PowerIndex.SKILL_4_SNEAK);
         } else if (altBlockPos != null){
             if (!isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_MERGE, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_MERGE, PowerIndex.SKILL_4_SNEAK);
             } else {
-                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_RELEASE, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.D4C_BLOCK_RELEASE, PowerIndex.SKILL_4_SNEAK);
             }
         } else if (!isHoldingSneak()) {
             setSkillIcon(context, x, y, 4, StandIcons.D4C_DIMENSION_HOP_2, PowerIndex.SKILL_4);
@@ -2244,6 +2313,9 @@ public class PowersD4C extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_4_BONUS){
             spawnAltBlock();
             return false;
+        } else if (move == PowerIndex.POWER_4_SNEAK_EXTRA){
+            removeAltBlock();
+            return false;
         } else if (move == PowerIndex.POWER_2) {
             spawnCloneServer();
             return false;
@@ -2343,13 +2415,13 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                theWorldSettings.theWorldAttackMultOnPlayers *0.01));
+                d4cSettings.d4cAttackMultOnPlayers *0.01));
     }
 
     @Override
     public float multiplyPowerByStandConfigMobs(float power){
         return (float) (power*(ClientNetworking.getAppropriateConfig().
-                theWorldSettings.theWorldAttackMultOnMobs *0.01));
+                d4cSettings.d4cAttackMultOnMobs *0.01));
     }
     public float getChopStrength(Entity entity){
         if (this.getReducedDamage(entity)){

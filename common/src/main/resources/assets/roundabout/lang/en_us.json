@@ -3837,6 +3837,7 @@
   "config.roundabout.creamVoidTime.name": "Void Time",
   "config.roundabout.creamVoidTime.desc": "How long you are able to stay in the void mode attack for",
 
+
   "config.roundabout.rattAttackBonusOnMobs.name": "Bonus Mob Damage",
   "config.roundabout.rattAttackBonusOnMobs.desc": "How much bonus damage Ratt darts deal to a mob.",
   "config.roundabout.rattSafetyTicks.name": "Ratt Safety Ticks",
@@ -4503,6 +4504,18 @@
   "config.roundabout.vampireAttackMultOnPlayers.desc": "How much damage vampires deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
   "config.roundabout.vampireAttackMultOnMobs.name": "Mob Damage Multiplier",
   "config.roundabout.vampireAttackMultOnMobs.desc": "How much damage vampires deals to every other mob, same math as above.",
+
+  "config.roundabout.d4cAttackMultOnPlayers.name": "Player Damage Multiplier",
+  "config.roundabout.d4cAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
+  "config.roundabout.d4cAttackMultOnMobs.name": "Mob Damage Multiplier",
+  "config.roundabout.d4cAttackMultOnMobs.desc": "How much damage the stand deals to every other mob, same math as above.",
+  "config.roundabout.d4cGuardPoints.name": "Guard Points",
+  "config.roundabout.d4cGuardPoints.desc": "How much raw, unreduced damage can the stand take before its guard breaks?",
+  "config.roundabout.miningSpeedMultiplierD4c.name": "Mining Speed Multiplier",
+  "config.roundabout.miningSpeedMultiplierD4c.desc": "Adjust how fast the stand can mine.",
+  "config.roundabout.getMiningTierD4c.name": "Mining Tier",
+  "config.roundabout.getMiningTierD4c.desc": "Tier 0 is the default, it does not replace tools for harvesting blocks. Tier 1 is wood tier, tier 2 is stone tier, tier 3 is iron tier, and tier 4 is diamond tier.",
+
 
   "config.roundabout.starPlatinumAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.starPlatinumAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
