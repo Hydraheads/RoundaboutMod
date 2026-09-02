@@ -238,6 +238,66 @@ public class SilverChariotEntity extends FollowingStandEntity {
         this.tickControlMode();
     }
 
+    @Override
+    protected void tickRidden(Player $$0, Vec3 $$1) {
+        super.tickRidden($$0, $$1);
+    }
+
+    @Override
+    public double getMyRidingOffset() {
+        return super.getMyRidingOffset();
+    }
+
+    @Override
+    public void rideTick() {
+        super.rideTick();
+    }
+
+    @Override
+    protected void positionRider(Entity $$0, MoveFunction $$1) {
+        super.positionRider($$0, $$1);
+    }
+
+    @Override
+    protected boolean canRide(Entity $$0) {
+        return super.canRide($$0);
+    }
+
+    @Override
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset();
+    }
+
+    @Override
+    protected boolean couldAcceptPassenger() {
+        return super.couldAcceptPassenger();
+    }
+
+    @Override
+    protected boolean canAddPassenger(Entity $$0) {
+        return super.canAddPassenger($$0);
+    }
+
+    @Override
+    public boolean canBeHitByStands() {
+        return super.canBeHitByStands();
+    }
+
+    @Override
+    public boolean canBreatheUnderwater() {
+        return super.canBreatheUnderwater();
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
+        return super.getRiddenInput($$0, $$1);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player $$0) {
+        return super.getRiddenSpeed($$0);
+    }
+
     private void tickControlMode() {
         switch (this.getRemoteControlMode()) {
             case (byte) 0 -> {

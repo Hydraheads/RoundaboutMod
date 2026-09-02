@@ -53,7 +53,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
 
     public SilverChariotRapierShotEntity(LivingEntity $$0, double $$1, double $$2, double $$3, Level $$4, byte type) {
         this(ModEntities.SILVER_CHARIOT_RAPIER, $$1, $$2, $$3, $$4);
-        this.setRapierShotType(BASE);
+        this.setRapierShotType(type);
         if (type == BASE) {
             this.setBounces(1);
         } else  {
@@ -180,10 +180,11 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         // super.onHitBlock($$0);
         if (!this.level().isClientSide()) {
             if (this.getRapierShotType() == PLATFORM) {
-                this.createPlatform($$0.getLocation());
+                this.createPlatform($$0);
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
             } else if (this.getRapierShotType() == BASE && this.getBounces() > 0) {
-                this.setBounces(this.getBounces() - 1);
+                // this.setBounces(this.getBounces() - 1);
 
                 Vec3 velocity = this.getDeltaMovement();
                 Direction hitDir = $$0.getDirection();
@@ -192,27 +193,35 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
                 Vec3 reflected = velocity.subtract(normal.scale(2 * velocity.dot(normal)));
                 reflected = reflected.scale(1.0);
 
-                this.setDeltaMovement(reflected);
-
                 Vec3 hitLoc = $$0.getLocation();
                 Vec3 pushOut = normal.scale(0.02);
                 this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
+                this.setDeltaMovement(reflected);
+
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+
+                this.setBounces(this.getBounces() - 1);
+
                 this.inGround = false;
                 this.shakeTime = 0;
             } else {
-                this.discard();
+                this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
             }
         }
     }
 
-    private void createPlatform(Vec3 position) {
+    private void createPlatform(BlockHitResult $$0) {
         SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
-                ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM,
                 this.level()
         );
 
+        platform.setPos($$0.getLocation());
 
+        platform.setYRot(this.getYRot());
+        platform.setXRot(this.getXRot());
+
+        this.level().addFreshEntity(platform);
     }
 
     public void shootFromRotationDeltaAgnostic(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5) {
@@ -295,7 +304,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         }
     }
 
-    public static void damageEntity(Entity gotten, Entity proj, LivingEntity user, PowersSilverChariot PSC) {
+    public void damageEntity(Entity gotten, Entity proj, LivingEntity user, PowersSilverChariot PSC) {
         if (PowerTypes.isInADifferentExistence(gotten,proj)){
             return;
         }
@@ -329,6 +338,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
             if (gotten instanceof LivingEntity le) {
                 PSC.addEXP(2, le);
             }
+            this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         } else if (gotten instanceof LivingEntity le && le.isBlocking()) {
             int breakShield = 160;
             MainUtil.knockShield(le, breakShield);
@@ -346,7 +356,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
     public void getEntity(Entity gotten, PowersSilverChariot PSC) {
         Entity user = this.getOwner();
         if (gotten != null && user instanceof LivingEntity livingEntity && !MainUtil.isMobOrItsMounts(gotten, user)) {
-            damageEntity(gotten, this, livingEntity, PSC);
+            this.damageEntity(gotten, this, livingEntity, PSC);
         }
     }
 
@@ -507,11 +517,7 @@ public class SilverChariotRapierShotEntity extends AbstractArrow implements Unbu
         this.setDeltaMovement(this.getDeltaMovement());
 
         if (this.getRapierShotType() == BASE) {
-            if (this.tickCount > 600) {
-                this.discard();
-            }
-        } else if (this.getRapierShotType() == PLATFORM) {
-            if (this.tickCount > 1200) {
+            if (this.tickCount > 300) {
                 this.discard();
             }
         }

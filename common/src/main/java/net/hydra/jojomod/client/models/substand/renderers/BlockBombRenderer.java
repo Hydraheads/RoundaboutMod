@@ -58,7 +58,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
                 case KillerQueenEntity.GOGO, KillerQueenEntity.NOTW, KillerQueenEntity.CREEPER -> {return GREEN;}
                 case KillerQueenEntity.GUNPOWDER, KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
                      KillerQueenEntity.ARTWORK-> {return GOLD;}
-                case KillerQueenEntity.NIGHTMARE, KillerQueenEntity.UMBRA,
+                case KillerQueenEntity.NIGHTMARE, KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET,
                      KillerQueenEntity.LIMBUSMORTIS, KillerQueenEntity.DEADLY -> {return NUMBRA;}
                 case KillerQueenEntity.STRAY, KillerQueenEntity.TAMA -> {return BLUE;}
                 case KillerQueenEntity.MINESWEEPER -> {return MINESWEEPER;}

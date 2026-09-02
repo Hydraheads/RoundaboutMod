@@ -105,7 +105,9 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         }
         if (!entity.isInvulnerable()){
             if (entity instanceof Player pl){
-                HeatUtil.addHeat(entity,-33);
+                if (HeatUtil.getHeat(pl) > -97){
+                    HeatUtil.addHeat(entity,-33);
+                }
             } else {
                 HeatUtil.makeAngryAtFreeze(entity,getUser());
                 HeatUtil.addHeat(entity,-40);
