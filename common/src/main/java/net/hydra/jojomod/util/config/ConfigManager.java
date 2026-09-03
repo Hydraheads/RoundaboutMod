@@ -90,8 +90,15 @@ public abstract class ConfigManager {
                             new ResourceLocation(split[2], split[3]);
 
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+                    if (sourceBlock == Blocks.AIR && !sourceId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: source block '{}' does not exist", sourceId);
+                        continue;
+                    }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
-
+                    if (targetBlock == Blocks.AIR && !targetId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid freezable block entry: source block '{}' does not exist", sourceId);
+                        continue;
+                    }
 
                     MainUtil.FREEZABLE_BLOCKS.put(sourceBlock, targetBlock);
 
