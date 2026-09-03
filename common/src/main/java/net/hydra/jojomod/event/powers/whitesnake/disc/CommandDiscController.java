@@ -14,8 +14,8 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 public final class CommandDiscController {
-    private static final int ATTACK_COMMAND_DURATION = 100;
-    private static final int EXPLOSIVE_COMMAND_DURATION = 200;
+    private static final int ATTACK_COMMAND_DURATION = 120;
+    private static final int EXPLOSIVE_COMMAND_DURATION = 400;
     private static final double EXPLOSIVE_COMMAND_DISTANCE_SQR = 100.0D;
     private static final Map<LivingEntity, AttackCommand> ATTACK_COMMANDS = new WeakHashMap<>();
     private static final Map<LivingEntity, ExplosiveCommand> EXPLOSIVE_COMMANDS = new WeakHashMap<>();

@@ -102,8 +102,6 @@ public class FabricItems {
             new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.FORGET));
     public static final Item EXPLOSIVE_COMMAND_DISC = registerItem("explosive_command_disc",
             new CommandDiscItem(new Item.Properties().stacksTo(1), CommandDiscItem.Command.EXPLOSIVE));
-    public static final Item HALLUCINATORY_ACID_GLOB = registerItem("hallucinatory_acid_glob",
-            new Item(new Item.Properties()));
     public static final Item HALLUCINATORY_ACID_HEIGHT_1 = registerItem("hallucinatory_acid_height_1",
             new HallucinatoryAcidDebugItem(FabricBlocks.HALLUCINATORY_ACID, 1, new Item.Properties()));
     public static final Item HALLUCINATORY_ACID_HEIGHT_2 = registerItem("hallucinatory_acid_height_2",
@@ -794,7 +792,6 @@ public class FabricItems {
                         entries.accept(EXPLOSIVE_COMMAND_DISC);
                         entries.accept(PUCCI_MASK);
                         entries.accept(PUCCI_MANGA_MASK);
-                        entries.accept(HALLUCINATORY_ACID_GLOB);
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_1);
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_2);
                         entries.accept(HALLUCINATORY_ACID_HEIGHT_3);
@@ -862,7 +859,6 @@ public class FabricItems {
         ModItems.ATTACK_COMMAND_DISC = ATTACK_COMMAND_DISC;
         ModItems.FORGET_COMMAND_DISC = FORGET_COMMAND_DISC;
         ModItems.EXPLOSIVE_COMMAND_DISC = EXPLOSIVE_COMMAND_DISC;
-        ModItems.HALLUCINATORY_ACID_GLOB = HALLUCINATORY_ACID_GLOB;
         ModItems.HALLUCINATORY_ACID_HEIGHT_1 = HALLUCINATORY_ACID_HEIGHT_1;
         ModItems.HALLUCINATORY_ACID_HEIGHT_2 = HALLUCINATORY_ACID_HEIGHT_2;
         ModItems.HALLUCINATORY_ACID_HEIGHT_3 = HALLUCINATORY_ACID_HEIGHT_3;

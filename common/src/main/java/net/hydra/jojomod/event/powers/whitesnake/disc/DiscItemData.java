@@ -202,6 +202,11 @@ public final class DiscItemData {
                 && "minecraft:creeper".equals(getMemoryEntityType(stack));
     }
 
+    public static boolean isSlimeMemory(ItemStack stack) {
+        return stack.getItem() instanceof MemoryDiscItem
+                && "minecraft:slime".equals(getMemoryEntityType(stack));
+    }
+
     private static ListTag captureInventory(Inventory inventory) {
         ListTag list = new ListTag();
         for (int slot = 0; slot < inventory.items.size(); slot++) {

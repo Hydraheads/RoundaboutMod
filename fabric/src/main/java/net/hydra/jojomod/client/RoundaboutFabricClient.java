@@ -91,7 +91,5 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ColorProviderRegistry.BLOCK.register(
                 (state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
                 ModBlocks.HALLUCINATORY_ACID, ModBlocks.HALLUCINATORY_ACID_WALL);
-        ColorProviderRegistry.ITEM.register(HallucinatoryAcidColors::itemColor,
-                FabricItems.HALLUCINATORY_ACID_GLOB);
     }
 }
