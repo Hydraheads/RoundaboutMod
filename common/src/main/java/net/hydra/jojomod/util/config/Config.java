@@ -1389,6 +1389,12 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownRapierSlash;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotMinimumCooldownCrouchAttack;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer silverChariotRapierSlashRadius;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinDuration;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinWindup;
     }
 
     public static class TimeStopSettings {
