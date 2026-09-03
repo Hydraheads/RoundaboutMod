@@ -1043,8 +1043,7 @@ public class BlockGrabPreset extends NewPunchingStand {
                 && ((entity != null && ((IEntityAndData)entity).rdbt$returnPickup()))
                 && !(entity instanceof Projectile)
                 && !(MainUtil.resistsKnockBack(entity))
-                && (!(entity instanceof StandEntity SE && !SE.canBeGrabed()))
-                && !(entity != null && MainUtil.isMobGrabBlacklisted(entity))){
+                && (!(entity instanceof StandEntity SE && !SE.canBeGrabed()))){
             if (entity instanceof Player pl && this.getSelf().getVehicle() != null && ((StandUser) pl).roundabout$getStand() != null &&
                     ((StandUser) pl).roundabout$getStand().is(this.getSelf().getRootVehicle())){
                 return false;
