@@ -168,13 +168,13 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2],split[3]);
                     Float decayRate = Float.parseFloat(split[4]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
-                    if (sourceBlock == Blocks.AIR && !(split[0].equals("minecraft") && split[1].equals("air"))) {
-                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
+                    if (sourceBlock == Blocks.AIR && !sourceId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: source block '{}' does not exist", sourceId);
                         continue;
                     }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
-                    if (targetBlock == Blocks.AIR && !(split[0].equals("minecraft") && split[1].equals("air"))) {
-                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
+                    if (targetBlock == Blocks.AIR && !targetId.toString().equals("minecraft:air")) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: target block '{}' does not exist", targetId);
                         continue;
                     }
                     MainUtil.PURPLE_HAZE_DECAY_BLOCKS.put(sourceBlock, targetBlock);
