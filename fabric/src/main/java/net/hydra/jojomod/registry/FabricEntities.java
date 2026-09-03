@@ -793,7 +793,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity"),
                     EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC).
-                            sized(0.7f, 0.7f)
+                            sized(StrayCatEntity.hitBoxWidth, 0.7f)
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":stray_cat_entity")
             );

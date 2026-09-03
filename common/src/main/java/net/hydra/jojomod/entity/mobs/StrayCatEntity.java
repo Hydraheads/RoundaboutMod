@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StrayCatItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,6 +23,7 @@ import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,6 +34,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -42,6 +45,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +58,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         this.setMaxUpStep(0.0F);
     }
 
-    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON);
+    private static final Ingredient TEMPT_INGREDIENT = Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH);
 
     private static final EntityDataAccessor<Byte> BREED = SynchedEntityData.defineId(StrayCatEntity.class,
             EntityDataSerializers.BYTE);;
@@ -157,6 +161,8 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     public static final int bubbleShieldTimerMax = 60;
     public int bubbleShieldTimer = 0;
 
+    public static float hitBoxWidth = 0.3f;
+
     private List<StrayCatAirBubble> bubblesList;
 
     public void bubbleListInit(){
@@ -258,8 +264,6 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             }
 
             if (!this.getPotted()) {
-                BlockHitResult hitResult = this.level().clip(new ClipContext(this.position().subtract(0, 0.5, 0), this.position().add(0,-0.75, 0),
-                        ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 
                 BlockPos pos = getOnPos();
                 BlockState stateOn = this.level().getBlockState(pos);
@@ -275,6 +279,65 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 }
             }
         }
+    }
+
+    public static void tryToSpawnStrayCat(Cat entity) {
+        Level level = entity.level();
+        BlockPos bPos = entity.getOnPos();
+
+        Vec3 selectedPos = null;
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                bPos.offset((int) 3, (int) 3, (int) 3),
+                bPos.offset(-(int) 3, -(int) 3, -(int) 3))) {
+            if (StrayCatEntity.canSurviveInBlock(level.getBlockState(pos))) {
+                if (
+                        level.getBlockState(pos.above()).is(Blocks.AIR)
+                        || level.getBlockState(pos.above()).is(Blocks.CAVE_AIR)
+                        || level.getBlockState(pos.above()).is(Blocks.VOID_AIR)
+                        || level.getBlockState(pos.above()).is(Blocks.STRUCTURE_VOID)
+                ) {
+                    if (selectedPos == null) {
+                        selectedPos = pos.getCenter();
+                    }else {
+                        Vec3 newPos = pos.getCenter();
+                        if (selectedPos.distanceTo(entity.getPosition(1)) > newPos.distanceTo(entity.getPosition(1))) {
+                            selectedPos = newPos;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (selectedPos != null) {
+            StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create(entity.level());
+            if (FunnyCat != null) {
+                FunnyCat.randomizeBreed();
+                Vec3 strayCatPos = selectedPos.add(0, 0.5, 0);
+                FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, entity.getYRot(), 0.0f);
+                entity.level().addFreshEntity(FunnyCat);
+            }
+        }
+
+        /*
+        BlockHitResult hitResult = entity.level().clip(new ClipContext(entity.getPosition(1), entity.getPosition(1).add(0, -1.5, 0),
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = hitResult.getBlockPos();
+            BlockState stateOn = entity.level().getBlockState(pos);
+
+            if (StrayCatEntity.canSurviveInBlock(stateOn)) {
+                StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create(entity.level());
+                if (FunnyCat != null) {
+                    FunnyCat.randomizeBreed();
+                    Vec3 strayCatPos = pos.getCenter().add(0, 0.5, 0);
+                    FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, entity.getYRot(), 0.0f);
+                    entity.level().addFreshEntity(FunnyCat);
+                }
+            }
+        }
+         */
     }
 
     public static boolean canSurviveInBlock(BlockState state) {
@@ -307,10 +370,11 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
         if (DMG.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                 DMG.is(DamageTypes.WITHER) ||
                 DMG.is(DamageTypes.DRAGON_BREATH) ||
-                DMG.is(ModDamageTypes.GO_BEYOND) ||
                 DMG.is(DamageTypes.GENERIC_KILL) ||
                 DMG.is(DamageTypes.DROWN) ||
-                DMG.is(DamageTypes.IN_WALL)
+                DMG.is(DamageTypes.IN_WALL) ||
+                MainUtil.isSpecialDamage(DMG) ||
+                DMG.is(DamageTypeTags.BYPASSES_SHIELD)
         ) {
             return false;
         }
@@ -320,6 +384,17 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override
     public boolean hurt(DamageSource DMG, float f) {
         if (this.getBubbleShield() && canBubbleShieldProtect(DMG)) {
+            Entity attacker = DMG.getEntity();
+
+            if (attacker instanceof LivingEntity LE) {
+
+                double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+                Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.5 * $$11);
+                if ($$12.lengthSqr() > 0.0) {
+                    LE.push($$12.x, 0.25, $$12.z);
+                }
+            }
+
             return false;
         }
 
@@ -461,11 +536,10 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
     @Override public void doPush(Entity ent) { }
 
     public boolean shouldSleep() {
-        BlockPos pos = this.getOnPos();
-        boolean lastState = this.getSleeping();
+        /*boolean lastState = this.getSleeping();
         if (!lastState && this.getTarget() != null) {
             return false;
-        }
+        }*/
 
         return !isUnderLight(this);
     }
@@ -523,14 +597,16 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
             if (!this.isTame()) { bubble.setDamageMult(2.4f); }
 
+            this.level().addFreshEntity(bubble);
+
             Vec3 addToPosition = new Vec3(0, this.getEyeHeight() * 0.85f, 0);
             Direction direction = ((IGravityEntity) this).roundabout$getGravityDirection();
             if (direction != Direction.DOWN) {
                 addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
             }
             Vec3 pos = this.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z);
-            bubble.setPos(pos.x(), pos.y(), pos.z());
-            this.level().addFreshEntity(bubble);
+            bubble.absMoveTo(pos.x(), pos.y(), pos.z());
+
 
             Vec3 targetpos = livingEntity.getPosition(0);
             Vec3 targetaddToPosition = new Vec3(0, livingEntity.getBbHeight() * 0.5f, 0);

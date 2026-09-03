@@ -33,9 +33,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 
@@ -175,16 +178,7 @@ public class StandArrowEntity extends AbstractArrow {
                     }
 
                     if (!$$1.isAlive() && !hadStandEffect && $$1 instanceof Cat C && !C.isTame()){
-                        BlockPos pos = $$1.getOnPos();
-                        BlockState stateOn = $$1.level().getBlockState(pos);
-
-                        if (StrayCatEntity.canSurviveInBlock(stateOn)) {
-                            StrayCatEntity FunnyCat = ModEntities.STRAY_CAT.create($$1.level());
-                            FunnyCat.randomizeBreed();
-                            Vec3 strayCatPos = $$1.position();
-                            FunnyCat.moveTo(strayCatPos.x, strayCatPos.y, strayCatPos.z, $$1.getYRot(), 0.0f);
-                            $$1.level().addFreshEntity(FunnyCat);
-                        }
+                        StrayCatEntity.tryToSpawnStrayCat(C);
                     }
 
                     if (this.getKnockback() > 0) {
