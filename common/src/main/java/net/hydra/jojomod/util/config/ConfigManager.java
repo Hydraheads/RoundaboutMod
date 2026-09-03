@@ -173,6 +173,10 @@ public abstract class ConfigManager {
                         continue;
                     }
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    if (targetBlock == Blocks.AIR && !(split[0].equals("minecraft") && split[1].equals("air"))) {
+                        Roundabout.LOGGER.warn("Invalid Purple Haze block decay entry: {}", entry);
+                        continue;
+                    }
                     MainUtil.PURPLE_HAZE_DECAY_BLOCKS.put(sourceBlock, targetBlock);
                     MainUtil.PURPLE_HAZE_DECAY_RATE.put(sourceBlock, decayRate);
                 }
