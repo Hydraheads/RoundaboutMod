@@ -1216,6 +1216,8 @@ public class ClientUtil {
                     SU.roundabout$getStandPowers().setAttackTimeDuring(0);
                 }
             }
+        } else if (context == PacketDataIndex.S2C_HALLUCINATION_INDICATOR) {
+            HallucinationIndicatorRenderer.update(data, data2);
         }
     }
 

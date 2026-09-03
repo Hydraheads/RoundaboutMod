@@ -582,11 +582,6 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static void registerWhitesnakeItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register(HallucinatoryAcidColors::itemColor, ForgeItems.HALLUCINATORY_ACID_GLOB.get());
-    }
-
-    @SubscribeEvent
     public static void modifyWhitesnakeBakedModels(ModelEvent.ModifyBakingResult event) {
         event.getModels().replaceAll((id, model) -> {
             if (!id.getNamespace().equals(Roundabout.MOD_ID)) return model;

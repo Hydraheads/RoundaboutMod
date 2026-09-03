@@ -1,6 +1,10 @@
 package net.hydra.jojomod.event.powers.whitesnake;
 
 import net.hydra.jojomod.access.IMob;
+import net.hydra.jojomod.event.index.PacketDataIndex;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.config.Config;
 
 import net.hydra.jojomod.client.ClientNetworking;
@@ -9,12 +13,16 @@ import net.hydra.jojomod.event.ModEffects;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
@@ -37,12 +45,13 @@ public final class HallucinationEffect extends MobEffect {
     }
 
     public static boolean hasDistortion(MobEffectInstance effect) {
-        return effect != null && effect.getAmplifier() < MAX_LEVEL - 1;
+        return effect != null;
     }
 
     @Override
     public void addAttributeModifiers(LivingEntity living, AttributeMap attributes, int amplifier) {
-        if (amplifier != 1) return;
+        syncIndicator(living, amplifier + 1);
+        if (amplifier < 1 || amplifier >= 2 && !(living instanceof Player)) return;
         AttributeInstance movement = attributes.getInstance(Attributes.MOVEMENT_SPEED);
         if (movement != null && movement.getModifier(SLOWNESS_ID) == null) {
             movement.addTransientModifier(new AttributeModifier(SLOWNESS_ID,
@@ -52,6 +61,7 @@ public final class HallucinationEffect extends MobEffect {
 
     @Override
     public void removeAttributeModifiers(LivingEntity living, AttributeMap attributes, int amplifier) {
+        syncIndicator(living, 0);
         AttributeInstance movement = attributes.getInstance(Attributes.MOVEMENT_SPEED);
         if (movement != null) movement.removeModifier(SLOWNESS_ID);
     }
@@ -61,6 +71,9 @@ public final class HallucinationEffect extends MobEffect {
         MobEffectInstance hallucination = living.getEffect(this);
         if (hallucination == null) return;
         int duration = hallucination.getDuration();
+        if (!living.level().isClientSide() && living.tickCount % 20 == 0) {
+            syncIndicator(living, amplifier + 1);
+        }
         if (!living.level().isClientSide() && living instanceof Mob mob && amplifier < 2) {
             int interval = amplifier == 1 ? 60 : 120;
             if (living.tickCount % interval == 0) {
@@ -88,5 +101,18 @@ public final class HallucinationEffect extends MobEffect {
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
+    }
+
+    private static void syncIndicator(LivingEntity target, int level) {
+        if (!(target.level() instanceof ServerLevel serverLevel)) return;
+        for (ServerPlayer viewer : serverLevel.players()) {
+            if (viewer.distanceToSqr(target) > 400) continue;
+            ItemStack standDisc = ((StandUser) viewer).roundabout$getStandDisc();
+            if (standDisc.is(ModItems.STAND_DISC_WHITESNAKE)
+                    || standDisc.is(ModItems.MAX_STAND_DISC_WHITESNAKE)) {
+                S2CPacketUtil.sendGenericIntIntToClientPacket(viewer,
+                        PacketDataIndex.S2C_HALLUCINATION_INDICATOR, target.getId(), level);
+            }
+        }
     }
 }

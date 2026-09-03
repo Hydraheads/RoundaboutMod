@@ -755,8 +755,6 @@ public class ForgeItems {
     public static final RegistryObject<Item> EXPLOSIVE_COMMAND_DISC = addToWIPTab(ITEMS.register(
             "explosive_command_disc", () -> new CommandDiscItem(new Item.Properties().stacksTo(1),
                     CommandDiscItem.Command.EXPLOSIVE)));
-    public static final RegistryObject<Item> HALLUCINATORY_ACID_GLOB = addToWIPTab(ITEMS.register(
-            "hallucinatory_acid_glob", () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> HALLUCINATORY_ACID_HEIGHT_1 = addToWIPTab(ITEMS.register(
             "hallucinatory_acid_height_1", () -> new HallucinatoryAcidDebugItem(
                     ForgeBlocks.HALLUCINATORY_ACID.get(), 1, new Item.Properties())));

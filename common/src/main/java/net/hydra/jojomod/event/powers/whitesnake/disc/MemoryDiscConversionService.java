@@ -14,13 +14,20 @@ public final class MemoryDiscConversionService {
 
     public static void convert(ServerPlayer player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
-        if (!DiscItemData.isCreeperMemory(held)) {
+        ItemStack result;
+        String message;
+        if (DiscItemData.isCreeperMemory(held)) {
+            result = new ItemStack(ModItems.EXPLOSIVE_COMMAND_DISC);
+            message = "message.roundabout.memory_conversion_explosive";
+        } else if (DiscItemData.isSlimeMemory(held)) {
+            result = new ItemStack(ModItems.JUMP_BACK_COMMAND_DISC);
+            message = "message.roundabout.memory_conversion_jump_back";
+        } else {
             player.displayClientMessage(Component.translatable(
                     "message.roundabout.memory_conversion_invalid"), true);
             return;
         }
 
-        ItemStack result = new ItemStack(ModItems.EXPLOSIVE_COMMAND_DISC);
         if (held.getCount() == 1) {
             player.setItemInHand(hand, result);
         } else {
@@ -29,7 +36,6 @@ public final class MemoryDiscConversionService {
         }
         player.level().playSound(null, player.blockPosition(), ModSounds.WHITESNAKE_COMMAND_DISC_CREATE_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
-        player.displayClientMessage(Component.translatable(
-                "message.roundabout.memory_conversion_explosive"), true);
+        player.displayClientMessage(Component.translatable(message), true);
     }
 }

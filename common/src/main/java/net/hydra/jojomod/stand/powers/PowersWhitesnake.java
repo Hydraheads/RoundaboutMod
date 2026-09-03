@@ -445,11 +445,13 @@ public class PowersWhitesnake extends BlockGrabPreset {
         meltingHoverExhausted = false;
         meltingCrawlGraceTicks = 0;
         meltingCrawlTransitionTicks = 0;
+        WhitesnakeEntity whitesnake = getStandEntity(self) instanceof WhitesnakeEntity entity ? entity : null;
+        if (whitesnake != null) whitesnake.setMeltingModeActive(meltingMode);
         if (meltingMode) {
-            if (getActivePower() == PowerIndex.ATTACK || isGuarding()) tryPower(PowerIndex.NONE, true);
+            if (getActivePower() == PowerIndex.ATTACK) tryPower(PowerIndex.NONE, true);
             return;
         }
-        if (!(getStandEntity(self) instanceof WhitesnakeEntity whitesnake)) return;
+        if (whitesnake == null) return;
         whitesnake.setMeltingHovering(false);
         Direction oldGravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
         ((IGravityEntity) whitesnake).roundabout$setGravityDirection(Direction.DOWN);
@@ -1571,7 +1573,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static boolean isMeltingRestrictedPower(int move) {
         return switch (move) {
-            case PowerIndex.ATTACK, PowerIndex.GUARD, DISC_STEAL,
+            case PowerIndex.ATTACK, DISC_STEAL,
                     PowerIndex.BARRAGE_CHARGE, PowerIndex.BARRAGE,
                     PowerIndex.SNEAK_ATTACK_CHARGE, PowerIndex.SNEAK_ATTACK,
                     PowerIndex.POWER_1_SNEAK -> true;
@@ -1868,6 +1870,22 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     @Override
+    public boolean isAttackInept(byte activePower) {
+        if (autoMode) return autoModeAttackDisabled();
+        return super.isAttackInept(activePower);
+    }
+
+    @Override
+    public boolean shouldReset(byte activePower) {
+        if (autoMode) return autoModeAttackDisabled();
+        return super.shouldReset(activePower);
+    }
+
+    private boolean autoModeAttackDisabled() {
+        return isDazed(self) || ((TimeStop) self.level()).CanTimeStopEntity(self);
+    }
+
+    @Override
     public void tickMobAI(LivingEntity attackTarget) {
         if (mobAbilityDecisionCooldown > 0) mobAbilityDecisionCooldown--;
         if (getActivePower() == PowerIndex.GUARD) {
@@ -2104,7 +2122,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
-        if (meltingMode || activePower == PowerIndex.POWER_2_BLOCK) return false;
+        if (activePower == PowerIndex.POWER_2_BLOCK) return false;
         return super.buttonInputGuard(keyIsDown, options);
     }
 

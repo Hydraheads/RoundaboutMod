@@ -94,7 +94,6 @@ public class ModItems {
     public static Item ATTACK_COMMAND_DISC;
     public static Item FORGET_COMMAND_DISC;
     public static Item EXPLOSIVE_COMMAND_DISC;
-    public static Item HALLUCINATORY_ACID_GLOB;
     public static Item HALLUCINATORY_ACID_HEIGHT_1;
     public static Item HALLUCINATORY_ACID_HEIGHT_2;
     public static Item HALLUCINATORY_ACID_HEIGHT_3;

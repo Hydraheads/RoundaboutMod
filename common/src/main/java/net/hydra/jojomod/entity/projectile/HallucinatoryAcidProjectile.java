@@ -50,7 +50,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
 
     @Override
     protected Item getDefaultItem() {
-        return ModItems.HALLUCINATORY_ACID_GLOB;
+        return ModItems.HALLUCINATORY_ACID_HEIGHT_1;
     }
 
     public static int itemSkin(ItemStack stack) {
@@ -59,7 +59,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
     }
 
     private static ItemStack createSkinItem(int skin) {
-        ItemStack stack = new ItemStack(ModItems.HALLUCINATORY_ACID_GLOB);
+        ItemStack stack = new ItemStack(ModItems.HALLUCINATORY_ACID_HEIGHT_1);
         stack.getOrCreateTag().putInt(SKIN_TAG, Mth.clamp(skin,
                 WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.SANDSNAKE_SKIN));
         return stack;
