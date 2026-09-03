@@ -608,7 +608,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"),
                     EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).
-                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":black_sabbath")
+                            sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":black_sabbath")
             );
 
     public static final EntityType<BeachSabbathEntity> BEACH_SABBATH =
@@ -616,7 +616,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath"),
                     EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).
-                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":beach_sabbath")
+                            sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":beach_sabbath")
             );
 
     public static final EntityType<BlackSantaSabbathEntity> SANTA_SABBATH =
@@ -624,14 +624,14 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath"),
                     EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).
-                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":santa_sabbath")
+                            sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":santa_sabbath")
             );
     public static final EntityType<CowboySabbathEntity> COWBOY_SABBATH =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath"),
                     EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).
-                            sized(0.70F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cowboy_sabbath")
+                            sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":cowboy_sabbath")
             );
         public static final EntityType<WalkingHeartEntity> WALKING_HEART =
                 Registry.register(
