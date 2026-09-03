@@ -45,6 +45,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
@@ -751,7 +752,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
     }
     private static final int STRANGLE_WINDUP_TICKS=30;
-    private static final double STRANGLE_SPEED=0.4;
+    private static final double STRANGLE_SPEED=1.4;
     private static final double STRANGLE_MAX_DISTANCE=8.0;
     private static final int STRANGLE_HOLD_DURATION=80;
 
@@ -879,12 +880,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.strangleVictim = victim;
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
 
+        if (victim instanceof Mob mob) {
+            mob.setNoAi(true);
+        }
+        if (victim instanceof StandUser SU) {
+            SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
+        }
+
         stand.setPos(victim.position().add(0, victim.getBbHeight() * 0.5, 0));
         animateStand(PurpleHazeEntity.STRANGLE_HOLD);
 
         playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                 ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
-
     }
 
     private void tickStranglePin(StandEntity stand) {
@@ -893,8 +900,17 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
+        if (strangleVictim instanceof StandUser SU) {
+            SU.roundabout$setRestrainedTicks(20);
+        }
+
         stand.setPos(strangleVictim.position().add(0, strangleVictim.getBbHeight() * 0.5, 0));
         strangleVictim.setDeltaMovement(Vec3.ZERO);
+
+        if (strangleVictim instanceof Mob mob) {
+            mob.getNavigation().stop();
+            mob.setTarget(null);
+        }
 
         if (strangleHoldTicks % 20 == 0) {
             this.StandDamageEntityAttack(strangleVictim, getStrangleTickDamage(), 0.0F, this.self);
@@ -910,6 +926,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     private void endStrangle() {
+        if (strangleVictim != null) {
+            if (strangleVictim instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+            if (strangleVictim instanceof StandUser SU) {
+                SU.roundabout$setRestrainedTicks(0);
+            }
+        }
         this.strangleVictim = null;
         this.strangleTicks = -1;
         this.strangleTravelTicks = 0;

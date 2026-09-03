@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.stand.animations.BlackSabbathAnimations;
 import net.hydra.jojomod.client.models.stand.animations.ManhattanTransferAnimations;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
+import net.hydra.jojomod.entity.stand.FollowingStandEntity;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
@@ -19,6 +21,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -209,7 +212,7 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         this.animate(pEntity.chest_open, BlackSabbathAnimations.Chest_Open, pAgeInTicks, 1f);
         this.animate(pEntity.chest_close, BlackSabbathAnimations.Chest_Close, pAgeInTicks, 1f);
         this.animate(pEntity.floating, BlackSabbathAnimations.Float, pAgeInTicks, 1f);
-	}
+	} private float swimRotCorrect = 0.0F;
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

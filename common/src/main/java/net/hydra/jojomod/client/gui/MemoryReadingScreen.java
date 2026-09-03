@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
@@ -12,13 +13,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 public final class MemoryReadingScreen extends Screen {
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(
+            Roundabout.MOD_ID, "textures/gui/memory_reading.png");
+    private static final int TEXTURE_WIDTH = 512;
+    private static final int TEXTURE_HEIGHT = 256;
     private static final int PANEL_WIDTH = 230;
     private static final int PLAYER_PANEL_HEIGHT = 205;
     private static final int MOB_PANEL_HEIGHT = 92;
+    private static final int MOB_PANEL_U = 230;
     private static final int SLOT_SIZE = 18;
     private final ItemStack disc;
     private final InteractionHand hand;
@@ -45,11 +52,18 @@ public final class MemoryReadingScreen extends Screen {
 
     @Override
     protected void init() {
-        if (!DiscItemData.isCreeperMemory(disc)) return;
+        String buttonText;
+        if (DiscItemData.isCreeperMemory(disc)) {
+            buttonText = "screen.roundabout.memory_create_explosive";
+        } else if (DiscItemData.isSlimeMemory(disc)) {
+            buttonText = "screen.roundabout.memory_create_jump_back";
+        } else {
+            return;
+        }
         int left = (width - PANEL_WIDTH) / 2;
         int top = (height - MOB_PANEL_HEIGHT) / 2;
         addRenderableWidget(Button.builder(
-                        Component.translatable("screen.roundabout.memory_create_explosive"),
+                        Component.translatable(buttonText),
                         button -> {
                             C2SPacketUtil.whitesnakeMemoryDiscConversion(hand);
                             onClose();
@@ -64,14 +78,16 @@ public final class MemoryReadingScreen extends Screen {
         int panelHeight = kind == DiscItemData.READING_PLAYER ? PLAYER_PANEL_HEIGHT : MOB_PANEL_HEIGHT;
         int left = (width - PANEL_WIDTH) / 2;
         int top = (height - panelHeight) / 2;
-        graphics.fill(left, top, left + PANEL_WIDTH, top + panelHeight, 0xE0101018);
-        graphics.fill(left + 2, top + 2, left + PANEL_WIDTH - 2, top + panelHeight - 2, 0xE0282832);
-        graphics.drawCenteredString(font, Component.translatable("screen.roundabout.memory_reading"),
-                width / 2, top + 8, 0xFFFFFF);
+        int textureU = kind == DiscItemData.READING_PLAYER ? 0 : MOB_PANEL_U;
+        graphics.blit(BACKGROUND, left, top, textureU, 0, PANEL_WIDTH, panelHeight,
+                TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        Component title = Component.translatable("screen.roundabout.memory_reading");
+        graphics.drawString(font, title, width / 2 - font.width(title) / 2,
+                top + 8, 0x404040, false);
 
         String owner = DiscItemData.getOwnerName(disc);
         graphics.drawString(font, Component.translatable("screen.roundabout.memory_owner",
-                owner.isEmpty() ? "Unknown" : owner), left + 10, top + 23, 0xC8C8C8, false);
+                owner.isEmpty() ? "Unknown" : owner), left + 10, top + 23, 0x404040, false);
 
         ItemStack hovered = ItemStack.EMPTY;
         if (kind == DiscItemData.READING_PLAYER) {
@@ -81,7 +97,7 @@ public final class MemoryReadingScreen extends Screen {
             renderVillagerDetails(graphics, left, top);
         } else {
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_unavailable"),
-                    left + 10, top + 42, 0xAAAAAA, false);
+                    left + 10, top + 42, 0x555555, false);
         }
         if (!hovered.isEmpty()) graphics.renderTooltip(font, hovered, mouseX, mouseY);
         super.render(graphics, mouseX, mouseY, delta);
@@ -91,16 +107,16 @@ public final class MemoryReadingScreen extends Screen {
         if (reading.contains(DiscItemData.READING_SPAWN_POS, Tag.TAG_LONG)) {
             BlockPos pos = BlockPos.of(reading.getLong(DiscItemData.READING_SPAWN_POS));
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_spawn",
-                    pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 36, 0xB9D7FF, false);
+                    pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 36, 0x3F5F7F, false);
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_dimension",
                     reading.getString(DiscItemData.READING_SPAWN_DIMENSION)),
-                    left + 10, top + 48, 0x909EBD, false);
+                    left + 10, top + 48, 0x596270, false);
         } else {
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_spawn_unknown"),
-                    left + 10, top + 36, 0xAAAAAA, false);
+                    left + 10, top + 36, 0x555555, false);
         }
         graphics.drawString(font, Component.translatable("screen.roundabout.memory_inventory"),
-                left + 10, top + 62, 0xFFFFFF, false);
+                left + 10, top + 62, 0x404040, false);
     }
 
     private ItemStack renderPlayerInventory(GuiGraphics graphics, int left, int top,
@@ -123,7 +139,7 @@ public final class MemoryReadingScreen extends Screen {
             if (!stack.isEmpty()) hovered = stack;
         }
         graphics.drawString(font, Component.translatable("screen.roundabout.memory_equipment"),
-                left + 10, top + 157, 0xFFFFFF, false);
+                left + 10, top + 157, 0x404040, false);
         int equipmentX = left + 70;
         int equipmentY = top + 174;
         for (int slot = 36; slot <= 40; slot++) {
@@ -138,20 +154,18 @@ public final class MemoryReadingScreen extends Screen {
         if (reading.contains(DiscItemData.READING_JOB_POS, Tag.TAG_LONG)) {
             BlockPos pos = BlockPos.of(reading.getLong(DiscItemData.READING_JOB_POS));
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_job_site",
-                    pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 42, 0xD6B9FF, false);
+                    pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 42, 0x6A4E80, false);
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_dimension",
                     reading.getString(DiscItemData.READING_JOB_DIMENSION)),
-                    left + 10, top + 55, 0xA590BD, false);
+                    left + 10, top + 55, 0x665B70, false);
         } else {
             graphics.drawString(font, Component.translatable("screen.roundabout.memory_job_unknown"),
-                    left + 10, top + 42, 0xAAAAAA, false);
+                    left + 10, top + 42, 0x555555, false);
         }
     }
 
     private ItemStack renderSlot(GuiGraphics graphics, ItemStack stack, int x, int y,
                                  int mouseX, int mouseY) {
-        graphics.fill(x, y, x + 18, y + 18, 0xFF8B8B8B);
-        graphics.fill(x + 1, y + 1, x + 17, y + 17, 0xFF373737);
         if (!stack.isEmpty()) {
             graphics.renderItem(stack, x + 1, y + 1);
             graphics.renderItemDecorations(font, stack, x + 1, y + 1);

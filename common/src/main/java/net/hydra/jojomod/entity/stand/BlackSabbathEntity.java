@@ -27,6 +27,8 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -129,7 +131,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     @Override
     public boolean isPickable() {
-        return true;
+        return getHunting() && !getRiding();
     }
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
@@ -138,6 +140,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean isInvulnerable() {
         return !getHunting() && getRiding();
+    }
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+    protected boolean isAffectedByFluids() {
+        FluidState $$3 = this.level().getFluidState(this.blockPosition());
+        return horizontalCollision && !($$3.is(Fluids.LAVA) || $$3.is(Fluids.FLOWING_LAVA));
     }
     @Override
     public boolean fireImmune() {
@@ -160,7 +170,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean lockPos(){
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2 && getRiding();
+            return pb.moveMode == 2 || getRiding();
         }
         return false;
     }
@@ -171,7 +181,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return getHunting() && !getRiding();
+        return super.canCollideWith(entity);
     }
     @Override
     public boolean hasNoPhysics(){
@@ -183,7 +193,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean isNoGravity() {
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2 || this.is(pb.blackSelect);
+            return pb.moveMode == 2 || this.is(pb.blackSelect) || getRiding();
         }
         return false;
     }
@@ -282,6 +292,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
        // System.out.println(damageImmunityTicks);
       //  System.out.println(this.getHealth());
      //   System.out.println(isUnderSunlight());
+        if(getRiding()){
+            if(this.getY() < this.level().getMinBuildHeight()) {
+                setDeltaMovement(Vec3.ZERO);
+            } else {
+                absMoveTo(this.getX(), this.level().getMinBuildHeight() , this.getZ());
+            }
+        }
+        System.out.println(this.getY());
         if(isBlackSabbathUnderLight()){
             this.getNavigation().setSpeedModifier(0.35);
         }
@@ -682,9 +700,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 if (ridingEntity == null) {
                                     if(pbs.blackSabbathTargets != null && !pbs.blackSabbathTargets.isEmpty()) {
                                         if (!pbs.blackSabbathTargets.contains(shadowHidTarget())) {
-                                            setRidingEntity(shadowHidTarget());
-                                            setRiding(true);
-                                            setUnrender(true);
+                                            if(!isBlackSabbathUnderLight()) {
+                                                setRidingEntity(shadowHidTarget());
+                                                setRiding(true);
+                                                setUnrender(true);
+                                            }
                                         }
                                     }
                                 }
@@ -727,12 +747,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-    int ticksUntilNextPathRecalculation = 15;
+    int ticksUntilNextPathRecalculation = 5;
 
     public void bsMove(Vec3 targetPos) {
         ticksUntilNextPathRecalculation--;
         if (ticksUntilNextPathRecalculation <= 0) {
-            ticksUntilNextPathRecalculation = 15;
+            ticksUntilNextPathRecalculation = 5;
 
             Path newPath;
             if(this.targetSabbath() != null && targetPos != null) {

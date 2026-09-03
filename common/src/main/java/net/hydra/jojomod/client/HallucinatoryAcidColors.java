@@ -2,9 +2,7 @@ package net.hydra.jojomod.client;
 
 import net.hydra.jojomod.block.HallucinatoryAcidBlock;
 import net.hydra.jojomod.block.HallucinatoryAcidWallBlock;
-import net.hydra.jojomod.entity.projectile.HallucinatoryAcidProjectile;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class HallucinatoryAcidColors {
@@ -30,10 +28,6 @@ public final class HallucinatoryAcidColors {
             return tint(state.getValue(HallucinatoryAcidWallBlock.SKIN));
         }
         return 0xFFFFFF;
-    }
-
-    public static int itemColor(ItemStack stack, int tintIndex) {
-        return tintIndex == 0 ? tint(HallucinatoryAcidProjectile.itemSkin(stack)) : 0xFFFFFF;
     }
 
     public static int tint(int skin) {

@@ -35,6 +35,9 @@ public final class WhitesnakeDiscUtil {
         if (isDiscBlacklisted(target)) return false;
         if (!isDiscStealEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
+        if (target instanceof ServerPlayer && !Boolean.TRUE.equals(config.stealPlayerDiscs)) {
+            return DiscSealController.seal(target, type);
+        }
         boolean lowHealthSteal = config.stealDiscWhenLowHealth && target.getHealth() < 2.0F;
         if (!lowHealthSteal && hallucinationLevel(target) < config.hallucinationAllowsDiscSteal) {
             return DiscSealController.seal(target, type);

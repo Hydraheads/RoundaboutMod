@@ -531,25 +531,25 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
             ENTITY_TYPES.register("black_sabbath", () ->
-                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
             );
     public static final RegistryObject<EntityType<BeachSabbathEntity>> BEACH_SABBATH =
             ENTITY_TYPES.register("beach_sabbath", () ->
-                    EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                    EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath").toString())
             );
     public static final RegistryObject<EntityType<BlackSantaSabbathEntity>> SANTA_SABBATH =
             ENTITY_TYPES.register("santa_sabbath", () ->
-                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath").toString())
             );
     public static final RegistryObject<EntityType<CowboySabbathEntity>> COWBOY_SABBATH =
             ENTITY_TYPES.register("cowboy_sabbath", () ->
-                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
             );
@@ -678,7 +678,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
             ENTITY_TYPES.register("stray_cat_entity", () ->
                     EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
-                            .sized(0.7f, 0.7f).
+                            .sized(StrayCatEntity.hitBoxWidth, 0.7f).
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())

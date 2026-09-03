@@ -646,10 +646,11 @@ public class SheerHeartAttackEntity extends StandEntity {
 		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 
 		if (target != null) {
+
 			if (target instanceof LivingEntity LE) {
 				double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-				Vec3 $$12 = this.position().subtract(LE.position()).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.35 * $$11);
-				if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.3, $$12.z); }
+				Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.55 * $$11);
+				if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.32, $$12.z); }
 			}
 		}
 	}

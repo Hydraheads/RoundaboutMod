@@ -28,6 +28,9 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_MOVE = whitesnakeIcon("auto_mode_move");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_ATTACK = whitesnakeIcon("auto_mode_attack");
     public static final ResourceLocation WHITESNAKE_HALLUCINATORY_DISGUISE = whitesnakeIcon("hallucinatory_disguise");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_1 = whitesnakeIcon("hallucination_1");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_2 = whitesnakeIcon("hallucination_2");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_3 = whitesnakeIcon("hallucination_3");
     public static final ResourceLocation WHITESNAKE_TIME_SPARK = whitesnakeIcon("time_spark");
     public static final ResourceLocation WHITESNAKE_INVENTORY = whitesnakeIcon("inventory");
     public static final ResourceLocation WHITESNAKE_DISC_STEAL_MENU = new ResourceLocation(Roundabout.MOD_ID,
