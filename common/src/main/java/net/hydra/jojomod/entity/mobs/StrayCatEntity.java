@@ -291,11 +291,9 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
                 bPos.offset((int) 3, (int) 3, (int) 3),
                 bPos.offset(-(int) 3, -(int) 3, -(int) 3))) {
             if (StrayCatEntity.canSurviveInBlock(level.getBlockState(pos))) {
+                BlockState state = level.getBlockState(pos.above());
                 if (
-                        level.getBlockState(pos.above()).is(Blocks.AIR)
-                        || level.getBlockState(pos.above()).is(Blocks.CAVE_AIR)
-                        || level.getBlockState(pos.above()).is(Blocks.VOID_AIR)
-                        || level.getBlockState(pos.above()).is(Blocks.STRUCTURE_VOID)
+                        state.isAir() || !state.isSuffocating(level, pos.above())
                 ) {
                     if (selectedPos == null) {
                         selectedPos = pos.getCenter();
