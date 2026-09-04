@@ -1330,7 +1330,7 @@ public class Config implements Cloneable {
         public Boolean hideHallucinationParticles;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinationHidesEffects;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 300, min = 1, max = 72000)
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 400, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;

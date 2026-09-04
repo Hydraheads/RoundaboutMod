@@ -192,14 +192,15 @@ public class PowersBlackSabbath extends NewDashPreset {
                     }
                     if (moveMode == 3) {
                         setNull();
+                        clearTargetEntitiesOnStandDeath();
+                        killTargetListClient();
+                        setTickDown2(20);
                     }
                 }
                 if (!desummon) {
                     if (blackSabbathTargets.isEmpty()) {
                         setNull();
                         blackSelect = null;
-                    } else {
-                        blackSelectClient();
                     }
                 }
             } else {
@@ -414,7 +415,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public StandEntity blackSelect = null;
     public boolean two(){
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
-        Position pn = this.self.getEyePosition().add(lvec.scale(-0.75F));
+        Position pn = this.self.getEyePosition().add(lvec.scale(-0.90F));
         if(moveMode == 0) {
             if (!this.getSelf().level().isClientSide()) {
                 if (blackSelect == null || blackSelect.isRemoved()){
@@ -1307,7 +1308,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     @Override
     public boolean returnFakeStandForHud(){
         if(this.self != null) {
-            return !(this.getStandEntity(this.self) != null);
+           // return !(this.getStandEntity(this.self) != null);
+            return true;
         }
         return false;
     }

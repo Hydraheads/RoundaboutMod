@@ -1,7 +1,12 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.hydra.jojomod.client.models.layers.visages.VisageRenderContext;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -58,6 +63,11 @@ public class VisageData {
     }
     public boolean isSlim(){
         return false;
+    }
+
+    public void render(VisageRenderContext renderContext, HumanoidModel<LivingEntity> model, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, String path, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+                       float r, float g, float b) {
+
     }
 
     public boolean rendersSpikeyHair(){

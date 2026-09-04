@@ -7,6 +7,7 @@ import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.config.Config;
 import net.minecraft.nbt.CompoundTag;
@@ -197,6 +198,10 @@ public final class WhitesnakeDiscUtil {
         if (!target.level().isClientSide()) {
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers().isPiloting()) {
+                ((StandUser) user).roundabout$getStandPowers().playSoundsIfNearby(
+                        PowersWhitesnake.WSVOICE_DISC_STEAL, 27, false, true);
+            }
             if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.ejectType == 2
                     && user instanceof Player player && player.getInventory().add(stack)) {
                 return;

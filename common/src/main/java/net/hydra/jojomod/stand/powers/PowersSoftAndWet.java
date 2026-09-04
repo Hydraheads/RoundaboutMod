@@ -1234,7 +1234,7 @@ public class PowersSoftAndWet extends NewPunchingStand {
         if (canExecuteMoveWithLevel(getGoBeyondLevel())) {
             if (inShootingMode() && goBeyondCharged()) {
                 Entity TE = MainUtil.getTargetEntity(this.self, 30, 15);
-                if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable()) && MainUtil.isActuallyALivingEntityNoCap(TE)) {
+                if (TE != null && !TE.is(this.self) && !(TE instanceof StandEntity && !TE.isAttackable() || TE instanceof BlackSabbathEntity be && be.getUnrender()) && MainUtil.isActuallyALivingEntityNoCap(TE)) {
                     this.setGoBeyondTarget(TE);
                 }
             } else {

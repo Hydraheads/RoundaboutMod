@@ -21,10 +21,8 @@ public class AvoidLightNodeEvaluator extends WalkNodeEvaluator {
         boolean isWeatherNotClear = mob.level().isRaining() || mob.level().isThundering();
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
 
-        if (light > 11 && lightSelf < light || isDay && light2 > 14 && lightSelf2 < light2) {
-            if(!isWeatherNotClear) {
+        if (light > 11 && lightSelf < light || isDay && light2 > 14 && lightSelf2 < light2 && !isWeatherNotClear) {
                 return BlockPathTypes.BLOCKED;
-            }
         }
         return super.getBlockPathType(level, x, y, z);
     }

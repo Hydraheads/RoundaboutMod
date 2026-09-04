@@ -49,7 +49,7 @@ public final class HallucinatoryAcidBlock extends BaseEntityBlock implements Sim
             {-1, 1}, {0, 1}, {1, 1}
     };
     public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 4);
-    public static final IntegerProperty SKIN = IntegerProperty.create("skin", 0, WhitesnakeEntity.SANDSNAKE_SKIN);
+    public static final IntegerProperty SKIN = IntegerProperty.create("skin", 0, WhitesnakeEntity.FLESHSNAKE_SKIN);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape[] SHAPES = new VoxelShape[]{Shapes.empty(),
             Block.box(0, 0, 0, 16, 4, 16), Block.box(0, 0, 0, 16, 8, 16),

@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class HallucinatoryAcidWallBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final IntegerProperty SKIN = IntegerProperty.create("skin", 0, WhitesnakeEntity.SANDSNAKE_SKIN);
+    public static final IntegerProperty SKIN = IntegerProperty.create("skin", 0, WhitesnakeEntity.FLESHSNAKE_SKIN);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final VoxelShape NORTH_SHAPE = Block.box(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape SOUTH_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
