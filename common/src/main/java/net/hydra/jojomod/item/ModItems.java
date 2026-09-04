@@ -226,6 +226,7 @@ public class ModItems {
     public static Item SHERIFF_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
     public static Item KIRA_PART_FOUR_MASK;
+    public static Item KIRA_PART_EIGHT_MASK;
     public static Item KOSAKU_MASK;
     public static Item KIRASAKU_MASK;
     public static Item AYA_MASK;

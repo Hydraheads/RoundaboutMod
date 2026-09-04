@@ -727,6 +727,8 @@ public class ForgeItems {
             "kosaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null))));
     public static final RegistryObject<Item> KIRASAKU_MASK = addToWIPTab(ITEMS.register(
             "kirasaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null))));
+    public static final RegistryObject<Item> KIRA_PART_EIGHT_MASK = addToWIPTab(ITEMS.register(
+            "kira_part_eight_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartEightVisage(null))));
 
 
     public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("white_album_disc",
