@@ -19,10 +19,15 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public final class WhitesnakeDiscUtil {
+    private static final double EJECT_HORIZONTAL_SPEED = 0.3D;
+    private static final double EJECT_VERTICAL_SPEED = 0.6D;
+
     public static final byte STAND = 0;
     public static final byte SIGHT = 1;
     public static final byte MEMORY = 2;
@@ -31,7 +36,7 @@ public final class WhitesnakeDiscUtil {
     private WhitesnakeDiscUtil() {
     }
 
-    public static boolean ejectDisc(LivingEntity target, byte type) {
+    public static boolean ejectDisc(LivingEntity target, byte type, LivingEntity user) {
         if (isDiscBlacklisted(target)) return false;
         if (!isDiscStealEnabled(type)) return false;
         Config.WhitesnakeSettings config = ClientNetworking.getAppropriateConfig().whitesnakeSettings;
@@ -43,10 +48,10 @@ public final class WhitesnakeDiscUtil {
             return DiscSealController.seal(target, type);
         }
         return switch (type) {
-            case SIGHT -> ejectSight(target);
-            case MEMORY -> ejectMemory(target);
-            case HEARING -> ejectHearing(target);
-            default -> ejectStand(target);
+            case SIGHT -> ejectSight(target, user);
+            case MEMORY -> ejectMemory(target, user);
+            case HEARING -> ejectHearing(target, user);
+            default -> ejectStand(target, user);
         };
     }
 
@@ -76,20 +81,20 @@ public final class WhitesnakeDiscUtil {
         };
     }
 
-    private static boolean ejectSight(LivingEntity target) {
-        return dropExtracted(target, extractSight(target, true));
+    private static boolean ejectSight(LivingEntity target, LivingEntity user) {
+        return dropExtracted(target, user, extractSight(target, true));
     }
 
-    private static boolean ejectHearing(LivingEntity target) {
-        return dropExtracted(target, extractHearing(target, true));
+    private static boolean ejectHearing(LivingEntity target, LivingEntity user) {
+        return dropExtracted(target, user, extractHearing(target, true));
     }
 
-    private static boolean ejectMemory(LivingEntity target) {
-        return dropExtracted(target, extractMemory(target, true));
+    private static boolean ejectMemory(LivingEntity target, LivingEntity user) {
+        return dropExtracted(target, user, extractMemory(target, true));
     }
 
-    private static boolean ejectStand(LivingEntity target) {
-        return dropExtracted(target, extractStand(target, true));
+    private static boolean ejectStand(LivingEntity target, LivingEntity user) {
+        return dropExtracted(target, user, extractStand(target, true));
     }
 
     public static ItemStack extractDiscStack(LivingEntity target, byte type) {
@@ -188,17 +193,29 @@ public final class WhitesnakeDiscUtil {
         }
     }
 
-    private static void drop(LivingEntity target, ItemStack stack) {
+    private static void drop(LivingEntity target, LivingEntity user, ItemStack stack) {
         if (!target.level().isClientSide()) {
-            target.spawnAtLocation(stack, 0.35F);
             target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
                     SoundSource.PLAYERS, 1.0F, 1.0F);
+            if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.ejectType == 2
+                    && user instanceof Player player && player.getInventory().add(stack)) {
+                return;
+            }
+            ItemEntity disc = target.spawnAtLocation(stack, 0.35F);
+            if (disc == null) return;
+            double angle = target.getRandom().nextDouble() * Math.PI * 2.0D;
+            disc.setDeltaMovement(
+                    Math.cos(angle) * EJECT_HORIZONTAL_SPEED,
+                    EJECT_VERTICAL_SPEED,
+                    Math.sin(angle) * EJECT_HORIZONTAL_SPEED
+            );
+            disc.hurtMarked = true;
         }
     }
 
-    private static boolean dropExtracted(LivingEntity target, ItemStack stack) {
+    private static boolean dropExtracted(LivingEntity target, LivingEntity user, ItemStack stack) {
         if (stack.isEmpty()) return false;
-        drop(target, stack);
+        drop(target, user, stack);
         return true;
     }
 

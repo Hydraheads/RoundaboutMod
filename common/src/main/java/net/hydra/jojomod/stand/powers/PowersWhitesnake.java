@@ -1350,7 +1350,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 successfulHit = true;
                 if (entity instanceof LivingEntity living) {
                     addEXP(5, living);
-                    WhitesnakeDiscUtil.ejectDisc(living, getSelectedDisc());
+                    WhitesnakeDiscUtil.ejectDisc(living, getSelectedDisc(), self);
                 }
                 if (dealsDamage) takeDeterminedKnockback(origin, entity, getImpaleKnockback());
             } else {
