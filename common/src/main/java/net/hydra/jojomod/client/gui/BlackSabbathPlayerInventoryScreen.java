@@ -42,8 +42,9 @@ public class BlackSabbathPlayerInventoryScreen
 
         if(((StandUser)player).roundabout$getStandPowers() instanceof PowersBlackSabbath) {
         if(((StandUser)player).roundabout$getStand() instanceof BlackSabbathEntity bs) {
+            int scaleInt = bs.getSkin() == BlackSabbathEntity.SANTA ? 20 : 24;
             renderEntityInInventoryFollowsMouse(
-                    $$0, $$4 + 34, $$5 + 67, 25, (float)($$4 + 51) - this.xMouse, (float)($$5 + 75 - 50) - this.yMouse, bs
+                    $$0, $$4 + 34, $$5 + 67, scaleInt, (float)($$4 + 51) - this.xMouse, (float)($$5 + 75 - 50) - this.yMouse, bs
             );
         }
         }

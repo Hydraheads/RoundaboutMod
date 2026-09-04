@@ -2,9 +2,11 @@ package net.hydra.jojomod.powers.power_types;
 
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.access.*;
+import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
+import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.projectile.EvilAuraProjectile;
 import net.hydra.jojomod.entity.projectile.RipperEyesProjectile;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
@@ -27,6 +29,7 @@ import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -42,9 +45,12 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -226,13 +232,39 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
         if (getFreezeLevel() > 0) {
-            if (sauce != null && isGuarding() && sauce.getEntity() instanceof LivingEntity LE
-            && (sauce.is(DamageTypes.MOB_ATTACK) || sauce.is(DamageTypes.PLAYER_ATTACK))) {
-                if (!HeatUtil.isLegsFrozen(LE)) {
-                    HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
+            if (sauce != null && isGuarding() && sauce.getEntity() instanceof LivingEntity LE) {
+                if (((sauce.is(DamageTypes.MOB_ATTACK) || sauce.is(DamageTypes.PLAYER_ATTACK)))){
+                    if (!HeatUtil.isLegsFrozen(LE)) {
+                        if (MainUtil.getReducedDamage(LE) && !(LE instanceof Monster)){
+                            HeatUtil.addHeat(LE, -3 + (-1*getFreezeLevel()));
+                        } else {
+                            HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
+                        }
+                    }
+                } else if (((sauce.is(ModDamageTypes.STAND)|| sauce.is(ModDamageTypes.STAND_BRAWL) ||
+                        sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
+                        sauce.is(ModDamageTypes.MARTIAL_ARTS)
+                        || sauce.is(ModDamageTypes.STAND_BRAWL)) && sauce.getDirectEntity() instanceof LivingEntity LE2)){
+                    if (!HeatUtil.isLegsFrozen(LE)) {
+                        HeatUtil.addHeat(LE, -5 + (-1*getFreezeLevel()));
+                    }
+                } else if (sauce.is(ModDamageTypes.STAND_RUSH) && sauce.getDirectEntity() instanceof LivingEntity LE2){
+                    if (!HeatUtil.isLegsFrozen(LE)) {
+                        HeatUtil.addHeat(LE, -2);
+                    }
                 }
             }
         }
+    }
+
+    @Override
+    public void addToCombo(Entity targ){
+        if (getFreezeLevel() > 0) {
+            if (!HeatUtil.isLegsFrozen(targ)) {
+                HeatUtil.addHeat(targ, -2);
+            }
+        }
+        super.addToCombo(targ);
     }
 
     public int getFreezeLevel(){
@@ -1288,7 +1320,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                         if (!(entity instanceof Player) && entity instanceof LivingEntity LE){
                             setDazed(LE,(byte) 4);
                         }
-                        HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
+                        if (HeatUtil.getHeat(entity) > -97 || !(entity instanceof Player)){
+                            HeatUtil.addHeat(entity,-24 + (-4*getFreezeLevel()));
+                        }
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), getBrawlPunchSound(), SoundSource.PLAYERS, 1F, (float) (1.1f + Math.random() * 0.1f));
                         //self.level().playSound(null, self.getX(), self.getY(), self.getZ(), ModSounds.HIT_1_SOUND_EVENT, SoundSource.PLAYERS, 1F, 1.4F+(float)(Math.random()*0.1));
                         addToCombo(entity);
@@ -1681,8 +1715,9 @@ public class VampireGeneralPowers extends PunchingGeneralPowers {
                     if ($$6.dot($$5) < 0.0) {
                         IProjectileAccess ipa = (IProjectileAccess) pr;
                         if (!ipa.roundabout$getIsDeflected()){
-                            if (pr instanceof RoundaboutBulletEntity) {
-                                return false;
+                            if (pr instanceof RoundaboutBulletEntity PE) {
+                                PE.setSuperThrown(false);
+                                PE.setOwner(self);
                             }
 
 

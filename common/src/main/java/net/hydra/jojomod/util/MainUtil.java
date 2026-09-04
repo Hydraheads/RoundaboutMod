@@ -236,6 +236,9 @@ public class MainUtil {
 
     public static final Map<Block, Block> SILVER_CHARIOT_BLOCK_TO_SLAB = new HashMap<>();
 
+    public static final Map<Block, Block> PURPLE_HAZE_DECAY_BLOCKS = new HashMap<>();
+    public static final Map<Block, Float> PURPLE_HAZE_DECAY_RATE = new HashMap<>();
+
     public static final Map<Item, List<MobEffect>> foodCuresThat = new HashMap<>();
     public static final Map<Item, List<MobEffect>> foodAddsThat = new HashMap<>();
     public static final Map<Item, List<String>> specialFoodRemoves = new HashMap<>();
@@ -1431,6 +1434,7 @@ public class MainUtil {
         playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
         playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
+        playerNames.put("NashorSenpai", UUID.fromString("e7d78d2b-01c8-4e46-ae87-9905d1261847"));
     }
 
     public static void makeMobBleed(Entity target) {
@@ -1781,6 +1785,7 @@ public class MainUtil {
                 || state.is(Blocks.CACTUS)
                 || state.is(ModBlocks.BARBED_WIRE)
                 || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.ICE_SPIKE)
                 || state.is(ModBlocks.STAND_FIRE)
                 || state.is(ModBlocks.COLD_AIR)
                 || state.is(ModBlocks.BARBED_WIRE_BUNDLE)
@@ -2405,8 +2410,15 @@ public class MainUtil {
     }
 
     public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
-        if (confirmIsOre(state) && !state.hasBlockEntity())
+        if (confirmIsOre(state) || state.hasBlockEntity())
             return false;
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness >= 0 && hardness < 50) {
+            return true;
+        }
+        return false;
+    }
+    public static boolean isDestructible2(Level level, BlockPos pos, BlockState state){
         float hardness = state.getDestroySpeed(level, pos);
         if (hardness >= 0 && hardness < 50) {
             return true;

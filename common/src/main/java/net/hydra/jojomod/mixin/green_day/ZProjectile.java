@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
 
@@ -82,10 +83,10 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
 
     @Inject(method = "canHitEntity", at = @At(value = "HEAD"),cancellable = true)
     private void roundabout$canHitEntity2(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
-        if (PowerTypes.isInADifferentExistence($$0x,this)){
+        if (PowerTypes.isInADifferentExistence($$0x,this) ||
+                ($$0x instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().phaseThroughProjectile(this))){
             cir.setReturnValue(false);
         }
-
     }
 
 }

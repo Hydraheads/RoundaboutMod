@@ -88,6 +88,8 @@ public class ForgeEvents {
         event.put(ForgeEntities.BLAZE_TRANSFER.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.BLACK_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.BEACH_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.SANTA_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
+        event.put(ForgeEntities.COWBOY_SABBATH.get(), BlackSabbathEntity.createStandAttributes().build());
         event.put(ForgeEntities.WALKING_HEART.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.CREAM.get(), StandEntity.createStandAttributes().build());
         event.put(ForgeEntities.MAGICIANS_RED.get(), StandEntity.createStandAttributes().build());
@@ -249,6 +251,7 @@ public class ForgeEvents {
         ModBlocks.WHITE_ALBUM_ICE_WALL_BLOCK = ForgeBlocks.WHITE_ALBUM_ICE_WALL.get();
         ModBlocks.WHITE_ALBUM_ICE_SLAB = ForgeBlocks.WHITE_ALBUM_ICE_SLAB.get();
         ModBlocks.STICKY_ICE = ForgeBlocks.STICKY_ICE_BLOCK.get();
+        ModBlocks.ICE_SPIKE = ForgeBlocks.ICE_SPIKE.get();
         ModBlocks.SHINY_QUARTZ_TILES = ForgeBlocks.SHINY_QUARTZ_TILES.get();
         ModBlocks.LOCACACA_CACTUS = ForgeBlocks.LOCACACA_CACTUS.get();
         ModBlocks.LOCACACA_BLOCK = ForgeBlocks.LOCACACA_BLOCK.get();
@@ -386,7 +389,6 @@ public class ForgeEvents {
         ModItems.ATTACK_COMMAND_DISC = ForgeItems.ATTACK_COMMAND_DISC.get();
         ModItems.FORGET_COMMAND_DISC = ForgeItems.FORGET_COMMAND_DISC.get();
         ModItems.EXPLOSIVE_COMMAND_DISC = ForgeItems.EXPLOSIVE_COMMAND_DISC.get();
-        ModItems.HALLUCINATORY_ACID_GLOB = ForgeItems.HALLUCINATORY_ACID_GLOB.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_1 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_1.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_2 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_2.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_3 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_3.get();
@@ -524,6 +526,7 @@ public class ForgeEvents {
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
         ModItems.FANCY_LIGHTER = ForgeItems.FANCY_LIGHTER.get();
+        ModItems.HAND = ForgeItems.HAND_ITEM.get();
         ModItems.LOCACACA_PIT = ForgeItems.LOCACACA_PIT.get();
         ModItems.LOCACACA = ForgeItems.LOCACACA.get();
         ModItems.LOCACACA_BRANCH = ForgeItems.LOCACACA_BRANCH.get();
@@ -546,6 +549,9 @@ public class ForgeEvents {
 
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
+        ModItems.KIRA_PART_FOUR_MASK = ForgeItems.KIRA_PART_FOUR_MASK.get();
+        ModItems.KOSAKU_MASK = ForgeItems.KOSAKU_MASK.get();
+        ModItems.KIRASAKU_MASK = ForgeItems.KIRASAKU_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
 
@@ -802,6 +808,8 @@ public class ForgeEvents {
         ModEntities.BLAZE_TRANSFER = ForgeEntities.BLAZE_TRANSFER.get();
         ModEntities.BLACK_SABBATH = ForgeEntities.BLACK_SABBATH.get();
         ModEntities.BEACH_SABBATH = ForgeEntities.BEACH_SABBATH.get();
+        ModEntities.SANTA_SABBATH = ForgeEntities.SANTA_SABBATH.get();
+        ModEntities.COWBOY_SABBATH = ForgeEntities.COWBOY_SABBATH.get();
         ModEntities.WALKING_HEART = ForgeEntities.WALKING_HEART.get();
         ModEntities.JUSTICE_PIRATE = ForgeEntities.JUSTICE_PIRATE.get();
         ModEntities.DARK_MIRAGE = ForgeEntities.DARK_MIRAGE.get();
@@ -814,11 +822,13 @@ public class ForgeEvents {
         ModEntities.DIVER_DOWN = ForgeEntities.DIVER_DOWN.get();
         ModEntities.SILVER_CHARIOT = ForgeEntities.SILVER_CHARIOT.get();
         ModEntities.SILVER_CHARIOT_RAPIER = ForgeEntities.SILVER_CHARIOT_RAPIER.get();
+        ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get();
         ModEntities.THROWN_HARPOON = ForgeEntities.THROWN_HARPOON.get();
         ModEntities.BLADED_BOWLER_HAT = ForgeEntities.BLADED_BOWLER_HAT.get();
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.D4C_BLOCK = ForgeEntities.D4C_BLOCK.get();
         ModEntities.FALLING_BANNER = ForgeEntities.FALLING_BANNER.get();
         ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
         ModEntities.STEP_RULE = ForgeEntities.STEP_RULE.get();

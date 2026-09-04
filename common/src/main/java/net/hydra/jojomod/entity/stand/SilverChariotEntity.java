@@ -41,7 +41,10 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
 
-
+    @Override
+    public boolean standHasGravity() {
+        return false;
+    }
 
     private boolean controlDimensionsActive;
 
@@ -183,13 +186,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
         controlForward = forward;
     }
 
-    public void resetControlInput() {
+    public void clearControlInput() {
         controlStrafe = 0.0F;
         controlForward = 0.0F;
         xxa = 0.0F;
         zza = 0.0F;
         Vec3 velocity = getDeltaMovement();
-        setDeltaMovement(0.0D, 0.0D, 0.0D);
+        setDeltaMovement(0.0D, velocity.y, 0.0D);
     }
 
     @Override
@@ -203,39 +206,118 @@ public class SilverChariotEntity extends FollowingStandEntity {
         /*
         if (isRemoteControlled()) {
             if (level().isClientSide() && isControlledByLocalInstance()) {
-                super.travel(new Vec3(vec3.x, vec3.y, vec3.z));
+                super.travel(new Vec3(controlStrafe, movement.y, controlForward));
                 C2SPacketUtil.updatePilot(this);
             } else {
                 super.travel(Vec3.ZERO);
             }
             return;
         }
+        super.travel(movement);
         */
 
         // TODO: Remove the teleporting camera for control mode when moving out of max range, as suggested by DOGael.
-
         super.travel(vec3);
         if (this.isControlledByLocalInstance()) {
             if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
                 C2SPacketUtil.updatePilot(this);
             }
         }
+        /*
+        if (this.isControlledByLocalInstance()) {
+            if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
+                C2SPacketUtil.updatePilot(this);
+            }
+        }
+         */
     }
 
     @Override
     public void tick() {
         super.tick();
+        this.tickControlMode();
+    }
+
+    @Override
+    protected void tickRidden(Player $$0, Vec3 $$1) {
+        super.tickRidden($$0, $$1);
+    }
+
+    @Override
+    public double getMyRidingOffset() {
+        return super.getMyRidingOffset();
+    }
+
+    @Override
+    public void rideTick() {
+        super.rideTick();
+    }
+
+    @Override
+    protected void positionRider(Entity $$0, MoveFunction $$1) {
+        super.positionRider($$0, $$1);
+    }
+
+    @Override
+    protected boolean canRide(Entity $$0) {
+        return super.canRide($$0);
+    }
+
+    @Override
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset();
+    }
+
+    @Override
+    protected boolean couldAcceptPassenger() {
+        return super.couldAcceptPassenger();
+    }
+
+    @Override
+    protected boolean canAddPassenger(Entity $$0) {
+        return super.canAddPassenger($$0);
+    }
+
+    @Override
+    public boolean canBeHitByStands() {
+        return super.canBeHitByStands();
+    }
+
+    @Override
+    public boolean canBreatheUnderwater() {
+        return super.canBreatheUnderwater();
+    }
+
+    @Override
+    protected Vec3 getRiddenInput(Player $$0, Vec3 $$1) {
+        return super.getRiddenInput($$0, $$1);
+    }
+
+    @Override
+    protected float getRiddenSpeed(Player $$0) {
+        return super.getRiddenSpeed($$0);
     }
 
     private void tickControlMode() {
+        switch (this.getRemoteControlMode()) {
+            case (byte) 0 -> {
+                tickControlModeZero();
+            }
+            case (byte) 1 -> {
+
+            }
+        }
+    }
+
+    private void tickControlModeZero() {
         if (this.level().isClientSide() && isControlModeActive()) {
-            tickControlBodyRotation();
+            tickControlModeZeroBodyRotation();
         } else {
             controlBodyRotationActive = false;
         }
     }
 
-    private void tickControlBodyRotation() {
+    private void tickControlModeZeroBodyRotation() {
         if (!controlBodyRotationActive) {
             controlBodyYaw = yBodyRot;
             controlBodyRotationActive = true;
@@ -272,7 +354,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public boolean isControlModeActive() {
-        return entityData.get(CONTROL_MODE) == CONTROL_MODE_NONE;
+        return entityData.get(CONTROL_MODE) == CONTROL_MODE_REMOTE;
     }
 
     @Override
@@ -311,18 +393,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     @Override
-    public boolean isNoGravity() {
-        return true;
-    }
-
-    @Override
     public boolean lockPos() {
-        return false;
-    }
-
-    @Override
-    public boolean forceVisualRotation() {
-        return true;
+        return !isRemoteControlled();
     }
 
     @Override
@@ -351,18 +423,18 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     protected float getFlyingSpeed() {
-        return 0.40F;
+        return 0.20F;
     }
 
     public void setControlMode(boolean active) {
         if (active) {
-            setRemoteMode(CONTROL_MODE_REMOTE);
+            setRemoteControlMode(CONTROL_MODE_REMOTE);
         } else if (entityData.get(CONTROL_MODE) == CONTROL_MODE_REMOTE) {
-            setRemoteMode(CONTROL_MODE_NONE);
+            setRemoteControlMode(CONTROL_MODE_NONE);
         }
     }
 
-    private void setRemoteMode(byte mode) {
+    public void setRemoteControlMode(byte mode) {
         if (entityData.get(CONTROL_MODE) == mode) {
             return;
         }
@@ -375,6 +447,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
         }
         refreshDimensions();
         controlDimensionsActive = controlled;
+    }
+
+    public byte getRemoteControlMode() {
+        if (this.getEntityData().hasItem(CONTROL_MODE)) {
+            this.getEntityData().get(CONTROL_MODE);
+        }
+        return CONTROL_MODE_NONE;
     }
 
     public boolean getIsArmoured() {

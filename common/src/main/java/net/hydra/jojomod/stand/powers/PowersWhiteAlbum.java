@@ -599,6 +599,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         BlockState state = level.getBlockState(pos);
 
         if (state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) || state.is(ModBlocks.STICKY_ICE)
+                || state.is(ModBlocks.ICE_SPIKE)
                 || state.is(ModBlocks.COLD_AIR)) {
 
             level.destroyBlock(pos, false);
@@ -898,7 +899,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_2)) {
 
             if (self instanceof Mob){
-                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2+10);
+                this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2+100);
             } else {
                 this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().whiteAlbumSettings.twisterCooldownv2);
             }
@@ -1167,7 +1168,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
             this.setActivePowerPhase(this.getActivePowerPhaseMax());
             this.setAttackTimeMax(gap);
             if (isBrawling()) {
-                tryPowerPacket(PowerIndex.EXTRA_2);
+                if (!isHoldingSneak()){
+                    tryPowerPacket(PowerIndex.EXTRA_2);
+                } else {
+                    tryPowerPacket(PowerIndex.POWER_4_BLOCK);
+                }
+
             }
         } else {
             C2SPacketUtil.guardCancelPacket();
@@ -1262,6 +1268,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
             case PowerIndex.EXTRA_2 -> {
                 setPowerColdBlastShot();
             }
+            case PowerIndex.POWER_4_BLOCK -> {
+                setPowerColdBlastShot2();
+            }
             case PowerIndex.POWER_3_BLOCK -> {
                 iceWallServer(true);
             }
@@ -1300,6 +1309,33 @@ public class PowersWhiteAlbum extends NewDashPreset {
                         ColdBlastProjectile bubble = new ColdBlastProjectile(self, self.level());
                         bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
                         bubble.setUser(self);
+                        bubble.setOwner(self);
+                        bubble.shootThis2(pl, 1.75F);
+                        PowerTypes.copyPlaneOfExisting(self,bubble);
+                        self.level().addFreshEntity(bubble);
+                    }
+                }
+            }
+        }
+
+        if (((StandUser) self).roundabout$isGuardInput()) {
+            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+        }
+    }
+    public void setPowerColdBlastShot2() {
+        if (getActivePower() == PowerIndex.EXTRA && self instanceof Player pl){
+            if (getPlayerPos2() == PlayerPosIndex.CHARGE_SHOT) {
+                this.setAttackTime(0);
+                this.setActivePowerPhase(this.getActivePowerPhaseMax());
+                this.setAttackTimeMax(gap);
+                if (isBrawling()) {
+                    playSoundIfPossible(self.level(),(Player) null, self.getX(), self.getY(), self.getZ(), ModSounds.COLD_SHOT_EVENT,
+                            SoundSource.NEUTRAL, 1F, (float) (1F + Math.random() * 0.08f));
+                    if (!self.level().isClientSide) {
+                        ColdBlastProjectile bubble = new ColdBlastProjectile(self, self.level());
+                        bubble.absMoveTo(self.getX(), self.getY(), self.getZ());
+                        bubble.setUser(self);
+                        bubble.hasSpikes = true;
                         bubble.setOwner(self);
                         bubble.shootThis2(pl, 1.75F);
                         PowerTypes.copyPlaneOfExisting(self,bubble);
@@ -1902,6 +1938,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 BlockState state = PL.level().getBlockState(pos);
 
                 if (state.is(ModBlocks.STICKY_ICE) || state.is(ModBlocks.COLD_AIR)
+                        || state.is(ModBlocks.ICE_SPIKE)
                         || state.is(ModBlocks.BARBED_WIRE_BUNDLE) || state.is(Blocks.COBWEB)) {
                     HeatUtil.addHeat(PL, -1);
                     return;

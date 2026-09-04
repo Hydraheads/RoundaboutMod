@@ -20,10 +20,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.block.FrostedIceBlock;
-import net.minecraft.world.level.block.LiquidBlockContainer;
-import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,6 +35,8 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         super($$0, $$1);
     }
 
+
+    public boolean hasSpikes = false;
     public ColdBlastProjectile(LivingEntity $$1, Level $$2) {
         this(ModEntities.COLD_BLAST_PROJECTILE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
@@ -106,7 +105,9 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         }
         if (!entity.isInvulnerable()){
             if (entity instanceof Player pl){
-                HeatUtil.addHeat(entity,-33);
+                if (HeatUtil.getHeat(pl) > -97){
+                    HeatUtil.addHeat(entity,-33);
+                }
             } else {
                 HeatUtil.makeAngryAtFreeze(entity,getUser());
                 HeatUtil.addHeat(entity,-40);
@@ -195,12 +196,17 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
                 for (int x = -range; x <= range; x++) {
                     for (int z = -range; z <= range; z++) {
                         BlockPos targetPos = getOnPos().offset(x, y, z);
-                        BlockState iceState = ModBlocks.STICKY_ICE.defaultBlockState();
+                        Block block = ModBlocks.STICKY_ICE;
+                        if (hasSpikes){
+                            block = ModBlocks.ICE_SPIKE;
+                        }
+
+                        BlockState iceState = block.defaultBlockState();
 
                         if (canFreeze(targetPos)
                                 && iceState.canSurvive(level(), targetPos)) {
                                 level().setBlockAndUpdate(targetPos, iceState);
-                                level().scheduleTick(targetPos, ModBlocks.STICKY_ICE, Mth.nextInt(level().getRandom(), 141, 145));
+                                level().scheduleTick(targetPos, block, Mth.nextInt(level().getRandom(), 141, 145));
                         }
                         // placement logic
                     }

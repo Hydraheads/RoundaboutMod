@@ -104,7 +104,7 @@ public class StrayCatItem extends Item {
                         if (direction != Direction.DOWN) {
                             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
                         }
-                        Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z).add(P.getForward().scale(P.getBbWidth() * 1));
+                        Vec3 pos = P.getPosition(1).add(addToPosition.x, addToPosition.y, addToPosition.z)/*.add(P.getForward().scale(P.getBbWidth() * 1))*/;
                         bubble.setPos(pos.x(), pos.y(), pos.z());
                         bubble.shootFromRotationDeltaAgnostic(P, P.getXRot(), P.getYRot(), 1.0F, SPEED, 0);
 
@@ -174,13 +174,16 @@ public class StrayCatItem extends Item {
     }
 
     static boolean isSleeping(Level level, LivingEntity user) {
-        long dayTime = level.getDayTime() % 24000;
-        boolean canSeeSun = true;
+        //long dayTime = level.getDayTime() % 24000;
+        boolean result = false;
         if (user != null) {
-            canSeeSun = level.canSeeSky(user.blockPosition());
+            return !StrayCatEntity.isUnderLight(user);
+            //canSeeSun = level.canSeeSky(user.blockPosition());
+            //isRainning = level.isRainingAt(user.blockPosition());
         }
 
-        return dayTime >= 13000 && dayTime <= 23750 || !canSeeSun;
+        return result;
+        //return dayTime >= 13000 && dayTime <= 23750 && (!canSeeSun || isRainning);
     }
 
 

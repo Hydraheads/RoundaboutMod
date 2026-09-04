@@ -5,6 +5,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 
+import static net.hydra.jojomod.client.models.stand.animations.PurpleHazeAnimations.STRANGLE_WINDUP;
+
 public class PurpleHazeEntity extends FollowingStandEntity{
     public PurpleHazeEntity(EntityType<? extends Mob> entityType, Level world) {
         super(entityType, world);
@@ -24,6 +26,15 @@ public class PurpleHazeEntity extends FollowingStandEntity{
     public final AnimationState kick_barrage = new AnimationState();
     public final AnimationState kick_barrage_end = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
+    public final AnimationState strangle_windup = new AnimationState();
+    public final AnimationState flyloop = new AnimationState();
+    public final AnimationState strangle_hold= new AnimationState();
+
+    public static byte
+            STRANGLE_WINDUP = 86,
+            FLYLOOP = 87,
+            STRANGLE_HOLD = 88;
+
 
     @Override
     public void setupAnimationStates() {
@@ -54,7 +65,21 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             } else {
                 this.kick_barrage_end.stop();
             }
-
+            if (this.getAnimation() == STRANGLE_WINDUP) {
+                this.strangle_windup.startIfStopped(this.tickCount);
+            } else {
+                this.strangle_windup.stop();
+            }
+            if (this.getAnimation() == FLYLOOP) {
+                this.flyloop.startIfStopped(this.tickCount);
+            } else {
+                this.flyloop.stop();
+            }
+            if (this.getAnimation() == STRANGLE_HOLD) {
+                this.strangle_hold.startIfStopped(this.tickCount);
+            } else {
+                this.strangle_hold.stop();
+            }
         }
     }
 }

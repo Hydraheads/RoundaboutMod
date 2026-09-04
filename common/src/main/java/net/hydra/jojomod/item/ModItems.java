@@ -94,7 +94,6 @@ public class ModItems {
     public static Item ATTACK_COMMAND_DISC;
     public static Item FORGET_COMMAND_DISC;
     public static Item EXPLOSIVE_COMMAND_DISC;
-    public static Item HALLUCINATORY_ACID_GLOB;
     public static Item HALLUCINATORY_ACID_HEIGHT_1;
     public static Item HALLUCINATORY_ACID_HEIGHT_2;
     public static Item HALLUCINATORY_ACID_HEIGHT_3;
@@ -151,6 +150,7 @@ public class ModItems {
     public static Item HAIRSPRAY;
 
     public static Item FANCY_LIGHTER;
+    public static Item HAND;
 
     public static Item GASOLINE_CAN;
     public static Item GASOLINE_BUCKET;
@@ -225,6 +225,9 @@ public class ModItems {
     public static Item VALENTINE_MASK;
     public static Item SHERIFF_MASK;
     public static Item JOSUKE_PART_EIGHT_MASK;
+    public static Item KIRA_PART_FOUR_MASK;
+    public static Item KOSAKU_MASK;
+    public static Item KIRASAKU_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
     public static Item GHIACCIO_MASK;

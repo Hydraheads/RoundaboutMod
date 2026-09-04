@@ -83,6 +83,8 @@ public class ModEntities {
     public static EntityType<BlazeTransferEntity> BLAZE_TRANSFER;
     public static EntityType<BlackSabbathEntity> BLACK_SABBATH;
     public static EntityType<BeachSabbathEntity> BEACH_SABBATH;
+    public static EntityType<BlackSantaSabbathEntity> SANTA_SABBATH;
+    public static EntityType<CowboySabbathEntity> COWBOY_SABBATH;
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
@@ -102,6 +104,7 @@ public class ModEntities {
     public static EntityType<DiverDownEntity> DIVER_DOWN;
     public static EntityType<SilverChariotEntity> SILVER_CHARIOT;
     public static EntityType<SilverChariotRapierShotEntity> SILVER_CHARIOT_RAPIER;
+    public static EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM;
     public static EntityType<HarpoonEntity> THROWN_HARPOON;
     public static EntityType<BladedBowlerHatEntity> BLADED_BOWLER_HAT;
     public static EntityType<RoundaboutBulletEntity> ROUNDABOUT_BULLET_ENTITY;
@@ -198,6 +201,7 @@ public class ModEntities {
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
     public static EntityType<BlockWallEntity> BLOCK_WALL;
+    public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;
     public static EntityType<FallingBannerEntity> FALLING_BANNER;
 

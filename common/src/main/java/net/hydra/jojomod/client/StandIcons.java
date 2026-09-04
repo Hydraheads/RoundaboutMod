@@ -28,6 +28,9 @@ public class StandIcons {
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_MOVE = whitesnakeIcon("auto_mode_move");
     public static final ResourceLocation WHITESNAKE_AUTO_MODE_ATTACK = whitesnakeIcon("auto_mode_attack");
     public static final ResourceLocation WHITESNAKE_HALLUCINATORY_DISGUISE = whitesnakeIcon("hallucinatory_disguise");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_1 = whitesnakeIcon("hallucination_1");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_2 = whitesnakeIcon("hallucination_2");
+    public static final ResourceLocation WHITESNAKE_HALLUCINATION_3 = whitesnakeIcon("hallucination_3");
     public static final ResourceLocation WHITESNAKE_TIME_SPARK = whitesnakeIcon("time_spark");
     public static final ResourceLocation WHITESNAKE_INVENTORY = whitesnakeIcon("inventory");
     public static final ResourceLocation WHITESNAKE_DISC_STEAL_MENU = new ResourceLocation(Roundabout.MOD_ID,
@@ -519,6 +522,24 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/offhand_weapon.png");
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/rapier_slash.png");
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SPIN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/rapier_spin.png");
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/rapier_shot.png");
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/rapier_shot_platform.png");
+    public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/control_mode_on.png");
+    public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/control_mode_off.png");
+    public static final ResourceLocation SILVER_CHARIOT_SELF_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/grab_self.png");
+    public static final ResourceLocation SILVER_CHARIOT_STAND_LEAP_REBOUND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/stand_leap_rebound.png");
+
+
+    public static final ResourceLocation D4C_LEDGE_GRAB = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/d4c/stand_ledge_grab.png");
 
     public static final ResourceLocation KING_CRIMSON_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/punch.png");
@@ -794,6 +815,9 @@ public class StandIcons {
     public static final ResourceLocation D4C_CLONE_SUMMON = Roundabout.location("textures/gui/icons/d4c/clone_summon.png");
     public static final ResourceLocation D4C_CLONE_SWAP = Roundabout.location("textures/gui/icons/d4c/clone_swap.png");
     public static final ResourceLocation D4C_MELT_DODGE = Roundabout.location("textures/gui/icons/d4c/melt_dodge.png");
+    public static final ResourceLocation D4C_BLOCK_COPY = Roundabout.location("textures/gui/icons/d4c/block_copy.png");
+    public static final ResourceLocation D4C_BLOCK_MERGE = Roundabout.location("textures/gui/icons/d4c/block_merge.png");
+    public static final ResourceLocation D4C_BLOCK_RELEASE = Roundabout.location("textures/gui/icons/d4c/block_release.png");
     public static final ResourceLocation D4C_DIMENSION_HOP = Roundabout.location("textures/gui/icons/d4c/dimension_hop.png");
     public static final ResourceLocation D4C_DIMENSION_HOP_2 = Roundabout.location("textures/gui/icons/d4c/dimension_hop_2.png");
     public static final ResourceLocation D4C_DIMENSION_RETURN = Roundabout.location("textures/gui/icons/d4c/dimension_hop_return.png");
@@ -864,6 +888,7 @@ public class StandIcons {
     public static final ResourceLocation PH_SWITCH = Roundabout.location("textures/gui/icons/purple_haze/switch.png");
     public static final ResourceLocation PH_FORWARD_BARRAGE = Roundabout.location("textures/gui/icons/purple_haze/forwardbarrage.png");
     public static final ResourceLocation PH_PUNCH = Roundabout.location("textures/gui/icons/purple_haze/punch.png");
+    public static final ResourceLocation VIRUS_SPIT = Roundabout.location("textures/gui/icons/purple_haze/virus_spit.png");
 
     public static final ResourceLocation ANUBIS_MEMORY = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/anubis_memory.png");

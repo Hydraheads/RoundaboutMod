@@ -17,7 +17,9 @@ import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
+import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,10 +28,6 @@ import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
-import net.hydra.jojomod.event.powers.CooldownInstance;
-import net.hydra.jojomod.event.powers.ModDamageTypes;
-import net.hydra.jojomod.event.powers.StandPowers;
-import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -47,12 +45,15 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.particles.DustParticleOptions;
 import org.joml.Vector3f;
@@ -268,12 +269,14 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PowerIndex.POWER_1 -> { // Distortion
                 attemptDistortion();
             }
-            case PowerIndex.POWER_1_BONUS ->
+            case PowerIndex.POWER_1_BONUS -> //Virus Spit
                 attemptVirusSpit();
             case PowerIndex.POWER_1_SNEAK -> { // Distortion Mode Change
                 attemptDistortionModeChange();
             }
-
+            case PowerIndex.POWER_2 -> { // Strangle
+                attemptStrangle();
+            }
             case PowerIndex.SNEAK_ATTACK_CHARGE -> attemptThrowPod();
         }
         return super.setPowerOther(move, lastMove);
@@ -289,6 +292,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
+            }
+            case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
+                this.tryPowerPacket(PowerIndex.POWER_2);
             }
             case SKILL_3_NORMAL -> tryToDashClient();
             case SKILL_3_CROUCH -> tryToStandLeapClient();
@@ -415,7 +421,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         } else {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
-                    setSkillIcon(context, x, y, 1, StandIcons.D4C_CHOP, PowerIndex.POWER_1_BONUS);
+                    setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
                 }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
@@ -459,7 +465,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
                 "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
-                "instruction.roundabout.distortion_spit", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.distortion_spit", StandIcons.VIRUS_SPIT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.PH_SWITCH,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+99,0, "ability.purple_haze.purple_smoke",
@@ -508,6 +514,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE) {
             IPlayerEntity ipe = ((IPlayerEntity) PE);
             byte level = ipe.roundabout$getStandLevel();
+            if(getPods()< MAX_PODS){
+                setPods(getPods()+1);
+            }
             if (level == 5) {
                 ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
@@ -526,6 +535,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                     }
                 }
                 super.levelUp();
+
             }
         }
     }
@@ -584,6 +594,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private static final int MAX_PODS = 6;
     private static final int POD_RECHARGE_TIME = 800;
     private int podRechargeTicks = 0;
+    private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
     private int getPods() {
         return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
@@ -613,7 +624,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         );*/
         IPlayerEntity playerData = (IPlayerEntity) self;
 
-        if (timeOfDay >= 200 &&
+        if (timeOfDay >= 50 &&
                 playerData.roundabout$getPurpleHazePodResetDay() != day) {
 
             setPods(MAX_PODS);
@@ -658,7 +669,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     public void Distortion() {
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_DISINTEGRATION_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PURPLE_HAZE_POD_BITE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.addEffect(new MobEffectInstance(
                     ModEffects.VIRUS_IMMUNITY, 100));
             if (!(self instanceof Player pl && pl.isCreative())) {
@@ -683,6 +694,27 @@ public class PowersPurpleHaze extends NewPunchingStand {
             ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
         }
     }
+    public boolean isEatingCapsule() {
+        return self instanceof Player pl
+                && ((IPlayerEntity) pl).roundabout$GetPoseEmote() == 37;
+    }
+
+    @Override
+    public float inputSpeedModifiers(float basis) {
+        if (isEatingCapsule()) {
+            basis *= 0.0f;
+        }
+        return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelJump() {
+        if (isEatingCapsule()) {
+            return true;
+        }
+        return super.cancelJump();
+    }
+
     public void attemptVirusSpit() {
         if (canExecuteMoveWithLevel(4) && !this.isBarraging()) {
             VirusSpit();
@@ -711,15 +743,206 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.THE_WORLD_ASSAULT_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             indistortionmode = !indistortionmode;
-            saveDiscAndSync(); // add this
-            // FEU I CANT FIGURE THIS OUT
-            //i dont know how to make it remain when leaving and re entering
+            saveDiscAndSync();
 
             this.setCooldown(PowerIndex.SKILL_1_SNEAK, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_1_SNEAK, 400);
             }
         }
+    }
+    private static final int STRANGLE_WINDUP_TICKS=30;
+    private static final double STRANGLE_SPEED=1.4;
+    private static final double STRANGLE_MAX_DISTANCE=8.0;
+    private static final int STRANGLE_HOLD_DURATION=80;
+
+    private int strangleTicks = -1;
+    private int strangleTravelTicks = 0;
+    private Vec3 strangleOrigin = Vec3.ZERO;
+    private Vec3 strangleDirection = Vec3.ZERO;
+    private LivingEntity strangleVictim = null;
+    private int strangleHoldTicks = 0;
+
+    public void attemptStrangle() {
+        if (canExecuteMoveWithLevel(2)) {
+            Strangle();
+
+        }
+    }
+    public void Strangle() {
+        if (this.onCooldown(PowerIndex.SKILL_2) || strangleVictim != null || strangleTicks != -1) {
+            return;
+        }
+        StandEntity stand = getStandEntity(this.self);
+        if (Objects.isNull(stand)) {
+            return;
+        }
+        this.setActivePower(PowerIndex.POWER_2);
+        this.setAttackTimeDuring(0);
+        this.strangleTicks = 0;
+
+        animateStand(PurpleHazeEntity.STRANGLE_WINDUP);
+        poseStand(OffsetIndex.LOOSE);
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.THE_WORLD_MUDA_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+    }
+    @Override
+    public void tickPowerEnd() {
+        super.tickPowerEnd();
+        if (this.getSelf().isAlive() && !this.getSelf().isRemoved()
+                && this.getActivePower() == PowerIndex.POWER_2
+                && !this.getSelf().level().isClientSide()) {
+
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.isNull(stand)) {
+                endStrangle();
+                return;
+            }
+
+            if (strangleVictim != null) {
+                tickStranglePin(stand);
+                return;
+            }
+
+            if (strangleTicks < STRANGLE_WINDUP_TICKS) {
+                strangleTicks++;
+                return;
+            }
+
+            if (strangleTicks == STRANGLE_WINDUP_TICKS) {
+                launchStrangle(stand);
+                strangleTicks++;
+                return;
+            }
+
+            tickStrangleTravel(stand);
+        }
+    }
+    private void launchStrangle(StandEntity stand) {
+        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+
+        stand.setYRot(twoVec.x);
+        stand.setXRot(twoVec.y);
+
+        this.strangleOrigin = stand.position();
+        this.strangleDirection = DamageHandler.getRotationVector(twoVecGrav.y, (float) twoVecGrav.x).normalize();
+        this.strangleTravelTicks = 0;
+
+
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.PURPLE_HAZE_POD_BITE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+    private void tickStrangleTravel(StandEntity stand) {
+        double traveled = strangleTravelTicks * STRANGLE_SPEED;
+        if (traveled >= STRANGLE_MAX_DISTANCE) {
+            endStrangle();
+            return;
+        }
+        animateStand(PurpleHazeEntity.FLYLOOP);
+        poseStand(OffsetIndex.LOOSE);
+        Vec3 before = stand.position();
+        Vec3 nextPos = strangleOrigin.add(
+                strangleDirection.scale(Math.min(traveled + STRANGLE_SPEED, STRANGLE_MAX_DISTANCE)));
+
+        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(
+                before, nextPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, stand));
+        if (blockHit.getType() == BlockHitResult.Type.BLOCK) {
+            endStrangle();
+            return;
+        }
+
+        stand.setPos(nextPos);
+        strangleTravelTicks++;
+
+        AABB sweep = stand.getBoundingBox().inflate(0.6).minmax(
+                new AABB(before, before).inflate(0.6));
+        List<Entity> hits = stand.level().getEntities(stand, sweep);
+        for (Entity e : hits) {
+            if (e instanceof LivingEntity le
+                    && !e.is(this.getSelf())
+                    && le.isAlive()
+                    && !le.isInvulnerable()
+                    && stand.getSensing().hasLineOfSight(le)) {
+                beginStranglePin(stand, le);
+                return;
+            }
+        }
+
+        if (stand.position().distanceTo(this.getSelf().position()) > STRANGLE_MAX_DISTANCE + 4) {
+            endStrangle();
+        }
+    }
+
+    private void beginStranglePin(StandEntity stand, LivingEntity victim) {
+        this.strangleVictim = victim;
+        this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
+
+        if (victim instanceof Mob mob) {
+            mob.setNoAi(true);
+        }
+        if (victim instanceof StandUser SU) {
+            SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
+        }
+
+        stand.setPos(victim.position().add(0, victim.getBbHeight() * 0.5, 0));
+        animateStand(PurpleHazeEntity.STRANGLE_HOLD);
+
+        playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                ModSounds.SOFT_AND_WET_BARRAGE_EVENT /*placeholder*/, SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+
+    private void tickStranglePin(StandEntity stand) {
+        if (!strangleVictim.isAlive() || strangleVictim.isRemoved() || strangleHoldTicks <= 0) {
+            endStrangle();
+            return;
+        }
+
+        if (strangleVictim instanceof StandUser SU) {
+            SU.roundabout$setRestrainedTicks(20);
+        }
+
+        stand.setPos(strangleVictim.position().add(0, strangleVictim.getBbHeight() * 0.5, 0));
+        strangleVictim.setDeltaMovement(Vec3.ZERO);
+
+        if (strangleVictim instanceof Mob mob) {
+            mob.getNavigation().stop();
+            mob.setTarget(null);
+        }
+
+        if (strangleHoldTicks % 20 == 0) {
+            this.StandDamageEntityAttack(strangleVictim, getStrangleTickDamage(), 0.0F, this.self);
+        }
+        strangleHoldTicks--;
+    }
+
+    private float getStrangleTickDamage() {
+        if (this.getReducedDamage(strangleVictim)) {
+            return levelupDamageMod(1.0F);
+        }
+        return levelupDamageMod(3.0F);
+    }
+
+    private void endStrangle() {
+        if (strangleVictim != null) {
+            if (strangleVictim instanceof Mob mob) {
+                mob.setNoAi(false);
+            }
+            if (strangleVictim instanceof StandUser SU) {
+                SU.roundabout$setRestrainedTicks(0);
+            }
+        }
+        this.strangleVictim = null;
+        this.strangleTicks = -1;
+        this.strangleTravelTicks = 0;
+        int cdr = 200;
+        this.setCooldown(PowerIndex.SKILL_2, cdr);
+        if (this.getSelf() instanceof ServerPlayer sp) {
+            S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.SKILL_2, cdr);
+        }
+        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
 
     @Override
@@ -842,19 +1065,24 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();
+
+            if (!podsSyncedOnJoin && self instanceof ServerPlayer sp) {
+                podsSyncedOnJoin = true;
+                S2CPacketUtil.syncPurpleHazePods(sp, (byte) getPods());
+            }
         }
 
-            if (capsuleEatingTick > 0) {
-                capsuleEatingTick--;
+        if (capsuleEatingTick > 0) {
+            capsuleEatingTick--;
 
-                if (capsuleEatingTick == 0) {
-                    if (self instanceof ServerPlayer pl) {
-                        this.setAttackTimeDuring(0);
-                        ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
-                    }
+            if (capsuleEatingTick == 0) {
+                if (self instanceof ServerPlayer pl) {
+                    this.setAttackTimeDuring(0);
+                    ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
                 }
             }
         }
+    }
     public boolean purpleHazeFieldGone = false;
 
     public void serverEndPurpleHazeField(){

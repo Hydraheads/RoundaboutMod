@@ -235,6 +235,8 @@ public class ClientConfig implements Cloneable {
     public static class WhitesnakeSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean forceThirdPersonInControlMode;
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean hallucinationIndicator;
     }
     public static class AnubisSettings {
         @BooleanOption(group = "inherit", value = false)

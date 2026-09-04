@@ -58,6 +58,7 @@ public class RoundaboutFabricClient implements ClientModInitializer {
                 ModBlocks.FOG_TRAP,
                 ModBlocks.POISON_TRAIL_MUSHROOM,
                 ModBlocks.GLASS_DOOR,
+                ModBlocks.ICE_SPIKE,
                 ModBlocks.CLIMBING_WIRE,
                 ModBlocks.CHAMOMILE,
                 ModBlocks.MINT,
@@ -90,7 +91,5 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         ColorProviderRegistry.BLOCK.register(
                 (state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
                 ModBlocks.HALLUCINATORY_ACID, ModBlocks.HALLUCINATORY_ACID_WALL);
-        ColorProviderRegistry.ITEM.register(HallucinatoryAcidColors::itemColor,
-                FabricItems.HALLUCINATORY_ACID_GLOB);
     }
 }

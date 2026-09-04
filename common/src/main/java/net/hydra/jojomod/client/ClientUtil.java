@@ -87,7 +87,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
-import net.hydra.jojomod.event.powers.disc.WhitesnakeDiscUtil;
+import net.hydra.jojomod.event.powers.whitesnake.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.MainUtil;
@@ -1216,6 +1216,8 @@ public class ClientUtil {
                     SU.roundabout$getStandPowers().setAttackTimeDuring(0);
                 }
             }
+        } else if (context == PacketDataIndex.S2C_HALLUCINATION_INDICATOR) {
+            HallucinationIndicatorRenderer.update(data, data2);
         }
     }
 
@@ -1899,6 +1901,18 @@ public class ClientUtil {
         //Roundabout.LOGGER.info("Case Pop "+caseNumber);
         stack.popPose();
     }
+
+
+    public static BlockHitResult getHitResult(){
+        //Roundabout.LOGGER.info("Case Pop "+caseNumber);
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.hitResult instanceof BlockHitResult blockHit) {
+            return blockHit;
+        }
+        return null;
+    }
+
 
     public static boolean roundabout$configButtonSelected = false;
 

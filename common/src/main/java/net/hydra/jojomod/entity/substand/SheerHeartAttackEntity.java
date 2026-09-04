@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
 import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.navigation.StandEntityNavigation;
@@ -23,6 +24,10 @@ import net.hydra.jojomod.util.ExplosionUtil;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
 
+import net.hydra.jojomod.util.gravity.RotationUtil;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -61,6 +66,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -152,7 +158,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	static final int tickTargetFindMax = 2;
 
 	int attackTick = 0;
-	static final int attackTickMax = 45;
+	static final int attackTickMax = 30;
 	int jumpTick = 0;
 	static final int jumpTickMax = 68;
 	int explosionMiningTicks = 0;
@@ -208,6 +214,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	private static final int inativeMaxTicks = 240;
 
 	public int explosions = 0;
+	public int throwDamageCooldown = 0;
 
 	public float viewRange = 10.0f;
 
@@ -270,6 +277,19 @@ public class SheerHeartAttackEntity extends StandEntity {
 		return false;
 	}
 
+	public Vec3 getRandPos(){
+		Vec3 funnyVec = new Vec3(0,(this.getBbHeight()*0.3f),0);
+		Direction gd = ((IGravityEntity)this).roundabout$getGravityDirection();
+		if (gd != Direction.DOWN){
+			funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
+		}
+		return new Vec3(
+				this.getRandomX(1)+funnyVec.x,
+				0.2f+funnyVec.y,
+				this.getRandomZ(1)+funnyVec.z
+		);
+	}
+
 	@Override
 	public void tick() {
 		validateUUID();
@@ -286,11 +306,22 @@ public class SheerHeartAttackEntity extends StandEntity {
 			|| MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 100){
 				unsummon();
 			}else {
+				PowersKillerQueen UP;
 				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
 					if (this != PKQ.SHA) {
 						unsummon();
 						return;
 					}
+					UP = PKQ;
+				}else {
+					return;
+				}
+
+				if (stunTicks > 0 && tickCount % 12 == 4) {
+					Vec3 pos = getRandPos();
+					UP.sendParticlesIfPossible(level(), ParticleTypes.SMALL_FLAME,
+							pos.x, pos.y, pos.z,
+							2, 0.2, 0.1, 0.2, 0.015);
 				}
 
 				this.setReturnStatus(this.getHaveToReturn());
@@ -329,7 +360,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				if (this.getHaveToReturn()) { this.returnTicks++; }
 
 
-				if (flyngTicks > 2 && this.hasTarget()) {
+				if (flyngTicks > 2 && this.hasTarget() && throwStatus != THROWED) {
 					if (this.shouldExplode(this.getTargetPosition())) {
 						this.attack();
 					}
@@ -345,8 +376,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 					if (this.onGround() || this.onClimbable() || this.wasTouchingWater
 							|| this.wasInPowderSnow || this.getDeltaMovement().length() < 0.8) {
 						throwStatus = HAS_BEEN;
-						stunTicks = 70;
+						stunTicks = 40;
 					}else {
+						throwDamageCooldown--;
 						AABB bb = this.getBoundingBox().inflate(1.5);
 						List<Entity> SHAAA = this.level().getEntities(this, bb);
 						for (Entity ent : SHAAA) {
@@ -356,6 +388,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 							if (ent instanceof LivingEntity LE) {
 								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
+
+
+								if (getEntityWarm(LE) > 0 && throwDamageCooldown <= 0) {
+									attackAt(LE);
+									this.explosions++;
+									throwDamageCooldown = 4;
+								}
+
 
 								if (MainUtil.getReducedDamage(LE)) {
 									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
@@ -376,6 +416,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			}
 		}
 
+
+
+
 		super.tick();
 	}
 
@@ -386,7 +429,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		} else if (getTorchStatus()) {
 			shaMiningMove();
 
-		} else if (this.hasTarget() && stunTicks <= 0) {
+		} else if (this.hasTarget() && stunTicks <= 0 && attackTick <= 0) {
 			Vec3 pos = this.getTargetPosition();
 			if (this.shouldExplode(pos)) {
 				this.attack();
@@ -583,6 +626,34 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 		return null;
 	}
+	public void attackAt(Entity target) {
+		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());
+
+		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		if (!(SP instanceof PowersKillerQueen)) { return; }
+		PowersKillerQueen KQ = (PowersKillerQueen)SP;
+
+
+		Vec3 pos = this.position().add(this.getForward().scale(0.3));
+		float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
+
+		ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
+				KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
+
+		ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(0.25f, 0.25f, 0.25f), 8);
+
+
+		this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+
+		if (target != null) {
+
+			if (target instanceof LivingEntity LE) {
+				double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+				Vec3 $$12 = (LE.getPosition(1).subtract(getPosition(1))).multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.55 * $$11);
+				if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.32, $$12.z); }
+			}
+		}
+	}
 
 	public void attack() {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());;
@@ -594,23 +665,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 		PowersKillerQueen KQ = (PowersKillerQueen)SP;
 
 		if (this.getTargetType() == ENTITY){
-			Vec3 pos = this.position().add(this.getForward().scale(0.3));
-			float damage = ClientNetworking.getAppropriateConfig().killerQueenSettings.SheerHeartAttackMaxDamage;
-
-			ExplosionUtil.explosionHurtWithMulti(pos, dmg, this.level(), damage, 0.3f, explosionRadius,
-					KQ.multiplyPowerByStandConfigMobs(1.3f), KQ.multiplyPowerByStandConfigPlayers(1.0f));
-
-			ExplosionUtil.explodeEffects(pos, this.level(), KQ.getExplosionParticle(), new Vec3(0.25f, 0.25f, 0.25f), 8);
-
-
-			this.level().playSound(null, this.blockPosition(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
+			attackAt(getEntityTarget());
 
 			if (getEntityTarget() != null) {
-				if (getEntityTarget() instanceof LivingEntity LE) {
-					double $$11 = Math.max(0.0, 1.0 - LE.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-					Vec3 $$12 = this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale((double) 0.25 * $$11);
-					if ($$12.lengthSqr() > 0.0) { LE.push($$12.x, 0.1, $$12.z); }
-				}
 
 				if (!getEntityTarget().isAlive()) {
 					this.entityTarget = null;
@@ -736,7 +793,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void shaMove(Vec3 targetPos) {
 		ticksUntilNextPathRecalculation--;
 		if (ticksUntilNextPathRecalculation <= 0) {
-			ticksUntilNextPathRecalculation = 15; // + mob.getRandom().nextInt(7);
+			ticksUntilNextPathRecalculation = 5; // + mob.getRandom().nextInt(7);
 
 			Path newPath;
 			if (this.getHaveToReturn()) {

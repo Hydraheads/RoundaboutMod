@@ -171,6 +171,91 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> purpleHazeDecayBlocksAndRates = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:grass_block:minecraft:dirt:0.45",
+                    "minecraft:mycelium:minecraft:dirt:0.45",
+                    "minecraft:podzol:minecraft:dirt:0.45",
+                    "minecraft:farmland:minecraft:dirt:0.45",
+                    "minecraft:rooted_dirt:minecraft:dirt:0.45",
+                    "minecraft:dandelion:minecraft:air:0.6",
+                    "minecraft:poppy:minecraft:air:0.6",
+                    "minecraft:blue_orchid:minecraft:air:0.6",
+                    "minecraft:allium:minecraft:air:0.6",
+                    "minecraft:azure_bluet:minecraft:air:0.6",
+                    "minecraft:red_tulip:minecraft:air:0.6",
+                    "minecraft:orange_tulip:minecraft:air:0.6",
+                    "minecraft:white_tulip:minecraft:air:0.6",
+                    "minecraft:pink_tulip:minecraft:air:0.6",
+                    "minecraft:oxeye_daisy:minecraft:air:0.6",
+                    "minecraft:cornflower:minecraft:air:0.6",
+                    "minecraft:lily_of_the_valley:minecraft:air:0.6",
+                    "minecraft:torch_flower:minecraft:air:0.6",
+                    "minecraft:sunflower:minecraft:air:0.6",
+                    "minecraft:lilac:minecraft:air:0.6",
+                    "minecraft:rose_bush:minecraft:air:0.6",
+                    "minecraft:peony:minecraft:air:0.6",
+                    "minecraft:pitcher_plant:minecraft:air:0.6",
+                    "minecraft:grass:minecraft:air:0.6",
+                    "minecraft:fern:minecraft:air:0.6",
+                    "minecraft:tall_grass:minecraft:air:0.6",
+                    "minecraft:large_fern:minecraft:air:0.6",
+                    "minecraft:small_dripleaf:minecraft:air:0.6",
+                    "minecraft:red_mushrom:minecraft:air:0.6",
+                    "minecraft:brown_mushroom:minecraft:air:0.6",
+                    "minecraft:sugar_cane:minecraft:air:0.6",
+                    "minecraft:dead_bush:minecraft:air:0.6",
+                    "minecraft:bone_block:minecraft:air:0.6",
+                    "minecraft:sniffer_egg:minecraft:air:0.6",
+                    "minecraft:turtle_egg:minecraft:air:0.6",
+                    "minecraft:moss_block:minecraft:air:0.6",
+                    "minecraft:moss_carpet:minecraft:air:0.6",
+                    "minecraft:vine:minecraft:air:0.6",
+                    "minecraft:warped_roots:minecraft:air:0.6",
+                    "minecraft:crimson_roots:minecraft:air:0.6",
+                    "minecraft:big_dripleaf:minecraft:air:0.6",
+                    "minecraft:big_dripleaf_stem:minecraft:air:0.6",
+                    "minecraft:lily_pad:minecraft:air:0.6",
+                    "minecraft:wheat:minecraft:air:0.6",
+                    "minecraft:carrots:minecraft:air:0.6",
+                    "minecraft:pitcher_crop:minecraft:air:0.6",
+                    "minecraft:potatoes:minecraft:air:0.6",
+                    "minecraft:beetroots:minecraft:air:0.6",
+                    "minecraft:pumpkin_stem:minecraft:air:0.6",
+                    "minecraft:melon_stem:minecraft:air:0.6",
+                    "minecraft:torchflower_crop:minecraft:air:0.6",
+                    "minecraft:sea_pickle:minecraft:air:0.6",
+                    "minecraft:kelp_plant:minecraft:air:0.6",
+                    "minecraft:kelp:minecraft:air:0.6",
+                    "minecraft:acacia_leaves:minecraft:air:0.3",
+                    "minecraft:azalea_leaves:minecraft:air:0.3",
+                    "minecraft:birch_leaves:minecraft:air:0.3",
+                    "minecraft:cherry_leaves:minecraft:air:0.3",
+                    "minecraft:dark_oak_leaves:minecraft:air:0.3",
+                    "minecraft:flowering_azalea_leaves:minecraft:air:0.3",
+                    "minecraft:jungle_leaves:minecraft:air:0.3",
+                    "minecraft:mangrove_leaves:minecraft:air:0.3",
+                    "minecraft:oak_leaves:minecraft:air:0.3",
+                    "minecraft:spruce_leaves:minecraft:air:0.3",
+                    "minecraft:nether_wart_block:minecraft:air:0.3",
+                    "minecraft:warped_wart_block:minecraft:air:0.3",
+                    "minecraft:shroomlight:minecraft:air:0.3",
+                    "minecraft:dirt_path:minecraft:farmland:0.3",
+                    "minecraft:crying_obsidian:minecraft:obsidian:0.3",
+                    "minecraft:warped_nylium:minecraft:netherrack:0.3",
+                    "minecraft:crimson_nylium:minecraft:netherrack:0.3",
+                    "minecraft:muddy_mangrove_roots:minecraft:mud:0.3",
+                    "minecraft:acacia_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:birch_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:cherry_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:dark_oak_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:oak_sapling:minecraft:dead_bush:0.3",
+                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+            )
+    );
+
     public Set<String> silverChariotBlocksToSlabs = new HashSet<>(
             Arrays.asList(
                     "minecraft:stone:minecraft:stone_slab",
@@ -221,11 +306,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:blue_wool:roundabout:wool_slab_blue",
                     "minecraft:brown_wool:roundabout:wool_slab_brown",
                     "minecraft:cyan_wool:roundabout:wool_slab_cyan",
-                    "minecraft:green_wool:roundabout:wool_slab_green",
-                    "minecraft:grey_wool:roundabout:wool_slab_grey",
-                    "minecraft:lime_wool:roundabout:wool_slab_lime",
+                    "minecraft:green_wool:roundabout:wool_slab_dark_green",
+                    "minecraft:gray_wool:roundabout:wool_slab_dark_grey",
+                    "minecraft:lime_wool:roundabout:wool_slab_green",
                     "minecraft:light_blue_wool:roundabout:wool_slab_light_blue",
-                    "minecraft:light_grey_wool:roundabout:wool_slab_light_grey",
+                    "minecraft:light_gray_wool:roundabout:wool_slab_light_grey",
                     "minecraft:magenta_wool:roundabout:wool_slab_magenta",
                     "minecraft:orange_wool:roundabout:wool_slab_orange",
                     "minecraft:purple_wool:roundabout:wool_slab_purple",
@@ -275,7 +360,7 @@ public class AdvancedConfig implements Cloneable {
                     "roundabout:stray_cat_entity:0"
             )
     );
-    public Set<String> standDestructionBlacklist = new HashSet<>(
+    public Set<String> standDestructionBlacklistv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:diamond_block",
                     "minecraft:gold_block",
@@ -283,7 +368,11 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:emerald_block",
                     "minecraft:redstone_block",
                     "minecraft:cobblestone_wall",
-                    "minecraft:reinforced_deepslate"
+                    "minecraft:reinforced_deepslate",
+                    "minecraft:nether_portal",
+                    "minecraft:end_portal",
+                    "roundabout:d4c_portal",
+                    "minecraft:light_block"
             )
     );
     public Set<String> unbreakableThrownItems = new HashSet<>(

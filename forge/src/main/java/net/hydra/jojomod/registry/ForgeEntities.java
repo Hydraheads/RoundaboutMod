@@ -531,23 +531,33 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<BlackSabbathEntity>> BLACK_SABBATH =
             ENTITY_TYPES.register("black_sabbath", () ->
-                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
+                    EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "black_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<BeachSabbathEntity>> BEACH_SABBATH =
+            ENTITY_TYPES.register("beach_sabbath", () ->
+                    EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<BlackSantaSabbathEntity>> SANTA_SABBATH =
+            ENTITY_TYPES.register("santa_sabbath", () ->
+                    EntityType.Builder.of(BlackSantaSabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "santa_sabbath").toString())
+            );
+    public static final RegistryObject<EntityType<CowboySabbathEntity>> COWBOY_SABBATH =
+            ENTITY_TYPES.register("cowboy_sabbath", () ->
+                    EntityType.Builder.of(CowboySabbathEntity::new, MobCategory.MISC).sized(0.60F, 1.6f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "cowboy_sabbath").toString())
             );
     public static final RegistryObject<EntityType<PearlJamEntity>> PEARL_JAM =
             ENTITY_TYPES.register("pearl_jam", () ->
                     EntityType.Builder.of(PearlJamEntity::new, MobCategory.MISC).sized(0.25F, 0.30f).
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pearl_jam").toString())
-            );
-
-
-    public static final RegistryObject<EntityType<BeachSabbathEntity>> BEACH_SABBATH =
-            ENTITY_TYPES.register("beach_sabbath", () ->
-                    EntityType.Builder.of(BeachSabbathEntity::new, MobCategory.MISC).sized(0.70F, 1.6f).
-                            clientTrackingRange(14).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "beach_sabbath").toString())
             );
     public static final RegistryObject<EntityType<WalkingHeartEntity>> WALKING_HEART =
             ENTITY_TYPES.register("walking_heart", () ->
@@ -617,9 +627,15 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierShotEntity>> SILVER_CHARIOT_RAPIER =
             ENTITY_TYPES.register("silver_chariot_rapier", () ->
-                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).
+                    EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier").toString())
+            );
+    public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
+            ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
+                            clientTrackingRange(16).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
             );
     public static final RegistryObject<EntityType<KnifeEntity>> THROWN_KNIFE =
             ENTITY_TYPES.register("knife", () ->
@@ -634,6 +650,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<BlockD4CEntity>> D4C_BLOCK =
+            ENTITY_TYPES.register("block_d4c_entity", () ->
+                    EntityType.Builder.<BlockD4CEntity>of(BlockD4CEntity::new, MobCategory.MISC)
+                            .sized(BlockD4CEntity.dimensions, BlockD4CEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "block_d4c_entity").toString())
             );
     public static final RegistryObject<EntityType<FallingBannerEntity>> FALLING_BANNER =
             ENTITY_TYPES.register("falling_banner", () ->
@@ -654,7 +678,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
             ENTITY_TYPES.register("stray_cat_entity", () ->
                     EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
-                            .sized(0.7f, 0.7f).
+                            .sized(StrayCatEntity.hitBoxWidth, 0.7f).
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())
