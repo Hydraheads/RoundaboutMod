@@ -26,7 +26,7 @@ public final class HallucinationRenderOffset {
         if (!HallucinationEffect.hasDistortion(effect)) return Vec3.ZERO;
 
         double maximumDistance = effect.getAmplifier() >= 1 ? 2.0D : 1.0D;
-        long interval = minecraft.level.getGameTime() / 40L;
+        long interval = minecraft.level.getGameTime() / 100L;
         long seed = interval * 341873128712L ^ (long) rendered.getId() * 132897987541L
                 ^ minecraft.player.getUUID().getLeastSignificantBits();
         Random random = new Random(seed);
