@@ -9,12 +9,18 @@ import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.CaliforniaKingBedEntity;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
+import net.hydra.jojomod.entity.stand.PollinationTransferEntity;
 import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> {
@@ -145,7 +151,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     }
     @Override
     public boolean shouldRender(BlackSabbathEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
-        if ($$0.getCrippled() || $$0.getUnrender()){
+        if ($$0.getCrippled() || $$0.getUnrender() || !$$0.getRiding() && $$0.getUnrender() && $$0.isBlackSabbathUnderLight()){
             return false;
         }
         return super.shouldRender($$0,$$1,$$2,$$3,$$4);

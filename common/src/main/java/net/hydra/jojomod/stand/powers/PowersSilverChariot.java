@@ -1091,7 +1091,7 @@ public class PowersSilverChariot extends NewPunchingStand {
                 // Look at PowersMagiciansRed code
 
                 // TODO: Implement rapier spin ability
-                // rapierSpinClient();
+                rapierSpinClient();
 
                 // Might implement forward barrage with 3 block range
             }
@@ -2374,7 +2374,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         this.setActivePower(SILVER_CHARIOT_RAPIER_SPIN_UPDATE);
         if (!this.self.level().isClientSide()) {
             // playStandUserOnlySoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false,true);
-            playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
+            // playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
         }
     }
 
@@ -2395,7 +2395,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
     }
 
-    public List<Entity> destroyProjectilesAndDamageEntities_(LivingEntity user, List<Entity> entities, float maxDistance, float angle){
+    public List<Entity> destroyProjectilesAndDamageEntities(LivingEntity user, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         Direction gravD = ((IGravityEntity)user).roundabout$getGravityDirection();
@@ -2414,12 +2414,23 @@ public class PowersSilverChariot extends NewPunchingStand {
 
                     value.discard();
                 }
+            } else if (
+                    !value.isAlive() || value.isInvulnerable() || value.getUUID() == this.self.getUUID() ||
+                            (value instanceof StandEntity SE && SE.getUser() != null && SE.getUser().is(this.self))
+            ) {
+                hitEntities.remove(value);
             } else if (value instanceof LivingEntity) {
-                if (this.attackTimeDuring % 5 == 0) {
-                    float knockbackStrength = this.getRapierSpinKnockback();
-                    float pow = this.getRapierSpinStrength(value);
-                    if (StandDamageEntityAttack(value, pow, 0, this.self)) {
-                        takeDeterminedKnockback(this.self, value, knockbackStrength);
+                float knockbackStrength = this.getRapierSpinKnockback();
+                float pow = this.getRapierSpinStrength(value);
+                if (this.attackTimeDuring % 10 == 0) {
+                    Vec2 lookVec = new Vec2(getLookAtEntityYaw(user, value), getLookAtEntityPitch(user, value));
+                    if (gravD != Direction.DOWN) {
+                        lookVec = RotationUtil.rotPlayerToWorld(lookVec.x, lookVec.y, gravD);
+                    }
+                    if (angleDistance(lookVec.x, (user.getYHeadRot()%360f)) <= angle && angleDistance(lookVec.y, user.getXRot()) <= angle){
+                        if (StandDamageEntityAttack(value, pow, 0, this.self)) {
+                            takeDeterminedKnockback(this.self, value, knockbackStrength);
+                        }
                     }
                 }
             }
@@ -2428,17 +2439,17 @@ public class PowersSilverChariot extends NewPunchingStand {
     }
 
     public float getRapierSpinKnockback() {
-        return 2.5F;
+        return 2F;
     }
 
     public float getRapierSpinStrength(Entity entity) {
         if (this.getReducedDamage(entity)) {
             return levelupDamageMod(
-                    multiplyPowerByStandConfigPlayers(1F)
+                    multiplyPowerByStandConfigPlayers(0.5F)
             );
         } else {
             return levelupDamageMod(
-                    multiplyPowerByStandConfigMobs(2F)
+                    multiplyPowerByStandConfigMobs(1F)
             );
         }
     }
@@ -2446,17 +2457,24 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void updateRapierSpin() {
         float dist = 5F;
         int angle = 30;
-        this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
+        // this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring <= this.getRapierSpinDuration()) {
-                if (this.self instanceof Player) {
-                    // this.destroyProjectilesAndDamageEntities(dist, angle);
+                if (this.attackTimeDuring % 10 == 0) {
+                    playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
                 }
+                if (this.self instanceof Player) {
+                    this.destroyProjectilesAndDamageEntities(
+                            this.self, DamageHandler.genHitbox(this.self, this.self.getEyePosition().x, this.self.getEyePosition().y, this.self.getEyePosition().z, dist, dist, dist), dist, angle
+                    );
+                }
+            } else {
+                // this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
             }
         }
     }
 
-    public void destroyProjectilesAndDamageEntities(float dist, int angle) {
+    public void destroyProjectilesAndDamageEntities__(float dist, int angle) {
         Vec3 pointVec3 = DamageHandler.getRayPoint(self, 5);
         List<Entity> listEnt = DamageHandler.genHitbox(
                 this.self, pointVec3.x, pointVec3.y, pointVec3.z, dist, dist, dist
