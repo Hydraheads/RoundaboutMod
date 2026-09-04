@@ -154,7 +154,7 @@ public abstract class ConfigManager {
                             || sourceBlock.equals(Blocks.AIR)
                             || targetBlock.equals(Blocks.AIR)
                     ) {
-                        throw new Exception();
+                        Roundabout.LOGGER.warn("Invalid whole block to slab block entry: {}", entry);
                     }
 
                     MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
