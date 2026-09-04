@@ -4680,7 +4680,7 @@
   "sounds.roundabout.whitesnake_punch_hit_2": "Whitesnake punches",
   "sounds.roundabout.whitesnake_punch_final_hit": "Whitesnake lands a final punch",
   "sounds.roundabout.whitesnake_barrage_hit": "Whitesnake barrages",
-  "sounds.roundabout.whitesnake_impale_voice": "Whitesnake impales",
+  "sounds.roundabout.wsvoice_impale": "Whitesnake impale cry",
   "sounds.roundabout.whitesnake_disc_steal_charge": "Whitesnake prepares to steal a disc",
   "sounds.roundabout.whitesnake_command_disc_create": "A command disc is created",
   "sounds.roundabout.whitesnake_disc_insert": "A disc is inserted",
