@@ -465,6 +465,7 @@
     "whitesnake.hallucination.HallucinationAcidModelRenderMixin",
     "whitesnake.hallucination.HallucinationAcidRenderMixin",
     "whitesnake.hallucination.HallucinationClientTickMixin",
+    "whitesnake.hallucination.HallucinationDamageMixin",
     "whitesnake.hallucination.HallucinationEffectParticleMixin",
     "whitesnake.hallucination.HallucinationEntityRendererMixin",
     "whitesnake.hallucination.HallucinationInventoryMixin",
