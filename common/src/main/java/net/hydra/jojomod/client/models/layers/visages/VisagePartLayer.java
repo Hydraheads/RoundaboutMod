@@ -225,6 +225,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
                         String path = vd.getSkinPath();
+
+                        VisageRenderContext renderContext = new VisageRenderContext(entity, partialTicks);
+
+                        vd.render(renderContext, (HumanoidModel<LivingEntity>) getParentModel(), poseStack, bufferSource, packedLight, path, entity, xx, yy, zz, partialTicks, r, g, b);
+
                         if (vd.rendersBreast()) {
                             renderNormalBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -257,10 +262,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderDoppioHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersKosakuHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
+                        /*if (vd.rendersKosakuHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderKosakuHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
-                        }
+                        }*/
                         if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
                                 && !hideExtraPartsWithSuit) {
                             renderKakyoinHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
