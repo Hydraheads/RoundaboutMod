@@ -678,7 +678,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<StrayCatEntity>> STRAY_CAT =
             ENTITY_TYPES.register("stray_cat_entity", () ->
                     EntityType.Builder.<StrayCatEntity>of(StrayCatEntity::new, MobCategory.MISC)
-                            .sized(0.7f, 0.7f).
+                            .sized(StrayCatEntity.hitBoxWidth, 0.7f).
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "stray_cat_entity").toString())

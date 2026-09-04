@@ -107,7 +107,7 @@ public class AnubisItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
         ItemStack $$3 = $$1.getItemInHand($$2);
-        if ($$1 != null && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+        if ($$2.equals(InteractionHand.MAIN_HAND) && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
             return InteractionResultHolder.fail($$3);
         }
 

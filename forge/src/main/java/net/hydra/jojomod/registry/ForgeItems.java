@@ -721,6 +721,13 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_KILLER_QUEEN = addToWIPTab(ITEMS.register("max_killer_queen_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersKillerQueen(null))));
 
+    public static final RegistryObject<Item> KIRA_PART_FOUR_MASK = addToWIPTab(ITEMS.register(
+            "kira_part_four_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null))));
+    public static final RegistryObject<Item> KOSAKU_MASK = addToWIPTab(ITEMS.register(
+            "kosaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null))));
+    public static final RegistryObject<Item> KIRASAKU_MASK = addToWIPTab(ITEMS.register(
+            "kirasaku_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null))));
+
 
     public static final RegistryObject<Item> STAND_DISC_WHITE_ALBUM = addToDiscTab(ITEMS.register("white_album_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersWhiteAlbum(null))));
@@ -774,6 +781,7 @@ public class ForgeItems {
             "pucci_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new PucciVisage(null))));
     public static final RegistryObject<Item> PUCCI_MANGA_MASK = addToWIPTab(ITEMS.register(
             "pucci_manga_mask", () -> new MaskItem(new Item.Properties().stacksTo(1), new PucciMangaVisage(null))));
+
 
     public static final RegistryObject<Item> STAND_DISC_OASIS = addToWIPTab(ITEMS.register("oasis_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersOasis(null))));

@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.zetalasis.hjson.JsonValue;
 
 import java.io.IOException;
@@ -147,6 +148,15 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+
+                    if (
+                            sourceBlock.equals(targetBlock)
+                            || sourceBlock.equals(Blocks.AIR)
+                            || targetBlock.equals(Blocks.AIR)
+                    ) {
+                        throw new Exception();
+                    }
+
                     MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse whole block to slab block entry '{}'", entry, e);

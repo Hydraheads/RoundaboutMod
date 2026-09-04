@@ -4627,6 +4627,8 @@
   "config.roundabout.stealDiscWhenLowHealth.desc": "When the target is below 2 health (1 heart), the disc is stolen rather than sealed.",
   "config.roundabout.stealPlayerDiscs.name": "Steal Player Discs",
   "config.roundabout.stealPlayerDiscs.desc": "When disabled, player discs can only be sealed and cannot be stolen.",
+  "config.roundabout.ejectType.name": "Disc Ejection Type",
+  "config.roundabout.ejectType.desc": "1 = Drop the disc toward a random direction. 2 = Put the disc directly into the user's inventory, unless inventory is full.",
   "config.roundabout.discSealing.name": "Enable Disc Sealing",
   "config.roundabout.discSealing.desc": "Allows failed disc thefts to temporarily seal discs.",
   "config.roundabout.standDiscSealTime.name": "Stand Disc Seal Time",
