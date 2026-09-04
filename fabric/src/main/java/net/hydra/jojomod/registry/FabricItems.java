@@ -116,7 +116,12 @@ public class FabricItems {
             new MaskItem(new Item.Properties().stacksTo(1), new PucciVisage(null)));
     public static final Item PUCCI_MANGA_MASK = registerItem("pucci_manga_mask",
             new MaskItem(new Item.Properties().stacksTo(1), new PucciMangaVisage(null)));
-
+    public static final Item KIRA_PART_FOUR_MASK = registerItem("kira_part_four_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new KiraPartFourVisage(null)));
+    public static final Item KOSAKU_MASK = registerItem("kosaku_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
+    public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
+        new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
 
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
@@ -765,6 +770,9 @@ public class FabricItems {
                         entries.accept(MAX_STAND_DISC_PURPLE_HAZE);
                         entries.accept(STAND_DISC_KILLER_QUEEN);
                         entries.accept(MAX_STAND_DISC_KILLER_QUEEN);
+                        entries.accept(KIRA_PART_FOUR_MASK);
+                        entries.accept(KOSAKU_MASK);
+                        entries.accept(KIRASAKU_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
                         entries.accept(STAND_DISC_PLANET_WAVES);
@@ -866,6 +874,7 @@ public class FabricItems {
         ModItems.HALLUCINATORY_ACID_WALL = HALLUCINATORY_ACID_WALL;
         ModItems.PUCCI_MASK = PUCCI_MASK;
         ModItems.PUCCI_MANGA_MASK = PUCCI_MANGA_MASK;
+
         ModItems.STAND_DISC_RATT = STAND_DISC_RATT;
         ((MaxStandDiscItem)MAX_STAND_DISC_RATT).baseDisc = ((StandDiscItem)STAND_DISC_RATT);
         ModItems.MAX_STAND_DISC_ANUBIS = MAX_STAND_DISC_ANUBIS;
@@ -1061,6 +1070,9 @@ public class FabricItems {
         ModItems.AESTHETICIAN_MASK_4 = AESTHETICIAN_MASK_4;
         ModItems.AESTHETICIAN_MASK_5 = AESTHETICIAN_MASK_5;
         ModItems.AESTHETICIAN_MASK_ZOMBIE = AESTHETICIAN_MASK_ZOMBIE;
+        ModItems.KIRA_PART_FOUR_MASK = KIRA_PART_FOUR_MASK;
+        ModItems.KOSAKU_MASK = KOSAKU_MASK;
+        ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;
