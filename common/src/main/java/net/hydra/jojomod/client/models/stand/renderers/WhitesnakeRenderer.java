@@ -30,7 +30,9 @@ public class WhitesnakeRenderer extends StandRenderer<WhitesnakeEntity> {
             texture("sour_candy"),
             texture("edgy_gold"),
             texture("gold_trimmed"),
-            texture("sandsnake")
+            texture("sandsnake"),
+            texture("eoh"),
+            texture("fleshsnake")
     };
     private final WhitesnakeDisguiseRenderer disguiseRenderer;
 

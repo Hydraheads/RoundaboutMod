@@ -218,6 +218,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (level > 2 || bypass) {
                 skins.add(WhitesnakeEntity.ASBR_SKIN);
                 skins.add(WhitesnakeEntity.AGOGO_SKIN);
+                skins.add(WhitesnakeEntity.EOH_SKIN);
             }
             if (level > 3 || bypass) {
                 skins.add(WhitesnakeEntity.COTTON_CANDY_SKIN);
@@ -229,6 +230,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (level > 5 || bypass) {
                 skins.add(WhitesnakeEntity.SILVER_SKIN);
                 skins.add(WhitesnakeEntity.GOLD_SKIN);
+                skins.add(WhitesnakeEntity.FLESHSNAKE_SKIN);
             }
             if (level > 6 || bypass) {
                 skins.add(WhitesnakeEntity.GOLD_TRIMMED_SKIN);
@@ -259,6 +261,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
             case WhitesnakeEntity.EDGY_GOLD_SKIN -> "skins.roundabout.whitesnake.edgy_gold";
             case WhitesnakeEntity.GOLD_TRIMMED_SKIN -> "skins.roundabout.whitesnake.gold_trimmed";
             case WhitesnakeEntity.SANDSNAKE_SKIN -> "skins.roundabout.whitesnake.sandsnake";
+            case WhitesnakeEntity.EOH_SKIN -> "skins.roundabout.whitesnake.eoh";
+            case WhitesnakeEntity.FLESHSNAKE_SKIN -> "skins.roundabout.whitesnake.fleshsnake";
             default -> "skins.roundabout.whitesnake.anime";
         };
         return Component.translatable(key);
