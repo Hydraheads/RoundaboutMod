@@ -1310,6 +1310,8 @@ public class Config implements Cloneable {
         public Boolean stealDiscWhenLowHealth;
         @BooleanOption(group = "inherit", value = false)
         public Boolean stealPlayerDiscs;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 2)
+        public Integer ejectType;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
