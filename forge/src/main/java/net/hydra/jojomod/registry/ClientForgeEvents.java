@@ -393,6 +393,7 @@ public class ClientForgeEvents {
         ModStrayModels.diegoRightLegPart = new DiegoRightLegPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.JohnnyHatPart = new JohnnyHatPart();
+        ModStrayModels.kosakuHairPart = new KosakuHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();
         ModStrayModels.DaiyaFluffPart = new DaiyaFluffPart();
         ModStrayModels.JohngalliaHairPart = new JohngalliaHairPart();
@@ -579,11 +580,6 @@ public class ClientForgeEvents {
     public static void registerWhitesnakeBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> HallucinatoryAcidColors.blockColor(state, tintIndex),
                 ForgeBlocks.HALLUCINATORY_ACID.get(), ForgeBlocks.HALLUCINATORY_ACID_WALL.get());
-    }
-
-    @SubscribeEvent
-    public static void registerWhitesnakeItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register(HallucinatoryAcidColors::itemColor, ForgeItems.HALLUCINATORY_ACID_GLOB.get());
     }
 
     @SubscribeEvent

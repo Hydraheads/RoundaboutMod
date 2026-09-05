@@ -379,6 +379,7 @@ public class FabricEntityClient {
         ModStrayModels.gyroHatPart = new GyroHatPart();
         ModStrayModels.steelBallsPart = new SteelBallsPart();
         ModStrayModels.DiegoHatPart = new DiegoHatPart();
+        ModStrayModels.kosakuHairPart = new KosakuHairPart();
         ModStrayModels.Diego2HatPart = new Diego2HatPart();
         ModStrayModels.DoppioHairPart = new DoppioHairPart();
         ModStrayModels.DaiyaEarsPart = new DaiyaEarsPart();

@@ -389,7 +389,6 @@ public class ForgeEvents {
         ModItems.ATTACK_COMMAND_DISC = ForgeItems.ATTACK_COMMAND_DISC.get();
         ModItems.FORGET_COMMAND_DISC = ForgeItems.FORGET_COMMAND_DISC.get();
         ModItems.EXPLOSIVE_COMMAND_DISC = ForgeItems.EXPLOSIVE_COMMAND_DISC.get();
-        ModItems.HALLUCINATORY_ACID_GLOB = ForgeItems.HALLUCINATORY_ACID_GLOB.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_1 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_1.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_2 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_2.get();
         ModItems.HALLUCINATORY_ACID_HEIGHT_3 = ForgeItems.HALLUCINATORY_ACID_HEIGHT_3.get();
@@ -550,6 +549,10 @@ public class ForgeEvents {
 
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
+        ModItems.KIRA_PART_FOUR_MASK = ForgeItems.KIRA_PART_FOUR_MASK.get();
+        ModItems.KIRA_PART_EIGHT_MASK = ForgeItems.KIRA_PART_EIGHT_MASK.get();
+        ModItems.KOSAKU_MASK = ForgeItems.KOSAKU_MASK.get();
+        ModItems.KIRASAKU_MASK = ForgeItems.KIRASAKU_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
 

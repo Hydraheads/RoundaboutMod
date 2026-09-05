@@ -135,7 +135,7 @@ public class FancyLighterItem extends BlockItem {
                                                     if (lvent != null && !lvent.isEmpty()) {
                                                         for (LivingEntity value : lvent) {
                                                             if (value.hasLineOfSight($$0)) {
-                                                                if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
+                                                                if (!(value instanceof StandEntity || value instanceof RoadRollerEntity || value.is(pbs.self))) {
                                                                         pbs.selectTargetSecond(value);
                                                                 }
                                                             }

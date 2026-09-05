@@ -68,6 +68,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
@@ -2952,6 +2953,69 @@ public class MainUtil {
                 }
             } else {
                 level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
+            }
+        }
+    }
+
+    public static void bleedCut(LivingEntity LE, LivingEntity self){
+        if (MainUtil.getMobBleed(LE)) {
+            SimpleParticleType bloodType = ModParticles.BLOOD;
+
+            if (MainUtil.hasEnderBlood(LE)) {
+                bloodType = ModParticles.ENDER_BLOOD;
+            } else if (MainUtil.hasBlueBlood(LE)) {
+                bloodType = ModParticles.BLUE_BLOOD;
+            }
+
+            if (!LE.level().isClientSide && LE.level() instanceof ServerLevel serverLevel) {
+
+                int particleCount = 9;
+                for (int i = 0; i < particleCount; i++) {
+                    int spread = i - (particleCount/2);
+                    double spreadX = 1.2;
+                    double spreadX2 = 0.6;
+
+                    double random = (Math.random() * spreadX) - spreadX2;
+                    double random2 = (Math.random() * spreadX) - spreadX2;
+                    double random3 = (Math.random() * spreadX) - spreadX2;
+                    double travelX = (self.getEyePosition().x - LE.getEyePosition().x) + random;
+                    double travelY = (self.getEyePosition().y - LE.getEyePosition().y) +2.3D + random2;
+                    double travelZ = (self.getEyePosition().z - LE.getEyePosition().z) + random3;
+                    MainUtil.sendParticlesIfPossible(
+                            LE,
+                            LE.level(),
+                            bloodType,
+                            LE.getEyePosition().x,
+                            LE.getEyePosition().y,
+                            LE.getEyePosition().z,
+                            0,
+                            travelX,
+                            travelY,
+                            travelZ,
+                            0.15
+                    );
+                }
+
+                /**This below is more slashlike, I changed my mind*/
+//                for (int i = 0; i < particleCount; i++) {
+//                    int spread = i - (particleCount/2);
+//                    double travelX = (self.getEyePosition().x - LE.getEyePosition().x) + ((double) spread / (double)particleCount)*1.3F;
+//                    double travelY = (self.getEyePosition().y - LE.getEyePosition().y) + (((double) spread / (double)particleCount)*1F)+0.1D;
+//                    double travelZ = (self.getEyePosition().z - LE.getEyePosition().z) + ((double) spread / (double)particleCount)*1.3F;
+//                    MainUtil.sendParticlesIfPossible(
+//                            LE,
+//                            LE.level(),
+//                            bloodType,
+//                            LE.getEyePosition().x,
+//                            LE.getEyePosition().y,
+//                            LE.getEyePosition().z,
+//                            0,
+//                            travelX,
+//                            travelY,
+//                            travelZ,
+//                            0.15
+//                    );
+//                }
             }
         }
     }

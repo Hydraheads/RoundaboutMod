@@ -12,6 +12,9 @@ import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,16 +28,22 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen {
 
@@ -117,19 +126,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     @Override
     public boolean canStandBeHurt(){
-        return getHunting();
+        return getHunting() && !getUnrender();
     }
     @Override
     public boolean canBeHitByProjectile() {
-        return getHunting() && !getRiding();
+        return getHunting() && !getRiding() && !getUnrender();
     }
     @Override
     public boolean isAttackable() {
-        return getHunting() && !getRiding();
+        return getHunting() && !getRiding() && !getUnrender();
     }
     @Override
     public boolean isPickable() {
-        return true;
+        return getHunting() && !getRiding() && !getUnrender();
     }
     @Override
     public boolean skipAttackInteraction(Entity $$0) {
@@ -137,7 +146,15 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     }
     @Override
     public boolean isInvulnerable() {
-        return !getHunting() && getRiding();
+        return getHunting() && (getRiding() || getUnrender());
+    }
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+    protected boolean isAffectedByFluids() {
+        FluidState $$3 = this.level().getFluidState(this.blockPosition());
+        return horizontalCollision && !($$3.is(Fluids.LAVA) || $$3.is(Fluids.FLOWING_LAVA));
     }
     @Override
     public boolean fireImmune() {
@@ -160,18 +177,18 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean lockPos(){
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2 && getRiding();
+            return pb.moveMode == 2 || getRiding();
         }
         return false;
     }
     @Override
     public boolean isPushable() {
-        return getHunting() && !getRiding();
+        return getHunting() && !getRiding() || !getUnrender();
     }
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        return getHunting() && !getRiding();
+        return super.canCollideWith(entity);
     }
     @Override
     public boolean hasNoPhysics(){
@@ -183,7 +200,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean isNoGravity() {
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb){
-            return pb.moveMode == 2 || this.is(pb.blackSelect);
+            return pb.moveMode == 2 || this.is(pb.blackSelect) || getRiding();
         }
         return false;
     }
@@ -274,14 +291,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         if(this.getDeltaMovement() != null) {
                             setDeltaMovement(0, this.getDeltaMovement().y, 0);
                         }
-                    } else {
-                      //  moveToBlock();
                     }
             }
         }
        // System.out.println(damageImmunityTicks);
       //  System.out.println(this.getHealth());
      //   System.out.println(isUnderSunlight());
+        if(getRiding()){
+            if(this.getY() < this.level().getMinBuildHeight()) {
+                setDeltaMovement(Vec3.ZERO);
+            } else {
+                absMoveTo(this.getX(), this.level().getMinBuildHeight() , this.getZ());
+            }
+        }
         if(isBlackSabbathUnderLight()){
             this.getNavigation().setSpeedModifier(0.35);
         }
@@ -382,7 +404,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
             ((StandUser)this.getUser()).roundabout$setSealedTicks(300);
             pbs.setTickDown2(20);
-            if(MainUtil.isStandDamage(source) && this.getRemainingFireTicks() > 0 || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.LAVA)) {
+            if(MainUtil.isStandDamage(source) && this.getRemainingFireTicks() > 0 || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(ModDamageTypes.STAND_FIRE) || source.is(DamageTypes.LAVA) || source.is(DamageTypes.HOT_FLOOR)) {
                 setCrippled(true);
                 if (this.level() instanceof ServerLevel SL) {
                     Vec3 position = this.getPosition(1);
@@ -414,6 +436,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                     this.level().playSound(null, BlockPos.containing(this.position()), ModSounds.VAMPIRE_CRUMBLE_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
                 }
             } else if(source.is(ModDamageTypes.GO_BEYOND)){
+                setUnrender(false);
                 if (this.level() instanceof ServerLevel SL) {
                     Vec3 position = this.getPosition(1);
                     Vec3 position2 = this.getEyePosition();
@@ -503,7 +526,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if (this.getUser() != null) {
             if(((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && (pb.moveMode == 2) && !getHunting()) {
                 Vec3 lvec = pb.getLookAngleChest(this.getUser().getYRot(), this.getUser());
-                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.75F));
+                Position pn = this.getUser().getEyePosition().add(lvec.scale(-0.90F));
                 positionUpdater.accept(this, pn.x(), this.getUser().getY() + (this.getUser().getBbHeight() / 2.45), pn.z());
             }
         }
@@ -682,9 +705,11 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 if (ridingEntity == null) {
                                     if(pbs.blackSabbathTargets != null && !pbs.blackSabbathTargets.isEmpty()) {
                                         if (!pbs.blackSabbathTargets.contains(shadowHidTarget())) {
-                                            setRidingEntity(shadowHidTarget());
-                                            setRiding(true);
-                                            setUnrender(true);
+                                            if(!isBlackSabbathUnderLight()) {
+                                                setRidingEntity(shadowHidTarget());
+                                                setRiding(true);
+                                                setUnrender(true);
+                                            }
                                         }
                                     }
                                 }
@@ -702,10 +727,45 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                         securityTicks--;
                     }
                 }
+                if(targetSabbath() != null) {
+                    if(!isBlackSabbathUnderLight() && !isOnFire()) {
+                        if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), targetSabbath().getX(), targetSabbath().getZ()) > 6) {
+                            setUnrender(true);
+                            createShadowParticles();
+                        } else {
+                            if (this.getY() > targetSabbath().getY() && !hasLineOfSight(targetSabbath())) {
+                                setUnrender(true);
+                                createShadowParticles();
+                            } else {
+                                setUnrender(false);
+                            }
+                        }
+                    } else {
+                        setUnrender(false);
+                    }
+                }
             }
         }
     }
-
+    protected void createShadowParticles() {
+        if(this.level() instanceof ServerLevel SL){
+            Random random = new Random();
+            Float flute = random.nextFloat(-0.1F, 0.1F);
+            Float flute2 = random.nextFloat(-0.1F, 0.1F);
+        if(this.onGround()) {
+            ((ServerLevel) this.level()).sendParticles((new DustParticleOptions(new Vector3f(0F, 0F, 0F), 1f)), this.getX() + flute,
+                    this.getY() - 0.1, this.getZ() + flute2,
+                    200,
+                    0.01, 0.01, 0.01,
+                    0.1);
+            ((ServerLevel) this.level()).sendParticles((new DustParticleOptions(new Vector3f(0.15F, 0.15F, 0.15F), 1f)), this.getX() + flute,
+                    this.getY() - 0.1, this.getZ() + flute2,
+                    200,
+                    0.01, 0.01, 0.01,
+                    0.1);
+        }
+        }
+    }
     protected void moveToTarget() {
         Vec3 pos = this.getTargetPosition();
         bsMove(pos);
@@ -727,12 +787,12 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         }
     }
 
-    int ticksUntilNextPathRecalculation = 15;
+    int ticksUntilNextPathRecalculation = 5;
 
     public void bsMove(Vec3 targetPos) {
         ticksUntilNextPathRecalculation--;
         if (ticksUntilNextPathRecalculation <= 0) {
-            ticksUntilNextPathRecalculation = 15;
+            ticksUntilNextPathRecalculation = 5;
 
             Path newPath;
             if(this.targetSabbath() != null && targetPos != null) {

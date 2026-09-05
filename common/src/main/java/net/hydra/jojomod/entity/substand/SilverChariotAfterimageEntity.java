@@ -9,13 +9,44 @@ import net.minecraft.world.level.Level;
 
 public class SilverChariotAfterimageEntity extends StandEntity implements NoHitboxRendering {
 
-    public SilverChariotAfterimageEntity(EntityType<? extends Mob> entityType, Level world) {
+    public SilverChariotAfterimageEntity(EntityType<? extends StandEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
+    public boolean isPickable() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
+
+    @Override
+    public boolean hasNoPhysics() {
+        return true;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
-        this.discard();
-        return super.hurt(source, amount);
+        // this.discard();
+        // return super.hurt(source, amount);
+        return false;
     }
 }

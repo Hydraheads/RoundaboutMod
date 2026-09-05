@@ -1,6 +1,8 @@
 package net.hydra.jojomod.access;
 
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public interface IGravityEntity {
@@ -19,6 +21,8 @@ public interface IGravityEntity {
 
     void roundabout$setExistVec(byte adj, Vec3 exist);
     Vec3 rdbt$getExistPlaneStartPoint();
+    ResourceKey<Level> rdbt$getExistPlaneLevel();
+    void rdbt$setExistPlaneLevel(ResourceKey<Level> keyLev);
     void roundabout$setExistPlane(byte adj);
     byte roundabout$getExistPlane();
 

@@ -1306,8 +1306,12 @@ public class Config implements Cloneable {
         public Boolean hearingDiscStealEnabled;
         @IntOption(group = "inherit", value = 3, min = 0, max = 3)
         public Integer hallucinationAllowsDiscSteal;
-        @BooleanOption(group = "inherit", value = false)
+        @BooleanOption(group = "inherit", value = true)
         public Boolean stealDiscWhenLowHealth;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean stealPlayerDiscs;
+        @IntOption(group = "inherit", value = 1, min = 1, max = 2)
+        public Integer ejectType;
         @BooleanOption(group = "inherit", value = true)
         public Boolean discSealing;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -1326,7 +1330,7 @@ public class Config implements Cloneable {
         public Boolean hideHallucinationParticles;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinationHidesEffects;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 300, min = 1, max = 72000)
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 400, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
@@ -1383,12 +1387,18 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownRapierShotInterrupt;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotPlatform;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 250, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotMinimumCooldownCrouchAttack;
+        @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        public Integer silverChariotRapierSlashRadius;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinDuration;
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinWindup;
     }
 
     public static class TimeStopSettings {

@@ -155,6 +155,15 @@ public abstract class ConfigManager {
                     ResourceLocation targetId = new ResourceLocation(split[2], split[3]);
                     Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
                     Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+
+                    if (
+                            sourceBlock.equals(targetBlock)
+                            || sourceBlock.equals(Blocks.AIR)
+                            || targetBlock.equals(Blocks.AIR)
+                    ) {
+                        Roundabout.LOGGER.warn("Invalid whole block to slab block entry: {}", entry);
+                    }
+
                     MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse whole block to slab block entry '{}'", entry, e);

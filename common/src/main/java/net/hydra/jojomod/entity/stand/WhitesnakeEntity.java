@@ -59,6 +59,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public static final byte EDGY_GOLD_SKIN = 15;
     public static final byte GOLD_TRIMMED_SKIN = 16;
     public static final byte SANDSNAKE_SKIN = 17;
+    public static final byte EOH_SKIN = 18;
+    public static final byte FLESHSNAKE_SKIN = 19;
     public static final byte CHOP_ATTACK = 82;
     public static final byte CHOP_CHARGED = 83;
     public static final byte DISC_STEAL_WINDUP = 88;
@@ -75,6 +77,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private static final EntityDataAccessor<Integer> MELTING_HOVER_MAX_CHARGE = SynchedEntityData.defineId(
             WhitesnakeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MELTING_HOVERING = SynchedEntityData.defineId(
+            WhitesnakeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> MELTING_MODE_ACTIVE = SynchedEntityData.defineId(
             WhitesnakeEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> REMOTE_MODE = SynchedEntityData.defineId(
             WhitesnakeEntity.class, EntityDataSerializers.BYTE);
@@ -137,6 +141,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         entityData.define(MELTING_HOVER_CHARGE, hoverCharge);
         entityData.define(MELTING_HOVER_MAX_CHARGE, hoverCharge);
         entityData.define(MELTING_HOVERING, false);
+        entityData.define(MELTING_MODE_ACTIVE, false);
         entityData.define(REMOTE_MODE, REMOTE_MODE_NONE);
     }
 
@@ -333,11 +338,12 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         entityData.set(MELTING_HOVERING, hovering && getMeltingHoverCharge() > 0);
     }
 
+    public void setMeltingModeActive(boolean active) {
+        entityData.set(MELTING_MODE_ACTIVE, active);
+    }
+
     public boolean isMeltingModeActive() {
-        LivingEntity user = getUser();
-        return isRemoteControlled() && user != null
-                && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
-                && powers.isMeltingMode();
+        return isRemoteControlled() && entityData.get(MELTING_MODE_ACTIVE);
     }
 
     public float getMeltingSwimBlend(float partialTick) {
@@ -540,7 +546,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         LivingEntity user = getUser();
         if (isRemoteControlled() && user != null) {
             Vec3 userVelocity = user.getDeltaMovement();
-            boolean damaged = user.hurt(source, amount);
+            boolean damaged = user.hurt(withoutShieldBlocking(source), amount);
             user.setDeltaMovement(userVelocity);
             if (damaged) {
                 hurtTime = 10;
@@ -554,6 +560,16 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             return damaged;
         }
         return super.hurt(source, amount);
+    }
+
+    private DamageSource withoutShieldBlocking(DamageSource source) {
+        return new DamageSource(source.typeHolder(), source.getDirectEntity(), source.getEntity()) {
+            @Override
+            @Nullable
+            public Vec3 getSourcePosition() {
+                return null;
+            }
+        };
     }
 
     @Override
