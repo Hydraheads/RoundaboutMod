@@ -608,7 +608,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     }
 
     private void tickPodReset() {
-        if (self == null || self.level().isClientSide()) {
+        if (self == null || self.level().isClientSide() || !(self instanceof Player)) {
             return;
         }
 
