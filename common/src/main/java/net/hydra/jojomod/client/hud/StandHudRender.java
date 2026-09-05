@@ -613,16 +613,16 @@ public class StandHudRender {
 
         if (comboTier == 1) {
             RenderSystem.enableBlend();
-            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 153, 13, 15);
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 153, 14, 15);
         } else if (comboTier == 2){
             RenderSystem.enableBlend();
-            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 135, 13, 15);
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 223, 135, 14, 15);
         } else if (comboTier == 3){
             RenderSystem.enableBlend();
-            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 135, 13, 15);
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 135, 14, 15);
         } else {
             RenderSystem.enableBlend();
-            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 153, 13, 15);
+            context.blit(StandIcons.JOJO_ICONS_2, k + locX, l+locY, 240, 153, 14, 15);
         }
 
         int y = 16766790;
