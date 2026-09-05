@@ -225,11 +225,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     if (visage.getItem() instanceof MaskItem MI) {
                         VisageData vd = MI.visageData.generateVisageData(entity);
                         String path = vd.getSkinPath();
-
+                        boolean isHoldingBowlerHat = (hand.getItem() instanceof BowlerHatItem) || (offHand.getItem() instanceof BowlerHatItem);
+                        /*
                         VisageRenderContext renderContext = new VisageRenderContext(entity, partialTicks);
 
                         vd.render(renderContext, (HumanoidModel<LivingEntity>) getParentModel(), poseStack, bufferSource, packedLight, path, entity, xx, yy, zz, partialTicks, r, g, b);
-
+                        */
                         if (vd.rendersBreast()) {
                             renderNormalBreast(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -243,7 +244,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderPonytail(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBigHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
+                        if (vd.rendersBackpack() && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
+                            renderBackpack(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersBigHair() && !isHoldingBowlerHat && !isBodyFrozen
                                 && !hideExtraPartsWithSuit) {
                             renderBigHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -262,66 +268,71 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderDoppioHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        /*if (vd.rendersKosakuHair() && !isBodyFrozen && !hideExtraPartsWithSuit) {
+                        if (vd.rendersKosakuHair() && !isBodyFrozen && !hideExtraPartsWithSuit && !isHoldingBowlerHat) {
                             renderKosakuHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
-                        }*/
-                        if (vd.rendersKakyoinHair() && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem) && !isBodyFrozen
+                        }
+                        if (vd.rendersKakyoinHair() && !isHoldingBowlerHat && !isBodyFrozen
                                 && !hideExtraPartsWithSuit) {
                             renderKakyoinHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersDiegoHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderDiegoHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDiego2Hat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersDiego2Hat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderDiego2Hat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersGyroHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersGyroHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderGyroHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDaiyaEars() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersSchoolHat() && !isBodyFrozen /*&& !MainUtil.isWearingEitherStoneMask(entity)*/ && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit) {
+                            renderSchoolHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersDaiyaEars() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersJohnnyHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersJohnnyHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderJohnnyHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpeedwagonFoundationHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersSpeedwagonFoundationHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderSpeedwagonFoundationHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersBasicHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersBasicHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderBasicHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSheriffHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersSheriffHat() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderSheriffHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersSpikeyHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderSpikeyHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersDotHanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersDotHanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderDotHanHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersSandmanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersSandmanHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderSandmanHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -352,12 +363,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                         r, g, b, ((IPlayerEntityAbstractClient)PE).roundabout$getTextureLocation2(), -0.01F, 0, 0, 1f);
                             }
                         }
-                        if (vd.rendersTasselHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersTasselHat() && !isBodyFrozen && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderTasselHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersTimHat() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersTimHat() && !isBodyFrozen && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             rendersTimHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -370,7 +381,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderSteelBallsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
-                        if (vd.rendersAvdolHairPart() && !isBodyFrozen && !(hand.getItem() instanceof BowlerHatItem) && !(offHand.getItem() instanceof BowlerHatItem)
+                        if (vd.rendersAvdolHairPart() && !isBodyFrozen && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderAvdolHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
@@ -789,6 +800,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,34);
     }
+    public void renderBackpack(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,34);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.BackpackPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,34);
+    }
     public void renderBigHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                float r, float g, float b) {
         ClientUtil.pushPoseAndCooperate(poseStack,35);
@@ -814,6 +834,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
+    public void renderSchoolHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                              float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.SchoolHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+
     public void renderSteelBallsPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
                                      float r, float g, float b) {
 
