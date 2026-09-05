@@ -114,8 +114,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte ROUNDABOUT_DODGE_NOISE = 59;
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte PHASE_GRAB_COOLDOWN = PowerIndex.SKILL_EXTRA_2;
-    private static final byte ACID_CHARGE_NOISE = 123;
     private static final byte DISC_STEAL_CHARGE_NOISE = 124;
+    public static final byte WSVOICE_DISC_STEAL = 125;
+    private static final byte WSVOICE_ACID_TOSS = 126;
+    private static final byte WSVOICE_IMPALE = 127;
+    private static final int WSVOICE_ACID_TOSS_COOLDOWN = 800;
     private static final int ACID_TOSS_COOLDOWN_TICKS = 120;
     private static final int DISC_STEAL_COOLDOWN = 300;
     private static final int DISC_STEAL_MISS_COOLDOWN = 60;
@@ -124,6 +127,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private Vec3 phaseGrabOffset = Vec3.ZERO;
     private boolean meltingMode;
     private boolean meltingHoverExhausted;
+    private int wsvoiceAcidTossCooldown;
     private int meltingCrawlGraceTicks;
     private int meltingCrawlTransitionTicks;
     private boolean autoMode;
@@ -214,6 +218,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (level > 2 || bypass) {
                 skins.add(WhitesnakeEntity.ASBR_SKIN);
                 skins.add(WhitesnakeEntity.AGOGO_SKIN);
+                skins.add(WhitesnakeEntity.EOH_SKIN);
             }
             if (level > 3 || bypass) {
                 skins.add(WhitesnakeEntity.COTTON_CANDY_SKIN);
@@ -225,6 +230,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (level > 5 || bypass) {
                 skins.add(WhitesnakeEntity.SILVER_SKIN);
                 skins.add(WhitesnakeEntity.GOLD_SKIN);
+                skins.add(WhitesnakeEntity.FLESHSNAKE_SKIN);
             }
             if (level > 6 || bypass) {
                 skins.add(WhitesnakeEntity.GOLD_TRIMMED_SKIN);
@@ -255,6 +261,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
             case WhitesnakeEntity.EDGY_GOLD_SKIN -> "skins.roundabout.whitesnake.edgy_gold";
             case WhitesnakeEntity.GOLD_TRIMMED_SKIN -> "skins.roundabout.whitesnake.gold_trimmed";
             case WhitesnakeEntity.SANDSNAKE_SKIN -> "skins.roundabout.whitesnake.sandsnake";
+            case WhitesnakeEntity.EOH_SKIN -> "skins.roundabout.whitesnake.eoh";
+            case WhitesnakeEntity.FLESHSNAKE_SKIN -> "skins.roundabout.whitesnake.fleshsnake";
             default -> "skins.roundabout.whitesnake.anime";
         };
         return Component.translatable(key);
@@ -1162,7 +1170,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
         airTriggered = false;
         setAttackTimeDuring(0);
         setActivePower(ACID_TOSS);
-        playSoundsIfNearby(ACID_CHARGE_NOISE, 27, false);
+        if (!self.level().isClientSide() && wsvoiceAcidTossCooldown <= 0) {
+            playSoundsIfNearby(WSVOICE_ACID_TOSS, 27, false, true);
+            wsvoiceAcidTossCooldown = WSVOICE_ACID_TOSS_COOLDOWN;
+        }
         animateStand(WhitesnakeEntity.ACID_TOSS);
         poseStand(OffsetIndex.FOLLOW);
         return true;
@@ -1556,9 +1567,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (move == PowerIndex.BARRAGE_CHARGE_2 || move == PowerIndex.BARRAGE_2) return false;
         if (isControlHovering() && isHoverRestrictedPower(move)) return false;
         if (meltingMode && isMeltingRestrictedPower(move)) return false;
-        if (!self.level().isClientSide() && getActivePower() == ACID_TOSS && move != ACID_TOSS) {
-            stopSoundsIfNearby(ACID_CHARGE_NOISE, 100, false);
-        }
         return super.tryPower(move, forced);
     }
 
@@ -1599,6 +1607,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             }
         }
         if (!self.level().isClientSide()) {
+            if (wsvoiceAcidTossCooldown > 0) wsvoiceAcidTossCooldown--;
             tickTimeSparkCropGrowth();
             tickControlModeServer();
             if (autoMode) tickAutoMode();
@@ -2277,8 +2286,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     public void updateImpale() {
         if (!self.level().isClientSide() && attackTimeDuring == 20) {
-            playSoundIfPossible(self.level(),null, actionOrigin().blockPosition(), ModSounds.WHITESNAKE_IMPALE_VOICE_EVENT,
-                    SoundSource.PLAYERS, 1.0F, 1.0F);
+            playSoundsIfNearby(WSVOICE_IMPALE, 27, false, true);
         }
         if (attackTimeDuring > 24) {
             standImpale();
@@ -2727,10 +2735,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return ModSounds.WHITESNAKE_SUMMON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
             return ModSounds.IMPALE_CHARGE_EVENT;
-        } else if (soundChoice == ACID_CHARGE_NOISE) {
-            return ModSounds.IMPALE_CHARGE_EVENT;
         } else if (soundChoice == DISC_STEAL_CHARGE_NOISE) {
             return ModSounds.WHITESNAKE_DISC_STEAL_CHARGE_EVENT;
+        } else if (soundChoice == WSVOICE_DISC_STEAL) {
+            return ModSounds.WSVOICE_DISC_STEAL_EVENT;
+        } else if (soundChoice == WSVOICE_ACID_TOSS) {
+            return ModSounds.WSVOICE_ACID_TOSS_EVENT;
+        } else if (soundChoice == WSVOICE_IMPALE) {
+            return ModSounds.WSVOICE_IMPALE_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING) {
             return ModSounds.TIME_STOP_TICKING_EVENT;
         } else if (soundChoice == ROUNDABOUT_DODGE_NOISE) {
@@ -2741,13 +2753,17 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public float getSoundVolumeFromByte(byte soundChoice) {
+        if (soundChoice == WSVOICE_DISC_STEAL) return 2.5F;
+        if (soundChoice == WSVOICE_ACID_TOSS) return 0.2F;
         return soundChoice == DISC_STEAL_CHARGE_NOISE ? 0.3F : super.getSoundVolumeFromByte(soundChoice);
     }
 
     @Override
     protected LivingEntity getSoundEmitter(byte soundNo, boolean onSelf) {
-        if (!onSelf && isPiloting()
-                && (soundNo == SoundIndex.REVOLVER_RELOAD || soundNo == SoundIndex.COLT_RELOAD)) {
+        if (!onSelf && (isPiloting()
+                && (soundNo == SoundIndex.REVOLVER_RELOAD || soundNo == SoundIndex.COLT_RELOAD)
+                || soundNo == WSVOICE_DISC_STEAL || soundNo == WSVOICE_ACID_TOSS
+                || soundNo == WSVOICE_IMPALE)) {
             LivingEntity stand = getPilotingStand();
             if (stand != null && stand.isAlive() && !stand.isRemoved()) return stand;
         }

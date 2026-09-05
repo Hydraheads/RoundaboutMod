@@ -47,6 +47,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -1967,6 +1968,10 @@ public class PowersD4C extends NewPunchingStand {
         Vec3 fallback =
                 ((IGravityEntity) self).rdbt$getExistPlaneStartPoint();
         if (fallback != null) {
+            ResourceKey<Level> startDim = (((IGravityEntity)self).rdbt$getExistPlaneLevel());
+            if (startDim == null || startDim != self.level().dimension()){
+                return false;
+            }
 
             AABB fallbackBox = self.getBoundingBox()
                     .move(fallback.subtract(self.position()));
@@ -2552,6 +2557,7 @@ public class PowersD4C extends NewPunchingStand {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(5, LE);
                         if (MainUtil.getMobBleed(entity)) {
+                            MainUtil.bleedCut(LE, self);
                             MainUtil.makeBleed(entity, 1, 300, this.getSelf());
                         }
                     }

@@ -3561,16 +3561,28 @@
       "roundabout:whitesnake_barrage_hit"
     ]
   },
-  "whitesnake_impale_voice": {
-    "subtitle": "sounds.roundabout.whitesnake_impale_voice",
+  "wsvoice_impale": {
+    "subtitle": "sounds.roundabout.wsvoice_impale",
     "sounds": [
-      "roundabout:whitesnake_impale_voice"
+      "roundabout:wsvoice_impale"
     ]
   },
   "whitesnake_disc_steal_charge": {
     "subtitle": "sounds.roundabout.whitesnake_disc_steal_charge",
     "sounds": [
       "roundabout:whitesnake_disc_steal_charge"
+    ]
+  },
+  "wsvoice_disc_steal": {
+    "subtitle": "sounds.roundabout.wsvoice_disc_steal",
+    "sounds": [
+      "roundabout:wsvoice_disc_steal"
+    ]
+  },
+  "wsvoice_acid_toss": {
+    "subtitle": "sounds.roundabout.wsvoice_acid_toss",
+    "sounds": [
+      "roundabout:wsvoice_acid_toss"
     ]
   },
   "whitesnake_command_disc_create": {

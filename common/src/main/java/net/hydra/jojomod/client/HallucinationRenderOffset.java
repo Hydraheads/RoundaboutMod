@@ -21,12 +21,13 @@ public final class HallucinationRenderOffset {
                 || rendered == minecraft.getCameraEntity() || !(rendered instanceof LivingEntity)) {
             return Vec3.ZERO;
         }
+        if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) return Vec3.ZERO;
         if (((StandUser) minecraft.player).roundabout$getStand() == rendered) return Vec3.ZERO;
         MobEffectInstance effect = minecraft.player.getEffect(ModEffects.HALLUCINATION);
         if (!HallucinationEffect.hasDistortion(effect)) return Vec3.ZERO;
 
         double maximumDistance = effect.getAmplifier() >= 1 ? 2.0D : 1.0D;
-        long interval = minecraft.level.getGameTime() / 40L;
+        long interval = minecraft.level.getGameTime() / 100L;
         long seed = interval * 341873128712L ^ (long) rendered.getId() * 132897987541L
                 ^ minecraft.player.getUUID().getLeastSignificantBits();
         Random random = new Random(seed);

@@ -3455,10 +3455,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
                 StandPowers thispowers = this.roundabout$getStandPowers();
                 if (thispowers.canSummonStand()) {
-                    if (sound && thispowers.hasHandsOut() &&
-                    !isCrouching()){
-                        thispowers.retractHands();
-                    }
+                    // arms mode feedback = remove
+//                    if (sound && thispowers.hasHandsOut() &&
+//                    !isCrouching()){
+//                        thispowers.retractHands();
+//                    }
 
                     thispowers.playSummonEffects(forced);
 

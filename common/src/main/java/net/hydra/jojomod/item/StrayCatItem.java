@@ -49,7 +49,7 @@ public class StrayCatItem extends Item {
         return 0;
     }
 
-    private static final int COOLDOWN = 30;
+    private static final int COOLDOWN = 100;
     private static final int LIFE_SPAN = 180;
 
     static public void saveStrayCatEntityInfo(ItemStack stack, StrayCatEntity stray) {

@@ -1215,10 +1215,14 @@ public class ForgeSounds {
             register(ModSounds.WHITESNAKE_PUNCH_FINAL_HIT, ModSounds.WHITESNAKE_PUNCH_FINAL_HIT_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_BARRAGE_HIT =
             register(ModSounds.WHITESNAKE_BARRAGE_HIT, ModSounds.WHITESNAKE_BARRAGE_HIT_ID);
-    public static final RegistryObject<SoundEvent> WHITESNAKE_IMPALE_VOICE =
-            register(ModSounds.WHITESNAKE_IMPALE_VOICE, ModSounds.WHITESNAKE_IMPALE_VOICE_ID);
+    public static final RegistryObject<SoundEvent> WSVOICE_IMPALE =
+            register(ModSounds.WSVOICE_IMPALE, ModSounds.WSVOICE_IMPALE_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_DISC_STEAL_CHARGE =
             register(ModSounds.WHITESNAKE_DISC_STEAL_CHARGE, ModSounds.WHITESNAKE_DISC_STEAL_CHARGE_ID);
+    public static final RegistryObject<SoundEvent> WSVOICE_DISC_STEAL =
+            register(ModSounds.WSVOICE_DISC_STEAL, ModSounds.WSVOICE_DISC_STEAL_ID);
+    public static final RegistryObject<SoundEvent> WSVOICE_ACID_TOSS =
+            register(ModSounds.WSVOICE_ACID_TOSS, ModSounds.WSVOICE_ACID_TOSS_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_COMMAND_DISC_CREATE =
             register(ModSounds.WHITESNAKE_COMMAND_DISC_CREATE, ModSounds.WHITESNAKE_COMMAND_DISC_CREATE_ID);
     public static final RegistryObject<SoundEvent> WHITESNAKE_DISC_INSERT =

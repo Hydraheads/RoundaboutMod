@@ -406,6 +406,8 @@ public class ClientForgeEvents {
         ModStrayModels.sheriffHatPart = new SheriffHatPart();
         ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
+        ModStrayModels.BackpackPart = new BackpackPart();
+        ModStrayModels.SchoolHatPart = new SchoolHatPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();
