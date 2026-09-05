@@ -190,7 +190,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:oxeye_daisy:minecraft:air:0.6",
                     "minecraft:cornflower:minecraft:air:0.6",
                     "minecraft:lily_of_the_valley:minecraft:air:0.6",
-                    "minecraft:torch_flower:minecraft:air:0.6",
+                    "minecraft:torchflower:minecraft:air:0.6",
                     "minecraft:sunflower:minecraft:air:0.6",
                     "minecraft:lilac:minecraft:air:0.6",
                     "minecraft:rose_bush:minecraft:air:0.6",
@@ -201,7 +201,7 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:tall_grass:minecraft:air:0.6",
                     "minecraft:large_fern:minecraft:air:0.6",
                     "minecraft:small_dripleaf:minecraft:air:0.6",
-                    "minecraft:red_mushrom:minecraft:air:0.6",
+                    "minecraft:red_mushroom:minecraft:air:0.6",
                     "minecraft:brown_mushroom:minecraft:air:0.6",
                     "minecraft:sugar_cane:minecraft:air:0.6",
                     "minecraft:dead_bush:minecraft:air:0.6",
@@ -225,8 +225,8 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:melon_stem:minecraft:air:0.6",
                     "minecraft:torchflower_crop:minecraft:air:0.6",
                     "minecraft:sea_pickle:minecraft:air:0.6",
-                    "minecraft:kelp_plant:minecraft:air:0.6",
-                    "minecraft:kelp:minecraft:air:0.6",
+                    "minecraft:kelp_plant:minecraft:water:0.6",
+                    "minecraft:kelp:minecraft:water:0.6",
                     "minecraft:acacia_leaves:minecraft:air:0.3",
                     "minecraft:azalea_leaves:minecraft:air:0.3",
                     "minecraft:birch_leaves:minecraft:air:0.3",
@@ -250,9 +250,8 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:cherry_sapling:minecraft:dead_bush:0.3",
                     "minecraft:dark_oak_sapling:minecraft:dead_bush:0.3",
                     "minecraft:jungle_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:mangrove_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:oak_sapling:minecraft:dead_bush:0.3",
-                    "minecraft:spruce_sapling:minecraft:dead_bush:0.3"
+                    "minecraft:mangrove_propagule:minecraft:air:0.3",
+                    "minecraft:oak_sapling:minecraft:dead_bush:0.3"
             )
     );
 

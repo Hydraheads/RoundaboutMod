@@ -41,12 +41,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class PurpleSmokeEntity extends StandEntity {
@@ -176,7 +181,17 @@ public class PurpleSmokeEntity extends StandEntity {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
-                return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED)
+                        && replacement.getBlock() == Blocks.AIR) {
+                    return Blocks.WATER.defaultBlockState();
+                }
+                for (Property<?> prop : state.getProperties()) {
+                    if (replacement.hasProperty(prop)) {
+                        replacement = MainUtil.copyBlockStateProperty(state, replacement, prop);
+                    }
+                }
+                return replacement;
             }
         }
         return null;
