@@ -543,6 +543,8 @@ public class ForgeItems {
             () -> new EmptyStandDiscItem(new Item.Properties().stacksTo(1))));
     public static final RegistryObject<Item> METEORITE = addToTab(ITEMS.register("meteorite",
             () -> new Item(new Item.Properties())));
+    public static final RegistryObject<Item> ANUBIS_2D = ITEMS.register("anubis_sword_2d",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> METEORITE_INGOT = addToTab(ITEMS.register("meteorite_ingot",
             () -> new Item(new Item.Properties())));
     public static final RegistryObject<Item> AJA = addToTab(ITEMS.register("aja",

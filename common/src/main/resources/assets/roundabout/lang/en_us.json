@@ -2964,6 +2964,7 @@
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
+  "item.roundabout.anubis_sword_2d": "Not So Mysterious Sword",
   "roundabout.anubis_item.requires_mainhand": "Must be in Main Hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.message2" : "Nobody to kill... Seek out a cleric!",
@@ -2994,6 +2995,7 @@
   "skins.roundabout.anubis.serpent": "Serpent",
   "skins.roundabout.anubis.soulborn": "Soulborn",
   "skins.roundabout.anubis.boneblade": "Bone Blade",
+  "skins.roundabout.anubis.item": "Item",
 
 
   "message.tusk.nearby_hole": "Must Be Near Another Hole",
