@@ -261,8 +261,7 @@ public class PowersAnubis extends NewDashPreset {
         return this.getActivePower() == PowerIndex.GUARD
                 || this.getActivePower() == PowersAnubis.CLEAVE
                 || this.getActivePower() == PowersAnubis.SPIN
-                || this.getActivePower() == PowersAnubis.FLURRY
-                || this.isEmpowered();
+                || this.getActivePower() == PowersAnubis.FLURRY;
     }
     @Override
     public float inputSpeedModifiers(float basis) {
@@ -280,9 +279,16 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.SPIN -> basis *= 0.4F;
             case PowersAnubis.FLURRY -> basis *= 0.3F;
         }
-        if (this.isEmpowered()) {basis *= 0.85F;}
 
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelJump() {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        }
+        return super.cancelJump();
     }
 
     @Override
@@ -2125,7 +2131,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean isBarrageCharging() {return super.isBarrageCharging() || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2;}
     public int getBarrageMinimum() {return getBarrageWindup();}
     @Override
-    public int getBarrageWindup() {return super.getBarrageWindup()+5;}
+    public int getBarrageWindup() {return super.getBarrageWindup()+10;}
 
     public int getCleaveWindup() {return 20;}
     public int getSpinWindup() {return 7;}
