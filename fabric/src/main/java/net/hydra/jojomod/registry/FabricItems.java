@@ -122,6 +122,8 @@ public class FabricItems {
         new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
+    public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new HayatoVisage(null)));
 
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
@@ -303,6 +305,7 @@ public class FabricItems {
                     .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
                     .build())));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item ANUBIS_2D = registerItem("anubis_sword_2d", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
@@ -774,6 +777,7 @@ public class FabricItems {
                         entries.accept(KIRA_PART_FOUR_MASK);
                         entries.accept(KOSAKU_MASK);
                         entries.accept(KIRASAKU_MASK);
+                        entries.accept(HAYATO_KAWAJIRI_MASK);
                         entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
@@ -974,6 +978,7 @@ public class FabricItems {
         ModItems.MINT = MINT;
 
         ModItems.HERB_TEA = HERB_TEA;
+        ModItems.ANUBIS_2D = ANUBIS_2D;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
         //ModItems.HAND = HAND;
@@ -1076,6 +1081,7 @@ public class FabricItems {
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
+        ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;

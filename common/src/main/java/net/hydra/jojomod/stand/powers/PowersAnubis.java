@@ -261,8 +261,7 @@ public class PowersAnubis extends NewDashPreset {
         return this.getActivePower() == PowerIndex.GUARD
                 || this.getActivePower() == PowersAnubis.CLEAVE
                 || this.getActivePower() == PowersAnubis.SPIN
-                || this.getActivePower() == PowersAnubis.FLURRY
-                || this.isEmpowered();
+                || this.getActivePower() == PowersAnubis.FLURRY;
     }
     @Override
     public float inputSpeedModifiers(float basis) {
@@ -280,9 +279,16 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.SPIN -> basis *= 0.4F;
             case PowersAnubis.FLURRY -> basis *= 0.3F;
         }
-        if (this.isEmpowered()) {basis *= 0.85F;}
 
         return super.inputSpeedModifiers(basis);
+    }
+
+    @Override
+    public boolean cancelJump() {
+        if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2) {
+            return true;
+        }
+        return super.cancelJump();
     }
 
     @Override
@@ -732,6 +738,13 @@ public class PowersAnubis extends NewDashPreset {
 
         this.getSelf().setNoGravity(this.isPogoing());
 
+        if (!self.level().isClientSide()){
+            if (SU.roundabout$getStandSkin() == ITEM){
+                if (self.getMainArm() == HumanoidArm.LEFT){
+                    SU.roundabout$setStandSkin(ANIME);
+                }
+            }
+        }
         super.tickPower();
     }
 
@@ -2125,7 +2138,7 @@ public class PowersAnubis extends NewDashPreset {
     public boolean isBarrageCharging() {return super.isBarrageCharging() || this.getActivePower() == PowerIndex.BARRAGE_CHARGE_2;}
     public int getBarrageMinimum() {return getBarrageWindup();}
     @Override
-    public int getBarrageWindup() {return super.getBarrageWindup()+5;}
+    public int getBarrageWindup() {return super.getBarrageWindup()+10;}
 
     public int getCleaveWindup() {return 20;}
     public int getSpinWindup() {return 7;}
@@ -2202,13 +2215,17 @@ public class PowersAnubis extends NewDashPreset {
             CHEF = 22,
             SERPENT = 23,
             SOULBORN = 24,
-            BONE_BLADE = 25;
+            BONE_BLADE = 25,
+            ITEM = 26;
 
 
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(ANIME);
+        if (self.getMainArm() != HumanoidArm.LEFT) {
+            $$1.add(ITEM);
+        }
         $$1.add(EVIL);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
@@ -2272,6 +2289,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.CHEF -> Component.translatable("skins.roundabout.anubis.chef");
             case PowersAnubis.SERPENT -> Component.translatable("skins.roundabout.anubis.serpent");
             case PowersAnubis.BONE_BLADE -> Component.translatable("skins.roundabout.anubis.boneblade");
+            case PowersAnubis.ITEM -> Component.translatable("skins.roundabout.anubis.item");
             case PowersAnubis.SOULBORN -> Component.translatable("skins.roundabout.anubis.soulborn");
 
             default -> Component.translatable("skins.roundabout.anubis.anime");

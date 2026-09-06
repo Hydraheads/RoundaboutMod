@@ -868,6 +868,13 @@ public class FabricEntities {
                     EntityType.Builder.<PWBigMeteorEntity>of(PWBigMeteorEntity::new, MobCategory.MISC).
                             sized(15.0F, 15.0F).clientTrackingRange(15).build(Roundabout.MOD_ID+":pw_big_meteor")
             );
+    public static final EntityType<VirusSpitEntity> VIRUS_SPIT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "virus_spit"),
+                    EntityType.Builder.<VirusSpitEntity>of(VirusSpitEntity::new, MobCategory.MISC).
+                            sized(15.0F, 15.0F).clientTrackingRange(15).build(Roundabout.MOD_ID+":virus_spit")
+            );
 
     public static final EntityType<EvilAuraProjectile> EVIL_AURA_PROJECTILE =
             Registry.register(
@@ -1287,6 +1294,7 @@ public class FabricEntities {
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
                 ModEntities.SILVER_CHARIOT_RAPIER = SILVER_CHARIOT_RAPIER;
                 ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM = SILVER_CHARIOT_RAPIER_PLATFORM;
+                ModEntities.VIRUS_SPIT = VIRUS_SPIT;
 
 
                 ModEntities.FALLEN_ZOMBIE = FALLEN_ZOMBIE;

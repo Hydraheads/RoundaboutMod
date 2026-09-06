@@ -148,6 +148,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_FIREBALL.get(), StandFireballRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PW_BIG_METEOR.get(), PWBigMeteorRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PW_METEOR.get(), PWMeteorRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.VIRUS_SPIT.get(), VirusSpitRenderer::new);
         event.registerEntityRenderer(ForgeEntities.EVIL_AURA_PROJECTILE.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.RIPPER_EYES_PROJECTILE.get(), RipperEyesRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ULTRAVIOLET_PROJECTILE.get(), UVBeamRenderer::new);
@@ -334,6 +335,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.STAND_FIREBALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_METEOR_LAYER, PWMeteorModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.PW_BIG_METEOR_LAYER, PWBigMeteorModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.VIRUS_SPIT_LAYER, VirusSpitModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.IRON_BALL_LAYER, StandFireballModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.RIPPER_EYES_LAYER, RipperEyesModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.UV_LAYER, UVModel::createBodyLayer);
@@ -406,6 +408,8 @@ public class ClientForgeEvents {
         ModStrayModels.sheriffHatPart = new SheriffHatPart();
         ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
+        ModStrayModels.BackpackPart = new BackpackPart();
+        ModStrayModels.SchoolHatPart = new SchoolHatPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();

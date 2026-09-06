@@ -405,6 +405,8 @@
   "item.roundabout.kira_part_four_mask.desc": "Yoshikage Kira (Part 4)",
   "item.roundabout.kira_part_eight_mask": "Kira Visage",
   "item.roundabout.kira_part_eight_mask.desc": "Yoshikage Kira (Part 8)",
+  "item.roundabout.hayato_kawajiri_mask": "Kayato Visage",
+  "item.roundabout.hayato_kawajiri_mask.desc": "Hayato Kawajiri",
   "item.roundabout.kosaku_mask": "Kosaku Visage",
   "item.roundabout.kosaku_mask.desc": "Kosaku Kawajiri",
   "item.roundabout.kirasaku_mask": "'Kosaku' Visage",
@@ -1256,6 +1258,7 @@
   "sounds.roundabout.purple_haze_barrage_cry":  "UBASHAAAA!!!",
   "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
   "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
+  "sounds.roundabout.pod_bite":  "Pod Cracks",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -2962,6 +2965,7 @@
   "death.attack.anubis_spin": "%1$s was shredded by %2$s",
 
   "item.roundabout.anubis_item": "Mysterious Sword",
+  "item.roundabout.anubis_sword_2d": "Not So Mysterious Sword",
   "roundabout.anubis_item.requires_mainhand": "Must be in Main Hand to use",
   "item.roundabout.anubis_item.message1" : "The sword is cursed! Seek out a cleric!",
   "item.roundabout.anubis_item.message2" : "Nobody to kill... Seek out a cleric!",
@@ -2992,6 +2996,7 @@
   "skins.roundabout.anubis.serpent": "Serpent",
   "skins.roundabout.anubis.soulborn": "Soulborn",
   "skins.roundabout.anubis.boneblade": "Bone Blade",
+  "skins.roundabout.anubis.item": "Item",
 
 
   "message.tusk.nearby_hole": "Must Be Near Another Hole",

@@ -65,11 +65,15 @@ public class VisageData {
         return false;
     }
 
+    /* I not really sure if this is really a good idea, to get a better glance look at KosakuVisage
     public void render(VisageRenderContext renderContext, HumanoidModel<LivingEntity> model, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, String path, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                        float r, float g, float b) {
 
-    }
+    } */
 
+    public boolean rendersBackpack() {
+        return false;
+    }
     public boolean rendersSpikeyHair(){
         return false;
     }
@@ -134,6 +138,9 @@ public class VisageData {
         return false;
     }
     public boolean rendersGyroHat(){
+        return false;
+    }
+    public boolean rendersSchoolHat(){
         return false;
     }
     public boolean rendersSteelBalls(){

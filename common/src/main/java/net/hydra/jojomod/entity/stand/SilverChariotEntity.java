@@ -214,9 +214,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public void travel(Vec3 vec3) {
         // TODO: Remove the teleporting camera for control mode when moving out of max range, as suggested by DOGael.
         super.travel(vec3);
-        if (this.getUser() instanceof Player PE && this.level().isClientSide()) {
-            C2SPacketUtil.updatePilot(this);
-        }
     }
 
     @Override
@@ -296,7 +293,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        return !isRemoteControlled() && super.skipAttackInteraction(attacker);
+        return super.skipAttackInteraction(attacker);
     }
 
     public boolean isControlModeActive() {
@@ -305,7 +302,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean hasNoPhysics() {
-        return true;
+        return false;
     }
 
     @Override
@@ -357,13 +354,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean isControlledByLocalInstance() {
-        LivingEntity user =  this.getUser();
-        if (user != null){
-            Entity ent =  this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
-            if (ent != null && ent.is(this)){
-                return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
-            }
-        }
         return super.isControlledByLocalInstance();
     }
 

@@ -2013,6 +2013,10 @@ public class StandPowers extends AbilityScapeBasis {
                             || !PowerTypes.hasHandsActive(self)) {
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
+                } else if (animationType == MINING) {
+                    if (getActivePower() != PowerIndex.MINING) {
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
                     if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
                         userSelf.roundabout$setStandAnimation(NONE);

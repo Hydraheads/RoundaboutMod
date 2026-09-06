@@ -67,6 +67,8 @@ public class ModStrayModels {
     public static SandmanHairPart SandmanHairPart;
     public static SheriffHatPart sheriffHatPart;
     public static LucyHairPart LucyHairPart;
+    public static BackpackPart BackpackPart;
+    public static SchoolHatPart SchoolHatPart;
     public static AvdolHairPart AvdolHairPart;
     public static JohngalliaHairPart JohngalliaHairPart;
     public static JosukeDecalsPart JosukeDecalsPart;
