@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.BlockD4CEntity;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
 import net.hydra.jojomod.entity.objects.IceTwisterEntity;
@@ -726,6 +727,7 @@ public class PowersD4C extends NewPunchingStand {
                 entity ->
                         entity.isAlive()
                                 && !(entity instanceof StandEntity)
+                                && !(entity instanceof StrayCatEntity)
                                 && !(entity instanceof CloneEntity)
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
