@@ -22,6 +22,9 @@ public final class MemoryDiscConversionService {
         } else if (DiscItemData.isSlimeMemory(held)) {
             result = new ItemStack(ModItems.JUMP_BACK_COMMAND_DISC);
             message = "message.roundabout.memory_conversion_jump_back";
+        } else if (DiscItemData.isWolfMemory(held)) {
+            result = new ItemStack(ModItems.ATTACK_COMMAND_DISC);
+            message = "message.roundabout.memory_conversion_attack";
         } else {
             player.displayClientMessage(Component.translatable(
                     "message.roundabout.memory_conversion_invalid"), true);

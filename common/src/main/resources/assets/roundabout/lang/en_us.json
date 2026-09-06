@@ -298,8 +298,10 @@
   "screen.roundabout.memory_job_unknown": "No job site was recorded.",
   "screen.roundabout.memory_create_explosive": "Create Explosive Command Disc",
   "screen.roundabout.memory_create_jump_back": "Create Jump Back Command Disc",
+  "screen.roundabout.memory_create_attack": "Create Attack Command Disc",
   "message.roundabout.memory_conversion_explosive": "The Creeper memory became an Explosive Command Disc.",
   "message.roundabout.memory_conversion_jump_back": "The Slime memory became a Jump Back Command Disc.",
+  "message.roundabout.memory_conversion_attack": "The Wolf memory became an Attack Command Disc.",
   "message.roundabout.memory_conversion_invalid": "This memory cannot create that command disc.",
 
   "item.roundabout.ocelot_remains": "Ocelot Remains",

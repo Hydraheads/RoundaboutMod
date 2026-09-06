@@ -57,6 +57,8 @@ public final class MemoryReadingScreen extends Screen {
             buttonText = "screen.roundabout.memory_create_explosive";
         } else if (DiscItemData.isSlimeMemory(disc)) {
             buttonText = "screen.roundabout.memory_create_jump_back";
+        } else if (DiscItemData.isWolfMemory(disc)) {
+            buttonText = "screen.roundabout.memory_create_attack";
         } else {
             return;
         }
