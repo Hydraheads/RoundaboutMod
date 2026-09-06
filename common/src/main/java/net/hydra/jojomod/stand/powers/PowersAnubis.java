@@ -732,6 +732,13 @@ public class PowersAnubis extends NewDashPreset {
 
         this.getSelf().setNoGravity(this.isPogoing());
 
+        if (!self.level().isClientSide()){
+            if (SU.roundabout$getStandSkin() == ITEM){
+                if (self.getMainArm() == HumanoidArm.LEFT){
+                    SU.roundabout$setStandSkin(ANIME);
+                }
+            }
+        }
         super.tickPower();
     }
 
@@ -2202,13 +2209,17 @@ public class PowersAnubis extends NewDashPreset {
             CHEF = 22,
             SERPENT = 23,
             SOULBORN = 24,
-            BONE_BLADE = 25;
+            BONE_BLADE = 25,
+            ITEM = 26;
 
 
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(ANIME);
+        if (self.getMainArm() != HumanoidArm.LEFT) {
+            $$1.add(ITEM);
+        }
         $$1.add(EVIL);
         if (this.getSelf() instanceof Player PE){
             byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
@@ -2272,6 +2283,7 @@ public class PowersAnubis extends NewDashPreset {
             case PowersAnubis.CHEF -> Component.translatable("skins.roundabout.anubis.chef");
             case PowersAnubis.SERPENT -> Component.translatable("skins.roundabout.anubis.serpent");
             case PowersAnubis.BONE_BLADE -> Component.translatable("skins.roundabout.anubis.boneblade");
+            case PowersAnubis.ITEM -> Component.translatable("skins.roundabout.anubis.item");
             case PowersAnubis.SOULBORN -> Component.translatable("skins.roundabout.anubis.soulborn");
 
             default -> Component.translatable("skins.roundabout.anubis.anime");

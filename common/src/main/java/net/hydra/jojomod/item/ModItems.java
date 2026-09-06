@@ -39,6 +39,7 @@ public class ModItems {
     public static Item MAX_STAND_DISC_MAGICIANS_RED;
     public static Item STAND_DISC_MAGICIANS_RED;
     public static Item STAND_DISC_D4C;
+    public static Item ANUBIS_2D;
     public static Item MAX_STAND_DISC_D4C;
 
     public static Item STAND_DISC_KING_CRIMSON;

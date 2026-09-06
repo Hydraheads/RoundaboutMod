@@ -303,6 +303,7 @@ public class FabricItems {
                     .effect(new MobEffectInstance(ModEffects.REFRESHED,ModItems.TEA_DURATION),1.0F)
                     .build())));
     public static Item METEORITE = registerItem("meteorite", new Item(new Item.Properties()));
+    public static Item ANUBIS_2D = registerItem("anubis_sword_2d", new Item(new Item.Properties()));
     public static Item AJA = registerItem("aja", new Item(new Item.Properties()));
     public static Item METEORITE_INGOT = registerItem("meteorite_ingot", new Item(new Item.Properties()));
     public static Item STREET_SIGN_DIO_BLOCK_ITEM = registerItem("street_sign_dio_item", (Item) new SignBlockItem(ModBlocks.STREET_SIGN_DIO, new Item.Properties().stacksTo(1)));
@@ -974,6 +975,7 @@ public class FabricItems {
         ModItems.MINT = MINT;
 
         ModItems.HERB_TEA = HERB_TEA;
+        ModItems.ANUBIS_2D = ANUBIS_2D;
         ModItems.METEORITE = METEORITE;
         ModItems.AJA = AJA;
         //ModItems.HAND = HAND;

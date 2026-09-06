@@ -522,6 +522,7 @@ public class ForgeEvents {
         ModItems.STREET_SIGN_YIELD_BLOCK_ITEM = ForgeItems.STREET_SIGN_YIELD_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
+        ModItems.ANUBIS_2D = ForgeItems.ANUBIS_2D.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
