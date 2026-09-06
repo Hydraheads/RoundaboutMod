@@ -554,6 +554,7 @@ public class ForgeEvents {
         ModItems.KIRA_PART_EIGHT_MASK = ForgeItems.KIRA_PART_EIGHT_MASK.get();
         ModItems.KOSAKU_MASK = ForgeItems.KOSAKU_MASK.get();
         ModItems.KIRASAKU_MASK = ForgeItems.KIRASAKU_MASK.get();
+        ModItems.HAYATO_KAWAJIRI_MASK = ForgeItems.HAYATO_KAWAJIRI_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
 

@@ -41,6 +41,7 @@ public class KosakuVisage extends VisageData {
         return "kosaku";
     }
 
+    /*
     @Override
     public void render(VisageRenderContext renderContext, HumanoidModel<LivingEntity> model, PoseStack poseStack, MultiBufferSource bufferSource,
                        int packedLight, String path, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
@@ -60,6 +61,6 @@ public class KosakuVisage extends VisageData {
         ModStrayModels.kosakuHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
-    }
+    }*/
 
 }

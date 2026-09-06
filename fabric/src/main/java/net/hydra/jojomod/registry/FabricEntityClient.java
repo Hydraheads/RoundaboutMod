@@ -395,6 +395,8 @@ public class FabricEntityClient {
         ModStrayModels.SandmanHairPart = new SandmanHairPart();
         ModStrayModels.sheriffHatPart = new SheriffHatPart();
         ModStrayModels.LucyHairPart = new LucyHairPart();
+        ModStrayModels.SchoolHatPart = new SchoolHatPart();
+        ModStrayModels.BackpackPart = new BackpackPart();
         ModStrayModels.AvdolHairPart = new AvdolHairPart();
         ModStrayModels.JosukeDecalsPart = new JosukeDecalsPart();
         ModStrayModels.TasselHatPart = new TasselHatPart();

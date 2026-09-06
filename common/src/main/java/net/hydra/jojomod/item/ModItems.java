@@ -230,6 +230,7 @@ public class ModItems {
     public static Item KIRA_PART_EIGHT_MASK;
     public static Item KOSAKU_MASK;
     public static Item KIRASAKU_MASK;
+    public static Item HAYATO_KAWAJIRI_MASK;
     public static Item AYA_MASK;
     public static Item MISTA_MASK;
     public static Item GHIACCIO_MASK;

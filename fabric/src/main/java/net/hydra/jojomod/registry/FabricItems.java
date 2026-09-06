@@ -122,6 +122,8 @@ public class FabricItems {
         new MaskItem(new Item.Properties().stacksTo(1), new KosakuVisage(null)));
     public static final Item KIRASAKU_MASK = registerItem("kirasaku_mask",
         new MaskItem(new Item.Properties().stacksTo(1), new KirasakuVisage(null)));
+    public static final Item HAYATO_KAWAJIRI_MASK = registerItem("hayato_kawajiri_mask",
+            new MaskItem(new Item.Properties().stacksTo(1), new HayatoVisage(null)));
 
     public static Item STAND_DISC_ANUBIS = registerItem("anubis_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAnubis(null)));
@@ -775,6 +777,7 @@ public class FabricItems {
                         entries.accept(KIRA_PART_FOUR_MASK);
                         entries.accept(KOSAKU_MASK);
                         entries.accept(KIRASAKU_MASK);
+                        entries.accept(HAYATO_KAWAJIRI_MASK);
                         entries.accept(KIRA_PART_EIGHT_MASK);
                         entries.accept(STAND_DISC_EMPEROR);
                         entries.accept(MAX_STAND_DISC_EMPEROR);
@@ -1078,6 +1081,7 @@ public class FabricItems {
         ModItems.KIRA_PART_EIGHT_MASK = KIRA_PART_EIGHT_MASK;
         ModItems.KOSAKU_MASK = KOSAKU_MASK;
         ModItems.KIRASAKU_MASK = KIRASAKU_MASK;
+        ModItems.HAYATO_KAWAJIRI_MASK = HAYATO_KAWAJIRI_MASK;
         ModItems.TERRIER_SPAWN_EGG = TERRIER_SPAWN_EGG;
         ModItems.ZOMBIE_MINION_SPAWN_EGG = ZOMBIE_MINION_SPAWN_EGG;
         ModItems.AESTHETICIAN_SPAWN_EGG = AESTHETICIAN_SPAWN_EGG;

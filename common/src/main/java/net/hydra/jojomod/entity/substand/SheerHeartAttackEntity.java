@@ -166,7 +166,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 1.3f;
+	final float jumpMaxHeight = 1.4f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -590,7 +590,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (hitResult.getType() != HitResult.Type.MISS) { return false; }
 
-		return (float)dist > (2.5f) && (float)dist < 4.0f;
+		return (float)dist > (2.5f) && (float)dist < 3.5f;
 	}
 
 	public boolean shouldExplode(Vec3 targetPos) {
@@ -714,7 +714,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			this.level().playSound(null, this.blockPosition(), ModSounds.SHA_JUMP_EVENT, SoundSource.PLAYERS, 0.25F, 1.0f);
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, jumpT0Pos);
 			this.jumpTick = jumpTickMax;
-			Vec3 movement = (this.getLookAngle().multiply(1.3, 0.54, 1.3)).add(0, 0.25, 0);
+			Vec3 movement = (this.getLookAngle().multiply(1.1, 0.54, 1.1)).add(0, 0.6, 0);
 			this.setDeltaMovement(movement.x(), Math.min(movement.y(), jumpMaxHeight), movement.z());
 		}
 	}
