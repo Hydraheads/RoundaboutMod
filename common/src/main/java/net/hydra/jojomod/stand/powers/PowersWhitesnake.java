@@ -997,6 +997,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     @Override
+    public void onItemGrab() {
+        if (!self.level().isClientSide() && !isPiloting()
+                && self instanceof Player player
+                && isThrowableDisc(player.getInventory().getItem(grabInventorySlot))
+                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof PucciVoice voice) {
+            voice.playDiscToss();
+        }
+    }
+
+    @Override
     public boolean inventoryGrab() {
         if (!(self instanceof Player player) || !WhitesnakeControlInventory.isActive(player)) {
             return super.inventoryGrab();

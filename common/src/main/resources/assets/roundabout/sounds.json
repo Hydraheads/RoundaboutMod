@@ -3663,46 +3663,52 @@
       "roundabout:whitesnake_pucci_stand_summon_2"
     ]
   },
-  "whitesnake_pucci_visage_equip_1": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_1",
+  "pucci_visage_whitesnake_disc_toss": {
+    "subtitle": "sounds.roundabout.pucci_visage_whitesnake_disc_toss",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_1"
+      "roundabout:pucci_visage_whitesnake_disc_toss"
     ]
   },
-  "whitesnake_pucci_visage_equip_2": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_2",
+  "pucci_visage_equip_1": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_1",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_2"
+      "roundabout:pucci_visage_equip_1"
     ]
   },
-  "whitesnake_pucci_visage_equip_3": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_3",
+  "pucci_visage_equip_2": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_2",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_3"
+      "roundabout:pucci_visage_equip_2"
     ]
   },
-  "whitesnake_pucci_hurt_1": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_1",
+  "pucci_visage_equip_3": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_3",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_1"
+      "roundabout:pucci_visage_equip_3"
     ]
   },
-  "whitesnake_pucci_hurt_2": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_2",
+  "pucci_hurt_1": {
+    "subtitle": "sounds.roundabout.pucci_hurt_1",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_2"
+      "roundabout:pucci_hurt_1"
     ]
   },
-  "whitesnake_pucci_hurt_3": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_3",
+  "pucci_hurt_2": {
+    "subtitle": "sounds.roundabout.pucci_hurt_2",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_3"
+      "roundabout:pucci_hurt_2"
     ]
   },
-  "whitesnake_pucci_hurt_4": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_4",
+  "pucci_hurt_3": {
+    "subtitle": "sounds.roundabout.pucci_hurt_3",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_4"
+      "roundabout:pucci_hurt_3"
+    ]
+  },
+  "pucci_hurt_4": {
+    "subtitle": "sounds.roundabout.pucci_hurt_4",
+    "sounds": [
+      "roundabout:pucci_hurt_4"
     ]
   },
   "silver_chariot_summon": {

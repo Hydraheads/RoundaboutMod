@@ -23,6 +23,12 @@ public final class PucciVoice extends VoiceData {
         playEquipVoice();
     }
 
+    public void playDiscToss() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+
+        playSoundAttack(ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS_EVENT, 30);
+    }
+
     private void playEquipVoice() {
         SoundEvent sound = switch (self.getRandom().nextInt(3)) {
             case 1 -> ModSounds.PUCCI_VISAGE_EQUIP_2_EVENT;
