@@ -1,18 +1,28 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public final class MemoryDiscConversionService {
     private MemoryDiscConversionService() {
     }
 
+    public static boolean canConvert(Player player) {
+        return player != null && player.isAlive()
+                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake;
+    }
+
     public static void convert(ServerPlayer player, InteractionHand hand) {
+        if (!canConvert(player)) return;
+
         ItemStack held = player.getItemInHand(hand);
         ItemStack result;
         String message;
