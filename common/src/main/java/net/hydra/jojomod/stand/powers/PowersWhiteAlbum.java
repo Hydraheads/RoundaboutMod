@@ -63,6 +63,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -1392,10 +1393,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
                                 Block replacement = MainUtil.FREEZABLE_BLOCKS.get(state.getBlock());
 
                                 if (replacement != null) {
+                                    BlockState replacementState = replacement.defaultBlockState();
+                                    for (Property<?> prop : state.getProperties()) {
+                                        if (replacementState.hasProperty(prop)) {
+                                            replacementState = MainUtil.copyBlockStateProperty(state, replacementState, prop);
+                                        }
+                                    }
                                     if (self instanceof Player pl) {
                                         self.level().setBlock(
                                                 pos,
-                                                replacement.defaultBlockState(),
+                                                replacementState,
                                                 Block.UPDATE_ALL
                                         );
                                     }
