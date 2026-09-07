@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.SheerHeartAttackModel;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
+import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
@@ -112,6 +113,11 @@ public class SheerHeartAttackRenderer extends StandRenderer<SheerHeartAttackEnti
         super.render(sha, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, i);
         	
         //}
+    }
+
+    @Override
+    public boolean skipLighting(SheerHeartAttackEntity mr){
+        return mr.getTorchStatus();
     }
     
     

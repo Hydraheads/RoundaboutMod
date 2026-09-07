@@ -37,7 +37,7 @@ public class SchoolHatPart extends PsuedoHierarchicalModel {
                 .texOffs(-11, 0).addBox(-5.5F, -7.5F, -5.5F, 11.0F, 0.0F, 11.0F, new CubeDeformation(0.0F)),
                 PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        return LayerDefinition.create(meshdefinition, 32, 32);
     }
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

@@ -948,6 +948,11 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     @Override
+    public boolean isMiningStand() {
+        return !inBitesTheDustMode();
+    }
+
+    @Override
     public boolean canVault(){
         return super.canVault() && !inBitesTheDustMode();
     }
