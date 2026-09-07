@@ -162,7 +162,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                     }
 
                     if (animation == KillerQueenEntity.MOB_PLANT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/((float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f);
+                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArms, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) /20)) * 1.364f));
                     } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
                         this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == KillerQueenEntity.DETONATE) {
