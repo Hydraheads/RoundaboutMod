@@ -132,6 +132,11 @@ public class FirstPersonArmsModel<T extends Entity> extends PsuedoHierarchicalMo
                 if (AnubisLayer.shouldRender(player) != null){
                     return;
                 }
+
+                if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(LE)) {
+                    return;
+                }
+
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {

@@ -330,7 +330,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public static int maxKickTime = 25;
     public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
-    private static final int blockPlantMaxTicks = 7;
+    private static final int blockPlantMaxTicks = 14;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public int btdTicks = -1;
@@ -2244,7 +2244,12 @@ public class PowersKillerQueen extends NewPunchingStand {
                         stand.setFadePercent(100);
                     }
                 }
-                bitesTheDustPlantedEntity = null;
+
+                if (bitesTheDustPlantedEntity != null) {
+                    ((StandUser)bitesTheDustPlantedEntity).rdbt$SetBtdPlantedUser(null);
+                    bitesTheDustPlantedEntity = null;
+                }
+
                 if (self instanceof ServerPlayer pl) {
                     S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersKillerQueen.BTD_ENTITY, -1);
                 }
@@ -2489,6 +2494,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             KQE.setPlantedBitesTheDust(true);
 
             bitesTheDustPlantedEntity = target;
+            ((StandUser)target).rdbt$SetBtdPlantedUser(this);
             saveCombatEntitiesSeconds(target.position());
             btdTicks = 0;
 
@@ -3311,10 +3317,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            if (bitesTheDustPlantedEntity != null && bitesTheDustPlantedEntity.isAlive() && !bitesTheDustPlantedEntity.isRemoved()) {
+            /*if (bitesTheDustPlantedEntity != null && bitesTheDustPlantedEntity.isAlive() && !bitesTheDustPlantedEntity.isRemoved()) {
                 StandUser SU = (StandUser)bitesTheDustPlantedEntity;
-                SU.rdbt$SetBtdPlantedTicks(3);
-            }
+                //SU.rdbt$SetBtdPlantedTicks(3);
+                SU.rdbt$SetBtdPlantedUser(this);
+            }*/
 
             this.detectIfShouldDefuse();
             this.updateDetonate();
@@ -3349,7 +3356,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             byte activePower = this.getActivePower();
 
             if (this.isContactModeEnabled() && activePower != DETONATE) {
-                if (this.currentBombStatus == BOMB_BLOCK) {
+                if (this.currentBombStatus == BOMB_BLOCK && getActivePower() != PowerIndex.POWER_1) {
                     if(Objects.nonNull(this.bombBlock) && activePower != PowerIndex.POWER_1) {
                         Entity contact = detectContact(this.bombBlock, 0.1);
                         if (contact != null) {
@@ -3362,9 +3369,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
                     if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2) {
                         Entity contact = detectContact(this.bombEntity, 0.1);
-                        if (contact != null) {
-                            this.bombEntity = contact;
-                            this.detonate();
+                        if (contact != null ) {
+                            if (currentBombStatus == ARROW_BOMB && (contact instanceof LivingEntity LE
+                                    && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PSW && PSW.hasWaterShield())) {
+                                this.bombEntity = null;
+                                defuseServer();
+                            }else {
+                                if (this.currentBombStatus == ARROW_BOMB) {
+                                    this.syncBombStatus(ARROW_CONTACT);
+                                }
+                                this.bombEntity = contact;
+                                this.detonate();
+                            }
                         }
                     }
                 }else if (this.currentBombStatus == BOMB_ITEM) {
@@ -3879,7 +3895,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     // hightlights entity things :0
     public boolean highlightsEntity(Entity ent,Player player){
-        if (inBitesTheDustMode()) {
+        if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
             if ((ent instanceof Mob || ent instanceof Player) && !(ent instanceof StandEntity)
                     && ent.distanceTo(bitesTheDustPlantedEntity) < btdRange && bitesTheDustPlantedEntity != ent) {
                 LivingEntity LE = (LivingEntity) ent;
@@ -4301,7 +4317,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
         if (!(bStatus == BUBBLE_CONTACT || bStatus == BOMB_BUBBLE)) {
-            int cooldownAmount = (ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown);
+            int cooldownAmount = (int)(ClientNetworking.getAppropriateConfig().killerQueenSettings.bubbleShootCooldown / 2.0f);
             this.setCooldown(BUBBLE_SEND_COOLDOWN, cooldownAmount);
             if (this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendCooldownSyncPacket(P, BUBBLE_SEND_COOLDOWN, cooldownAmount);
@@ -4446,7 +4462,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             Config.KillerQueenSettings config = ClientNetworking.getAppropriateConfig().killerQueenSettings;
 
-            float damage = bStatus == BOMB_BUBBLE ? config.StrayCatAirBubblesDamage : config.explosionDetonateMaxDamage;
+            // I dont remenber the reason of this :/
+            float damage = /*bStatus == BOMB_BUBBLE ? config.StrayCatAirBubblesDamage :*/ config.explosionDetonateMaxDamage;
+
+            if (bStatus == ARROW_CONTACT || bStatus == BLOCK_CONTACT || bStatus == ITEM_CONTACT) {
+                damage = damage * 0.8f;
+            }
 
             DamageSource dmg = ModDamageTypes.of(level, ModDamageTypes.EXPLOSIVE_STAND, this.getSelf());
             ExplosionUtil.explosionHurtSneakyWithMulti(vPos, dmg, level,
@@ -4516,7 +4537,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
     
     public boolean detonate() {
-    	if (!this.isClient() && this.detonateTimer == -1) {
+    	if (!this.isClient() && this.detonateTimer == -1 && getActivePower() != PowerIndex.POWER_1) {
             if (this.self instanceof ServerPlayer pl) {
                 S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), DETONATE_NOISE);
             }

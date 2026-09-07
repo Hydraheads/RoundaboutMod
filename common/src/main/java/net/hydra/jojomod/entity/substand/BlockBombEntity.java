@@ -56,7 +56,9 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private int tickIndicator = maxTickIndicator;
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	private AABB blockBB = null;
-	public int renderFadeIn = 1;
+	public int renderFadeIn = 0;
+	public int renderFadeInMax = 14;
+	public int renderFadeCooldown = 5;
 
 	@Override
 	protected void defineSynchedData() {
@@ -132,7 +134,9 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		BlockState state = this.level().getBlockState(this.bombPos);
 		return state.isAir();
 	}
-	
+
+
+
 	@Override
     public void tick() {
 		this.setFadeOut((byte)1);
@@ -173,8 +177,11 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 						0, 1.2, 0);
 				this.tickIndicator--;
 			}
-			if (this.renderFadeIn < 12) {
+			if (this.renderFadeIn < renderFadeInMax && renderFadeCooldown <= 0) {
 				this.renderFadeIn++;
+			}
+			if (renderFadeCooldown > 0) {
+				renderFadeCooldown--;
 			}
 		}
         super.tick();

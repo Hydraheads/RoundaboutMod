@@ -9,9 +9,11 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.StandUserClient;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.stand.powers.Powers20thCenturyBoy;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.stand.powers.PowersRatt;
 import net.hydra.jojomod.util.MainUtil;
@@ -69,6 +71,11 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             ci.cancel();
             return;
         }
+        if (((StandUser)entity).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(entity)) {
+            ci.cancel();
+            return;
+        }
+
 
         dominant$Hand = entity.getMainArm() == HumanoidArm.RIGHT;
         if (entity instanceof Player) {
@@ -109,6 +116,8 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
                     bl = false;
                 }
             }
+
+
             if (bl) {
                 ci.cancel();
                 return;
