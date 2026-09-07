@@ -142,15 +142,15 @@ public class ExplosionUtil {
 		return amountOfVictims;
 	}
 
-	public static void explodeBlocks(BlockPos location, Level level, Float range) {
-		explodeBlocksBase(location, level, range, false);
+	public static void explodeBlocks(BlockPos location, Level level, Float range, Entity causer) {
+		explodeBlocksBase(location, level, range, false, causer);
 	}
 
-	public static void explodeBlocksIgnoreOres(BlockPos location, Level level, Float range) {
-		explodeBlocksBase(location, level, range, true);
+	public static void explodeBlocksIgnoreOres(BlockPos location, Level level, Float range, Entity causer) {
+		explodeBlocksBase(location, level, range, true, causer);
 	}
 
-	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres) {
+	public static void explodeBlocksBase(BlockPos location, Level level, Float range, boolean ignoreOres, Entity causer) {
 		Vec3 center = new Vec3(location.getX(), location.getY(), location.getZ());
 
 		int intSize = (int) Math.floor(range);
@@ -170,7 +170,7 @@ public class ExplosionUtil {
 
 			Double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
-			if (dist2 <= explosionDistance) {
+			if (dist2 <= explosionDistance && !(causer instanceof Player PL && !MainUtil.canPlaceOnClaim(PL, pos))) {
 				boolean shouldDrop = !info.requiresCorrectToolForDrops();
 				level.destroyBlock(pos, shouldDrop);
 			}

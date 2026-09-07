@@ -773,7 +773,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 		if (hitResult.getType() == HitResult.Type.BLOCK && explosionMiningTicks <= 0) {
 			ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 8);
-			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true);
+			ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
 			level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 			explosionMiningTicks = explosionMiningTicksMax;
 			explosions++;
@@ -782,7 +782,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			explosionMiningIntervalTicks--;
 			if (explosionMiningIntervalTicks <= 0) {
 				ExplosionUtil.explodeEffects(hitResult.getBlockPos().getCenter(), this.level(), KQ.getExplosionParticle(), new Vec3(0.8f, 0.8f, 0.8f), 6);
-				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true);
+				ExplosionUtil.explodeBlocksBase(hitResult.getBlockPos().above(), level(), 1.2f, true, getUser());
 				level().playSound(null, hitResult.getBlockPos(), KQ.getExplosionSound(), SoundSource.PLAYERS, 0.65F, 1.0f);
 				explosions++;
 				explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;

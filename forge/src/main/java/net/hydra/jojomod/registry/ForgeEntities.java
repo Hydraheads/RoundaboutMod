@@ -509,6 +509,12 @@ public class ForgeEntities {
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor").toString())
             );
+    public static final RegistryObject<EntityType<VirusSpitEntity>> VIRUS_SPIT =
+            ENTITY_TYPES.register("virus_spit", () ->
+                    EntityType.Builder.<VirusSpitEntity>of(VirusSpitEntity::new, MobCategory.MISC).sized(15.0F, 15.0F).
+                            clientTrackingRange(15).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "virus_spit").toString())
+            );
 
     public static final RegistryObject<EntityType<ManhattanTransferEntity>> MANHATTAN_TRANSFER =
             ENTITY_TYPES.register("manhattan_transfer", () ->
