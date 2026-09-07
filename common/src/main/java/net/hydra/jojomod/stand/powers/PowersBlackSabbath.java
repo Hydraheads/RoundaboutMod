@@ -47,7 +47,9 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.material.LavaFluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -79,7 +81,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         List<LivingEntity> fogControlledEntities2 = new ArrayList<>(blackSabbathTargets) {};
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
-                if (value.isRemoved() || !value.isAlive()) {
+                if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying()) {
                     removeTargetEntities(value);
                 }
             }
@@ -543,6 +545,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.setTickBeforeHunt(20);
                 moveMode = 3;
             }
+          //  System.out.println(blackSabbathTargets.isEmpty() + " " + this.isClient());
         }
         if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
             List<Villager> lvent = this.self.level().getEntitiesOfClass(Villager.class, this.getSelf().getBoundingBox().inflate(40), (livingEntity) -> {
@@ -552,7 +555,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 for (LivingEntity value : lvent) {
                     if (value.hasLineOfSight(this.getSelf())) {
                         if (!(value instanceof StandEntity || value instanceof RoadRollerEntity)) {
-                            this.selectTargetSecond(value);
+                            this.blackSabbathTargets.add(attackTarget);
+                           // this.selectTargetSecond(value);
                         }
                     }
                 }
@@ -856,7 +860,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                         candidate.y - lent.getY(),
                         candidate.z - lent.getZ()
                 );
-                if (level.noCollision(lent, testBox) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
+                if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
                 } else {
                     for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
@@ -1063,7 +1067,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     private Entity getTarget() {
         Entity target = MainUtil.getTargetEntity(this.getSelf(),100,10);
         if (target instanceof LivingEntity LE) {
-            if (LE.isInvisible() || LE instanceof RoadRollerEntity) {
+            if (LE.isInvisible() || LE instanceof RoadRollerEntity || LE.isDeadOrDying() || LE.isRemoved() || !LE.isAlive()) {
                 return null;
             }
         }
