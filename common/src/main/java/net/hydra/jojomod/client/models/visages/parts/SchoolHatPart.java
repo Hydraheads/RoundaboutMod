@@ -32,9 +32,10 @@ public class SchoolHatPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition schoolhat = partdefinition.addOrReplaceChild("schoolhat", CubeListBuilder.create().texOffs(0, 11).addBox(-4.0F, -9.5F, -4.0F, 8.0F, 2.0F, 8.0F, new CubeDeformation(0.1F))
-                .texOffs(0, 21).addBox(-3.0F, -10.5F, -3.0F, 6.0F, 1.0F, 6.0F, new CubeDeformation(0.1F))
-                .texOffs(-11, 0).addBox(-5.5F, -7.5F, -5.5F, 11.0F, 0.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition schoolhat = partdefinition.addOrReplaceChild("schoolhat", CubeListBuilder.create()
+                .texOffs(0, 11).addBox(-4.0F, -9.5F, -4.0F, 8.0F, 2.0F, 8.0F, new CubeDeformation(0.1F))
+                .texOffs(-11, 0).addBox(-5.5F, -7.5F, -5.5F, 11.0F, 0.0F, 11.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
