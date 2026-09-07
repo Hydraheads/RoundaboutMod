@@ -105,7 +105,7 @@ public class PurpleHazeModel<T extends PurpleHazeEntity> extends StandModel<T> {
                 .texOffs(48, 70).mirror().addBox(-1.0F, -1.0F, -2.25F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(66, 50).mirror().addBox(-2.0F, 0.9999F, -1.9998F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.202F)).mirror(false), PartPose.offset(0.0F, 7.0F, 0.0F));
 
-        PartDefinition BAM = partdefinition.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, 7.0F, -12.0F));
+        PartDefinition BAM = stand2.addOrReplaceChild("BAM", CubeListBuilder.create(), PartPose.offset(0.0F, 7.0F, -12.0F));
 
         PartDefinition RightArmBAM = BAM.addOrReplaceChild("RightArmBAM", CubeListBuilder.create(), PartPose.offset(-11.5F, -9.0F, 0.0F));
 

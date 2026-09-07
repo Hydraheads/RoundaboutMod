@@ -4438,7 +4438,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true);
+                ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true, self);
             }
             if (bStatus != BOMB_ENTITY) {
                 addEXP(2);
