@@ -55,11 +55,11 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
     public static final MobEffect HAZE_VIRUS =
-            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+            register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect DISTORTION_VIRUS =
-            register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 8388863));
+            register("distortion_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect VIRUS_IMMUNITY =
-            register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 8388863));
+            register("virus_immunity", new FabricEffects(MobEffectCategory.BENEFICIAL, 10824365));
 
     protected FabricEffects(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
