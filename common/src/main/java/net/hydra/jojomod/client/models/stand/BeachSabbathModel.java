@@ -208,6 +208,9 @@ public class BeachSabbathModel<T extends BeachSabbathEntity> extends StandModel<
         this.animate(pEntity.chest_open, BlackSabbathAnimations.Chest_Open, pAgeInTicks, 1f);
         this.animate(pEntity.chest_close, BlackSabbathAnimations.Chest_Close, pAgeInTicks, 1f);
         this.animate(pEntity.floating, BlackSabbathAnimations.Float, pAgeInTicks, 1f);
+        this.animate(pEntity.diving, BlackSabbathAnimations.Dive, pAgeInTicks, 1f);
+        this.animate(pEntity.emerge, BlackSabbathAnimations.Emerge, pAgeInTicks, 1f);
+        this.animate(pEntity.catching, BlackSabbathAnimations.CatchAttempt, pAgeInTicks, 1f);
 	}
 
 	@Override
