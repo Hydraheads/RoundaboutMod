@@ -3338,6 +3338,9 @@
   "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
   "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
 
+  "config.roundabout.chanceForAltMobs.name": "Alternate Mob Chance",
+  "config.roundabout.chanceForAltMobs.desc": "Small chance of select mobs having rare variations like shiny pokemon, from 0-1 (1 being 100 percent chance). Also rabbits can be killer rabbits...",
+
 
   "config.roundabout.chanceToEncounterNewAnimal.name": "Encounter New Animals",
   "config.roundabout.chanceToEncounterNewAnimal.desc": "Small chance of seeing a new animal in a parallel world, from 0-1 (1 being 100 percent chance).",

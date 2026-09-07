@@ -1269,6 +1269,31 @@ public class PowersD4C extends NewPunchingStand {
 
             copyFish.setVariant(originalFish.getVariant());
         }
+        float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltMobs;
+        if (Math.random() <= randomChance) {
+            if (copy instanceof Wolf pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IWolf) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Sheep pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((ISheep) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Pig pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IPig) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof IronGolem pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IIronGolem) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Rabbit copyRabbit) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                if (skin == 1) {
+                    copyRabbit.setVariant(Rabbit.Variant.EVIL);
+                }
+            }
+        }
     }
 
     @Nullable
