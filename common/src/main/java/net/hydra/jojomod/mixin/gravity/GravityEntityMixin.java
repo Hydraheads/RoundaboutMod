@@ -30,6 +30,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -149,13 +150,26 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     @Unique
     private Vec3 rdb$existPlaneStartPoint = Vec3.ZERO;
     @Unique
+    private ResourceKey<Level> rdb$existPlaneLevel = null;
+    @Unique
     @Override
     public Vec3 rdbt$getExistPlaneStartPoint(){
         return rdb$existPlaneStartPoint;
     }
     @Unique
     @Override
+    public ResourceKey<Level> rdbt$getExistPlaneLevel(){
+        return rdb$existPlaneLevel;
+    }
+    @Unique
+    @Override
+    public void rdbt$setExistPlaneLevel(ResourceKey<Level> levelV){
+        rdb$existPlaneLevel = levelV;
+    }
+    @Unique
+    @Override
     public void roundabout$setExistPlane(byte adj) {
+        rdbt$setExistPlaneLevel(this.level().dimension());
         roundabout$setExistVec(adj,this.position());
     }
     @Unique

@@ -19,6 +19,7 @@ import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
 import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -33,6 +34,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
@@ -40,11 +43,13 @@ import org.joml.Quaternionf;
 public class AnubisModel extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     private final ModelPart sword;
+    private final ModelPart stand;
 
     public AnubisModel() {
         super(RenderType::entityCutout);
 
         this.sword = createBodyLayer().bakeRoot();
+        this.stand = sword.getChild("stand");
 
         ModItemModels.ANUBIS_MODEL = this;
     }
@@ -189,7 +194,22 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                 this.animate(((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.ItemUnsheath,partialTicks,1F  );
             }
 
+            if (skin == PowersAnubis.ITEM){
+                ItemDisplayContext display = (context instanceof LivingEntity liv &&liv.getMainArm() == HumanoidArm.LEFT) ? ItemDisplayContext.THIRD_PERSON_LEFT_HAND : ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+                Minecraft.getInstance().getItemRenderer().renderStatic(
+                        new ItemStack(ModItems.ANUBIS_2D),
+                        display,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        poseStack,
+                        bufferSource,
+                        context.level(),
+                        0
+                );
+                return;
+            }
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             StandUser SU = (StandUser) context;
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
@@ -281,21 +301,52 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             if (anim != null) {
                 user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
                 this.animate(user.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
+                if (skin == PowersAnubis.ITEM){
+                    sword.translateAndRotate(poseStack);
+                    stand.translateAndRotate(poseStack);
+                    poseStack.mulPose(new Quaternionf().rotationZYX(0, 0, 1.5708F));
+                    poseStack.mulPose(new Quaternionf().rotationZYX(0, 0, 3.14159F));
+                    poseStack.translate(0,0.3,0);
+                    poseStack.translate(0.1,0,0);
+                    poseStack.translate(0,0,0.04);
 
-                if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
-                    float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
-                    time -= (15/20.0F);
-                    if (time > 0 && time < (15/20.0F)) {
-                        float scaler = 0.75F * Math.min(time * 0.7F, 1);
-                        for (int i = 0; i < translations.length; i++) {
-                            Vec2 translation = translations[i];
-                            poseStack.pushPose();
-                            poseStack.translate((time * 8) % 1, translation.x * scaler * Math.cos(partialTicks * 0.5), translation.y * scaler * Math.sin(partialTicks * 0.5));
-                            render(entity, skin, poseStack, bufferSource, packedLight, alpha * (0.4F * (1 - time / 300)));
-                            poseStack.popPose();
+                    if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
+                        float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                        time -= (15/20.0F);
+                        if (time > 0 && time < (15/20.0F)) {
+                            float scaler = 0.75F * Math.min(time * 0.7F, 1);
+                            for (int i = 0; i < translations.length; i++) {
+                                Vec2 translation = translations[i];
+                                poseStack.pushPose();
+                                poseStack.translate(
+                                        translation.x * scaler * Math.cos(partialTicks * 0.5),
+                                        ((time * 8) % 1),
+                                        translation.y * scaler * Math.sin(partialTicks * 0.5)
+                                );
+
+                                render(entity, skin, poseStack, bufferSource, packedLight, alpha * (0.4F * (1 - time / 300)));
+                                poseStack.popPose();
+                            }
+                        }
+                    }
+                } else {
+
+                    if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
+                        float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                        time -= (15/20.0F);
+                        if (time > 0 && time < (15/20.0F)) {
+                            float scaler = 0.75F * Math.min(time * 0.7F, 1);
+                            for (int i = 0; i < translations.length; i++) {
+                                Vec2 translation = translations[i];
+                                poseStack.pushPose();
+                                poseStack.translate((time * 8) % 1, translation.x * scaler * Math.cos(partialTicks * 0.5), translation.y * scaler * Math.sin(partialTicks * 0.5));
+                                render(entity, skin, poseStack, bufferSource, packedLight, alpha * (0.4F * (1 - time / 300)));
+                                poseStack.popPose();
+                            }
                         }
                     }
                 }
+
             }
         }
 
@@ -312,6 +363,21 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     }
 
     private void render(Entity entity, byte skin, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, float alpha) {
+
+        if (skin == PowersAnubis.ITEM){
+            ItemDisplayContext display = (entity instanceof LivingEntity liv &&liv.getMainArm() == HumanoidArm.LEFT) ? ItemDisplayContext.THIRD_PERSON_LEFT_HAND : ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+                Minecraft.getInstance().getItemRenderer().renderStatic(
+                    new ItemStack(ModItems.ANUBIS_2D),
+                        display,
+                    packedLight,
+                    OverlayTexture.NO_OVERLAY,
+                    poseStack,
+                    bufferSource,
+                    entity.level(),
+                    0
+            );
+            return;
+        }
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
         root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
         StandUser SU = (StandUser) entity;

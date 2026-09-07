@@ -50,6 +50,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -4027,8 +4028,12 @@ public class PowersKingCrimson extends BlockGrabPreset {
                 if (entity instanceof LivingEntity LE) {
                     if (charged >= 1) {
                         addEXP(5, LE);
-                    } else if (charged > 0.5F){
-                        MainUtil.makeBleed(LE, 0, 200, this.self);
+                    } else if (charged >= 0.5F){
+                        if (MainUtil.getMobBleed(LE)){
+                            MainUtil.bleedCut(LE, self);
+                                // use particle type to spawn particles
+                            MainUtil.makeBleed(LE, 0, 200, this.self);
+                        }
                         addEXP(2, LE);
                     }
                 }

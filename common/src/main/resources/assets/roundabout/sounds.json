@@ -3561,16 +3561,28 @@
       "roundabout:whitesnake_barrage_hit"
     ]
   },
-  "whitesnake_impale_voice": {
-    "subtitle": "sounds.roundabout.whitesnake_impale_voice",
+  "wsvoice_impale": {
+    "subtitle": "sounds.roundabout.wsvoice_impale",
     "sounds": [
-      "roundabout:whitesnake_impale_voice"
+      "roundabout:wsvoice_impale"
     ]
   },
   "whitesnake_disc_steal_charge": {
     "subtitle": "sounds.roundabout.whitesnake_disc_steal_charge",
     "sounds": [
       "roundabout:whitesnake_disc_steal_charge"
+    ]
+  },
+  "wsvoice_disc_steal": {
+    "subtitle": "sounds.roundabout.wsvoice_disc_steal",
+    "sounds": [
+      "roundabout:wsvoice_disc_steal"
+    ]
+  },
+  "wsvoice_acid_toss": {
+    "subtitle": "sounds.roundabout.wsvoice_acid_toss",
+    "sounds": [
+      "roundabout:wsvoice_acid_toss"
     ]
   },
   "whitesnake_command_disc_create": {
@@ -3651,46 +3663,52 @@
       "roundabout:whitesnake_pucci_stand_summon_2"
     ]
   },
-  "whitesnake_pucci_visage_equip_1": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_1",
+  "pucci_visage_whitesnake_disc_toss": {
+    "subtitle": "sounds.roundabout.pucci_visage_whitesnake_disc_toss",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_1"
+      "roundabout:pucci_visage_whitesnake_disc_toss"
     ]
   },
-  "whitesnake_pucci_visage_equip_2": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_2",
+  "pucci_visage_equip_1": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_1",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_2"
+      "roundabout:pucci_visage_equip_1"
     ]
   },
-  "whitesnake_pucci_visage_equip_3": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_visage_equip_3",
+  "pucci_visage_equip_2": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_2",
     "sounds": [
-      "roundabout:whitesnake_pucci_visage_equip_3"
+      "roundabout:pucci_visage_equip_2"
     ]
   },
-  "whitesnake_pucci_hurt_1": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_1",
+  "pucci_visage_equip_3": {
+    "subtitle": "sounds.roundabout.pucci_visage_equip_3",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_1"
+      "roundabout:pucci_visage_equip_3"
     ]
   },
-  "whitesnake_pucci_hurt_2": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_2",
+  "pucci_hurt_1": {
+    "subtitle": "sounds.roundabout.pucci_hurt_1",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_2"
+      "roundabout:pucci_hurt_1"
     ]
   },
-  "whitesnake_pucci_hurt_3": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_3",
+  "pucci_hurt_2": {
+    "subtitle": "sounds.roundabout.pucci_hurt_2",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_3"
+      "roundabout:pucci_hurt_2"
     ]
   },
-  "whitesnake_pucci_hurt_4": {
-    "subtitle": "sounds.roundabout.whitesnake_pucci_hurt_4",
+  "pucci_hurt_3": {
+    "subtitle": "sounds.roundabout.pucci_hurt_3",
     "sounds": [
-      "roundabout:whitesnake_pucci_hurt_4"
+      "roundabout:pucci_hurt_3"
+    ]
+  },
+  "pucci_hurt_4": {
+    "subtitle": "sounds.roundabout.pucci_hurt_4",
+    "sounds": [
+      "roundabout:pucci_hurt_4"
     ]
   },
   "silver_chariot_summon": {

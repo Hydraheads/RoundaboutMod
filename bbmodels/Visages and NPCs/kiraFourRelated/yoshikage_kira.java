@@ -18,7 +18,7 @@ public class yoshikage_kira<T extends Entity> extends EntityModel<T> {
 	public yoshikage_kira(ModelPart root) {
 		this.Waist = root.getChild("Waist");
 		this.Head = this.Waist.getChild("Head");
-		this.hair = this.Waist.getChild("hair");
+		this.hair = this.Head.getChild("hair");
 		this.Body = this.Waist.getChild("Body");
 		this.Right Arm = this.Waist.getChild("Right Arm");
 		this.Left Arm = this.Waist.getChild("Left Arm");
@@ -35,7 +35,7 @@ public class yoshikage_kira<T extends Entity> extends EntityModel<T> {
 		PartDefinition Head = Waist.addOrReplaceChild("Head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
 		.texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)), PartPose.offset(0.0F, -12.0F, 0.0F));
 
-		PartDefinition hair = Waist.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(2.0F, -19.5F, -2.0F));
+		PartDefinition hair = Head.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(2.0F, -7.5F, -2.0F));
 
 		PartDefinition cube_r1 = hair.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(24, 0).addBox(-6.0F, -3.0F, -1.0F, 8.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.3927F));
 

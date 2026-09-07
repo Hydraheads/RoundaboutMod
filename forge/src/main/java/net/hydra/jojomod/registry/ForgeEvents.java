@@ -522,6 +522,7 @@ public class ForgeEvents {
         ModItems.STREET_SIGN_YIELD_BLOCK_ITEM = ForgeItems.STREET_SIGN_YIELD_BLOCK_ITEM.get();
         ModItems.STREET_SIGN_DANGER_BLOCK_ITEM = ForgeItems.STREET_SIGN_DANGER_BLOCK_ITEM.get();
         ModItems.METEORITE = ForgeItems.METEORITE.get();
+        ModItems.ANUBIS_2D = ForgeItems.ANUBIS_2D.get();
         ModItems.METEORITE_INGOT = ForgeItems.METEORITE_INGOT.get();
         ModItems.AJA = ForgeItems.AJA.get();
         ModItems.ULTRAVIOLET_BLASTER = ForgeItems.ULTRAVIOLET_BLASTER.get();
@@ -550,8 +551,10 @@ public class ForgeEvents {
         ModItems.BLANK_MASK = ForgeItems.BLANK_MASK.get();
         ModItems.RAT_MASK = ForgeItems.RAT_MASK.get();
         ModItems.KIRA_PART_FOUR_MASK = ForgeItems.KIRA_PART_FOUR_MASK.get();
+        ModItems.KIRA_PART_EIGHT_MASK = ForgeItems.KIRA_PART_EIGHT_MASK.get();
         ModItems.KOSAKU_MASK = ForgeItems.KOSAKU_MASK.get();
         ModItems.KIRASAKU_MASK = ForgeItems.KIRASAKU_MASK.get();
+        ModItems.HAYATO_KAWAJIRI_MASK = ForgeItems.HAYATO_KAWAJIRI_MASK.get();
 
         ModItems.IRON_BALL_CROSSBOW = ForgeItems.IRON_BALL_CROSSBOW.get();
 
@@ -864,6 +867,7 @@ public class ForgeEvents {
         ModEntities.LEFT_SEPERATED_ARM_SLIM = ForgeEntities.LEFT_SEPERATED_ARM_SLIM.get();
         ModEntities.MOLD_SPORES = ForgeEntities.MOLD_SPORE.get();
         ModEntities.PURPLE_SMOKE = ForgeEntities.PURPLE_SMOKE.get();
+        ModEntities.VIRUS_SPIT = ForgeEntities.VIRUS_SPIT.get();
 
         ModEntities.THROWN_OBJECT = ForgeEntities.THROWN_OBJECT.get();
         ModEntities.THROWN_ANUBIS = ForgeEntities.THROWN_ANUBIS.get();

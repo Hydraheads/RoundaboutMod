@@ -2899,12 +2899,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (hasHandsOut()) {
                 getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.MOB_PLANT);
             }else {
-                double rand = Math.random();
-                if (rand > 0.5) {
-                    this.animateStand(KillerQueenEntity.MOB_PLANT);
-                } else {
-                    this.animateStand(KillerQueenEntity.MOB_PLANT_2);
-                }
+                this.animateStand(KillerQueenEntity.MOB_PLANT);
             }
             this.poseStand(OffsetIndex.GUARD);
 
@@ -4438,7 +4433,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
 
             if (canDestroyBlocks) {
-                ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true);
+                ExplosionUtil.explodeBlocksBase(bPos, level, 1.0f, true, self);
             }
             if (bStatus != BOMB_ENTITY) {
                 addEXP(2);

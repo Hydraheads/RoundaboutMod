@@ -11,6 +11,7 @@ import net.hydra.jojomod.entity.BlockD4CEntity;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.D4CCloneEntity;
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
 import net.hydra.jojomod.entity.objects.IceTwisterEntity;
@@ -47,6 +48,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -725,6 +727,7 @@ public class PowersD4C extends NewPunchingStand {
                 entity ->
                         entity.isAlive()
                                 && !(entity instanceof StandEntity)
+                                && !(entity instanceof StrayCatEntity)
                                 && !(entity instanceof CloneEntity)
                                 && MainUtil.canCopyMob(entity)
                                 && PowerTypes.originatedFromOurWorld(entity)
@@ -1265,6 +1268,31 @@ public class PowersD4C extends NewPunchingStand {
                 && copy instanceof TropicalFish copyFish) {
 
             copyFish.setVariant(originalFish.getVariant());
+        }
+        float randomChance = ClientNetworking.getAppropriateConfig().d4cSettings.chanceForAltMobs;
+        if (Math.random() <= randomChance) {
+            if (copy instanceof Wolf pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IWolf) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Sheep pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((ISheep) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Pig pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IPig) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof IronGolem pg) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                ((IIronGolem) copy).roundabout$setAlt(skin);
+            }
+            if (copy instanceof Rabbit copyRabbit) {
+                byte skin = (byte) (((int) (Math.random() * 3)) + 1);
+                if (skin == 1) {
+                    copyRabbit.setVariant(Rabbit.Variant.EVIL);
+                }
+            }
         }
     }
 
@@ -1967,6 +1995,10 @@ public class PowersD4C extends NewPunchingStand {
         Vec3 fallback =
                 ((IGravityEntity) self).rdbt$getExistPlaneStartPoint();
         if (fallback != null) {
+            ResourceKey<Level> startDim = (((IGravityEntity)self).rdbt$getExistPlaneLevel());
+            if (startDim == null || startDim != self.level().dimension()){
+                return false;
+            }
 
             AABB fallbackBox = self.getBoundingBox()
                     .move(fallback.subtract(self.position()));
@@ -2552,6 +2584,7 @@ public class PowersD4C extends NewPunchingStand {
                     if (entity instanceof LivingEntity LE) {
                         addEXP(5, LE);
                         if (MainUtil.getMobBleed(entity)) {
+                            MainUtil.bleedCut(LE, self);
                             MainUtil.makeBleed(entity, 1, 300, this.getSelf());
                         }
                     }

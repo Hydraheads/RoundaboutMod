@@ -18,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class KosakuHairPart extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-   private final ModelPart hair;
+    private final ModelPart hair;
     private final ModelPart Root;
 
     public KosakuHairPart() {
@@ -32,7 +32,7 @@ public class KosakuHairPart extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(2.0F, 0, -2.0F));
+        PartDefinition hair = partdefinition.addOrReplaceChild("hair", CubeListBuilder.create(), PartPose.offset(2.0F, -7.5F, -2.0F));
 
         PartDefinition cube_r1 = hair.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(24, 0).addBox(-6.0F, -3.0F, -1.0F, 8.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.3927F));
 

@@ -472,7 +472,7 @@ public class Config implements Cloneable {
         public Boolean blocksDestruction;
     	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 5.5F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 4.75F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
         @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
         public Float StrayCatAirBubblesDamage;
@@ -522,7 +522,7 @@ public class Config implements Cloneable {
         public Float bitesTheDustCombatPlayersDamage;
         @FloatOption(group = "inherit", value = 38.5F, min = 0, max = 200F)
         public Float bitesTheDustDayMobsDamage;
-        @FloatOption(group = "inherit", value = 17.5F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 18.5F, min = 0, max = 200F)
         public Float bitesTheDustDayPlayersDamage;
         @IntOption(group = "inherit", value = 12, min = 0, max = 72000)
         public Integer bitesTheDustCombatMinimunForFullBlow;
@@ -1172,6 +1172,8 @@ public class Config implements Cloneable {
         public Float chanceToEncounterNewAnimal;
         @FloatOption(group = "inherit", value = 0.25F, min = 0.0F, max = 1.0F)
         public Float chanceForAltStands;
+        @FloatOption(group = "inherit", value = 0.015F, min = 0.0F, max = 1.0F)
+        public Float chanceForAltMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer d4cAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
@@ -1330,7 +1332,7 @@ public class Config implements Cloneable {
         public Boolean hideHallucinationParticles;
         @BooleanOption(group = "inherit", value = true)
         public Boolean hallucinationHidesEffects;
-        @IntOption(group = "inherit", value = 100, min = 1, max = 72000)
+        @IntOption(group = "inherit", value = 400, min = 1, max = 72000)
         public Integer hallucinatoryAcidStageUpTime;
         @IntOption(group = "inherit", value = 400, min = 20, max = 72000)
         public Integer hallucinatoryAcidDespawnTime;
@@ -1387,7 +1389,7 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownRapierShotInterrupt;
         @IntOption(group = "inherit", value = 600, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotPlatform;
-        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 250, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
         @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSlash;

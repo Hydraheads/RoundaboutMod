@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class AcidExposureTracker {
+    private static final long EXPOSURE_RESET_DELAY = 400L;
     private static final Map<LivingEntity, Exposure> EXPOSURES = new WeakHashMap<>();
 
     private AcidExposureTracker() {
@@ -18,11 +19,12 @@ public final class AcidExposureTracker {
     public static void touch(LivingEntity living, long gameTime) {
         Exposure exposure = EXPOSURES.computeIfAbsent(living, ignored -> new Exposure());
         if (exposure.lastSeen == gameTime) return;
-        if (exposure.lastSeen < gameTime - 1L) {
+        if (exposure.lastSeen == Long.MIN_VALUE
+                || gameTime - exposure.lastSeen >= EXPOSURE_RESET_DELAY) {
             exposure.ticks = 0;
             MobEffectInstance current = living.getEffect(ModEffects.HALLUCINATION);
             if (current == null) {
-                living.addEffect(HallucinationEffect.createInstance(200, 0));
+                living.addEffect(HallucinationEffect.createInstance(800, 0));
             }
         }
         exposure.lastSeen = gameTime;
@@ -34,8 +36,7 @@ public final class AcidExposureTracker {
         MobEffectInstance current = living.getEffect(ModEffects.HALLUCINATION);
         int amplifier = current == null ? 0 : Math.min(
                 HallucinationEffect.MAX_LEVEL - 1, current.getAmplifier() + 1);
-        int duration = (current == null ? 0 : current.getDuration()) + 200;
-        living.addEffect(HallucinationEffect.createInstance(Math.max(200, duration), amplifier));
+        living.addEffect(HallucinationEffect.createInstance(800, amplifier));
     }
 
     private static final class Exposure {

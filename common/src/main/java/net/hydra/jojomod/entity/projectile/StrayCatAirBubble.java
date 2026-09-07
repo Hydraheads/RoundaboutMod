@@ -353,7 +353,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         if (strayCatEntityMade) {
             MainUtil.makeBleed($$0, 1, 160, user);
         } else {
-            MainUtil.makeBleed($$0, 0, 160, user);
+            MainUtil.makeBleed($$0, 1, 160, user);
         }
     }
 
