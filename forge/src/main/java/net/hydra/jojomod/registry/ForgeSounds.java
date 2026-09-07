@@ -1249,6 +1249,8 @@ public class ForgeSounds {
             register(ModSounds.PUCCI_STAND_SUMMON_1, ModSounds.PUCCI_STAND_SUMMON_1_ID);
     public static final RegistryObject<SoundEvent> PUCCI_STAND_SUMMON_2 =
             register(ModSounds.PUCCI_STAND_SUMMON_2, ModSounds.PUCCI_STAND_SUMMON_2_ID);
+    public static final RegistryObject<SoundEvent> PUCCI_VISAGE_WHITESNAKE_DISC_TOSS =
+            register(ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS, ModSounds.PUCCI_VISAGE_WHITESNAKE_DISC_TOSS_ID);
     public static final RegistryObject<SoundEvent> PUCCI_VISAGE_EQUIP_1 =
             register(ModSounds.PUCCI_VISAGE_EQUIP_1, ModSounds.PUCCI_VISAGE_EQUIP_1_ID);
     public static final RegistryObject<SoundEvent> PUCCI_VISAGE_EQUIP_2 =

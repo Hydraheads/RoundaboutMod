@@ -400,7 +400,7 @@
   "item.roundabout.pucci_mask.tag": "Pucci",
   "item.roundabout.pucci_manga_mask": "Pucci Visage",
   "item.roundabout.pucci_manga_mask.desc": "Enrico Pucci (Manga)",
-  "item.roundabout.pucci_manga_mask.tag": "Pucci Manga",
+  "item.roundabout.pucci_manga_mask.tag": "Pucci",
   "item.roundabout.kira_part_four_mask": "Kira Visage",
   "item.roundabout.kira_part_four_mask.desc": "Yoshikage Kira (Part 4)",
   "item.roundabout.kira_part_eight_mask": "Kira Visage",
@@ -1258,6 +1258,7 @@
   "sounds.roundabout.purple_haze_barrage_cry":  "UBASHAAAA!!!",
   "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
   "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
+  "sounds.roundabout.pod_bite":  "Pod Cracks",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -1629,13 +1630,14 @@
 
   "sounds.roundabout.whitesnake_pucci_stand_summon_1": "Whitesnake",
   "sounds.roundabout.whitesnake_pucci_stand_summon_2": "Whitesnake",
-  "sounds.roundabout.whitesnake_pucci_visage_equip_1": "Pucci speaks",
-  "sounds.roundabout.whitesnake_pucci_visage_equip_2": "Pucci speaks",
-  "sounds.roundabout.whitesnake_pucci_visage_equip_3": "Pucci speaks",
-  "sounds.roundabout.whitesnake_pucci_hurt_1": "Pucci hurt",
-  "sounds.roundabout.whitesnake_pucci_hurt_2": "Pucci hurt",
-  "sounds.roundabout.whitesnake_pucci_hurt_3": "Pucci hurt",
-  "sounds.roundabout.whitesnake_pucci_hurt_4": "Pucci hurt",
+  "sounds.roundabout.pucci_visage_whitesnake_disc_toss": "Pucci speaks",
+  "sounds.roundabout.pucci_visage_equip_1": "Pucci speaks",
+  "sounds.roundabout.pucci_visage_equip_2": "Pucci speaks",
+  "sounds.roundabout.pucci_visage_equip_3": "Pucci speaks",
+  "sounds.roundabout.pucci_hurt_1": "Pucci hurt",
+  "sounds.roundabout.pucci_hurt_2": "Pucci hurt",
+  "sounds.roundabout.pucci_hurt_3": "Pucci hurt",
+  "sounds.roundabout.pucci_hurt_4": "Pucci hurt",
 
   "sounds.roundabout.silver_chariot_summon": "Silver Chariot summon",
   "sounds.roundabout.silver_chariot_barrage": "Barrage sound",

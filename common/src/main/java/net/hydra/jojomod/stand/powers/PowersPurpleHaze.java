@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.PHCapsuleEntity;
+import net.hydra.jojomod.entity.projectile.VirusSpitEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.stand.PlanetWavesEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
@@ -139,7 +140,13 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public int getMaxGuardPoints() {
         return 15;
     }
-
+    @Override
+    public boolean canGuard(){
+        if (isStrangling()||isStranglePinning()){
+            return false;
+        }
+        return super.canGuard();
+    }
     @Override
     public StandEntity getNewStandEntity() {
         return ModEntities.PURPLE_HAZE.create(this.getSelf().level());
@@ -726,6 +733,32 @@ public class PowersPurpleHaze extends NewPunchingStand {
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.PLANET_WAVES_METEOR_SHOWER_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             self.removeEffect(ModEffects.VIRUS_IMMUNITY);
 
+            VirusSpitEntity spit = new VirusSpitEntity(
+                    ModEntities.VIRUS_SPIT,
+                    self.level()
+            );
+
+            spit.setOwner(self);
+
+            spit.setPos(
+                    self.getX(),
+                    self.getEyeY() - 0.1,
+                    self.getZ()
+            );
+
+            spit.shootFromRotation(
+                    self,
+                    self.getXRot(),
+                    self.getYRot(),
+                    0.0F,
+                    0.4F,
+                    0.0F
+            );
+
+            purpleHazePodDistortionMode = indistortionmode;
+
+            self.level().addFreshEntity(spit);
+
             this.setCooldown(PowerIndex.POWER_1_BONUS, 400);
             if (this.getSelf() instanceof ServerPlayer sp) {
                 S2CPacketUtil.sendCooldownSyncPacket(sp, PowerIndex.POWER_1_BONUS,
@@ -773,6 +806,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (this.onCooldown(PowerIndex.SKILL_2) || strangleVictim != null || strangleTicks != -1) {
             return;
         }
+
         StandEntity stand = getStandEntity(this.self);
         if (Objects.isNull(stand)) {
             return;
@@ -791,7 +825,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void tickPowerEnd() {
         super.tickPowerEnd();
         if (this.getSelf().isAlive() && !this.getSelf().isRemoved()
-                && this.getActivePower() == PowerIndex.POWER_2
+                && isStrangling()
                 && !this.getSelf().level().isClientSide()) {
 
             StandEntity stand = getStandEntity(this.self);
@@ -849,10 +883,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
         BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(
                 before, nextPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, stand));
-        if (blockHit.getType() == BlockHitResult.Type.BLOCK) {
+        /*if (blockHit.getType() == BlockHitResult.Type.BLOCK) {
             endStrangle();
             return;
-        }
+        }*/
 
         stand.setPos(nextPos);
         strangleTravelTicks++;
@@ -880,9 +914,6 @@ public class PowersPurpleHaze extends NewPunchingStand {
         this.strangleVictim = victim;
         this.strangleHoldTicks = STRANGLE_HOLD_DURATION;
 
-        if (victim instanceof Mob mob) {
-            mob.setNoAi(true);
-        }
         if (victim instanceof StandUser SU) {
             SU.roundabout$setRestrainedTicks(STRANGLE_HOLD_DURATION);
         }
@@ -924,7 +955,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         return levelupDamageMod(3.0F);
     }
-
+    public boolean isStrangling() {
+        return this.strangleTicks != -1;
+    }
+    public boolean isStranglePinning() {
+        return this.strangleVictim != null;
+    }
     private void endStrangle() {
         if (strangleVictim != null) {
             if (strangleVictim instanceof Mob mob) {
