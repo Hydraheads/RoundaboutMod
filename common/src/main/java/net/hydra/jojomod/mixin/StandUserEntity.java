@@ -965,11 +965,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (getDistortionHazeTicks() > 0) {
             SetInDistortionHazeTicks(getDistortionHazeTicks() - 1);
         }
-        if(BtdPlantedTicks > 0){
-            if (roundabout$hasAStand()) {
-                BtdPlantedTicks = -1;
-            }else {
-                BtdPlantedTicks -= 1;
+        if(BtdPlantedUser != null){
+            if (roundabout$hasAStand() || BtdPlantedUser.bitesTheDustPlantedEntity != rdbt$this()) {
+                BtdPlantedUser.bitesTheDustPlantedEntity = null;
+                BtdPlantedUser = null;
             }
         }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
@@ -2827,6 +2826,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             user.roundabout$damageGuard(amount);
             ci.cancel();
         }
+
+        if (BtdPlantedUser != null && BtdPlantedUser.getSelf() != null) {
+            ((StandUser) BtdPlantedUser.getSelf()).roundabout$damageGuard(amount);
+            ci.cancel();
+        }
     }
 
     @Unique
@@ -3758,6 +3762,12 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     private void roundabout$isBlockingRoundabout(CallbackInfoReturnable<Boolean> ci) {
         if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()){
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
+        }
+
+        if (BtdPlantedUser != null && BtdPlantedUser.getSelf() != null) {
+            if (((StandUser)BtdPlantedUser.getSelf()).roundabout$shieldNotDisabled() && !((StandUser)BtdPlantedUser.getSelf()).roundabout$getGuardBroken()) {
+                ci.setReturnValue(true);
+            }
         }
     }
     @Inject(method = "doAutoAttackOnTouch", at = @At(value = "HEAD"), cancellable = true, require = 0)
@@ -6448,10 +6458,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     }
 
     public int BtdPlantedTicks;
+    public PowersKillerQueen BtdPlantedUser;
 
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
-        if (BtdPlantedTicks > 0 && !this.level().isClientSide()
+        if (BtdPlantedUser != null && !this.level().isClientSide()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
                 && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())
@@ -6463,10 +6474,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+
     @Override
-    public void rdbt$SetBtdPlantedTicks(int e) {
+    public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
         if(!this.level().isClientSide) {
-            BtdPlantedTicks = e;
+            BtdPlantedUser = e;
         }
     }
 
