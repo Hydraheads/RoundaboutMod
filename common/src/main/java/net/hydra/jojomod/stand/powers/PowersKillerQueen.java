@@ -4647,7 +4647,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void btdGuardDamage(float amount) {
         if (btdShieldCooldown > 0) { return; }
-
+        bitesTheDustPlantedEntity.level().playSound(null,bitesTheDustPlantedEntity.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
         float finalValue = btdShieldPoints - amount;
         if (finalValue <= 0) {
             btdShieldPoints = 0;
@@ -4665,7 +4665,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (btdShieldPoints < maximunBtdShieldPoints) {
             if (btdShieldBroken) {
                 btdShieldPoints += (maximunBtdShieldPoints / 100f);
-                if (btdShieldPoints > maximunBtdShieldPoints) { btdShieldPoints = maximunBtdShieldPoints; }
+                if (btdShieldPoints > maximunBtdShieldPoints) {
+                    btdShieldPoints = maximunBtdShieldPoints;
+                    btdShieldBroken = false;
+                }
             }else {
                 if (btdShieldRegenTicks <= 0) {
                     btdShieldPoints += (maximunBtdShieldPoints / 220f);

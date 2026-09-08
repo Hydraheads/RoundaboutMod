@@ -3797,7 +3797,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
-            this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
             BtdPlantedUser.btdGuardDamage($$1);
             ci.setReturnValue(false);
             return;
