@@ -166,7 +166,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 1.4f;
+	final float jumpMaxHeight = 1.2f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -599,13 +599,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		double dist = Math.abs(this.position().distanceTo(targetPos));
+		double dist2 = dist;
 
 		float minDist = (explosionRadius-0.12f);
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
+		}else if (getTargetType() == ENTITY && entityTarget != null) {
+			Vec3 addToPos = new Vec3(0, entityTarget.getEyeY(), 0);
+			Direction gdir = ((IGravityEntity)entityTarget).roundabout$getGravityDirection();
+			Vec3 result = RotationUtil.vecPlayerToWorld(addToPos,gdir);
+
+			dist2 = Math.abs(this.position().distanceTo(targetPos.add(result)));
 		}
 
-		return (float)dist < minDist;
+		return (float)dist < minDist || (float)dist2 < minDist;
 	}
 
 	public byte getTargetType() {return this.entityData.get(TARGET_STATUS);}
