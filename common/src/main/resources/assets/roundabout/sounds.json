@@ -3657,6 +3657,72 @@
       "roundabout:kira4_btd_activate"
     ]
   },
+  "kira4_attack_1": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_1"
+    ]
+  },
+  "kira4_attack_2": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_2"
+    ]
+  },
+  "kira4_attack_3": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_3"
+    ]
+  },
+  "kira4_attack_4": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_4"
+    ]
+  },
+  "kira4_shiba": {
+    "subtitle": "sounds.roundabout.kira4_shiba",
+    "sounds" : [
+      "roundabout:kira4_shiba"
+    ]
+  },
+  "kira4_threat": {
+    "subtitle": "sounds.roundabout.kira4_threat",
+    "sounds" : [
+      "roundabout:kira4_threat"
+    ]
+  },
+  "kira4_idle_1": {
+    "subtitle": "sounds.roundabout.kira4_idle_1",
+    "sounds" : [
+      "roundabout:kira4_idle_1"
+    ]
+  },
+  "kira4_kq_1": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_1"
+    ]
+  },
+  "kira4_kq_2": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_2"
+    ]
+  },
+  "kira4_kq_3": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_3"
+    ]
+  },
+  "kira4_kq_4": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_4"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [

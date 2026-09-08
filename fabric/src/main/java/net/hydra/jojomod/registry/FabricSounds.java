@@ -430,6 +430,16 @@ public class FabricSounds {
 
         addSound(ModSounds.KIRA4_LIVE_HAPPY_ID, ModSounds.KIRA4_LIVE_HAPPY_EVENT);
         addSound(ModSounds.KIRA4_I_BEAT_THEM_ID, ModSounds.KIRA4_I_BEAT_THEM_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_1_ID, ModSounds.KIRA4_ATTACK_1_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_2_ID, ModSounds.KIRA4_ATTACK_2_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_3_ID, ModSounds.KIRA4_ATTACK_3_EVENT);
+        addSound(ModSounds.KIRA4_ATTACK_4_ID, ModSounds.KIRA4_ATTACK_4_EVENT);
+        addSound(ModSounds.KIRA4_SHIBO_ID, ModSounds.KIRA4_SHIBO_EVENT);
+
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_1_ID, ModSounds.KIRA4_KILLER_QUEEN_1_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_2_ID, ModSounds.KIRA4_KILLER_QUEEN_2_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_3_ID, ModSounds.KIRA4_KILLER_QUEEN_3_EVENT);
+        addSound(ModSounds.KIRA4_KILLER_QUEEN_4_ID, ModSounds.KIRA4_KILLER_QUEEN_4_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);

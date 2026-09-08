@@ -461,6 +461,25 @@ public class ForgeSounds {
             register(ModSounds.KIRA4_LIVE_HAPPY, ModSounds.KIRA4_LIVE_HAPPY_ID);
     public static final RegistryObject<SoundEvent> KIRA4_I_BEAT_THEM_EVENT =
             register(ModSounds.KIRA4_I_BEAT_THEM, ModSounds.KIRA4_I_BEAT_THEM_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_ATTACK_1_EVENT =
+            register(ModSounds.KIRA4_ATTACK_1, ModSounds.KIRA4_ATTACK_1_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_ATTACK_2_EVENT =
+            register(ModSounds.KIRA4_ATTACK_2, ModSounds.KIRA4_ATTACK_2_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_ATTACK_3_EVENT =
+            register(ModSounds.KIRA4_ATTACK_3, ModSounds.KIRA4_ATTACK_3_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_ATTACK_4_EVENT =
+            register(ModSounds.KIRA4_ATTACK_4, ModSounds.KIRA4_ATTACK_4_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_SHIBO_EVENT =
+            register(ModSounds.KIRA4_SHIBO, ModSounds.KIRA4_SHIBO_ID);
+
+    public static final RegistryObject<SoundEvent> KIRA4_KILLER_QUEEN_1_EVENT =
+            register(ModSounds.KIRA4_KILLER_QUEEN_1, ModSounds.KIRA4_KILLER_QUEEN_1_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_KILLER_QUEEN_2_EVENT =
+            register(ModSounds.KIRA4_KILLER_QUEEN_2, ModSounds.KIRA4_KILLER_QUEEN_2_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_KILLER_QUEEN_3_EVENT =
+            register(ModSounds.KIRA4_KILLER_QUEEN_3, ModSounds.KIRA4_KILLER_QUEEN_3_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_KILLER_QUEEN_4_EVENT =
+            register(ModSounds.KIRA4_KILLER_QUEEN_4, ModSounds.KIRA4_KILLER_QUEEN_4_ID);
 
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
             register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
