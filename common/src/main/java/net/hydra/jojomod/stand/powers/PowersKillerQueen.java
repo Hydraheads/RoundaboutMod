@@ -4028,12 +4028,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 float size = 0.3f;
                 ResourceLocation icon = StandIcons.BITES_THE_DUST_TARGET;
-                if (LE == bitesTheDustPlantedEntity) {
+                if (LE.getId() == bitesTheDustPlantedEntity.getId()) {
                     icon = StandIcons.BITES_THE_DUST_PLANTED;
                     size = 0.25f;
                 }
 
-                if (LE == bitesTheDustPlantedEntity || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange && LE.hasLineOfSight(bitesTheDustPlantedEntity)) {
+                if (LE.getId() == bitesTheDustPlantedEntity.getId() || LE.distanceTo(bitesTheDustPlantedEntity) <= btdRange && LE.hasLineOfSight(bitesTheDustPlantedEntity)) {
                     matrixStack.pushPose();
 
                     float height = (LE.getBbHeight() + 0.43F);
