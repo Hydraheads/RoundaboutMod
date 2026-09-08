@@ -930,6 +930,46 @@ public class ModSounds {
     public static final ResourceLocation STRAY_CAT_BUBBLE_REDIRECT_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+STRAY_CAT_BUBBLE_REDIRECT_2);
     public static SoundEvent STRAY_CAT_BUBBLE_REDIRECT_2_EVENT = SoundEvent.createVariableRangeEvent(STRAY_CAT_BUBBLE_SOUND_2_ID);
 
+    public static final String KIRA4_DAMAGE_1 = "kira4_damage_1";
+    public static final ResourceLocation KIRA4_DAMAGE_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_1);
+    public static SoundEvent KIRA4_DAMAGE_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_1_ID);
+    public static final String KIRA4_DAMAGE_2 = "kira4_damage_2";
+    public static final ResourceLocation KIRA4_DAMAGE_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_2);
+    public static SoundEvent KIRA4_DAMAGE_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_2_ID);
+    public static final String KIRA4_DAMAGE_3 = "kira4_damage_3";
+    public static final ResourceLocation KIRA4_DAMAGE_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_3);
+    public static SoundEvent KIRA4_DAMAGE_3_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_3_ID);
+    public static final String KIRA4_DAMAGE_4 = "kira4_damage_4";
+    public static final ResourceLocation KIRA4_DAMAGE_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_4);
+    public static SoundEvent KIRA4_DAMAGE_4_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_4_ID);
+    public static final String KIRA4_DAMAGE_5 = "kira4_damage_5";
+    public static final ResourceLocation KIRA4_DAMAGE_5_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_5);
+    public static SoundEvent KIRA4_DAMAGE_5_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_5_ID);
+    public static final String KIRA4_DAMAGE_6 = "kira4_damage_6";
+    public static final ResourceLocation KIRA4_DAMAGE_6_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_6);
+    public static SoundEvent KIRA4_DAMAGE_6_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_6_ID);
+    public static final String KIRA4_DAMAGE_7 = "kira4_damage_7";
+    public static final ResourceLocation KIRA4_DAMAGE_7_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DAMAGE_7);
+    public static SoundEvent KIRA4_DAMAGE_7_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DAMAGE_7_ID);
+
+    public static final String KIRA4_DEATH_1 = "kira4_death_1";
+    public static final ResourceLocation KIRA4_DEATH_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DEATH_1);
+    public static SoundEvent KIRA4_DEATH_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DEATH_1_ID);
+    public static final String KIRA4_DEATH_2 = "kira4_death_2";
+    public static final ResourceLocation KIRA4_DEATH_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DEATH_2);
+    public static SoundEvent KIRA4_DEATH_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DEATH_2_ID);
+    public static final String KIRA4_DEATH_3 = "kira4_death_3";
+    public static final ResourceLocation KIRA4_DEATH_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_DEATH_3);
+    public static SoundEvent KIRA4_DEATH_3_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_DEATH_3_ID);
+
+    public static final String KIRA4_LIVE_HAPPY = "kira4_btd_won";
+    public static final ResourceLocation KIRA4_LIVE_HAPPY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_LIVE_HAPPY);
+    public static SoundEvent KIRA4_LIVE_HAPPY_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_LIVE_HAPPY_ID);
+    public static final String KIRA4_I_BEAT_THEM = "kira4_btd_activate";
+    public static final ResourceLocation KIRA4_I_BEAT_THEM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_I_BEAT_THEM);
+    public static SoundEvent KIRA4_I_BEAT_THEM_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_I_BEAT_THEM_ID);
+
+
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);
     public static SoundEvent EXPLOSIVE_PUNCH_EVENT = SoundEvent.createVariableRangeEvent(EXPLOSIVE_PUNCH_ID);

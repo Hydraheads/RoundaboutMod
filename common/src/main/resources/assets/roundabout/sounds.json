@@ -3585,6 +3585,78 @@
       "roundabout:wsvoice_acid_toss"
     ]
   },
+  "kira4_damage_1": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_1"
+    ]
+  },
+  "kira4_damage_2": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_2"
+    ]
+  },
+  "kira4_damage_3": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_3"
+    ]
+  },
+  "kira4_damage_4": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_4"
+    ]
+  },
+  "kira4_damage_5": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_5"
+    ]
+  },
+  "kira4_damage_6": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_6"
+    ]
+  },
+  "kira4_damage_7": {
+    "subtitle": "sounds.roundabout.kira4_damage",
+    "sounds" : [
+      "roundabout:kira4_damage_7"
+    ]
+  },
+  "kira4_death_1": {
+    "subtitle": "sounds.roundabout.kira4_death",
+    "sounds" : [
+      "roundabout:kira4_death_1"
+    ]
+  },
+  "kira4_death_2": {
+    "subtitle": "sounds.roundabout.kira4_death",
+    "sounds" : [
+      "roundabout:kira4_death_2"
+    ]
+  },
+  "kira4_death_3": {
+    "subtitle": "sounds.roundabout.kira4_nani",
+    "sounds" : [
+      "roundabout:kira4_death_3"
+    ]
+  },
+  "kira4_btd_won": {
+    "subtitle": "sounds.roundabout.kira4_now_free",
+    "sounds" : [
+      "roundabout:kira4_btd_won"
+    ]
+  },
+  "kira4_btd_activate": {
+    "subtitle": "sounds.roundabout.kira4_i_beat_them",
+    "sounds" : [
+      "roundabout:kira4_btd_activate"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [

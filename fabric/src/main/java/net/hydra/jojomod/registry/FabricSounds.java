@@ -416,6 +416,21 @@ public class FabricSounds {
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_1_EVENT);
         addSound(ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_ID, ModSounds.STRAY_CAT_BUBBLE_REDIRECT_2_EVENT);
 
+        addSound(ModSounds.KIRA4_DAMAGE_1_ID, ModSounds.KIRA4_DAMAGE_1_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_2_ID, ModSounds.KIRA4_DAMAGE_2_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_3_ID, ModSounds.KIRA4_DAMAGE_3_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_4_ID, ModSounds.KIRA4_DAMAGE_4_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_5_ID, ModSounds.KIRA4_DAMAGE_5_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_6_ID, ModSounds.KIRA4_DAMAGE_6_EVENT);
+        addSound(ModSounds.KIRA4_DAMAGE_7_ID, ModSounds.KIRA4_DAMAGE_7_EVENT);
+
+        addSound(ModSounds.KIRA4_DEATH_1_ID, ModSounds.KIRA4_DEATH_1_EVENT);
+        addSound(ModSounds.KIRA4_DEATH_2_ID, ModSounds.KIRA4_DEATH_2_EVENT);
+        addSound(ModSounds.KIRA4_DEATH_3_ID, ModSounds.KIRA4_DEATH_3_EVENT);
+
+        addSound(ModSounds.KIRA4_LIVE_HAPPY_ID, ModSounds.KIRA4_LIVE_HAPPY_EVENT);
+        addSound(ModSounds.KIRA4_I_BEAT_THEM_ID, ModSounds.KIRA4_I_BEAT_THEM_EVENT);
+
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
 

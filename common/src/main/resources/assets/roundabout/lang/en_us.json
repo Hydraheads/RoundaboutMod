@@ -1628,6 +1628,12 @@
   "sounds.roundabout.jotaro_dio":  "DIO!",
   "sounds.roundabout.jotaro_getting_closer":  "How else can I...",
 
+  "sounds.roundabout.kira4_damage": "Kira hurt",
+  "sounds.roundabout.kira4_death": "Kira killed",
+  "sounds.roundabout.kira4_nani": "What?!",
+  "sounds.roundabout.kira4_now_free": "Now I can be free!",
+  "sounds.roundabout.kira4_i_beat_them": "I beat them!",
+
   "sounds.roundabout.whitesnake_pucci_stand_summon_1": "Whitesnake",
   "sounds.roundabout.whitesnake_pucci_stand_summon_2": "Whitesnake",
   "sounds.roundabout.pucci_visage_whitesnake_disc_toss": "Pucci speaks",
