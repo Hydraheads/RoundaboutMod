@@ -2827,10 +2827,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.cancel();
         }
 
-        if (BtdPlantedUser != null && BtdPlantedUser.getSelf() != null) {
-            ((StandUser) BtdPlantedUser.getSelf()).roundabout$damageGuard(amount);
-            ci.cancel();
-        }
     }
 
     @Unique
@@ -3764,11 +3760,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
         }
 
-        if (BtdPlantedUser != null && BtdPlantedUser.getSelf() != null) {
-            if (((StandUser)BtdPlantedUser.getSelf()).roundabout$shieldNotDisabled() && !((StandUser)BtdPlantedUser.getSelf()).roundabout$getGuardBroken()) {
-                ci.setReturnValue(true);
-            }
-        }
     }
     @Inject(method = "doAutoAttackOnTouch", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$doAttackOnTouch(LivingEntity $$0, CallbackInfo ci) {
@@ -3805,11 +3796,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return;
             }
         }
-        /*if (rdbt$interceptIncomingHarmIfBTD($$0)) {
-            this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
+        if (rdbt$interceptIncomingHarmIfBTD($$0)) {
+            BtdPlantedUser.btdGuardDamage($$1);
             ci.setReturnValue(false);
             return;
-        }*/
+        }
 
         if ($$0.getEntity() instanceof Player pe) {
             if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1, ((LivingEntity) (Object) this))) {
@@ -6457,12 +6448,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
-    public int BtdPlantedTicks;
-    public PowersKillerQueen BtdPlantedUser;
+    public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
-        if (BtdPlantedUser != null && !this.level().isClientSide()
+        if (!this.level().isClientSide() && BtdPlantedUser != null && BtdPlantedUser.catBtdShield()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
                 && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())

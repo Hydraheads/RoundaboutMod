@@ -330,7 +330,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public static int maxKickTime = 25;
     public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
-    private static final int blockPlantMaxTicks = 14;
+    private static final int blockPlantMaxTicks = 15;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public int btdTicks = -1;
@@ -1786,13 +1786,50 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void updateDetonate() {
+        if (this.currentBombStatus == BOMB_NONE) {
+            this.detonateTimer = -1;
+            if (this.getActivePower() == DETONATE) {
+                this.setPowerNone();
+            }
+        }
         if (this.detonateTimer != -1) {
-            if (this.currentBombStatus == BOMB_NONE) {
-                this.detonateTimer = -1;
-                if (this.getActivePower() == DETONATE) {
-                    this.setPowerNone();
+            if (detonateTimer > getDetonateWindup() - 2) {
+                if (bombEntity instanceof StrayCatEntity SC && SC.getBubbleShield()) {
+                    detonateTimer = getDetonateWindup() - 2;
+                }else {
+                    Entity bomb = bombEntity;
+
+                    if (this.currentBombStatus == BOMB_BLOCK) {
+                        bomb = bombBlock;
+                    } else if (currentBombStatus == BOMB_BUBBLE) {
+                        bomb = bombBubble;
+                    } else if (currentBombStatus == BOMB_ITEM) {
+                        bomb = bombPlantedItem;
+                    }
+
+                    if (bomb != null) {
+                        AABB wallBox = bomb.getBoundingBox().inflate(0.5f);
+
+                        for (StrayCatEntity entity : bomb.level().getEntitiesOfClass(
+                                StrayCatEntity.class, wallBox)) {
+                            double dist = MainUtil.cheapDistanceTo(
+                                    bomb.getX(),
+                                    bomb.getY(),
+                                    bomb.getZ(),
+                                    entity.getX(),
+                                    entity.getY(),
+                                    entity.getZ()
+                            );
+                            if (dist < 1.5) {
+                                detonateTimer = getDetonateWindup() - 2;
+                                break;
+                            }
+                        }
+                    }
                 }
-            } else if (this.detonateTimer >= getDetonateWindup()) {
+            }
+
+            if (this.detonateTimer >= getDetonateWindup()) {
                 this.setAttackTimeDuring(-10);
                 this.explode();
                 this.detonateTimer = -1;
@@ -3300,6 +3337,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (!isClient()) {
+            tickBtdGuard();
 
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();
@@ -3316,12 +3354,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
             }
-
-            /*if (bitesTheDustPlantedEntity != null && bitesTheDustPlantedEntity.isAlive() && !bitesTheDustPlantedEntity.isRemoved()) {
-                StandUser SU = (StandUser)bitesTheDustPlantedEntity;
-                //SU.rdbt$SetBtdPlantedTicks(3);
-                SU.rdbt$SetBtdPlantedUser(this);
-            }*/
 
             this.detectIfShouldDefuse();
             this.updateDetonate();
@@ -3922,7 +3954,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK) {
                 Entity target = MainUtil.getTargetEntity(this.self, 40);
                 if (this.canBubbleTarget(target)) {
-                    return ent == target;
+                    return ent == target && !(ent instanceof StandEntity);
                 }
             }
 
@@ -3937,7 +3969,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            return ent == targetBuffer && ent.isAlive()
+            return ent == targetBuffer && ent.isAlive() && !(ent instanceof StandEntity)
                     || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()
                     && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
                     && LE.getEffect(MobEffects.INVISIBILITY) != null)));
@@ -4604,10 +4636,56 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
-
-
-
         super.onHitGuard(amt, sauce);
+    }
+
+    private final float maximunBtdShieldPoints = getNormalMaxGuardPoints() + 2.5f;
+    public float btdShieldPoints = maximunBtdShieldPoints;
+    public int btdShieldRegenTicks = 0;
+    public boolean btdShieldBroken = false;
+    public int btdShieldCooldown = 0;
+
+    public void btdGuardDamage(float amount) {
+        if (btdShieldCooldown > 0) { return; }
+        bitesTheDustPlantedEntity.level().playSound(null,bitesTheDustPlantedEntity.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
+        float finalValue = btdShieldPoints - amount;
+        if (finalValue <= 0) {
+            btdShieldPoints = 0;
+            btdShieldRegenTicks = 20;
+            btdShieldBroken = true;
+        }else {
+            btdShieldCooldown = 10;
+            btdShieldPoints = finalValue;
+            btdShieldRegenTicks = 16;
+        }
+    }
+
+    public void tickBtdGuard() {
+
+        if (btdShieldPoints < maximunBtdShieldPoints) {
+            if (btdShieldBroken) {
+                btdShieldPoints += (maximunBtdShieldPoints / 100f);
+                if (btdShieldPoints > maximunBtdShieldPoints) {
+                    btdShieldPoints = maximunBtdShieldPoints;
+                    btdShieldBroken = false;
+                }
+            }else {
+                if (btdShieldRegenTicks <= 0) {
+                    btdShieldPoints += (maximunBtdShieldPoints / 220f);
+                    if (btdShieldPoints > maximunBtdShieldPoints) { btdShieldPoints = maximunBtdShieldPoints; }
+                }else {
+                    btdShieldRegenTicks--;
+                }
+            }
+        }
+
+        if (btdShieldCooldown > 0) {
+            btdShieldCooldown--;
+        }
+    }
+
+    public boolean catBtdShield() {
+        return !btdShieldBroken && btdShieldPoints > 0;
     }
 
     // charges resolutions:
