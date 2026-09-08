@@ -6467,9 +6467,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Override
     public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
-        if(!this.level().isClientSide) {
-            BtdPlantedUser = e;
-        }
+        if(!this.level().isClientSide) { BtdPlantedUser = e; }
     }
 
 
