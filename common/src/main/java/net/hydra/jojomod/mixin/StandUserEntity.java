@@ -5578,6 +5578,46 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public int roundabout$explosionInflatTimer = 0;
 
+    @Unique
+    public void rdbt$reduceOtherEffectDurations(int ticks, MobEffect... exclude) {
+        if (this.activeEffects.isEmpty()) return;
+
+        List<MobEffect> toRemove = new ArrayList<>();
+
+        for (Map.Entry<MobEffect, MobEffectInstance> entry : new ArrayList<>(this.activeEffects.entrySet())) {
+            MobEffect effect = entry.getKey();
+
+            boolean skip = false;
+            for (MobEffect ex : exclude) {
+                if (effect.equals(ex)) { skip = true; break; }
+            }
+            if (skip) continue;
+
+            MobEffectInstance old = entry.getValue();
+            if (old.isInfiniteDuration()) continue;
+
+            int newDuration = old.getDuration() - ticks;
+            if (newDuration <= 0) {
+                toRemove.add(effect);
+            } else {
+                MobEffectInstance replacement = new MobEffectInstance(
+                        effect,
+                        newDuration,
+                        old.getAmplifier(),
+                        old.isAmbient(),
+                        old.isVisible(),
+                        old.showIcon()
+                );
+                this.activeEffects.put(effect, replacement);
+                this.onEffectUpdated(replacement, false, rdbt$this());
+            }
+        }
+
+        for (MobEffect effect : toRemove) {
+            this.removeEffect(effect);
+        }
+    }
+
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
@@ -5722,6 +5762,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
                         this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
+                rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
             }
 
             if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
