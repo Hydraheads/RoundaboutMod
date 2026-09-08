@@ -442,6 +442,7 @@ public class FabricSounds {
         addSound(ModSounds.KIRA4_KILLER_QUEEN_4_ID, ModSounds.KIRA4_KILLER_QUEEN_4_EVENT);
 
         addSound(ModSounds.KIRA4_MONOLOGUE_ID, ModSounds.KIRA4_MONOLOGUE_EVENT);
+        addSound(ModSounds.KIRA4_HAYATO_ID, ModSounds.KIRA4_HAYATO_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);
