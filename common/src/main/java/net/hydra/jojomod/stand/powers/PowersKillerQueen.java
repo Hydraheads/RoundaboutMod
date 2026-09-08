@@ -1824,7 +1824,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                                     entity.getY(),
                                     entity.getZ()
                             );
-                            if (dist < 1.5) {
+                            if (dist < 1.5 && entity.getBubbleShield()) {
                                 detonateTimer = getDetonateWindup() - 2;
                                 if (this.getActivePower() == DETONATE) {
                                     this.setPowerNone();
