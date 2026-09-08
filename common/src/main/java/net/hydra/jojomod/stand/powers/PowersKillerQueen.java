@@ -3300,6 +3300,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
         if (!isClient()) {
+            tickBtdGuard();
 
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();
@@ -3316,12 +3317,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }
             }
-
-            /*if (bitesTheDustPlantedEntity != null && bitesTheDustPlantedEntity.isAlive() && !bitesTheDustPlantedEntity.isRemoved()) {
-                StandUser SU = (StandUser)bitesTheDustPlantedEntity;
-                //SU.rdbt$SetBtdPlantedTicks(3);
-                SU.rdbt$SetBtdPlantedUser(this);
-            }*/
 
             this.detectIfShouldDefuse();
             this.updateDetonate();
@@ -4604,10 +4599,53 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     @Override
     public void onHitGuard(float amt, DamageSource sauce){
-
-
-
         super.onHitGuard(amt, sauce);
+    }
+
+    private final float maximunBtdShieldPoints = getNormalMaxGuardPoints() + 2.5f;
+    public float btdShieldPoints = maximunBtdShieldPoints;
+    public int btdShieldRegenTicks = 0;
+    public boolean btdShieldBroken = false;
+    public int btdShieldCooldown = 0;
+
+    public void btdGuardDamage(float amount) {
+        if (btdShieldCooldown > 0) { return; }
+
+        float finalValue = btdShieldPoints - amount;
+        if (finalValue <= 0) {
+            btdShieldPoints = 0;
+            btdShieldRegenTicks = 20;
+            btdShieldBroken = true;
+        }else {
+            btdShieldCooldown = 10;
+            btdShieldPoints = finalValue;
+            btdShieldRegenTicks = 16;
+        }
+    }
+
+    public void tickBtdGuard() {
+
+        if (btdShieldPoints < maximunBtdShieldPoints) {
+            if (btdShieldBroken) {
+                btdShieldPoints += (maximunBtdShieldPoints / 100f);
+                if (btdShieldPoints > maximunBtdShieldPoints) { btdShieldPoints = maximunBtdShieldPoints; }
+            }else {
+                if (btdShieldRegenTicks <= 0) {
+                    btdShieldPoints += (maximunBtdShieldPoints / 220f);
+                    if (btdShieldPoints > maximunBtdShieldPoints) { btdShieldPoints = maximunBtdShieldPoints; }
+                }else {
+                    btdShieldRegenTicks--;
+                }
+            }
+        }
+
+        if (btdShieldCooldown > 0) {
+            btdShieldCooldown--;
+        }
+    }
+
+    public boolean catBtdShield() {
+        return !btdShieldBroken && btdShieldPoints > 0;
     }
 
     // charges resolutions:
