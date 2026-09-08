@@ -47,6 +47,8 @@ public class KiraPartFourVoice extends VoiceData{
     public void challenge(){
         if (staringTicks >= 12) {
             playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
+            lastTarget = -1;
+            staringTicks = 0;
         }else {
             Entity target = MainUtil.getTargetEntity(this.self, 9);
             if (target instanceof LivingEntity) {
