@@ -1005,8 +1005,9 @@ public class ModSounds {
     public static final ResourceLocation KIRA4_KILLER_QUEEN_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KILLER_QUEEN_4);
     public static SoundEvent KIRA4_KILLER_QUEEN_4_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KILLER_QUEEN_4_ID);
 
-
-
+    public static final String KIRA4_MONOLOGUE = "kira4_monologue";
+    public static final ResourceLocation KIRA4_MONOLOGUE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_MONOLOGUE);
+    public static SoundEvent KIRA4_MONOLOGUE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_MONOLOGUE_ID);
 
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);

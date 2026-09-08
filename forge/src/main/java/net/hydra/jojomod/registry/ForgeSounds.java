@@ -481,6 +481,9 @@ public class ForgeSounds {
     public static final RegistryObject<SoundEvent> KIRA4_KILLER_QUEEN_4_EVENT =
             register(ModSounds.KIRA4_KILLER_QUEEN_4, ModSounds.KIRA4_KILLER_QUEEN_4_ID);
 
+    public static final RegistryObject<SoundEvent> KIRA4_MONOLOGUE_EVENT =
+            register(ModSounds.KIRA4_MONOLOGUE, ModSounds.KIRA4_MONOLOGUE_ID);
+
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
             register(ModSounds.EXPLOSIVE_PUNCH, ModSounds.EXPLOSIVE_PUNCH_ID);
     public static final RegistryObject<SoundEvent> FIRE_BLAST_EVENT =

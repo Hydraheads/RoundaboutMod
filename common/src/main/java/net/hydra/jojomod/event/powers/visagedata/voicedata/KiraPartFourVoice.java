@@ -39,6 +39,7 @@ public class KiraPartFourVoice extends VoiceData{
 
 
     public void challenge(){
+
     }
 }
 

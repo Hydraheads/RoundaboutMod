@@ -3723,6 +3723,12 @@
       "roundabout:kira4_kq_4"
     ]
   },
+  "kira4_monologue": {
+    "subtitle": "sounds.roundabout.kira4_monologue",
+    "sounds" : [
+      "roundabout:kira4_monologue"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [

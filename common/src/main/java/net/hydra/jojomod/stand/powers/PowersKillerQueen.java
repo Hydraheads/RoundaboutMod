@@ -32,6 +32,8 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
@@ -3666,7 +3668,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     
     @Override
     public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
-    
+
+    @Override
+    public void playSummonSound() {
+        if (this.self.isCrouching() || hasHandsOut()){
+            return;
+        }
+
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice JV){
+            JV.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+    }
+
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
