@@ -58,7 +58,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private AABB blockBB = null;
 	public int renderFadeIn = 0;
 	public int renderFadeInMax = 14;
-	public int renderFadeCooldown = 5;
+	public int renderFadeCooldown = 10;
 
 	@Override
 	protected void defineSynchedData() {

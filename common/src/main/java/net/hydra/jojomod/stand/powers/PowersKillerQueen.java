@@ -330,7 +330,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public static int maxKickTime = 25;
     public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
-    private static final int blockPlantMaxTicks = 14;
+    private static final int blockPlantMaxTicks = 15;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public int btdTicks = -1;
@@ -1786,13 +1786,50 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public void updateDetonate() {
+        if (this.currentBombStatus == BOMB_NONE) {
+            this.detonateTimer = -1;
+            if (this.getActivePower() == DETONATE) {
+                this.setPowerNone();
+            }
+        }
         if (this.detonateTimer != -1) {
-            if (this.currentBombStatus == BOMB_NONE) {
-                this.detonateTimer = -1;
-                if (this.getActivePower() == DETONATE) {
-                    this.setPowerNone();
+            if (detonateTimer > getDetonateWindup() - 2) {
+                if (bombEntity instanceof StrayCatEntity SC && SC.getBubbleShield()) {
+                    detonateTimer = getDetonateWindup() - 2;
+                }else {
+                    Entity bomb = bombEntity;
+
+                    if (this.currentBombStatus == BOMB_BLOCK) {
+                        bomb = bombBlock;
+                    } else if (currentBombStatus == BOMB_BUBBLE) {
+                        bomb = bombBubble;
+                    } else if (currentBombStatus == BOMB_ITEM) {
+                        bomb = bombPlantedItem;
+                    }
+
+                    if (bomb != null) {
+                        AABB wallBox = bomb.getBoundingBox().inflate(0.5f);
+
+                        for (StrayCatEntity entity : bomb.level().getEntitiesOfClass(
+                                StrayCatEntity.class, wallBox)) {
+                            double dist = MainUtil.cheapDistanceTo(
+                                    bomb.getX(),
+                                    bomb.getY(),
+                                    bomb.getZ(),
+                                    entity.getX(),
+                                    entity.getY(),
+                                    entity.getZ()
+                            );
+                            if (dist < 1.5) {
+                                detonateTimer = getDetonateWindup() - 2;
+                                break;
+                            }
+                        }
+                    }
                 }
-            } else if (this.detonateTimer >= getDetonateWindup()) {
+            }
+
+            if (this.detonateTimer >= getDetonateWindup()) {
                 this.setAttackTimeDuring(-10);
                 this.explode();
                 this.detonateTimer = -1;
@@ -3917,7 +3954,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (this.currentBombStatus == BOMB_BUBBLE && this.isGuarding() || this.activePower == PowerIndex.POWER_2_BLOCK) {
                 Entity target = MainUtil.getTargetEntity(this.self, 40);
                 if (this.canBubbleTarget(target)) {
-                    return ent == target;
+                    return ent == target && !(ent instanceof StandEntity);
                 }
             }
 
@@ -3932,7 +3969,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            return ent == targetBuffer && ent.isAlive()
+            return ent == targetBuffer && ent.isAlive() && !(ent instanceof StandEntity)
                     || (this.bombBubble != null && this.bombBubble.getTarget() == ent && this.bombBubble.getTarget().isAlive()
                     && !(MainUtil.getEntityIsTrulyInvisible(ent) || (ent instanceof LivingEntity LE
                     && LE.getEffect(MobEffects.INVISIBILITY) != null)));
