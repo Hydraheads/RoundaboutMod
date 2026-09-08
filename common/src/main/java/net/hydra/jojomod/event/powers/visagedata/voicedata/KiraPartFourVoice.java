@@ -2,6 +2,8 @@ package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class KiraPartFourVoice extends VoiceData{
@@ -38,8 +40,27 @@ public class KiraPartFourVoice extends VoiceData{
     }
 
 
-    public void challenge(){
+    int staringTicks = 0;
+    int lastTarget = -1;
 
+
+    public void challenge(){
+        if (staringTicks >= 12) {
+            playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
+        }else {
+            Entity target = MainUtil.getTargetEntity(this.self, 9);
+            if (target instanceof LivingEntity) {
+                if (target.getId() != lastTarget) {
+                    lastTarget = target.getId();
+                    staringTicks = 0;
+                } else {
+                    staringTicks++;
+                }
+            } else {
+                lastTarget = -1;
+                staringTicks = 0;
+            }
+        }
     }
 }
 
