@@ -91,6 +91,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.border.WorldBorder;
@@ -2108,10 +2109,8 @@ public class PowersKingCrimson extends BlockGrabPreset {
             );
             targetBox = RotationUtil.boxPlayerToWorld(targetBox, ((IGravityEntity) entity).roundabout$getGravityDirection());
 
-        for(VoxelShape $$2 : level.getBlockCollisions(entity, targetBox)) {
-            if (!$$2.isEmpty()) {
-                return;
-            }
+        if (level.collidesWithSuffocatingBlock(entity, targetBox)) {
+            return;
         }
 
             boolean deviousStratBlocker = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindStopsDeviousStrategies;
