@@ -1724,7 +1724,7 @@ public class PowersStarPlatinum extends TWAndSPSharedPowers {
 
     @Override
     public void playSummonSound() {
-        if (this.self.isCrouching()){
+        if (this.self.isCrouching() || hasHandsOut()){
             return;
         }
 
