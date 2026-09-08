@@ -85,7 +85,7 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
                 matrixStack.translate(0,-1.5,0);
 
                 model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
-                        0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / 12) + (partialTicks * 0.05F), 1f));
+                        0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / blockBombEntity.renderFadeInMax) + (partialTicks * 0.05F), 1f));
                 matrixStack.popPose();
         	}
         }

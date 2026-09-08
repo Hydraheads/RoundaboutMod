@@ -3805,11 +3805,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 return;
             }
         }
-        if (rdbt$interceptIncomingHarmIfBTD($$0)) {
+        /*if (rdbt$interceptIncomingHarmIfBTD($$0)) {
             this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
             ci.setReturnValue(false);
             return;
-        }
+        }*/
 
         if ($$0.getEntity() instanceof Player pe) {
             if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1, ((LivingEntity) (Object) this))) {
