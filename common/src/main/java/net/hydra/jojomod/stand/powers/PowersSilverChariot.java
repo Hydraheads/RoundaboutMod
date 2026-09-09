@@ -502,8 +502,6 @@ public class PowersSilverChariot extends NewPunchingStand {
         return 0.50F;
     }
 
-    public boolean unarmouredInArmsMode = false;
-
     public boolean hasRapier = true;
 
     private float CONTROL_MODE_RANGE = 3f;
@@ -664,6 +662,10 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon) {
+            if (isPiloting()) {
+                setPiloting(0);
+                SilverChariotClient.exit();
+            }
             // TODO: Implement armor shed support
             this.desummon = true;
             if (!armoured && !regainingArmourFromDesummon) {
@@ -713,7 +715,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canGuard() {
-        return !this.isBarraging() && !this.isClashing();
+        return !onCooldown(PowerIndex.SKILL_4) && !this.isBarraging() && !this.isClashing();
     }
 
     @Override
@@ -1405,9 +1407,9 @@ public class PowersSilverChariot extends NewPunchingStand {
     public float getBarrageFinisherStrength(Entity entity) {
         float str = super.getBarrageFinisherStrength(entity);
         if (this.getReducedDamage(entity)) {
-            str *= levelupDamageMod(this.getAttackMultOnPlayers());
+            str *= levelupDamageMod(this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            str *= levelupDamageMod(this.getAttackMultOnMobs());
+            str *= levelupDamageMod(this.getAttackMultOnMobs() * 0.01F);
         }
         return str;
     }
@@ -2041,11 +2043,11 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void updateRapierSpin() {
         float dist = 5F;
-        int angle = 30;
+        int angle = 40;
         // this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring <= this.getRapierSpinDuration()) {
-                if (this.attackTimeDuring % 10 == 0) {
+                if (this.attackTimeDuring % 20 == 0) {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
                 }
                 if (this.self instanceof Player) {
@@ -2184,6 +2186,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     // Armor shed
     public void armorShedClient() {
         if (!regainingArmourFromDesummon && !this.onCooldown(PowerIndex.SKILL_2_GUARD) && canExecuteMoveWithLevel(getArmorShedLevel()) && armoured) {
+            armoured = false;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
@@ -2308,9 +2311,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         if (HeatUtil.isArmsFrozen(self)){
-            this.attackTimeMax = 36;
+            // this.attackTimeMax = 36;
+            this.attackTimeMax = armoured ? 21 : 10;
         } else {
-            this.attackTimeMax = 21;
+            // this.attackTimeMax = 21;
+            this.attackTimeMax = armoured ? 12 : 6;
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
@@ -2598,7 +2603,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean isBrawling() {
-        return super.isBrawling();
+        return false;
     }
 
     @Override
@@ -2694,12 +2699,12 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean interceptAttack() {
-        return !regainingArmourFromDesummon || !onCooldown(PowerIndex.SKILL_4);
+        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4);
     }
 
     @Override
     public boolean interceptGuard() {
-        return !regainingArmourFromDesummon || !onCooldown(PowerIndex.SKILL_4);
+        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4);
     }
 
     @Override
@@ -2707,6 +2712,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("hasArmsOut",hasArmsOut);
         $$0.putBoolean("isRenderingArms",isRenderingArms);
+        $$0.putBoolean("armoured", armoured);
     }
 
     @Override
@@ -2717,6 +2723,9 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
         if ($$0.contains("isRenderingArms")) {
             isRenderingArms = $$0.getBoolean("isRenderingArms");
+        }
+        if ($$0.contains("armoured")) {
+            armoured = $$0.getBoolean("armoured");
         }
     }
 

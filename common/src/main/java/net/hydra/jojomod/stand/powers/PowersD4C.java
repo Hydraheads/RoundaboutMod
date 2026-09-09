@@ -7,10 +7,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.BlockD4CEntity;
-import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
@@ -792,33 +789,42 @@ public class PowersD4C extends NewPunchingStand {
 
 
         if (hasChest){
-            Entity copyEntity = ModEntities.PARALLEL_CHEST.create(self.level());
+
+            boolean needsRefill = ParallelChestEntity.needsARefill(self);
+            boolean randomChance = true;
+
+            if (needsRefill || randomChance){
+                Entity copyEntity = ModEntities.PARALLEL_CHEST.create(self.level());
 
 
-            if (copyEntity!=null) {
+                if (copyEntity instanceof ParallelChestEntity pce) {
 
 
-                Vec3 spawnPos = findWorldMergeChestSpawnPosition(
-                        sl,
-                        copyEntity,
-                        10
-                );
-
-                if (spawnPos != null) {
-
-                    // Position
-                    copyEntity.moveTo(
-                            spawnPos.x,
-                            spawnPos.y,
-                            spawnPos.z,
-                            0,
-                            0
+                    Vec3 spawnPos = findWorldMergeChestSpawnPosition(
+                            sl,
+                            copyEntity,
+                            10
                     );
 
-                    // Alternate universe
-                    PowerTypes.setPlaneOfExisting(copyEntity, worldId);
-                    PowerTypes.setTicksUntilGone(copyEntity, PowerTypes.getForeignWorldMaxTime(worldId), worldId);
-                    self.level().addFreshEntity(copyEntity);
+                    if (spawnPos != null) {
+
+                        // Position
+                        copyEntity.moveTo(
+                                spawnPos.x,
+                                spawnPos.y,
+                                spawnPos.z,
+                                0,
+                                0
+                        );
+
+                        // Alternate universe
+                        PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                        PowerTypes.setTicksUntilGone(copyEntity, PowerTypes.getForeignWorldMaxTime(worldId), worldId);
+                        if (needsRefill){
+                            pce.setAmmo(true);
+                        }
+                        self.level().addFreshEntity(copyEntity);
+                    }
                 }
             }
         }

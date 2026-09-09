@@ -40,39 +40,11 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         super($$0.durability(1500));
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack p_41456_) {
-        return false;
-    }
-
-    private static final String AMMO_COUNT_TAG = "AmmoCount";
-    private static final String RELOADING_TAG = "IsReloading";
-
-    private int getAmmo(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
-    }
-
-    private void setAmmo(ItemStack stack, int count) {
-        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
-    }
-
-    private boolean getReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
-    private void setReloading(ItemStack stack, boolean value) {
-        stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
-    }
 
     int maxAmmo = 30;
-
-    private boolean isReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
     @Override
-    public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BOW;
+    public int getMaxAmmo(){
+        return maxAmmo;
     }
 
     private boolean hasTommyAmmo(Player player) {
@@ -131,16 +103,6 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
         return consumed;
     }
 
-    public void cancelReload(ItemStack stack, Player player) {
-        if (isReloading(stack)) {
-            setReloading(stack, false);
-            if (player != null){
-                ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
-                player.getCooldowns().removeCooldown(this);
-                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
-    }
 
     @Override
     public void fireBullet(Level level, Player player, InteractionHand hand) {
@@ -259,16 +221,16 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
             return;
         }
 
-        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && player.getMainHandItem() == stack
-                || isReloading(stack) && !player.getCooldowns().isOnCooldown(this) && (player.getOffhandItem() == stack)) {
+        if (isReloading(stack) && !player.getCooldowns().isOnCooldown(stack.getItem()) && player.getMainHandItem() == stack
+                || isReloading(stack) && !player.getCooldowns().isOnCooldown(stack.getItem()) && (player.getOffhandItem() == stack)) {
             int currentAmmo = getAmmo(stack);
-            int ammoNeeded = maxAmmo - currentAmmo;
+            int ammoNeeded = getMaxAmmo() - currentAmmo;
 
             int ammoLoaded = consumeTommyAmmo(player, ammoNeeded);
 
             if (ammoLoaded > 0) {
                 if (player.isCreative()) {
-                    setAmmo(stack, maxAmmo);
+                    setAmmo(stack, getMaxAmmo());
                 } else {
                     setAmmo(stack, currentAmmo + ammoLoaded);
                 }
@@ -279,12 +241,4 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
     }
 
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        int ammo = getAmmo(stack);
-        tooltip.add(
-                Component.literal("Ammo: " + ammo + " / " + maxAmmo)
-                        .withStyle(ChatFormatting.GRAY)
-        );
-    }
 }

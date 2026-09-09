@@ -2,11 +2,17 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -89,12 +95,63 @@ public class ParallelChestEntity extends Entity {
         return false;
     }
 
+    public void refillAGun(Player player){
+        if (player != null){
+            for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                ItemStack $$6 = player.getInventory().getItem($$5);
+                if ($$6.getItem() instanceof FirearmItem fi){
+                    if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                        fi.setAmmo($$6, fi.getMaxAmmo());
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean needsARefill(Entity entity){
+        if (entity instanceof Player player){
+            for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                ItemStack $$6 = player.getInventory().getItem($$5);
+                if ($$6.getItem() instanceof FirearmItem fi){
+                    if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
-        if (!player.level().isClientSide()) {
+        if (!player.level().isClientSide() && player.level() instanceof ServerLevel sl
+        && player instanceof ServerPlayer sp) {
             this.playSound(ModSounds.SPECIAL_CHEST_EVENT);
             this.playSound(SoundEvents.CHEST_OPEN);
             setOpened(true);
+            for (int i = 0; i < 10; i++) {
+
+                double angle = (Math.PI * 2.0D / 10.0D) * i;
+                double radius = 0.5D;
+
+                float circleX = (float)(Math.cos(angle) * radius);
+                float circleZ = (float)(Math.sin(angle) * radius);
+
+                MainUtil.sendParticlesIfPossible(
+                        sp, sl, ParticleTypes.END_ROD,
+                        this.getX(), this.getY(), this.getZ(),
+                        0,
+                        circleX, 2D, circleZ,
+                        0.2D
+                );
+            }
+            if (getAmmo()){
+                refillAGun(sp);
+                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.gun_restore"), true);
+            } else {
+                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.goody"), true);
+            }
         }
         return InteractionResult.SUCCESS;
     }
@@ -102,15 +159,18 @@ public class ParallelChestEntity extends Entity {
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(OPENED)) {
             this.entityData.define(OPENED, false);
+            this.entityData.define(AMMO, false);
         }
     }
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("openedChest", getOpened());
+        $$0.putBoolean("ammoChest", getAmmo());
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setOpened($$0.getBoolean("openedChest"));
+        this.setAmmo($$0.getBoolean("ammoChest"));
     }
 
     public boolean getOpened() {
@@ -119,6 +179,14 @@ public class ParallelChestEntity extends Entity {
     public void setOpened(boolean bool){
         this.entityData.set(OPENED, bool);
     }
+    public boolean getAmmo() {
+        return this.getEntityData().get(AMMO);
+    }
+    public void setAmmo(boolean bool){
+        this.entityData.set(AMMO, bool);
+    }
     private static final EntityDataAccessor<Boolean> OPENED =
+            SynchedEntityData.defineId(ParallelChestEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> AMMO =
             SynchedEntityData.defineId(ParallelChestEntity.class, EntityDataSerializers.BOOLEAN);
 }
