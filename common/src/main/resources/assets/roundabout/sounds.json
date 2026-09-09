@@ -17,6 +17,12 @@
       "roundabout:d4c_copy_block"
     ]
   },
+  "special_chest": {
+    "subtitle": "sounds.roundabout.special_chest",
+    "sounds": [
+      "roundabout:special_chest"
+    ]
+  },
   "block_attract": {
     "subtitle": "sounds.roundabout.block_attract",
     "sounds": [
