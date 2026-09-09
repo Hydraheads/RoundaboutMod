@@ -95,10 +95,27 @@ public class ParallelChestEntity extends Entity {
             for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
                 ItemStack $$6 = player.getInventory().getItem($$5);
                 if ($$6.getItem() instanceof FirearmItem fi){
-
+                    if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                        fi.setAmmo($$6, fi.getMaxAmmo());
+                        return;
+                    }
                 }
             }
         }
+    }
+
+    public static boolean needsARefill(Entity entity){
+        if (entity instanceof Player player){
+            for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                ItemStack $$6 = player.getInventory().getItem($$5);
+                if ($$6.getItem() instanceof FirearmItem fi){
+                    if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -114,6 +131,7 @@ public class ParallelChestEntity extends Entity {
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(OPENED)) {
             this.entityData.define(OPENED, false);
+            this.entityData.define(AMMO, false);
         }
     }
     @Override
