@@ -106,6 +106,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
+        event.put(ForgeEntities.KIRA4.get(), KiraPartFourNPC.createAttributes().build());
         event.put(ForgeEntities.PUCCI.get(), PucciNPC.createAttributes().build());
         event.put(ForgeEntities.AVDOL.get(), AvdolNPC.createAttributes().build());
         event.put(ForgeEntities.DIO.get(), DIONPC.createAttributes().build());
@@ -904,6 +905,7 @@ public class ForgeEvents {
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.ENYA = ForgeEntities.ENYA.get();
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();
+        ModEntities.KIRA4 = ForgeEntities.KIRA4.get();
         ModEntities.PUCCI = ForgeEntities.PUCCI.get();
         ModEntities.DIO = ForgeEntities.DIO.get();
         ModEntities.PARALLEL_DIEGO = ForgeEntities.PARALLEL_DIEGO.get();

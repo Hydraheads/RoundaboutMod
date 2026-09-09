@@ -184,6 +184,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.OVA_ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENYA.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.JOTARO.get(), VisageBasisRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.KIRA4.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.PUCCI.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.AVDOL.get(), VisageBasisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.DIO.get(), VisageBasisRenderer::new);

@@ -2546,6 +2546,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(true);
 
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playTertiaryBomb();
+            }
+
             bitesTheDustPlantedEntity = target;
             ((StandUser)target).rdbt$SetBtdPlantedUser(this);
             saveCombatEntitiesSeconds(target.position());
@@ -2655,7 +2660,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             return false;
         }
 
-        detectWhoBitedTheDust(target);
+        detectWhoBitedTheDust(target, false);
+
+        if (!bitedTheDust.isEmpty()) {
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playBtdActivation();
+            }
+        }
 
         btdTicks = 0;
 
@@ -2754,6 +2766,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
 
         if (!list.isEmpty()) {
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playBtdActivation();
+            }
+
             int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
 
             for (Entity ent : list) {
@@ -2836,10 +2853,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void detectWhoBitedTheDust(Entity target) {
-        detectWhoBitedTheDust(target, false);
-    }
-
     public void detectWhoBitedTheDust(Entity target, boolean dayMode) {
         Vec3 pos = target.position();
 
@@ -2857,20 +2870,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                         int dayTime = ((int)this.self.level().getDayTime()) % 24000;
                         dayBitedTheDustinit();
                         if (dayBitedTheDust.containsKey(id)) {
-                            int oldTime = dayBitedTheDust.get(id);
-                            if (oldTime > dayTime) {
-                                dayBitedTheDust.replace(id, dayTime);
-                            }
+                            dayBitedTheDust.replace(id, dayTime);
                         } else {
                             dayBitedTheDust.put(id, dayTime);
                         }
                     }else{
                         bitedTheDustInit();
                         if (bitedTheDust.containsKey(id)) {
-                            int oldTicks = bitedTheDust.get(id);
-                            if (oldTicks > this.btdTicks) {
-                                bitedTheDust.replace(id, this.btdTicks);
-                            }
+                            bitedTheDust.replace(id, this.btdTicks);
                         } else {
                             bitedTheDust.put(id, this.btdTicks);
                         }
@@ -3359,6 +3366,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (!isClient()) {
             tickBtdGuard();
+            if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
+                if ( self instanceof Player player
+                        && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice && !voice.inTheMiddleOfTalking()) {
+                    Vec3 pos = bitesTheDustPlantedEntity.position();
+
+                    if (!MainUtil.genHitbox(bitesTheDustPlantedEntity.level(),
+                            pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange).isEmpty()) {
+                        voice.playBtdRange();
+                    }
+                }
+            }
 
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();

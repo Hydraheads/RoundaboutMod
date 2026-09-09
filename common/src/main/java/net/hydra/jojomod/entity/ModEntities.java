@@ -166,6 +166,7 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<KiraPartFourNPC> KIRA4;
     public static EntityType<PucciNPC> PUCCI;
 
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;

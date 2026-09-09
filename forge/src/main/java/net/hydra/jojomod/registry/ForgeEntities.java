@@ -71,6 +71,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro").toString())
             );
+    public static final RegistryObject<EntityType<KiraPartFourNPC>> KIRA4 =
+            ENTITY_TYPES.register("jojo_npc_kira_part_four", () ->
+                    EntityType.Builder.of(KiraPartFourNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_kira_part_four").toString())
+            );
     public static final RegistryObject<EntityType<PucciNPC>> PUCCI =
             ENTITY_TYPES.register("jojo_npc_pucci", () ->
                     EntityType.Builder.of(PucciNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).

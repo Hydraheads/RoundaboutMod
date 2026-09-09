@@ -3801,6 +3801,24 @@
       "roundabout:kira4_sha_3"
     ]
   },
+  "kira4_kq_btd_1": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_1"
+    ]
+  },
+  "kira4_kq_btd_2": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_2"
+    ]
+  },
+  "kira4_btd_range": {
+    "subtitle": "sounds.roundabout.kira4_btd_range",
+    "sounds" : [
+      "roundabout:kira4_btd_range"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [
