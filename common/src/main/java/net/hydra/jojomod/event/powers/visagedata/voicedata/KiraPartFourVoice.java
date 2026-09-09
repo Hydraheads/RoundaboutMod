@@ -92,17 +92,17 @@ public class KiraPartFourVoice extends VoiceData{
             }
         }
 
-        if (self.getDeltaMovement().lengthSqr() > 0.4f) {
+        if (self.getDeltaMovement().lengthSqr() > 0.2f) {
             lastTarget = -1;
             staringTicks = 0;
-        }else if (staringTicks >= 75) {
+        }else if (staringTicks >= 295 && self.tickCount % 11 == 0) {
             playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
         }else {
             Entity target = MainUtil.getTargetEntity(this.self, 9);
             if (target instanceof LivingEntity) {
                 if (target.getId() != lastTarget) {
                     lastTarget = target.getId();
-                    staringTicks = 0;
+                    staringTicks = -1;
                 } else {
                     staringTicks++;
                 }
