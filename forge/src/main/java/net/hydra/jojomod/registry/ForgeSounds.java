@@ -497,6 +497,15 @@ public class ForgeSounds {
             register(ModSounds.KIRA4_JOTARO_STAND, ModSounds.KIRA4_JOTARO_STAND_ID);
     public static final RegistryObject<SoundEvent> KIRA4_JOTARO_WATCH_EVENT =
             register(ModSounds.KIRA4_JOTARO_WATCH, ModSounds.KIRA4_JOTARO_WATCH_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_PRIMARY_BOMB_EVENT =
+            register(ModSounds.KIRA4_PRIMARY_BOMB, ModSounds.KIRA4_PRIMARY_BOMB_ID);
+
+    public static final RegistryObject<SoundEvent> KIRA4_SHA_1_EVENT =
+            register(ModSounds.KIRA4_SHA_1, ModSounds.KIRA4_SHA_1_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_SHA_2_EVENT =
+            register(ModSounds.KIRA4_SHA_2, ModSounds.KIRA4_SHA_2_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_SHA_3_EVENT =
+            register(ModSounds.KIRA4_SHA_3, ModSounds.KIRA4_SHA_3_ID);
 
 
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =

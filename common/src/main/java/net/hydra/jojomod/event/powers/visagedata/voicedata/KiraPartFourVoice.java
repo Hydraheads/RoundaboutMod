@@ -112,5 +112,24 @@ public class KiraPartFourVoice extends VoiceData{
             }
         }
     }
+
+    public void playPrimaryBomb() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+
+        playSoundAttack(ModSounds.KIRA4_PRIMARY_BOMB_EVENT, 62);
+    }
+
+    public void playSecondaryBomb() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+        double db = Math.random();
+        if (db < 0.33) {
+            playSoundAttack(ModSounds.KIRA4_SHA_1_EVENT, 106);
+        }else if (db < 0.66) {
+            playSoundAttack(ModSounds.KIRA4_SHA_2_EVENT, 56);
+        }else {
+            playSoundAttack(ModSounds.KIRA4_SHA_3_EVENT, 52);
+        }
+
+    }
 }
 

@@ -3777,6 +3777,30 @@
       "roundabout:kira4_jotaro_stand"
     ]
   },
+  "kira4_kq_bomb": {
+    "subtitle": "sounds.roundabout.kira4_kq_bomb",
+    "sounds" : [
+      "roundabout:kira4_kq_bomb"
+    ]
+  },
+  "kira4_sha_1": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_1"
+    ]
+  },
+  "kira4_sha_2": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_2"
+    ]
+  },
+  "kira4_sha_3": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_3"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [
