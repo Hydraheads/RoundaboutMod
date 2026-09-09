@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
+import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -258,6 +259,8 @@ public class MainUtil {
     public static ArrayList<String> unbreakableThrownItems = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
+
+
 
     public record FoodBloodStats(String id, int hunger, float saturation) {}
 
@@ -1002,6 +1005,7 @@ public class MainUtil {
         }
         return false;
     }
+
     public static <T extends ParticleOptions> void sendParticlesIfPossible(
             Entity self,
             Level level,
@@ -2714,7 +2718,7 @@ public class MainUtil {
                 return false;
                 //return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
-        } else if (entity instanceof EncasementBubbleEntity sbe){
+        } else if (entity instanceof EncasementBubbleEntity  || entity instanceof ParallelChestEntity){
             return false;
         }
         return entity.isPickable();
