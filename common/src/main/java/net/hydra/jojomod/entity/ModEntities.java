@@ -166,6 +166,7 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<KiraPartFourNPC> KIRA4;
     public static EntityType<PucciNPC> PUCCI;
 
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
@@ -201,6 +202,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
+
+    public static EntityType<ParallelChestEntity> PARALLEL_CHEST;
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;

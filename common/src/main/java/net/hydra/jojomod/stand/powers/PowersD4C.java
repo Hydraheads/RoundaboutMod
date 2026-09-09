@@ -7,10 +7,7 @@ import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
-import net.hydra.jojomod.entity.BlockD4CEntity;
-import net.hydra.jojomod.entity.BlockWallEntity;
-import net.hydra.jojomod.entity.D4CCloneEntity;
-import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.objects.FallingBannerEntity;
@@ -648,7 +645,7 @@ public class PowersD4C extends NewPunchingStand {
                         ), self.getEyePosition().x,
                         self.getEyePosition().y, self.getEyePosition().z,
                         20, 0.3, 0.3, 0.3, 0.3);
-                populateWorld((byte) worldId);
+                populateWorld((byte) worldId, true);
                 enactEligability2();
                 PowerTypes.setPlaneOfExisting(self, (byte) worldId);
                 playStandUserOnlySoundsIfNearby(WORLD_MERGE, 50, false, false);
@@ -671,7 +668,7 @@ public class PowersD4C extends NewPunchingStand {
             }
         }
     }
-    public void populateWorld(byte worldId) {
+    public void populateWorld(byte worldId, boolean hasChest) {
         if (!(self.level() instanceof ServerLevel sl)) {
             return;
         }
@@ -787,6 +784,48 @@ public class PowersD4C extends NewPunchingStand {
 
             if (createParallelCopy(sl, target, spawnPos, worldId)) {
                 copied++;
+            }
+        }
+
+
+        if (hasChest){
+
+            boolean needsRefill = ParallelChestEntity.needsARefill(self);
+            boolean randomChance = true;
+
+            if (needsRefill || randomChance){
+                Entity copyEntity = ModEntities.PARALLEL_CHEST.create(self.level());
+
+
+                if (copyEntity instanceof ParallelChestEntity pce) {
+
+
+                    Vec3 spawnPos = findWorldMergeChestSpawnPosition(
+                            sl,
+                            copyEntity,
+                            10
+                    );
+
+                    if (spawnPos != null) {
+
+                        // Position
+                        copyEntity.moveTo(
+                                spawnPos.x,
+                                spawnPos.y,
+                                spawnPos.z,
+                                0,
+                                0
+                        );
+
+                        // Alternate universe
+                        PowerTypes.setPlaneOfExisting(copyEntity, worldId);
+                        PowerTypes.setTicksUntilGone(copyEntity, PowerTypes.getForeignWorldMaxTime(worldId), worldId);
+                        if (needsRefill){
+                            pce.setAmmo(true);
+                        }
+                        self.level().addFreshEntity(copyEntity);
+                    }
+                }
             }
         }
 
@@ -1297,9 +1336,78 @@ public class PowersD4C extends NewPunchingStand {
     }
 
     @Nullable
+    public Vec3 findWorldMergeChestSpawnPosition(
+            ServerLevel level,
+            Entity entity,
+            double radius
+    ) {
+        int attempts = 40;
+        double minDistance = 3.5D;
+
+        for (int i = 0; i < attempts; i++) {
+
+            double angle = Math.random() * Math.PI * 2.0D;
+
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+
+            double x = self.getX() + Math.cos(angle) * distance;
+            double z = self.getZ() + Math.sin(angle) * distance;
+
+            int blockX = Mth.floor(x);
+            int blockZ = Mth.floor(z);
+
+            int baseY = Mth.floor(self.getY());
+
+            for (int yOffset = -4; yOffset <= 4; yOffset++) {
+
+                int blockY = baseY + yOffset;
+
+                BlockPos groundPos = new BlockPos(blockX, blockY - 1, blockZ);
+                BlockPos chestPos = new BlockPos(blockX, blockY, blockZ);
+                BlockPos abovePos = new BlockPos(blockX, blockY + 1, blockZ);
+
+                // Must have something to sit on.
+                if (level.getBlockState(groundPos).isAir()) {
+                    continue;
+                }
+
+                // Chest's block space must be empty.
+                if (!level.getBlockState(chestPos).isAir()) {
+                    continue;
+                }
+
+                // One full block of clearance above the chest.
+                if (!level.getBlockState(abovePos).isAir()) {
+                    continue;
+                }
+
+                // Make sure the entity itself isn't colliding with anything.
+                Vec3 candidate = new Vec3(
+                        blockX + 0.5D,
+                        blockY,
+                        blockZ + 0.5D
+                );
+
+                AABB testBox = entity.getBoundingBox().move(
+                        candidate.x - entity.getX(),
+                        candidate.y - entity.getY(),
+                        candidate.z - entity.getZ()
+                );
+
+                if (level.noCollision(entity, testBox)) {
+                    return candidate;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
     public Vec3 findWorldMergeSpawnPosition(
             ServerLevel level,
-            LivingEntity entity,
+            Entity entity,
             double radius
     ) {
         int attempts = 40;
@@ -1375,7 +1483,7 @@ public class PowersD4C extends NewPunchingStand {
                 int worldId = ((int) (Math.random() * 2)) + 6;
                 PowerTypes.setPlaneOfExisting(target, (byte) worldId);
                 if (target instanceof Player pl){
-                populateWorld((byte) worldId);
+                populateWorld((byte) worldId, false);
                 }
 
                 MainUtil.sendParticlesIfPossible(self,self.level(),

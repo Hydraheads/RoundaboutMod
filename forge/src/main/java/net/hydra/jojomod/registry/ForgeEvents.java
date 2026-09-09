@@ -106,6 +106,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.OVA_ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.ENYA.get(), OVAEnyaNPC.createAttributes().build());
         event.put(ForgeEntities.JOTARO.get(), JotaroNPC.createAttributes().build());
+        event.put(ForgeEntities.KIRA4.get(), KiraPartFourNPC.createAttributes().build());
         event.put(ForgeEntities.PUCCI.get(), PucciNPC.createAttributes().build());
         event.put(ForgeEntities.AVDOL.get(), AvdolNPC.createAttributes().build());
         event.put(ForgeEntities.DIO.get(), DIONPC.createAttributes().build());
@@ -831,6 +832,7 @@ public class ForgeEvents {
         ModEntities.ROUNDABOUT_BULLET_ENTITY = ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get();
         ModEntities.THROWN_KNIFE = ForgeEntities.THROWN_KNIFE.get();
         ModEntities.BLOCK_WALL = ForgeEntities.BLOCK_WALL.get();
+        ModEntities.PARALLEL_CHEST = ForgeEntities.PARALLEL_CHEST.get();
         ModEntities.D4C_BLOCK = ForgeEntities.D4C_BLOCK.get();
         ModEntities.FALLING_BANNER = ForgeEntities.FALLING_BANNER.get();
         ModEntities.STRAY_CAT = ForgeEntities.STRAY_CAT.get();
@@ -904,6 +906,7 @@ public class ForgeEvents {
         ModEntities.OVA_ENYA = ForgeEntities.OVA_ENYA.get();
         ModEntities.ENYA = ForgeEntities.ENYA.get();
         ModEntities.JOTARO = ForgeEntities.JOTARO.get();
+        ModEntities.KIRA4 = ForgeEntities.KIRA4.get();
         ModEntities.PUCCI = ForgeEntities.PUCCI.get();
         ModEntities.DIO = ForgeEntities.DIO.get();
         ModEntities.PARALLEL_DIEGO = ForgeEntities.PARALLEL_DIEGO.get();

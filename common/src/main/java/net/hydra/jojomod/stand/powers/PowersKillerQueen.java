@@ -32,6 +32,9 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
+import net.hydra.jojomod.event.powers.visagedata.voicedata.PucciVoice;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.item.StandArrowItem;
@@ -1577,6 +1580,10 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.sendOrReturnSHA(true);
     	} else if (move == DETONATE) {
+             if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                 voice.playPrimaryBomb();
+             }
     		return detonate();
     	} else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerKickWindup();
@@ -2539,6 +2546,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (target != null && stand instanceof KillerQueenEntity KQE) {
             KQE.setPlantedBitesTheDust(true);
 
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playTertiaryBomb();
+            }
+
             bitesTheDustPlantedEntity = target;
             ((StandUser)target).rdbt$SetBtdPlantedUser(this);
             saveCombatEntitiesSeconds(target.position());
@@ -2648,7 +2660,14 @@ public class PowersKillerQueen extends NewPunchingStand {
             return false;
         }
 
-        detectWhoBitedTheDust(target);
+        detectWhoBitedTheDust(target, false);
+
+        if (!bitedTheDust.isEmpty()) {
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playBtdActivation();
+            }
+        }
 
         btdTicks = 0;
 
@@ -2747,6 +2766,11 @@ public class PowersKillerQueen extends NewPunchingStand {
         this.setCooldown(PowerIndex.SKILL_EXTRA, btdDayCooldown);
 
         if (!list.isEmpty()) {
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playBtdActivation();
+            }
+
             int mandomRewindCooldown = ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindCooldownv2;
 
             for (Entity ent : list) {
@@ -2829,10 +2853,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void detectWhoBitedTheDust(Entity target) {
-        detectWhoBitedTheDust(target, false);
-    }
-
     public void detectWhoBitedTheDust(Entity target, boolean dayMode) {
         Vec3 pos = target.position();
 
@@ -2850,20 +2870,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                         int dayTime = ((int)this.self.level().getDayTime()) % 24000;
                         dayBitedTheDustinit();
                         if (dayBitedTheDust.containsKey(id)) {
-                            int oldTime = dayBitedTheDust.get(id);
-                            if (oldTime > dayTime) {
-                                dayBitedTheDust.replace(id, dayTime);
-                            }
+                            dayBitedTheDust.replace(id, dayTime);
                         } else {
                             dayBitedTheDust.put(id, dayTime);
                         }
                     }else{
                         bitedTheDustInit();
                         if (bitedTheDust.containsKey(id)) {
-                            int oldTicks = bitedTheDust.get(id);
-                            if (oldTicks > this.btdTicks) {
-                                bitedTheDust.replace(id, this.btdTicks);
-                            }
+                            bitedTheDust.replace(id, this.btdTicks);
                         } else {
                             bitedTheDust.put(id, this.btdTicks);
                         }
@@ -3074,6 +3088,11 @@ public class PowersKillerQueen extends NewPunchingStand {
                 if (SHA == null || SHA.isRemoved()) {
                     SheerHeartAttackEntity sha = ModEntities.SHEER_HEART_ATTACK.create(this.getSelf().level());
                     if (sha != null) {
+                        if ( self instanceof Player player
+                                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                            voice.playSecondaryBomb();
+                        }
+
                         sha.setUser(this.self);
                         sha.setXRot(this.self.getXRot());
                         sha.setYRot(this.self.getYRot());
@@ -3347,6 +3366,17 @@ public class PowersKillerQueen extends NewPunchingStand {
 
         if (!isClient()) {
             tickBtdGuard();
+            if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
+                if ( self instanceof Player player
+                        && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice && !voice.inTheMiddleOfTalking()) {
+                    Vec3 pos = bitesTheDustPlantedEntity.position();
+
+                    if (!MainUtil.genHitbox(bitesTheDustPlantedEntity.level(),
+                            pos.x(), pos.y(), pos.z(), btdRange, btdRange, btdRange).isEmpty()) {
+                        voice.playBtdRange();
+                    }
+                }
+            }
 
             if (PowerTypes.hasHandsActive(self)) {
                 StandUser userSelf = getStandUserSelf();
@@ -3663,10 +3693,34 @@ public class PowersKillerQueen extends NewPunchingStand {
 
 
     // sound related stuff
-    
+
+    @Override
+    public void playBarrageCrySound(){
+        if (!this.self.level().isClientSide()) {
+            if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice JV) {
+                if (Math.random() > 0.7) {
+                    JV.playSoundIfPossible(ModSounds.KIRA4_KOICHI_1_EVENT, 42, 1, 2);
+                }
+            }
+        }
+        super.playBarrageCrySound();
+    }
+
     @Override
     public byte chooseBarrageSound(){ return SoundIndex.BARRAGE_CRY_SOUND;}
-    
+
+    @Override
+    public void playSummonSound() {
+        if (this.self.isCrouching() || hasHandsOut()){
+            return;
+        }
+
+        if (this.self instanceof Player pe && ((IPlayerEntity)pe).roundabout$getVoiceData() instanceof KiraPartFourVoice JV){
+            JV.playSummon();
+        }
+        playStandUserOnlySoundsIfNearby(this.getSummonSound(), 10, false,false);
+    }
+
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;

@@ -17,6 +17,12 @@
       "roundabout:d4c_copy_block"
     ]
   },
+  "special_chest": {
+    "subtitle": "sounds.roundabout.special_chest",
+    "sounds": [
+      "roundabout:special_chest"
+    ]
+  },
   "block_attract": {
     "subtitle": "sounds.roundabout.block_attract",
     "sounds": [
@@ -3655,6 +3661,168 @@
     "subtitle": "sounds.roundabout.kira4_i_beat_them",
     "sounds" : [
       "roundabout:kira4_btd_activate"
+    ]
+  },
+  "kira4_attack_1": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_1"
+    ]
+  },
+  "kira4_attack_2": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_2"
+    ]
+  },
+  "kira4_attack_3": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_3"
+    ]
+  },
+  "kira4_attack_4": {
+    "subtitle": "sounds.roundabout.kira4_attack",
+    "sounds" : [
+      "roundabout:kira4_attack_4"
+    ]
+  },
+  "kira4_shiba": {
+    "subtitle": "sounds.roundabout.kira4_shiba",
+    "sounds" : [
+      "roundabout:kira4_shiba"
+    ]
+  },
+  "kira4_threat": {
+    "subtitle": "sounds.roundabout.kira4_threat",
+    "sounds" : [
+      "roundabout:kira4_threat"
+    ]
+  },
+  "kira4_idle_1": {
+    "subtitle": "sounds.roundabout.kira4_idle_1",
+    "sounds" : [
+      "roundabout:kira4_idle_1"
+    ]
+  },
+  "kira4_kq_1": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_1"
+    ]
+  },
+  "kira4_kq_2": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_2"
+    ]
+  },
+  "kira4_kq_3": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_3"
+    ]
+  },
+  "kira4_kq_4": {
+    "subtitle": "sounds.roundabout.kira4_killer_queen",
+    "sounds" : [
+      "roundabout:kira4_kq_4"
+    ]
+  },
+  "kira4_monologue": {
+    "subtitle": "sounds.roundabout.kira4_monologue",
+    "sounds" : [
+      "roundabout:kira4_monologue"
+    ]
+  },
+  "kira4_josuke": {
+    "subtitle": "sounds.roundabout.kira4_josuke",
+    "sounds" : [
+      "roundabout:kira4_josuke"
+    ]
+  },
+  "kira4_hayato": {
+    "subtitle": "sounds.roundabout.kira4_hayato",
+    "sounds" : [
+      "roundabout:kira4_hayato"
+    ]
+  },
+  "kira4_jotaro": {
+    "subtitle": "sounds.roundabout.kira4_jotaro",
+    "sounds" : [
+      "roundabout:kira4_jotaro"
+    ]
+  },
+  "kira4_koichi_angry_1": {
+    "subtitle": "sounds.roundabout.kira4_koichi_angry_1",
+    "sounds" : [
+      "roundabout:kira4_koichi_angry_1"
+    ]
+  },
+  "kira4_koichi_angry_2": {
+    "subtitle": "sounds.roundabout.kira4_koichi_angry_2",
+    "sounds" : [
+      "roundabout:kira4_koichi_angry_2"
+    ]
+  },
+  "kira4_can_see": {
+    "subtitle": "sounds.roundabout.kira4_can_see",
+    "sounds" : [
+      "roundabout:kira4_can_see"
+    ]
+  },
+  "jotaro_your_watch": {
+    "subtitle": "sounds.roundabout.jotaro_your_watch",
+    "sounds" : [
+      "roundabout:jotaro_your_watch"
+    ]
+  },
+  "kira4_jotaro_stand": {
+    "subtitle": "sounds.roundabout.kira4_jotaro_stand",
+    "sounds" : [
+      "roundabout:kira4_jotaro_stand"
+    ]
+  },
+  "kira4_kq_bomb": {
+    "subtitle": "sounds.roundabout.kira4_kq_bomb",
+    "sounds" : [
+      "roundabout:kira4_kq_bomb"
+    ]
+  },
+  "kira4_sha_1": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_1"
+    ]
+  },
+  "kira4_sha_2": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_2"
+    ]
+  },
+  "kira4_sha_3": {
+    "subtitle": "sounds.roundabout.kira4_sha",
+    "sounds" : [
+      "roundabout:kira4_sha_3"
+    ]
+  },
+  "kira4_kq_btd_1": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_1"
+    ]
+  },
+  "kira4_kq_btd_2": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_2"
+    ]
+  },
+  "kira4_btd_range": {
+    "subtitle": "sounds.roundabout.kira4_btd_range",
+    "sounds" : [
+      "roundabout:kira4_btd_range"
     ]
   },
   "whitesnake_command_disc_create": {

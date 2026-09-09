@@ -154,6 +154,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_D4C_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_D4C);
     public static SoundEvent SUMMON_D4C_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_D4C_ID);
 
+    public static final String SPECIAL_CHEST = "special_chest";
+    public static final ResourceLocation SPECIAL_CHEST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPECIAL_CHEST);
+    public static SoundEvent SPECIAL_CHEST_EVENT = SoundEvent.createVariableRangeEvent(SPECIAL_CHEST_ID);
+
     public static final String D4C_PORTAL = "d4c_portal";
     public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
     public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
@@ -969,6 +973,90 @@ public class ModSounds {
     public static final ResourceLocation KIRA4_I_BEAT_THEM_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_I_BEAT_THEM);
     public static SoundEvent KIRA4_I_BEAT_THEM_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_I_BEAT_THEM_ID);
 
+    public static final String KIRA4_ATTACK_1 = "kira4_attack_1";
+    public static final ResourceLocation KIRA4_ATTACK_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_ATTACK_1);
+    public static SoundEvent KIRA4_ATTACK_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_ATTACK_1_ID);
+    public static final String KIRA4_ATTACK_2 = "kira4_attack_2";
+    public static final ResourceLocation KIRA4_ATTACK_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_ATTACK_2);
+    public static SoundEvent KIRA4_ATTACK_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_ATTACK_2_ID);
+    public static final String KIRA4_ATTACK_3 = "kira4_attack_3";
+    public static final ResourceLocation KIRA4_ATTACK_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_ATTACK_3);
+    public static SoundEvent KIRA4_ATTACK_3_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_ATTACK_3_ID);
+    public static final String KIRA4_ATTACK_4 = "kira4_attack_4";
+    public static final ResourceLocation KIRA4_ATTACK_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_ATTACK_4);
+    public static SoundEvent KIRA4_ATTACK_4_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_ATTACK_4_ID);
+    public static final String KIRA4_SHIBO = "kira4_shibo";
+    public static final ResourceLocation KIRA4_SHIBO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_SHIBO);
+    public static SoundEvent KIRA4_SHIBO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_SHIBO_ID);
+
+    public static final String KIRA4_THREAT = "kira4_threat";
+    public static final ResourceLocation KIRA4_THREAT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_THREAT);
+    public static SoundEvent KIRA4_THREAT_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_THREAT_ID);
+    public static final String KIRA4_IDLE = "kira4_idle_1";
+    public static final ResourceLocation KIRA4_IDLE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_IDLE);
+    public static SoundEvent KIRA4_IDLE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_IDLE_ID);
+
+    public static final String KIRA4_KILLER_QUEEN_1 = "kira4_kq_1";
+    public static final ResourceLocation KIRA4_KILLER_QUEEN_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KILLER_QUEEN_1);
+    public static SoundEvent KIRA4_KILLER_QUEEN_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KILLER_QUEEN_1_ID);
+    public static final String KIRA4_KILLER_QUEEN_2 = "kira4_kq_2";
+    public static final ResourceLocation KIRA4_KILLER_QUEEN_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KILLER_QUEEN_2);
+    public static SoundEvent KIRA4_KILLER_QUEEN_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KILLER_QUEEN_2_ID);
+    public static final String KIRA4_KILLER_QUEEN_3 = "kira4_kq_3";
+    public static final ResourceLocation KIRA4_KILLER_QUEEN_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KILLER_QUEEN_3);
+    public static SoundEvent KIRA4_KILLER_QUEEN_3_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KILLER_QUEEN_3_ID);
+    public static final String KIRA4_KILLER_QUEEN_4 = "kira4_kq_4";
+    public static final ResourceLocation KIRA4_KILLER_QUEEN_4_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KILLER_QUEEN_4);
+    public static SoundEvent KIRA4_KILLER_QUEEN_4_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KILLER_QUEEN_4_ID);
+
+    public static final String KIRA4_MONOLOGUE = "kira4_monologue";
+    public static final ResourceLocation KIRA4_MONOLOGUE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_MONOLOGUE);
+    public static SoundEvent KIRA4_MONOLOGUE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_MONOLOGUE_ID);
+    public static final String KIRA4_HAYATO = "kira4_hayato";
+    public static final ResourceLocation KIRA4_HAYATO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_HAYATO);
+    public static SoundEvent KIRA4_HAYATO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_HAYATO_ID);
+    public static final String KIRA4_JOTARO = "kira4_jotaro";
+    public static final ResourceLocation KIRA4_JOTARO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO);
+    public static SoundEvent KIRA4_JOTARO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_ID);
+    public static final String KIRA4_KOICHI_1 = "kira4_koichi_angry_1";
+    public static final ResourceLocation KIRA4_KOICHI_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KOICHI_1);
+    public static SoundEvent KIRA4_KOICHI_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KOICHI_1_ID);
+    public static final String KIRA4_KOICHI_2 = "kira4_koichi_angry_2";
+    public static final ResourceLocation KIRA4_KOICHI_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KOICHI_2);
+    public static SoundEvent KIRA4_KOICHI_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KOICHI_2_ID);
+
+    public static final String KIRA4_JOTARO_SEE = "kira4_can_see";
+    public static final ResourceLocation KIRA4_JOTARO_SEE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_SEE);
+    public static SoundEvent KIRA4_JOTARO_SEE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_SEE_ID);
+    public static final String KIRA4_JOTARO_WATCH = "jotaro_your_watch";
+    public static final ResourceLocation KIRA4_JOTARO_WATCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_WATCH);
+    public static SoundEvent KIRA4_JOTARO_WATCH_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_WATCH_ID);
+    public static final String KIRA4_JOTARO_STAND = "kira4_jotaro_stand";
+    public static final ResourceLocation KIRA4_JOTARO_STAND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_STAND);
+    public static SoundEvent KIRA4_JOTARO_STAND_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_STAND_ID);
+
+    public static final String KIRA4_PRIMARY_BOMB = "kira4_kq_bomb";
+    public static final ResourceLocation KIRA4_PRIMARY_BOMB_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_PRIMARY_BOMB);
+    public static SoundEvent KIRA4_PRIMARY_BOMB_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_PRIMARY_BOMB_ID);
+    public static final String KIRA4_BTD_1 = "kira4_kq_btd_1";
+    public static final ResourceLocation KIRA4_BTD_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_1);
+    public static SoundEvent KIRA4_BTD_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_1_ID);
+    public static final String KIRA4_BTD_2 = "kira4_kq_btd_2";
+    public static final ResourceLocation KIRA4_BTD_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_2);
+    public static SoundEvent KIRA4_BTD_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_2_ID);
+    public static final String KIRA4_BTD_RANGE = "kira4_btd_range";
+    public static final ResourceLocation KIRA4_BTD_RANGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_BTD_RANGE);
+    public static SoundEvent KIRA4_BTD_RANGE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_BTD_RANGE_ID);
+
+    public static final String KIRA4_SHA_1 = "kira4_sha_1";
+    public static final ResourceLocation KIRA4_SHA_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_SHA_1);
+    public static SoundEvent KIRA4_SHA_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_SHA_1_ID);
+    public static final String KIRA4_SHA_2 = "kira4_sha_2";
+    public static final ResourceLocation KIRA4_SHA_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_SHA_2);
+    public static SoundEvent KIRA4_SHA_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_SHA_2_ID);
+    public static final String KIRA4_SHA_3 = "kira4_sha_3";
+    public static final ResourceLocation KIRA4_SHA_3_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_SHA_3);
+    public static SoundEvent KIRA4_SHA_3_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_SHA_3_ID);
 
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);

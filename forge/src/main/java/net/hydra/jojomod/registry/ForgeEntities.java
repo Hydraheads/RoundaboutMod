@@ -71,6 +71,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro").toString())
             );
+    public static final RegistryObject<EntityType<KiraPartFourNPC>> KIRA4 =
+            ENTITY_TYPES.register("jojo_npc_kira_part_four", () ->
+                    EntityType.Builder.of(KiraPartFourNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_kira_part_four").toString())
+            );
     public static final RegistryObject<EntityType<PucciNPC>> PUCCI =
             ENTITY_TYPES.register("jojo_npc_pucci", () ->
                     EntityType.Builder.of(PucciNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
@@ -656,6 +662,14 @@ public class ForgeEntities {
                             clientTrackingRange(10)
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
+            );
+    public static final RegistryObject<EntityType<ParallelChestEntity>> PARALLEL_CHEST =
+            ENTITY_TYPES.register("parallel_chest", () ->
+                    EntityType.Builder.<ParallelChestEntity>of(ParallelChestEntity::new, MobCategory.MISC)
+                            .sized(ParallelChestEntity.dimensions, ParallelChestEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "parallel_chest").toString())
             );
     public static final RegistryObject<EntityType<BlockD4CEntity>> D4C_BLOCK =
             ENTITY_TYPES.register("block_d4c_entity", () ->
