@@ -1011,6 +1011,25 @@ public class ModSounds {
     public static final String KIRA4_HAYATO = "kira4_hayato";
     public static final ResourceLocation KIRA4_HAYATO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_HAYATO);
     public static SoundEvent KIRA4_HAYATO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_HAYATO_ID);
+    public static final String KIRA4_JOTARO = "kira4_jotaro";
+    public static final ResourceLocation KIRA4_JOTARO_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO);
+    public static SoundEvent KIRA4_JOTARO_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_ID);
+    public static final String KIRA4_KOICHI_1 = "kira4_koichi_angry_1";
+    public static final ResourceLocation KIRA4_KOICHI_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KOICHI_1);
+    public static SoundEvent KIRA4_KOICHI_1_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KOICHI_1_ID);
+    public static final String KIRA4_KOICHI_2 = "kira4_koichi_angry_2";
+    public static final ResourceLocation KIRA4_KOICHI_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_KOICHI_2);
+    public static SoundEvent KIRA4_KOICHI_2_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_KOICHI_2_ID);
+
+    public static final String KIRA4_JOTARO_SEE = "kira4_can_see";
+    public static final ResourceLocation KIRA4_JOTARO_SEE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_SEE);
+    public static SoundEvent KIRA4_JOTARO_SEE_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_SEE_ID);
+    public static final String KIRA4_JOTARO_WATCH = "jotaro_your_watch";
+    public static final ResourceLocation KIRA4_JOTARO_WATCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_WATCH);
+    public static SoundEvent KIRA4_JOTARO_WATCH_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_WATCH_ID);
+    public static final String KIRA4_JOTARO_STAND = "kira4_jotaro_stand";
+    public static final ResourceLocation KIRA4_JOTARO_STAND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+KIRA4_JOTARO_STAND);
+    public static SoundEvent KIRA4_JOTARO_STAND_EVENT = SoundEvent.createVariableRangeEvent(KIRA4_JOTARO_STAND_ID);
 
     public static final String EXPLOSIVE_PUNCH = "explosive_punch";
     public static final ResourceLocation EXPLOSIVE_PUNCH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+EXPLOSIVE_PUNCH);

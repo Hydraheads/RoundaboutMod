@@ -3747,6 +3747,36 @@
       "roundabout:kira4_jotaro"
     ]
   },
+  "kira4_koichi_angry_1": {
+    "subtitle": "sounds.roundabout.kira4_koichi_angry_1",
+    "sounds" : [
+      "roundabout:kira4_koichi_angry_1"
+    ]
+  },
+  "kira4_koichi_angry_2": {
+    "subtitle": "sounds.roundabout.kira4_koichi_angry_2",
+    "sounds" : [
+      "roundabout:kira4_koichi_angry_2"
+    ]
+  },
+  "kira4_can_see": {
+    "subtitle": "sounds.roundabout.kira4_can_see",
+    "sounds" : [
+      "roundabout:kira4_can_see"
+    ]
+  },
+  "jotaro_your_watch": {
+    "subtitle": "sounds.roundabout.jotaro_your_watch",
+    "sounds" : [
+      "roundabout:jotaro_your_watch"
+    ]
+  },
+  "kira4_jotaro_stand": {
+    "subtitle": "sounds.roundabout.kira4_jotaro_stand",
+    "sounds" : [
+      "roundabout:kira4_jotaro_stand"
+    ]
+  },
   "whitesnake_command_disc_create": {
     "subtitle": "sounds.roundabout.whitesnake_command_disc_create",
     "sounds": [

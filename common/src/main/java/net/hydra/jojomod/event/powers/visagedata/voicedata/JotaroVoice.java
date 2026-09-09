@@ -42,6 +42,8 @@ public class JotaroVoice extends VoiceData{
             playSoundChallenge(ModSounds.JOTARO_DIO_EVENT,10);
         } if (challengeNumber == 2){
             playSoundChallenge(ModSounds.JOTARO_GETING_CLOSER_EVENT,68);
+        } if (challengeNumber == 3) {
+            playSoundChallenge(ModSounds.KIRA4_JOTARO_WATCH_EVENT,88);
         }
     }
 }

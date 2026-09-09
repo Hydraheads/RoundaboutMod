@@ -34,6 +34,8 @@ public class KiraPartFourVoice extends VoiceData{
         addVoiceLine(new VoiceLine(12, ModSounds.KIRA4_ATTACK_2_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
         addVoiceLine(new VoiceLine(5, ModSounds.KIRA4_ATTACK_3_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
         addVoiceLine(new VoiceLine(8, ModSounds.KIRA4_ATTACK_4_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(42, ModSounds.KIRA4_KOICHI_1_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(60, ModSounds.KIRA4_KOICHI_2_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
 
         addVoiceLine(new VoiceLine(14, ModSounds.KIRA4_DAMAGE_1_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
         addVoiceLine(new VoiceLine(13, ModSounds.KIRA4_DAMAGE_2_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
@@ -59,24 +61,33 @@ public class KiraPartFourVoice extends VoiceData{
     int staringTicks = 0;
     int lastTarget = -1;
 
-
     public void challenge(){
         if (this.self.tickCount % 11 == 0) {
             AABB aab = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
             List<? extends LivingEntity> le = this.self.level().getNearbyEntities(LivingEntity.class,
                     roundabout$attackTargeting, self, aab);
-            Iterator var4 = le.iterator();
-            while (var4.hasNext()) {
-                LivingEntity nle = (LivingEntity) var4.next();
+            for (LivingEntity nle : le) {
                 VisageData vd = null;
+                VoiceData vc = null;
                 if (nle instanceof Player pl) {
                     IPlayerEntity ipe = ((IPlayerEntity) pl);
                     if (ipe.roundabout$getMaskSlot().getItem() instanceof MaskItem MI) {
                         vd = MI.visageData.generateVisageData(pl);
                     }
+                    vc = ipe.roundabout$getVoiceData();
                 }
-                if (vd instanceof HayatoVisage jv) {
-                    playSoundChallenge(ModSounds.KIRA4_HAYATO_EVENT,40);
+                if (vc instanceof JotaroVoice jv && !jv.inTheMiddleOfTalking() && !nle.isCrouching() && jv.challengeCooldown <= -1) {
+                    double db = Math.random();
+                    if (db > 0.75F) {
+                        playSoundChallenge(ModSounds.KIRA4_JOTARO_STAND_EVENT, 74);
+                    } else {
+                        playSoundChallenge(ModSounds.KIRA4_JOTARO_SEE_EVENT, 80);
+                        jv.challengeId(83, 3);
+                    }
+                    break;
+                } else if (vd instanceof HayatoVisage) {
+                    playSoundChallenge(ModSounds.KIRA4_HAYATO_EVENT, 40);
+                    break;
                 }
             }
         }
