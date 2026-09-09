@@ -2,6 +2,7 @@ package net.hydra.jojomod.entity;
 
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
+import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -89,6 +90,17 @@ public class ParallelChestEntity extends Entity {
         return false;
     }
 
+    public void refillAGun(Player player){
+        if (player != null){
+            for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                ItemStack $$6 = player.getInventory().getItem($$5);
+                if ($$6.getItem() instanceof FirearmItem fi){
+
+                }
+            }
+        }
+    }
+
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
         if (!player.level().isClientSide()) {
@@ -107,10 +119,12 @@ public class ParallelChestEntity extends Entity {
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         $$0.putBoolean("openedChest", getOpened());
+        $$0.putBoolean("ammoChest", getAmmo());
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
         this.setOpened($$0.getBoolean("openedChest"));
+        this.setAmmo($$0.getBoolean("ammoChest"));
     }
 
     public boolean getOpened() {
@@ -119,6 +133,14 @@ public class ParallelChestEntity extends Entity {
     public void setOpened(boolean bool){
         this.entityData.set(OPENED, bool);
     }
+    public boolean getAmmo() {
+        return this.getEntityData().get(AMMO);
+    }
+    public void setAmmo(boolean bool){
+        this.entityData.set(AMMO, bool);
+    }
     private static final EntityDataAccessor<Boolean> OPENED =
+            SynchedEntityData.defineId(ParallelChestEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> AMMO =
             SynchedEntityData.defineId(ParallelChestEntity.class, EntityDataSerializers.BOOLEAN);
 }
