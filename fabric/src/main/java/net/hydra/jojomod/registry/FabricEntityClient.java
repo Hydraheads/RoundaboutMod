@@ -170,6 +170,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.OVA_ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.ENYA, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.JOTARO, VisageBasisRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.KIRA4, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.PUCCI, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.AVDOL, VisageBasisRenderer::new);
         EntityRendererRegistry.register(FabricEntities.VALENTINE, VisageBasisRenderer::new);

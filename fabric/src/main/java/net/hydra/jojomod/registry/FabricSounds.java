@@ -451,6 +451,9 @@ public class FabricSounds {
         addSound(ModSounds.KIRA4_JOTARO_STAND_ID, ModSounds.KIRA4_JOTARO_STAND_EVENT);
         addSound(ModSounds.KIRA4_JOTARO_SEE_ID, ModSounds.KIRA4_JOTARO_SEE_EVENT);
         addSound(ModSounds.KIRA4_PRIMARY_BOMB_ID, ModSounds.KIRA4_PRIMARY_BOMB_EVENT);
+        addSound(ModSounds.KIRA4_BTD_1_ID, ModSounds.KIRA4_BTD_1_EVENT);
+        addSound(ModSounds.KIRA4_BTD_2_ID, ModSounds.KIRA4_BTD_2_EVENT);
+        addSound(ModSounds.KIRA4_BTD_RANGE_ID, ModSounds.KIRA4_BTD_RANGE_EVENT);
 
         addSound(ModSounds.THE_WORLD_OVER_HEAVEN_ID, ModSounds.THE_WORLD_OVER_HEAVEN_EVENT);
         addSound(ModSounds.UNLOCK_SKIN_ID, ModSounds.UNLOCK_SKIN_EVENT);

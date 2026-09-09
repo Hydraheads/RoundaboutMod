@@ -633,6 +633,7 @@
   "entity.roundabout.fallen_spider": "Spider Corpse",
   "entity.roundabout.fallen_phantom": "Phantom Corpse",
   "entity.roundabout.jojo_npc_ova_enya": "Enya",
+  "entity.roundabout.jojo_npc_kira_part_four": "Yoshikage Kira",
   "entity.roundabout.jojo_npc_enya": "Enya",
   "entity.roundabout.jojo_npc_avdol": "Avdol",
   "entity.roundabout.jojo_npc_jotaro": "Jotaro",
@@ -1651,6 +1652,8 @@
   "sounds.roundabout.kira4_jotaro_stand": "Your stand is weak",
   "sounds.roundabout.kira4_kq_bomb": "Killer Queen! Primary Bomb!",
   "sounds.roundabout.kira4_sha": "Sheer Heart Attack",
+  "sounds.roundabout.kira4_kq_btd": "Bites the Dust!",
+  "sounds.roundabout.kira4_btd_range": "Killer Queen is in your eyes...",
 
   "sounds.roundabout.whitesnake_pucci_stand_summon_1": "Whitesnake",
   "sounds.roundabout.whitesnake_pucci_stand_summon_2": "Whitesnake",

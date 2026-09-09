@@ -508,6 +508,12 @@ public class ForgeSounds {
             register(ModSounds.KIRA4_SHA_2, ModSounds.KIRA4_SHA_2_ID);
     public static final RegistryObject<SoundEvent> KIRA4_SHA_3_EVENT =
             register(ModSounds.KIRA4_SHA_3, ModSounds.KIRA4_SHA_3_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_1_EVENT =
+            register(ModSounds.KIRA4_BTD_1, ModSounds.KIRA4_BTD_1_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_2_EVENT =
+            register(ModSounds.KIRA4_BTD_2, ModSounds.KIRA4_BTD_2_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_RANGE_EVENT =
+            register(ModSounds.KIRA4_BTD_RANGE, ModSounds.KIRA4_BTD_RANGE_ID);
 
 
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
