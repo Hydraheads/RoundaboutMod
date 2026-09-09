@@ -769,6 +769,15 @@ public class FabricEntities {
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
             );
+    public static final EntityType<ParallelChestEntity> PARALLEL_CHEST =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "parallel_chest"),
+                    EntityType.Builder.<ParallelChestEntity>of(ParallelChestEntity::new, MobCategory.MISC).
+                            sized(ParallelChestEntity.dimensions, ParallelChestEntity.dimensions)
+                            .updateInterval(1).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":parallel_chest")
+            );
     public static final EntityType<BlockD4CEntity> D4C_BLOCK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1250,6 +1259,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
+                ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
                 ModEntities.D4C_BLOCK = D4C_BLOCK;
                 ModEntities.STEP_RULE = STEP_RULE;
                 ModEntities.STRAY_CAT = STRAY_CAT;

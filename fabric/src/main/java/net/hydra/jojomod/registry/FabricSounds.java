@@ -68,6 +68,7 @@ public class FabricSounds {
         addSound(ModSounds.OVA_PLATINUM_ORA_4_ID, ModSounds.OVA_PLATINUM_ORA_4_EVENT);
         addSound(ModSounds.DSP_SUMMON_ID, ModSounds.DSP_SUMMON_EVENT);
         addSound(ModSounds.SUMMON_D4C_ID, ModSounds.SUMMON_D4C_EVENT);
+        addSound(ModSounds.SPECIAL_CHEST_ID, ModSounds.SPECIAL_CHEST_EVENT);
         addSound(ModSounds.D4C_PORTAL_ID, ModSounds.D4C_PORTAL_EVENT);
         addSound(ModSounds.BLOCK_ATTRACT_ID, ModSounds.BLOCK_ATTRACT_EVENT);
         addSound(ModSounds.D4C_COPY_BLOCK_ID, ModSounds.D4C_COPY_BLOCK_EVENT);

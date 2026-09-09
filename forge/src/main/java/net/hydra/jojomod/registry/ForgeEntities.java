@@ -663,6 +663,14 @@ public class ForgeEntities {
                             .updateInterval(1).
                             build(new ResourceLocation(Roundabout.MOD_ID, "block_wall").toString())
             );
+    public static final RegistryObject<EntityType<ParallelChestEntity>> PARALLEL_CHEST =
+            ENTITY_TYPES.register("parallel_chest", () ->
+                    EntityType.Builder.<ParallelChestEntity>of(ParallelChestEntity::new, MobCategory.MISC)
+                            .sized(ParallelChestEntity.dimensions, ParallelChestEntity.dimensions).
+                            clientTrackingRange(10)
+                            .updateInterval(1).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "parallel_chest").toString())
+            );
     public static final RegistryObject<EntityType<BlockD4CEntity>> D4C_BLOCK =
             ENTITY_TYPES.register("block_d4c_entity", () ->
                     EntityType.Builder.<BlockD4CEntity>of(BlockD4CEntity::new, MobCategory.MISC)

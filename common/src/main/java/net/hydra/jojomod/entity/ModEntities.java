@@ -202,6 +202,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
+
+    public static EntityType<ParallelChestEntity> PARALLEL_CHEST;
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;

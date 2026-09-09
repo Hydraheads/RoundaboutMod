@@ -154,6 +154,10 @@ public class ModSounds {
     public static final ResourceLocation SUMMON_D4C_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_D4C);
     public static SoundEvent SUMMON_D4C_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_D4C_ID);
 
+    public static final String SPECIAL_CHEST = "special_chest";
+    public static final ResourceLocation SPECIAL_CHEST_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SPECIAL_CHEST);
+    public static SoundEvent SPECIAL_CHEST_EVENT = SoundEvent.createVariableRangeEvent(SPECIAL_CHEST_ID);
+
     public static final String D4C_PORTAL = "d4c_portal";
     public static final ResourceLocation D4C_PORTAL_ID = new ResourceLocation(Roundabout.MOD_ID+":"+D4C_PORTAL);
     public static SoundEvent D4C_PORTAL_EVENT = SoundEvent.createVariableRangeEvent(D4C_PORTAL_ID);
