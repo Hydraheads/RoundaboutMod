@@ -22,6 +22,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -123,10 +125,42 @@ public class ParallelChestEntity extends Entity {
         return false;
     }
 
+    public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
+    }
+    public void addItemToPlayer(Entity ent, ItemStack stack){
+        if (ent instanceof Player PE) {
+            if (canAddItem(stack, PE.getInventory()) && PE.isAlive()) {
+                PE.addItem(stack);
+            } else {
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                        this.getY() + this.getEyeHeight(), this.getZ(),
+                        stack);
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(PE.getUUID());
+                PE.level().addFreshEntity($$4);
+            }
+        } else {
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                    this.getY() + this.getEyeHeight(), this.getZ(),
+                    stack);
+            $$4.setPickUpDelay(40);
+            this.level().addFreshEntity($$4);
+        }
+    }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
         if (!player.level().isClientSide() && player.level() instanceof ServerLevel sl
         && player instanceof ServerPlayer sp) {
+            if (getOpened()) {
+                return InteractionResult.CONSUME;
+            }
             this.playSound(ModSounds.SPECIAL_CHEST_EVENT);
             this.playSound(SoundEvents.CHEST_OPEN);
             setOpened(true);
@@ -150,6 +184,7 @@ public class ParallelChestEntity extends Entity {
                 refillAGun(sp);
                 sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.gun_restore"), true);
             } else {
+                addItemToPlayer(player,MainUtil.getRandomD4CLoot(player.level()));
                 sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.goody"), true);
             }
         }
