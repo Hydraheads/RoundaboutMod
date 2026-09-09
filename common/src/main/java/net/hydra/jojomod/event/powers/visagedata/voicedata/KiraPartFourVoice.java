@@ -1,39 +1,135 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.VoiceLine;
+import net.hydra.jojomod.event.powers.visagedata.HayatoVisage;
+import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class KiraPartFourVoice extends VoiceData{
     public KiraPartFourVoice(LivingEntity self) {
         super(self);
-        addVoiceLine(new VoiceLine(26, ModSounds.DIEGO_HO_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
-        addVoiceLine(new VoiceLine(18, ModSounds.DIEGO_HO_2_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
-        addVoiceLine(new VoiceLine(40, ModSounds.DIEGO_LAUGH_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
-        addVoiceLine(new VoiceLine(70, ModSounds.DIEGO_KONO_DIEGO_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
-        addVoiceLine(new VoiceLine(16, ModSounds.DIEGO_INTERESTING_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
-        addVoiceLine(new VoiceLine(76, ModSounds.DIEGO_DEATH_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
-        addVoiceLine(new VoiceLine(40, ModSounds.DIEGO_DEATH_2_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
-        addVoiceLine(new VoiceLine(18, ModSounds.DIEGO_NO_WAY_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
-        addVoiceLine(new VoiceLine(16, ModSounds.DIEGO_KUREI_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(24, ModSounds.DIEGO_CHECKMATE_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(4, ModSounds.DIEGO_ATTACK_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(7, ModSounds.DIEGO_ATTACK_2_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(24, ModSounds.DIEGO_WRY_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(28, ModSounds.DIEGO_TAUNT_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
-        addVoiceLine(new VoiceLine(8, ModSounds.DIEGO_HURT_1_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
-        addVoiceLine(new VoiceLine(7, ModSounds.DIEGO_HURT_2_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
-        addVoiceLine(new VoiceLine(8, ModSounds.DIEGO_HURT_3_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
-        addVoiceLine(new VoiceLine(11, ModSounds.DIEGO_HURT_4_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
-        addVoiceLine(new VoiceLine(10, ModSounds.DIEGO_NANI_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
-        addVoiceLine(new VoiceLine(20, ModSounds.DIEGO_THE_WORLD_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
-        addVoiceLine(new VoiceLine(29, ModSounds.DIEGO_THE_WORLD_2_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
-        addVoiceLine(new VoiceLine(23, ModSounds.DIEGO_THE_WORLD_3_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
-        addVoiceLine(new VoiceLine(27, ModSounds.DIEGO_THE_WORLD_4_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
+        addVoiceLine(new VoiceLine(142, ModSounds.KIRA4_IDLE_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
+        addVoiceLine(new VoiceLine(96, ModSounds.KIRA4_THREAT_EVENT, VoiceLine.SOUND_CATEGORIES.IDLE));
+
+        addVoiceLine(new VoiceLine(35, ModSounds.KIRA4_DEATH_1_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
+        addVoiceLine(new VoiceLine(33, ModSounds.KIRA4_DEATH_2_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
+        addVoiceLine(new VoiceLine(23, ModSounds.KIRA4_DEATH_3_EVENT, VoiceLine.SOUND_CATEGORIES.DEATH));
+
+        addVoiceLine(new VoiceLine(80, ModSounds.KIRA4_I_BEAT_THEM_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(51, ModSounds.KIRA4_LIVE_HAPPY_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+
+        addVoiceLine(new VoiceLine(13, ModSounds.KIRA4_SHIBO_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(6, ModSounds.KIRA4_ATTACK_1_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(12, ModSounds.KIRA4_ATTACK_2_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(5, ModSounds.KIRA4_ATTACK_3_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(8, ModSounds.KIRA4_ATTACK_4_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(42, ModSounds.KIRA4_KOICHI_1_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+        addVoiceLine(new VoiceLine(60, ModSounds.KIRA4_KOICHI_2_EVENT, VoiceLine.SOUND_CATEGORIES.KILL));
+
+        addVoiceLine(new VoiceLine(14, ModSounds.KIRA4_DAMAGE_1_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(13, ModSounds.KIRA4_DAMAGE_2_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(39, ModSounds.KIRA4_DAMAGE_3_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(20, ModSounds.KIRA4_DAMAGE_4_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(14, ModSounds.KIRA4_DAMAGE_5_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(6, ModSounds.KIRA4_DAMAGE_6_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+        addVoiceLine(new VoiceLine(36, ModSounds.KIRA4_DAMAGE_7_EVENT, VoiceLine.SOUND_CATEGORIES.HURT));
+
+        addVoiceLine(new VoiceLine(24, ModSounds.KIRA4_KILLER_QUEEN_1_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
+        addVoiceLine(new VoiceLine(15, ModSounds.KIRA4_KILLER_QUEEN_2_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
+        addVoiceLine(new VoiceLine(20, ModSounds.KIRA4_KILLER_QUEEN_3_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
+        addVoiceLine(new VoiceLine(20, ModSounds.KIRA4_KILLER_QUEEN_4_EVENT, VoiceLine.SOUND_CATEGORIES.SUMMON));
     }
 
+    @Override
+    public void playSoundChallenge(SoundEvent se, int ticksLasting){
+        super.playSoundChallenge(se, ticksLasting);
+        lastTarget = -1;
+        staringTicks = 0;
+    }
+
+    int staringTicks = 0;
+    int lastTarget = -1;
 
     public void challenge(){
+        if (this.self.tickCount % 11 == 0) {
+            AABB aab = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
+            List<? extends LivingEntity> le = this.self.level().getNearbyEntities(LivingEntity.class,
+                    roundabout$attackTargeting, self, aab);
+            for (LivingEntity nle : le) {
+                VisageData vd = null;
+                VoiceData vc = null;
+                if (nle instanceof Player pl) {
+                    IPlayerEntity ipe = ((IPlayerEntity) pl);
+                    if (ipe.roundabout$getMaskSlot().getItem() instanceof MaskItem MI) {
+                        vd = MI.visageData.generateVisageData(pl);
+                    }
+                    vc = ipe.roundabout$getVoiceData();
+                }
+                if (vc instanceof JotaroVoice jv && !jv.inTheMiddleOfTalking() && !nle.isCrouching() && jv.challengeCooldown <= -1) {
+                    double db = Math.random();
+                    if (db > 0.75F) {
+                        playSoundChallenge(ModSounds.KIRA4_JOTARO_STAND_EVENT, 74);
+                    } else {
+                        playSoundChallenge(ModSounds.KIRA4_JOTARO_SEE_EVENT, 80);
+                        jv.challengeId(83, 3);
+                    }
+                    break;
+                } else if (vd instanceof HayatoVisage) {
+                    playSoundChallenge(ModSounds.KIRA4_HAYATO_EVENT, 40);
+                    break;
+                }
+            }
+        }
+
+        if (self.getDeltaMovement().lengthSqr() > 0.2f) {
+            lastTarget = -1;
+            staringTicks = 0;
+        }else if (staringTicks >= 295 && self.tickCount % 11 == 0) {
+            playSoundChallenge(ModSounds.KIRA4_MONOLOGUE_EVENT,1484);
+        }else {
+            Entity target = MainUtil.getTargetEntity(this.self, 9);
+            if (target instanceof LivingEntity) {
+                if (target.getId() != lastTarget) {
+                    lastTarget = target.getId();
+                    staringTicks = -1;
+                } else {
+                    staringTicks++;
+                }
+            } else {
+                lastTarget = -1;
+                staringTicks = 0;
+            }
+        }
+    }
+
+    public void playPrimaryBomb() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+
+        playSoundAttack(ModSounds.KIRA4_PRIMARY_BOMB_EVENT, 62);
+    }
+
+    public void playSecondaryBomb() {
+        if (attackCooldown > -1 || inTheMiddleOfTalking()) return;
+        double db = Math.random();
+        if (db < 0.33) {
+            playSoundAttack(ModSounds.KIRA4_SHA_1_EVENT, 106);
+        }else if (db < 0.66) {
+            playSoundAttack(ModSounds.KIRA4_SHA_2_EVENT, 56);
+        }else {
+            playSoundAttack(ModSounds.KIRA4_SHA_3_EVENT, 52);
+        }
+
     }
 }
 

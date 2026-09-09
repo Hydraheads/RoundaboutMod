@@ -605,17 +605,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
-    private int getPods() {
-        return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
-    }
-    private void setPods(int pods) {
-        ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
 
+    private int getPods() {
+        if (self instanceof Player) {
+            return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
+        }
+        return MAX_PODS;
+    }
+
+    private void setPods(int pods) {
         if (self instanceof Player player) {
+            ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
             S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
         }
     }
-
+    //summon minecraft:zombie ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_purple_haze_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     private void tickPodReset() {
         if (self == null || self.level().isClientSide() || !(self instanceof Player)) {
             return;
