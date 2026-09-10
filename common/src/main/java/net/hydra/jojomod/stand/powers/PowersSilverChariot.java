@@ -1405,7 +1405,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float getBarrageFinisherStrength(Entity entity) {
-        float str = super.getBarrageFinisherStrength(entity);
+        float str = super.getBarrageFinisherStrength(entity) * 0.75F;
         if (this.getReducedDamage(entity)) {
             str *= levelupDamageMod(this.getAttackMultOnPlayers() * 0.01F);
         } else {

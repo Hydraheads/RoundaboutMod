@@ -1,6 +1,8 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.SilverChariotModel;
@@ -12,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -63,8 +66,23 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 this.model.getHead().visible = true;
             }
         }
+        renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.3F);
         // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         // this.model.getHead().visible = true;
+    }
+
+    public void renderAfterimage(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha) {
+
+        matrixStack.pushPose();
+
+        this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
+        this.scale(mobEntity, matrixStack, g);
+        matrixStack.mulPose((Axis.ZP.rotationDegrees(-180.0F)));
+        matrixStack.translate(0.0D, -2.0D, 1.0D);
+
+        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(ANIME_PART_3));
+        this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        matrixStack.popPose();
     }
 
     @Nullable
