@@ -3,6 +3,7 @@ package net.hydra.jojomod.entity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.item.TommyGunItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.ParticleTypes;
@@ -102,9 +103,16 @@ public class ParallelChestEntity extends Entity {
             for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
                 ItemStack $$6 = player.getInventory().getItem($$5);
                 if ($$6.getItem() instanceof FirearmItem fi){
-                    if (fi.getAmmo($$6) < fi.getMaxAmmo()){
-                        fi.setAmmo($$6, fi.getMaxAmmo());
-                        return;
+                    if (fi instanceof TommyGunItem){
+                        if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                            fi.setAmmo($$6, Math.min(fi.getMaxAmmo(),fi.getAmmo($$6)+10));
+                            return;
+                        }
+                    } else {
+                        if (fi.getAmmo($$6) < fi.getMaxAmmo()){
+                            fi.setAmmo($$6, fi.getMaxAmmo());
+                            return;
+                        }
                     }
                 }
             }

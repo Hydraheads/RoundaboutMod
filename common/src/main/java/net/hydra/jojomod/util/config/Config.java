@@ -1179,6 +1179,8 @@ public class Config implements Cloneable {
         public Float chanceForAltStands;
         @FloatOption(group = "inherit", value = 0.015F, min = 0.0F, max = 1.0F)
         public Float chanceForAltMobs;
+        @FloatOption(group = "inherit", value = 0.08F, min = 0.0F, max = 1.0F)
+        public Float chanceForMergeLoot;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer d4cAttackMultOnMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
