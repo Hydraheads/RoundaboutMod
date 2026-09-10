@@ -4,10 +4,15 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.item.FirearmItem;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -17,6 +22,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -118,12 +125,68 @@ public class ParallelChestEntity extends Entity {
         return false;
     }
 
+    public boolean canAddItem(ItemStack itemStack, Inventory inventory) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : inventory.items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            bl = true;
+            break;
+        }
+        return bl;
+    }
+    public void addItemToPlayer(Entity ent, ItemStack stack){
+        if (ent instanceof Player PE) {
+            if (canAddItem(stack, PE.getInventory()) && PE.isAlive()) {
+                PE.addItem(stack);
+            } else {
+                ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                        this.getY() + this.getEyeHeight(), this.getZ(),
+                        stack);
+                $$4.setPickUpDelay(40);
+                $$4.setThrower(PE.getUUID());
+                PE.level().addFreshEntity($$4);
+            }
+        } else {
+            ItemEntity $$4 = new ItemEntity(this.level(), this.getX(),
+                    this.getY() + this.getEyeHeight(), this.getZ(),
+                    stack);
+            $$4.setPickUpDelay(40);
+            this.level().addFreshEntity($$4);
+        }
+    }
     @Override
     public InteractionResult interactAt(Player player, Vec3 location, InteractionHand intHand) {
-        if (!player.level().isClientSide()) {
+        if (!player.level().isClientSide() && player.level() instanceof ServerLevel sl
+        && player instanceof ServerPlayer sp) {
+            if (getOpened()) {
+                return InteractionResult.CONSUME;
+            }
             this.playSound(ModSounds.SPECIAL_CHEST_EVENT);
             this.playSound(SoundEvents.CHEST_OPEN);
             setOpened(true);
+            for (int i = 0; i < 10; i++) {
+
+                double angle = (Math.PI * 2.0D / 10.0D) * i;
+                double radius = 0.5D;
+
+                float circleX = (float)(Math.cos(angle) * radius);
+                float circleZ = (float)(Math.sin(angle) * radius);
+
+                MainUtil.sendParticlesIfPossible(
+                        sp, sl, ParticleTypes.END_ROD,
+                        this.getX(), this.getY(), this.getZ(),
+                        0,
+                        circleX, 2D, circleZ,
+                        0.2D
+                );
+            }
+            if (getAmmo()){
+                refillAGun(sp);
+                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.gun_restore"), true);
+            } else {
+                addItemToPlayer(player,MainUtil.getRandomD4CLoot(player.level()));
+                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.goody"), true);
+            }
         }
         return InteractionResult.SUCCESS;
     }
