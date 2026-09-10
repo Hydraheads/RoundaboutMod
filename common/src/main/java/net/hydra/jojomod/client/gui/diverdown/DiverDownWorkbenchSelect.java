@@ -105,9 +105,9 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
     /**    (non-Javadoc)
      * mouseReleased indicates when a GUI element is clicked
      * 
-     * @param double $$0 is an indicator for the x coordinate of the mouse
-     * @param double $$1 is an indicator for the y coordinate of the mouse
-     * @param int $$2 indicates what mouse button was clicked. 0 is for left click, 1 is for right.
+     * @param $$0 is an indicator for the x coordinate of the mouse
+     * @param $$1 is an indicator for the y coordinate of the mouse
+     * @param $$2 indicates what mouse button was clicked. 0 is for left click, 1 is for right.
      * @see net.minecraft.client.gui.components.events.ContainerEventHandler#mouseReleased(double, double, int)
      */
     @Override
