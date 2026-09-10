@@ -162,6 +162,7 @@
   "item.roundabout.d4c_disc": "Stand Disc",
   "item.roundabout.silver_chariot_disc": "Stand Disc",
   "item.roundabout.green_day_disc": "Stand Disc",
+  "item.roundabout.oh_lonesome_me_disc": "Stand Disc",
   "item.roundabout.soft_and_wet_disc": "Stand Disc",
   "item.roundabout.cinderella_disc": "Stand Disc",
   "item.roundabout.california_king_bed_disc": "Stand Disc",
@@ -211,6 +212,7 @@
   "item.roundabout.d4c_disc.desc": "D4C",
   "item.roundabout.silver_chariot_disc.desc": "Silver Chariot",
   "item.roundabout.green_day_disc.desc": "Green Day",
+  "item.roundabout.oh_lonesome_me_disc.desc": "Oh Lonesome Me",
   "item.roundabout.planet_waves_disc": "Stand Disc",
   "item.roundabout.max_planet_waves_disc": "Stand Disc+",
   "item.roundabout.planet_waves_disc.desc": "Planet Waves",
@@ -3074,6 +3076,7 @@
   "skins.roundabout.emperor.manga": "Manga",
   "skins.roundabout.emperor.anime": "Anime",
 
+  "skins.roundabout.Lonesome.manga": "Manga",
 
   "skins.roundabout.achtung_baby.base": "Has No Form",
 
@@ -3449,6 +3452,8 @@
   "config.roundabout.enableAchtungBaby.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableGreenDay.name": "Enable Stand",
   "config.roundabout.enableGreenDay.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
+  "config.roundabout.enableOhLonesomeMe.name": "Enable Stand",
+  "config.roundabout.enableOhLonesomeMe.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableHeyYa.name": "Enable Stand",
   "config.roundabout.enableHeyYa.desc": "Turn the stand on or off. If off, the stand disc will not work or be in arrow/mob pools no matter what.",
   "config.roundabout.enableCinderella.name": "Enable Stand",
@@ -4836,6 +4841,7 @@
   "config.roundabout.magiciansRedSettings.name": "Magician's Red",
   "config.roundabout.walkingHeartSettings.name": "Walking Heart",
   "config.roundabout.greenDaySettings.name": "Green Day",
+  "config.roundabout.ohLonesomeMeSettings.name": "Oh Lonesome Me",
   "config.roundabout.rattSettings.name": "Ratt",
   "config.roundabout.standTweak.name": "Ratt",
   "config.roundabout.justiceSettings.name": "Justice",

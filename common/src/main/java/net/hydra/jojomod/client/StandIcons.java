@@ -590,6 +590,15 @@ public class StandIcons {
     public static final ResourceLocation KING_CRIMSON_ITEM_GRAB = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/king_crimson/grab_item.png");
 
+    public static final ResourceLocation LONESOME_ARM_LAUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/arm_launch.png");
+    public static final ResourceLocation LONESOME_CRAWL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/crawl.png");
+    public static final ResourceLocation LONESOME_LASSO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/lasso.png");
+    public static final ResourceLocation LONESOME_ZIPLINE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/zipline.png");
+
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");
     public static final ResourceLocation MANDOM_VISION_OFF = new ResourceLocation(Roundabout.MOD_ID,
