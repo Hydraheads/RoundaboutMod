@@ -23,7 +23,6 @@ import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.renderers.*;
 import net.hydra.jojomod.client.models.stand.*;
 import net.hydra.jojomod.client.models.stand.renderers.*;
-import net.hydra.jojomod.block.HallucinatoryAcidBlockEntityRenderer;
 import net.hydra.jojomod.client.models.substand.*;
 import net.hydra.jojomod.client.models.substand.renderers.*;
 import net.hydra.jojomod.client.models.visages.*;
@@ -36,7 +35,6 @@ import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
-import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.SpectralArrowRenderer;
@@ -217,7 +215,6 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM, LeftSeperatedArmRenderer::new);
         EntityRendererRegistry.register(FabricEntities.LEFT_SEPERATED_ARM_SLIM, LeftSeperatedArmSlimRenderer::new);
         EntityRendererRegistry.register(FabricEntities.SHEER_HEART_ATTACK, SheerHeartAttackRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageRenderer::new);
         
         EntityRendererRegistry.register(FabricEntities.METALLICA_KNIFE, KnifeRenderer::new);
 
@@ -296,7 +293,6 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_LAYER, SilverChariotRapierModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_RAPIER_PLATFORM_LAYER, SilverChariotRapierPlatformModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SILVER_CHARIOT_AFTERIMAGE_LAYER, SilverChariotAfterimageModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.HARPOON_LAYER, HarpoonModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PARALLEL_CHEST, ParallelChestRenderer::createSingleBodyLayer);
@@ -341,6 +337,7 @@ public class FabricEntityClient {
         BlockEntityRenderers.register(ModBlocks.CHESS_PIECE_BLOCK_ENTITY, ChessPieceRenderer::new);
         //BlockEntityRenderers.register(ModBlocks.CHESSBOARD_BLOCK_ENTITY, ChessBoardRenderer::new);
         BlockEntityRenderers.register(ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlocks.DIVER_LIMB_BLOCK_ENTITY, DiverLimbBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.D4C_PORTAL_BLOCK_ENTITY, D4CPortalBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.INVISIBLE_BLOCK_ENTITY, InvisiBlockEntityRenderer::new);
         BlockEntityRenderers.register(ModBlocks.OASIS_MUD_BLOCK_ENTITY, OasisMudBlockEntityRenderer::new);

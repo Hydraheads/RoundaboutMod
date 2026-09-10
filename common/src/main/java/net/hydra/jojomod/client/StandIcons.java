@@ -1017,12 +1017,34 @@ public class StandIcons {
     public static final ResourceLocation INVIS_BLOCK = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/achtung_baby/invis_block.png");
 
-    public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
+    //Diver Down icons start
+        public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_ledge_grab.png");
-    public static final ResourceLocation DIVER_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
+        public static final ResourceLocation DIVER_DOWN_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_selection.png");
-    public static final ResourceLocation DIVER_DOWN_ZIP = new ResourceLocation(Roundabout.MOD_ID,
+        public static final ResourceLocation DIVER_DOWN_ZIP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_zip.png");
+        public static final ResourceLocation DIVER_DOWN_WORKSTATION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/diver_workstation.png");
+        public static final ResourceLocation DIVER_DOWN_DISASSEMBLE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_SELF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_AFFLICTION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_RELEASE_AUTO = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_RELEASE_MANUAL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_STORE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/diver_climb.png");
+        public static final ResourceLocation DIVER_DOWN_GROUND_DIVE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/placeholder.png");
+        public static final ResourceLocation DIVER_DOWN_RECALL = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/diver_down/stand_recall.png");
+        //Diver Down icons end
 
     public static final ResourceLocation EMPEROR_SPEED_UP = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/emperor/emperor_speed_up.png");

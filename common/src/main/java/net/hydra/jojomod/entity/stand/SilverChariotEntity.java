@@ -41,10 +41,23 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
 
+    public void setArmoured(boolean armoured) {
+        if (this.entityData.hasItem(IS_ARMOURED)) {
+            this.entityData.set(IS_ARMOURED, armoured);
+        }
+    }
+
+    public boolean getArmoured() {
+        if (this.entityData.hasItem(IS_ARMOURED)) {
+            return this.entityData.get(IS_ARMOURED);
+        }
+        return true;
+    }
+
     private boolean armoured;
     private boolean isCarryingUser;
-    private final int maxGravityFreeCarryTicks = 100;
-    private int gravityFreeCarryTicks = 0;
+    private final int maxNoGravityCarryTicks = 100;
+    private int noGravityCarryTicks = 0;
 
     public boolean isCarryingUser() {
         return isCarryingUser;
@@ -52,7 +65,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean standHasGravity() {
-        return !isCarryingUser || gravityFreeCarryTicks > maxGravityFreeCarryTicks;
+        return !isCarryingUser || noGravityCarryTicks > maxNoGravityCarryTicks;
     }
 
     private boolean controlDimensionsActive;
@@ -181,7 +194,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
         entityData.define(CONTROL_MODE, CONTROL_MODE_NONE);
         entityData.define(IS_ARMOURED, true);
         entityData.define(HAS_RAPIER, true);
-
     }
 
     private float controlStrafe;

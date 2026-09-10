@@ -17,10 +17,6 @@ import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.item.CommandDiscItem;
-import net.hydra.jojomod.item.HearingDiscItem;
-import net.hydra.jojomod.item.MemoryDiscItem;
-import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -196,10 +192,10 @@ public class FabricItems {
     public static Item STAND_DISC_ACHTUNG = registerItem("achtung_baby_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersAchtungBaby(null)));
 
-   /* public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
+    public static Item STAND_DISC_DIVER_DOWN = registerItem("diver_down_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
     public static Item MAX_STAND_DISC_DIVER_DOWN = registerItem("max_diver_down_disc",
-            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
+            new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
 
  /*   public static Item STAND_DISC_CREAM = registerItem("cream_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null)));
@@ -788,7 +784,8 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
-
+                        entries.accept(STAND_DISC_DIVER_DOWN);
+                        entries.accept(MAX_STAND_DISC_DIVER_DOWN);
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);
                         entries.accept(STAND_DISC_WHITESNAKE);
@@ -923,9 +920,9 @@ public class FabricItems {
         ModItems.STAND_DISC_WALKING_HEART = STAND_DISC_WALKING_HEART;
         ModItems.MAX_STAND_DISC_WALKING_HEART = MAX_STAND_DISC_WALKING_HEART;
         ((MaxStandDiscItem)MAX_STAND_DISC_WALKING_HEART).baseDisc = ((StandDiscItem)STAND_DISC_WALKING_HEART);
-      /*  ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
+        ModItems.STAND_DISC_DIVER_DOWN = STAND_DISC_DIVER_DOWN;
         ((MaxStandDiscItem)MAX_STAND_DISC_DIVER_DOWN).baseDisc = ((StandDiscItem)STAND_DISC_DIVER_DOWN);
-        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN; */
+        ModItems.MAX_STAND_DISC_DIVER_DOWN = MAX_STAND_DISC_DIVER_DOWN;
        /* ModItems.STAND_DISC_CREAM = STAND_DISC_CREAM;
         ((MaxStandDiscItem)MAX_STAND_DISC_CREAM).baseDisc = ((StandDiscItem)STAND_DISC_CREAM);
         ModItems.MAX_STAND_DISC_CREAM = MAX_STAND_DISC_CREAM;*/

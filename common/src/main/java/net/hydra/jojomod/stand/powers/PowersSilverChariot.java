@@ -313,6 +313,21 @@ public class PowersSilverChariot extends NewPunchingStand {
         return stand != null && stand.isAlive() && !stand.isRemoved();
     }
 
+    public boolean isRegainingArmourFromDesummon() {
+        if (this.self instanceof Player player && player.isCreative()) {
+            return false;
+        }
+        return regainingArmourFromDesummon;
+    }
+
+    private boolean restrictionsFromNoRapier() {
+        return false;
+    }
+
+    private boolean restrictionsFromNoArmour() {
+        return false;
+    }
+
 
 
     @Override
@@ -466,29 +481,22 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canUseMiningStand() {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
     }
 
     @Override
     public boolean canAttackHeavy() {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
     }
 
     @Override
     public boolean canActuallyHit(Entity entity) {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
     }
 
     public boolean armoured = true;
 
     public boolean regainingArmourFromDesummon = false;
-
-    public boolean isRegainingArmourFromDesummon() {
-        if (this.self instanceof Player player && player.isCreative()) {
-            return false;
-        }
-        return regainingArmourFromDesummon;
-    }
 
     public boolean unarmouredDesummonFromHiddenMode = false;
 
@@ -670,6 +678,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             this.desummon = true;
             if (!armoured && !regainingArmourFromDesummon) {
                 armoured = true;
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand instanceof SilverChariotEntity silverChariot) {
+                    silverChariot.setArmoured(true);
+                }
                 if (this.self instanceof Player player && player.isCreative()) {
                     regainingArmourFromDesummon = false;
                 } else {
@@ -677,6 +689,12 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
                 this.sealFromArmorShed();
             }
+        } else {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof SilverChariotEntity silverChariot) {
+                silverChariot.setArmoured(true);
+            }
+            armoured = true;
         }
     }
 
@@ -2195,6 +2213,10 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void armorShedServer() {
         if (!this.self.level().isClientSide() && armoured) {
             armoured = false;
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof SilverChariotEntity silverChariot) {
+                silverChariot.setArmoured(false);
+            }
             ((StandUser) this.self).roundabout$damageGuard(getMaxGuardPoints());
             this.playStandUserOnlySoundsIfNearby(ARMOR_SHED_SOUND, 15, false,
                     false);
