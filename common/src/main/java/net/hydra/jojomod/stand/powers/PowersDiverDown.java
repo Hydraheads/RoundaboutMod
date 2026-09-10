@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlock;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -70,7 +71,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 60;
 
-    // NOISES GO BELOW HERE, starting from 120. I think that should be more than enough.
+    // NOISES GO BELOW HERE, starting from 120. I think that should be more than
+    // enough.
     public static final byte CHARGE_NOISE = 120;
 
     // the next 2 variables are used for the charge phase punch later
@@ -297,9 +299,6 @@ public class PowersDiverDown extends NewPunchingStand {
     /**
      * (non-Javadoc)
      * tryLimbClimb is the client side activation for the limb move.
-     * 
-     * @see net.hydra.jojomod.stand.powers.presets.NewDashPreset#tryIntPower(int,
-     *      boolean, int)
      */
     private void tryLimbClimb() {
         if (this.self.level().isClientSide()) {
@@ -323,7 +322,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
         if (move == ACCESS_WORKBENCH) {
             // test message, once done comment everything out...
-            /**
+            /*
              * if (this.getSelf() instanceof ServerPlayer serverPlayer) {
              * serverPlayer.displayClientMessage(Component.literal("Server received ID: " +
              * workbenchId), false);
@@ -371,7 +370,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public void updateUniqueMoves() {
-        // this is specifically to destroy all limbs if the user dies while still having limbs active.
+        // this is specifically to destroy all limbs if the user dies while still having
+        // limbs active.
         if (!this.self.isAlive() && !this.activeLimbs.isEmpty()) {
             this.recallLimbs();
         }
@@ -528,7 +528,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * workbenchID. The next 5 functions that follow all open the corresponding
      * workbenches.
      * 
-     * @int workbenchID ID of the workbench being accessed
+     * @param workbenchID ID of the workbench being accessed
      */
     private boolean openWorkbench(int workbenchId) {
         if (!(this.getSelf() instanceof ServerPlayer serverPlayer)) {
@@ -671,7 +671,8 @@ public class PowersDiverDown extends NewPunchingStand {
             }
             if (this.self.distanceToSqr(Vec3.atCenterOf(targetPos)) <= 25.0) {
                 Level level = this.self.level();
-                if (level.getBlockState(targetPos).canBeReplaced() && !level.getBlockState(targetPos).is(ModBlocks.DIVER_LIMB)) {
+                if (level.getBlockState(targetPos).canBeReplaced()
+                        && !level.getBlockState(targetPos).is(ModBlocks.DIVER_LIMB)) {
                     // cycle limb code here
                     while (activeLimbs.size() >= 4) {
                         BlockPos oldest = activeLimbs.remove(0);
@@ -732,21 +733,22 @@ public class PowersDiverDown extends NewPunchingStand {
                                 stand.setXRot(pitch);
 
                                 // add animations and effects here
-                                // sound effect here, currentLimbIndex says if it should play the first limb phase sound, or the rephase sound
-                                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                                // sound effect here, currentLimbIndex says if it should play the first limb
+                                // phase sound, or the rephase sound
+                                playSoundIfPossible(self.level(), null, this.self.blockPosition(),
                                         ModSounds.DIVER_DOWN_DIVE_EVENT,
                                         SoundSource.PLAYERS, 0.85F, 1);
                                 // finally despawns the stand once it's inside the block
                                 stand.forceDespawn(true);
                             }
                         }
-                        //subsequent usages
-                        else{
-                            //play the animations + effects
-                            //play a sound
+                        // subsequent usages
+                        else {
+                            // play the animations + effects
+                            // play a sound
                             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                                        ModSounds.DIVER_DOWN_DIVE2_EVENT,
-                                        SoundSource.PLAYERS, 0.85F, 1);
+                                    ModSounds.DIVER_DOWN_DIVE2_EVENT,
+                                    SoundSource.PLAYERS, 0.85F, 1);
                         }
                     }
                     return true;
@@ -797,8 +799,8 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!level.isClientSide() && hasStandActive(this.self)) {
             ((StandUser) this.self).roundabout$summonStand(level, true, false);
             playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                                        ModSounds.SUMMON_DIVER_DOWN_EVENT,
-                                        SoundSource.PLAYERS, 0.85F, 1);
+                    ModSounds.SUMMON_DIVER_DOWN_EVENT,
+                    SoundSource.PLAYERS, 0.85F, 1);
         }
         return true;
     }
@@ -818,8 +820,67 @@ public class PowersDiverDown extends NewPunchingStand {
     // Ground dive move here
 
     private void tryGroundDive() {
-        System.out.println("lol. lmao, even.");
+        if (isPiloting()) {
+            // Pressing skill 4 again cancels pilot mode / recalls stand
+            // note to self: for the icon, check if isPiloting is true to get the right icon for this.
+            exitGroundDive();
+            return;
+        }
+        StandEntity stand = getStandEntity(this.self);
+        if (stand != null && stand.isAlive()) {
+            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
+            ClientUtil.setCameraEntity(stand);
+            stand.setPos(stand.getX(), stand.getY() - 1.2D, stand.getZ());
+            //note to self: get the last survivor ult sound effect for this. this is a placeholder for now
+            playSoundIfPossible(self.level(), null, stand.blockPosition(),
+                    ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
     }
+
+    public void exitGroundDive() {
+        // Return camera to player
+        ClientUtil.setCameraEntity(null);
+        setPiloting(0);
+        tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+        StandEntity stand = getStandEntity(this.self);
+        if (stand != null) {
+            // Bring stand back to user
+            stand.setPos(this.self.getX(), this.self.getY(), this.self.getZ());
+        }
+    }
+
+    // used to send diver down into pilot mode
+    @Override
+    public boolean isPiloting() {
+        // wow diver down is stealing 2 moves from whitesnake now
+        if (self instanceof Player player) {
+            StandEntity stand = ((StandUser) player).roundabout$getStand();
+            return stand != null && ((IPlayerEntity) player).roundabout$getControlling() == stand.getId();
+        }
+        return false;
+    }
+
+    @Override
+    public void setPiloting(int id) {
+        if (this.self instanceof Player player) {
+            StandEntity stand = getStandEntity(this.self);
+            boolean entering = stand != null && id == stand.getId();
+
+            ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
+            if (stand instanceof FollowingStandEntity following) {
+                // detach the stand entity from the player
+                following.setOffsetType(entering ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+            }
+        }
+    }
+
+    @Override
+    public int getMaxPilotRange() {
+        //(this is in blocks)
+        return 20;
+    }
+
+    // figure out walking heart autostep here
 
     // Ground dive move end
 
@@ -845,10 +906,12 @@ public class PowersDiverDown extends NewPunchingStand {
 
     /**
      * Used to check if stand able to be used or not.
-     * Use this to render alternative icons for moves etc, depending on what move is being used
+     * Use this to render alternative icons for moves etc, depending on what move is
+     * being used
      * 
      * Update this if there are more moves that disable stand
-     * @return
+     * 
+     * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
         return hasLimbsDeployed() || isDiveActive();
@@ -887,11 +950,16 @@ public class PowersDiverDown extends NewPunchingStand {
         return super.canSummonStandAsEntity();
     }
 
-    @Override public boolean canUseMiningStand() {
+    @Override
+    public boolean canUseMiningStand() {
         return !areStandMovesDisabled() && super.canUseMiningStand();
     }
 
-    //this override goes here cuz it goes with the rest of the overrides
+    /*
+     * this override goes here cuz it goes with the rest of the overrides
+     * This will be used for recalling "pilot" moves, such as the limb move,
+     * or the dive move when unsummoning stand.
+     */
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon) {
