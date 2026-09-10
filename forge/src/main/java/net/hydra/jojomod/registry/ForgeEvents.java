@@ -155,7 +155,6 @@ public class ForgeEvents {
         event.put(ForgeEntities.MOLD_SPORE.get(), MoldSporesEntity.createStandAttributes().build());
         event.put(ForgeEntities.PURPLE_SMOKE.get(), PurpleSmokeEntity.createStandAttributes().build());
         event.put(ForgeEntities.SHEER_HEART_ATTACK.get(), SheerHeartAttackEntity.createStandAttributes().build());
-        event.put(ForgeEntities.SILVER_CHARIOT_AFTERIMAGE.get(), SilverChariotAfterimageEntity.createStandAttributes().build());
     }
 
     @SubscribeEvent

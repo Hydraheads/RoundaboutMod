@@ -66,19 +66,23 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 this.model.getHead().visible = true;
             }
         }
-        renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.3F);
+        if (!mobEntity.getArmoured()) {
+            //  y a nd z have switched cases for some odd reason
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.45F, 1.5D, -2.0D, -1.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.45F, -1.5D, -2.0D, -1.5D);
+        }
         // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         // this.model.getHead().visible = true;
     }
 
-    public void renderAfterimage(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha) {
+    public void renderAfterimage(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha, double x, double y, double z) {
 
         matrixStack.pushPose();
 
         this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
         this.scale(mobEntity, matrixStack, g);
         matrixStack.mulPose((Axis.ZP.rotationDegrees(-180.0F)));
-        matrixStack.translate(0.0D, -2.0D, 1.0D);
+        matrixStack.translate(x, y, z);
 
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(ANIME_PART_3));
         this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);

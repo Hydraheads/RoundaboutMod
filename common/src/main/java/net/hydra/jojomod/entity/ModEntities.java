@@ -194,7 +194,6 @@ public class ModEntities {
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
     public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
-    public static EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
