@@ -412,6 +412,12 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
     }
+    @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
+    public void roundabout$isInvisible(Entity ent, CallbackInfoReturnable<Boolean> cir){
+        if (PowerTypes.isInADifferentExistence(((Entity)(Object) this),ent)){
+            cir.setReturnValue(false);
+        }
+    }
     @Inject(method = "lavaHurt", at = @At("HEAD"), cancellable = true)
     public void roundabout$lavaHurt(CallbackInfo ci) {
         if (PowerTypes.isErasingTime(((Entity)(Object) this))){

@@ -8,6 +8,7 @@ import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.KeyInputs;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.RattEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -799,6 +800,53 @@ public abstract class InputEvents implements IInputEvents {
 
 
             if (PowerTypes.isExistentiallyElsewhere(player) && !PowerTypes.canInteractInExistence(player)){
+                if (!this.gameMode.isDestroying()) {
+                    this.rightClickDelay = 4;
+                    if (!this.player.isHandsBusy()) {
+                        if (this.hitResult == null) {
+                        }
+
+                        for (InteractionHand $$0 : InteractionHand.values()) {
+                            if ($$0 == InteractionHand.MAIN_HAND) {
+                                $$0 = InteractionHand.OFF_HAND;
+                            } else if ($$0 == InteractionHand.OFF_HAND) {
+                                $$0 = InteractionHand.MAIN_HAND;
+                            }
+                            ItemStack $$1 = this.player.getItemInHand($$0);
+                            if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                                ci.cancel();
+                                return;
+                            }
+
+                            if (this.hitResult != null) {
+                                switch (this.hitResult.getType()) {
+                                    case ENTITY:
+                                        EntityHitResult $$2 = (EntityHitResult) this.hitResult;
+                                        Entity $$3 = $$2.getEntity();
+                                        if (!this.level.getWorldBorder().isWithinBounds($$3.blockPosition())) {
+                                            ci.cancel();
+                                            return;
+                                        }
+
+                                        if (PowerTypes.isInADifferentExistence($$3,this.player)) {
+                                            break;
+                                        }
+                                        if (!($$3 instanceof ParallelChestEntity)){
+                                            return;
+                                        }
+
+                                        InteractionResult $$4 = this.gameMode.interactAt(this.player, $$3, $$2, $$0);
+                                        if (!$$4.consumesAction()) {
+                                            $$4 = this.gameMode.interact(this.player, $$3, $$0);
+                                        }
+
+                                        this.player.swing($$0);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
                 roundabout$TryGuard();
                 ci.cancel();
                 return;
@@ -958,11 +1006,6 @@ public abstract class InputEvents implements IInputEvents {
         }
 
 
-        if (PowerTypes.isExistentiallyElsewhere(player) && !PowerTypes.canInteractInExistence(player)){
-            roundabout$TryGuard();
-            return;
-        }
-
         if (powers.interceptAllInteractions()) {
             roundabout$TryGuard();
             return;
@@ -987,6 +1030,59 @@ public abstract class InputEvents implements IInputEvents {
 
                 return;
             }
+        }
+
+
+
+        if (PowerTypes.isExistentiallyElsewhere(player) && !PowerTypes.canInteractInExistence(player)){
+            if (!this.gameMode.isDestroying()) {
+                this.rightClickDelay = 4;
+                if (!this.player.isHandsBusy()) {
+                    if (this.hitResult == null) {
+                    }
+
+                    for (InteractionHand $$0 : InteractionHand.values()) {
+                        if ($$0 == InteractionHand.MAIN_HAND) {
+                            $$0 = InteractionHand.OFF_HAND;
+                        } else if ($$0 == InteractionHand.OFF_HAND) {
+                            $$0 = InteractionHand.MAIN_HAND;
+                        }
+                        ItemStack $$1 = this.player.getItemInHand($$0);
+                        if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
+                            return;
+                        }
+
+                        if (this.hitResult != null) {
+                            switch (this.hitResult.getType()) {
+                                case ENTITY:
+                                    EntityHitResult $$2 = (EntityHitResult) this.hitResult;
+                                    Entity $$3 = $$2.getEntity();
+                                    if (!this.level.getWorldBorder().isWithinBounds($$3.blockPosition())) {
+                                        return;
+                                    }
+
+                                    if (PowerTypes.isInADifferentExistence($$3,this.player)) {
+                                        break;
+                                    }
+                                    if (!($$3 instanceof ParallelChestEntity)){
+                                        return;
+                                    }
+
+                                    InteractionResult $$4 = this.gameMode.interactAt(this.player, $$3, $$2, $$0);
+                                    if (!$$4.consumesAction()) {
+                                        $$4 = this.gameMode.interact(this.player, $$3, $$0);
+                                    }
+
+
+                                            this.player.swing($$0);
+                                    return;
+                            }
+                        }
+                    }
+                }
+            }
+            roundabout$TryGuard();
+            return;
         }
         if (!this.gameMode.isDestroying()) {
             this.rightClickDelay = 4;
