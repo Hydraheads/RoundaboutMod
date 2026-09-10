@@ -791,7 +791,7 @@ public class PowersD4C extends NewPunchingStand {
         if (hasChest){
 
             boolean needsRefill = ParallelChestEntity.needsARefill(self);
-            boolean randomChance = true;
+            boolean randomChance = Math.random() < ClientNetworking.getAppropriateConfig().d4cSettings.chanceForMergeLoot;
 
             if (needsRefill || randomChance){
                 Entity copyEntity = ModEntities.PARALLEL_CHEST.create(self.level());

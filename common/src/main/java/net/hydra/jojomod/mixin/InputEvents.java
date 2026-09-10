@@ -812,11 +812,6 @@ public abstract class InputEvents implements IInputEvents {
                             } else if ($$0 == InteractionHand.OFF_HAND) {
                                 $$0 = InteractionHand.MAIN_HAND;
                             }
-                            ItemStack $$1 = this.player.getItemInHand($$0);
-                            if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
-                                ci.cancel();
-                                return;
-                            }
 
                             if (this.hitResult != null) {
                                 switch (this.hitResult.getType()) {
@@ -1046,10 +1041,6 @@ public abstract class InputEvents implements IInputEvents {
                             $$0 = InteractionHand.OFF_HAND;
                         } else if ($$0 == InteractionHand.OFF_HAND) {
                             $$0 = InteractionHand.MAIN_HAND;
-                        }
-                        ItemStack $$1 = this.player.getItemInHand($$0);
-                        if (!$$1.isItemEnabled(this.level.enabledFeatures())) {
-                            return;
                         }
 
                         if (this.hitResult != null) {
