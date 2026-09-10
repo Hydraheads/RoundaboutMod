@@ -511,7 +511,13 @@ public class FabricSounds {
         addSound(ModSounds.RIPPER_EYES_CHARGE_ID, ModSounds.RIPPER_EYES_CHARGE_EVENT);
         addSound(ModSounds.RIPPER_EYES_SHORT_ID, ModSounds.RIPPER_EYES_SHORT_EVENT);
         addSound(ModSounds.SUMMON_ACHTUNG_ID, ModSounds.SUMMON_ACHTUNG_EVENT);
+        
         addSound(ModSounds.SUMMON_DIVER_DOWN_ID, ModSounds.SUMMON_DIVER_DOWN_EVENT);
+        addSound(ModSounds.DIVER_DOWN_HIT_ID, ModSounds.DIVER_DOWN_HIT_EVENT);
+        addSound(ModSounds.DIVER_DOWN_HIT_HEAVY_ID, ModSounds.DIVER_DOWN_HIT_HEAVY_EVENT);
+        addSound(ModSounds.DIVER_DOWN_UI_SELECT_ID, ModSounds.DIVER_DOWN_UI_SELECT_EVENT);
+        addSound(ModSounds.DIVER_DOWN_CHARGE_ID, ModSounds.DIVER_DOWN_CHARGE_EVENT);
+
         addSound(ModSounds.SUMMON_GREEN_DAY_ID, ModSounds.SUMMON_GREEN_DAY_EVENT);
         addSound(ModSounds.SUMMON_WALKING_ID, ModSounds.SUMMON_WALKING_EVENT);
         addSound(ModSounds.HEEL_RAISE_ID, ModSounds.HEEL_RAISE_EVENT);

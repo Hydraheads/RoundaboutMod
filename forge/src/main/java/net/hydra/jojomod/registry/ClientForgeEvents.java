@@ -3,6 +3,7 @@ package net.hydra.jojomod.registry;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
+import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.client.models.*;
 import net.hydra.jojomod.client.models.corpses.renderers.*;
 import net.hydra.jojomod.client.models.minions.*;
@@ -32,11 +33,9 @@ import net.hydra.jojomod.client.models.layers.MagiciansRedSpinEffectLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.npcs.ZombieAestheticianModel;
 import net.hydra.jojomod.client.models.npcs.renderers.ZombieAestheticianRenderer;
-import net.hydra.jojomod.client.models.projectile.renderers.NoRenderer;
 import net.hydra.jojomod.particles.*;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.block.HallucinatoryAcidBlockEntityRenderer;
-import net.hydra.jojomod.particles.HallucinatoryAcidDripParticle;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.particle.ExplodeParticle;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -61,6 +60,12 @@ public class ClientForgeEvents {
         // This runs on client during mod loading (after registries)
         MainUtil.setClient();
         event.enqueueWork(() -> {
+            ForgeMenus.initialize();
+            //Diver Down custom workbenches registry
+            MenuScreens.register(ForgeMenus.DIVER_DOWN_CRAFTING.get(), DiverDownCraftingScreen::new);
+            MenuScreens.register(ForgeMenus.DIVER_DOWN_ANVIL.get(), DiverDownAnvilScreen::new);
+            MenuScreens.register(ForgeMenus.DIVER_DOWN_SMITHING.get(), DiverDownSmithingScreen::new);
+            //DD workbench registry end
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ForgeBlocks.HALLUCINATORY_ACID_WALL.get(), RenderType.translucent());
         });
@@ -232,6 +237,7 @@ public class ClientForgeEvents {
         event.registerBlockEntityRenderer(ForgeBlocks.HAND_BLOCK_ENTITY.get(), HandRenderer::new);
         //event.registerBlockEntityRenderer(ForgeBlocks.CHESSBOARD_BLOCK_ENTITY.get(), ChessBoardRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY.get(), BubbleScaffoldBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(ForgeBlocks.DIVER_LIMB_BLOCK_ENTITY.get(), DiverLimbBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.D4C_PORTAL_BLOCK_ENTITY.get(), D4CPortalBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.INVISIBLE_BLOCK_ENTITY.get(), InvisiBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ForgeBlocks.OASIS_MUD_BLOCK_ENTITY.get(), OasisMudBlockEntityRenderer::new);
