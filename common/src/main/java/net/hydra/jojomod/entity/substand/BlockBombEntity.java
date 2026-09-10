@@ -79,7 +79,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		super($$0, $$1);
 	}
 
-	public static final float dimensions = 1F;
+	public static final float dimensions = 0.9F;
 
 	@Override
 	public void push(Entity $$0) {
