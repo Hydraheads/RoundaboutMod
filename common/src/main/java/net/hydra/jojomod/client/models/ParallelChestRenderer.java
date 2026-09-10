@@ -90,6 +90,7 @@ public class ParallelChestRenderer extends EntityRenderer<ParallelChestEntity> {
                     $$16 = Math.min(1,((((float)entity.tickDestroy)+$$2)/14));
                     opacity = Math.max(0.01F,1-((((float)entity.tickDestroy)+$$2)/20));
                 }
+                //$$3.mulPose(Axis.YP.rotationDegrees(90));
                     $$16 = 1.0F - $$16;
                     $$16 = 1.0F - $$16 * $$16 * $$16;
                 VertexConsumer vertexConsumer = $$4.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity)));
