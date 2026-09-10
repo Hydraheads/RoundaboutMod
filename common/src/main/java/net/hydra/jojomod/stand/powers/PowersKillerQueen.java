@@ -3439,18 +3439,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                     }
                 }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
                     if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2) {
-                        Entity contact = detectContact(this.bombEntity, 0.1);
-                        if (contact != null ) {
-                            if (currentBombStatus == ARROW_BOMB && (contact instanceof LivingEntity LE
-                                    && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PSW && PSW.hasWaterShield())) {
-                                this.bombEntity = null;
-                                defuseServer();
-                            }else {
+                        if (!(
+                                this.getBombEntity() instanceof BombPlantedArrow A && !A.onGround()
+                                || this.getBombEntity() instanceof BombPlantedSpectralArrow SA && !SA.onGround()
+                        )) {
+                            Entity contact = detectContact(this.bombEntity, 0.1);
+                            if (contact != null) {
                                 if (this.currentBombStatus == ARROW_BOMB) {
                                     this.syncBombStatus(ARROW_CONTACT);
                                 }
                                 this.bombEntity = contact;
                                 this.detonate();
+
                             }
                         }
                     }
