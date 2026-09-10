@@ -8,6 +8,7 @@ import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
@@ -24,12 +25,15 @@ import net.hydra.jojomod.event.powers.DamageHandler;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
+import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -78,6 +82,11 @@ public class PowersDiverDown extends NewPunchingStand {
     // the next 2 variables are used for the charge phase punch later
     public boolean holdDownClick = false;
     public int chargedPhasePunch = 0;
+
+    // used for ground dive
+    public static final int MAX_DIVE_TICKS = 200; // 10 seconds
+    public int diveTicksLeft = 0;
+    private CameraType previousCameraType = null;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -822,24 +831,40 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryGroundDive() {
         if (isPiloting()) {
             // Pressing skill 4 again cancels pilot mode / recalls stand
-            // note to self: for the icon, check if isPiloting is true to get the right icon for this.
+            // note to self: for the icon, check if isPiloting is true to get the right icon
+            // for this.
             exitGroundDive();
             return;
         }
         StandEntity stand = getStandEntity(this.self);
         if (stand != null && stand.isAlive()) {
+            // saves camera
+            this.previousCameraType = Minecraft.getInstance().options.getCameraType();
+            // forces third person camera
+            Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
             ClientUtil.setCameraEntity(stand);
-            stand.setPos(stand.getX(), stand.getY() - 1.2D, stand.getZ());
-            //note to self: get the last survivor ult sound effect for this. this is a placeholder for now
+            stand.setPos(stand.getX(), stand.getY(), stand.getZ());
+            // note to self: get the last survivor ult sound effect for this. this is a
+            // placeholder for now
             playSoundIfPossible(self.level(), null, stand.blockPosition(),
                     ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 
     public void exitGroundDive() {
-        // Return camera to player
-        ClientUtil.setCameraEntity(null);
+        if (this.self.level().isClientSide()) {
+            Minecraft mc = Minecraft.getInstance();
+            // return camera to player
+            ClientUtil.setCameraEntity(null);
+            if (mc.player != null) {
+                mc.setCameraEntity(mc.player);
+            }
+            // go back to first person/whatever the person was using when they used this move.
+            CameraType restore = (this.previousCameraType != null) ? this.previousCameraType : CameraType.FIRST_PERSON;
+            mc.options.setCameraType(restore);
+            this.previousCameraType = null;
+        }
         setPiloting(0);
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
         StandEntity stand = getStandEntity(this.self);
@@ -849,7 +874,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    // used to send diver down into pilot mode
+    // checks if diver down is in pilot
     @Override
     public boolean isPiloting() {
         // wow diver down is stealing 2 moves from whitesnake now
@@ -860,6 +885,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
+    //starts/stops stand piloting. also initializes the timer.
     @Override
     public void setPiloting(int id) {
         if (this.self instanceof Player player) {
@@ -871,16 +897,123 @@ public class PowersDiverDown extends NewPunchingStand {
                 // detach the stand entity from the player
                 following.setOffsetType(entering ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
             }
+            if (entering) {
+                this.diveTicksLeft = MAX_DIVE_TICKS;
+            } else {
+                // move returns camera as a failsafe.
+                this.diveTicksLeft = 0;
+                if (this.self.level().isClientSide()) {
+                    Minecraft mc = Minecraft.getInstance();
+                    ClientUtil.setCameraEntity(null);
+                    if (mc.player != null) {
+                        mc.setCameraEntity(mc.player);
+                    }
+                    CameraType restore = (this.previousCameraType != null) ? this.previousCameraType : CameraType.FIRST_PERSON;
+                    mc.options.setCameraType(restore);
+                    this.previousCameraType = null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void tickPower() {
+        super.tickPower();
+        // timer for the pilot, kicks you out once it hits 0, all that good stuff.
+        if (isPiloting()) {
+            if (this.diveTicksLeft > 0) {
+                this.diveTicksLeft--;
+                if (this.diveTicksLeft == 0) {
+                    if (this.self.level().isClientSide()) {
+                        exitGroundDive();
+                    } else {
+                        setPiloting(0);
+                    }
+                }
+            }
         }
     }
 
     @Override
     public int getMaxPilotRange() {
-        //(this is in blocks)
+        // (this is in blocks)
         return 20;
     }
 
-    // figure out walking heart autostep here
+    @Override
+    public void synchToCamera() {
+        if (isPiloting()) {
+            LivingEntity stand = getPilotingStand();
+            if (stand != null) {
+                ClientUtil.synchToCamera(stand);
+                Minecraft mc = Minecraft.getInstance();
+                if (mc.options.getCameraType() != CameraType.THIRD_PERSON_BACK) {
+                    mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
+        if (entity instanceof DiverDownEntity diver) {
+            // autostep
+            // need to think about if this should be 1.0, or 1.4F so it can go up things
+            // like carpeted fences and stuff.
+            // will first try out this move with friends, and balance accordingly.
+            diver.setMaxUpStep(1.0F);
+            // horizontal movement
+            float speed = 0.4F;
+            float yawRad = diver.getYRot() * ((float) Math.PI / 180F);
+            double forward = kpi.forwardImpulse;
+            double strafe = kpi.leftImpulse;
+            double motionX = (-Math.sin(yawRad) * forward + Math.cos(yawRad) * strafe) * speed;
+            double motionZ = (Math.cos(yawRad) * forward + Math.sin(yawRad) * strafe) * speed;
+            //stops movement when reaching max range
+            double nextX = diver.getX() + motionX;
+            double nextZ = diver.getZ() + motionZ;
+            double distFromPlayer = Math.hypot(nextX - this.self.getX(), nextZ - this.self.getZ());
+            int maxRange = getMaxPilotRange();
+            if (distFromPlayer > maxRange) {
+                double angle = Math.atan2(nextZ - this.self.getZ(), nextX - this.self.getX());
+                double stopX = this.self.getX() + Math.cos(angle) * maxRange;
+                double stopZ = this.self.getZ() + Math.sin(angle) * maxRange;
+                motionX = stopX - diver.getX();
+                motionZ = stopZ - diver.getZ();
+            }
+            diver.setDeltaMovement(motionX, diver.getDeltaMovement().y, motionZ);
+        }
+    }
+
+    //diver down has it's own "you can't leave this range" circle, so this is unnecessary
+    @Override
+    public boolean shouldRenderPilotingHud() {
+        return false;
+    }
+
+    //replaces hud when piloting
+    @Override
+    public boolean replaceHudActively() {
+        return isPiloting();
+    }
+
+    @Override
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x, boolean removeNum) {
+        if (isPiloting()) {
+            //shows the timer for how long diver down pilot is active for
+            StandHudRender.renderGroundDiveHud(context, cameraPlayer, screenWidth, screenHeight, x, this);
+            return;
+        }
+        super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
+    }
+
+    // walking heart autostep works on the player, not on the stand. i can't copy
+    // that for this, unfortunately.
+
+    // note to self: all of whitesnake's controls can be found in
+    // WhitesnakeControlClient
+    // i just need to use the camera third person thing though, so I'll just
+    // transfer everything here.
 
     // Ground dive move end
 
