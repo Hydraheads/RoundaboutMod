@@ -70,6 +70,9 @@ public class PowersDiverDown extends NewPunchingStand {
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 60;
 
+    // NOISES GO BELOW HERE, starting from 120. I think that should be more than enough.
+    public static final byte CHARGE_NOISE = 120;
+
     // the next 2 variables are used for the charge phase punch later
     public boolean holdDownClick = false;
     public int chargedPhasePunch = 0;
@@ -136,17 +139,17 @@ public class PowersDiverDown extends NewPunchingStand {
         // Ability 4 (V)
         if (areStandMovesDisabled()) {
             if (isGuarding()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_GUARD);
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_RECALL, PowerIndex.SKILL_4);
             }
         } else {
             if (isGuarding()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_PLATFORM, PowerIndex.SKILL_4_GUARD);
             } else if (isHoldingSneak()) {
-                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4);
+                setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_WORKSTATION, PowerIndex.SKILL_4_SNEAK);
             } else {
                 setSkillIcon(context, x, y, 4, StandIcons.DIVER_DOWN_GROUND_DIVE, PowerIndex.SKILL_4);
             }
@@ -184,10 +187,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public SoundEvent getSoundFromByte(byte soundChoice) {
-        switch (soundChoice) {
-            case SoundIndex.SUMMON_SOUND -> {
-                return ModSounds.SUMMON_DIVER_DOWN_EVENT;
-            }
+        if (soundChoice == SoundIndex.SUMMON_SOUND) {
+            return ModSounds.SUMMON_DIVER_DOWN_EVENT;
+        } else if (soundChoice == IMPALE_NOISE) {
+            return ModSounds.DIVER_DOWN_CHARGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
     }
@@ -262,6 +265,10 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
+            // ground dive
+            case SKILL_4_NORMAL -> {
+                tryGroundDive();
+            }
             // 3x3 crafting grid.
             case SKILL_4_CROUCH -> {
                 tryWorkbenchSelectionClient();
@@ -297,41 +304,11 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryLimbClimb() {
         if (this.self.level().isClientSide()) {
             if (!this.onCooldown(PowerIndex.SKILL_4_GUARD)) {
+                // literally just to prevent the move from being spammed
+                this.setCooldown(PowerIndex.SKILL_4_GUARD, 30);
                 ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
                 tryPowerPacket(LIMB_SCAFFOLD);
             }
-        }
-    }
-
-    public boolean recallLimbs() {
-        if (this.activeLimbs.isEmpty()) {
-            return false;
-        }
-        Level level = this.self.level();
-        if (!level.isClientSide()) {
-            for (BlockPos pos : this.activeLimbs) {
-                if (level.getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
-                    level.removeBlock(pos, false);
-                }
-            }
-        }
-        // reset current limbs
-        this.activeLimbs.clear();
-        this.currentLimbIndex = 0;
-        // resummons stand
-        if (!level.isClientSide() && hasStandActive(this.self)) {
-            ((StandUser) this.self).roundabout$summonStand(level, true, false);
-        }
-        return true;
-    }
-
-    /**
-     * This is a client side function that tries to recall all limb scaffolds
-     */
-    private void tryRecallLimbs() {
-        if (this.self.level().isClientSide()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
-            tryPowerPacket(LIMB_RECALL);
         }
     }
 
@@ -394,6 +371,10 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public void updateUniqueMoves() {
+        // this is specifically to destroy all limbs if the user dies while still having limbs active.
+        if (!this.self.isAlive() && !this.activeLimbs.isEmpty()) {
+            this.recallLimbs();
+        }
         if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             updatePhasePunchCharge();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
@@ -661,18 +642,18 @@ public class PowersDiverDown extends NewPunchingStand {
     public final List<BlockPos> activeLimbs = new ArrayList<>();
     public int currentLimbIndex = 0;
 
-    // checks to see if limbs are deployed to ensure moves can't be used while
-    // active.
+    /**
+     * Checks to see if limbs are deployed to ensure moves can't be used while
+     * active.
+     */
     public boolean hasLimbsDeployed() {
-        if (this.self.level() != null) {
+        if (this.self.level() != null && !this.self.level().isClientSide()) {
             this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
         }
         return !this.activeLimbs.isEmpty();
     }
 
     public boolean placeLimb() {
-        //check to see if limb is already on a block
-
         // checks to see if there is a block within 6... blocks.
         HitResult hit = this.self.pick(6.0D, 0.0F, false);
 
@@ -691,8 +672,6 @@ public class PowersDiverDown extends NewPunchingStand {
             if (this.self.distanceToSqr(Vec3.atCenterOf(targetPos)) <= 25.0) {
                 Level level = this.self.level();
                 if (level.getBlockState(targetPos).canBeReplaced() && !level.getBlockState(targetPos).is(ModBlocks.DIVER_LIMB)) {
-                    // literally just to prevent the move from being spammed
-                    this.setCooldown(PowerIndex.SKILL_4_GUARD, 10);
                     // cycle limb code here
                     while (activeLimbs.size() >= 4) {
                         BlockPos oldest = activeLimbs.remove(0);
@@ -753,13 +732,21 @@ public class PowersDiverDown extends NewPunchingStand {
                                 stand.setXRot(pitch);
 
                                 // add animations and effects here
-                                // sound effect here, using stand summon cuz it also doubles as a dive sound
-                                playSoundIfPossible(self.level(), null, this.self.blockPosition(),
-                                        ModSounds.SUMMON_DIVER_DOWN_EVENT,
-                                        SoundSource.PLAYERS, 0.85F, 1.2F);
+                                // sound effect here, currentLimbIndex says if it should play the first limb phase sound, or the rephase sound
+                                    playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                                        ModSounds.DIVER_DOWN_DIVE_EVENT,
+                                        SoundSource.PLAYERS, 0.85F, 1);
                                 // finally despawns the stand once it's inside the block
                                 stand.forceDespawn(true);
                             }
+                        }
+                        //subsequent usages
+                        else{
+                            //play the animations + effects
+                            //play a sound
+                            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                                        ModSounds.DIVER_DOWN_DIVE2_EVENT,
+                                        SoundSource.PLAYERS, 0.85F, 1);
                         }
                     }
                     return true;
@@ -791,7 +778,50 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
+    public boolean recallLimbs() {
+        if (this.activeLimbs.isEmpty()) {
+            return false;
+        }
+        Level level = this.self.level();
+        if (!level.isClientSide()) {
+            for (BlockPos pos : this.activeLimbs) {
+                if (level.getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                    level.removeBlock(pos, false);
+                }
+            }
+        }
+        // reset current limbs
+        this.activeLimbs.clear();
+        this.currentLimbIndex = 0;
+        // resummons stand
+        if (!level.isClientSide() && hasStandActive(this.self)) {
+            ((StandUser) this.self).roundabout$summonStand(level, true, false);
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(),
+                                        ModSounds.SUMMON_DIVER_DOWN_EVENT,
+                                        SoundSource.PLAYERS, 0.85F, 1);
+        }
+        return true;
+    }
+
+    /**
+     * This is a client side function that tries to recall all limb scaffolds
+     */
+    private void tryRecallLimbs() {
+        if (this.self.level().isClientSide()) {
+            ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
+            tryPowerPacket(LIMB_RECALL);
+        }
+    }
+
     // Limb scaffold climb move end
+
+    // Ground dive move here
+
+    private void tryGroundDive() {
+        System.out.println("lol. lmao, even.");
+    }
+
+    // Ground dive move end
 
     /**
      * Placeholder function, right now returns false (because dive hasn't even been
@@ -813,13 +843,28 @@ public class PowersDiverDown extends NewPunchingStand {
         return true;
     }
 
-    // general check for is stand is disabled
+    /**
+     * Used to check if stand able to be used or not.
+     * Use this to render alternative icons for moves etc, depending on what move is being used
+     * 
+     * Update this if there are more moves that disable stand
+     * @return
+     */
     public boolean areStandMovesDisabled() {
         return hasLimbsDeployed() || isDiveActive();
     }
 
-    // 3 overrides below are for making sure the stand can't attack and also be
-    // rendered while the stand moves are disabled
+    // Used to stop sounds early
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
+        }
+        return super.tryPower(move, forced);
+    }
+
+    // 4 overrides below are for making sure the stand can't do a variety of stuff
+    // while the stand moves are disabled
     @Override
     public boolean canAttack() {
         if (areStandMovesDisabled())
@@ -840,6 +885,19 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         return super.canSummonStandAsEntity();
+    }
+
+    @Override public boolean canUseMiningStand() {
+        return !areStandMovesDisabled() && super.canUseMiningStand();
+    }
+
+    //this override goes here cuz it goes with the rest of the overrides
+    @Override
+    public void onStandSummon(boolean desummon) {
+        if (desummon) {
+            recallLimbs();
+        }
+        super.onStandSummon(desummon);
     }
 
     // animations and attack stuff go here
@@ -997,6 +1055,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.poseStand(OffsetIndex.GUARD);
         // uncomment the animation later when done
         // animateStand((byte) 42);
+        playStandUserOnlySoundsIfNearby(IMPALE_NOISE, 27, false, false);
         return true;
     }
 
@@ -1014,6 +1073,7 @@ public class PowersDiverDown extends NewPunchingStand {
         // 20 ticks = 1 second, rn it's at 80 ticks so you can hold the move for 4
         // seconds after max charge.
         if (this.attackTimeDuring >= 80) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
             if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide() && isPacketPlayer()) {
                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);

@@ -1727,6 +1727,12 @@ public class ModSounds {
     public static final String DIVER_DOWN_CHARGE = "diver_down_charge";
     public static final ResourceLocation DIVER_DOWN_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_CHARGE);
     public static SoundEvent DIVER_DOWN_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_CHARGE_ID);
+    public static final String DIVER_DOWN_DIVE = "diver_down_dive";
+    public static final ResourceLocation DIVER_DOWN_DIVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE);
+    public static SoundEvent DIVER_DOWN_DIVE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE_ID);
+    public static final String DIVER_DOWN_DIVE2 = "diver_down_dive2";
+    public static final ResourceLocation DIVER_DOWN_DIVE2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE2);
+    public static SoundEvent DIVER_DOWN_DIVE2_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE2_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);

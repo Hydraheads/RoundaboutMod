@@ -47,7 +47,7 @@ public class DiverLimbBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level $$0, BlockState $$1, BlockEntityType<T> $$2) {
-        return createTickerHelper($$2, ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY, BubbleScaffoldBlockEntity::tickBubbleScaffold);
+        return createTickerHelper($$2, ModBlocks.DIVER_LIMB_BLOCK_ENTITY, DiverLimbBlockEntity::tick);
     }
 
     @Override
@@ -80,5 +80,32 @@ public class DiverLimbBlock extends BaseEntityBlock {
     @Override
     public VoxelShape getShape(BlockState $$0, BlockGetter $$1, BlockPos $$2, CollisionContext $$3) {
          return Shapes.empty();
+    }
+
+    /**    (non-Javadoc)
+     * Used to destroy limb blocks when the block it's on is broken
+     * 
+     * @see net.minecraft.world.level.block.state.BlockBehaviour#neighborChanged(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.Level, net.minecraft.core.BlockPos, net.minecraft.world.level.block.Block, net.minecraft.core.BlockPos, boolean)
+     */
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        if (!level.isClientSide()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof DiverLimbBlockEntity limb) {
+                // What block the limb is attached to
+                BlockPos attachedPos = pos.relative(limb.facing);
+                
+                // If the block that changed is the supporting wall/floor
+                if (fromPos.equals(attachedPos)) {
+                    BlockState attachedState = level.getBlockState(attachedPos);
+                    
+                    // If the supporting block is broken (turned to air, water, etc.)
+                    if (attachedState.isAir() || attachedState.canBeReplaced()) {
+                        level.removeBlock(pos, false);
+                    }
+                }
+            }
+        }
     }
 }

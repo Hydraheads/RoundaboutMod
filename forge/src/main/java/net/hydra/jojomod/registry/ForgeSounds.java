@@ -951,6 +951,10 @@ public class ForgeSounds {
             register(ModSounds.DIVER_DOWN_UI_SELECT, ModSounds.DIVER_DOWN_UI_SELECT_ID);
         public static final RegistryObject<SoundEvent> DIVER_DOWN_CHARGE =
             register(ModSounds.DIVER_DOWN_CHARGE, ModSounds.DIVER_DOWN_CHARGE_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE =
+            register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
+            register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
 
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
