@@ -333,7 +333,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public static int maxKickTime = 25;
     public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
-    private static final int blockPlantMaxTicks = 15;
+    private static final int blockPlantMaxTicks = 18;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public int btdTicks = -1;
@@ -1999,6 +1999,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             if (!(self instanceof Player PL && PL.getAbilities().instabuild)) {
                 stack.shrink(1);
             }
+
             arrow.shootFromRotation(self, self.getXRot(), self.getYRot(), 0.0F, $$1 * 3.0F, 1.0F);
             arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
 
@@ -2938,8 +2939,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
                 this.bombBlock.setUser(this.self);
                 this.bombBlock.setOnContact(isContactModeEnabled());
-                ((IGravityEntity)bombBlock).roundabout$setExistPlane(
-                        ((IGravityEntity)self).roundabout$getExistPlane());
+                PowerTypes.copyPlaneOfExisting(self, bombBlock);
 
                 this.bombBlock.setBlockPos(pos);
                 this.self.level().addFreshEntity(this.bombBlock);
