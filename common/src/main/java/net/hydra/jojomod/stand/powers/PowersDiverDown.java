@@ -77,10 +77,13 @@ public class PowersDiverDown extends NewPunchingStand {
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
-            SMITHING_TABLE = 59;
+            SMITHING_TABLE = 59,
+            OPEN_CHEST = 60,
+            GROUND_GET_ITEMS = 61,
+            GROUND_DIVE_BARRAGE = 62;
 
     // for all the move ids accessed elsewhere.
-    public static final byte ACCESS_WORKBENCH = 60;
+    public static final byte ACCESS_WORKBENCH = 119;
 
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
@@ -134,7 +137,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         // Ability 2 (X)
-        if (!isDiveActive()) {
+        if (isDiveActive()) {
             setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
         } else if (isGuarding()) {
             // releaseMode will be true if auto, false if manual
@@ -260,7 +263,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     /**
-     * Activates the power based on the buttons pressed.
+     * Gets the input for the power based on the buttons pressed.
      * Note, this is client side only. DO NOT FORGET!!!!
      *
      * @param context What button combination was pressed.
@@ -312,6 +315,40 @@ public class PowersDiverDown extends NewPunchingStand {
                 tryLimbClimb();
             }
         }
+    }
+
+    // for activating all the moves
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        // does the limb scaffold move
+        if (move == LIMB_SCAFFOLD) {
+            return placeLimb();
+        }
+        // recalls limb scaffolds
+        else if (move == LIMB_RECALL) {
+            return recallLimbs();
+        }
+        // charges the phase punch
+        else if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            return setPowerChargePhase();
+        }
+        // does the phase punch
+        else if (move == PowerIndex.SNEAK_ATTACK) {
+            return setPowerPhasePunch();
+        }
+        // barrages in ground dive
+        else if (move == GROUND_DIVE_BARRAGE) {
+            return groundDiveBarrage();
+        }
+        return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+        if (move == OPEN_CHEST) {
+            openChest(blockPos);
+        }
+        return super.tryBlockPosPower(move, forced, blockPos);
     }
 
     public void tryToDashClient() {
@@ -678,14 +715,14 @@ public class PowersDiverDown extends NewPunchingStand {
      * Checks to see if limbs are deployed to ensure moves can't be used while
      * active.
      */
-    public boolean hasLimbsDeployed() {
+    private boolean hasLimbsDeployed() {
         if (this.self.level() != null && !this.self.level().isClientSide()) {
             this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
         }
         return !this.activeLimbs.isEmpty();
     }
 
-    public boolean placeLimb() {
+    private boolean placeLimb() {
         // checks to see if there is a block within 6... blocks.
         HitResult hit = this.self.pick(6.0D, 0.0F, false);
 
@@ -812,7 +849,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
-    public boolean recallLimbs() {
+    private boolean recallLimbs() {
         if (this.activeLimbs.isEmpty()) {
             return false;
         }
@@ -841,10 +878,8 @@ public class PowersDiverDown extends NewPunchingStand {
      * This is a client side function that tries to recall all limb scaffolds
      */
     private void tryRecallLimbs() {
-        if (this.self.level().isClientSide()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
-            tryPowerPacket(LIMB_RECALL);
-        }
+        ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
+        tryPowerPacket(LIMB_RECALL);
     }
 
     // Limb scaffold climb move end
@@ -908,7 +943,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean isPiloting() {
         // wow diver down is stealing 2 moves from whitesnake now
         if (self instanceof Player player) {
-            StandEntity stand = ((StandUser) player).roundabout$getStand();
+            StandEntity stand = getStandEntity(player);
             return stand != null && ((IPlayerEntity) player).roundabout$getControlling() == stand.getId();
         }
         return false;
@@ -1062,7 +1097,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * @param targetY Target Y coordinate
      * @param targetZ Target Z coordinate
      */
-    public boolean isInDiveHitbox(double targetX, double targetY, double targetZ) {
+    private boolean isInDiveHitbox(double targetX, double targetY, double targetZ) {
         StandEntity stand = getStandEntity(this.self);
         if (stand == null)
             return false;
@@ -1083,7 +1118,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // Gets chest to open.
-    public BlockPos getClosestChest() {
+    private BlockPos getClosestChest() {
         StandEntity stand = getStandEntity(this.self);
         if (stand == null)
             return null;
@@ -1108,40 +1143,71 @@ public class PowersDiverDown extends NewPunchingStand {
         return closestPos;
     }
 
-    //sends the open chest move to the server to process it
-    public void tryOpenChest(){
-        //WIP
-        //lol. lmao, even.
+    // sends the open chest move to the server to process it
+    private void tryOpenChest() {
+        BlockPos chestPos = this.getClosestChest();
+        if (chestPos != null) {
+            tryBlockPosPower(OPEN_CHEST, true, chestPos);
+            tryBlockPosPowerPacket(OPEN_CHEST, chestPos);
+        }
     }
 
     // Brings up the chest UI on the player's screen
-    public void openChestServer() {
-
-        if (this.self.level().isClientSide || !(this.self instanceof ServerPlayer serverPlayer)) {
-            return;
+    private boolean openChest(BlockPos chestPos) {
+        if (!(this.self instanceof ServerPlayer serverPlayer)) {
+            return false;
         }
-        BlockPos chestPos = this.getClosestChest();
         if (chestPos == null) {
-            return;
+            return false;
         }
         BlockState state = this.self.level().getBlockState(chestPos);
         MenuProvider menuProvider = state.getMenuProvider(this.self.level(), chestPos);
         if (menuProvider != null) {
             serverPlayer.openMenu(menuProvider);
             this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
+            // test message, comment out once done
+            /*
+             * if (this.self instanceof Player player) {
+             * player.sendSystemMessage(Component.literal("it's chesting time4"));
+             * }
+             */
         }
         this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
+        return true;
+    }
+
+    // runs get items code on client and server
+    private void tryDiveGetItems() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_GET_ITEMS, true);
+        tryPowerPacket(GROUND_GET_ITEMS);
+    }
+
+    // gets the items when the move is pressed
+    private boolean diveGetItems() {
+        return true;
     }
 
     /*
-     * Handles the mini barrage code
+     * Checks for clicks in pilot. if there is, trigger the dive barrage.
      * this can't be put in powerActivate because there's no check for clicks.
      */
     @Override
     public void pilotInputAttack() {
+        tryDiveBarrage();
+    }
+
+    // runs dive barrage on client and server
+    private void tryDiveBarrage() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_DIVE_BARRAGE, true);
+        tryPowerPacket(GROUND_DIVE_BARRAGE);
+    }
+
+    // dive barrage code
+    private boolean groundDiveBarrage() {
         // insert mini barrage code here
         // wait a bit to account for how long the move takes
         // recall stand
+        return true;
     }
 
     // walking heart autostep works on the player, not on the stand. i can't copy
@@ -1174,6 +1240,15 @@ public class PowersDiverDown extends NewPunchingStand {
         return true;
     }
 
+    // Used to stop sounds early
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
+        }
+        return super.tryPower(move, forced);
+    }
+
     /**
      * Used to check if stand able to be used or not.
      * Use this to render alternative icons for moves etc, depending on what move is
@@ -1185,15 +1260,6 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     public boolean areStandMovesDisabled() {
         return hasLimbsDeployed() || isDiveActive() || isPiloting();
-    }
-
-    // Used to stop sounds early
-    @Override
-    public boolean tryPower(int move, boolean forced) {
-        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
-        }
-        return super.tryPower(move, forced);
     }
 
     // 4 overrides below are for making sure the stand can't do a variety of stuff
@@ -1364,27 +1430,6 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             return 1;
         }
-    }
-
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-        // does the limb scaffold move
-        if (move == LIMB_SCAFFOLD) {
-            return placeLimb();
-        }
-        // recalls limb scaffolds
-        if (move == LIMB_RECALL) {
-            return recallLimbs();
-        }
-        // charges the phase punch
-        if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            return setPowerChargePhase();
-        }
-        // does the phase punch
-        else if (move == PowerIndex.SNEAK_ATTACK) {
-            return setPowerPhasePunch();
-        }
-        return super.setPowerOther(move, lastMove);
     }
 
     private boolean setPowerChargePhase() {
