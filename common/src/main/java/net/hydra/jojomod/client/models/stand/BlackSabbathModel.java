@@ -245,6 +245,11 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         this.animate(pEntity.diving, BlackSabbathAnimations.Dive, pAgeInTicks, 1f);
         this.animate(pEntity.emerge, BlackSabbathAnimations.Emerge, pAgeInTicks, 1f);
         this.animate(pEntity.catching, BlackSabbathAnimations.CatchAttempt, pAgeInTicks, 1f);
+        this.animate(pEntity.burningStart, BlackSabbathAnimations.burningStart, pAgeInTicks, 1f);
+        this.animate(pEntity.burningCripple, BlackSabbathAnimations.burningCripple, pAgeInTicks, 1f);
+        this.animate(pEntity.burningDive, BlackSabbathAnimations.burningDive, pAgeInTicks, 1f);
+        this.animate(pEntity.walk, BlackSabbathAnimations.ArmedWalk, pAgeInTicks, 1f);
+        this.animate(pEntity.stando, BlackSabbathAnimations.ArmedStand, pAgeInTicks, 1f);
 	} private float swimRotCorrect = 0.0F;
 
 	@Override

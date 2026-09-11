@@ -8,6 +8,7 @@
     "AbsurdBrainFix",
     "AbsurdPiglinAiFix",
     "AbsurdPiglinBruteAiFix",
+    "ContainerPilotMixin",
     "EntityAndData",
     "PlayerEntity",
     "PlayerEntityServer",

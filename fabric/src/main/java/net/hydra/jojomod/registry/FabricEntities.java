@@ -608,7 +608,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "black_sabbath"),
                     EntityType.Builder.of(BlackSabbathEntity::new, MobCategory.MISC).
-                            sized(0.60F, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":black_sabbath")
+                            sized(0.60f, 1.6f).clientTrackingRange(14).build(Roundabout.MOD_ID+":black_sabbath")
             );
 
     public static final EntityType<BeachSabbathEntity> BEACH_SABBATH =
