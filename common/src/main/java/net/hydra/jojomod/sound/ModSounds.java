@@ -1715,6 +1715,24 @@ public class ModSounds {
     public static final String SUMMON_DIVER_DOWN = "summon_diver_down";
     public static final ResourceLocation SUMMON_DIVER_DOWN_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_DIVER_DOWN);
     public static SoundEvent SUMMON_DIVER_DOWN_EVENT = SoundEvent.createVariableRangeEvent(SUMMON_DIVER_DOWN_ID);
+    public static final String DIVER_DOWN_HIT = "diver_down_hit";
+    public static final ResourceLocation DIVER_DOWN_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_HIT);
+    public static SoundEvent DIVER_DOWN_HIT_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_HIT_ID);
+    public static final String DIVER_DOWN_HIT_HEAVY = "diver_down_hit_heavy";
+    public static final ResourceLocation DIVER_DOWN_HIT_HEAVY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_HIT_HEAVY);
+    public static SoundEvent DIVER_DOWN_HIT_HEAVY_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_HIT_HEAVY_ID);
+    public static final String DIVER_DOWN_UI_SELECT = "diver_down_ui_select";
+    public static final ResourceLocation DIVER_DOWN_UI_SELECT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_UI_SELECT);
+    public static SoundEvent DIVER_DOWN_UI_SELECT_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_UI_SELECT_ID);
+    public static final String DIVER_DOWN_CHARGE = "diver_down_charge";
+    public static final ResourceLocation DIVER_DOWN_CHARGE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_CHARGE);
+    public static SoundEvent DIVER_DOWN_CHARGE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_CHARGE_ID);
+    public static final String DIVER_DOWN_DIVE = "diver_down_dive";
+    public static final ResourceLocation DIVER_DOWN_DIVE_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE);
+    public static SoundEvent DIVER_DOWN_DIVE_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE_ID);
+    public static final String DIVER_DOWN_DIVE2 = "diver_down_dive2";
+    public static final ResourceLocation DIVER_DOWN_DIVE2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+DIVER_DOWN_DIVE2);
+    public static SoundEvent DIVER_DOWN_DIVE2_EVENT = SoundEvent.createVariableRangeEvent(DIVER_DOWN_DIVE2_ID);
 
     public static final String SUMMON_GREEN_DAY = "summon_green_day";
     public static final ResourceLocation SUMMON_GREEN_DAY_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SUMMON_GREEN_DAY);
