@@ -3,6 +3,7 @@ package net.hydra.jojomod.util;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +55,6 @@ public class BlackSabbathPlayerInventory extends SimpleContainer {
 
     @Override
     public void setChanged() {
-
         super.setChanged();
     }
 

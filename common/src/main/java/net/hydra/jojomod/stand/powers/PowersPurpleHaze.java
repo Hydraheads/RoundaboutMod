@@ -431,7 +431,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
                     setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
-                }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
+                }else setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
 
@@ -472,7 +472,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
-                "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.POD_BITE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.VIRUS_SPIT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
