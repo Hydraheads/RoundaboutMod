@@ -1047,7 +1047,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
 
     public void playSummonSound() {
-        if (this.self.isCrouching()){
+        if (this.self.isCrouching() || hasHandsOut()){
             return;
         }
         if (PowerTypes.isErasingTime(self)){

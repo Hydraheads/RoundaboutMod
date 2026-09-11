@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "roundabout:bubble_scaffold",
+    "roundabout:diver_limb",
     "roundabout:climbing_wire"
   ]
 }

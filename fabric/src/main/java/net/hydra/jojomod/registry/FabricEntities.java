@@ -80,6 +80,13 @@ public class FabricEntities {
                         EntityType.Builder.of(JotaroNPC::new, MobCategory.MISC).
                                 sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_jotaro")
                 );
+    public static final EntityType<KiraPartFourNPC> KIRA4 =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_kira_part_four"),
+                    EntityType.Builder.of(KiraPartFourNPC::new, MobCategory.MISC).
+                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":jojo_npc_kira_part_four")
+            );
         public static final EntityType<PucciNPC> PUCCI =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -259,13 +266,6 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "king_crimson_projection"),
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).
                             sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":king_crimson_projection")
-            );
-    public static final EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE =
-            Registry.register(
-                    BuiltInRegistries.ENTITY_TYPE,
-                    new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_afterimage"),
-                    EntityType.Builder.of(SilverChariotAfterimageEntity::new, MobCategory.MISC).
-                            sized(0.6f, 1.8f).clientTrackingRange(10).build(Roundabout.MOD_ID+":silver_chariot_afterimage")
             );
         public static final EntityType<FallenZombie> FALLEN_ZOMBIE =
                 Registry.register(
@@ -762,6 +762,15 @@ public class FabricEntities {
                             .updateInterval(1).
                             clientTrackingRange(10).build(Roundabout.MOD_ID+":block_wall_entity")
             );
+    public static final EntityType<ParallelChestEntity> PARALLEL_CHEST =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "parallel_chest"),
+                    EntityType.Builder.<ParallelChestEntity>of(ParallelChestEntity::new, MobCategory.MISC).
+                            sized(ParallelChestEntity.dimensions, ParallelChestEntity.dimensions)
+                            .updateInterval(1).
+                            clientTrackingRange(10).build(Roundabout.MOD_ID+":parallel_chest")
+            );
     public static final EntityType<BlockD4CEntity> D4C_BLOCK =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1243,6 +1252,7 @@ public class FabricEntities {
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
+                ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
                 ModEntities.D4C_BLOCK = D4C_BLOCK;
                 ModEntities.STEP_RULE = STEP_RULE;
                 ModEntities.STRAY_CAT = STRAY_CAT;
@@ -1314,6 +1324,7 @@ public class FabricEntities {
                 ModEntities.OVA_ENYA = OVA_ENYA;
                 ModEntities.ENYA = ENYA;
                 ModEntities.JOTARO = JOTARO;
+                ModEntities.KIRA4 = KIRA4;
                 ModEntities.PUCCI = PUCCI;
                 ModEntities.AVDOL = AVDOL;
                 ModEntities.VALENTINE = VALENTINE;
@@ -1346,7 +1357,6 @@ public class FabricEntities {
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
-                ModEntities.SILVER_CHARIOT_AFTERIMAGE = SILVER_CHARIOT_AFTERIMAGE;
 
                 /*Attributes*/
                 FabricDefaultAttributeRegistry.register(TERRIER_DOG, Wolf.createAttributes());
@@ -1356,6 +1366,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(OVA_ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(ENYA, OVAEnyaNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(JOTARO, JotaroNPC.createAttributes());
+                FabricDefaultAttributeRegistry.register(KIRA4, KiraPartFourNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(PUCCI, PucciNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(AVDOL, AvdolNPC.createAttributes());
                 FabricDefaultAttributeRegistry.register(VALENTINE, ValentineNPC.createAttributes());
@@ -1460,7 +1471,6 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(PURPLE_SMOKE, PurpleSmokeEntity.createStandAttributes());
                 
                 FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
-                FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_AFTERIMAGE, SilverChariotAfterimageEntity.createStandAttributes());
                 
                 /*Spawn Weights and Biomes*/
                 BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,

@@ -965,11 +965,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (getDistortionHazeTicks() > 0) {
             SetInDistortionHazeTicks(getDistortionHazeTicks() - 1);
         }
-        if(BtdPlantedTicks > 0){
-            if (roundabout$hasAStand()) {
-                BtdPlantedTicks = -1;
-            }else {
-                BtdPlantedTicks -= 1;
+        if(BtdPlantedUser != null){
+            if (roundabout$hasAStand() || BtdPlantedUser.bitesTheDustPlantedEntity != rdbt$this()) {
+                BtdPlantedUser.bitesTheDustPlantedEntity = null;
+                BtdPlantedUser = null;
             }
         }
         if (!(((LivingEntity)(Object)this) instanceof Player)) {
@@ -2827,6 +2826,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             user.roundabout$damageGuard(amount);
             ci.cancel();
         }
+
     }
 
     @Unique
@@ -3759,6 +3759,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$isGuarding() || this.roundabout$getStandPowers().isSpecialGuarding()){
             ci.setReturnValue(this.roundabout$isGuardingEffectively());
         }
+
     }
     @Inject(method = "doAutoAttackOnTouch", at = @At(value = "HEAD"), cancellable = true, require = 0)
     private void roundabout$doAttackOnTouch(LivingEntity $$0, CallbackInfo ci) {
@@ -3796,7 +3797,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             }
         }
         if (rdbt$interceptIncomingHarmIfBTD($$0)) {
-            this.level().playSound(null,this.blockPosition(),SoundEvents.SHIELD_BLOCK,SoundSource.NEUTRAL,1F,1F);
+            BtdPlantedUser.btdGuardDamage($$1);
             ci.setReturnValue(false);
             return;
         }
@@ -5577,6 +5578,46 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     public int roundabout$explosionInflatTimer = 0;
 
+    @Unique
+    public void rdbt$reduceOtherEffectDurations(int ticks, MobEffect... exclude) {
+        if (this.activeEffects.isEmpty()) return;
+
+        List<MobEffect> toRemove = new ArrayList<>();
+
+        for (Map.Entry<MobEffect, MobEffectInstance> entry : new ArrayList<>(this.activeEffects.entrySet())) {
+            MobEffect effect = entry.getKey();
+
+            boolean skip = false;
+            for (MobEffect ex : exclude) {
+                if (effect.equals(ex)) { skip = true; break; }
+            }
+            if (skip) continue;
+
+            MobEffectInstance old = entry.getValue();
+            if (old.isInfiniteDuration()) continue;
+
+            int newDuration = old.getDuration() - ticks;
+            if (newDuration <= 0) {
+                toRemove.add(effect);
+            } else {
+                MobEffectInstance replacement = new MobEffectInstance(
+                        effect,
+                        newDuration,
+                        old.getAmplifier(),
+                        old.isAmbient(),
+                        old.isVisible(),
+                        old.showIcon()
+                );
+                this.activeEffects.put(effect, replacement);
+                this.onEffectUpdated(replacement, false, rdbt$this());
+            }
+        }
+
+        for (MobEffect effect : toRemove) {
+            this.removeEffect(effect);
+        }
+    }
+
     /**Stone Heart and Potion Ticks*/
     @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickEffects()V", shift = At.Shift.BEFORE))
     protected void roundabout$baseTick(CallbackInfo ci) {
@@ -5721,6 +5762,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (this.tickCount % 15 == 0 && !this.level().isClientSide() && this.isAlive()) {
                 this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISTORTION_VIRUS),
                         this.getEffect(ModEffects.DISTORTION_VIRUS).getAmplifier() + 1);
+                rdbt$reduceOtherEffectDurations(20, ModEffects.DISTORTION_VIRUS, ModEffects.VIRUS_IMMUNITY);
             }
 
             if (this.tickCount % 30 == 0 && !this.level().isClientSide() && this.isAlive()) {
@@ -6447,11 +6489,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
-    public int BtdPlantedTicks;
+    public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
     public boolean rdbt$interceptIncomingHarmIfBTD(DamageSource source) {
-        if (BtdPlantedTicks > 0 && !this.level().isClientSide()
+        if (!this.level().isClientSide() && BtdPlantedUser != null && BtdPlantedUser.catBtdShield()
                 && !((TimeStop) rdbt$this().level()).inTimeStopRange(rdbt$this())
                 && !source.is(DamageTypeTags.BYPASSES_SHIELD)
                 && !MainUtil.isArmorBypassingButNotShieldBypassing(source, rdbt$this())
@@ -6463,11 +6505,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return false;
     }
 
+
     @Override
-    public void rdbt$SetBtdPlantedTicks(int e) {
-        if(!this.level().isClientSide) {
-            BtdPlantedTicks = e;
-        }
+    public void rdbt$SetBtdPlantedUser(PowersKillerQueen e) {
+        if(!this.level().isClientSide) { BtdPlantedUser = e; }
     }
 
 

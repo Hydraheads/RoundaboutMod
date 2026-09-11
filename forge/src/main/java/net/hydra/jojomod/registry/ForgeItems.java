@@ -9,10 +9,6 @@ import net.hydra.jojomod.item.paintings.BirthOfVenusPaintingItem;
 import net.hydra.jojomod.item.paintings.MonaLisaPaintingItem;
 import net.hydra.jojomod.item.paintings.VanGoughPaintingItem;
 import net.hydra.jojomod.stand.powers.*;
-import net.hydra.jojomod.item.CommandDiscItem;
-import net.hydra.jojomod.item.HearingDiscItem;
-import net.hydra.jojomod.item.MemoryDiscItem;
-import net.hydra.jojomod.item.SightDiscItem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -845,10 +841,10 @@ public class ForgeItems {
     public static final RegistryObject<Item> MAX_STAND_DISC_GREEN_DAY = addToWIPTab(ITEMS.register("max_green_day_disc",
             () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersGreenDay(null))));
 
-   /* public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = ITEMS.register("diver_down_disc",
-            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null)));
-    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = ITEMS.register("max_diver_down_disc",
-            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))); */
+    public static final RegistryObject<Item> STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("diver_down_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
+    public static final RegistryObject<Item> MAX_STAND_DISC_DIVER_DOWN = addToWIPTab(ITEMS.register("max_diver_down_disc",
+            () -> new MaxStandDiscItem(new Item.Properties().stacksTo(1), new PowersDiverDown(null))));
 
  /*   public static final RegistryObject<Item> STAND_DISC_CREAM = addToWIPTab(ITEMS.register("cream_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCream(null))));

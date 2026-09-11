@@ -16,6 +16,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.gui.FogInventoryMenu;
 import net.hydra.jojomod.client.gui.PowerInventoryMenu;
 import net.hydra.jojomod.entity.KingCrimsonProjectionEntity;
+import net.hydra.jojomod.entity.ParallelChestEntity;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
@@ -229,6 +230,7 @@ public class MainUtil {
     public static ArrayList<String> hypnotismMobBlackList = Lists.newArrayList();
     public static ArrayList<String> blackOrWhiteListParallelMobs = Lists.newArrayList();
     public static ArrayList<String> fleshBudMobBlacklist = Lists.newArrayList();
+    public static ArrayList<String> lootPoolForD4CChests = Lists.newArrayList();
 
     public static final Map<Block, Block> FREEZABLE_BLOCKS = new HashMap<>();
     public static final Map<Block, Block> FREEZABLE_BLOCK_ITEMS = new HashMap<>();
@@ -258,6 +260,8 @@ public class MainUtil {
     public static ArrayList<String> unbreakableThrownItems = Lists.newArrayList();
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
+
+
 
     public record FoodBloodStats(String id, int hunger, float saturation) {}
 
@@ -362,6 +366,48 @@ public class MainUtil {
             return true;
         }
         return false;
+    }
+    public static ItemStack getRandomD4CLoot(Level level) {
+        if (lootPoolForD4CChests.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        // Duplicate entries naturally increase their chance of being selected
+        String loot = lootPoolForD4CChests.get(
+                level.getRandom().nextInt(lootPoolForD4CChests.size())
+        );
+
+        String[] parts = loot.split(":");
+
+        if (parts.length != 4) {
+            Roundabout.LOGGER.warn("Invalid D4C loot entry: {}", loot);
+            return ItemStack.EMPTY;
+        }
+
+        String namespace = parts[0];
+        String itemName = parts[1];
+        int min = Integer.parseInt(parts[2]);
+        int max = Integer.parseInt(parts[3]);
+
+        ResourceLocation itemId = ResourceLocation.tryBuild(
+                namespace,
+                itemName
+        );
+
+        Item item = BuiltInRegistries.ITEM.get(itemId);
+
+        if (item == Items.AIR) {
+            Roundabout.LOGGER.warn("Unknown D4C loot item: {}", itemId);
+            return ItemStack.EMPTY;
+        }
+
+        int amount = Mth.nextInt(
+                level.getRandom(),
+                min,
+                max
+        );
+
+        return new ItemStack(item, amount);
     }
     public static boolean isBlackOrWhiteListed(Entity ent){
         if (ent == null)
@@ -1002,6 +1048,7 @@ public class MainUtil {
         }
         return false;
     }
+
     public static <T extends ParticleOptions> void sendParticlesIfPossible(
             Entity self,
             Level level,
@@ -1435,6 +1482,7 @@ public class MainUtil {
         playerNames.put("ChaoticRobot_", UUID.fromString("95637d52-928d-48f9-b211-e53a8cd3e7d5"));
         playerNames.put("IShootMuffins", UUID.fromString("ef5ff7af-c6d6-440a-a111-2f0932ed0131"));
         playerNames.put("TheChaseyOne", UUID.fromString("8e86263a-2740-4d0f-a83f-afe0e6fd3c3d"));
+        playerNames.put("FieldstormDapper", UUID.fromString("4813e816-05b2-438b-8c59-5bfe9d78aa01"));
         playerNames.put("NashorSenpai", UUID.fromString("e7d78d2b-01c8-4e46-ae87-9905d1261847"));
     }
 
@@ -2713,7 +2761,7 @@ public class MainUtil {
                 return false;
                 //return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
-        } else if (entity instanceof EncasementBubbleEntity sbe){
+        } else if (entity instanceof EncasementBubbleEntity  || entity instanceof ParallelChestEntity){
             return false;
         }
         return entity.isPickable();
@@ -3822,6 +3870,10 @@ public class MainUtil {
             }
         }
     }
+
+
+
+
     public static void addItem(Player player, ItemStack stack){
         ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
                 player.getEyePosition().y, player.getEyePosition().z,

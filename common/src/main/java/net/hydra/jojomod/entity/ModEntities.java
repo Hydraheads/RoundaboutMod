@@ -166,6 +166,7 @@ public class ModEntities {
     public static EntityType<EnyaNPC> ENYA;
 
     public static EntityType<JotaroNPC> JOTARO;
+    public static EntityType<KiraPartFourNPC> KIRA4;
     public static EntityType<PucciNPC> PUCCI;
 
     public static EntityType<VanGoughPainting> VAN_GOUGH_PAINTING;
@@ -193,7 +194,6 @@ public class ModEntities {
     public static EntityType<KingCrimsonCloneEntity> KING_CRIMSON_CLONE;
     public static EntityType<D4CCloneEntity> D4C_CLONE;
     public static EntityType<KingCrimsonProjectionEntity> KING_CRIMSON_PROJECTION;
-    public static EntityType<SilverChariotAfterimageEntity> SILVER_CHARIOT_AFTERIMAGE;
     public static EntityType<FallenZombie> FALLEN_ZOMBIE;
     public static EntityType<FallenSkeleton> FALLEN_SKELETON;
     public static EntityType<FallenSpider> FALLEN_SPIDER;
@@ -201,6 +201,8 @@ public class ModEntities {
     public static EntityType<FallenPhantom> FALLEN_PHANTOM;
     public static EntityType<FallenCreeper> FALLEN_CREEPER;
 
+
+    public static EntityType<ParallelChestEntity> PARALLEL_CHEST;
     public static EntityType<BlockWallEntity> BLOCK_WALL;
     public static EntityType<BlockD4CEntity> D4C_BLOCK;
     public static EntityType<StepRuleEntity> STEP_RULE;

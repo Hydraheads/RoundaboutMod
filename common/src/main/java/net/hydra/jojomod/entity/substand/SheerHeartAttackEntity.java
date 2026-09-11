@@ -166,7 +166,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	int explosionMiningIntervalTicks = explosionMiningIntervalTicksMax;
 	static final int explosionMiningIntervalTicksMax = 45;
 
-	final float jumpMaxHeight = 1.4f;
+	final float jumpMaxHeight = 1.2f;
 	int stunTicks = 15;
 
 	public int struckTicks = 0;
@@ -599,13 +599,20 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}
 
 		double dist = Math.abs(this.position().distanceTo(targetPos));
+		double dist2 = dist;
 
 		float minDist = (explosionRadius-0.12f);
 		if (this.getTargetType() == BLOCK) {
 			minDist = 1.4f;
+		}else if (getTargetType() == ENTITY && entityTarget != null) {
+			Vec3 addToPos = new Vec3(0, entityTarget.getEyeY(), 0);
+			Direction gdir = ((IGravityEntity)entityTarget).roundabout$getGravityDirection();
+			Vec3 result = RotationUtil.vecPlayerToWorld(addToPos,gdir);
+
+			dist2 = Math.abs(this.position().distanceTo(targetPos.add(result)));
 		}
 
-		return (float)dist < minDist;
+		return (float)dist < minDist || (float)dist2 < minDist;
 	}
 
 	public byte getTargetType() {return this.entityData.get(TARGET_STATUS);}
@@ -850,10 +857,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 		int points = 0;
 
 		if (entity instanceof TamableAnimal TM) {
-			if (TM.getOwner() == getUser()) { return 0; }
+			if (TM.getOwner() == getUser()) { return -1; }
 		}
 
-		if (PowerTypes.isInADifferentExistence(entity,this)) { return 0; }
+
+		if (!entity.isAttackable()
+				|| PowerTypes.isInADifferentExistence(entity,this)
+				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -862,14 +872,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			return MainUtil.SHA_CUSTOM_ENTITY_HEAT.get(tag);
 		}
 
-		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
-
 		if (entity instanceof LivingEntity LE) {
-			if (LE.isDeadOrDying()
-					|| (LE instanceof Player pl && pl.isCreative())
-					|| PowerTypes.isInADifferentExistence((entity),this)) {
-				return 0;
-			}
 			points += 20;
 			points += HeatUtil.getHeat(LE);
 
@@ -889,6 +892,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
+
 		return points;
 	}
 

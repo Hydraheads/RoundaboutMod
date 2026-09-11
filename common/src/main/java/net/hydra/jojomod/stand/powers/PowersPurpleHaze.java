@@ -79,6 +79,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.BLACK -> {return Component.translatable("skins.roundabout.purple_haze.black");}
             case PurpleHazeEntity.GREEN -> {return Component.translatable("skins.roundabout.purple_haze.green");}
             case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
+            case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -117,6 +118,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 $$1.add(PurpleHazeEntity.NETHERITE);
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
+                $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
             }
         }
         return $$1;
@@ -429,7 +431,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (canExecuteMoveWithLevel(4)) {
                 if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)){
                     setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
-                }else setSkillIcon(context, x, y, 1, StandIcons.PLANET_WAVES_BIG_METEOR, PowerIndex.SKILL_1);
+                }else setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1);
             } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.SKILL_1);
         }
 
@@ -470,7 +472,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
          $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+80,0, "ability.purple_haze.daily_capsule_recharge",
                 "instruction.roundabout.passive", StandIcons.PODS_STOCKS,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+99,4, "ability.purple_haze.distortion",
-                "instruction.roundabout.press_skill", StandIcons.KING_CRIMSON_FINAL_PUNCH,1,level,bypas));
+                "instruction.roundabout.press_skill", StandIcons.POD_BITE,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+58+startPos,topPos+118,4, "ability.purple_haze.virus_spit",
                 "instruction.roundabout.distortion_spit", StandIcons.VIRUS_SPIT,1,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+77+startPos,topPos+80,4, "ability.purple_haze.haze_switch",
@@ -603,17 +605,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private int podRechargeTicks = 0;
     private boolean podsSyncedOnJoin = false;
     //private int podsRemaining = MAX_PODS;
-    private int getPods() {
-        return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
-    }
-    private void setPods(int pods) {
-        ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
 
+    private int getPods() {
+        if (self instanceof Player) {
+            return ((IPlayerEntity) self).roundabout$getPurpleHazePods();
+        }
+        return MAX_PODS;
+    }
+
+    private void setPods(int pods) {
         if (self instanceof Player player) {
+            ((IPlayerEntity) self).roundabout$setPurpleHazePods((byte) pods);
             S2CPacketUtil.syncPurpleHazePods(player, (byte) pods);
         }
     }
-
+    //summon minecraft:zombie ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_purple_haze_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     private void tickPodReset() {
         if (self == null || self.level().isClientSide() || !(self instanceof Player)) {
             return;

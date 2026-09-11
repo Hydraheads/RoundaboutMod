@@ -313,6 +313,21 @@ public class PowersSilverChariot extends NewPunchingStand {
         return stand != null && stand.isAlive() && !stand.isRemoved();
     }
 
+    public boolean isRegainingArmourFromDesummon() {
+        if (this.self instanceof Player player && player.isCreative()) {
+            return false;
+        }
+        return regainingArmourFromDesummon;
+    }
+
+    private boolean restrictionsFromNoRapier() {
+        return false;
+    }
+
+    private boolean restrictionsFromNoArmour() {
+        return false;
+    }
+
 
 
     @Override
@@ -466,29 +481,22 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canUseMiningStand() {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canUseMiningStand();
     }
 
     @Override
     public boolean canAttackHeavy() {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canAttackHeavy();
     }
 
     @Override
     public boolean canActuallyHit(Entity entity) {
-        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
+        return !isRegainingArmourFromDesummon() && !onCooldown(PowerIndex.SKILL_4) && super.canActuallyHit(entity);
     }
 
     public boolean armoured = true;
 
     public boolean regainingArmourFromDesummon = false;
-
-    public boolean isRegainingArmourFromDesummon() {
-        if (this.self instanceof Player player && player.isCreative()) {
-            return false;
-        }
-        return regainingArmourFromDesummon;
-    }
 
     public boolean unarmouredDesummonFromHiddenMode = false;
 
@@ -501,8 +509,6 @@ public class PowersSilverChariot extends NewPunchingStand {
     public float getUnarmouredTimeModifier() {
         return 0.50F;
     }
-
-    public boolean unarmouredInArmsMode = false;
 
     public boolean hasRapier = true;
 
@@ -664,10 +670,18 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         if (desummon) {
+            if (isPiloting()) {
+                setPiloting(0);
+                SilverChariotClient.exit();
+            }
             // TODO: Implement armor shed support
             this.desummon = true;
             if (!armoured && !regainingArmourFromDesummon) {
                 armoured = true;
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand instanceof SilverChariotEntity silverChariot) {
+                    silverChariot.setArmoured(true);
+                }
                 if (this.self instanceof Player player && player.isCreative()) {
                     regainingArmourFromDesummon = false;
                 } else {
@@ -675,6 +689,12 @@ public class PowersSilverChariot extends NewPunchingStand {
                 }
                 this.sealFromArmorShed();
             }
+        } else {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof SilverChariotEntity silverChariot) {
+                silverChariot.setArmoured(true);
+            }
+            armoured = true;
         }
     }
 
@@ -713,7 +733,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean canGuard() {
-        return !this.isBarraging() && !this.isClashing();
+        return !onCooldown(PowerIndex.SKILL_4) && !this.isBarraging() && !this.isClashing();
     }
 
     @Override
@@ -1403,11 +1423,11 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public float getBarrageFinisherStrength(Entity entity) {
-        float str = super.getBarrageFinisherStrength(entity);
+        float str = super.getBarrageFinisherStrength(entity) * 0.75F;
         if (this.getReducedDamage(entity)) {
-            str *= levelupDamageMod(this.getAttackMultOnPlayers());
+            str *= levelupDamageMod(this.getAttackMultOnPlayers() * 0.01F);
         } else {
-            str *= levelupDamageMod(this.getAttackMultOnMobs());
+            str *= levelupDamageMod(this.getAttackMultOnMobs() * 0.01F);
         }
         return str;
     }
@@ -2041,11 +2061,11 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     public void updateRapierSpin() {
         float dist = 5F;
-        int angle = 30;
+        int angle = 40;
         // this.setCooldown(PowerIndex.SKILL_1, this.getCooldownRapierSpin());
         if (!this.self.level().isClientSide()) {
             if (this.attackTimeDuring <= this.getRapierSpinDuration()) {
-                if (this.attackTimeDuring % 10 == 0) {
+                if (this.attackTimeDuring % 20 == 0) {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GREEN_DAY_ARM_SPIN_EVENT, SoundSource.PLAYERS, 1F, (float) (1.2f + Math.random() * 0.03f));
                 }
                 if (this.self instanceof Player) {
@@ -2184,6 +2204,7 @@ public class PowersSilverChariot extends NewPunchingStand {
     // Armor shed
     public void armorShedClient() {
         if (!regainingArmourFromDesummon && !this.onCooldown(PowerIndex.SKILL_2_GUARD) && canExecuteMoveWithLevel(getArmorShedLevel()) && armoured) {
+            armoured = false;
             ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
@@ -2192,6 +2213,10 @@ public class PowersSilverChariot extends NewPunchingStand {
     public void armorShedServer() {
         if (!this.self.level().isClientSide() && armoured) {
             armoured = false;
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand instanceof SilverChariotEntity silverChariot) {
+                silverChariot.setArmoured(false);
+            }
             ((StandUser) this.self).roundabout$damageGuard(getMaxGuardPoints());
             this.playStandUserOnlySoundsIfNearby(ARMOR_SHED_SOUND, 15, false,
                     false);
@@ -2308,9 +2333,11 @@ public class PowersSilverChariot extends NewPunchingStand {
             return;
         }
         if (HeatUtil.isArmsFrozen(self)){
-            this.attackTimeMax = 36;
+            // this.attackTimeMax = 36;
+            this.attackTimeMax = armoured ? 21 : 10;
         } else {
-            this.attackTimeMax = 21;
+            // this.attackTimeMax = 21;
+            this.attackTimeMax = armoured ? 12 : 6;
         }
         this.attackTimeDuring = 0;
         this.setAttackTime(0);
@@ -2598,7 +2625,7 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean isBrawling() {
-        return super.isBrawling();
+        return false;
     }
 
     @Override
@@ -2694,12 +2721,12 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean interceptAttack() {
-        return !regainingArmourFromDesummon || !onCooldown(PowerIndex.SKILL_4);
+        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4);
     }
 
     @Override
     public boolean interceptGuard() {
-        return !regainingArmourFromDesummon || !onCooldown(PowerIndex.SKILL_4);
+        return !regainingArmourFromDesummon && !onCooldown(PowerIndex.SKILL_4);
     }
 
     @Override
@@ -2707,6 +2734,7 @@ public class PowersSilverChariot extends NewPunchingStand {
         super.addAdditionalSaveData($$0);
         $$0.putBoolean("hasArmsOut",hasArmsOut);
         $$0.putBoolean("isRenderingArms",isRenderingArms);
+        $$0.putBoolean("armoured", armoured);
     }
 
     @Override
@@ -2717,6 +2745,9 @@ public class PowersSilverChariot extends NewPunchingStand {
         }
         if ($$0.contains("isRenderingArms")) {
             isRenderingArms = $$0.getBoolean("isRenderingArms");
+        }
+        if ($$0.contains("armoured")) {
+            armoured = $$0.getBoolean("armoured");
         }
     }
 
