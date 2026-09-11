@@ -80,6 +80,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.GREEN -> {return Component.translatable("skins.roundabout.purple_haze.green");}
             case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
+            case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -119,6 +120,8 @@ public class PowersPurpleHaze extends NewPunchingStand {
             } if (Level > 2 || bypass) {
                 $$1.add(PurpleHazeEntity.BLAZING_HAZE);
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
+            } if (Level > 3 || bypass) {
+                $$1.add(PurpleHazeEntity.ROTT);
             }
         }
         return $$1;
