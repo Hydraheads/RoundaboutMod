@@ -2476,10 +2476,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bubble.setIsPlanted(true);
                 bubble.setHasTimeLimit(true);
                 bubble.setFollowOwnerView(true);
-
-                ((IGravityEntity)bubble).roundabout$setExistPlane(
-                        ((IGravityEntity)self).roundabout$getExistPlane());
-
+                
                 Vec3 addToPosition = new Vec3(0, user.getEyeHeight() * 0.85f, 0);
                 Direction direction = ((IGravityEntity) user).roundabout$getGravityDirection();
                 if (direction != Direction.DOWN) {
