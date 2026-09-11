@@ -3000,6 +3000,7 @@
   "skins.roundabout.purple_haze.netherite": "Netherite",
   "skins.roundabout.purple_haze.manga": "Manga",
   "skins.roundabout.purple_haze.mirror_battle": "Mirror Battle",
+  "skins.roundabout.purple_haze.rott_haze": "Rott Haze",
 
   "skins.roundabout.silver_chariot_anime_part_3_silver": "Part 3 Silver",
   "skins.roundabout.silver_chariot_manga_part_3": "Part 3 Manga",
@@ -4701,6 +4702,9 @@
   "config.roundabout.switchStandDiscLength.desc": "The length of switching stands is 100 ticks, or 5 seconds by default.",
   "config.roundabout.switchStandDiscWhileOnCooldownsLength.name": "Disc Switch On Cooldowns",
   "config.roundabout.switchStandDiscWhileOnCooldownsLength.desc": "The length of switching stands while already on an ability cooldown is increased to 300 ticks (15 seconds) by default.",
+
+  "config.roundabout.chanceForMergeLoot.name": "Merge Loot Chance",
+  "config.roundabout.chanceForMergeLoot.desc": "Set the percentage chance that using world merge creates a merge loot chest (loot in advanced config). 100 Percent would be 1.0.",
 
   "config.roundabout.worthyMobOdds.name": "Worthy Mob Chance",
   "config.roundabout.worthyMobOdds.desc": "Set the percentage of mobs that are worthy to have stands if shot with arrows. By default, it is 0.05, or 5 Percent of all mobs (1 in 20). 100 Percent would be 1.0.",

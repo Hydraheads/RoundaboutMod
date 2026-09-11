@@ -57,8 +57,8 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 	private Vec3 blockSize = new Vec3(1.0f, 1.0f, 1.0f);
 	private AABB blockBB = null;
 	public int renderFadeIn = 0;
-	public int renderFadeInMax = 14;
-	public int renderFadeCooldown = 10;
+	public int renderFadeInMax = 12;
+	public int renderFadeCooldown = 13;
 
 	@Override
 	protected void defineSynchedData() {
@@ -79,7 +79,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 		super($$0, $$1);
 	}
 
-	public static final float dimensions = 1F;
+	public static final float dimensions = 0.9F;
 
 	@Override
 	public void push(Entity $$0) {

@@ -42,21 +42,28 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,10 +77,13 @@ public class PowersDiverDown extends NewPunchingStand {
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
-            SMITHING_TABLE = 59;
+            SMITHING_TABLE = 59,
+            OPEN_CHEST = 60,
+            GROUND_GET_ITEMS = 61,
+            GROUND_DIVE_BARRAGE = 62;
 
     // for all the move ids accessed elsewhere.
-    public static final byte ACCESS_WORKBENCH = 60;
+    public static final byte ACCESS_WORKBENCH = 119;
 
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
@@ -87,6 +97,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public static final int MAX_DIVE_TICKS = 200; // 10 seconds
     public int diveTicksLeft = 0;
     private CameraType previousCameraType = null;
+    private boolean wasPilotingClient = false;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -126,7 +137,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
 
         // Ability 2 (X)
-        if (!isDiveActive()) {
+        if (isDiveActive()) {
             setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
         } else if (isGuarding()) {
             // releaseMode will be true if auto, false if manual
@@ -252,7 +263,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     /**
-     * Activates the power based on the buttons pressed.
+     * Gets the input for the power based on the buttons pressed.
      * Note, this is client side only. DO NOT FORGET!!!!
      *
      * @param context What button combination was pressed.
@@ -260,16 +271,31 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void powerActivate(PowerContext context) {
         if (areStandMovesDisabled()) {
-            // pressing V recalls limbs if limb move is active
-            if (context == PowerContext.SKILL_4_NORMAL) {
-                tryRecallLimbs();
-                // note: still not sure about the heirarchy for sneak + guard moves. Replace
-                // this when known.
-            } else if (context == PowerContext.SKILL_4_GUARD || context == PowerContext.SKILL_4_CROUCH_GUARD) {
-                tryLimbClimb();
+            if (hasLimbsDeployed()) {
+                // pressing V recalls limbs if limb move is active
+                if (context == PowerContext.SKILL_4_NORMAL) {
+                    tryRecallLimbs();
+                    // note: still not sure about the heirarchy for sneak + guard moves. Replace
+                    // this when known.
+                } else if (context == PowerContext.SKILL_4_GUARD || context == PowerContext.SKILL_4_CROUCH_GUARD) {
+                    tryLimbClimb();
+                }
+                // stops everything else from working
+                return;
             }
-            // stops everything else from working
-            return;
+            if (isPiloting()) {
+                if (context == PowerContext.SKILL_4_NORMAL) {
+                    exitGroundDive();
+                    // note: still not sure about the heirarchy for sneak + guard moves. Replace
+                    // this when known.
+                } else if (context == PowerContext.SKILL_3_NORMAL) {
+                    tryOpenChest();
+                } else if (context == PowerContext.SKILL_2_NORMAL) {
+                    // insert item pickup here
+                }
+                // stops everything else from working
+                return;
+            }
         }
         switch (context) {
             // dash, need to figure out how other moves will work.
@@ -289,6 +315,40 @@ public class PowersDiverDown extends NewPunchingStand {
                 tryLimbClimb();
             }
         }
+    }
+
+    // for activating all the moves
+    @Override
+    public boolean setPowerOther(int move, int lastMove) {
+        // does the limb scaffold move
+        if (move == LIMB_SCAFFOLD) {
+            return placeLimb();
+        }
+        // recalls limb scaffolds
+        else if (move == LIMB_RECALL) {
+            return recallLimbs();
+        }
+        // charges the phase punch
+        else if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            return setPowerChargePhase();
+        }
+        // does the phase punch
+        else if (move == PowerIndex.SNEAK_ATTACK) {
+            return setPowerPhasePunch();
+        }
+        // barrages in ground dive
+        else if (move == GROUND_DIVE_BARRAGE) {
+            return groundDiveBarrage();
+        }
+        return super.setPowerOther(move, lastMove);
+    }
+
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
+        if (move == OPEN_CHEST) {
+            openChest(blockPos);
+        }
+        return super.tryBlockPosPower(move, forced, blockPos);
     }
 
     public void tryToDashClient() {
@@ -583,11 +643,11 @@ public class PowersDiverDown extends NewPunchingStand {
                         return true;
                     }
                 },
-                Component.translatable("container.crafting")));
-        /**
-         * test to see if the selection even works in the first place.
-         * comment this out when unneeded anymore :thumbsup:
-         */
+                Component.translatable("container.crafting")));/**
+                                                                * test to see if the selection even works in the first
+                                                                * place.
+                                                                * comment this out when unneeded anymore :thumbsup:
+                                                                */
         // serverPlayer.displayClientMessage(Component.literal("Selected: Crafting
         // Table"), false);
     }
@@ -655,14 +715,14 @@ public class PowersDiverDown extends NewPunchingStand {
      * Checks to see if limbs are deployed to ensure moves can't be used while
      * active.
      */
-    public boolean hasLimbsDeployed() {
+    private boolean hasLimbsDeployed() {
         if (this.self.level() != null && !this.self.level().isClientSide()) {
             this.activeLimbs.removeIf(pos -> !this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB));
         }
         return !this.activeLimbs.isEmpty();
     }
 
-    public boolean placeLimb() {
+    private boolean placeLimb() {
         // checks to see if there is a block within 6... blocks.
         HitResult hit = this.self.pick(6.0D, 0.0F, false);
 
@@ -789,7 +849,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
-    public boolean recallLimbs() {
+    private boolean recallLimbs() {
         if (this.activeLimbs.isEmpty()) {
             return false;
         }
@@ -818,10 +878,8 @@ public class PowersDiverDown extends NewPunchingStand {
      * This is a client side function that tries to recall all limb scaffolds
      */
     private void tryRecallLimbs() {
-        if (this.self.level().isClientSide()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
-            tryPowerPacket(LIMB_RECALL);
-        }
+        ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
+        tryPowerPacket(LIMB_RECALL);
     }
 
     // Limb scaffold climb move end
@@ -829,22 +887,26 @@ public class PowersDiverDown extends NewPunchingStand {
     // Ground dive move here
 
     private void tryGroundDive() {
-        if (isPiloting()) {
-            // Pressing skill 4 again cancels pilot mode / recalls stand
-            // note to self: for the icon, check if isPiloting is true to get the right icon
-            // for this.
-            exitGroundDive();
-            return;
-        }
         StandEntity stand = getStandEntity(this.self);
         if (stand != null && stand.isAlive()) {
+            Minecraft mc = Minecraft.getInstance();
             // saves camera
-            this.previousCameraType = Minecraft.getInstance().options.getCameraType();
+            if (this.previousCameraType == null) {
+                this.previousCameraType = mc.options.getCameraType();
+            }
             // forces third person camera
-            Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            if (mc.player != null && mc.getCameraEntity() != mc.player) {
+                mc.setCameraEntity(mc.player);
+            }
+            setPiloting(stand.getId());
             tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
-            ClientUtil.setCameraEntity(stand);
-            stand.setPos(stand.getX(), stand.getY(), stand.getZ());
+            if (mc.player != null) {
+                ClientUtil.setCameraEntity(stand);
+            }
+            // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
+            // walls
+            stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
             // note to self: get the last survivor ult sound effect for this. this is a
             // placeholder for now
             playSoundIfPossible(self.level(), null, stand.blockPosition(),
@@ -860,10 +922,12 @@ public class PowersDiverDown extends NewPunchingStand {
             if (mc.player != null) {
                 mc.setCameraEntity(mc.player);
             }
-            // go back to first person/whatever the person was using when they used this move.
+            // go back to first person/whatever the person was using when they used this
+            // move.
             CameraType restore = (this.previousCameraType != null) ? this.previousCameraType : CameraType.FIRST_PERSON;
             mc.options.setCameraType(restore);
             this.previousCameraType = null;
+            this.wasPilotingClient = false;
         }
         setPiloting(0);
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
@@ -879,13 +943,13 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean isPiloting() {
         // wow diver down is stealing 2 moves from whitesnake now
         if (self instanceof Player player) {
-            StandEntity stand = ((StandUser) player).roundabout$getStand();
+            StandEntity stand = getStandEntity(player);
             return stand != null && ((IPlayerEntity) player).roundabout$getControlling() == stand.getId();
         }
         return false;
     }
 
-    //starts/stops stand piloting. also initializes the timer.
+    // starts/stops stand piloting. also initializes the timer.
     @Override
     public void setPiloting(int id) {
         if (this.self instanceof Player player) {
@@ -901,6 +965,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 this.diveTicksLeft = MAX_DIVE_TICKS;
             } else {
                 // move returns camera as a failsafe.
+                // NOTE TO SELF: MOVE CAMERA STILL DOESN'T WORK, IT'S NOT RETURNING PROPERLY.
                 this.diveTicksLeft = 0;
                 if (this.self.level().isClientSide()) {
                     Minecraft mc = Minecraft.getInstance();
@@ -908,7 +973,8 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (mc.player != null) {
                         mc.setCameraEntity(mc.player);
                     }
-                    CameraType restore = (this.previousCameraType != null) ? this.previousCameraType : CameraType.FIRST_PERSON;
+                    CameraType restore = (this.previousCameraType != null) ? this.previousCameraType
+                            : CameraType.FIRST_PERSON;
                     mc.options.setCameraType(restore);
                     this.previousCameraType = null;
                 }
@@ -920,13 +986,26 @@ public class PowersDiverDown extends NewPunchingStand {
     public void tickPower() {
         super.tickPower();
         // timer for the pilot, kicks you out once it hits 0, all that good stuff.
-        if (isPiloting()) {
-            if (this.diveTicksLeft > 0) {
-                this.diveTicksLeft--;
-                if (this.diveTicksLeft == 0) {
-                    if (this.self.level().isClientSide()) {
+        if (this.self.level().isClientSide()) {
+            boolean pilotingNow = isPiloting();
+            if (pilotingNow) {
+                wasPilotingClient = true;
+                if (this.diveTicksLeft > 0) {
+                    this.diveTicksLeft--;
+                    if (this.diveTicksLeft <= 0) {
                         exitGroundDive();
-                    } else {
+                    }
+                }
+            } else if (wasPilotingClient) {
+                // if this runs again, it ends early.
+                wasPilotingClient = false;
+                exitGroundDive();
+            }
+        } else {
+            if (isPiloting()) {
+                if (this.diveTicksLeft > 0) {
+                    this.diveTicksLeft--;
+                    if (this.diveTicksLeft <= 0) {
                         setPiloting(0);
                     }
                 }
@@ -969,7 +1048,7 @@ public class PowersDiverDown extends NewPunchingStand {
             double strafe = kpi.leftImpulse;
             double motionX = (-Math.sin(yawRad) * forward + Math.cos(yawRad) * strafe) * speed;
             double motionZ = (Math.cos(yawRad) * forward + Math.sin(yawRad) * strafe) * speed;
-            //stops movement when reaching max range
+            // stops movement when reaching max range
             double nextX = diver.getX() + motionX;
             double nextZ = diver.getZ() + motionZ;
             double distFromPlayer = Math.hypot(nextX - this.self.getX(), nextZ - this.self.getZ());
@@ -985,26 +1064,150 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    //diver down has it's own "you can't leave this range" circle, so this is unnecessary
+    // diver down has it's own "you can't leave this range" circle, so this is
+    // unnecessary
     @Override
     public boolean shouldRenderPilotingHud() {
         return false;
     }
 
-    //replaces hud when piloting
+    // replaces hud when piloting
     @Override
     public boolean replaceHudActively() {
         return isPiloting();
     }
 
+    // replaces the exp bar with the timer
     @Override
-    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x, boolean removeNum) {
+    public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
+            boolean removeNum) {
         if (isPiloting()) {
-            //shows the timer for how long diver down pilot is active for
+            // shows the timer for how long diver down pilot is active for
             StandHudRender.renderGroundDiveHud(context, cameraPlayer, screenWidth, screenHeight, x, this);
             return;
         }
         super.getReplacementHUD(context, cameraPlayer, screenWidth, screenHeight, x, removeNum);
+    }
+
+    /**
+     * Checks if a position is within a 4x4 horizontal area around Diver Down,
+     * with the 4 outer 1x1 corners removed to simulate a circle.
+     *
+     * @param targetX Target X coordinate
+     * @param targetY Target Y coordinate
+     * @param targetZ Target Z coordinate
+     */
+    private boolean isInDiveHitbox(double targetX, double targetY, double targetZ) {
+        StandEntity stand = getStandEntity(this.self);
+        if (stand == null)
+            return false;
+        double dx = Math.abs(targetX - stand.getX());
+        double dy = Math.abs(targetY - stand.getY());
+        double dz = Math.abs(targetZ - stand.getZ());
+        // Vertical check. 3 represents the height of the hitbox. edit this number to
+        // change it.
+        if (dy > 3)
+            return false;
+        // check for if entity is with the 2 block radius
+        if (dx > 2.0 || dz > 2.0)
+            return false;
+        // cut out the 4 corners
+        if (dx > 1.0 && dz > 1.0)
+            return false;
+        return true;
+    }
+
+    // Gets chest to open.
+    private BlockPos getClosestChest() {
+        StandEntity stand = getStandEntity(this.self);
+        if (stand == null)
+            return null;
+
+        BlockPos standPos = stand.blockPosition();
+        BlockPos closestPos = null;
+        double closestDistSq = Double.MAX_VALUE;
+        // does the math. BlockPos is used to check the positions of blocks.
+        for (BlockPos pos : BlockPos.betweenClosed(standPos.offset(-2, 0, -2), standPos.offset(2, 0, 2))) {
+            if (isInDiveHitbox(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) {
+                BlockState state = stand.level().getBlockState(pos);
+                if (state.getBlock() instanceof ChestBlock || state.getBlock() instanceof BarrelBlock) {
+                    // distanceToSqr calculates 3D distance squared to stand's position
+                    double distSq = stand.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    if (distSq < closestDistSq) {
+                        closestDistSq = distSq;
+                        closestPos = pos.immutable(); // .immutable() is important with betweenClosed!
+                    }
+                }
+            }
+        }
+        return closestPos;
+    }
+
+    // sends the open chest move to the server to process it
+    private void tryOpenChest() {
+        BlockPos chestPos = this.getClosestChest();
+        if (chestPos != null) {
+            tryBlockPosPower(OPEN_CHEST, true, chestPos);
+            tryBlockPosPowerPacket(OPEN_CHEST, chestPos);
+        }
+    }
+
+    // Brings up the chest UI on the player's screen
+    private boolean openChest(BlockPos chestPos) {
+        if (!(this.self instanceof ServerPlayer serverPlayer)) {
+            return false;
+        }
+        if (chestPos == null) {
+            return false;
+        }
+        BlockState state = this.self.level().getBlockState(chestPos);
+        MenuProvider menuProvider = state.getMenuProvider(this.self.level(), chestPos);
+        if (menuProvider != null) {
+            serverPlayer.openMenu(menuProvider);
+            this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
+            // test message, comment out once done
+            /*
+             * if (this.self instanceof Player player) {
+             * player.sendSystemMessage(Component.literal("it's chesting time4"));
+             * }
+             */
+        }
+        this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
+        return true;
+    }
+
+    // runs get items code on client and server
+    private void tryDiveGetItems() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_GET_ITEMS, true);
+        tryPowerPacket(GROUND_GET_ITEMS);
+    }
+
+    // gets the items when the move is pressed
+    private boolean diveGetItems() {
+        return true;
+    }
+
+    /*
+     * Checks for clicks in pilot. if there is, trigger the dive barrage.
+     * this can't be put in powerActivate because there's no check for clicks.
+     */
+    @Override
+    public void pilotInputAttack() {
+        tryDiveBarrage();
+    }
+
+    // runs dive barrage on client and server
+    private void tryDiveBarrage() {
+        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_DIVE_BARRAGE, true);
+        tryPowerPacket(GROUND_DIVE_BARRAGE);
+    }
+
+    // dive barrage code
+    private boolean groundDiveBarrage() {
+        // insert mini barrage code here
+        // wait a bit to account for how long the move takes
+        // recall stand
+        return true;
     }
 
     // walking heart autostep works on the player, not on the stand. i can't copy
@@ -1013,7 +1216,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // note to self: all of whitesnake's controls can be found in
     // WhitesnakeControlClient
     // i just need to use the camera third person thing though, so I'll just
-    // transfer everything here.
+    // transfer that here instead of making a new file.
 
     // Ground dive move end
 
@@ -1037,6 +1240,15 @@ public class PowersDiverDown extends NewPunchingStand {
         return true;
     }
 
+    // Used to stop sounds early
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
+        }
+        return super.tryPower(move, forced);
+    }
+
     /**
      * Used to check if stand able to be used or not.
      * Use this to render alternative icons for moves etc, depending on what move is
@@ -1047,16 +1259,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
-        return hasLimbsDeployed() || isDiveActive();
-    }
-
-    // Used to stop sounds early
-    @Override
-    public boolean tryPower(int move, boolean forced) {
-        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
-        }
-        return super.tryPower(move, forced);
+        return hasLimbsDeployed() || isDiveActive() || isPiloting();
     }
 
     // 4 overrides below are for making sure the stand can't do a variety of stuff
@@ -1227,27 +1430,6 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             return 1;
         }
-    }
-
-    @Override
-    public boolean setPowerOther(int move, int lastMove) {
-        // does the limb scaffold move
-        if (move == LIMB_SCAFFOLD) {
-            return placeLimb();
-        }
-        // recalls limb scaffolds
-        if (move == LIMB_RECALL) {
-            return recallLimbs();
-        }
-        // charges the phase punch
-        if (move == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            return setPowerChargePhase();
-        }
-        // does the phase punch
-        else if (move == PowerIndex.SNEAK_ATTACK) {
-            return setPowerPhasePunch();
-        }
-        return super.setPowerOther(move, lastMove);
     }
 
     private boolean setPowerChargePhase() {
