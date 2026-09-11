@@ -619,6 +619,8 @@ public class Config implements Cloneable {
         public Integer waterShieldCooldown;
         @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
         public Integer woundPlugCooldown;
+        @FloatOption(group = "inherit", value = 1f, min = 0, max = 72000)
+        public Float woundPlugHealAmount;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)

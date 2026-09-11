@@ -598,6 +598,10 @@ public class StandIcons {
             "textures/gui/icons/lonesome/lasso.png");
     public static final ResourceLocation LONESOME_ZIPLINE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/lonesome/zipline.png");
+    public static final ResourceLocation LONESOME_END_OF_YOUR_ROPE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/end_of_your_rope.png");
+    public static final ResourceLocation LONESOME_GOING_THROUGH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/lonesome/going_through.png");
 
     public static final ResourceLocation MANDOM_VISION_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/mandom/vision_on.png");

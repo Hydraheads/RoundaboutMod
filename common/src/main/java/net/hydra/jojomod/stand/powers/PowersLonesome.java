@@ -190,6 +190,8 @@ public class PowersLonesome extends NewDashPreset {
         LivingEntity player = this.self;
         if (crawlingOn()){
             ((StandUser) player).rdbt$SetCrawlTicks(1);
+            System.out.println(player.level().getBlockEntity(getRayBlockHit(player, 1f).getBlockPos()));
+            // for future me, i'm trying to find the name of the block at the player raytrace
         }
         return true;
     }
@@ -279,12 +281,12 @@ public class PowersLonesome extends NewDashPreset {
 
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.RED);
+        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.GRAY);
     }
 
     @Override
     public Component ifWipListDev(){
-        return Component.literal(  "BinaryCell").withStyle(ChatFormatting.DARK_RED);
+        return Component.literal(  "BinaryCell").withStyle(ChatFormatting.DARK_GRAY);
     }
 
 
@@ -302,16 +304,20 @@ public class PowersLonesome extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.arm_launch",
                 "instruction.roundabout.press_skill", StandIcons.LONESOME_ARM_LAUNCH, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lasso",
                 "instruction.roundabout.press_skill", StandIcons.LONESOME_LASSO,2,level,bypass));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.zipline",
+                "instruction.roundabout.press_skill_air", StandIcons.LONESOME_ZIPLINE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.crawl",
                 "instruction.roundabout.press_skill", StandIcons.LONESOME_CRAWL,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.yap_yap",
-                "instruction.roundabout.press_skill", StandIcons.LONESOME_ZIPLINE,5,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.going_through",
+                "instruction.roundabout.press_skill", StandIcons.LONESOME_GOING_THROUGH,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.end_of_your_rope",
+                "instruction.roundabout.passive", StandIcons.LONESOME_END_OF_YOUR_ROPE,0,level,bypass));
         return $$1;
     }
 }
