@@ -25,6 +25,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.DamageHandler;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.client.gui.diverdown.custom_workbench_code.*;
@@ -32,6 +33,7 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,6 +51,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -120,6 +124,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // used for diver zip
     private Direction feetDirection = Direction.DOWN;
+    public int justFlippedTicks = 0;
+    private int mercyTicks = 0;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -139,6 +145,12 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public PowersDiverDown(LivingEntity self) {
         super(self);
+    }
+
+    // configs here
+
+    public boolean canWallZipConfig() {
+        return ClientNetworking.getAppropriateConfig().miscellaneousSettings.enableWallWalking;
     }
 
     // icons and ability list here
@@ -404,8 +416,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
         }
-        switch (move)
-        {
+        switch (move) {
             case DIVER_ZIP -> {
                 inZipMode();
             }
@@ -527,6 +538,13 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (this.getActivePower() == PowerIndex.POWER_1) {
             // slows you down by 70%
             basis *= 0.3f;
+        }
+        if (inZipMode()) {
+            if (self.isSprinting()) {
+                basis *= 1.27F; // 5.612 * 1.27 = ~7.127 m/s while sprinting
+            } else {
+                basis *= 1.651F; // 4.317 * 1.651 = ~7.127 m/s even if not sprinting
+            }
         }
         return super.inputSpeedModifiers(basis);
     }
@@ -1105,6 +1123,69 @@ public class PowersDiverDown extends NewPunchingStand {
                 wasPilotingClient = false;
                 exitGroundDive();
             }
+            if (isPacketPlayer()) {
+                // pull down in air
+                if (inZipMode() && !getStandUserSelf().rdbt$getJumping()) {
+                    if (!self.onGround()) {
+                        if (this.self.getDeltaMovement().y < 0) {
+                            this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                        }
+                    }
+                }
+                // disengage if swimming
+                if (self.isSwimming()) {
+                    toggleZip(false);
+                    C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+                }
+                // Check for ground/ledge with mercyTicks(coyote time) grace period
+                if (inZipMode()) {
+                    if (justFlippedTicks > 0) {
+                        justFlippedTicks--;
+                    } else {
+                        // Check block probe positions beneath player relative to gravity
+                        Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                        Vec3 newVec2 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.0, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
+                        Vec3 newVec4 = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.5, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                        Vec3 newVec5 = RotationUtil.vecPlayerToWorld(new Vec3(0, -1.1, 0),
+                                ((IGravityEntity) self).roundabout$getGravityDirection());
+                        BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
+                        if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
+                            // making this longer than walking heart because you'll be moving faster than it
+                            mercyTicks = 8;
+                        } else {
+                            if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
+                                    || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
+                                mercyTicks--;
+                            } else {
+                                mercyTicks = 0;
+                            }
+                        }
+                        // cancel power if something bad happens
+                        if (self.isSleeping() || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
+                                && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                            feetDirection = Direction.DOWN;
+                            toggleZip(false);
+                            C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
+
+                            // Reset gravity direction to DOWN
+                            ((IGravityEntity) this.self).roundabout$setGravityDirection(feetDirection);
+                            justFlippedTicks = 5;
+                            C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_GRAVITY_FLIP,
+                                    MainUtil.getIntFromDirection(feetDirection));
+                        }
+                    }
+                } else {
+                    feetDirection = Direction.DOWN;
+                }
+            }
         } else {
             if (isPiloting()) {
                 if (this.diveTicksLeft > 0) {
@@ -1175,6 +1256,24 @@ public class PowersDiverDown extends NewPunchingStand {
                 } else {
                     this.setPowerNone();
                     exitGroundDive();
+                }
+            }
+            if (!inZipMode()) {
+                feetDirection = Direction.DOWN;
+            } else {
+                // Server verifies the surface beneath the player is still valid
+                Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
+                        ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
+                Vec3 newVec4 = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.5, 0),
+                        ((IGravityEntity) self).roundabout$getGravityDirection());
+                BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
+                BlockState state1 = self.level().getBlockState(pos);
+                BlockState state4 = self.level().getBlockState(pos4);
+                boolean isOnValidBlock = MainUtil.isBlockWalkableSimplified(state1)
+                        && MainUtil.isBlockWalkableSimplified(state4);
+                if (!isOnValidBlock) {
+                    toggleZip(false);
                 }
             }
         }
@@ -1462,33 +1561,33 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    public void activateZip(){
+    public void activateZip() {
         if (self.isSwimming())
             return;
         boolean isAnchored = inZipMode();
-            if (isAnchored){
-                if (!this.self.level().isClientSide()) {
-                    toggleZip(false);
-                }
-            } else {
-                    if (self.onGround()) {
-                        this.setCooldown(PowerIndex.SKILL_3, 10);
-                        if (!this.self.level().isClientSide()) {
-                            setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
-                            toggleZip(true);
-                        }
-                    }
+        if (isAnchored) {
+            if (!this.self.level().isClientSide()) {
+                toggleZip(false);
             }
+        } else {
+            if (self.onGround()) {
+                this.setCooldown(PowerIndex.SKILL_3, 10);
+                if (!this.self.level().isClientSide()) {
+                    setHeelDirection(((IGravityEntity) this.self).roundabout$getGravityDirection());
+                    toggleZip(true);
+                }
+            }
+        }
     }
 
-    public void toggleZip(boolean toggle){
+    public void toggleZip(boolean toggle) {
         if (!this.self.level().isClientSide()) {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
-                    //put sound here
+                    // put sound here
                 } else {
-                    Direction gf = ((IGravityEntity)self).roundabout$getGravityDirection();
+                    Direction gf = ((IGravityEntity) self).roundabout$getGravityDirection();
                     if (gf != getIntendedDirection()) {
                         Vec3 vec = new Vec3(0, 0.3f, 0);
                         vec = RotationUtil.vecPlayerToWorld(vec, gf);
@@ -1497,17 +1596,21 @@ public class PowersDiverDown extends NewPunchingStand {
                                 self.getY() + vec.y,
                                 self.getZ() + vec.z);
                     }
-                    //put cooldown here
-                    //put sound here
+                    // put cooldown here
+                    // put sound here
                 }
             }
         }
         getStandUserSelf().roundabout$setUniqueStandModeToggle(toggle);
     }
 
-    public void setHeelDirection(Direction dir){
+    public void setHeelDirection(Direction dir) {
         feetDirection = dir;
     }
+
+    // step height method
+
+    // gravity and wall walking
 
     public boolean forceBlock() {
         if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
@@ -1519,7 +1622,17 @@ public class PowersDiverDown extends NewPunchingStand {
         return getStandUserSelf().roundabout$getUniqueStandModeToggle();
     }
 
-    public Direction getIntendedDirection(){
+    public void onActuallyHurt(DamageSource $$0, float $$1) {
+        if ($$0.getEntity() != null && !$$0.is(DamageTypes.THORNS)) {
+            if (!$$0.is(ModDamageTypes.KNIFE) && !$$0.is(ModDamageTypes.BULLET)) {
+                if (inZipMode()) {
+                    toggleZip(false);
+                }
+            }
+        }
+    }
+
+    public Direction getIntendedDirection() {
         Direction rightAxis = Direction.DOWN;
         MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
         if (mi != null) {
@@ -1540,6 +1653,19 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         return rightAxis;
+    }
+
+    @Override
+    public float getStepHeightAddon() {
+        if (inZipMode()) {
+            if (canWallZipConfig())
+                return 0.4F;
+            else
+                return 2.0F;
+        } else if (!(self instanceof Player)) {
+            return 3.0F;
+        }
+        return 0;
     }
     // heel plant 2.0 stop
 
