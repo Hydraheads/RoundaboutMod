@@ -15,6 +15,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.fates.powers.VampiricFate;
 import net.hydra.jojomod.networking.ModPacketHandler;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.stand.powers.PowersWalkingHeart;
 import net.hydra.jojomod.util.GEntityTags;
 import net.hydra.jojomod.util.MainUtil;
@@ -1154,8 +1155,8 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 && PW.hasExtendedHeelsForWalking()){
             ci.cancel();
         }
-        if (SU.roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
-            ci.cancel()
+        if (rdbt$this() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+            ci.cancel();
         }
     }
     @Inject(
