@@ -1154,6 +1154,9 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                 && PW.hasExtendedHeelsForWalking()){
             ci.cancel();
         }
+        if (SU.roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+            ci.cancel()
+        }
     }
     @Inject(
             method = "onInsideBubbleColumn(Z)V",
