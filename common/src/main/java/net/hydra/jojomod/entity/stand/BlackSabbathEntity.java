@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
-import com.google.common.collect.ImmutableMap;
+import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.navigation.BlackSabbathNavigation;
@@ -10,12 +10,13 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.multiplayer.chat.ChatLog;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,22 +30,21 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.*;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class BlackSabbathEntity extends StandEntity implements HasCustomInventoryScreen {
@@ -124,7 +124,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                                 this.coat_open.stop();
                                 if((targetSabbath() != null && !isUnderSunlight(targetSabbath()))) {
-                               //     System.out.println(lungeTicks);
                                     if (lungeTicks < 10) {
                                         burningDive.stop();
                                         diving.startIfStopped(this.tickCount);
@@ -139,8 +138,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     if (lungeTicks <= 210 && lungeTicks > 180) {
                                         catching.startIfStopped(this.tickCount);
                                         emerge.stop();
-                                    } else {
-                                        //  diving.stop();
                                     }
                                     if (lungeTicks <= 50 && lungeTicks > 35) {
                                         if (burningCripple.isStarted() || burningStart.isStarted() || isOnFire()) {
@@ -262,10 +259,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     @Override
     public boolean isInvulnerable() {
         return getHunting() && (getRiding() || getUnrender());
-    }
-    @Override
-    public boolean isPushedByFluid() {
-        return false;
     }
     protected boolean isAffectedByFluids() {
         FluidState $$3 = this.level().getFluidState(this.blockPosition());
@@ -414,7 +407,8 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
      //   System.out.println(isUnderSunlight());
         if(getRiding()){
             if(this.getY() < this.level().getMinBuildHeight()) {
-                setDeltaMovement(Vec3.ZERO);
+                setDeltaMovement(this.getDeltaMovement().x, 0, this.getDeltaMovement().z);
+                absMoveTo(this.getX(), this.getY() , this.getZ());
             } else {
                 absMoveTo(this.getX(), this.level().getMinBuildHeight() , this.getZ());
             }
@@ -422,10 +416,22 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
         if(isBlackSabbathUnderLight()){
             this.getNavigation().setSpeedModifier(0.05);
         }
+        if(this.getUser() != null && this.getUser() instanceof Player pl){
+            IPlayerEntity play = ((IPlayerEntity)pl);
+            ItemStack blackSabbathFirstSlot = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+            if(!this.level().isClientSide()){
+                if(blackSabbathFirstSlot != getHeldItemSabbath()){
+                    setHeldItemSabbath(blackSabbathFirstSlot);
+                    MutableComponent message = Component.literal("Your held item is " + getHeldItemSabbath().getCount() + " ");
+                    MutableComponent message2 = Component.translatable(getHeldItemSabbath().getItem().getDescription().getString());
+                    pl.sendSystemMessage(message.append(message2).append("."));
+                }
+            }
+        }
         if(getHunting()){
             huntingTick();
+            hurtBlackSabbath();
         }
-        hurtBlackSabbath();
         super.tick();
         travelAhead(Entity::setPos);
     }
@@ -473,7 +479,14 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             }
         }
     }
-
+    protected static final EntityDataAccessor<ItemStack> HELD_ITEM_BLACK_SABBATH = SynchedEntityData.defineId(BlackSabbathEntity.class,
+            EntityDataSerializers.ITEM_STACK);
+    public final ItemStack getHeldItemSabbath() {
+        return this.entityData.get(HELD_ITEM_BLACK_SABBATH);
+    }
+    public final void setHeldItemSabbath(ItemStack stack) {
+        this.entityData.set(HELD_ITEM_BLACK_SABBATH, stack);
+    }
     private static final EntityDataAccessor<Boolean> MUST_UNRENDER =
             SynchedEntityData.defineId(BlackSabbathEntity.class, EntityDataSerializers.BOOLEAN);
     public final Boolean getUnrender() {
@@ -514,6 +527,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
             this.entityData.define(IS_RIDING, false);
             this.entityData.define(IS_HUNTING, false);
             this.entityData.define(MUST_UNRENDER, false);
+            this.entityData.define(HELD_ITEM_BLACK_SABBATH, ItemStack.EMPTY);
         }
     }
     @Override
@@ -850,7 +864,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                 }
                             }
                         }
-                        if (ridingEntity != null && (!isUnderSunlight(ridingEntity) || ridingEntity.isDeadOrDying())) {
+                        if (ridingEntity != null && (!isUnderSunlight(ridingEntity) || ridingEntity.isDeadOrDying() || ridingEntity.isRemoved())) {
                             absMoveTo(ridingEntity.getX(), ridingEntity.getY(), ridingEntity.getZ());
                             setRidingEntity(null);
                             setRiding(false);
@@ -908,7 +922,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     this.getNavigation().setSpeedModifier((float) 0);
                                 }
                             }
-                            if (lungeTicks < 35 && lungeTicks > 1) {
+                            if (lungeTicks < 40 && lungeTicks > 1) {
                                 if(!getUnrender()) {
                                     setUnrender(true);
                                 }
@@ -943,8 +957,6 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     protected void createShadowParticles() {
         if(this.level() instanceof ServerLevel SL){
             Random random = new Random();
-            Float flute = random.nextFloat(-0.15F, 0.15F);
-            Float flute2 = random.nextFloat(-0.15F, 0.15F);
             Float flute5 = random.nextFloat(-0F, 0.15F);
             if(this.onGround()) {
                 ((ServerLevel) this.level()).sendParticles((new DustParticleOptions(new Vector3f(flute5, flute5, flute5), 1.75f)), this.getX(),
@@ -985,24 +997,19 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     public void bsMove(Vec3 targetPos) {
         ticksUntilNextPathRecalculation--;
         if (ticksUntilNextPathRecalculation <= 0) {
-            if(isBlackSabbathUnderLight()) {
+            if(!isBlackSabbathUnderLight()) {
                 ticksUntilNextPathRecalculation = 5;
             } else {
                 ticksUntilNextPathRecalculation = 20;
             }
-
             Path newPath;
             if(targetPos != null) {
                 newPath = this.getNavigation().createPath(targetPos.x, targetPos.y, targetPos.z, 0);
             } else {
                 newPath = null;
             }
-
-
             if (newPath == null) { return; }
-
             this.lookAt(EntityAnchorArgument.Anchor.FEET, new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ()));
-
             if (!this.getNavigation().moveTo(newPath, 1.6f))
                 ticksUntilNextPathRecalculation += 5;
         }

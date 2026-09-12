@@ -39,18 +39,20 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.SmallFireball;
-import net.minecraft.world.entity.projectile.Snowball;
-import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.projectile.*;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -920,6 +922,30 @@ public class PowersManhattanTransfer extends NewDashPreset {
                                             $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
                                             ME.level().addFreshEntity($$7);
                                             ME.hattanDeflected = $$7;
+                                        } else if (this.getSelf() instanceof Llama ll) {
+                                            LlamaSpit $$7 = new LlamaSpit(ll.level(), ll);
+                                            $$7.setOwner(this.getSelf());
+                                            $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            PowerTypes.copyPlaneOfExisting(self,$$7);
+                                            $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                                            ME.level().addFreshEntity($$7);
+                                            ME.hattanDeflected = $$7;
+                                        } else if (this.getSelf() instanceof Chicken) {
+                                            ThrownEgg $$7 = new ThrownEgg(ME.getUser().level(), ME.getUser());
+                                            $$7.setOwner(this.getSelf());
+                                            $$7.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            PowerTypes.copyPlaneOfExisting(self,$$7);
+                                            $$7.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 2F, 0.0F);
+                                            ME.level().addFreshEntity($$7);
+                                            ME.hattanDeflected = $$7;
+                                        } else if (this.getSelf() instanceof Witch wh) {
+                                            Potion $$7 = Potions.HARMING;
+                                            ThrownPotion $$8 = new ThrownPotion(ME.getUser().level(), ME.getUser());
+                                            $$8.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), $$7));
+                                            $$8.setXRot($$8.getXRot() - -20.0F);
+                                            $$8.setPos(ME.getX(), ME.getY() - 0.15, ME.getZ());
+                                            $$8.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, -3.0F, 0.75F, 0.0F);
+                                            ME.level().addFreshEntity($$8);
                                         } else {
                                             Arrow $$11 = new Arrow(this.getSelf().level(), ME.getX(), ME.getY(), ME.getZ());
                                             $$11.setOwner(this.getSelf());
