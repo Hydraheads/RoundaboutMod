@@ -843,7 +843,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         int attempts = 100;
         double minDistance = 2.5D+ (0.5);
 
-        for (int yOffset = 0; yOffset <= 10; yOffset++) {
+        for (int yOffset = -1; yOffset <= 10; yOffset++) {
             for (int i = 0; i < attempts; i++) {
                 double angle = Math.random() * Math.PI * 2.0D;
                 double distance = minDistance
@@ -863,9 +863,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 );
                 if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
-                } else if(y == 10){
-                    for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
+                } else if(y == 9){
+                    for (int yOffset2 = -2; yOffset2 >= -8; yOffset2--) {
                     for (int i2 = 0; i2 < attempts; i2++) {
+                        System.out.println(attempts + " / " + yOffset2);
                         double distance2 = minDistance
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
                         double x2 = lent.getX() + Math.cos(angle) * distance2;

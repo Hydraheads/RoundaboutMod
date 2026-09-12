@@ -922,7 +922,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
                                     this.getNavigation().setSpeedModifier((float) 0);
                                 }
                             }
-                            if (lungeTicks < 35 && lungeTicks > 1) {
+                            if (lungeTicks < 40 && lungeTicks > 1) {
                                 if(!getUnrender()) {
                                     setUnrender(true);
                                 }
