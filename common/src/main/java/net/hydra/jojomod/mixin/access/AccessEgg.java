@@ -1,7 +1,10 @@
 package net.hydra.jojomod.mixin.access;
 
+import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.entity.TimeMovingProjectile;
 import net.hydra.jojomod.entity.stand.ManhattanTransferEntity;
 import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.mixin.time_stop.TimeStopProjectile;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.minecraft.sounds.SoundEvents;
@@ -9,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownEgg;
@@ -22,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownEgg.class)
-public abstract class AccessEgg extends ThrowableItemProjectile {
+public abstract class AccessEgg extends ThrowableItemProjectile implements IProjectileAccess {
 
     /**For use to everyone who'll need this :)*/
 
@@ -84,6 +88,15 @@ public abstract class AccessEgg extends ThrowableItemProjectile {
                 }
             }
         }
+
+            ThrownEgg thrownEgg = (ThrownEgg) (Object) (this);
+            if(((IProjectileAccess)thrownEgg).roundabout$getManhattanProjectile() && this.getOwner() instanceof Chicken){
+                System.out.println("aa");
+                ci.cancel();
+                super.onHit($$0);
+                thrownEgg.discard();
+                return;
+            }
     }
 
 }

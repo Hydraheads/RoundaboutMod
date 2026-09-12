@@ -71,22 +71,23 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     public void render(BlockBombEntity blockBombEntity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         Player ClientPlayer = Minecraft.getInstance().player;
         boolean hidesOnF1 = ConfigManager.getClientConfig().killerQueenSettings.bombOverlayHideOnF1;
-
-        //matrixStack.scale(0.95f, 0.95f, 0.95f);
         
     	if (ClientUtil.canSeeStands(ClientPlayer) && !(Minecraft.getInstance().options.hideGui && hidesOnF1)) {
         	Player UserPlayer =((Player)blockBombEntity.getUser());
         	if (UserPlayer == ClientPlayer) {
-                matrixStack.pushPose();
+                float fade = (((float) blockBombEntity.renderFadeIn) / blockBombEntity.renderFadeInMax);
+                if (fade > 0) {
+                    matrixStack.pushPose();
 
-                VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
+                    VertexConsumer vertex = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(blockBombEntity)));
 
-                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                matrixStack.translate(0,-1.5,0);
+                    matrixStack.mulPose(Axis.ZP.rotationDegrees(180f));
+                    matrixStack.translate(0, -1.5, 0);
 
-                model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
-                        0.75f*Math.min((((float) blockBombEntity.renderFadeIn) / blockBombEntity.renderFadeInMax) + (partialTicks * 0.05F), 1f));
-                matrixStack.popPose();
+                    model.renderToBuffer(matrixStack, vertex, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F,
+                            0.75f * Math.min(fade + (partialTicks * 0.05F), 1f));
+                    matrixStack.popPose();
+                }
         	}
         }
     }
