@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 
+import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlock;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
@@ -40,12 +41,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.LoomMenu;
@@ -56,6 +60,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -98,6 +103,11 @@ public class PowersDiverDown extends NewPunchingStand {
     public int diveTicksLeft = 0;
     private CameraType previousCameraType = null;
     private boolean wasPilotingClient = false;
+    private boolean isBarrel = false;
+    private boolean isChestScreenCurrentlyOpen = false;
+
+    // used for ground barrage
+    private int diveBarrageTicks = 0;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -291,7 +301,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 } else if (context == PowerContext.SKILL_3_NORMAL) {
                     tryOpenChest();
                 } else if (context == PowerContext.SKILL_2_NORMAL) {
-                    // insert item pickup here
+                    tryDiveGetItems();
                 }
                 // stops everything else from working
                 return;
@@ -349,6 +359,23 @@ public class PowersDiverDown extends NewPunchingStand {
             openChest(blockPos);
         }
         return super.tryBlockPosPower(move, forced, blockPos);
+    }
+
+    @Override
+    public boolean tryPosPower(int move, boolean forced, Vec3 pos) {
+        if (move == GROUND_GET_ITEMS) {
+            if (!this.self.level().isClientSide) {
+                StandEntity stand = getStandEntity(this.self);
+                if (stand != null) {
+                    // Teleport the server stand to where the client actually is!
+                    stand.setPos(pos.x, pos.y, pos.z);
+                }
+                diveGetItems();
+            }
+            return true;
+        }
+        // could also maybe be used for barrage
+        return super.tryPosPower(move, forced, pos);
     }
 
     public void tryToDashClient() {
@@ -596,8 +623,6 @@ public class PowersDiverDown extends NewPunchingStand {
      * This functions runs the method based on the workbench found in
      * workbenchID. The next 5 functions that follow all open the corresponding
      * workbenches.
-     * 
-     * @param workbenchID ID of the workbench being accessed
      */
     private boolean openWorkbench(int workbenchId) {
         if (!(this.getSelf() instanceof ServerPlayer serverPlayer)) {
@@ -990,9 +1015,22 @@ public class PowersDiverDown extends NewPunchingStand {
             boolean pilotingNow = isPiloting();
             if (pilotingNow) {
                 wasPilotingClient = true;
+                // plays chest closing noise if chest closes
+                Minecraft mc = Minecraft.getInstance();
+                boolean hasScreenNow = mc.screen != null;
+                if (hasScreenNow) {
+                    this.isChestScreenCurrentlyOpen = true;
+                }
+                else if (this.isChestScreenCurrentlyOpen) {
+                    this.isChestScreenCurrentlyOpen = false;
+                    SoundEvent closeSound = this.isBarrel ? SoundEvents.BARREL_CLOSE : SoundEvents.CHEST_CLOSE;
+                    mc.player.playSound(closeSound, 1.0F, 1.0F);
+                }
                 if (this.diveTicksLeft > 0) {
                     this.diveTicksLeft--;
-                    if (this.diveTicksLeft <= 0) {
+                } else if (this.diveTicksLeft <= 0) {
+                    // make sure that the chest screen isn't open if player used open chest
+                    if (Minecraft.getInstance().screen == null) {
                         exitGroundDive();
                     }
                 }
@@ -1005,7 +1043,10 @@ public class PowersDiverDown extends NewPunchingStand {
             if (isPiloting()) {
                 if (this.diveTicksLeft > 0) {
                     this.diveTicksLeft--;
-                    if (this.diveTicksLeft <= 0) {
+                } else if (this.diveTicksLeft <= 0) {
+                    // same as earlier, if the player's container becomes their inventory
+                    // then we know that they haev exited the chest.
+                    if (this.self instanceof ServerPlayer sp && sp.containerMenu == sp.inventoryMenu) {
                         setPiloting(0);
                     }
                 }
@@ -1108,7 +1149,7 @@ public class PowersDiverDown extends NewPunchingStand {
         // change it.
         if (dy > 3)
             return false;
-        // check for if entity is with the 2 block radius
+        // check for if entity is with the 2 block radius.
         if (dx > 2.0 || dz > 2.0)
             return false;
         // cut out the 4 corners
@@ -1135,7 +1176,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     double distSq = stand.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     if (distSq < closestDistSq) {
                         closestDistSq = distSq;
-                        closestPos = pos.immutable(); // .immutable() is important with betweenClosed!
+                        closestPos = pos.immutable();
                     }
                 }
             }
@@ -1147,6 +1188,14 @@ public class PowersDiverDown extends NewPunchingStand {
     private void tryOpenChest() {
         BlockPos chestPos = this.getClosestChest();
         if (chestPos != null) {
+            // plays whatever container open sound, also updates the variables so closing
+            // sound can be played
+            if (this.self.level().isClientSide()) {
+                BlockState state = this.self.level().getBlockState(chestPos);
+                this.isBarrel = state.getBlock() instanceof BarrelBlock;
+                SoundEvent openSound = this.isBarrel ? SoundEvents.BARREL_OPEN : SoundEvents.CHEST_OPEN;
+                Minecraft.getInstance().player.playSound(openSound, 1.0F, 1.0F);
+            }
             tryBlockPosPower(OPEN_CHEST, true, chestPos);
             tryBlockPosPowerPacket(OPEN_CHEST, chestPos);
         }
@@ -1168,7 +1217,7 @@ public class PowersDiverDown extends NewPunchingStand {
             // test message, comment out once done
             /*
              * if (this.self instanceof Player player) {
-             * player.sendSystemMessage(Component.literal("it's chesting time4"));
+             * player.sendSystemMessage(Component.literal("it's chesting time"));
              * }
              */
         }
@@ -1178,12 +1227,52 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // runs get items code on client and server
     private void tryDiveGetItems() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_GET_ITEMS, true);
-        tryPowerPacket(GROUND_GET_ITEMS);
+        Vec3 pos = getStandEntity(this.self).position();
+        tryPosPower(GROUND_GET_ITEMS, true, pos);
+        tryPosPowerPacket(GROUND_GET_ITEMS, pos);
     }
 
     // gets the items when the move is pressed
     private boolean diveGetItems() {
+        if (this.self.level().isClientSide || !(this.self instanceof Player player)) {
+            return false;
+        }
+        StandEntity stand = getStandEntity(this.self);
+        if (stand == null)
+            return false;
+        AABB box = stand.getBoundingBox().inflate(2.0, 1.5, 2.0);
+        // reading through star platinum moves rn
+        // from what i understand i need to do the "gettargetenttiylistthroughwalls"
+        // command
+        List<Entity> allTargets = this.self.level().getEntities(stand, box);
+        // then check for all the entities that are items
+        if (!allTargets.isEmpty()) {
+            // for boss filtering function, taken from walking heart. It took me a while to
+            // figure out that FE meant "Filtered Entities," so im leaving this variable as
+            // the whole thing for future reference
+            // repurposed here to filter items
+            for (Entity target : allTargets) {
+                // the check below was taken from star platinum inhale, which is a much better
+                // method to copy as that drags in ALL items, not just one
+                // unlike phase grab
+                boolean collected = false;
+                if (target instanceof ItemEntity || target instanceof ExperienceOrb) {
+                    // filter it out even more to only account for thing inside the hitbox
+                    if (isInDiveHitbox(target.getX(), target.getY(), target.getZ())) {
+                        // bring items to player yippee
+                        target.playerTouch(player);
+                        collected = true;
+                        // only trigger this once because otherwise it will get spammed and be really
+                        // annoying
+                        if (collected) {
+                            playSoundIfPossible(this.self.level(), null, stand.blockPosition(),
+                                    SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.85F, 1.0F);
+                        }
+                        exitGroundDive();
+                    }
+                }
+            }
+        }
         return true;
     }
 
@@ -1193,11 +1282,6 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     @Override
     public void pilotInputAttack() {
-        tryDiveBarrage();
-    }
-
-    // runs dive barrage on client and server
-    private void tryDiveBarrage() {
         ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_DIVE_BARRAGE, true);
         tryPowerPacket(GROUND_DIVE_BARRAGE);
     }
