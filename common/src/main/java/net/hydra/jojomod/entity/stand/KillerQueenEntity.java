@@ -25,12 +25,18 @@ public class KillerQueenEntity extends FollowingStandEntity {
 
     protected static final EntityDataAccessor<Boolean> PLANTED_BITES_THE_DUST = SynchedEntityData.defineId(FollowingStandEntity.class,
             EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> BUBBLE_SHIELD_ACTIVE = SynchedEntityData.defineId(FollowingStandEntity.class,
+            EntityDataSerializers.BOOLEAN);
+
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         if (!this.entityData.hasItem(PLANTED_BITES_THE_DUST)) {
             this.entityData.define(PLANTED_BITES_THE_DUST, false);
+        }
+        if (!this.entityData.hasItem(BUBBLE_SHIELD_ACTIVE)) {
+            this.entityData.define(BUBBLE_SHIELD_ACTIVE, false);
         }
     }
 
@@ -41,6 +47,16 @@ public class KillerQueenEntity extends FollowingStandEntity {
     public boolean getPlantedBitesTheDust() {
         return entityData.get(PLANTED_BITES_THE_DUST);
     }
+
+
+    public void setBubbleShieldActive(boolean value) {
+        entityData.set(BUBBLE_SHIELD_ACTIVE, value);
+    }
+
+    public boolean getBubbleShieldActive() {
+        return entityData.get(BUBBLE_SHIELD_ACTIVE);
+    }
+
 
     public static Component getSkinNameT(byte skinId) {
         switch (skinId)
@@ -95,6 +111,8 @@ public class KillerQueenEntity extends FollowingStandEntity {
 
     public final AnimationState lid_open = new AnimationState();
     public final AnimationState hideFists = new AnimationState();
+    public final AnimationState hideBubble = new AnimationState();
+    public final AnimationState bubbleSpin = new AnimationState();
     public final AnimationState kick_barrage_windup = new AnimationState();
     public final AnimationState finalKickWindup = new AnimationState();
     public final AnimationState finalKick = new AnimationState();
@@ -130,12 +148,24 @@ public class KillerQueenEntity extends FollowingStandEntity {
     	    HEAVY_STRIKE = 26,
             ARROW_CHARGE = 89,
             ARROW_THROW = 90;
-    
+
+
+
     @Override
     public void setupAnimationStates() {
         super.setupAnimationStates();
         if (this.getUser() != null) {
             byte animation = this.getAnimation();
+
+            if (getBubbleShieldActive()) {
+                bubbleSpin.startIfStopped(tickCount);
+                lid_open.startIfStopped(tickCount);
+                hideBubble.stop();
+            } else {
+                bubbleSpin.stop();
+                lid_open.stop();
+                hideBubble.startIfStopped(tickCount);
+            }
 
             if (this.getAnimation() != BARRAGE) {
                 this.hideFists.startIfStopped(this.tickCount);

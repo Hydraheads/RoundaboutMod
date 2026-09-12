@@ -324,7 +324,7 @@ public class PowersKillerQueen extends NewPunchingStand {
 	public static int maxKickTime = 25;
     public int getMaxKickTime() { return maxKickTime+(getMeltLevel()*2); }
 
-    private static final int blockPlantMaxTicks = 18;
+    private static final int blockPlantMaxTicks = 15;
     public int mobPlantTicks = 0;
     public int impaleTicks = 0;
     public int btdTicks = -1;
@@ -1043,10 +1043,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         return false;
     }
 
-    public boolean canBlockPlantBomb() { 
-    	StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-		
-	    if ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
+    public boolean canBlockPlantBomb() {
+	    if (this.currentBombStatus == BOMB_NONE) {
 	    	float range = getRange(blockPlantRange);
 
 	    	Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -1583,10 +1581,6 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (move == PowerIndex.POWER_3_BLOCK) {
             return this.sendOrReturnSHA(true);
     	} else if (move == DETONATE) {
-             if ( self instanceof Player player
-                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
-                 voice.playPrimaryBomb();
-             }
     		return detonate();
     	} else if (move == PowerIndex.SNEAK_ATTACK_CHARGE){
             return this.setPowerKickWindup();
@@ -2970,44 +2964,44 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public boolean blockPlantBomb() {
     	if (!this.isClient() && currentBombStatus == BOMB_NONE) {
-			StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
-			
-		    if ((standEntity != null && standEntity.isAlive() && !standEntity.isRemoved() || hasHandsOut()) && this.currentBombStatus == BOMB_NONE) {
-		    	float range = getRange(blockPlantRange);
 
-                Vec3 vec3d = this.getSelf().getEyePosition(0);
-		        Vec3 vec3d2 = this.getSelf().getViewVector(0);
-		        Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-		        
-		        BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
-                if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playPrimaryBomb();
+            }
+            float range = getRange(blockPlantRange);
 
-                BlockPos pos = blockHit.getBlockPos();
+            Vec3 vec3d = this.getSelf().getEyePosition(0);
+            Vec3 vec3d2 = this.getSelf().getViewVector(0);
+            Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
 
-                this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
-                this.bombBlock.setUser(this.self);
-                this.bombBlock.setOnContact(isContactModeEnabled());
-                PowerTypes.copyPlaneOfExisting(self, bombBlock);
+            BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
+            if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
 
-                this.bombBlock.setBlockPos(pos);
-                this.self.level().addFreshEntity(this.bombBlock);
-                this.currentBombStatus = BOMB_BLOCK;
+            BlockPos pos = blockHit.getBlockPos();
 
-                this.syncBombStatus(BOMB_BLOCK);
+            this.bombBlock = ModEntities.getBlockBomb().create(this.getSelf().level());
+            this.bombBlock.setUser(this.self);
+            this.bombBlock.setOnContact(isContactModeEnabled());
+            PowerTypes.copyPlaneOfExisting(self, bombBlock);
 
-                if (hasHandsOut()) {
-                    refreshArms();
-                    getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.BLOCK_PLANT);
-                }else {
-                    this.animateStand(KillerQueenEntity.BLOCK_PLANT);
-                }
-                this.poseStand(OffsetIndex.ATTACK);
-                this.setAttackTimeDuring(-blockPlantMaxTicks);
-                this.setActivePower(PowerIndex.POWER_1);
+            this.bombBlock.setBlockPos(pos);
+            this.self.level().addFreshEntity(this.bombBlock);
+            this.currentBombStatus = BOMB_BLOCK;
 
-                return true;
+            this.syncBombStatus(BOMB_BLOCK);
 
-		    }
+            if (hasHandsOut()) {
+                refreshArms();
+                getStandUserSelf().roundabout$setStandAnimation(KillerQueenEntity.BLOCK_PLANT);
+            }else {
+                this.animateStand(KillerQueenEntity.BLOCK_PLANT);
+            }
+            this.poseStand(OffsetIndex.ATTACK);
+            this.setAttackTimeDuring(-blockPlantMaxTicks);
+            this.setActivePower(PowerIndex.POWER_1);
+
+            return true;
     	}
     	return true;
     }
@@ -3391,40 +3385,17 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (impaleTicks > 0){ impaleTicks--; }
         if (btdTicks >= 0) { btdTicks++; }
 
-        if (!isClient() && this.getActivePower() == PowerIndex.GUARD && this.self.tickCount % 6 == 0
-                && this.getStandUserSelf().roundabout$getGuardPoints() > getNormalMaxGuardPoints()*(ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01)) {
-            StandEntity KQE = this.getStandEntity(this.self);
-
-            if(KQE != null) {
-                float factor = 0.5F + (((FollowingStandEntity) KQE).getSizePercent() / 2);
-
-
-                Vec3 standPos = KQE.getPosition(1);
-                float Hsize = KQE.getBbHeight() / 2.0f;
-                Vec3 gizmo = standPos.add(0, Hsize, 0);
-                Vec3 addToPos = new Vec3(0, -Hsize, 0)
-                        .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
-                        .yRot(-KQE.getYRot() * Mth.DEG_TO_RAD);
-
-                Vec3 unhandledBubbblePos = new Vec3(
-                        (KQE.getRandom().nextFloat() * 0.4) - 0.2,
-                        (KQE.getRandom().nextFloat() * 0.2) - 0.2 + 0.9,
-                        0.65
-                );
-                Vec3 bubblePos = unhandledBubbblePos
-                        .xRot(-KQE.getXRot() * Mth.DEG_TO_RAD)
-                        .yRot(-KQE.getYRot() * Mth.DEG_TO_RAD)
-                        .scale(factor);
-                Vec3 pos = gizmo.add(addToPos).add(bubblePos);
-
-                sendParticlesIfPossible(self.level(), getBubbleParticle(),
-                        (double) pos.x, (double) pos.y, (double) pos.z,
-                        0, 0, 0, 0.0, 1);
-            }
-        }
-
-
         if (!isClient()) {
+            StandEntity SE = this.getStandEntity(this.self);
+
+            if(SE instanceof KillerQueenEntity KQE) {
+                float value = (float)getNormalMaxGuardPoints() * (ClientNetworking.getAppropriateConfig().generalStandSettings.standGuardMultiplier*0.01f);
+
+                KQE.setBubbleShieldActive(
+                        this.getActivePower() == PowerIndex.GUARD && getStandUserSelf().roundabout$getGuardPoints() > value
+                );
+            }
+
             tickBtdGuard();
             if (inBitesTheDustMode() && bitesTheDustPlantedEntity != null) {
                 if ( self instanceof Player player
@@ -4438,7 +4409,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                  KillerQueenEntity.TAMA, KillerQueenEntity.STRAY-> {return 2;}
             case KillerQueenEntity.FINAL, KillerQueenEntity.YELLOW,
                  KillerQueenEntity.ARTWORK, KillerQueenEntity.GUNPOWDER,
-                 KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET-> {return 3;}
+                 KillerQueenEntity.UMBRA, KillerQueenEntity.MINUET,
+                 KillerQueenEntity.STARDUST-> {return 3;}
             case KillerQueenEntity.MINESWEEPER -> {return 4;}
             
             default -> {return 0;}
