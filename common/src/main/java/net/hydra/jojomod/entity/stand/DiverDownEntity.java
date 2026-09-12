@@ -87,9 +87,15 @@ public class DiverDownEntity extends FollowingStandEntity {
         return !isRemoteControlled() || super.hasNoPhysics();
     }
 
+    /* autostep
+     * need to think about if this should be 1.0, or 1.4F so it can go up things
+     * like carpeted fences and stuff.
+     * will first try out this move with friends, and balance accordingly.
+     * @see net.minecraft.world.entity.LivingEntity#maxUpStep()
+     */
     @Override
     public float maxUpStep() {
-        return 1.0F;
+        return 3.0F;
     }
 
     /*

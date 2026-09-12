@@ -3,6 +3,7 @@ package net.hydra.jojomod.stand.powers;
 import com.google.common.collect.Lists;
 
 import net.hydra.jojomod.access.IEntityAndData;
+import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.DiverLimbBlock;
 import net.hydra.jojomod.block.DiverLimbBlockEntity;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -31,6 +33,7 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.CameraType;
@@ -46,6 +49,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,7 +89,8 @@ public class PowersDiverDown extends NewPunchingStand {
             SMITHING_TABLE = 59,
             OPEN_CHEST = 60,
             GROUND_GET_ITEMS = 61,
-            GROUND_DIVE_BARRAGE = 62;
+            GROUND_DIVE_BARRAGE = 62,
+            DIVER_ZIP = 63;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -94,6 +99,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // enough.
     public static final byte CHARGE_NOISE = 120;
 
+    // used for limb scaffolds
+    private int MAX_LIMB_DISTANCE = 3;
     // the next 2 variables are used for the charge phase punch later
     public boolean holdDownClick = false;
     public int chargedPhasePunch = 0;
@@ -110,6 +117,9 @@ public class PowersDiverDown extends NewPunchingStand {
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
                                                // + 9 for animation
     private int barrageTicksLeft = 0;
+
+    // used for diver zip
+    private Direction feetDirection = Direction.DOWN;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -210,7 +220,7 @@ public class PowersDiverDown extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
                 "ability.roundabout.diver_self_submerge",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58+ startPos, topPos + 80, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SELECTION, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0,
@@ -347,6 +357,10 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
+            // dive zip
+            case SKILL_3_CROUCH -> {
+                tryDiverZip();
+            }
             // ground dive
             case SKILL_4_NORMAL -> {
                 tryGroundDive();
@@ -382,6 +396,21 @@ public class PowersDiverDown extends NewPunchingStand {
             return setPowerPhasePunch();
         }
         return super.setPowerOther(move, lastMove);
+    }
+
+    // Used to stop sounds early
+    @Override
+    public boolean tryPower(int move, boolean forced) {
+        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
+            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
+        }
+        switch (move)
+        {
+            case DIVER_ZIP -> {
+                inZipMode();
+            }
+        }
+        return super.tryPower(move, forced);
     }
 
     @Override
@@ -904,8 +933,8 @@ public class PowersDiverDown extends NewPunchingStand {
             int dx = Math.abs(targetPos.getX() - limbPos.getX());
             int dy = Math.abs(targetPos.getY() - limbPos.getY());
             int dz = Math.abs(targetPos.getZ() - limbPos.getZ());
-            // blocks must be within 4 block in all 3 directions
-            if (dx <= 4 && dy <= 4 && dz <= 4) {
+            // blocks must be within MAX_LIMB_DISTANCE block in all 3 directions
+            if (dx <= MAX_LIMB_DISTANCE && dy <= MAX_LIMB_DISTANCE && dz <= MAX_LIMB_DISTANCE) {
                 return true;
             }
         }
@@ -1154,7 +1183,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public int getMaxPilotRange() {
         // (this is in blocks)
-        return 20;
+        return 15;
     }
 
     @Override
@@ -1179,11 +1208,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 diver.setDeltaMovement(0, diver.getDeltaMovement().y, 0);
                 return;
             }
-            // autostep
-            // need to think about if this should be 1.0, or 1.4F so it can go up things
-            // like carpeted fences and stuff.
-            // will first try out this move with friends, and balance accordingly.
-            diver.setMaxUpStep(1.0F);
+            // autostep can be found in DiverDownEntity
             // horizontal movement
             float speed = 0.4F;
             float yawRad = diver.getYRot() * ((float) Math.PI / 180F);
@@ -1426,6 +1451,98 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // Ground dive move end
 
+    // heel plant 2.0 start
+
+    public void tryDiverZip() {
+        if (!self.isSwimming()) {
+            if (forceBlock())
+                return;
+            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            tryPowerPacket(DIVER_ZIP);
+        }
+    }
+
+    public void activateZip(){
+        if (self.isSwimming())
+            return;
+        boolean isAnchored = inZipMode();
+            if (isAnchored){
+                if (!this.self.level().isClientSide()) {
+                    toggleZip(false);
+                }
+            } else {
+                    if (self.onGround()) {
+                        this.setCooldown(PowerIndex.SKILL_3, 10);
+                        if (!this.self.level().isClientSide()) {
+                            setHeelDirection(((IGravityEntity)this.self).roundabout$getGravityDirection());
+                            toggleZip(true);
+                        }
+                    }
+            }
+    }
+
+    public void toggleZip(boolean toggle){
+        if (!this.self.level().isClientSide()) {
+            boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
+            if (toggle != getTog) {
+                if (toggle) {
+                    //put sound here
+                } else {
+                    Direction gf = ((IGravityEntity)self).roundabout$getGravityDirection();
+                    if (gf != getIntendedDirection()) {
+                        Vec3 vec = new Vec3(0, 0.3f, 0);
+                        vec = RotationUtil.vecPlayerToWorld(vec, gf);
+                        self.teleportTo(
+                                self.getX() + vec.x,
+                                self.getY() + vec.y,
+                                self.getZ() + vec.z);
+                    }
+                    //put cooldown here
+                    //put sound here
+                }
+            }
+        }
+        getStandUserSelf().roundabout$setUniqueStandModeToggle(toggle);
+    }
+
+    public void setHeelDirection(Direction dir){
+        feetDirection = dir;
+    }
+
+    public boolean forceBlock() {
+        if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
+            return true;
+        return false;
+    }
+
+    public boolean inZipMode() {
+        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+    }
+
+    public Direction getIntendedDirection(){
+        Direction rightAxis = Direction.DOWN;
+        MobEffectInstance mi = self.getEffect(ModEffects.GRAVITY_FLIP);
+        if (mi != null) {
+            if (mi.getAmplifier() == 0) {
+                rightAxis = Direction.NORTH;
+            }
+            if (mi.getAmplifier() == 1) {
+                rightAxis = Direction.SOUTH;
+            }
+            if (mi.getAmplifier() == 2) {
+                rightAxis = Direction.EAST;
+            }
+            if (mi.getAmplifier() == 3) {
+                rightAxis = Direction.WEST;
+            }
+            if (mi.getAmplifier() == 4) {
+                rightAxis = Direction.UP;
+            }
+        }
+        return rightAxis;
+    }
+    // heel plant 2.0 stop
+
     /**
      * Placeholder function, right now returns false (because dive hasn't even been
      * implemented yet. duh.)
@@ -1443,16 +1560,11 @@ public class PowersDiverDown extends NewPunchingStand {
      * false for manual
      */
     private boolean releaseMode() {
-        return true;
-    }
+        // water bucket
 
-    // Used to stop sounds early
-    @Override
-    public boolean tryPower(int move, boolean forced) {
-        if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            this.stopSoundsIfNearby(IMPALE_NOISE, 100, true);
-        }
-        return super.tryPower(move, forced);
+        // RELEASE
+        // 🔥🔥🔥🔥🔥
+        return true;
     }
 
     /**
