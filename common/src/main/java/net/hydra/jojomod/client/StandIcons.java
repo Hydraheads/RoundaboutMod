@@ -805,6 +805,8 @@ public class StandIcons {
             "textures/gui/icons/black_sabbath/black_sabbath_chest.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_MODE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/target_manual_selection.png");
+    public static final ResourceLocation POLPO_SELECTING_TARGET_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/black_sabbath/target_manual_selection_off.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_CONFIRM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/black_sabbath/target_manual_selection_confirm.png");
     public static final ResourceLocation POLPO_SELECTING_TARGET_UNSELECTION = new ResourceLocation(Roundabout.MOD_ID,
