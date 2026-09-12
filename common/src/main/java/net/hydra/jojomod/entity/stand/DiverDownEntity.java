@@ -74,6 +74,11 @@ public class DiverDownEntity extends FollowingStandEntity {
         return !isRemoteControlled();
     }
 
+    @Override
+    public boolean standHasGravity() {
+        return isRemoteControlled();
+    }
+
     /*
      * Overriding hasNoPhysics lets the stand go through walls
      */
