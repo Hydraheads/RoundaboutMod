@@ -11,6 +11,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -143,6 +144,10 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 }
             }
         }
+
+        if (getOwner() != null && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
+            KQ.bulletContacted(target);
+        }
     }
 
     boolean timeStopShot = false;
@@ -161,6 +166,7 @@ public class RoundaboutBulletEntity extends AbstractArrow {
     }
 
     public boolean isHattan = false;
+    public boolean isKillerQueen = false;
     public float manhattanDamage = 0.0F;
 
     @Override
@@ -234,6 +240,9 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
                 ;
             }
+
+            if (isKillerQueen) { damage *= 0.4f; }
+
             if (!isHattan) {
                 boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
 
@@ -260,6 +269,8 @@ public class RoundaboutBulletEntity extends AbstractArrow {
                 if (livingEntity.isAlive()) {
                     doPostHurtXtraDamage(livingEntity);
                 }
+
+
             }
         }else if (entity instanceof GentlyWeepsEntity gwe){
                 GentlyWeepsEntity.dealWithProjectile(this,gwe);
