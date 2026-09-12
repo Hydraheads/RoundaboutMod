@@ -2444,7 +2444,7 @@
   "ability.roundabout.diver_cancel_store": "I'm making Mac and Cheese",
   "ability.roundabout.diver_cancel_store.desc": "AND NOBODY CAN STOP ME!!!",
   "ability.roundabout.diver_zip": "Diver Zip",
-  "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! Control your direction using WASD",
+  "ability.roundabout.diver_zip.desc": "Your stand dives into the ground and zips you around! While in this mode, you can go on walls and ceilings, however, you can't do anything and 1 hit knocks you out.",
   "ability.roundabout.diver_workstation": "Workstation Emulation",
   "ability.roundabout.diver_workstation.desc": "Your stand dives into your items and changes them from the inside out, allowing it emulate the functions of various workstations.",
   "ability.roundabout.diver_limb_platform": "Limb Platform",

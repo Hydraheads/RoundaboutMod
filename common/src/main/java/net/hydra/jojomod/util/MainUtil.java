@@ -1,6 +1,5 @@
 package net.hydra.jojomod.util;
 
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -116,7 +115,6 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 
-
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
@@ -125,16 +123,16 @@ public class MainUtil {
 
     public static boolean isClient = false;
 
-    public static boolean isClient(){
+    public static boolean isClient() {
         return isClient;
     }
-    public static void setClient(){
+
+    public static void setClient() {
         isClient = true;
     }
 
-
-    public static void playPop(Entity entity){
-        if (entity instanceof LivingEntity LE && !LE.level().isClientSide()){
+    public static void playPop(Entity entity) {
+        if (entity instanceof LivingEntity LE && !LE.level().isClientSide()) {
             StandUser SE = ((StandUser) LE);
             if (SE.roundabout$isBubbleEncased()) {
                 SE.roundabout$setBubbleEncased((byte) 0);
@@ -147,25 +145,25 @@ public class MainUtil {
         }
     }
 
-    public static void blockBreakParticles(Level level, Block block, Vec3 pos, int blockmt){
+    public static void blockBreakParticles(Level level, Block block, Vec3 pos, int blockmt) {
         if (!level.isClientSide()) {
             ((ServerLevel) level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
-                            block.defaultBlockState()),
+                    block.defaultBlockState()),
                     pos.x, pos.y, pos.z,
                     blockmt, 0.2, 0.2, 0.2, 0.3);
         }
     }
-    public static boolean isGravityNormal(Entity entity){
-        if (entity != null){
-            Direction gd = ((IGravityEntity)entity).roundabout$getGravityDirection();
-            if (gd != Direction.DOWN){
+
+    public static boolean isGravityNormal(Entity entity) {
+        if (entity != null) {
+            Direction gd = ((IGravityEntity) entity).roundabout$getGravityDirection();
+            if (gd != Direction.DOWN) {
                 return false;
             }
         }
 
         return true;
     }
-
 
     public static final Map<DyeColor, ItemLike> SHEEP_DYE;
     static {
@@ -189,28 +187,29 @@ public class MainUtil {
         });
     }
 
-    public static boolean isMeleeDamage(DamageSource di){
+    public static boolean isMeleeDamage(DamageSource di) {
         if (di.is(DamageTypes.PLAYER_ATTACK) || di.is(DamageTypes.MOB_ATTACK))
             return true;
         return false;
     }
 
-    public static boolean isZapper(LivingEntity ent1, Entity ent2){
+    public static boolean isZapper(LivingEntity ent1, Entity ent2) {
         if (ent1 != null && ent2 != null) {
             StandUser standComp = ((StandUser) ent1);
             int zappedId = standComp.roundabout$getZappedToID();
-            if (zappedId > -1){
+            if (zappedId > -1) {
                 Entity ent = ent2.level().getEntity(zappedId);
-                if (ent != null && ent.is(ent2)){
+                if (ent != null && ent.is(ent2)) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     public static boolean isPlayerInFireBlock(Entity player) {
         // Get the position of the block the player is standing in
-        BlockPos pos = BlockPos.containing(player.getX(), player.getY()+0.01F, player.getZ());
+        BlockPos pos = BlockPos.containing(player.getX(), player.getY() + 0.01F, player.getZ());
 
         // Get the block at that position
         Block block = player.level().getBlockState(pos).getBlock();
@@ -261,16 +260,16 @@ public class MainUtil {
     public static Set<String> foodThatGivesBloodList = Set.of();
     Map<String, FoodBloodStats> foodThatGivesBloodMap;
 
-
-
-    public record FoodBloodStats(String id, int hunger, float saturation) {}
+    public record FoodBloodStats(String id, int hunger, float saturation) {
+    }
 
     public static Map<String, FoodBloodStats> parseFoodList(Set<String> entries) {
         Map<String, FoodBloodStats> map = new HashMap<>();
 
         for (String entry : entries) {
             String[] parts = entry.split(":");
-            if (parts.length < 4) continue; // safety check
+            if (parts.length < 4)
+                continue; // safety check
 
             // Recombine the namespaced ID ("minecraft:beef" = parts[0] + ":" + parts[1])
             String id = parts[0] + ":" + parts[1];
@@ -284,7 +283,6 @@ public class MainUtil {
     }
 
     public static Map<String, FoodBloodStats> foodMap;
-
 
     public static int getBloodAmount(ItemStack stack) {
         if (foodMap != null && !foodMap.isEmpty()) {
@@ -316,57 +314,70 @@ public class MainUtil {
         return 0;
     }
 
-    public static boolean isBlockBlacklisted(BlockState bs){
+    public static boolean isBlockBlacklisted(BlockState bs) {
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null
+                && standBlockGrabBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isEffectBanishable(MobEffectInstance mei){
+
+    public static boolean isEffectBanishable(MobEffectInstance mei) {
         ResourceLocation rl = BuiltInRegistries.MOB_EFFECT.getKey(mei.getEffect());
-        if (occultChargeEffectsToBanish != null && !occultChargeEffectsToBanish.isEmpty() && rl != null && occultChargeEffectsToBanish.contains(rl.toString())){
+        if (occultChargeEffectsToBanish != null && !occultChargeEffectsToBanish.isEmpty() && rl != null
+                && occultChargeEffectsToBanish.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isBlockDestructionBlacklisted(BlockState bs){
+
+    public static boolean isBlockDestructionBlacklisted(BlockState bs) {
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (standDestructionBlacklist != null && !standDestructionBlacklist.isEmpty() && rl != null && standDestructionBlacklist.contains(rl.toString())){
+        if (standDestructionBlacklist != null && !standDestructionBlacklist.isEmpty() && rl != null
+                && standDestructionBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isItemGrabBlacklisted(ItemStack stack){
+
+    public static boolean isItemGrabBlacklisted(ItemStack stack) {
         ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null && standBlockGrabBlacklist.contains(rl.toString())){
+        if (standBlockGrabBlacklist != null && !standBlockGrabBlacklist.isEmpty() && rl != null
+                && standBlockGrabBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isMobStandUserBlacklisted(Entity ent){
+
+    public static boolean isMobStandUserBlacklisted(Entity ent) {
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null && naturalStandUserMobBlacklist.contains(rl.toString())){
+        if (naturalStandUserMobBlacklist != null && !naturalStandUserMobBlacklist.isEmpty() && rl != null
+                && naturalStandUserMobBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isDiscEntityBlacklisted(Entity ent){
+
+    public static boolean isDiscEntityBlacklisted(Entity ent) {
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
         return discEntityBlacklist != null && !discEntityBlacklist.isEmpty()
                 && rl != null && discEntityBlacklist.contains(rl.toString());
     }
-    public static boolean isHypnotismTargetBlacklisted(Entity ent){
+
+    public static boolean isHypnotismTargetBlacklisted(Entity ent) {
         if (ent == null)
             return false;
         if (ent instanceof FallenMob)
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null && hypnotismMobBlackList.contains(rl.toString())){
+        if (hypnotismMobBlackList != null && !hypnotismMobBlackList.isEmpty() && rl != null
+                && hypnotismMobBlackList.contains(rl.toString())) {
             return true;
         }
         return false;
     }
+
     public static ItemStack getRandomD4CLoot(Level level) {
         if (lootPoolForD4CChests.isEmpty()) {
             return ItemStack.EMPTY;
@@ -374,8 +385,7 @@ public class MainUtil {
 
         // Duplicate entries naturally increase their chance of being selected
         String loot = lootPoolForD4CChests.get(
-                level.getRandom().nextInt(lootPoolForD4CChests.size())
-        );
+                level.getRandom().nextInt(lootPoolForD4CChests.size()));
 
         String[] parts = loot.split(":");
 
@@ -391,8 +401,7 @@ public class MainUtil {
 
         ResourceLocation itemId = ResourceLocation.tryBuild(
                 namespace,
-                itemName
-        );
+                itemName);
 
         Item item = BuiltInRegistries.ITEM.get(itemId);
 
@@ -404,22 +413,23 @@ public class MainUtil {
         int amount = Mth.nextInt(
                 level.getRandom(),
                 min,
-                max
-        );
+                max);
 
         return new ItemStack(item, amount);
     }
-    public static boolean isBlackOrWhiteListed(Entity ent){
+
+    public static boolean isBlackOrWhiteListed(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (blackOrWhiteListParallelMobs != null && !blackOrWhiteListParallelMobs.isEmpty() && rl != null && blackOrWhiteListParallelMobs.contains(rl.toString())){
+        if (blackOrWhiteListParallelMobs != null && !blackOrWhiteListParallelMobs.isEmpty() && rl != null
+                && blackOrWhiteListParallelMobs.contains(rl.toString())) {
             return true;
         }
         return false;
     }
 
-    public static boolean isFleshBudBlacklisted(Entity ent){
+    public static boolean isFleshBudBlacklisted(Entity ent) {
         if (ent == null)
             return false;
         if (ent instanceof FallenMob)
@@ -427,179 +437,202 @@ public class MainUtil {
         if (ent instanceof KingCrimsonProjectionEntity)
             return true;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null && fleshBudMobBlacklist.contains(rl.toString())){
+        if (fleshBudMobBlacklist != null && !fleshBudMobBlacklist.isEmpty() && rl != null
+                && fleshBudMobBlacklist.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isSunDamageWorld(String string){
+
+    public static boolean isSunDamageWorld(String string) {
         if (string == null || string.isEmpty())
             return false;
-        if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty() && vampireSunDamageWorlds.contains(string)){
+        if (vampireSunDamageWorlds != null && !vampireSunDamageWorlds.isEmpty()
+                && vampireSunDamageWorlds.contains(string)) {
 
             return true;
         }
         return false;
     }
-    public static boolean canCopyMob(Entity entity){
-        if (entity != null){
-            if (entity instanceof FallenMob fm){
+
+    public static boolean canCopyMob(Entity entity) {
+        if (entity != null) {
+            if (entity instanceof FallenMob fm) {
                 return false;
             }
             boolean whiteList = ClientNetworking.getAppropriateConfig().d4cSettings.whiteListModdedMobs;
             String nameSpace = entity.getType().builtInRegistryHolder().key().location().getNamespace();
-            if (whiteList){
-                if (!(nameSpace.equals("minecraft"))){
-                    if (!isBlackOrWhiteListed(entity)){
+            if (whiteList) {
+                if (!(nameSpace.equals("minecraft"))) {
+                    if (!isBlackOrWhiteListed(entity)) {
                         return false;
                     }
                 }
             } else {
-                if (isBlackOrWhiteListed(entity)){
+                if (isBlackOrWhiteListed(entity)) {
                     return false;
                 }
             }
 
             if (entity instanceof LivingEntity lv && lv.getMaxHealth() >= 60 &&
-                    ClientNetworking.getAppropriateConfig().d4cSettings.blacklistHighHealthMobs){
+                    ClientNetworking.getAppropriateConfig().d4cSettings.blacklistHighHealthMobs) {
                 if (!(nameSpace.equals("minecraft"))) {
                     return false;
                 }
             }
-            if (isBossMob(entity)){
+            if (isBossMob(entity)) {
                 return false;
             }
             return true;
         }
         return false;
     }
-    public static boolean isEdibleToVampires(ItemStack stack){
+
+    public static boolean isEdibleToVampires(ItemStack stack) {
         if (stack == null || stack.isEmpty())
             return false;
         ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        if (foodThatHasEffectsForVampires != null && !foodThatHasEffectsForVampires.isEmpty() && rl != null && foodThatHasEffectsForVampires.contains(rl.toString())){
+        if (foodThatHasEffectsForVampires != null && !foodThatHasEffectsForVampires.isEmpty() && rl != null
+                && foodThatHasEffectsForVampires.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isIndestructibleThrownItem(ItemStack stack){
+
+    public static boolean isIndestructibleThrownItem(ItemStack stack) {
         if (stack == null || stack.isEmpty())
             return false;
         ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        if(unbreakableThrownItems != null && !unbreakableThrownItems.isEmpty() && rl != null && unbreakableThrownItems.contains(rl.toString())){
-             return true;
-        }
-        return  false;
-    }
-    public static boolean isFreezableMobBlacklisted(Entity ent){
-        if (ent == null)
-            return false;
-        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null && unfreezableMobs.contains(rl.toString())){
+        if (unbreakableThrownItems != null && !unbreakableThrownItems.isEmpty() && rl != null
+                && unbreakableThrownItems.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isPowerfulMob(Entity ent){
+
+    public static boolean isFreezableMobBlacklisted(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (powerfulMobs != null && !powerfulMobs.isEmpty() && rl != null && powerfulMobs.contains(rl.toString())){
+        if (unfreezableMobs != null && !unfreezableMobs.isEmpty() && rl != null
+                && unfreezableMobs.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isWhitelistedRedBlood(Entity ent){
+
+    public static boolean isPowerfulMob(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (addedMobsWithRedBlood != null && !addedMobsWithRedBlood.isEmpty() && rl != null && addedMobsWithRedBlood.contains(rl.toString())){
+        if (powerfulMobs != null && !powerfulMobs.isEmpty() && rl != null && powerfulMobs.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isWhitelistedBlueBlood(Entity ent){
+
+    public static boolean isWhitelistedRedBlood(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (addedMobsWithBlueBlood != null && !addedMobsWithBlueBlood.isEmpty() && rl != null && addedMobsWithBlueBlood.contains(rl.toString())){
+        if (addedMobsWithRedBlood != null && !addedMobsWithRedBlood.isEmpty() && rl != null
+                && addedMobsWithRedBlood.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isWhitelistedEnderBlood(Entity ent){
+
+    public static boolean isWhitelistedBlueBlood(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (addedMobsWithEnderBlood != null && !addedMobsWithEnderBlood.isEmpty() && rl != null && addedMobsWithEnderBlood.contains(rl.toString())){
+        if (addedMobsWithBlueBlood != null && !addedMobsWithBlueBlood.isEmpty() && rl != null
+                && addedMobsWithBlueBlood.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isBloodBlacklisted(Entity ent){
+
+    public static boolean isWhitelistedEnderBlood(Entity ent) {
         if (ent == null)
             return false;
         ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
-        if (removeBloodFromThese != null && !removeBloodFromThese.isEmpty() && rl != null && removeBloodFromThese.contains(rl.toString())){
+        if (addedMobsWithEnderBlood != null && !addedMobsWithEnderBlood.isEmpty() && rl != null
+                && addedMobsWithEnderBlood.contains(rl.toString())) {
             return true;
         }
         return false;
     }
-    public static boolean isBlockWalkable(BlockState bs){
-        if (!bs.isSolid()){
+
+    public static boolean isBloodBlacklisted(Entity ent) {
+        if (ent == null)
+            return false;
+        ResourceLocation rl = BuiltInRegistries.ENTITY_TYPE.getKey(ent.getType());
+        if (removeBloodFromThese != null && !removeBloodFromThese.isEmpty() && rl != null
+                && removeBloodFromThese.contains(rl.toString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isBlockWalkable(BlockState bs) {
+        if (!bs.isSolid()) {
             return false;
         }
         return true;
     }
-    public static boolean isBlockWalkableSimplified(BlockState bs){
+
+    public static boolean isBlockWalkableSimplified(BlockState bs) {
 
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null && walkableBlocks.contains(rl.toString())){
+        if (walkableBlocks != null && !walkableBlocks.isEmpty() && rl != null
+                && walkableBlocks.contains(rl.toString())) {
             return false;
         }
         return true;
     }
-    public static boolean isBlockExpAble(BlockState bs){
+
+    public static boolean isBlockExpAble(BlockState bs) {
 
         ResourceLocation rl = BuiltInRegistries.BLOCK.getKey(bs.getBlock());
-        if (expLessBlocks != null && !expLessBlocks.isEmpty() && rl != null && expLessBlocks.contains(rl.toString())){
+        if (expLessBlocks != null && !expLessBlocks.isEmpty() && rl != null && expLessBlocks.contains(rl.toString())) {
             return false;
         }
         return true;
     }
-    public static boolean isStandingInBlock(LivingEntity LE){
-        if (LE.level().getBlockState(BlockPos.containing(LE.getPosition(1))).isSolid()){
+
+    public static boolean isStandingInBlock(LivingEntity LE) {
+        if (LE.level().getBlockState(BlockPos.containing(LE.getPosition(1))).isSolid()) {
             return true;
         }
         return false;
     }
 
-    public static void clearCooldowns(Entity ent){
-        if (ent instanceof LivingEntity LE){
+    public static void clearCooldowns(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             StandUser SU = ((StandUser) LE);
             StandPowers powers = SU.roundabout$getStandPowers();
             powers.refreshCooldowns();
-            if (ent instanceof ServerPlayer SP){
+            if (ent instanceof ServerPlayer SP) {
                 S2CPacketUtil.refreshCooldowns(SP);
             }
         }
     }
 
-    public static boolean isKnockbackImmune(Entity ent){
-        if (ent instanceof LivingEntity LE){
+    public static boolean isKnockbackImmune(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             StandUser SU = ((StandUser) LE);
             if (SU.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.hasExtendedHeelsForWalking()
-            || (PowerTypes.hasStandActive(ent) && ent instanceof Mob mb && mb.onGround()))){
+                    || (PowerTypes.hasStandActive(ent) && ent instanceof Mob mb && mb.onGround()))) {
                 return true;
-            }
-            else if(SU.roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+            } else if (SU.roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
                 return true;
             }
         }
         return false;
     }
 
-    public static Direction getDirectionFromByte(byte bt){
+    public static Direction getDirectionFromByte(byte bt) {
         switch (bt) {
             case 1:
                 return Direction.NORTH;
@@ -615,7 +648,8 @@ public class MainUtil {
                 return Direction.DOWN;
         }
     }
-    public static byte getByteFromDirection(Direction direction){
+
+    public static byte getByteFromDirection(Direction direction) {
         switch (direction) {
             case NORTH:
                 return 1;
@@ -632,46 +666,51 @@ public class MainUtil {
         }
     }
 
+    public static int maxGasTicks() {
+        return 200;
+    }
 
-    public static int maxGasTicks(){
+    public static int maxBucketGasTicks() {
         return 200;
     }
-    public static int maxBucketGasTicks(){
-        return 200;
-    }
-    public static int maxLeapTicks(){
+
+    public static int maxLeapTicks() {
         return 60;
     }
 
+    /** Additional math functions for the mod. */
 
-    /**Additional math functions for the mod.*/
-
-    /** This version of interpolation accommodates speed multipliers so you can control how
+    /**
+     * This version of interpolation accommodates speed multipliers so you can
+     * control how
      * fast something moves from point A to point B.
-     * Ex: the speed a stand tilts in*/
+     * Ex: the speed a stand tilts in
+     */
     public static float controlledLerp(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,1);
-        return start + (delta * (end - start))*multiplier;
+        delta = Math.min(delta, 1);
+        return start + (delta * (end - start)) * multiplier;
     }
 
-    /**The most basic hitbox grabber in the world*/
+    /** The most basic hitbox grabber in the world */
 
     public static List<Entity> getEntitiesInRange(Level level, BlockPos center, double range) {
-        return getEntitiesInRange(level,center,range,null);
+        return getEntitiesInRange(level, center, range, null);
     }
-    public static List<Entity> getEntitiesInRange(Level level, BlockPos center, double range, @Nullable Entity exception) {
+
+    public static List<Entity> getEntitiesInRange(Level level, BlockPos center, double range,
+            @Nullable Entity exception) {
         AABB area = new AABB(
                 center.getX() - range, center.getY() - range, center.getZ() - range,
-                center.getX() + range, center.getY() + range, center.getZ() + range
-        );
+                center.getX() + range, center.getY() + range, center.getZ() + range);
 
         return level.getEntities(exception, area);
     }
 
-    public static final void spreadRadialClientPacket(Entity entity,double range, boolean skipSelf, String packet, Object... vargs) {
+    public static final void spreadRadialClientPacket(Entity entity, double range, boolean skipSelf, String packet,
+            Object... vargs) {
         if (!entity.level().isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) entity.level());
-            Vec3 userLocation = new Vec3(entity.getX(),  entity.getY(), entity.getZ());
+            Vec3 userLocation = new Vec3(entity.getX(), entity.getY(), entity.getZ());
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) entity.level()).players().get(j);
 
@@ -684,15 +723,17 @@ public class MainUtil {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
+                    ModMessageEvents.sendToPlayer((ServerPlayer) serverPlayerEntity, packet, vargs);
                 }
             }
         }
     }
-    public static final void spreadRadialClientPacket(Level level,BlockPos pos,double range, String packet, Object... vargs) {
+
+    public static final void spreadRadialClientPacket(Level level, BlockPos pos, double range, String packet,
+            Object... vargs) {
         if (!level.isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) level);
-            Vec3 userLocation = new Vec3(pos.getX(),  pos.getY(), pos.getZ());
+            Vec3 userLocation = new Vec3(pos.getX(), pos.getY(), pos.getZ());
             for (int j = 0; j < serverWorld.players().size(); ++j) {
                 ServerPlayer serverPlayerEntity = ((ServerLevel) level).players().get(j);
 
@@ -702,89 +743,101 @@ public class MainUtil {
 
                 BlockPos blockPos = serverPlayerEntity.blockPosition();
                 if (blockPos.closerToCenterThan(userLocation, range)) {
-                    ModMessageEvents.sendToPlayer((ServerPlayer)serverPlayerEntity, packet,vargs);
+                    ModMessageEvents.sendToPlayer((ServerPlayer) serverPlayerEntity, packet, vargs);
                 }
             }
         }
     }
-    public static boolean isCreativeOrInvincible(Entity ent){
-        if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))){
+
+    public static boolean isCreativeOrInvincible(Entity ent) {
+        if (ent != null && (ent.isInvulnerable() || (ent instanceof Player PL && PL.isCreative()))) {
             return true;
         }
         return false;
     }
-    public static boolean getEntityIsTrulyInvisible(Entity ent){
-        if (ent != null){
+
+    public static boolean getEntityIsTrulyInvisible(Entity ent) {
+        if (ent != null) {
             IEntityAndData entityAndData = ((IEntityAndData) ent);
             return entityAndData.roundabout$getTrueInvisibility() > -1;
         }
         return false;
     }
-    public static int getEntityTrulyInvisibleTicks(Entity ent){
-        if (ent != null){
+
+    public static int getEntityTrulyInvisibleTicks(Entity ent) {
+        if (ent != null) {
             IEntityAndData entityAndData = ((IEntityAndData) ent);
             return entityAndData.roundabout$getTrueInvisibility();
         }
         return -1;
     }
-    public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist){
-        if (ent != null && checkAgaist != null){
-            if (ent.is(checkAgaist)){
+
+    public static boolean isMobOrItsMounts(Entity ent, Entity checkAgaist) {
+        if (ent != null && checkAgaist != null) {
+            if (ent.is(checkAgaist)) {
                 return true;
             }
-            if (ent.hasPassenger(checkAgaist)){
+            if (ent.hasPassenger(checkAgaist)) {
                 return true;
             }
-            if (checkAgaist.hasPassenger(ent)){
+            if (checkAgaist.hasPassenger(ent)) {
                 return true;
             }
-            if (checkAgaist instanceof LivingEntity LE){
-                StandUser user = ((StandUser)LE);
+            if (checkAgaist instanceof LivingEntity LE) {
+                StandUser user = ((StandUser) LE);
                 StandEntity st = user.roundabout$getStand();
-                if (st != null && st.is(ent)){
+                if (st != null && st.is(ent)) {
                     return true;
                 }
             }
-            if (ent instanceof LivingEntity LE){
-                StandUser user = ((StandUser)LE);
+            if (ent instanceof LivingEntity LE) {
+                StandUser user = ((StandUser) LE);
                 StandEntity st = user.roundabout$getStand();
-                if (st != null && st.is(checkAgaist)){
+                if (st != null && st.is(checkAgaist)) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     public static boolean isDreadBook(ItemStack stack) {
-        if (stack != null && !stack.isEmpty() && stack.is(Items.BOOK)){
+        if (stack != null && !stack.isEmpty() && stack.is(Items.BOOK)) {
             Component name = stack.getHoverName();
             String str = name.getString().toLowerCase();
-            if ("cha'garoth".equals(str) || "chagaroth".equals(str) || "dreadbeast".equals(str)){
+            if ("cha'garoth".equals(str) || "chagaroth".equals(str) || "dreadbeast".equals(str)) {
                 return true;
             }
         }
         return false;
     }
+
     public static float controlledLerpAngleDegrees(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,1);
-        return start + (delta * Mth.wrapDegrees(end - start))*multiplier;
-    }public static float controlledLerpRadianDegrees(float delta, float start, float end, float multiplier) {
-        delta = Math.min(delta,1);
-        return start + (delta * wrapRadians(end - start))*multiplier;
+        delta = Math.min(delta, 1);
+        return start + (delta * Mth.wrapDegrees(end - start)) * multiplier;
     }
+
+    public static float controlledLerpRadianDegrees(float delta, float start, float end, float multiplier) {
+        delta = Math.min(delta, 1);
+        return start + (delta * wrapRadians(end - start)) * multiplier;
+    }
+
     public static final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(20.0);
     public static final TargetingConditions followTargetting = TargetingConditions.forCombat().range(50.0);
-    public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0).ignoreInvisibilityTesting();
+    public static final TargetingConditions plsWorkTargetting = TargetingConditions.forCombat().range(20.0)
+            .ignoreInvisibilityTesting();
 
     public static double getWorthyOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-        || mob instanceof JojoNPC|| mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)){
+        if ((isBossMob(mob)
+                && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
+                || mob instanceof JojoNPC || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
     }
-    public static boolean getIfMobIsAttacking(Mob mb){
-        for (WrappedGoal wrappedGoal : ((IMob)mb).roundabout$getGoalSelector().getAvailableGoals()) {
+
+    public static boolean getIfMobIsAttacking(Mob mb) {
+        for (WrappedGoal wrappedGoal : ((IMob) mb).roundabout$getGoalSelector().getAvailableGoals()) {
             Goal goal = wrappedGoal.getGoal();
 
             // Check if it's a melee or ranged attack goal
@@ -797,43 +850,53 @@ public class MainUtil {
         }
         return true;
     }
+
     public static double getStandUserOdds(Mob mob) {
-        if ((isBossMob(mob) && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC|| mob instanceof CloneEntity || mob instanceof ZombieAesthetician
-        || isMobStandUserBlacklisted(mob)){
+        if ((isBossMob(mob)
+                && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
+                || mob instanceof JojoNPC || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
+                || isMobStandUserBlacklisted(mob)) {
             return 0;
-        } else if (mob instanceof AbstractVillager){
+        } else if (mob instanceof AbstractVillager) {
             return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserOdds;
     }
+
     public static double getWorthyBreedBonus(Mob mob) {
-        if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
+        if (mob instanceof AbstractVillager) {
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus
+                    * ClientNetworking
+                            .getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
+
     public static double getStandUserBreedBonus(Mob mob) {
-        if (mob instanceof AbstractVillager){
-            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus *ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
+        if (mob instanceof AbstractVillager) {
+            return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus
+                    * ClientNetworking
+                            .getAppropriateConfig().generalStandUserMobSettings.multiplyAboveForVillagerBreeding;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.userAndWorthyBreedingOddsBonus;
     }
-    public static boolean isHumanoid(LivingEntity LE){
+
+    public static boolean isHumanoid(LivingEntity LE) {
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
-        || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
+                || LE instanceof Player || LE instanceof Piglin || LE instanceof CloneEntity
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
 
-    public static boolean isHumanoid2(LivingEntity LE){
+    public static boolean isHumanoid2(LivingEntity LE) {
         return ((LE instanceof Zombie || LE instanceof AbstractSkeleton
                 || LE instanceof Player
                 || LE instanceof JojoNPC) && !LE.isBaby());
 
     }
 
-    public static LivingEntity findClosestEntity(Level level, Vec3 pos, double range, Predicate<LivingEntity> condition) {
+    public static LivingEntity findClosestEntity(Level level, Vec3 pos, double range,
+            Predicate<LivingEntity> condition) {
         List<Entity> EntitiesInRange = genHitbox(level, pos.x, pos.y,
                 pos.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
@@ -841,8 +904,8 @@ public class MainUtil {
         LivingEntity mm = null;
         double distance = -1;
         for (Entity value : hitEntities) {
-            if (value instanceof LivingEntity mb){
-                if (condition.test(mb) && (distance == -1 || mb.distanceToSqr(pos) < distance)){
+            if (value instanceof LivingEntity mb) {
+                if (condition.test(mb) && (distance == -1 || mb.distanceToSqr(pos) < distance)) {
                     mm = mb;
                     distance = mb.distanceToSqr(pos);
                 }
@@ -852,30 +915,31 @@ public class MainUtil {
     }
 
     public static LivingEntity homeOnWorthy(Level level, Vec3 vec3, double range) {
-        return findClosestEntity(level,vec3,range, MainUtil::canGrantStand);
+        return findClosestEntity(level, vec3, range, MainUtil::canGrantStand);
     }
 
-    public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack){
+    public static ItemStack saveToDiscData(LivingEntity ent, ItemStack stack) {
         if (ent instanceof Player PE && !(stack.getItem() instanceof MaxStandDiscItem)) {
             IPlayerEntity IPE = ((IPlayerEntity) PE);
             if (stack.getItem() instanceof StandDiscItem SD && !SD.standPowers.isSecondaryStand()) {
-                stack.getOrCreateTagElement("Memory").putByte("Level", (byte) Math.max(IPE.roundabout$getStandLevel() - 1, 0));
+                stack.getOrCreateTagElement("Memory").putByte("Level",
+                        (byte) Math.max(IPE.roundabout$getStandLevel() - 1, 0));
                 stack.getOrCreateTagElement("Memory").putInt("Experience", IPE.roundabout$getStandExp());
-                stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin",IPE.roundabout$getUnlockedBonusSkin());
+                stack.getOrCreateTagElement("Memory").putBoolean("BonusSkin", IPE.roundabout$getUnlockedBonusSkin());
             }
         }
         if (stack.getItem() instanceof StandDiscItem SD) {
-            ((StandUser)ent).roundabout$getStandPowers().addAdditionalSaveData(stack.getOrCreateTagElement("Memory"));
+            ((StandUser) ent).roundabout$getStandPowers().addAdditionalSaveData(stack.getOrCreateTagElement("Memory"));
         }
         return stack;
     }
 
     public static void handleChangeItem(Player player, byte context, ItemStack stack) {
         if (context == PacketDataIndex.ITEM_SWITCH_MAIN || context == PacketDataIndex.ITEM_SWITCH_SECONDARY) {
-            boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(),stack);
-            if (player.getInventory().contains(stack) || offh){
-                if (stack.getItem() instanceof StandArrowItem){
-                    StandArrowItem.rerollStand(player,offh,stack,context);
+            boolean offh = ItemStack.isSameItemSameTags(player.getOffhandItem(), stack);
+            if (player.getInventory().contains(stack) || offh) {
+                if (stack.getItem() instanceof StandArrowItem) {
+                    StandArrowItem.rerollStand(player, offh, stack, context);
                 }
             }
         }
@@ -893,22 +957,22 @@ public class MainUtil {
                     return;
                 }
 
-
                 if (stack == null || stack.isEmpty() || stack.getItem() instanceof AirItem)
                     return;
 
                 if (!(stack.getItem() instanceof FogBlockItem)) {
-                    Roundabout.LOGGER.warn("Attempted to give player {} item {}, but they failed the check! Justice User: {}",
+                    Roundabout.LOGGER.warn(
+                            "Attempted to give player {} item {}, but they failed the check! Justice User: {}",
                             player.getName().getString(),
                             BuiltInRegistries.ITEM.getKey(stack.getItem()),
-                            (user.roundabout$getStandPowers() instanceof PowersJustice)
-                    );
-                    //sp.connection.disconnect(Component.literal("Exploit Detected"));
+                            (user.roundabout$getStandPowers() instanceof PowersJustice));
+                    // sp.connection.disconnect(Component.literal("Exploit Detected"));
                     return;
                 }
 
                 CompoundTag compoundtag = BlockItem.getBlockEntityData(itemstack);
-                if (!itemstack.isEmpty() && compoundtag != null && compoundtag.contains("x") && compoundtag.contains("y") && compoundtag.contains("z")) {
+                if (!itemstack.isEmpty() && compoundtag != null && compoundtag.contains("x")
+                        && compoundtag.contains("y") && compoundtag.contains("z")) {
                     BlockPos blockpos = BlockEntity.getPosFromTag(compoundtag);
                     if (player.level().isLoaded(blockpos)) {
                         BlockEntity blockentity = player.level().getBlockEntity(blockpos);
@@ -919,13 +983,14 @@ public class MainUtil {
                 }
 
                 boolean flag1 = integer >= 1 && integer <= 45;
-                boolean flag2 = itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty();
+                boolean flag2 = itemstack.isEmpty()
+                        || itemstack.getDamageValue() >= 0 && itemstack.getCount() <= 64 && !itemstack.isEmpty();
                 if (flag1 && flag2) {
                     player.inventoryMenu.getSlot(integer).setByPlayer(itemstack);
                     player.inventoryMenu.broadcastChanges();
                 } else if (flag && flag2) {
-                    if (canAddItem(itemstack,player.getInventory())){
-                        addItem(player,itemstack);
+                    if (canAddItem(itemstack, player.getInventory())) {
+                        addItem(player, itemstack);
                     } else {
                         player.drop(itemstack, true);
                     }
@@ -935,116 +1000,118 @@ public class MainUtil {
         }
     }
 
-
-
-
     public static boolean canAddItem(ItemStack itemStack, Inventory inventory) {
         boolean bl = false;
         for (ItemStack itemStack2 : inventory.items) {
-            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() >= itemStack2.getMaxStackSize())) continue;
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack)
+                    || itemStack2.getCount() >= itemStack2.getMaxStackSize()))
+                continue;
             bl = true;
             break;
         }
         return bl;
     }
 
-    public static boolean isWearingEitherStoneMask(Entity ent){
+    public static boolean isWearingEitherStoneMask(Entity ent) {
         return isWearingStoneMask(ent) || isWearingBloodyStoneMask(ent);
     }
 
-    public static void activateStoneMask(Entity ent){
+    public static void activateStoneMask(Entity ent) {
         if (!ClientNetworking.getAppropriateConfig().vampireSettings.enableStoneMask)
             return;
 
-        if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()){
+        if (ent instanceof LivingEntity LE && !ent.isInWater() && !ent.level().isClientSide()) {
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
-            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())){
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem())) {
 
-                if (ent instanceof Player PE){
+                if (ent instanceof Player PE) {
                     IFatePlayer ifp = (IFatePlayer) PE;
-                    if (FateTypes.isHuman(PE)){
+                    if (FateTypes.isHuman(PE)) {
                         ifp.rdbt$startVampireTransformation(true);
                     }
                 }
                 ItemStack stack2 = ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
-                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+                LE.setItemSlot(EquipmentSlot.HEAD, stack2);
             }
         }
     }
-    //only called at end of transformation
-    public static void popOffStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE){
+
+    // only called at end of transformation
+    public static void popOffStoneMask(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             ItemStack helmet = LE.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet != null && !helmet.isEmpty() && helmet.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+            if (helmet != null && !helmet.isEmpty() && helmet.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())) {
 
-                    Level level = ent.level();
+                Level level = ent.level();
 
-                    // Do nothing if no helmet
-                    if (helmet.isEmpty()) return;
+                // Do nothing if no helmet
+                if (helmet.isEmpty())
+                    return;
 
+                if (!level.isClientSide) {
+                    // Remove the helmet
+                    ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                    // Drop item slightly above the player’s head
+                    Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
+                    ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
 
-                    if (!level.isClientSide) {
-                        // Remove the helmet
-                        ent.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                        // Drop item slightly above the player’s head
-                        Vec3 pos = ent.position().add(0, ent.getBbHeight() * 0.8, 0);
-                        ItemEntity drop = new ItemEntity(level, pos.x, pos.y, pos.z, helmet.copy());
+                    // Give it some small random velocity like a pop effect
+                    drop.setDeltaMovement(
+                            (level.random.nextDouble() - 0.5) * 0.2,
+                            0.3 + level.random.nextDouble() * 0.2,
+                            (level.random.nextDouble() - 0.5) * 0.2);
 
-                        // Give it some small random velocity like a pop effect
-                        drop.setDeltaMovement(
-                                (level.random.nextDouble() - 0.5) * 0.2,
-                                0.3 + level.random.nextDouble() * 0.2,
-                                (level.random.nextDouble() - 0.5) * 0.2
-                        );
-
-                        // Shrink the player's inventory copy only after spawning the entity
-                        helmet.shrink(helmet.getCount());
-                        level.addFreshEntity(drop);
-                    }
+                    // Shrink the player's inventory copy only after spawning the entity
+                    helmet.shrink(helmet.getCount());
+                    level.addFreshEntity(drop);
+                }
 
             }
         }
     }
-    public static void clearStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE){
+
+    public static void clearStoneMask(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             if (FateTypes.isTransforming(LE))
                 return;
 
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
-            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())) {
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
-                LE.setItemSlot(EquipmentSlot.HEAD,stack2);
+                LE.setItemSlot(EquipmentSlot.HEAD, stack2);
             }
 
             stack = LE.getItemBySlot(EquipmentSlot.MAINHAND);
-            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())) {
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
-                LE.setItemSlot(EquipmentSlot.MAINHAND,stack2);
+                LE.setItemSlot(EquipmentSlot.MAINHAND, stack2);
             }
             stack = LE.getItemBySlot(EquipmentSlot.OFFHAND);
-            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())){
+            if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())) {
                 ItemStack stack2 = ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance();
                 stack2.setTag(stack.getTag());
-                LE.setItemSlot(EquipmentSlot.OFFHAND,stack2);
+                LE.setItemSlot(EquipmentSlot.OFFHAND, stack2);
             }
         }
     }
-    public static boolean isWearingStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE){
+
+    public static boolean isWearingStoneMask(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
-            if (stack != null && !stack.isEmpty()){
+            if (stack != null && !stack.isEmpty()) {
                 return stack.is(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem());
             }
         }
         return false;
     }
-    public static boolean isWearingBloodyStoneMask(Entity ent){
-        if (ent instanceof LivingEntity LE){
+
+    public static boolean isWearingBloodyStoneMask(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             ItemStack stack = LE.getItemBySlot(EquipmentSlot.HEAD);
-            if (stack != null && !stack.isEmpty()){
+            if (stack != null && !stack.isEmpty()) {
                 return stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem());
             }
         }
@@ -1062,15 +1129,13 @@ public class MainUtil {
             double xDist,
             double yDist,
             double zDist,
-            double speed
-    ) {
+            double speed) {
         if (level instanceof ServerLevel sl) {
             if (PowerTypes.isErasingTime(self)) {
                 return;
             }
 
-            for (ServerPlayer playerInList :
-                    level.getServer().getPlayerList().getPlayers()) {
+            for (ServerPlayer playerInList : level.getServer().getPlayerList().getPlayers()) {
 
                 if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
                     continue;
@@ -1093,12 +1158,12 @@ public class MainUtil {
                         xDist,
                         yDist,
                         zDist,
-                        speed
-                );
+                        speed);
             }
         }
 
     }
+
     public static <T extends ParticleOptions> void sendParticlesIfPossible(
             Entity self,
             Level level,
@@ -1108,15 +1173,13 @@ public class MainUtil {
             double z,
             double xDist,
             double yDist,
-            double zDist
-    ) {
+            double zDist) {
         if (level instanceof ServerLevel sl) {
             if (PowerTypes.isErasingTime(self)) {
                 return;
             }
 
-            for (ServerPlayer playerInList :
-                    level.getServer().getPlayerList().getPlayers()) {
+            for (ServerPlayer playerInList : level.getServer().getPlayerList().getPlayers()) {
 
                 if (PowerTypes.isInADifferentExistenceNoTE(self, playerInList)) {
                     continue;
@@ -1135,8 +1198,7 @@ public class MainUtil {
                         z,
                         xDist,
                         yDist,
-                        zDist
-                );
+                        zDist);
             }
         } else if (level instanceof ClientLevel cl) {
             if (PowerTypes.isInADifferentExistenceNoTE(self, ClientUtil.getPlayer())) {
@@ -1156,21 +1218,20 @@ public class MainUtil {
                     z,
                     xDist,
                     yDist,
-                    zDist
-            );
+                    zDist);
         }
 
     }
 
-
-    public static boolean confirmIsOre(BlockState state){
+    public static boolean confirmIsOre(BlockState state) {
         return (state.is(ModPacketHandler.PLATFORM_ACCESS.getOreTag()) || state.is(Blocks.ANCIENT_DEBRIS));
     }
-    public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack){
-        StandUser user = ((StandUser)ent);
+
+    public static void extractDiscData(LivingEntity ent, StandDiscItem SD, ItemStack stack) {
+        StandUser user = ((StandUser) ent);
         CompoundTag $$4 = stack.getTagElement("Memory");
         if ($$4 != null) {
-            ((StandUser)ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
+            ((StandUser) ent).roundabout$getStandPowers().readAdditionalSaveData($$4);
             if (SD instanceof MaxStandDiscItem) {
                 if (ent instanceof Player PE) {
                     IPlayerEntity IPE = ((IPlayerEntity) PE);
@@ -1192,7 +1253,7 @@ public class MainUtil {
                             IPE.roundabout$setStandExp(0);
                         }
                     } else {
-                        IPE.roundabout$setStandLevel((byte)1);
+                        IPE.roundabout$setStandLevel((byte) 1);
                         IPE.roundabout$setStandExp(0);
                     }
                     if ($$4.contains("BonusSkin")) {
@@ -1209,23 +1270,25 @@ public class MainUtil {
                 IPE.roundabout$setStandLevel((byte) 1);
                 IPE.roundabout$setStandExp(0);
                 IPE.roundabout$setUnlockedBonusSkin(false);
-            };
+            }
+            ;
             user.roundabout$setStandSkinLight((byte) 0);
             user.roundabout$setIdlePosLight((byte) 0);
         }
 
     }
+
     public static LivingEntity homeOnFlier(Level level, Vec3 vec3, double range, Entity owner) {
         List<Entity> EntitiesInRange = genHitbox(level, vec3.x, vec3.y,
                 vec3.z, range, range, range);
         List<Entity> hitEntities = new ArrayList<>(EntitiesInRange) {
         };
         for (Entity value : hitEntities) {
-            if (value instanceof LivingEntity mb){
-                if ((mb.isFallFlying() || mb instanceof Phantom|| (mb instanceof FallenPhantom fm &&
+            if (value instanceof LivingEntity mb) {
+                if ((mb.isFallFlying() || mb instanceof Phantom || (mb instanceof FallenPhantom fm &&
                         !(fm.getControllingPassenger() != null && owner != null &&
                                 owner.getUUID().equals(fm.getControllingPassenger().getUUID()))))
-                        && !(mb instanceof StandEntity)){
+                        && !(mb instanceof StandEntity)) {
                     if (owner != null && owner.getUUID() == mb.getUUID()) {
                     } else {
                         return mb;
@@ -1237,14 +1300,14 @@ public class MainUtil {
     }
 
     // if splattered vampire blood can resurrect a mob when they die
-    public static boolean canMobResurrectWithBlood(Entity mob){
+    public static boolean canMobResurrectWithBlood(Entity mob) {
         if (mob instanceof Mob mb && (mb.getMobType() == MobType.UNDEAD || mb instanceof ZombieHorse))
             return false;
         return true;
     }
 
     public static boolean getMobBleed(Entity mob) {
-        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters) {
             return false;
         }
 
@@ -1254,19 +1317,23 @@ public class MainUtil {
         if (isWhitelistedRedBlood(mob) || isWhitelistedBlueBlood(mob) || isWhitelistedEnderBlood(mob))
             return true;
 
-        if (mob instanceof LivingEntity){
-            return mob instanceof Zombie || (mob instanceof Animal && !(mob instanceof SkeletonHorse || mob instanceof StrayCatEntity) && !(mob instanceof ZombieHorse))
-                    || mob instanceof Villager || mob instanceof Bat || mob instanceof WaterAnimal || mob instanceof WanderingTrader || mob instanceof Witch
-                    || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player || mob instanceof AbstractPiglin
+        if (mob instanceof LivingEntity) {
+            return mob instanceof Zombie
+                    || (mob instanceof Animal && !(mob instanceof SkeletonHorse || mob instanceof StrayCatEntity)
+                            && !(mob instanceof ZombieHorse))
+                    || mob instanceof Villager || mob instanceof Bat || mob instanceof WaterAnimal
+                    || mob instanceof WanderingTrader || mob instanceof Witch
+                    || mob instanceof AbstractIllager || mob instanceof Creeper || mob instanceof Player
+                    || mob instanceof AbstractPiglin
                     || mob instanceof JojoNPC || mob instanceof Zoglin || mob instanceof Ravager
                     || mob instanceof Spider || mob instanceof EnderDragon || mob instanceof EnderMan;
         }
         return false;
     }
 
-    public static void onDeath(Entity entity, DamageSource source){
-        StandPowers powers = ((StandUser)entity).roundabout$getStandPowers();
-        if (powers != null && powers.isClashing()){
+    public static void onDeath(Entity entity, DamageSource source) {
+        StandPowers powers = ((StandUser) entity).roundabout$getStandPowers();
+        if (powers != null && powers.isClashing()) {
             powers.endClash();
         }
 
@@ -1276,34 +1343,35 @@ public class MainUtil {
             }
         }
         if (source.getEntity() instanceof Player pl) {
-            ((IPowersPlayer) pl).rdbt$getPowers().onKill(entity,source);
-            ((IFatePlayer) pl).rdbt$getFatePowers().onKill(entity,source);
+            ((IPowersPlayer) pl).rdbt$getPowers().onKill(entity, source);
+            ((IFatePlayer) pl).rdbt$getFatePowers().onKill(entity, source);
         }
         if (source.getEntity() instanceof LivingEntity le) {
-            ((StandUser) le).roundabout$getStandPowers().onKill(entity,source);
+            ((StandUser) le).roundabout$getStandPowers().onKill(entity, source);
         }
     }
 
-    public static Vec3 getMobCenter(Entity entity, float centerpercent){
+    public static Vec3 getMobCenter(Entity entity, float centerpercent) {
         Vec3 start = entity.getPosition(1f);
-        Vec3 hitbox = new Vec3(0,entity.getBbHeight()*centerpercent,0);
+        Vec3 hitbox = new Vec3(0, entity.getBbHeight() * centerpercent, 0);
         hitbox = RotationUtil.vecPlayerToWorld(hitbox,
-                ((IGravityEntity)entity).roundabout$getGravityDirection());
+                ((IGravityEntity) entity).roundabout$getGravityDirection());
         return start.add(hitbox);
     }
 
-    public static boolean absolveBlockStateForCombatMode(BlockHitResult blockHitResult, Entity ent){
-        if (blockHitResult != null){
+    public static boolean absolveBlockStateForCombatMode(BlockHitResult blockHitResult, Entity ent) {
+        if (blockHitResult != null) {
             BlockPos blockpos = blockHitResult.getBlockPos();
             BlockState state = ent.level().getBlockState(blockpos);
             Block blk = state.getBlock();
             if ((state.hasBlockEntity() && (ent.level().getBlockEntity(blockpos) instanceof MenuProvider
-            || (ent.level().getBlockEntity(blockpos) instanceof Container))) || ((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
-                    || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock) || (blk instanceof BedBlock)
-                    || (blk instanceof FenceGateBlock))){
+                    || (ent.level().getBlockEntity(blockpos) instanceof Container)))
+                    || ((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
+                            || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock) || (blk instanceof BedBlock)
+                            || (blk instanceof FenceGateBlock))) {
                 return true;
             }
-            if (ent.isCrouching()){
+            if (ent.isCrouching()) {
                 return true;
             }
         }
@@ -1334,12 +1402,12 @@ public class MainUtil {
                     return ItemStack.EMPTY;
                 }
             }
-            if (pl.isUsingItem()){
+            if (pl.isUsingItem()) {
                 return stack;
             }
 
             byte posByte2 = ((IPlayerEntity) pl).roundabout$GetPoseEmote();
-            if (posByte2 == 35){
+            if (posByte2 == 35) {
                 return ItemStack.EMPTY;
             }
 
@@ -1358,62 +1426,71 @@ public class MainUtil {
         return stack;
     }
 
-    public static boolean canFreeze(Entity mob){
-        if (mob instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+    public static boolean canFreeze(Entity mob) {
+        if (mob instanceof LivingEntity LE
+                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
                 PWA.hasStandActive(LE)) {
             return false;
         }
 
         return (!isFreezableMobBlacklisted(mob) && !(mob instanceof Mob mb && isBossMob(mb))
-                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob))
-        &&  !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
-    }
-    public static boolean canDrinkBlood(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
-                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)) &&
-                !(mob instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
-    }
-    public static boolean canDrinkBlood2(Entity mob){
-        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
-                && !(mob != null && ((TimeStop)mob.level()).CanTimeStopEntity(mob)));
+                && !(mob != null && ((TimeStop) mob.level()).CanTimeStopEntity(mob))
+                && !(mob instanceof LivingEntity le && FateTypes.isVampire(le)));
     }
 
-    public static boolean resistsKnockBack(Entity ent){
+    public static boolean canDrinkBlood(Entity mob) {
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop) mob.level()).CanTimeStopEntity(mob)) &&
+                !(mob instanceof Mob mb && ((IMob) mb).roundabout$isVampire()));
+    }
+
+    public static boolean canDrinkBlood2(Entity mob) {
+        return (getMobBleed(mob) && !hasEnderBlood(mob) && mob.isAlive() && !mob.isRemoved()
+                && !(mob != null && ((TimeStop) mob.level()).CanTimeStopEntity(mob)));
+    }
+
+    public static boolean resistsKnockBack(Entity ent) {
         if (ent instanceof LivingEntity LE &&
-                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
-                PW.hasExtendedHeelsForWalking()){
+                ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW &&
+                PW.hasExtendedHeelsForWalking()) {
             return true;
-        }
-        else if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+        } else if (ent instanceof LivingEntity LE
+                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
             return true;
         }
         return false;
     }
-    public static boolean canDrinkBloodFair(Entity ent,Entity drinker){
+
+    public static boolean canDrinkBloodFair(Entity ent, Entity drinker) {
         return canDrinkBlood(ent) && !(ent instanceof Player);
     }
-    public static boolean canPlantBud(Entity ent,Entity drinker){
-        if (isFleshBudBlacklisted(ent)){
+
+    public static boolean canPlantBud(Entity ent, Entity drinker) {
+        if (isFleshBudBlacklisted(ent)) {
             return false;
         }
         return canDrinkBlood2(ent) && !(ent instanceof Player);
     }
-    public static boolean canDrinkBloodCritAggro(Entity ent,Entity drinker){
+
+    public static boolean canDrinkBloodCritAggro(Entity ent, Entity drinker) {
         return !(ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(drinker));
     }
-    public static boolean canDrinkBloodCrit(Entity ent,Entity drinker){
+
+    public static boolean canDrinkBloodCrit(Entity ent, Entity drinker) {
         if (ent instanceof LivingEntity LE && (LE.hasEffect(ModEffects.VAMPIRE_BLOOD)))
             return false;
-        return canDrinkBloodCritAggro(ent,drinker);
+        return canDrinkBloodCritAggro(ent, drinker);
     }
 
-    public static void removeFleshBud(Entity entity){
-        if (entity instanceof LivingEntity LE && entity.level() instanceof ServerLevel sl && ((StandUser)LE).rdbt$getFleshBud() != null){
-            ((StandUser)LE).rdbt$setFleshBud(null);
+    public static void removeFleshBud(Entity entity) {
+        if (entity instanceof LivingEntity LE && entity.level() instanceof ServerLevel sl
+                && ((StandUser) LE).rdbt$getFleshBud() != null) {
+            ((StandUser) LE).rdbt$setFleshBud(null);
             SoundEvent sound = ModSounds.FLESH_BUD_REMOVAL_EVENT;
             entity.level().playSound(null, BlockPos.containing(entity.position()), sound, SoundSource.BLOCKS, 1F, 1F);
 
-            sl.sendParticles(ParticleTypes.CRIT, entity.getEyePosition().x, entity.getEyePosition().y,entity.getEyePosition().z,
+            sl.sendParticles(ParticleTypes.CRIT, entity.getEyePosition().x, entity.getEyePosition().y,
+                    entity.getEyePosition().z,
                     10, 0.5F, 0.5F, 0.5F, 0.4);
         }
     }
@@ -1425,8 +1502,8 @@ public class MainUtil {
         if (level == null)
             return false;
         Vec3 mainVec = new Vec3(0, 0.05, 0);
-        mainVec = RotationUtil.vecPlayerToWorld(mainVec,((IGravityEntity)player).roundabout$getGravityDirection());
-        AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x,mainVec.y,mainVec.z);
+        mainVec = RotationUtil.vecPlayerToWorld(mainVec, ((IGravityEntity) player).roundabout$getGravityDirection());
+        AABB headSpace = player.getBoundingBox().expandTowards(mainVec.x, mainVec.y, mainVec.z);
         boolean blocked = level.getBlockCollisions(player, headSpace)
                 .iterator()
                 .hasNext();
@@ -1434,25 +1511,27 @@ public class MainUtil {
         return blocked;
     }
 
-    public static boolean isUsingMetallica(Entity ent){
-        if (ent instanceof LivingEntity LE && ((StandUser)ent).roundabout$getStandPowers() instanceof PowersMetallica PM){
-            if (PM.hasStandActive(LE)){
+    public static boolean isUsingMetallica(Entity ent) {
+        if (ent instanceof LivingEntity LE
+                && ((StandUser) ent).roundabout$getStandPowers() instanceof PowersMetallica PM) {
+            if (PM.hasStandActive(LE)) {
                 return true;
             }
         }
 
         return false;
     }
-    public static void makeFaceless(Entity entity, int ticks, int power, Entity user){
-        if (entity instanceof LivingEntity LE){
-            if (((LivingEntity)entity).hasEffect(ModEffects.FACELESS)){
-                MobEffectInstance mf = ((LivingEntity)entity).getEffect(ModEffects.FACELESS);
-                if (mf != null && mf.getAmplifier() <= power && mf.getDuration() > ticks){
+
+    public static void makeFaceless(Entity entity, int ticks, int power, Entity user) {
+        if (entity instanceof LivingEntity LE) {
+            if (((LivingEntity) entity).hasEffect(ModEffects.FACELESS)) {
+                MobEffectInstance mf = ((LivingEntity) entity).getEffect(ModEffects.FACELESS);
+                if (mf != null && mf.getAmplifier() <= power && mf.getDuration() > ticks) {
                     return;
                 }
             }
-            ((StandUser)entity).roundabout$setGlow((byte) 1);
-            ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.FACELESS, ticks, power), user);
+            ((StandUser) entity).roundabout$setGlow((byte) 1);
+            ((LivingEntity) entity).addEffect(new MobEffectInstance(ModEffects.FACELESS, ticks, power), user);
         }
     }
 
@@ -1493,7 +1572,7 @@ public class MainUtil {
 
     public static void makeMobBleed(Entity target) {
         if (!(target instanceof LivingEntity LE && FateTypes.hasBloodHunger(LE)) &&
-        getMobBleed(target)) {
+                getMobBleed(target)) {
             int variety = (int) Math.round(Math.random() * 4);
             Block modBlock = ModBlocks.BLOOD_SPLATTER;
             if (MainUtil.hasBlueBlood(target)) {
@@ -1503,28 +1582,35 @@ public class MainUtil {
             }
 
             if (variety != 1) {
-                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0, modBlock.defaultBlockState().
-                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 0,
+                        modBlock.defaultBlockState().setValue(ModBlocks.BLOOD_LEVEL,
+                                Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
             if (variety != 2) {
-                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1, modBlock.defaultBlockState().
-                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, -1,
+                        modBlock.defaultBlockState().setValue(ModBlocks.BLOOD_LEVEL,
+                                Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
             if (variety != 3) {
-                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1, modBlock.defaultBlockState().
-                        setValue(ModBlocks.BLOOD_LEVEL, Integer.valueOf((int) Math.round(Math.random() * 3))));
+                MainUtil.setSplatter(target.level(), target.getOnPos(), (int) Math.floor(Math.random() * 3) - 1, 1,
+                        modBlock.defaultBlockState().setValue(ModBlocks.BLOOD_LEVEL,
+                                Integer.valueOf((int) Math.round(Math.random() * 3))));
             }
         }
     }
-    public static boolean hasBlueBlood(Entity target){
-        if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee || target instanceof Silverfish  || target instanceof Squid){
+
+    public static boolean hasBlueBlood(Entity target) {
+        if (isWhitelistedBlueBlood(target) || target instanceof Spider || target instanceof Bee
+                || target instanceof Silverfish || target instanceof Squid) {
             return true;
         } else {
             return false;
         }
     }
-    public static boolean hasEnderBlood(Entity target){
-        if (isWhitelistedEnderBlood(target) || target instanceof EnderMan || target instanceof Endermite || target instanceof EnderDragon){
+
+    public static boolean hasEnderBlood(Entity target) {
+        if (isWhitelistedEnderBlood(target) || target instanceof EnderMan || target instanceof Endermite
+                || target instanceof EnderDragon) {
             return true;
         } else {
             return false;
@@ -1532,25 +1618,27 @@ public class MainUtil {
     }
 
     private static boolean containsInvalidValues(double $$0, double $$1, double $$2, float $$3, float $$4) {
-        return Double.isNaN($$0) || Double.isNaN($$1) || Double.isNaN($$2) || !Floats.isFinite($$4) || !Floats.isFinite($$3);
+        return Double.isNaN($$0) || Double.isNaN($$1) || Double.isNaN($$2) || !Floats.isFinite($$4)
+                || !Floats.isFinite($$3);
     }
 
     private static double clampHorizontal(double $$0) {
         return Mth.clamp($$0, -3.0E7, 3.0E7);
     }
 
-    public static void updateHairColor(Player player,float red, float green, float blue){
-        if (player != null){
-            IPlayerEntity iplayer = ((IPlayerEntity)player);
+    public static void updateHairColor(Player player, float red, float green, float blue) {
+        if (player != null) {
+            IPlayerEntity iplayer = ((IPlayerEntity) player);
             iplayer.rdbt$setHairColorX(red);
             iplayer.rdbt$setHairColorY(green);
             iplayer.rdbt$setHairColorZ(blue);
         }
     }
-    public static void updateNailColor(Player player,float red, float green, float blue){
-        if (player != null){
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersTusk PT) {
-                PT.setNailColor(red,green,blue);
+
+    public static void updateNailColor(Player player, float red, float green, float blue) {
+        if (player != null) {
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.setNailColor(red, green, blue);
                 PT.saveDiscAndSync();
             }
         }
@@ -1559,9 +1647,10 @@ public class MainUtil {
     private static double clampVertical(double $$0) {
         return Mth.clamp($$0, -2.0E7, 2.0E7);
     }
+
     public static void handleMovePilot(double getX, double getY, double getZ, float getYRot, float getXRot,
-                                       Player player, int entityInt,
-                                       double velocityX, double velocityY, double velocityZ) {
+            Player player, int entityInt,
+            double velocityX, double velocityY, double velocityZ) {
         Entity entity = player.level().getEntity(entityInt);
         if (entity != null) {
             if (containsInvalidValues(getX, getY, getZ, getYRot, getXRot)
@@ -1598,30 +1687,33 @@ public class MainUtil {
             }
         }
     }
-    public static boolean canCauseRejection(Entity ent){
-        if (ent instanceof Mob ME){
-            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
+
+    public static boolean canCauseRejection(Entity ent) {
+        if (ent instanceof Mob ME) {
+            if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)) {
+                if (((StandUser) ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)) {
                     return true;
                 }
             }
-        } else if (ent instanceof Player PE){
-            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand && ((StandUser) PE).roundabout$getStandDisc().isEmpty()){
+        } else if (ent instanceof Player PE) {
+            if (PE.experienceLevel < ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand
+                    && ((StandUser) PE).roundabout$getStandDisc().isEmpty()) {
                 return true;
             }
         }
         return false;
     }
-    public static boolean canGrantStand(Entity ent){
-        if (ent instanceof Mob ME){
-            if (!(ME instanceof StandEntity)){
-                if (((StandUser)ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)){
-                    return ((IMob)ME).roundabout$isWorthy();
+
+    public static boolean canGrantStand(Entity ent) {
+        if (ent instanceof Mob ME) {
+            if (!(ME instanceof StandEntity)) {
+                if (((StandUser) ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)) {
+                    return ((IMob) ME).roundabout$isWorthy();
                 }
             }
-        } else if (ent instanceof Player PL){
-            if (ClientNetworking.getAppropriateConfig().itemSettings.canAwakenOtherPlayersWithArrows){
-                if (((StandUser)PL).roundabout$getStandDisc().isEmpty()){
+        } else if (ent instanceof Player PL) {
+            if (ClientNetworking.getAppropriateConfig().itemSettings.canAwakenOtherPlayersWithArrows) {
+                if (((StandUser) PL).roundabout$getStandDisc().isEmpty()) {
                     return PL.experienceLevel >= ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
                 }
             }
@@ -1629,23 +1721,23 @@ public class MainUtil {
         return false;
     }
 
-    public static float gasDamageMultiplier(){
-        return (float) (0.78F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage *0.01));
+    public static float gasDamageMultiplier() {
+        return (float) (0.78F * (ClientNetworking.getAppropriateConfig().itemSettings.gasolineExplosionDamage * 0.01));
     }
 
-    public static void makeBleed(Entity entity, int level, int ticks, Entity source){
-        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters){
+    public static void makeBleed(Entity entity, int level, int ticks, Entity source) {
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.disableBleedingAndBloodSplatters) {
             return;
         }
-        if (getMobBleed(entity)){
+        if (getMobBleed(entity)) {
 
-            //Bleed now removes strength but only on apply
+            // Bleed now removes strength but only on apply
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.bleedRemovesStrength) {
                 ((LivingEntity) entity).removeEffect(MobEffects.DAMAGE_BOOST);
             }
 
             if (!hasEnderBlood(entity) && !hasBlueBlood(entity)) {
-                //Bleeding activates stone masks
+                // Bleeding activates stone masks
                 if (source != null && isWearingEitherStoneMask(source) && source.distanceTo(entity) < 5) {
                     activateStoneMask(source);
                 } else if (isWearingStoneMask(entity)) {
@@ -1654,13 +1746,13 @@ public class MainUtil {
 
             }
 
-            ((StandUser)entity).roundabout$setBleedLevel(level);
-            ((LivingEntity)entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
+            ((StandUser) entity).roundabout$setBleedLevel(level);
+            ((LivingEntity) entity).addEffect(new MobEffectInstance(ModEffects.BLEED, ticks, level), source);
         }
     }
 
-    /**Imported Chrosu fruit TP code for ender blood*/
-    public static void randomChorusTeleport(LivingEntity entity){
+    /** Imported Chrosu fruit TP code for ender blood */
+    public static void randomChorusTeleport(LivingEntity entity) {
         Level $$1 = entity.level();
         if (!$$1.isClientSide) {
             double $$4 = entity.getX();
@@ -1672,19 +1764,19 @@ public class MainUtil {
                 double $$9 = Mth.clamp(
                         entity.getY() + (double) (entity.getRandom().nextInt(16) - 8),
                         (double) $$1.getMinBuildHeight(),
-                        (double) ($$1.getMinBuildHeight() + ((ServerLevel) $$1).getLogicalHeight() - 1)
-                );
+                        (double) ($$1.getMinBuildHeight() + ((ServerLevel) $$1).getLogicalHeight() - 1));
                 double $$10 = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 16.0;
                 if (entity.isPassenger()) {
                     entity.stopRiding();
                 }
 
                 Vec3 $$11 = entity.position();
-                if (randomTeleport(entity,$$8, $$9, $$10, true)) {
+                if (randomTeleport(entity, $$8, $$9, $$10, true)) {
                     entity.hurtMarked = true;
                     entity.hasImpulse = true;
                     $$1.gameEvent(GameEvent.TELEPORT, $$11, GameEvent.Context.of(entity));
-                    SoundEvent $$12 = entity instanceof Fox ? SoundEvents.FOX_TELEPORT : SoundEvents.CHORUS_FRUIT_TELEPORT;
+                    SoundEvent $$12 = entity instanceof Fox ? SoundEvents.FOX_TELEPORT
+                            : SoundEvents.CHORUS_FRUIT_TELEPORT;
                     $$1.playSound(null, $$4, $$5, $$6, $$12, SoundSource.PLAYERS, 1.0F, 1.0F);
                     entity.playSound($$12, 1.0F, 1.0F);
                     break;
@@ -1717,8 +1809,8 @@ public class MainUtil {
 
             if ($$11) {
                 ent.teleportTo($$0, $$7, $$2);
-                if (ent instanceof Player){
-                    ((IEntityAndData)ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
+                if (ent instanceof Player) {
+                    ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
                 }
                 if ($$10.noCollision(ent) && !$$10.containsAnyLiquid(ent.getBoundingBox())) {
                     $$8 = true;
@@ -1728,24 +1820,25 @@ public class MainUtil {
 
         if (!$$8) {
             ent.teleportTo($$4, $$5, $$6);
-            if (ent instanceof Player){
-                ((IEntityAndData)ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
+            if (ent instanceof Player) {
+                ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3($$0, $$7, $$2));
             }
             return false;
         } else {
             if ($$3) {
-                $$10.broadcastEntityEvent(ent, (byte)46);
+                $$10.broadcastEntityEvent(ent, (byte) 46);
             }
 
             if (ent instanceof PathfinderMob) {
-                ((PathfinderMob)ent).getNavigation().stop();
+                ((PathfinderMob) ent).getNavigation().stop();
             }
 
             return true;
         }
     }
 
-    public static List<Entity> genHitbox(Level level, double startX, double startY, double startZ, double radiusX, double radiusY, double radiusZ) {
+    public static List<Entity> genHitbox(Level level, double startX, double startY, double startZ, double radiusX,
+            double radiusY, double radiusZ) {
         double k = Mth.floor(startX - radiusX);
         double l = Mth.floor(startX + radiusX);
         double r = (startY - radiusY);
@@ -1755,23 +1848,26 @@ public class MainUtil {
         return level.getEntities(null, new AABB(k, r, t, l, s, u));
     }
 
-    public static List<Entity> hitbox(List<Entity> entities){
+    public static List<Entity> hitbox(List<Entity> entities) {
 
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || value instanceof StandEntity){
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive()
+                    || value instanceof StandEntity) {
                 hitEntities.remove(value);
             }
         }
         return hitEntities;
     }
-    public static List<Entity> hitboxGas(List<Entity> entities){
+
+    public static List<Entity> hitboxGas(List<Entity> entities) {
 
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if ((!value.showVehicleHealth() && !(value instanceof GasolineCanEntity)) || value.isInvulnerable() || !value.isAlive()){
+            if ((!value.showVehicleHealth() && !(value instanceof GasolineCanEntity)) || value.isInvulnerable()
+                    || !value.isAlive()) {
                 hitEntities.remove(value);
             }
         }
@@ -1787,7 +1883,7 @@ public class MainUtil {
         if (f < -180.0f) {
             f += 360.0f;
         }
-        return (f*Mth.DEG_TO_RAD);
+        return (f * Mth.DEG_TO_RAD);
     }
 
     public static Vec3 getMoveRelative(float $$0, Vec3 $$1, Entity ett) {
@@ -1799,15 +1895,16 @@ public class MainUtil {
         if ($$3 < 1.0E-7) {
             return Vec3.ZERO;
         } else {
-            Vec3 $$4 = ($$3 > 1.0 ? $$0.normalize() : $$0).scale((double)$$1);
+            Vec3 $$4 = ($$3 > 1.0 ? $$0.normalize() : $$0).scale((double) $$1);
             float $$5 = Mth.sin($$2 * (float) (Math.PI / 180.0));
             float $$6 = Mth.cos($$2 * (float) (Math.PI / 180.0));
-            return new Vec3($$4.x * (double)$$6 - $$4.z * (double)$$5, $$4.y, $$4.z * (double)$$6 + $$4.x * (double)$$5);
+            return new Vec3($$4.x * (double) $$6 - $$4.z * (double) $$5, $$4.y,
+                    $$4.z * (double) $$6 + $$4.x * (double) $$5);
         }
     }
 
-    public static double fixAngle(float angle){
-       return (Math.abs(angle) % 360);
+    public static double fixAngle(float angle) {
+        return (Math.abs(angle) % 360);
     }
 
     public static void slowTarget(Entity e, float p) {
@@ -1816,8 +1913,13 @@ public class MainUtil {
         e.hasImpulse = true;
     }
 
-    public static void takeDeterminedKnockbackWithY(Entity user, Entity target, float knockbackStrength){
-        float xRot; if (!target.onGround()){xRot=user.getXRot();} else {xRot = -15;}
+    public static void takeDeterminedKnockbackWithY(Entity user, Entity target, float knockbackStrength) {
+        float xRot;
+        if (!target.onGround()) {
+            xRot = user.getXRot();
+        } else {
+            xRot = -15;
+        }
         takeKnockbackWithY(target, knockbackStrength,
                 Mth.sin(user.getYRot() * ((float) Math.PI / 180)),
                 Mth.sin(xRot * ((float) Math.PI / 180)),
@@ -1825,14 +1927,14 @@ public class MainUtil {
 
     }
 
-
-    public static boolean inWater(BlockState state){
+    public static boolean inWater(BlockState state) {
         if (state.is(Blocks.WATER)) {
             return true;
         }
         return false;
     }
-    public static boolean isDangerous(Level level, BlockPos pos, BlockState state, boolean isStrider){
+
+    public static boolean isDangerous(Level level, BlockPos pos, BlockState state, boolean isStrider) {
         if (state.is(Blocks.COBWEB)
                 || (state.is(Blocks.FIRE) && !isStrider)
                 || (state.is(Blocks.SOUL_FIRE) && !isStrider)
@@ -1851,13 +1953,12 @@ public class MainUtil {
         return false;
     }
 
-
     public static float getNetheriteMultiplier(Entity entity) {
-        if (entity instanceof Player pl){
+        if (entity instanceof Player pl) {
             float resistance = (float) pl
                     .getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 
-            if (resistance <= 0){
+            if (resistance <= 0) {
                 return 1;
             }
 
@@ -1865,29 +1966,34 @@ public class MainUtil {
         }
         return 1;
     }
+
     public static void takeKnockback(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength
+                * (float) (1.0 - ((LivingEntity) entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
-        if (MainUtil.isKnockbackImmune(entity)){
+        if (MainUtil.isKnockbackImmune(entity)) {
             return;
         }
-        takeUnresistableKnockback(entity,strength,x,y,z);
+        takeUnresistableKnockback(entity, strength, x, y, z);
     }
+
     public static void takeKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
 
-        if (entity instanceof LivingEntity && (strength * (float) (1.0 - ((LivingEntity)entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity && (strength
+                * (float) (1.0 - ((LivingEntity) entity).getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
 
-        if (MainUtil.isKnockbackImmune(entity)){
+        if (MainUtil.isKnockbackImmune(entity)) {
             return;
         }
 
-        takeUnresistableKnockbackWithY(entity,strength,x,y,z);
+        takeUnresistableKnockbackWithY(entity, strength, x, y, z);
     }
+
     public static void takeNoKnockback(Entity entity) {
         entity.hurtMarked = true;
         entity.setDeltaMovement(0,
@@ -1899,56 +2005,62 @@ public class MainUtil {
     public static void takeUnresistableKnockback(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        entity.setDeltaMovement(- vec3d2.x,
+        entity.setDeltaMovement(-vec3d2.x,
                 0.4F,
-                - vec3d2.z);
+                -vec3d2.z);
         entity.hasImpulse = true;
     }
+
     public static void takeUnresistableKnockbackWithY(Entity entity, double strength, double x, double y, double z) {
         entity.hurtMarked = true;
 
         Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        entity.setDeltaMovement(- vec3d2.x,
+        entity.setDeltaMovement(-vec3d2.x,
                 -vec3d2.y,
-                - vec3d2.z);
-        entity.hasImpulse = true;
-    }
-    public static void takeLiteralUnresistableKnockbackWithY(Entity entity,  double x, double y, double z) {
-        entity.hurtMarked = true;
-        entity.setDeltaMovement(x,
-                y,
-               z);
+                -vec3d2.z);
         entity.hasImpulse = true;
     }
 
-    public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z, float yBias, float yscalp) {
+    public static void takeLiteralUnresistableKnockbackWithY(Entity entity, double x, double y, double z) {
         entity.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        Vec3 vec3d3 = vec3d2.multiply(yBias,1-yscalp,yBias);
-        entity.setDeltaMovement(- vec3d3.x,
-                -vec3d3.y,
-                - vec3d3.z);
-        entity.hasImpulse = true;
-    }
-    public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z, float yBias) {
-        entity.hurtMarked = true;
-        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
-        Vec3 vec3d3 = vec3d2.multiply(yBias,1,yBias);
-        entity.setDeltaMovement(- vec3d3.x,
-                -vec3d3.y,
-                - vec3d3.z);
-        entity.hasImpulse = true;
-    }
-    public static void takeUnresistableKnockbackWithY2(Entity entity,double x, double y, double z) {
-        entity.hurtMarked = true;
-        entity.setDeltaMovement( x,
+        entity.setDeltaMovement(x,
                 y,
                 z);
         entity.hasImpulse = true;
     }
 
-    public static void ejectInFront(StandEntity stand){
-        if (stand.getFirstPassenger() != null){
+    public static void takeUnresistableKnockbackWithYBias2(Entity entity, double strength, double x, double y, double z,
+            float yBias, float yscalp) {
+        entity.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        Vec3 vec3d3 = vec3d2.multiply(yBias, 1 - yscalp, yBias);
+        entity.setDeltaMovement(-vec3d3.x,
+                -vec3d3.y,
+                -vec3d3.z);
+        entity.hasImpulse = true;
+    }
+
+    public static void takeUnresistableKnockbackWithYBias(Entity entity, double strength, double x, double y, double z,
+            float yBias) {
+        entity.hurtMarked = true;
+        Vec3 vec3d2 = new Vec3(x, y, z).normalize().scale(strength);
+        Vec3 vec3d3 = vec3d2.multiply(yBias, 1, yBias);
+        entity.setDeltaMovement(-vec3d3.x,
+                -vec3d3.y,
+                -vec3d3.z);
+        entity.hasImpulse = true;
+    }
+
+    public static void takeUnresistableKnockbackWithY2(Entity entity, double x, double y, double z) {
+        entity.hurtMarked = true;
+        entity.setDeltaMovement(x,
+                y,
+                z);
+        entity.hasImpulse = true;
+    }
+
+    public static void ejectInFront(StandEntity stand) {
+        if (stand.getFirstPassenger() != null) {
             Entity entity = stand.getFirstPassenger();
             stand.ejectPassengers();
             LivingEntity user = stand.getUser();
@@ -1956,7 +2068,8 @@ public class MainUtil {
                 if (entity.level().dimensionTypeId() == user.level().dimensionTypeId()) {
                     if (user.position().distanceTo(entity.position()) < 50) {
                         if (entity instanceof Player ent) {
-                            ((IEntityAndData) ent).roundabout$setQVec2Params(new Vec3(user.getX(), user.getY(), user.getZ()));
+                            ((IEntityAndData) ent)
+                                    .roundabout$setQVec2Params(new Vec3(user.getX(), user.getY(), user.getZ()));
                         } else {
                             entity.dismountTo(user.getX(), user.getY(), user.getZ());
                         }
@@ -1967,24 +2080,28 @@ public class MainUtil {
     }
 
     public static void knockback(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d *(1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity le
+                && (d * (1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
-        if (MainUtil.isKnockbackImmune(entity)){
+        if (MainUtil.isKnockbackImmune(entity)) {
             return;
         }
 
         entity.hasImpulse = true;
         Vec3 vec3 = entity.getDeltaMovement();
         Vec3 vec32 = new Vec3(e, 0.0, f).normalize().scale(d);
-        entity.setDeltaMovement(vec3.x / 2.0 - vec32.x, entity.onGround() ? Math.min(0.4, vec3.y / 2.0 + d) : vec3.y, vec3.z / 2.0 - vec32.z);
+        entity.setDeltaMovement(vec3.x / 2.0 - vec32.x, entity.onGround() ? Math.min(0.4, vec3.y / 2.0 + d) : vec3.y,
+                vec3.z / 2.0 - vec32.z);
         entity.hurtMarked = true;
     }
+
     public static void knockbackWithoutBumpUp(Entity entity, double d, double e, double f) {
-        if (entity instanceof LivingEntity le && (d * (1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
+        if (entity instanceof LivingEntity le
+                && (d * (1.0 - le.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE))) <= 0.0) {
             return;
         }
-        if (MainUtil.isKnockbackImmune(entity)){
+        if (MainUtil.isKnockbackImmune(entity)) {
             return;
         }
         entity.hasImpulse = true;
@@ -2006,48 +2123,72 @@ public class MainUtil {
         return angle * (Math.PI / 180);
     }
 
-    public static double cheapDistanceTo(double x,double y,double z,double x2,double y2,double z2){
+    public static double cheapDistanceTo(double x, double y, double z, double x2, double y2, double z2) {
         double mdist = 0;
-        double cdist = Math.abs(x-x2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(y-y2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(z-z2);
-        if (cdist > mdist){mdist=cdist;}
-        return mdist;
-    }
-    public static double timeStopDistanceTo(double x,double y,double z,double x2,double y2, double z2){
-        if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().timeStopSettings != null
-        && ClientNetworking.getAppropriateConfig().timeStopSettings.usePreciseMath){
-            return new Vec3(x,y,z).distanceTo(new Vec3(x2,y2,z2));
+        double cdist = Math.abs(x - x2);
+        if (cdist > mdist) {
+            mdist = cdist;
         }
-        return cheapDistanceTo(x,y,z,x2,y2,z2);
-    }
-    public static double cheapDistanceTo2(double x,double z,double x2,double z2){
-        double mdist = 0;
-        double cdist = Math.abs(x-x2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(z-z2);
-        if (cdist > mdist){mdist=cdist;}
-        return mdist;
-    }
-    public static int cheapDistanceTo2(int x,int z,int x2,int z2){
-        int mdist = 0;
-        int cdist = Math.abs(x-x2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(z-z2);
-        if (cdist > mdist){mdist=cdist;}
+        cdist = Math.abs(y - y2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        cdist = Math.abs(z - z2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
         return mdist;
     }
 
-    public static double cheapDistanceTo(int x,int y,int z,int x2,int y2,int z2){
+    public static double timeStopDistanceTo(double x, double y, double z, double x2, double y2, double z2) {
+        if (ClientNetworking.getAppropriateConfig() != null
+                && ClientNetworking.getAppropriateConfig().timeStopSettings != null
+                && ClientNetworking.getAppropriateConfig().timeStopSettings.usePreciseMath) {
+            return new Vec3(x, y, z).distanceTo(new Vec3(x2, y2, z2));
+        }
+        return cheapDistanceTo(x, y, z, x2, y2, z2);
+    }
+
+    public static double cheapDistanceTo2(double x, double z, double x2, double z2) {
         double mdist = 0;
-        double cdist = Math.abs(x-x2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(y-y2);
-        if (cdist > mdist){mdist=cdist;}
-        cdist = Math.abs(z-z2);
-        if (cdist > mdist){mdist=cdist;}
+        double cdist = Math.abs(x - x2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        cdist = Math.abs(z - z2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        return mdist;
+    }
+
+    public static int cheapDistanceTo2(int x, int z, int x2, int z2) {
+        int mdist = 0;
+        int cdist = Math.abs(x - x2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        cdist = Math.abs(z - z2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        return mdist;
+    }
+
+    public static double cheapDistanceTo(int x, int y, int z, int x2, int y2, int z2) {
+        double mdist = 0;
+        double cdist = Math.abs(x - x2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        cdist = Math.abs(y - y2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
+        cdist = Math.abs(z - z2);
+        if (cdist > mdist) {
+            mdist = cdist;
+        }
         return mdist;
     }
 
@@ -2069,89 +2210,100 @@ public class MainUtil {
         }
         return false;
     }
-    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
-    //It doesn't need the block hit to be on a claim
-    public static boolean canPlaceOnClaim(Player player,BlockHitResult blockHit){
-        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
 
-        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+    // Couldn't find better wording but this tests if you're on claimed land that
+    // isn't yours
+    // It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player, BlockHitResult blockHit) {
+        // Seems counterintuitive but most abilities have their own ways of handling
+        // this, so I'll just make it return True.
+
+        if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
             return true;
 
         }
-        boolean isLiquid = (!player.level().getBlockState(blockHit.getBlockPos()).isSolid() && !player.level().getBlockState(blockHit.getBlockPos()).isAir());
+        boolean isLiquid = (!player.level().getBlockState(blockHit.getBlockPos()).isSolid()
+                && !player.level().getBlockState(blockHit.getBlockPos()).isAir());
         BlockState replace = player.level().getBlockState(blockHit.getBlockPos());
-        //Always correct, but for some reason I need to put it as a conditional
-        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
-            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),barrier.getDefaultInstance(),blockHit));
+        // Always correct, but for some reason I need to put it as a conditional
+        if (Blocks.BARRIER.asItem() instanceof BlockItem barrier) {
+            barrier.place(
+                    new BlockPlaceContext(player, player.getUsedItemHand(), barrier.getDefaultInstance(), blockHit));
             BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
-            player.level().destroyBlock(placedBPos,false,player);
-            if(!player.level().getBlockState(placedBPos).isAir()){
-                player.level().removeBlock(placedBPos,false);
-                if(isLiquid) {
+            player.level().destroyBlock(placedBPos, false, player);
+            if (!player.level().getBlockState(placedBPos).isAir()) {
+                player.level().removeBlock(placedBPos, false);
+                if (isLiquid) {
                     player.level().setBlock(blockHit.getBlockPos(), replace, 0);
                 }
                 return false;
             }
-            if(isLiquid) {
+            if (isLiquid) {
                 player.level().setBlock(blockHit.getBlockPos(), replace, 0);
             }
         }
         return true;
     }
 
-    //Couldn't find better wording but this tests if you're on claimed land that isn't yours
-    //It doesn't need the block hit to be on a claim
-    public static boolean canPlaceOnClaim(Player player,BlockPos pos){
-        //Seems counterintuitive but most abilities have their own ways of handling this, so I'll just make it return True.
+    // Couldn't find better wording but this tests if you're on claimed land that
+    // isn't yours
+    // It doesn't need the block hit to be on a claim
+    public static boolean canPlaceOnClaim(Player player, BlockPos pos) {
+        // Seems counterintuitive but most abilities have their own ways of handling
+        // this, so I'll just make it return True.
 
-        if(!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims || !MainUtil.getIsGamemodeApproriateForGrief(player)){
+        if (!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
+                || !MainUtil.getIsGamemodeApproriateForGrief(player)) {
             return true;
 
         }
         boolean isLiquid = (!player.level().getBlockState(pos).isSolid() && !player.level().getBlockState(pos).isAir());
         BlockState replace = player.level().getBlockState(pos);
-        //Always correct, but for some reason I need to put it as a conditional
+        // Always correct, but for some reason I need to put it as a conditional
 
         BlockHitResult blockHit = new BlockHitResult(
-                new Vec3(pos.getX(),pos.getY(),pos.getZ()), Direction.UP,
-                pos,false);
-        if(Blocks.BARRIER.asItem() instanceof  BlockItem barrier){
-            barrier.place(new BlockPlaceContext(player,player.getUsedItemHand(),
-                    barrier.getDefaultInstance(),blockHit));
+                new Vec3(pos.getX(), pos.getY(), pos.getZ()), Direction.UP,
+                pos, false);
+        if (Blocks.BARRIER.asItem() instanceof BlockItem barrier) {
+            barrier.place(new BlockPlaceContext(player, player.getUsedItemHand(),
+                    barrier.getDefaultInstance(), blockHit));
             BlockPos placedBPos = blockHit.getBlockPos().relative(blockHit.getDirection());
 
-            player.level().destroyBlock(placedBPos,false,player);
-            if(!player.level().getBlockState(placedBPos).isAir()){
-                player.level().removeBlock(placedBPos,false);
-                if(isLiquid) {
+            player.level().destroyBlock(placedBPos, false, player);
+            if (!player.level().getBlockState(placedBPos).isAir()) {
+                player.level().removeBlock(placedBPos, false);
+                if (isLiquid) {
                     player.level().setBlock(blockHit.getBlockPos(), replace, 0);
                 }
                 return false;
             }
-            if(isLiquid) {
+            if (isLiquid) {
                 player.level().setBlock(blockHit.getBlockPos(), replace, 0);
             }
         }
         return true;
     }
 
-    public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius, int blockRadius, float power){
-        if (!level.isClientSide){
+    public static void gasExplode(BlockState blk, ServerLevel level, BlockPos blkPos, int iteration, int hitRadius,
+            int blockRadius, float power) {
+        if (!level.isClientSide) {
             level.sendParticles(ParticleTypes.LAVA, blkPos.getX() + 0.5, blkPos.getY(), blkPos.getZ() + 0.5,
                     2, 0.0, 0.0, 0.0, 0.4);
-            if (iteration == 0){
+            if (iteration == 0) {
                 SoundEvent $$6 = ModSounds.GASOLINE_EXPLOSION_EVENT;
                 level.playSound(null, blkPos, $$6, SoundSource.BLOCKS, 10F, 1F);
-                level.sendParticles(ParticleTypes.EXPLOSION, blkPos.getX()+0.5F, blkPos.getY()+0.5F, blkPos.getZ()+0.5F,
+                level.sendParticles(ParticleTypes.EXPLOSION, blkPos.getX() + 0.5F, blkPos.getY() + 0.5F,
+                        blkPos.getZ() + 0.5F,
                         1, 0.1, 0.1, 0.1, 0.2);
             }
 
             List<Entity> entities = MainUtil.hitboxGas(MainUtil.genHitbox(level, blkPos.getX(), blkPos.getY(),
-                    blkPos.getZ(), hitRadius, hitRadius+1, hitRadius));
+                    blkPos.getZ(), hitRadius, hitRadius + 1, hitRadius));
             if (!entities.isEmpty()) {
-                DamageSource $$5 = ModDamageTypes.of(level,ModDamageTypes.GASOLINE_EXPLOSION);
+                DamageSource $$5 = ModDamageTypes.of(level, ModDamageTypes.GASOLINE_EXPLOSION);
                 for (Entity value : entities) {
-                    if (value instanceof GasolineCanEntity){
+                    if (value instanceof GasolineCanEntity) {
                         value.remove(Entity.RemovalReason.DISCARDED);
                         gasExplode(null, level, value.getOnPos(), iteration + 1, 1, blockRadius, power);
                         break;
@@ -2159,23 +2311,25 @@ public class MainUtil {
                     if (!value.fireImmune()) {
                         value.setSecondsOnFire(15);
                         float np = power;
-                        if (value instanceof LivingEntity){
-                            ((StandUser)value).roundabout$setGasolineTime(-1);
-                            if (value instanceof Player){
+                        if (value instanceof LivingEntity) {
+                            ((StandUser) value).roundabout$setGasolineTime(-1);
+                            if (value instanceof Player) {
                                 np *= 0.31F;
                             }
-                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, (LivingEntity) value);
-                            np = (float) (np * (1-(f*0.045)));
+                            int f = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
+                                    (LivingEntity) value);
+                            np = (float) (np * (1 - (f * 0.045)));
                         }
-                        if (value instanceof LivingEntity && ((LivingEntity)value).hasEffect(MobEffects.FIRE_RESISTANCE)){
-                            MobEffectInstance instance = ((LivingEntity)value).getEffect(MobEffects.FIRE_RESISTANCE);
-                            ((LivingEntity)value).removeEffect(MobEffects.FIRE_RESISTANCE);
-                            np*=1.1f;
-                            value.hurt($$5,np);
-                            ((LivingEntity)value).addEffect(instance);
+                        if (value instanceof LivingEntity
+                                && ((LivingEntity) value).hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                            MobEffectInstance instance = ((LivingEntity) value).getEffect(MobEffects.FIRE_RESISTANCE);
+                            ((LivingEntity) value).removeEffect(MobEffects.FIRE_RESISTANCE);
+                            np *= 1.1f;
+                            value.hurt($$5, np);
+                            ((LivingEntity) value).addEffect(instance);
                         } else {
-                            np*=1.1f;
-                            value.hurt($$5,np);
+                            np *= 1.1f;
+                            value.hurt($$5, np);
                         }
                     }
                 }
@@ -2191,13 +2345,13 @@ public class MainUtil {
             for (int x = -blockRadius; x < blockRadius; x++) {
                 for (int y = -blockRadius; y < blockRadius; y++) {
                     for (int z = -blockRadius; z < blockRadius; z++) {
-                        BlockPos blkPo2 = new BlockPos(blkPos.getX() + x, blkPos.getY()+y, blkPos.getZ() + z);
+                        BlockPos blkPo2 = new BlockPos(blkPos.getX() + x, blkPos.getY() + y, blkPos.getZ() + z);
                         BlockState state = level.getBlockState(blkPo2);
                         Block block = state.getBlock();
 
                         if (block instanceof GasolineBlock) {
                             boolean ignited = state.getValue(GasolineBlock.IGNITED);
-                            if (!ignited){
+                            if (!ignited) {
                                 state = state.setValue(GasolineBlock.IGNITED, Boolean.valueOf(true));
                                 level.setBlock(blkPo2, state, 1);
                                 gasList.add(blkPo2);
@@ -2214,12 +2368,10 @@ public class MainUtil {
             }
         }
 
-
     }
 
-
-    /**For new Locacaca mechanics and rendering*/
-    public static LivingEntity getStoneTarget(Level $$0, LivingEntity $$1){
+    /** For new Locacaca mechanics and rendering */
+    public static LivingEntity getStoneTarget(Level $$0, LivingEntity $$1) {
         List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox($$0, $$1.getX(), $$1.getY(),
                 $$1.getZ(), 5, 5, 5));
         double maxDistance = 5;
@@ -2228,13 +2380,12 @@ public class MainUtil {
             for (Entity value : entities) {
                 if (value instanceof LivingEntity && value.getUUID() != $$1.getUUID() && !(value instanceof StandEntity)
                         && !((PowerTypes.isExistentiallyElsewhere($$1) || PowerTypes.isExistentiallyElsewhere(value))
-                        &&
-                        !PowerTypes.isExistentiallyElsewhereTogether($$1,value))
+                                &&
+                                !PowerTypes.isExistentiallyElsewhereTogether($$1, value))
                         && !(value instanceof FallenMob)
-                        && (MainUtil.isActuallyALivingEntityNoCap(value))
-                ) {
+                        && (MainUtil.isActuallyALivingEntityNoCap(value))) {
                     double distance = value.position().distanceTo($$1.position());
-                    if (distance <= maxDistance && ((StandUser)value).roundabout$getLocacacaCurse() < 0){
+                    if (distance <= maxDistance && ((StandUser) value).roundabout$getLocacacaCurse() < 0) {
                         target = (LivingEntity) value;
                         maxDistance = distance;
                     }
@@ -2245,34 +2396,38 @@ public class MainUtil {
         return target;
     }
 
-    public static Entity getTargetEntity(LivingEntity User, float distance){
-        return getTargetEntity(User,distance,25);
+    public static Entity getTargetEntity(LivingEntity User, float distance) {
+        return getTargetEntity(User, distance, 25);
     }
-    public static Entity getTargetEntity(LivingEntity User, float distance, int angle){
-        /*First, attempts to hit what you are looking at*/
-            getDistanceOut(User, distance, false);
-        Entity targetEntity = rayCastEntity(User,distance);
-        /*If that fails, attempts to hit the nearest entity in a spherical radius in front of you*/
+
+    public static Entity getTargetEntity(LivingEntity User, float distance, int angle) {
+        /* First, attempts to hit what you are looking at */
+        getDistanceOut(User, distance, false);
+        Entity targetEntity = rayCastEntity(User, distance);
+        /*
+         * If that fails, attempts to hit the nearest entity in a spherical radius in
+         * front of you
+         */
         if (targetEntity == null) {
-            float halfReach = (float) (distance*0.5);
+            float halfReach = (float) (distance * 0.5);
             Vec3 pointVec = DamageHandler.getRayPoint(User, halfReach);
             targetEntity = AttackHitboxNear(User, GrabHitbox(User, DamageHandler.genHitbox(User, pointVec.x, pointVec.y,
-                    pointVec.z, halfReach, halfReach, halfReach), distance, angle),distance);
+                    pointVec.z, halfReach, halfReach, halfReach), distance, angle), distance);
         }
 
-        if (targetEntity instanceof EnderDragonPart EDP){
+        if (targetEntity instanceof EnderDragonPart EDP) {
             targetEntity = EDP.parentMob;
         }
-        if (PowerTypes.isInADifferentExistenceNoTE(User,targetEntity)){
+        if (PowerTypes.isInADifferentExistenceNoTE(User, targetEntity)) {
             targetEntity = null;
         }
         return targetEntity;
     }
 
-    public static float getDistanceOut(LivingEntity entity, float range, boolean offset){
+    public static float getDistanceOut(LivingEntity entity, float range, boolean offset) {
         float distanceFront = getRayDistance(entity, range);
         if (offset) {
-            Entity targetEntity = rayCastEntity(entity,range);
+            Entity targetEntity = rayCastEntity(entity, range);
             if (targetEntity != null && targetEntity.distanceTo(entity) < distanceFront) {
                 distanceFront = targetEntity.distanceTo(entity);
             }
@@ -2282,23 +2437,23 @@ public class MainUtil {
         return distanceFront;
     }
 
-    public static float getRayDistance(LivingEntity entity, float range){
+    public static float getRayDistance(LivingEntity entity, float range) {
         Vec3 vec3d = entity.getEyePosition(0);
         Vec3 vec3d2 = entity.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        HitResult blockHit = entity.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
-        if (blockHit.getType() != HitResult.Type.MISS){
+        HitResult blockHit = entity.level()
+                .clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity));
+        if (blockHit.getType() != HitResult.Type.MISS) {
             return Mth.sqrt((float) entity.distanceToSqr(blockHit.getLocation()));
         }
         return range;
     }
 
-
-    public static boolean isThrownBlockItem(Item item){
-        if (item instanceof BlockItem){
-            Block blk = ((BlockItem)item).getBlock();
+    public static boolean isThrownBlockItem(Item item) {
+        if (item instanceof BlockItem) {
+            Block blk = ((BlockItem) item).getBlock();
             if (item instanceof ItemNameBlockItem || blk instanceof BushBlock
-                    || blk instanceof WebBlock  || blk instanceof BarbedWireBundleBlock
+                    || blk instanceof WebBlock || blk instanceof BarbedWireBundleBlock
                     || blk instanceof TorchBlock
                     || blk instanceof FrogspawnBlock
                     || blk instanceof CauldronBlock
@@ -2320,7 +2475,7 @@ public class MainUtil {
                     || blk instanceof RodBlock
                     || blk instanceof HorizontalDirectionalBlock
                     || blk instanceof FleshBlock
-                    || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))){
+                    || (blk instanceof SimpleWaterloggedBlock && !(blk instanceof LeavesBlock))) {
                 return false;
             }
             return true;
@@ -2329,35 +2484,40 @@ public class MainUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static boolean tryPlaceBlock(Entity ent, BlockPos pos){
+    public static boolean tryPlaceBlock(Entity ent, BlockPos pos) {
         return tryPlaceBlock(ent, pos, false);
     }
 
     @SuppressWarnings("deprecation")
-    public static boolean tryPlaceBlock(Entity ent, BlockPos pos, boolean liquid){
+    public static boolean tryPlaceBlock(Entity ent, BlockPos pos, boolean liquid) {
         if (ent != null && !ent.level().isClientSide()) {
             BlockState state = ent.level().getBlockState(pos);
-            if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief(ent) && (!state.liquid() || liquid) &&
-                    ent.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
-                    !((ent instanceof Player PL &&
-                            (PL.blockActionRestricted(ent.level(), pos, ((ServerPlayer)
-                                    ent).gameMode.getGameModeForPlayer()))) ||
-                            (ent instanceof Player && !ent.level().mayInteract(((Player) ent), pos))))) {
+            if (state.isAir()
+                    || (state.canBeReplaced() && getIsGamemodeApproriateForGrief(ent) && (!state.liquid() || liquid) &&
+                            ent.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                            !((ent instanceof Player PL &&
+                                    (PL.blockActionRestricted(ent.level(), pos,
+                                            ((ServerPlayer) ent).gameMode.getGameModeForPlayer())))
+                                    ||
+                                    (ent instanceof Player && !ent.level().mayInteract(((Player) ent), pos))))) {
                 return true;
             }
         }
         return false;
     }
 
-    public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, int angle){
+    public static List<Entity> GrabHitbox(LivingEntity User, List<Entity> entities, float maxDistance, int angle) {
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
         for (Entity value : entities) {
-            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive() || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
-            || (User instanceof StandEntity SE && SE.getUser() != null &&  SE.getUser().isPassenger() && SE.getUser().getVehicle().getUUID() == value.getUUID())){
+            if (!value.showVehicleHealth() || value.isInvulnerable() || !value.isAlive()
+                    || (User.isPassenger() && User.getVehicle().getUUID() == value.getUUID())
+                    || (User instanceof StandEntity SE && SE.getUser() != null && SE.getUser().isPassenger()
+                            && SE.getUser().getVehicle().getUUID() == value.getUUID())) {
                 hitEntities.remove(value);
             } else {
-                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot()%360f)) <= angle && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)){
+                if (!(angleDistance(getLookAtEntityYaw(User, value), (User.getYHeadRot() % 360f)) <= angle
+                        && angleDistance(getLookAtEntityPitch(User, value), User.getXRot()) <= angle)) {
                     hitEntities.remove(value);
                 }
             }
@@ -2365,11 +2525,11 @@ public class MainUtil {
         return hitEntities;
     }
 
-    public static int getTargetEntityId(LivingEntity User, float distance){
-        return getTargetEntityId(User,distance,25);
+    public static int getTargetEntityId(LivingEntity User, float distance) {
+        return getTargetEntityId(User, distance, 25);
     }
 
-    public static int getTargetEntityId(LivingEntity User, float distance, int angle){
+    public static int getTargetEntityId(LivingEntity User, float distance, int angle) {
         Entity targetEntity = getTargetEntity(User, distance, angle);
         int id;
         if (targetEntity != null) {
@@ -2382,17 +2542,21 @@ public class MainUtil {
 
     // damage types which shouldn't be normally blocked at all
     public static boolean isSpecialDamage(DamageSource source) {
-        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)
+        return source.is(ModDamageTypes.GO_BEYOND) || source.is(DamageTypes.FELL_OUT_OF_WORLD)
+                || source.is(DamageTypes.GENERIC_KILL)
                 || source.is(ModDamageTypes.D4C_COLLISION);
     }
 
-    public static boolean isStandDamage(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND) || sauce.is(ModDamageTypes.STAR_FINGER)
-                || sauce.is(ModDamageTypes.STAND_RUSH)|| sauce.is(ModDamageTypes.CROSSFIRE)|| sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
+    public static boolean isStandDamage(DamageSource sauce) {
+        if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.PENETRATING_STAND)
+                || sauce.is(ModDamageTypes.STAR_FINGER)
+                || sauce.is(ModDamageTypes.STAND_RUSH) || sauce.is(ModDamageTypes.CROSSFIRE)
+                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)
                 || sauce.is(ModDamageTypes.GO_BEYOND)
                 || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.CHESS_STRIKE)
-                || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)
+                || sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION)
+                || sauce.is(ModDamageTypes.CORPSE_ARROW)
                 || sauce.is(ModDamageTypes.MELTING)
                 || sauce.is(ModDamageTypes.HEEL_SPIKE)
                 || sauce.is(ModDamageTypes.CREAM_VOID_BALL)
@@ -2400,55 +2564,58 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
                 || sauce.is(ModDamageTypes.KQ_EXPLOSION)
-                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
-            return true;
-        }
-        return false;
-    }
-    public static boolean isCorpseDamage(DamageSource sauce){
-        if (sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION) || sauce.is(ModDamageTypes.CORPSE_ARROW)){
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)) {
             return true;
         }
         return false;
     }
 
+    public static boolean isCorpseDamage(DamageSource sauce) {
+        if (sauce.is(ModDamageTypes.CORPSE) || sauce.is(ModDamageTypes.CORPSE_EXPLOSION)
+                || sauce.is(ModDamageTypes.CORPSE_ARROW)) {
+            return true;
+        }
+        return false;
+    }
 
-    public static boolean getReducedDamage(Entity entity){
+    public static boolean getReducedDamage(Entity entity) {
         return (entity instanceof Player || entity instanceof StandEntity ||
-                ((entity instanceof LivingEntity LE && !((StandUser)LE).roundabout$getStandDisc().isEmpty()) &&
-                        ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers)
-        );
+                ((entity instanceof LivingEntity LE && !((StandUser) LE).roundabout$getStandDisc().isEmpty()) &&
+                        ClientNetworking
+                                .getAppropriateConfig().generalStandUserMobSettings.standUserMobsTakePlayerDamageMultipliers));
     }
 
-    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target){
+    public static boolean isArmorBypassingButNotShieldBypassing(DamageSource sauce, Entity target) {
         if (sauce.is(ModDamageTypes.STAND) || sauce.is(ModDamageTypes.CORPSE)
                 || sauce.is(ModDamageTypes.RIPPER_EYES)
                 || sauce.is(ModDamageTypes.STAND_BRAWL)
                 || sauce.is(ModDamageTypes.VAMPIRE) || sauce.is(ModDamageTypes.HAMON) ||
                 (sauce.is(ModDamageTypes.MARTIAL_ARTS) && getReducedDamage(target))
-                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND)  || sauce.is(ModDamageTypes.HEEL_SPIKE)  ||
-                sauce.is(ModDamageTypes.CORPSE_ARROW) ||  sauce.is(ModDamageTypes.STAND_RUSH) ||  sauce.is(ModDamageTypes.CROSSFIRE) ||
-                sauce.is(ModDamageTypes.CORPSE_EXPLOSION) ) {
+                || sauce.is(ModDamageTypes.EXPLOSIVE_STAND) || sauce.is(ModDamageTypes.HEEL_SPIKE) ||
+                sauce.is(ModDamageTypes.CORPSE_ARROW) || sauce.is(ModDamageTypes.STAND_RUSH)
+                || sauce.is(ModDamageTypes.CROSSFIRE) ||
+                sauce.is(ModDamageTypes.CORPSE_EXPLOSION)) {
             return true;
         }
         return false;
     }
 
-
-    /**Returns the vertical angle between two mobs in degrees*/
+    /** Returns the vertical angle between two mobs in degrees */
     public static float getLookAtEntityPitch(Entity user, Entity targetEntity) {
         double f;
         double d = targetEntity.getEyePosition().x - user.getEyePosition().x;
         double e = targetEntity.getEyePosition().z - user.getEyePosition().z;
         if (targetEntity instanceof LivingEntity) {
-            LivingEntity livingEntity = (LivingEntity)targetEntity;
+            LivingEntity livingEntity = (LivingEntity) targetEntity;
             f = livingEntity.getEyePosition().y - user.getEyePosition().y;
         } else {
-            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0 - user.getEyePosition().y;
+            f = (targetEntity.getBoundingBox().minY + targetEntity.getBoundingBox().maxY) / 2.0
+                    - user.getEyePosition().y;
         }
         double g = Math.sqrt(d * d + e * e);
-        return (float)(-(Mth.atan2(f, g) * 57.2957763671875));
+        return (float) (-(Mth.atan2(f, g) * 57.2957763671875));
     }
+
     public static Vec2 getRotationsBetween(Vec3 from, Vec3 to) {
         Vec3 delta = to.subtract(from);
         double dx = delta.x;
@@ -2463,7 +2630,7 @@ public class MainUtil {
         return new Vec2(xRot, yRot); // Vec2 is (xRot, yRot)
     }
 
-    public static boolean isDestructible(Level level, BlockPos pos, BlockState state){
+    public static boolean isDestructible(Level level, BlockPos pos, BlockState state) {
         if (confirmIsOre(state) || state.hasBlockEntity())
             return false;
         float hardness = state.getDestroySpeed(level, pos);
@@ -2472,7 +2639,8 @@ public class MainUtil {
         }
         return false;
     }
-    public static boolean isDestructible2(Level level, BlockPos pos, BlockState state){
+
+    public static boolean isDestructible2(Level level, BlockPos pos, BlockState state) {
         float hardness = state.getDestroySpeed(level, pos);
         if (hardness >= 0 && hardness < 50) {
             return true;
@@ -2480,43 +2648,45 @@ public class MainUtil {
         return false;
     }
 
-    /**Returns the horizontal angle between two mobs in degrees*/
+    /** Returns the horizontal angle between two mobs in degrees */
     public static float getLookAtEntityYaw(Entity user, Entity targetEntity) {
         double d = targetEntity.getX() - user.getX();
         double e = targetEntity.getZ() - user.getZ();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+        return (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
+
     public static float getLookAtEntityYawWithAngle(Vec3 user, Entity targetEntity) {
         double d = targetEntity.getX() - user.x();
         double e = targetEntity.getZ() - user.z();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+        return (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
+
     public static float getLookAtEntityYawWithAngles(Vec3 user, Vec3 target) {
         double d = target.x() - user.x();
         double e = target.z() - user.z();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+        return (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
+
     public static float getLookAtEntityEyeYawWithAngle(Vec3 user, Entity targetEntity) {
         double d = targetEntity.getEyePosition().x() - user.x();
         double e = targetEntity.getEyePosition().z() - user.z();
-        return (float)(Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
+        return (float) (Mth.atan2(e, d) * 57.2957763671875) - 90.0f;
     }
 
     public static float angleDistance(float alpha, float beta) {
-        float phi = Math.abs(beta - alpha) % 360;       // This is either the distance or 360 - distance
+        float phi = Math.abs(beta - alpha) % 360; // This is either the distance or 360 - distance
         float distance = phi > 180 ? 360 - phi : phi;
         return distance;
     }
 
-    /**Creative players should only be rewound by themselves*/
-    public static boolean canRewindInTime(Entity ent, Entity rewinder){
+    /** Creative players should only be rewound by themselves */
+    public static boolean canRewindInTime(Entity ent, Entity rewinder) {
         if (!ent.isRemoved() && ent.isAlive()) {
             if (PowerTypes.isExistentiallyElsewhere(ent) && !PowerTypes.isExistentiallyElsewhereTogether(
-                    ent,rewinder
-            )){
+                    ent, rewinder)) {
                 return false;
             }
-            if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)){
+            if ((ent instanceof Player PE && PE.isCreative()) && rewinder != null && !rewinder.is(ent)) {
                 return false;
             }
             if (ent instanceof ArmorStand || ent instanceof Painting || ent instanceof RoundaboutPainting)
@@ -2526,71 +2696,86 @@ public class MainUtil {
         return false;
     }
 
-    public static boolean canHaveSightTaken(LivingEntity LE){
-        if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin){
+    public static boolean canHaveSightTaken(LivingEntity LE) {
+        if (LE instanceof Sniffer || LE instanceof Bat || LE instanceof Dolphin) {
             return false;
         }
 
-        if (LE instanceof Mob mb && ((IMob)mb).roundabout$getSightProtectionTicks() > 0){
+        if (LE instanceof Mob mb && ((IMob) mb).roundabout$getSightProtectionTicks() > 0) {
             return false;
         }
 
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseSight);
     }
 
-    /**Is it a potion effect that should not be easily discarded or plundered, or has special particles*/
-    public static boolean isSpecialEffect(MobEffectInstance value){
+    /**
+     * Is it a potion effect that should not be easily discarded or plundered, or
+     * has special particles
+     */
+    public static boolean isSpecialEffect(MobEffectInstance value) {
         return isSpecialEffect(value.getEffect());
     }
-    public static boolean isSpecialEffect(MobEffect value){
+
+    public static boolean isSpecialEffect(MobEffect value) {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
-                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING) || value.equals(ModEffects.MOLD);
+                value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.MOLD);
     }
-    public static boolean hidesPotionEffectSwirl(MobEffect value){
-        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.FACELESS)
+
+    public static boolean hidesPotionEffectSwirl(MobEffect value) {
+        return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
+                || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }
 
-
-    public static boolean isKnockbackResilient(LivingEntity LE){
-        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+    public static boolean isKnockbackResilient(LivingEntity LE) {
+        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()) {
             return true;
         }
-        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
             return true;
         }
         return false;
     }
-    public static boolean canHaveFrictionTaken(LivingEntity LE){
-        if (LE.onClimbable()){
+
+    public static boolean canHaveFrictionTaken(LivingEntity LE) {
+        if (LE.onClimbable()) {
             return false;
         }
-        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()){
+        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && PW.hasExtendedHeelsForWalking()) {
             return false;
         }
-        if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
             return false;
         }
         return !(isBossMob(LE) && ClientNetworking.getAppropriateConfig().softAndWetSettings.bossesCannotLoseFriction);
     }
-    public static boolean canBeScoopedUpInBubble(LivingEntity LE){
-        return !(isBossMob(LE)) && LE.getBbWidth() < ClientNetworking.getAppropriateConfig().softAndWetSettings.widthOfMobBubbleMobsStolen && LE.getBbHeight() < ClientNetworking.getAppropriateConfig().softAndWetSettings.sizeOfMobBubbleMobsStolen && !(LE.getVehicle() instanceof SoftAndWetPlunderBubbleEntity);
+
+    public static boolean canBeScoopedUpInBubble(LivingEntity LE) {
+        return !(isBossMob(LE)) && LE
+                .getBbWidth() < ClientNetworking.getAppropriateConfig().softAndWetSettings.widthOfMobBubbleMobsStolen
+                && LE.getBbHeight() < ClientNetworking
+                        .getAppropriateConfig().softAndWetSettings.sizeOfMobBubbleMobsStolen
+                && !(LE.getVehicle() instanceof SoftAndWetPlunderBubbleEntity);
     }
 
-    /**No Armor Stands*/
-    public static boolean isActuallyALivingEntityNoCap(Entity LE){
-        if (LE instanceof KingCrimsonProjectionEntity){
+    /** No Armor Stands */
+    public static boolean isActuallyALivingEntityNoCap(Entity LE) {
+        if (LE instanceof KingCrimsonProjectionEntity) {
             return false;
         }
         return LE instanceof Mob || LE instanceof Player;
     }
+
     public static HitResult getHitResultOnMoveVector(Entity $$0, Predicate<Entity> $$1) {
         Vec3 $$2 = $$0.getDeltaMovement();
         Level $$3 = $$0.level();
@@ -2598,14 +2783,15 @@ public class MainUtil {
         return getHitResult($$4, $$0, $$1, $$2, $$3);
     }
 
-    public static BlockHitResult getAheadVec(Entity entity,float distOut){
+    public static BlockHitResult getAheadVec(Entity entity, float distOut) {
         Vec3 vec3d = entity.getEyePosition(1f);
         Vec3 vec3d2 = entity.getViewVector(1f);
         return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
                 vec3d2.y * distOut, vec3d2.z * distOut), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 entity));
     }
-    public static BlockHitResult getAheadVecRender(Entity entity,float distOut, float rendertick){
+
+    public static BlockHitResult getAheadVecRender(Entity entity, float distOut, float rendertick) {
         Vec3 vec3d = entity.getEyePosition(rendertick);
         Vec3 vec3d2 = entity.getViewVector(1f);
         return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
@@ -2613,72 +2799,82 @@ public class MainUtil {
                 entity));
     }
 
-    /**Generate pointer on block or entity position*/
-    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range){
-        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
-        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
+    /** Generate pointer on block or entity position */
+    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range) {
+        EntityHitResult targetEntity = rayCastEntityHitResult(source, range);
+        if (targetEntity != null && targetEntity.getEntity() != null
+                && canActuallyHit(source, targetEntity.getEntity())) {
             return targetEntity.getLocation();
         }
 
         Vec3 vec3d = source.getEyePosition(0);
         Vec3 vec3d2 = source.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+        BlockHitResult blockHit = source.level()
+                .clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, source));
         return blockHit.getLocation();
 
     }
-    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range, float distance){
-        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
-        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
+
+    public static Vec3 getRaytracePointOnMobOrBlock(Entity source, float range, float distance) {
+        EntityHitResult targetEntity = rayCastEntityHitResult(source, range);
+        if (targetEntity != null && targetEntity.getEntity() != null
+                && canActuallyHit(source, targetEntity.getEntity())) {
             return targetEntity.getLocation();
         }
 
         Vec3 vec3d = source.getEyePosition(0);
         Vec3 vec3d2 = source.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
-        return blockHit.getLocation().relative(blockHit.getDirection(),distance);
+        BlockHitResult blockHit = source.level()
+                .clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, source));
+        return blockHit.getLocation().relative(blockHit.getDirection(), distance);
 
     }
-    public static Vec3 getRaytracePointOnMobOrBlockIfNotUp(Entity source, float range, float distance){
-        EntityHitResult targetEntity = rayCastEntityHitResult(source,range);
-        if (targetEntity != null && targetEntity.getEntity() != null && canActuallyHit(source,targetEntity.getEntity())){
+
+    public static Vec3 getRaytracePointOnMobOrBlockIfNotUp(Entity source, float range, float distance) {
+        EntityHitResult targetEntity = rayCastEntityHitResult(source, range);
+        if (targetEntity != null && targetEntity.getEntity() != null
+                && canActuallyHit(source, targetEntity.getEntity())) {
             return targetEntity.getLocation();
         }
 
         Vec3 vec3d = source.getEyePosition(0);
         Vec3 vec3d2 = source.getViewVector(0);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * range, vec3d2.y * range, vec3d2.z * range);
-        BlockHitResult blockHit = source.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,source));
+        BlockHitResult blockHit = source.level()
+                .clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, source));
 
         if (blockHit.getType().equals(HitResult.Type.MISS))
             return null;
 
         if (blockHit.getDirection().equals(Direction.UP))
             return blockHit.getLocation();
-        Vec3 vec= new Vec3(blockHit.getBlockPos().getX(),blockHit.getBlockPos().getY(),blockHit.getBlockPos().getZ());
-        vec = vec.add(0.5f,0.5f,0.5f).relative(blockHit.getDirection(),0.5).relative(blockHit.getDirection(),distance);
+        Vec3 vec = new Vec3(blockHit.getBlockPos().getX(), blockHit.getBlockPos().getY(),
+                blockHit.getBlockPos().getZ());
+        vec = vec.add(0.5f, 0.5f, 0.5f).relative(blockHit.getDirection(), 0.5).relative(blockHit.getDirection(),
+                distance);
         return vec;
 
     }
 
-    public static float hasModifiedPartialVisibility(Entity entity){
+    public static float hasModifiedPartialVisibility(Entity entity) {
         float basis = 1F;
-        if (getEntityIsTrulyInvisible(entity)){
-            basis *=0.4F;
+        if (getEntityIsTrulyInvisible(entity)) {
+            basis *= 0.4F;
         }
         return basis;
     }
 
-    public static boolean allowThruWalls(Entity entity){
+    public static boolean allowThruWalls(Entity entity) {
         if (MainUtil.isBossMob(entity) &&
                 !ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses)
             return false;
         return ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxes;
     }
 
-    //Walls corners and doors check
-    public static boolean canActuallyHitInvolved2(Entity self, Entity entity){
+    // Walls corners and doors check
+    public static boolean canActuallyHitInvolved2(Entity self, Entity entity) {
         Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
         Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
 
@@ -2687,8 +2883,7 @@ public class MainUtil {
                 to,
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                self
-        ));
+                self));
         boolean isBlocked = result.getType() != HitResult.Type.MISS &&
                 result.getLocation().distanceTo(from) < to.distanceTo(from);
 
@@ -2700,11 +2895,9 @@ public class MainUtil {
                 to2,
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                self
-        ));
+                self));
         boolean isBlocked2 = result2.getType() != HitResult.Type.MISS &&
                 result2.getLocation().distanceTo(from2) < to2.distanceTo(from2);
-
 
         Vec3 from3 = new Vec3(entity.getX(), entity.getY(), entity.getZ()); // your position
         Vec3 to3 = self.getEyePosition(1.0F); // where the entity's eyes are
@@ -2714,30 +2907,30 @@ public class MainUtil {
                 to2,
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                self
-        ));
+                self));
         boolean isBlocked3 = result3.getType() != HitResult.Type.MISS &&
                 result3.getLocation().distanceTo(from3) < to3.distanceTo(from3);
 
         return !isBlocked || !isBlocked2 || !isBlocked3;
     }
-    //Walls corners and doors check
-    public static boolean canActuallyHitInvolved(Entity self, Entity entity){
-        if (entity instanceof SoftAndWetPlunderBubbleEntity){
+
+    // Walls corners and doors check
+    public static boolean canActuallyHitInvolved(Entity self, Entity entity) {
+        if (entity instanceof SoftAndWetPlunderBubbleEntity) {
             return false;
         }
-        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
+        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners) {
             return true;
         }
 
-        if (self == null){
+        if (self == null) {
             return false;
         }
-        if (entity == null){
+        if (entity == null) {
             return false;
         }
-        if (self instanceof LivingEntity LE){
-            if (LE.hasLineOfSight(entity)){
+        if (self instanceof LivingEntity LE) {
+            if (LE.hasLineOfSight(entity)) {
                 return true;
             }
             return false;
@@ -2745,34 +2938,37 @@ public class MainUtil {
         return true;
     }
 
-    public static boolean canActuallyHit(Entity self, Entity entity){
-//        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
-//            return true;
-//        }
-//        Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
-//        Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
-//
-//        BlockHitResult result = self.level().clip(new ClipContext(
-//                from,
-//                to,
-//                ClipContext.Block.COLLIDER,
-//                ClipContext.Fluid.NONE,
-//                self
-//        ));
-//        boolean isBlocked = result.getType() != HitResult.Type.MISS &&
-//                result.getLocation().distanceTo(from) < to.distanceTo(from);
+    public static boolean canActuallyHit(Entity self, Entity entity) {
+        // if
+        // (ClientNetworking.getAppropriateConfig().miscellaneousSettings.generalDetectionGoThroughDoorsAndCorners){
+        // return true;
+        // }
+        // Vec3 from = new Vec3(self.getX(), self.getY(), self.getZ()); // your position
+        // Vec3 to = entity.getEyePosition(1.0F); // where the entity's eyes are
+        //
+        // BlockHitResult result = self.level().clip(new ClipContext(
+        // from,
+        // to,
+        // ClipContext.Block.COLLIDER,
+        // ClipContext.Fluid.NONE,
+        // self
+        // ));
+        // boolean isBlocked = result.getType() != HitResult.Type.MISS &&
+        // result.getLocation().distanceTo(from) < to.distanceTo(from);
         // return !isBlocked
-        return canActuallyHitInvolved(self,entity);
+        return canActuallyHitInvolved(self, entity);
     }
-    public static boolean isStandPickable(Entity entity){
-        if (entity instanceof SoftAndWetPlunderBubbleEntity sbe){
-            if (entity.level().isClientSide() && ClientUtil.getPlayer() != null && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
+
+    public static boolean isStandPickable(Entity entity) {
+        if (entity instanceof SoftAndWetPlunderBubbleEntity sbe) {
+            if (entity.level().isClientSide() && ClientUtil.getPlayer() != null
+                    && ClientUtil.getPlayer().getId() == sbe.getUserID()) {
                 return false;
             } else {
                 return false;
-                //return sbe.getActivated() && !sbe.isPopPlunderBubbble();
+                // return sbe.getActivated() && !sbe.isPopPlunderBubbble();
             }
-        } else if (entity instanceof EncasementBubbleEntity  || entity instanceof ParallelChestEntity){
+        } else if (entity instanceof EncasementBubbleEntity || entity instanceof ParallelChestEntity) {
             return false;
         }
         return entity.isPickable();
@@ -2785,7 +2981,8 @@ public class MainUtil {
             $$5 = $$6.getLocation();
         }
 
-        HitResult $$7 = getEntityHitResult($$4, $$1, $$0, $$5, $$1.getBoundingBox().expandTowards($$3).inflate(1.5), $$2);
+        HitResult $$7 = getEntityHitResult($$4, $$1, $$0, $$5, $$1.getBoundingBox().expandTowards($$3).inflate(1.5),
+                $$2);
         if ($$7 != null) {
             $$6 = $$7;
         }
@@ -2794,12 +2991,13 @@ public class MainUtil {
     }
 
     @Nullable
-    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4, Predicate<Entity> $$5, float $$6) {
+    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4,
+            Predicate<Entity> $$5, float $$6) {
         double $$7 = Double.MAX_VALUE;
         Entity $$8 = null;
 
         for (Entity $$9 : $$0.getEntities($$1, $$4, $$5)) {
-            AABB $$10 = $$9.getBoundingBox().inflate((double)$$6);
+            AABB $$10 = $$9.getBoundingBox().inflate((double) $$6);
             Optional<Vec3> $$11 = $$10.clip($$2, $$3);
             if ($$11.isPresent()) {
                 double $$12 = $$2.distanceToSqr($$11.get());
@@ -2812,19 +3010,23 @@ public class MainUtil {
 
         return $$8 == null ? null : new EntityHitResult($$8);
     }
+
     @Nullable
-    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4, Predicate<Entity> $$5) {
+    public static EntityHitResult getEntityHitResult(Level $$0, Entity $$1, Vec3 $$2, Vec3 $$3, AABB $$4,
+            Predicate<Entity> $$5) {
         return getEntityHitResult($$0, $$1, $$2, $$3, $$4, $$5, 0.3F);
     }
+
     @Nullable
-    public static EntityHitResult getEntityHitResult(Entity $$0, Vec3 $$1, Vec3 $$2, AABB $$3, Predicate<Entity> $$4, double $$5) {
+    public static EntityHitResult getEntityHitResult(Entity $$0, Vec3 $$1, Vec3 $$2, AABB $$3, Predicate<Entity> $$4,
+            double $$5) {
         Level $$6 = $$0.level();
         double $$7 = $$5;
         Entity $$8 = null;
         Vec3 $$9 = null;
 
         for (Entity $$10 : $$6.getEntities($$0, $$3, $$4)) {
-            AABB $$11 = $$10.getBoundingBox().inflate((double)$$10.getPickRadius());
+            AABB $$11 = $$10.getBoundingBox().inflate((double) $$10.getPickRadius());
             Optional<Vec3> $$12 = $$11.clip($$1, $$2);
             if ($$11.contains($$1)) {
                 if ($$7 >= 0.0) {
@@ -2853,19 +3055,15 @@ public class MainUtil {
         return $$8 == null ? null : new EntityHitResult($$8, $$9);
     }
 
-
-
-
-
-    public static boolean playSoundIfPossible(Entity self, Level level, Entity entity, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+    public static boolean playSoundIfPossible(Entity self, Level level, Entity entity, SoundEvent $$2, SoundSource $$3,
+            float $$4, float $$5) {
         if (!PowerTypes.isErasingTime(self) && entity != null) {
-            if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (PowerTypes.isExistentiallyElsewhere(self)) {
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
-                        for (ServerPlayer playerInList :
-                                sl.getServer().getPlayerList().getPlayers()) {
+                        for (ServerPlayer playerInList : sl.getServer().getPlayerList().getPlayers()) {
 
                             double range = $$2.getRange($$5);
                             double rangeSqr = range * range;
@@ -2885,26 +3083,26 @@ public class MainUtil {
                                     str,
                                     $$4,
                                     $$5,
-                                    entity
-                            );
+                                    entity);
                         }
                     }
                 }
             } else {
-                level.playSound(null,entity,$$2,$$3,$$4,$$5);
+                level.playSound(null, entity, $$2, $$3, $$4, $$5);
             }
             return true;
         }
         return false;
     }
-    public static boolean playSoundToAll(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+
+    public static boolean playSoundToAll(Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2,
+            SoundSource $$3, float $$4, float $$5) {
         if ($$2 != null && level instanceof ServerLevel sl) {
 
             ResourceLocation soundId = $$2.getLocation();
             if (soundId != null) {
                 String str = $$3.name();
-                for (ServerPlayer playerInList :
-                        sl.getServer().getPlayerList().getPlayers()) {
+                for (ServerPlayer playerInList : sl.getServer().getPlayerList().getPlayers()) {
 
                     double range = $$2.getRange($$5);
                     double rangeSqr = range * range;
@@ -2920,8 +3118,7 @@ public class MainUtil {
                             soundId.toString(),
                             str,
                             $$4,
-                            $$5
-                    );
+                            $$5);
                 }
             }
             return true;
@@ -2929,16 +3126,16 @@ public class MainUtil {
         return false;
     }
 
-    public static boolean playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5){
+    public static boolean playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, BlockPos $$1,
+            SoundEvent $$2, SoundSource $$3, float $$4, float $$5) {
         if (!PowerTypes.isErasingTime(self)) {
-            if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (PowerTypes.isExistentiallyElsewhere(self)) {
                 if ($$2 != null && self.level() instanceof ServerLevel sl) {
 
                     ResourceLocation soundId = $$2.getLocation();
                     if (soundId != null) {
                         String str = $$3.name();
-                        for (ServerPlayer playerInList :
-                                sl.getServer().getPlayerList().getPlayers()) {
+                        for (ServerPlayer playerInList : sl.getServer().getPlayerList().getPlayers()) {
 
                             double range = $$2.getRange($$5);
                             double rangeSqr = range * range;
@@ -2960,27 +3157,27 @@ public class MainUtil {
                                     soundId.toString(),
                                     str,
                                     $$4,
-                                    $$5
-                            );
+                                    $$5);
                         }
                     }
                 }
             } else {
-                level.playSound($$0,$$1,$$2,$$3,$$4,$$5);
+                level.playSound($$0, $$1, $$2, $$3, $$4, $$5);
             }
             return true;
         }
         return false;
     }
-    public static void playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, double $$1, double $$2, double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
+
+    public static void playSoundIfPossible(Entity self, Level level, @Nullable Player $$0, double $$1, double $$2,
+            double $$3, SoundEvent $$4, SoundSource $$5, float $$6, float $$7) {
         if (!PowerTypes.isErasingTime(self)) {
-            if (PowerTypes.isExistentiallyElsewhere(self)){
+            if (PowerTypes.isExistentiallyElsewhere(self)) {
                 if ($$4 != null && self.level() instanceof ServerLevel sl) {
                     ResourceLocation soundId = $$4.getLocation();
                     if (soundId != null) {
                         String str = $$5.name();
-                        for (ServerPlayer playerInList :
-                                sl.getServer().getPlayerList().getPlayers()) {
+                        for (ServerPlayer playerInList : sl.getServer().getPlayerList().getPlayers()) {
 
                             double range = $$4.getRange($$7);
                             double rangeSqr = range * range;
@@ -3002,8 +3199,7 @@ public class MainUtil {
                                     soundId.toString(),
                                     str,
                                     $$6,
-                                    $$7
-                            );
+                                    $$7);
                         }
                     }
                 }
@@ -3013,7 +3209,7 @@ public class MainUtil {
         }
     }
 
-    public static void bleedCut(LivingEntity LE, LivingEntity self){
+    public static void bleedCut(LivingEntity LE, LivingEntity self) {
         if (MainUtil.getMobBleed(LE)) {
             SimpleParticleType bloodType = ModParticles.BLOOD;
 
@@ -3027,7 +3223,7 @@ public class MainUtil {
 
                 int particleCount = 9;
                 for (int i = 0; i < particleCount; i++) {
-                    int spread = i - (particleCount/2);
+                    int spread = i - (particleCount / 2);
                     double spreadX = 1.2;
                     double spreadX2 = 0.6;
 
@@ -3035,7 +3231,7 @@ public class MainUtil {
                     double random2 = (Math.random() * spreadX) - spreadX2;
                     double random3 = (Math.random() * spreadX) - spreadX2;
                     double travelX = (self.getEyePosition().x - LE.getEyePosition().x) + random;
-                    double travelY = (self.getEyePosition().y - LE.getEyePosition().y) +2.3D + random2;
+                    double travelY = (self.getEyePosition().y - LE.getEyePosition().y) + 2.3D + random2;
                     double travelZ = (self.getEyePosition().z - LE.getEyePosition().z) + random3;
                     MainUtil.sendParticlesIfPossible(
                             LE,
@@ -3048,48 +3244,50 @@ public class MainUtil {
                             travelX,
                             travelY,
                             travelZ,
-                            0.15
-                    );
+                            0.15);
                 }
 
-                /**This below is more slashlike, I changed my mind*/
-//                for (int i = 0; i < particleCount; i++) {
-//                    int spread = i - (particleCount/2);
-//                    double travelX = (self.getEyePosition().x - LE.getEyePosition().x) + ((double) spread / (double)particleCount)*1.3F;
-//                    double travelY = (self.getEyePosition().y - LE.getEyePosition().y) + (((double) spread / (double)particleCount)*1F)+0.1D;
-//                    double travelZ = (self.getEyePosition().z - LE.getEyePosition().z) + ((double) spread / (double)particleCount)*1.3F;
-//                    MainUtil.sendParticlesIfPossible(
-//                            LE,
-//                            LE.level(),
-//                            bloodType,
-//                            LE.getEyePosition().x,
-//                            LE.getEyePosition().y,
-//                            LE.getEyePosition().z,
-//                            0,
-//                            travelX,
-//                            travelY,
-//                            travelZ,
-//                            0.15
-//                    );
-//                }
+                /** This below is more slashlike, I changed my mind */
+                // for (int i = 0; i < particleCount; i++) {
+                // int spread = i - (particleCount/2);
+                // double travelX = (self.getEyePosition().x - LE.getEyePosition().x) +
+                // ((double) spread / (double)particleCount)*1.3F;
+                // double travelY = (self.getEyePosition().y - LE.getEyePosition().y) +
+                // (((double) spread / (double)particleCount)*1F)+0.1D;
+                // double travelZ = (self.getEyePosition().z - LE.getEyePosition().z) +
+                // ((double) spread / (double)particleCount)*1.3F;
+                // MainUtil.sendParticlesIfPossible(
+                // LE,
+                // LE.level(),
+                // bloodType,
+                // LE.getEyePosition().x,
+                // LE.getEyePosition().y,
+                // LE.getEyePosition().z,
+                // 0,
+                // travelX,
+                // travelY,
+                // travelZ,
+                // 0.15
+                // );
+                // }
             }
         }
     }
 
-    public static boolean blockConfusionTicks(Entity LE){
-        if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC){
+    public static boolean blockConfusionTicks(Entity LE) {
+        if ((LE instanceof LivingEntity LV && MainUtil.forceAggression(LV)) || LE instanceof JojoNPC) {
             return true;
         }
-        if (LE instanceof Spider sp && sp.getLightLevelDependentMagicValue() >= 0.5){
+        if (LE instanceof Spider sp && sp.getLightLevelDependentMagicValue() >= 0.5) {
             return true;
         }
         return false;
     }
 
-    public static boolean isBossMob(Entity LE){
+    public static boolean isBossMob(Entity LE) {
         if (LE instanceof Warden || LE instanceof EnderDragon || LE instanceof WitherBoss
-            || isPowerfulMob(LE) ||
-                (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))){
+                || isPowerfulMob(LE) ||
+                (LE instanceof LivingEntity ll && (ModPacketHandler.PLATFORM_ACCESS.getBoss(ll)))) {
             return true;
         }
         return false;
@@ -3104,7 +3302,7 @@ public class MainUtil {
                 if (!value.isInvulnerable() && value.isAlive() && value.getUUID() != User.getUUID()) {
                     float distanceTo = value.distanceTo(User);
                     if ((nearestDistance < 0 || distanceTo < nearestDistance) && distanceTo <= distance) {
-                        if (canActuallyHit(value,User)) {
+                        if (canActuallyHit(value, User)) {
                             nearestDistance = distanceTo;
                             nearestMob = value;
                         }
@@ -3114,7 +3312,8 @@ public class MainUtil {
         }
         return nearestMob;
     }
-    public static Entity rayCastEntity(Entity entityX, float reach){
+
+    public static Entity rayCastEntity(Entity entityX, float reach) {
         float tickDelta = 0;
         if (entityX.level().isClientSide()) {
             tickDelta = ClientUtil.getDelta();
@@ -3124,18 +3323,21 @@ public class MainUtil {
         Vec3 vec3d2 = entityX.getViewVector(1.0f);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
         float f = 1.0f;
-        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
+        AABB box = new AABB(vec3d.x + reach, vec3d.y + reach, vec3d.z + reach, vec3d.x - reach, vec3d.y - reach,
+                vec3d.z - reach);
 
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach*reach);
-        if (entityHitResult != null){
+        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box,
+                entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable(), reach * reach);
+        if (entityHitResult != null) {
             Entity hitResult = entityHitResult.getEntity();
-            if (hitResult.isAlive() && !hitResult.isRemoved() && canActuallyHit(entityX,hitResult)) {
+            if (hitResult.isAlive() && !hitResult.isRemoved() && canActuallyHit(entityX, hitResult)) {
                 return hitResult;
             }
         }
         return null;
     }
-    public static EntityHitResult rayCastEntityHitResult(Entity entityX, float reach){
+
+    public static EntityHitResult rayCastEntityHitResult(Entity entityX, float reach) {
         float tickDelta = 0;
         if (entityX.level().isClientSide()) {
             tickDelta = ClientUtil.getDelta();
@@ -3145,10 +3347,15 @@ public class MainUtil {
         Vec3 vec3d2 = entityX.getViewVector(1.0f);
         Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
         float f = 1.0f;
-        AABB box = new AABB(vec3d.x+reach, vec3d.y+reach, vec3d.z+reach, vec3d.x-reach, vec3d.y-reach, vec3d.z-reach);
+        AABB box = new AABB(vec3d.x + reach, vec3d.y + reach, vec3d.z + reach, vec3d.x - reach, vec3d.y - reach,
+                vec3d.z - reach);
 
-        EntityHitResult entityHitResult = ProjectileUtil.getEntityHitResult(entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable() && !entity.isInvulnerable() && !(entityX instanceof SoftAndWetBubbleEntity), reach*reach);
-        if (entityHitResult != null){
+        EntityHitResult entityHitResult = ProjectileUtil
+                .getEntityHitResult(
+                        entityX, vec3d, vec3d3, box, entity -> !entity.isSpectator() && entity.isPickable()
+                                && !entity.isInvulnerable() && !(entityX instanceof SoftAndWetBubbleEntity),
+                        reach * reach);
+        if (entityHitResult != null) {
             Entity hitResult = entityHitResult.getEntity();
             if (hitResult.isAlive() && !hitResult.isRemoved()) {
                 return entityHitResult;
@@ -3157,19 +3364,20 @@ public class MainUtil {
         return null;
     }
 
-    /**Guard breaking*/
-    public static StandUser getUserData(LivingEntity User){
+    /** Guard breaking */
+    public static StandUser getUserData(LivingEntity User) {
         return ((StandUser) User);
     }
-    public static boolean knockShield(Entity entity, int duration){
+
+    public static boolean knockShield(Entity entity, int duration) {
 
         if (entity != null && entity.isAlive() && !entity.isRemoved()) {
             if (entity instanceof LivingEntity) {
                 if (((LivingEntity) entity).isBlocking()) {
 
-                    StandUser standUser= getUserData((LivingEntity) entity);
+                    StandUser standUser = getUserData((LivingEntity) entity);
                     if (!standUser.roundabout$isGuarding()) {
-                        if (entity instanceof Player){
+                        if (entity instanceof Player) {
                             ItemStack itemStack = ((LivingEntity) entity).getUseItem();
                             Item item = itemStack.getItem();
                             if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
@@ -3187,29 +3395,31 @@ public class MainUtil {
         return false;
     }
 
-    public static boolean forceAggression(LivingEntity LE){
-        if (LE != null){
+    public static boolean forceAggression(LivingEntity LE) {
+        if (LE != null) {
             StandUser user = ((StandUser) LE);
-            return ( (user.roundabout$hasAStand() && !(user.roundabout$getStandPowers() instanceof PowersAnubis && LE instanceof Cow)   )  || user.roundabout$getZappedToID() > -1
+            return ((user.roundabout$hasAStand()
+                    && !(user.roundabout$getStandPowers() instanceof PowersAnubis && LE instanceof Cow))
+                    || user.roundabout$getZappedToID() > -1
                     || user.rdbt$getFleshBud() != null ||
-                    (LE instanceof Mob mb && ((IMob)mb).roundabout$isVampire()));
+                    (LE instanceof Mob mb && ((IMob) mb).roundabout$isVampire()));
         }
         return false;
     }
 
-    public static boolean knockShieldPlusStand(Entity entity, int duration){
+    public static boolean knockShieldPlusStand(Entity entity, int duration) {
 
         if (entity != null && entity.isAlive() && !entity.isRemoved()) {
             if (entity instanceof LivingEntity) {
                 if (((LivingEntity) entity).isBlocking()) {
 
-                    StandUser standUser= getUserData((LivingEntity) entity);
+                    StandUser standUser = getUserData((LivingEntity) entity);
                     if (standUser.roundabout$isGuarding()) {
-                        if (!standUser.roundabout$getGuardBroken()){
+                        if (!standUser.roundabout$getGuardBroken()) {
                             standUser.roundabout$breakGuard();
                         }
                     }
-                    if (entity instanceof Player){
+                    if (entity instanceof Player) {
                         ItemStack itemStack = ((LivingEntity) entity).getUseItem();
                         Item item = itemStack.getItem();
                         if (item.getUseAnimation(itemStack) == UseAnim.BLOCK) {
@@ -3230,15 +3440,15 @@ public class MainUtil {
         if (entity instanceof Player) {
             InteractionHand interactionHand = ((Player) entity).getUsedItemHand();
             ItemStack itemInHand = ((Player) entity).getItemInHand(interactionHand);
-            Roundabout.LOGGER.info("Get used item print:"+itemInHand);
+            Roundabout.LOGGER.info("Get used item print:" + itemInHand);
             return itemInHand;
         }
         return ItemStack.EMPTY;
     }
 
-    /**Code for determining if it is appropriate to place a splatter down*/
-    public static boolean canPlaceSplatter(Level level,BlockPos pos, int offsetX, int offsetY, int offsetZ){
-        BlockPos blk =  new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
+    /** Code for determining if it is appropriate to place a splatter down */
+    public static boolean canPlaceSplatter(Level level, BlockPos pos, int offsetX, int offsetY, int offsetZ) {
+        BlockPos blk = new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ);
 
         if (level.isEmptyBlock(blk)) {
             BlockPos $$8 = blk.below();
@@ -3250,70 +3460,76 @@ public class MainUtil {
         return false;
     }
 
-    public static void setSplatter(Level level,BlockPos pos, int offsetX, int offsetZ, BlockState state){
+    public static void setSplatter(Level level, BlockPos pos, int offsetX, int offsetZ, BlockState state) {
         BlockPos blockPos = null;
         if (canPlaceSplatter(level, pos, offsetX, +1, offsetZ)) {
             blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 1, pos.getZ() + offsetZ);
-        } else if (canPlaceSplatter(level, pos, offsetX, +2, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY() + 2,pos.getZ()+offsetZ);
-        } else if (canPlaceSplatter(level, pos, offsetX, 0, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY(),pos.getZ()+offsetZ);
-        } else if (canPlaceSplatter(level, pos, offsetX, -1, offsetZ)){
-            blockPos = new BlockPos(pos.getX()+offsetX,pos.getY()-1,pos.getZ()+offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, +2, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() + 2, pos.getZ() + offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, 0, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY(), pos.getZ() + offsetZ);
+        } else if (canPlaceSplatter(level, pos, offsetX, -1, offsetZ)) {
+            blockPos = new BlockPos(pos.getX() + offsetX, pos.getY() - 1, pos.getZ() + offsetZ);
         }
-        //if (this.level().getBlockState(pos).getBlock())
+        // if (this.level().getBlockState(pos).getBlock())
         if (blockPos != null) {
             level.setBlockAndUpdate(new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ()), state);
         }
     }
+
     public static final TargetingConditions OFFER_TARGER_CONTEXT = TargetingConditions.forNonCombat().range(64.0D);
 
-    public static void handShake(ServerPlayer player){
+    public static void handShake(ServerPlayer player) {
         Networking.sendConfigToPlayer(player);
     }
 
-    public static void handShakeCooldowns(ServerPlayer player){
-        ((StandUser)player).roundabout$getStandPowers().syncAllCooldowns();
+    public static void handShakeCooldowns(ServerPlayer player) {
+        ((StandUser) player).roundabout$getStandPowers().syncAllCooldowns();
         S2CPacketUtil.affirmCooldownsS2C(player);
-        ((StandUser)player).roundabout$syncGuard();
+        ((StandUser) player).roundabout$syncGuard();
         S2CPacketUtil.sendGenericIntToClientPacket(
                 player,
                 PacketDataIndex.S2C_INT_LVL_DECREASE,
-                ((IPlayerEntity)player).rdbt$getLevelDecreaseTicks()
-        );
-        ((StandUser)player).roundabout$getStandPowers().xTryPower(PowerIndex.NONE,true);
-        ((IFatePlayer)player).rdbt$getFatePowers().xTryPower(PowerIndex.NONE,true);
-        ((IPowersPlayer)player).rdbt$getPowers().xTryPower(PowerIndex.NONE,true);
+                ((IPlayerEntity) player).rdbt$getLevelDecreaseTicks());
+        ((StandUser) player).roundabout$getStandPowers().xTryPower(PowerIndex.NONE, true);
+        ((IFatePlayer) player).rdbt$getFatePowers().xTryPower(PowerIndex.NONE, true);
+        ((IPowersPlayer) player).rdbt$getPowers().xTryPower(PowerIndex.NONE, true);
     }
 
+    /**
+     * A generalized packet for sending bytes to the server. Context is what to do
+     * with the data byte
+     */
 
-    /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
-
-    public static void handleBytePacketC2S(Player player, byte data, byte context){
+    public static void handleBytePacketC2S(Player player, byte data, byte context) {
         if (context == PacketDataIndex.BYTE_UPDATE_COOLDOWN) {
             ((StandUser) player).roundabout$getStandPowers().setCooldown(data, -1);
         } else if (context == PacketDataIndex.BYTE_STRIKE_POSE) {
             ((IPlayerEntity) player).roundabout$SetPoseEmote(data);
         } else if (context == PacketDataIndex.BYTE_CORPSE_TACTICS) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersJustice PJ){
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersJustice PJ) {
                 PJ.justiceTacticsUse(data);
             }
         } else if (context == PacketDataIndex.BYTE_CHANGE_MORPH) {
             StandPowers sp = ((StandUser) player).roundabout$getStandPowers();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(data);
-            if (sp instanceof PowersJustice pj){
+            if (sp instanceof PowersJustice pj) {
 
-                if (ShapeShifts.isVillager(shift) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())){
-                    return;
-                }if (ShapeShifts.isZombie(shift) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())){
-                    return;
-                }if (ShapeShifts.isSkeleton(shift) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())){
+                if (ShapeShifts.isVillager(shift) && !sp.canExecuteMoveWithLevel(pj.getVillagerMorphLevel())) {
                     return;
                 }
-                if (shift == ShapeShifts.VILLAGER){
+                if (ShapeShifts.isZombie(shift) && !sp.canExecuteMoveWithLevel(pj.getZombieMorphLevel())) {
+                    return;
+                }
+                if (ShapeShifts.isSkeleton(shift) && !sp.canExecuteMoveWithLevel(pj.getSkeletonMorphLevel())) {
+                    return;
+                }
+                if (shift == ShapeShifts.VILLAGER) {
                     byte totalMorph = 0;
-                    Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player, player.getX(), player.getY(), player.getZ(),player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
-                    if (ent != null){
+                    Villager ent = player.level().getNearestEntity(Villager.class, OFFER_TARGER_CONTEXT, player,
+                            player.getX(), player.getY(), player.getZ(),
+                            player.getBoundingBox().inflate(12.0D, 2.0D, 12.0D));
+                    if (ent != null) {
                         VillagerType VT = ent.getVillagerData().getType();
                         VillagerProfession VP = ent.getVillagerData().getProfession();
                         totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + ShapeShifts.getByteFromProfession(VP));
@@ -3321,7 +3537,6 @@ public class MainUtil {
                         VillagerType VT = VillagerType.byBiome(player.level().getBiome(player.blockPosition()));
                         totalMorph = (byte) (ShapeShifts.getByteFromType(VT) + 1);
                     }
-
 
                     ((IPlayerEntity) player).roundabout$setShapeShiftExtraData(totalMorph);
                 }
@@ -3331,34 +3546,38 @@ public class MainUtil {
 
         } else if (context == PacketDataIndex.BYTE_RESPAWN_STRATEGY) {
             ((IPlayerEntity) player).rdbt$setRespawnStrategy(data);
-            S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.S2C_RESPAWN);
+            S2CPacketUtil.sendSimpleByteToClientPacket(player, PacketDataIndex.S2C_RESPAWN);
         } else if (context == PacketDataIndex.BYTE_SWITCH_POWERS) {
-            if (PowerTypes.canHavePower(player,data)){
-                PowerTypes.setPowerTypeWithPenalty(player,data);
+            if (PowerTypes.canHavePower(player, data)) {
+                PowerTypes.setPowerTypeWithPenalty(player, data);
             }
         }
     }
-    /**A generalized packet for sending bytes to the server. Context is what to do with the data byte*/
-    public static void handleSingleBytePacketC2S(Player player, byte context){
+
+    /**
+     * A generalized packet for sending bytes to the server. Context is what to do
+     * with the data byte
+     */
+    public static void handleSingleBytePacketC2S(Player player, byte context) {
         if (context == PacketDataIndex.SINGLE_BYTE_SILENT_SUMMON) {
             ((StandUser) player).roundabout$summonStand(player.level(), false, false);
 
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_LEFT) {
-                StandUser user = ((StandUser) player);
-                user.roundabout$getStandPowers().getSkinInDirection(false,false);
+            StandUser user = ((StandUser) player);
+            user.roundabout$getStandPowers().getSkinInDirection(false, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT) {
             StandUser user = ((StandUser) player);
-            user.roundabout$getStandPowers().getSkinInDirection(true,false);
+            user.roundabout$getStandPowers().getSkinInDirection(true, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED) {
             StandUser user = ((StandUser) player);
-            user.roundabout$getStandPowers().getSkinInDirection(false,true);
+            user.roundabout$getStandPowers().getSkinInDirection(false, true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED) {
             StandUser user = ((StandUser) player);
-            user.roundabout$getStandPowers().getSkinInDirection(true,true);
+            user.roundabout$getStandPowers().getSkinInDirection(true, true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_LEFT) {
             StandUser user = ((StandUser) player);
             user.roundabout$getStandPowers().getPoseInDirection(false);
-        } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT){
+        } else if (context == PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT) {
             StandUser user = ((StandUser) player);
             user.roundabout$getStandPowers().getPoseInDirection(true);
         } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_POWER_INVENTORY) {
@@ -3366,7 +3585,7 @@ public class MainUtil {
             PowerTypes.initializeStandPower(player);
             IPlayerEntity iplay = ((IPlayerEntity) player);
             byte unlocked = 0;
-            if (iplay.roundabout$getUnlockedBonusSkin()){
+            if (iplay.roundabout$getUnlockedBonusSkin()) {
                 unlocked = 1;
             }
 
@@ -3377,85 +3596,90 @@ public class MainUtil {
                 player.containerMenu = player.inventoryMenu;
             }
 
-            ((IPlayerEntityServer)player).roundabout$nextContainerCounter();
-            int cid = ((IPlayerEntityServer)player).roundabout$getCounter();
+            ((IPlayerEntityServer) player).roundabout$nextContainerCounter();
+            int cid = ((IPlayerEntityServer) player).roundabout$getCounter();
             S2CPacketUtil.sendGenericIntToClientPacket(((ServerPlayer) player), PacketDataIndex.S2C_POWER_INVENTORY,
                     cid);
-            player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player,cid);
-            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
-        }else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
+            player.containerMenu = new PowerInventoryMenu(player.getInventory(), true, player, cid);
+            ((IPlayerEntityServer) player).roundabout$initMenu(player.containerMenu);
+        } else if (context == PacketDataIndex.SINGLE_BYTE_OPEN_FOG_INVENTORY) {
             player.containerMenu = new FogInventoryMenu(player.getInventory(), !player.level().isClientSide, player);
-            ((IPlayerEntityServer)player).roundabout$initMenu(player.containerMenu);
+            ((IPlayerEntityServer) player).roundabout$initMenu(player.containerMenu);
         } else if (context == PacketDataIndex.SINGLE_BYTE_GLAIVE_START_SOUND) {
             if (player.getUseItem() != null && player.getUseItem().getItem() instanceof GlaiveItem) {
-                ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+                ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10,
+                        false);
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND) {
-            ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+            ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30, false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND) {
-            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10, false);
+            ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.STAND_ARROW_CHARGE, 10,
+                    false);
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE) {
-            if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
+            if (player != null && ((StandUser) player).roundabout$getStand() instanceof StarPlatinumEntity SE) {
                 SE.setScoping(true);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking
+                        .getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1000000, 21, false, false), null);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SCOPE_OFF) {
-            if (player != null && ((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SE){
+            if (player != null && ((StandUser) player).roundabout$getStand() instanceof StarPlatinumEntity SE) {
                 SE.setScoping(false);
-                if (ClientNetworking.getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
+                if (ClientNetworking
+                        .getAppropriateConfig().starPlatinumSettings.starPlatinumScopeUsesPotionEffectForNightVision) {
                     MobEffectInstance ME = player.getEffect(MobEffects.NIGHT_VISION);
-                    if (ME != null && ME.getDuration() >= 100000 && ME.getDuration() >= 100000 && ME.getAmplifier() > 20) {
+                    if (ME != null && ME.getDuration() >= 100000 && ME.getDuration() >= 100000
+                            && ME.getAmplifier() > 20) {
                         player.removeEffect(MobEffects.NIGHT_VISION);
                     }
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE) {
-            if (player != null && ((StandUser)player).roundabout$getStandPowers().attackTimeDuring >= 0){
-                ((StandUser)player).roundabout$getStandPowers().forwardBarrage = true;
-                ((StandUser)player).roundabout$getStandPowers().moveStarted = true;
-                ((StandUser)player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
-                StandEntity SE = ((StandUser)player).roundabout$getStand();
-                if (SE != null){
-                    SE.setPos(player.getPosition(1).add(player.getForward().scale(2)).add(0,0.2F,0));
+            if (player != null && ((StandUser) player).roundabout$getStandPowers().attackTimeDuring >= 0) {
+                ((StandUser) player).roundabout$getStandPowers().forwardBarrage = true;
+                ((StandUser) player).roundabout$getStandPowers().moveStarted = true;
+                ((StandUser) player).roundabout$getStandPowers().poseStand(OffsetIndex.LOOSE);
+                StandEntity SE = ((StandUser) player).roundabout$getStand();
+                if (SE != null) {
+                    SE.setPos(player.getPosition(1).add(player.getForward().scale(2)).add(0, 0.2F, 0));
                     SE.setYRot(player.getYHeadRot() % 360);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_SMELT) {
             if (player != null) {
 
-                 if (player.containerMenu instanceof AbstractFurnaceMenu fm) {
-                    Container ct = ((IAbstractFurnaceMenu)fm).roundabout$getContainer();
-                    if (ct instanceof AbstractFurnaceBlockEntity fbe){
+                if (player.containerMenu instanceof AbstractFurnaceMenu fm) {
+                    Container ct = ((IAbstractFurnaceMenu) fm).roundabout$getContainer();
+                    if (ct instanceof AbstractFurnaceBlockEntity fbe) {
 
                         int it = ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFurnaceTicks;
                         if (it > 0) {
                             ((IAbstractFurnaceBlockEntity) fbe).roundabout$setFurnaceHeatingTime(it);
                         }
                     }
-                 }
+                }
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_DESUMMON) {
             if (player != null) {
                 StandUser user = ((StandUser) player);
-                if (PowerTypes.hasStandActive(player)){
+                if (PowerTypes.hasStandActive(player)) {
                     user.roundabout$summonStand(player.level(), false, false);
                 }
             }
         } else if (context == PacketDataIndex.END_BLOOD_SPEED) {
             if (player != null) {
-                if (((IFatePlayer)player).rdbt$getFatePowers() instanceof VampiricFate vp){
+                if (((IFatePlayer) player).rdbt$getFatePowers() instanceof VampiricFate vp) {
                     vp.setSpeedActivated(0);
                 }
             }
         } else if (context == PacketDataIndex.QUERY_STAND_UPDATE) {
             if (player != null) {
-                ((StandUser)player).roundabout$getStandPowers().serverQueried();
+                ((StandUser) player).roundabout$getStandPowers().serverQueried();
             }
         } else if (context == PacketDataIndex.QUERY_STAND_UPDATE_2) {
             if (player != null) {
-                ((StandUser)player).roundabout$getStandPowers().serverQueried2();
+                ((StandUser) player).roundabout$getStandPowers().serverQueried2();
             }
         } else if (context == PacketDataIndex.QUERY_VAMPIRE_UPDATE) {
             if (player != null) {
@@ -3464,19 +3688,19 @@ public class MainUtil {
         } else if (context == PacketDataIndex.SINGLE_BYTE_LEFT_POWERS) {
             List<PowerTypes> powerTypes = PowerTypes.getAvailablePowers(player);
             int queryNumber = 0;
-            int powerNumber = ((IPlayerEntity)player).roundabout$getPower();
-            for (var i = 0; i < powerTypes.size(); i++){
+            int powerNumber = ((IPlayerEntity) player).roundabout$getPower();
+            for (var i = 0; i < powerTypes.size(); i++) {
                 PowerTypes pt = powerTypes.get(i);
-                if (powerNumber == pt.ordinal()){
+                if (powerNumber == pt.ordinal()) {
                     queryNumber = i;
                 }
             }
 
             queryNumber++;
-            if (queryNumber > powerTypes.size()-1){
+            if (queryNumber > powerTypes.size() - 1) {
                 queryNumber = 0;
             }
-            ((IPlayerEntity)player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte) powerTypes.get(queryNumber).ordinal());
         } else if (context == PacketDataIndex.CALIFORNIA_CHESS_HURT) {
             boolean inTSRange = ((TimeStop) player.level()).CanTimeStopEntity(player);
             if (!inTSRange) {
@@ -3484,7 +3708,7 @@ public class MainUtil {
             }
         } else if (context == PacketDataIndex.CALIFORNIA_BISHOP_USE) {
             boolean inTSRange = ((TimeStop) player.level()).CanTimeStopEntity(player);
-            if (!inTSRange){
+            if (!inTSRange) {
                 ExperienceBishopItem.attackThePerson(player);
             }
         } else if (context == PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS) {
@@ -3500,9 +3724,9 @@ public class MainUtil {
 
             queryNumber--;
             if (queryNumber < 0) {
-                queryNumber = powerTypes.size()-1;
+                queryNumber = powerTypes.size() - 1;
             }
-            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte)powerTypes.get(queryNumber).ordinal());
+            ((IPlayerEntity) player).roundabout$setPowerWithPenalty((byte) powerTypes.get(queryNumber).ordinal());
         } else if (context == PacketDataIndex.FIX_COOLDOWN_FOR_SERVER) {
             StandUser user = ((StandUser) player);
             int attackTimeMax = user.roundabout$getAttackTimeMax();
@@ -3510,40 +3734,40 @@ public class MainUtil {
                 float attackTime = user.roundabout$getAttackTime();
                 float finalATime = attackTime / attackTimeMax;
                 if (finalATime <= 1) {
-                    user.roundabout$getStandPowers().setAttackTime((attackTimeMax+1));
+                    user.roundabout$getStandPowers().setAttackTime((attackTimeMax + 1));
                     user.roundabout$getStandPowers().setActivePowerPhase((byte) 0);
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
-                if (pkc.isUsingEpitaph()){
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                if (pkc.isUsingEpitaph()) {
                     pkc.epitaph();
                 }
             }
         } else if (context == PacketDataIndex.SINGLE_STAND_TRIGGER_2) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
-                if (pkc.isUsingTimeErase()){
+            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                if (pkc.isUsingTimeErase()) {
                     pkc.timeErase();
                 }
             }
         } else if (context == PacketDataIndex.RELOAD_GUN) {
-            if (player.getUseItem().getItem() instanceof FirearmItem fm){
+            if (player.getUseItem().getItem() instanceof FirearmItem fm) {
 
                 FirearmItem.cycleReload = true;
                 ItemStack stack = player.getUseItem();
-                InteractionHand hand= InteractionHand.MAIN_HAND;
+                InteractionHand hand = InteractionHand.MAIN_HAND;
                 if (ItemStack.isSameItemSameTags(player.getMainHandItem(), stack)) {
                     hand = InteractionHand.MAIN_HAND;
                 } else if (ItemStack.isSameItemSameTags(player.getOffhandItem(), stack)) {
                     hand = InteractionHand.OFF_HAND;
                 }
-                fm.use(player.level(),player,hand);
+                fm.use(player.level(), player, hand);
                 FirearmItem.cycleReload = false;
             }
         }
     }
 
-    public static Direction getDirectionFromInt(int integer){
+    public static Direction getDirectionFromInt(int integer) {
         if (integer == 0)
             return Direction.UP;
         if (integer == 1)
@@ -3555,9 +3779,10 @@ public class MainUtil {
         if (integer == 4)
             return Direction.EAST;
 
-            return Direction.WEST;
+        return Direction.WEST;
     }
-    public static int getIntFromDirection(Direction dir){
+
+    public static int getIntFromDirection(Direction dir) {
         if (dir == Direction.UP)
             return 0;
         if (dir == Direction.DOWN)
@@ -3572,12 +3797,12 @@ public class MainUtil {
         return 5;
     }
 
-    public static boolean getIsGamemodeApproriateForGrief(Entity Li){
+    public static boolean getIsGamemodeApproriateForGrief(Entity Li) {
         if (Li != null && !Li.level().isClientSide()) {
             if ((!(Li instanceof Player) || (((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
                     && ((ServerPlayer) Li).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
                     && Li.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
-                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)){
+                if (PowerTypes.isExistentiallyElsewhere(Li) && !PowerTypes.canInteractInExistence(Li)) {
                     return false;
                 }
                 return true;
@@ -3590,7 +3815,8 @@ public class MainUtil {
         if (ent.level().isDay() && !ent.level().isClientSide) {
             float $$0 = ent.getLightLevelDependentMagicValue();
             BlockPos $$1 = BlockPos.containing(ent.getEyePosition().x, ent.getEyePosition().y, ent.getEyePosition().z);
-            if ($$0 > 0.5F && ent.level().random.nextFloat() * 30.0F < ($$0 - 0.4F) * 2.0F && ent.level().canSeeSky($$1)) {
+            if ($$0 > 0.5F && ent.level().random.nextFloat() * 30.0F < ($$0 - 0.4F) * 2.0F
+                    && ent.level().canSeeSky($$1)) {
                 return true;
             }
         }
@@ -3605,21 +3831,24 @@ public class MainUtil {
         return false;
     }
 
-    /**A generalized packet for sending floats to the server. Context is what to do with the data byte*/
-    public static void handleFloatPacketC2S(Player player, float data, byte context){
+    /**
+     * A generalized packet for sending floats to the server. Context is what to do
+     * with the data byte
+     */
+    public static void handleFloatPacketC2S(Player player, float data, byte context) {
         if (context == PacketDataIndex.FLOAT_VELOCITY_BARBED_WIRE) {
-            data = Math.min(data,10F);
-            if (player.getVehicle() != null){
-                if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
-                    MainUtil.makeBleed(player.getVehicle(),0,200,null);
+            data = Math.min(data, 10F);
+            if (player.getVehicle() != null) {
+                if (player.getVehicle().hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)) {
+                    MainUtil.makeBleed(player.getVehicle(), 0, 200, null);
                 }
             } else {
-                if (player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)){
-                    MainUtil.makeBleed(player,0,200,null);
+                if (player.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.BARBED_WIRE), data)) {
+                    MainUtil.makeBleed(player, 0, 200, null);
                 }
             }
         } else if (context == PacketDataIndex.FLOAT_STAR_FINGER_SIZE) {
-            if (((StandUser)player).roundabout$getStand() instanceof StarPlatinumEntity SP){
+            if (((StandUser) player).roundabout$getStand() instanceof StarPlatinumEntity SP) {
                 SP.setFingerLength(data);
             }
         } else if (context == PacketDataIndex.FLOAT_DISTANCE_OUT) {
@@ -3635,17 +3864,18 @@ public class MainUtil {
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setIdleYOffset(data);
         } else if (context == PacketDataIndex.FLOAT_UPDATE_STAND_MOVE) {
-            ((StandUser)player).roundabout$getStandPowers().updateMove(data);
+            ((StandUser) player).roundabout$getStandPowers().updateMove(data);
         } else if (context == PacketDataIndex.FLOAT_BIG_JUMP) {
-            ((StandUser)player).roundabout$setBigJump(true);
-            ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
+            ((StandUser) player).roundabout$setBigJump(true);
+            ((StandUser) player).roundabout$setBigJumpCurrentProgress(data);
         } else if (context == PacketDataIndex.FLOAT_BIG_JUMP_CANCEL) {
-            ((StandUser)player).roundabout$setBigJump(false);
-            ((StandUser)player).roundabout$setBigJumpCurrentProgress(data);
+            ((StandUser) player).roundabout$setBigJump(false);
+            ((StandUser) player).roundabout$setBigJumpCurrentProgress(data);
         } else if (context == PacketDataIndex.FLOAT_MOLD_STARTING_Y_POS) {
-            ((StandUser)player).roundabout$setStartingYpos(data);
+            ((StandUser) player).roundabout$setStartingYpos(data);
         }
     }
+
     public static boolean isCollidingWithAnyBlock(Entity entity) {
         Level level = entity.level();
         AABB box = entity.getBoundingBox();
@@ -3660,27 +3890,27 @@ public class MainUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void handleIntPacketC2S(Player player, int data, byte context){
-        if (context == PacketDataIndex.INT_GLAIVE_TARGET){
+    public static void handleIntPacketC2S(Player player, int data, byte context) {
+        if (context == PacketDataIndex.INT_GLAIVE_TARGET) {
             Entity target = player.level().getEntity(data);
 
             target.hurt(ModDamageTypes.of(player.level(), ModDamageTypes.GLAIVE), data);
-        } else if (context == PacketDataIndex.INT_TS_TIME){
-            if (((StandUser)player).roundabout$getStandPowers().getChargedTSTicks() > data) {
-                ((StandUser)player).roundabout$getStandPowers().setChargedTSTicks(data);
+        } else if (context == PacketDataIndex.INT_TS_TIME) {
+            if (((StandUser) player).roundabout$getStandPowers().getChargedTSTicks() > data) {
+                ((StandUser) player).roundabout$getStandPowers().setChargedTSTicks(data);
             }
-        } else if (context == PacketDataIndex.INT_RIDE_TICKS){
-            ((StandUser)player).roundabout$setRestrainedTicks(data);
-        } else if (context == PacketDataIndex.INT_STAND_ATTACK){
+        } else if (context == PacketDataIndex.INT_RIDE_TICKS) {
+            ((StandUser) player).roundabout$setRestrainedTicks(data);
+        } else if (context == PacketDataIndex.INT_STAND_ATTACK) {
             Entity target = player.level().getEntity(data);
-            ((StandUser)player).roundabout$getStandPowers().handleStandAttack(player,target);
-        } else if (context == PacketDataIndex.INT_STAND_ATTACK_2){
+            ((StandUser) player).roundabout$getStandPowers().handleStandAttack(player, target);
+        } else if (context == PacketDataIndex.INT_STAND_ATTACK_2) {
             Entity target = player.level().getEntity(data);
-            ((StandUser)player).roundabout$getStandPowers().handleStandAttack2(player,target);
-        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE){
+            ((StandUser) player).roundabout$getStandPowers().handleStandAttack2(player, target);
+        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE) {
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setAnchorPlace(data);
-        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE_ATTACK){
+        } else if (context == PacketDataIndex.INT_ANCHOR_PLACE_ATTACK) {
             IPlayerEntity ple = (IPlayerEntity) player;
             ple.roundabout$setAnchorPlaceAttack(data);
         } else if (context == PacketDataIndex.INT_UPDATE_MOVE) {
@@ -3688,90 +3918,96 @@ public class MainUtil {
         } else if (context == PacketDataIndex.INT_WHITE_ALBUM_ACCELERATION) {
             if (player != null) {
                 StandUser user = ((StandUser) player);
-                if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
+                if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa) {
                     pwa.setAcceleration(data);
                 }
             }
-        } else if (context == PacketDataIndex.INT_UPDATE_PILOT){
-            StandEntity SE = ((StandUser)player).roundabout$getStand();
+        } else if (context == PacketDataIndex.INT_UPDATE_PILOT) {
+            StandEntity SE = ((StandUser) player).roundabout$getStand();
             Entity target = player.level().getEntity(data);
-            if (target != null){
-                if (!isCollidingWithAnyBlock(target)){
-                    ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
+            if (target != null) {
+                if (!isCollidingWithAnyBlock(target)) {
+                    ((StandUser) player).roundabout$getStandPowers().setPiloting(data);
                 }
             } else {
-                ((StandUser)player).roundabout$getStandPowers().setPiloting(data);
+                ((StandUser) player).roundabout$getStandPowers().setPiloting(data);
             }
-        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL){
-            if (ModItems.getVisageStore().size() >= data){
+        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_LEVEL) {
+            if (ModItems.getVisageStore().size() >= data) {
                 VisageStoreEntry entry = ModItems.getVisageStore().get(data);
-                if (player.experienceLevel >= entry.costL){
-                    addItem(player,entry.stack.copy());
+                if (player.experienceLevel >= entry.costL) {
+                    addItem(player, entry.stack.copy());
                     player.giveExperienceLevels(-entry.costL);
 
                     SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
-                    player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F, 1F);
+                    player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F,
+                            1F);
                 }
             }
-        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS){
-            if (ModItems.getVisageStore().size() >= data){
+        } else if (context == PacketDataIndex.INT_INDEX_OF_VISAGE_EMERALDS) {
+            if (ModItems.getVisageStore().size() >= data) {
                 VisageStoreEntry entry = ModItems.getVisageStore().get(data);
-                    int i = 0;
-                    for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                int i = 0;
+                for (int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
+                    ItemStack $$6 = player.getInventory().getItem($$5);
+                    if ($$6.getItem().equals(Items.EMERALD)) {
+                        i += $$6.getCount();
+                    }
+                }
+                if (i >= entry.costE) {
+                    addItem(player, entry.stack.copy());
+                    int j = 0;
+                    for (int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
                         ItemStack $$6 = player.getInventory().getItem($$5);
-                        if ($$6.getItem().equals(Items.EMERALD)){
-                            i+=$$6.getCount();
+                        if ($$6.getItem().equals(Items.EMERALD)) {
+                            int ct = $$6.getCount();
+                            if ((j + ct) > entry.costE) {
+                                $$6.shrink(entry.costE);
+                                j += entry.costE;
+                            } else {
+                                $$6.shrink(ct);
+                                j += ct;
+                            }
+                        }
+                        if (j >= entry.costE) {
+                            break;
                         }
                     }
-                    if (i >= entry.costE){
-                        addItem(player,entry.stack.copy());
-                        int j = 0;
-                        for(int $$5 = 0; $$5 < player.getInventory().getContainerSize(); ++$$5) {
-                            ItemStack $$6 = player.getInventory().getItem($$5);
-                            if ($$6.getItem().equals(Items.EMERALD)){
-                                int ct = $$6.getCount();
-                                if ((j + ct) > entry.costE){
-                                    $$6.shrink(entry.costE);
-                                    j+= entry.costE;
-                                } else {
-                                    $$6.shrink(ct);
-                                    j+= ct;
-                                }
-                            }
-                            if (j >= entry.costE){
-                                break;
-                            }
-                        }
 
-                        SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
-                        player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F, 1F);
-                    }
+                    SoundEvent $$6 = ModSounds.CINDERELLA_SPARKLE_EVENT;
+                    player.level().playSound(null, BlockPos.containing(player.position()), $$6, SoundSource.BLOCKS, 1F,
+                            1F);
+                }
             }
-        } else if (context == PacketDataIndex.INT_RELLA_START){
+        } else if (context == PacketDataIndex.INT_RELLA_START) {
             Entity target = player.level().getEntity(data);
-            if (target instanceof Aesthetician aes && aes.getTarget() == null){
-                S2CPacketUtil.sendGenericIntToClientPacket(player,PacketDataIndex.AESTHETICIAN_OPEN,data);
+            if (target instanceof Aesthetician aes && aes.getTarget() == null) {
+                S2CPacketUtil.sendGenericIntToClientPacket(player, PacketDataIndex.AESTHETICIAN_OPEN, data);
                 aes.addPlayerToList(player);
             }
-        } else if (context == PacketDataIndex.INT_RELLA_CANCEL){
+        } else if (context == PacketDataIndex.INT_RELLA_CANCEL) {
             Entity target = player.level().getEntity(data);
-            if (target instanceof Aesthetician aes){
+            if (target instanceof Aesthetician aes) {
                 aes.removePlayerFromList(player);
             }
-        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP){
-            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP) {
+            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
             Direction cd = MainUtil.getDirectionFromInt(data);
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
-            if (powers instanceof PowersWalkingHeart pw){
+            if (powers instanceof PowersWalkingHeart pw) {
                 pw.setHeelDirection(cd);
                 pw.justFlippedTicks = 5;
+            } else if (powers instanceof PowersDiverDown pdd) {
+                pdd.setHeelDirection(cd);
+                pdd.justFlippedTicks = 5;
             }
-        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_2){
-            StandPowers powers = ((StandUser)player).roundabout$getStandPowers();
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_2) {
+            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
             Direction cd = MainUtil.getDirectionFromInt(data);
-            if (powers instanceof PowersWalkingHeart pw){
+            if (powers instanceof PowersWalkingHeart pw) {
                 if (!player.level().isClientSide()) {
-                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT, SoundSource.PLAYERS, 1F, 1f);
+                    player.level().playSound(null, player.blockPosition(), ModSounds.WALL_LATCH_EVENT,
+                            SoundSource.PLAYERS, 1F, 1f);
 
                 }
                 pw.toggleSpikes(true);
@@ -3779,8 +4015,8 @@ public class MainUtil {
                 pw.justFlippedTicks = 7;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
-        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3){
-            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_3) {
+            FatePowers powers = ((IFatePlayer) player).rdbt$getFatePowers();
             Direction cd = MainUtil.getDirectionFromInt(data);
             if (powers instanceof VampiricFate vf) {
                 vf.canLatchOntoWall();
@@ -3799,82 +4035,83 @@ public class MainUtil {
                 }
                 vf.setWallWalkDirection(cd);
                 vf.justFlippedTicks = 7;
-                player.level().playSound(null, player.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT, SoundSource.PLAYERS, 2F, 1f);
+                player.level().playSound(null, player.blockPosition(), ModSounds.VAMPIRE_WALL_GRIP_EVENT,
+                        SoundSource.PLAYERS, 2F, 1f);
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
-        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_4){
-            FatePowers powers = ((IFatePlayer)player).rdbt$getFatePowers();
+        } else if (context == PacketDataIndex.INT_GRAVITY_FLIP_4) {
+            FatePowers powers = ((IFatePlayer) player).rdbt$getFatePowers();
             Direction cd = MainUtil.getDirectionFromInt(data);
             if (powers instanceof VampiricFate vf) {
                 vf.setWallWalkDirection(cd);
                 vf.justFlippedTicks = 5;
             }
             ((IGravityEntity) player).roundabout$setGravityDirection(cd);
-        } else if (context == PacketDataIndex.INT_MOLD_JUMP_TICKS){
-            ((StandUser)player).roundabout$setJumpImunityTicks(data);
-        } else if (context == PacketDataIndex.INT_MOLD_GOING_DOWN){
-            ((StandUser)player).roundabout$setGoingDown(data == 1);
-        } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY){
-            VampireData vdata = ((IPlayerEntity)player).rdbt$getVampireData();
-            if (vdata.getPoints() > 0){
-                if (data==1) {
+        } else if (context == PacketDataIndex.INT_MOLD_JUMP_TICKS) {
+            ((StandUser) player).roundabout$setJumpImunityTicks(data);
+        } else if (context == PacketDataIndex.INT_MOLD_GOING_DOWN) {
+            ((StandUser) player).roundabout$setGoingDown(data == 1);
+        } else if (context == PacketDataIndex.INT_VAMPIRE_SKILL_BUY) {
+            VampireData vdata = ((IPlayerEntity) player).rdbt$getVampireData();
+            if (vdata.getPoints() > 0) {
+                if (data == 1) {
                     if (vdata.strengthLevel < VampireData.strengthMaxLevel) {
                         vdata.setStrengthLevel(vdata.strengthLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 2) {
-                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel){
-                        vdata.setDexterityLevel(vdata.dexterityLevel+1);
+                    if (vdata.dexterityLevel < VampireData.dexterityMaxLevel) {
+                        vdata.setDexterityLevel(vdata.dexterityLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 3) {
-                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel){
-                        vdata.setResilienceLevel(vdata.resilienceLevel+1);
+                    if (vdata.resilienceLevel < VampireData.reslienceMaxLevel) {
+                        vdata.setResilienceLevel(vdata.resilienceLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 4) {
-                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel){
-                        vdata.setHypnotismLevel(vdata.hypnotismLevel+1);
+                    if (vdata.hypnotismLevel < VampireData.hypnotismMaxLevel) {
+                        vdata.setHypnotismLevel(vdata.hypnotismLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 5) {
-                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel){
-                        vdata.setSuperHearingLevel(vdata.superHearingLevel+1);
+                    if (vdata.superHearingLevel < VampireData.superHearingMaxLevel) {
+                        vdata.setSuperHearingLevel(vdata.superHearingLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 6) {
-                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel){
-                        vdata.setBloodSpeedLevel(vdata.bloodSpeedLevel+1);
+                    if (vdata.bloodSpeedLevel < VampireData.bloodSpeedMaxLevel) {
+                        vdata.setBloodSpeedLevel(vdata.bloodSpeedLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 7) {
-                    if (vdata.graftingLevel < VampireData.graftingMaxLevel){
-                        vdata.setGraftingLevel(vdata.graftingLevel+1);
+                    if (vdata.graftingLevel < VampireData.graftingMaxLevel) {
+                        vdata.setGraftingLevel(vdata.graftingLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 8) {
-                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel){
-                        vdata.setFleshBudLevel(vdata.fleshBudLevel+1);
+                    if (vdata.fleshBudLevel < VampireData.fleshBudMaxLevel) {
+                        vdata.setFleshBudLevel(vdata.fleshBudLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 9) {
-                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel){
-                        vdata.setDaggerSplatterLevel(vdata.daggerSplatterLevel+1);
+                    if (vdata.daggerSplatterLevel < VampireData.daggerSplatterMaxLevel) {
+                        vdata.setDaggerSplatterLevel(vdata.daggerSplatterLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 10) {
-                    if (vdata.jumpLevel < VampireData.jumpMaxLevel){
-                        vdata.setJumpLevel(vdata.jumpLevel+1);
+                    if (vdata.jumpLevel < VampireData.jumpMaxLevel) {
+                        vdata.setJumpLevel(vdata.jumpLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 11) {
-                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel){
-                        vdata.setRipperEyesLevel(vdata.ripperEyesLevel+1);
+                    if (vdata.ripperEyesLevel < VampireData.ripperEyesMaxLevel) {
+                        vdata.setRipperEyesLevel(vdata.ripperEyesLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 } else if (data == 12) {
-                    if (vdata.freezeLevel < VampireData.freezeMaxLevel){
-                        vdata.setFreezeLevel(vdata.freezeLevel+1);
+                    if (vdata.freezeLevel < VampireData.freezeMaxLevel) {
+                        vdata.setFreezeLevel(vdata.freezeLevel + 1);
                         S2CPacketUtil.beamVampireData(player);
                     }
                 }
@@ -3882,10 +4119,7 @@ public class MainUtil {
         }
     }
 
-
-
-
-    public static void addItem(Player player, ItemStack stack){
+    public static void addItem(Player player, ItemStack stack) {
         ItemEntity $$4 = new ItemEntity(player.level(), player.getEyePosition().x,
                 player.getEyePosition().y, player.getEyePosition().z,
                 stack);
@@ -3894,12 +4128,12 @@ public class MainUtil {
         player.level().addFreshEntity($$4);
     }
 
-    public static void syncActivePower(Player pl, byte activePower){
+    public static void syncActivePower(Player pl, byte activePower) {
 
         StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
 
-        if (powers.activePower != activePower){
-            if (activePower == PowerIndex.NONE){
+        if (powers.activePower != activePower) {
+            if (activePower == PowerIndex.NONE) {
                 powers.setAttackTimeDuring(-1);
             } else {
                 powers.setAttackTimeDuring(0);
@@ -3911,12 +4145,12 @@ public class MainUtil {
 
     }
 
-    public static void syncActivePowerFate(Player pl, byte activePower){
+    public static void syncActivePowerFate(Player pl, byte activePower) {
 
         FatePowers powers = ((IFatePlayer) pl).rdbt$getFatePowers();
 
-        if (powers.activePower != activePower){
-            if (activePower == PowerIndex.NONE){
+        if (powers.activePower != activePower) {
+            if (activePower == PowerIndex.NONE) {
                 powers.setAttackTimeDuring(-1);
             } else {
                 powers.setAttackTimeDuring(0);
@@ -3927,14 +4161,15 @@ public class MainUtil {
         powers.kickStartClient();
 
     }
-    public static void syncActivePowerPowers(Player pl, byte activePower){
 
-        //FILL THIS IN FOR POWERS
+    public static void syncActivePowerPowers(Player pl, byte activePower) {
+
+        // FILL THIS IN FOR POWERS
 
         GeneralPowers powers = ((IPowersPlayer) pl).rdbt$getPowers();
 
-        if (powers.activePower != activePower){
-            if (activePower == PowerIndex.NONE){
+        if (powers.activePower != activePower) {
+            if (activePower == PowerIndex.NONE) {
                 powers.setAttackTimeDuring(-1);
             } else {
                 powers.setAttackTimeDuring(0);
@@ -3945,13 +4180,14 @@ public class MainUtil {
         powers.kickStartClient();
 
     }
+
     public static void syncCooldownsForAttacks(int attackTime, int attackTimeMax, int attackTimeDuring,
-                                               byte activePower, byte activePowerPhase, Player pl){
+            byte activePower, byte activePowerPhase, Player pl) {
 
         StandPowers powers = ((StandUser) pl).roundabout$getStandPowers();
 
-        if (powers.activePower != activePower){
-            if (activePower == PowerIndex.NONE){
+        if (powers.activePower != activePower) {
+            if (activePower == PowerIndex.NONE) {
                 powers.setAttackTimeDuring(-1);
             } else {
                 powers.setAttackTimeDuring(0);
@@ -3973,8 +4209,7 @@ public class MainUtil {
                 reachVec,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
-                player
-        );
+                player);
 
         BlockHitResult blockHit = world.clip(blockContext);
         double blockHitDistance = blockHit != null
@@ -4005,7 +4240,6 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
-
     public static Entity raytraceEntityStand(Level world, LivingEntity player, double maxDistance) {
 
         Vec3 eyePos = player.getEyePosition(1.0F); // player.getEyePosition(float)
@@ -4018,8 +4252,7 @@ public class MainUtil {
                 reachVec,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
-                player
-        );
+                player);
 
         BlockHitResult blockHit = world.clip(blockContext);
         double blockHitDistance = blockHit != null
@@ -4040,8 +4273,9 @@ public class MainUtil {
 
             if (hitOptional.isPresent()) {
                 double hitDistance = eyePos.distanceTo(hitOptional.get());
-                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
-                && !entity.hasPassenger(player)) {
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity)
+                        && !entity.isInvulnerable()
+                        && !entity.hasPassenger(player)) {
                     closestDistance = hitDistance;
                     closest = entity;
                 }
@@ -4051,10 +4285,10 @@ public class MainUtil {
         return closest; // null if no valid hit
     }
 
-    public static Entity pick(Entity self, double distance){
+    public static Entity pick(Entity self, double distance) {
         double $$2 = distance;
         float choose = 1;
-        if (self.level().isClientSide()){
+        if (self.level().isClientSide()) {
             choose = ClientUtil.getFrameTime() % 1;
         }
         HitResult pick = self.pick($$2, choose, false);
@@ -4074,8 +4308,10 @@ public class MainUtil {
         Vec3 $$7 = self.getViewVector(1.0F);
         Vec3 $$8 = $$3.add($$7.x * $$2, $$7.y * $$2, $$7.z * $$2);
         AABB $$10 = self.getBoundingBox().expandTowards($$7.scale($$2)).inflate(1.0, 1.0, 1.0);
-        EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10, $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
-                && !$$0x.hasPassenger(self), $$6);
+        EntityHitResult $$11 = ProjectileUtil.getEntityHitResult(self, $$3, $$8, $$10,
+                $$0x -> !$$0x.isSpectator() && MainUtil.isStandPickable($$0x) && !$$0x.isInvulnerable()
+                        && !$$0x.hasPassenger(self),
+                $$6);
         if ($$11 != null) {
             Entity $$12 = $$11.getEntity();
             Vec3 $$13 = $$11.getLocation();
@@ -4086,33 +4322,35 @@ public class MainUtil {
                 return $$12;
             }
         }
-        return  null;
+        return null;
     }
 
-
-    public static boolean isHoldingRoadRoller(Entity ent){
-        if (ent instanceof LivingEntity LE){
+    public static boolean isHoldingRoadRoller(Entity ent) {
+        if (ent instanceof LivingEntity LE) {
             ItemStack hand = LE.getMainHandItem();
             ItemStack offHand = LE.getOffhandItem();
-            if ((!hand.isEmpty() && hand.getItem() instanceof RoadRollerItem) || (!offHand.isEmpty() && offHand.getItem() instanceof RoadRollerItem)){
+            if ((!hand.isEmpty() && hand.getItem() instanceof RoadRollerItem)
+                    || (!offHand.isEmpty() && offHand.getItem() instanceof RoadRollerItem)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static Boolean isInMold(Entity entity){
-        if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).getMoldTicks() > 0;
+    public static Boolean isInMold(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getMoldTicks() > 0;
         }
         return false;
     }
+
     public static Boolean isInPurpleHaze(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             return ((StandUser) LE).getPurpleHazeTicks() > 0;
         }
         return false;
     }
+
     public static Boolean isInDistortionHaze(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             return ((StandUser) LE).getDistortionHazeTicks() > 0;
@@ -4132,8 +4370,7 @@ public class MainUtil {
                 reachVec,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
-                player
-        );
+                player);
 
         BlockHitResult blockHit = world.clip(blockContext);
         double blockHitDistance = maxDistance;
@@ -4153,7 +4390,8 @@ public class MainUtil {
 
             if (hitOptional.isPresent()) {
                 double hitDistance = eyePos.distanceTo(hitOptional.get());
-                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity) && !entity.isInvulnerable()
+                if (hitDistance < closestDistance && !entity.isSpectator() && MainUtil.isStandPickable(entity)
+                        && !entity.isInvulnerable()
                         && !entity.hasPassenger(player)) {
                     closestDistance = hitDistance;
                     closest = entity;
@@ -4176,8 +4414,7 @@ public class MainUtil {
                 reachVec,
                 ClipContext.Block.OUTLINE,
                 ClipContext.Fluid.NONE,
-                player
-        );
+                player);
 
         BlockHitResult blockHit = world.clip(blockContext);
         double blockHitDistance = maxDistance;
@@ -4220,20 +4457,22 @@ public class MainUtil {
         return false;
     }
 
-    public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player){
+    public static ResourceLocation getPlayerSkinWithRespectToVisage(Player player) {
 
         if (player instanceof AbstractClientPlayer lpe) {
 
-
             IPlayerEntity pl = ((IPlayerEntity) player);
             ItemStack visage = pl.roundabout$getMaskSlot();
-            if(Objects.nonNull(visage)) {
+            if (Objects.nonNull(visage)) {
 
-                if(FateTypes.isZombie(player)){
+                if (FateTypes.isZombie(player)) {
                     if (FateTypes.isUndisguisedZombie(player)) {
                         if (visage.getItem() instanceof MaskItem MI) {
-                            if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                                return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                            if (!visage.getItem().equals(ModItems.RAT_MASK)
+                                    && !visage.getItem().equals(ModItems.BLANK_MASK)
+                                    && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
+                                return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/"
+                                        + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                             }
                         }
                         PlayerModel pm = ClientUtil.getPlayerModel(player);
@@ -4246,33 +4485,35 @@ public class MainUtil {
                 }
 
                 if (visage.getItem() instanceof MaskItem MI) {
-                    if(! visage.getItem().equals(ModItems.RAT_MASK) &&! visage.getItem().equals(ModItems.BLANK_MASK) && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
-                        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
+                    if (!visage.getItem().equals(ModItems.RAT_MASK) && !visage.getItem().equals(ModItems.BLANK_MASK)
+                            && !visage.getItem().equals(ModItems.MODIFICATION_MASK)) {
+                        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"
+                                + MI.visageData.generateVisageData(player).getSkinPath() + ".png");
                     }
                 }
             }
         }
-                if (player.getGameProfile() != null) {
-                    if (!player.getGameProfile().isComplete()) {
-                        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
-                    } else {
-                        final Minecraft minecraft = Minecraft.getInstance();
-                        SkinManager skinManager = minecraft.getSkinManager();
-                        final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager.getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
-                        if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-                            return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
-                        } else {
-                            return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
-                        }
-                    }
+        if (player.getGameProfile() != null) {
+            if (!player.getGameProfile().isComplete()) {
+                return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
+            } else {
+                final Minecraft minecraft = Minecraft.getInstance();
+                SkinManager skinManager = minecraft.getSkinManager();
+                final Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> loadSkinFromCache = skinManager
+                        .getInsecureSkinInformation(player.getGameProfile()); // returned map may or may not be typed
+                if (loadSkinFromCache.containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                    return skinManager.registerTexture(loadSkinFromCache.get(MinecraftProfileTexture.Type.SKIN),
+                            MinecraftProfileTexture.Type.SKIN);
+                } else {
+                    return DefaultPlayerSkin.getDefaultSkin(player.getGameProfile().getId());
                 }
+            }
+        }
 
-
-
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
+        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/green_day/part_four_green_day.png");
     }
 
-    public static BlockHitResult getMotionPath(Entity entity,float distOut){
+    public static BlockHitResult getMotionPath(Entity entity, float distOut) {
         Vec3 vec3d = entity.getEyePosition(1f);
         Vec3 vec3d2 = entity.getDeltaMovement();
         return entity.level().clip(new ClipContext(vec3d, vec3d.add(vec3d2.x * distOut,
@@ -4286,7 +4527,8 @@ public class MainUtil {
         BlockState state = user.level().getBlockState(blockPos);
 
         return !MainUtil.isBlockBlacklisted(state)
-                && (!(standPower instanceof BlockGrabPreset BGP) || blockPos.distSqr(user.getOnPos()) <= BGP.getGrabRange() )
+                && (!(standPower instanceof BlockGrabPreset BGP)
+                        || blockPos.distSqr(user.getOnPos()) <= BGP.getGrabRange())
                 && state.getBlock().isCollisionShapeFullBlock(state, user.level(), blockPos)
                 && !state.is(Blocks.REINFORCED_DEEPSLATE)
                 && !(state.getBlock() instanceof InfestedBlock)
@@ -4298,11 +4540,11 @@ public class MainUtil {
 
     }
 
-    public static boolean isHoldingBanner(Entity entity){
-        if (entity instanceof Player pl){
-            //Only works for mainhand on purpose
-            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersD4C pd4 &&
-            pd4.canHoldBanner) {
+    public static boolean isHoldingBanner(Entity entity) {
+        if (entity instanceof Player pl) {
+            // Only works for mainhand on purpose
+            if (((StandUser) pl).roundabout$getStandPowers() instanceof PowersD4C pd4 &&
+                    pd4.canHoldBanner) {
                 ItemStack stack = pl.getMainHandItem();
                 if (stack != null && !stack.isEmpty() && stack.getItem() instanceof BannerItem) {
                     if (!pl.isUsingItem()) {

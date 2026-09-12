@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.ibm.icu.number.Precision;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -60,8 +61,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -126,6 +127,8 @@ public class PowersDiverDown extends NewPunchingStand {
     private Direction feetDirection = Direction.DOWN;
     public int justFlippedTicks = 0;
     private int mercyTicks = 0;
+    private Vec3 lastGroundPosition = Vec3.ZERO;
+    private Direction cutDirection;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -241,19 +244,28 @@ public class PowersDiverDown extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0,
                 "ability.roundabout.diver_release_toggle",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_RELEASE_AUTO, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76 + startPos, topPos + 118, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_cancel_store",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_CANCEL_STORE, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 80, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, 0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.DIVER_DOWN_VAULT, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 99, 0, "ability.roundabout.diver_zip",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 118, 0, "ability.roundabout.diver_zip",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_ZIP, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 80, 0,
+                "ability.roundabout.diver_workstation",
+                "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_WORKSTATION, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 99, 0,
+                "ability.roundabout.diver_limb_platform",
+                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_PLATFORM, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115 + startPos, topPos + 118, 0,
+                "ability.roundabout.diver_ground_dive",
+                "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_GROUND_DIVE, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 118, 0,
                 "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SELECTION, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SELECTION, 4, level, bypas));
         return $$1;
@@ -296,6 +308,9 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
+        if (areStandMovesDisabled()) {
+            return;
+        }
         if (!consumeClickInput) {
             if (holdDownClick) {
                 if (keyIsDown) {
@@ -338,6 +353,13 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void powerActivate(PowerContext context) {
         if (areStandMovesDisabled()) {
+            if (inZipMode()) {
+                // allows toggling the mode and that's it
+                if (context == PowerContext.SKILL_3_CROUCH) {
+                    tryDiverZip();
+                }
+                return;
+            }
             if (hasLimbsDeployed()) {
                 // pressing V recalls limbs if limb move is active
                 if (context == PowerContext.SKILL_4_NORMAL) {
@@ -418,7 +440,7 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         switch (move) {
             case DIVER_ZIP -> {
-                inZipMode();
+                activateZip();
             }
         }
         return super.tryPower(move, forced);
@@ -540,10 +562,10 @@ public class PowersDiverDown extends NewPunchingStand {
             basis *= 0.3f;
         }
         if (inZipMode()) {
-            if (self.isSprinting()) {
-                basis *= 1.27F; // 5.612 * 1.27 = ~7.127 m/s while sprinting
+            if (isHoldingSneak()) {
+                basis *= 3.32F; // slow crawl when holding Shift (1.295 base crawl speed * 3.32 modifier = ~4.3 m/s)
             } else {
-                basis *= 1.651F; // 4.317 * 1.651 = ~7.127 m/s even if not sprinting
+                basis *= 5.503F; // 1.295 base crawl speed * 5.303 modifier = ~7.127 m/s
             }
         }
         return super.inputSpeedModifiers(basis);
@@ -1095,6 +1117,12 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
+        // force crawl mode in zippy time
+        if (inZipMode()) {
+            ((StandUser) this.self).rdbt$SetCrawlTicks(5);
+            this.self.setPose(Pose.SWIMMING);
+            this.self.setSwimming(true);
+        }
         // timer for the pilot, kicks you out once it hits 0, all that good stuff.
         if (this.self.level().isClientSide()) {
             boolean pilotingNow = isPiloting();
@@ -1128,12 +1156,14 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (inZipMode() && !getStandUserSelf().rdbt$getJumping()) {
                     if (!self.onGround()) {
                         if (this.self.getDeltaMovement().y < 0) {
-                            this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                            if (!(canCutCorners() && justFlippedTicks > 0)) {
+                                this.self.setDeltaMovement(this.self.getDeltaMovement().add(0, -0.14, 0));
+                            }
                         }
                     }
                 }
                 // disengage if swimming
-                if (self.isSwimming()) {
+                if (self.isInWater()) {
                     toggleZip(false);
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
                 }
@@ -1142,6 +1172,22 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (justFlippedTicks > 0) {
                         justFlippedTicks--;
                     } else {
+                        if (this.self.horizontalCollision && canCutCorners() && justFlippedTicks <= 0) {
+                            Direction facing = RotationUtil.getRealFacingDirection2(this.self);
+                            Direction grav = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                            if (facing != grav && facing != grav.getOpposite()) {
+                                Vec3 mpos = this.self.getPosition(1F);
+                                // Check if there is a walkable block in front of the player
+                                BlockPos wallPos = BlockPos.containing(mpos).relative(facing);
+                                if (MainUtil.isBlockWalkable(this.self.level().getBlockState(wallPos))) {
+                                    ((IGravityEntity) this.self).roundabout$setGravityDirection(facing);
+                                    setHeelDirection(facing);
+                                    justFlippedTicks = 7;
+                                    C2SPacketUtil.intToServerPacket(
+                                            PacketDataIndex.INT_GRAVITY_FLIP, MainUtil.getIntFromDirection(facing));
+                                }
+                            }
+                        }
                         // Check block probe positions beneath player relative to gravity
                         Vec3 newVec = RotationUtil.vecPlayerToWorld(new Vec3(0, -0.2, 0),
                                 ((IGravityEntity) self).roundabout$getGravityDirection());
@@ -1156,21 +1202,43 @@ public class PowersDiverDown extends NewPunchingStand {
                                 ((IGravityEntity) self).roundabout$getGravityDirection());
                         BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
                         if (self.onGround() && MainUtil.isBlockWalkableSimplified(self.getBlockStateOn())) {
-                            // making this longer than walking heart because you'll be moving faster than it
-                            mercyTicks = 8;
+                            mercyTicks = 12; // needs lots of coyote time for sprinting
+                            lastGroundPosition = self.position();
                         } else {
+                            // If ANY block directly beneath your rotated feet is solid, you are still on a
+                            // surface
                             if (MainUtil.isBlockWalkable(self.level().getBlockState(pos))
                                     || MainUtil.isBlockWalkable(self.level().getBlockState(pos2))
                                     || MainUtil.isBlockWalkable(self.level().getBlockState(pos4))
                                     || MainUtil.isBlockWalkable(self.level().getBlockState(pos5))) {
                                 mercyTicks--;
                             } else {
-                                mercyTicks = 0;
+                                // Only attempt to cut the corner when all probe blocks are AIR (stepped off
+                                // edge)
+                                if (canCutCorners()) {
+                                    if (mercyTicks > 8) {
+                                        mercyTicks = 8;
+                                    }
+                                    mercyTicks -= 1;
+                                    if (canCut() && cutDirection != ((IGravityEntity) this.self)
+                                            .roundabout$getGravityDirection()) {
+                                        ((IGravityEntity) this.self).roundabout$setGravityDirection(cutDirection);
+                                        setHeelDirection(cutDirection);
+                                        justFlippedTicks = 5;
+                                        C2SPacketUtil.intToServerPacket(
+                                                PacketDataIndex.INT_GRAVITY_FLIP,
+                                                MainUtil.getIntFromDirection(feetDirection));
+                                    }
+                                } else {
+                                    mercyTicks = 0;
+                                }
                             }
                         }
                         // cancel power if something bad happens
-                        if (self.isSleeping() || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
-                                && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
+                        if (getStandUserSelf().rdbt$getJumping() || self.isSleeping()
+                                || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
+                                        && mercyTicks <= 0)
+                                || self.getRootVehicle() != this.self) {
                             feetDirection = Direction.DOWN;
                             toggleZip(false);
                             C2SPacketUtil.trySingleBytePacket(PacketDataIndex.QUERY_STAND_UPDATE_2);
@@ -1553,16 +1621,16 @@ public class PowersDiverDown extends NewPunchingStand {
     // heel plant 2.0 start
 
     public void tryDiverZip() {
-        if (!self.isSwimming()) {
+        if (!self.isInWater()) {
             if (forceBlock())
                 return;
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            ((StandUser) this.getSelf()).roundabout$tryPower(DIVER_ZIP, true);
             tryPowerPacket(DIVER_ZIP);
         }
     }
 
     public void activateZip() {
-        if (self.isSwimming())
+        if (self.isInWater())
             return;
         boolean isAnchored = inZipMode();
         if (isAnchored) {
@@ -1581,7 +1649,15 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void toggleZip(boolean toggle) {
+        if (!toggle) {
+            ((StandUser) this.self).rdbt$SetCrawlTicks(0);
+            this.self.setSwimming(false);
+        }
         if (!this.self.level().isClientSide()) {
+            // test message, comment out when done
+            /*if (this.getSelf() instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("it's zipping time"), false);
+            }*/
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
@@ -1604,13 +1680,16 @@ public class PowersDiverDown extends NewPunchingStand {
         getStandUserSelf().roundabout$setUniqueStandModeToggle(toggle);
     }
 
+    @Override
+    public void serverQueried2() {
+        if (self instanceof ServerPlayer) {
+            toggleZip(false);
+        }
+    }
+
     public void setHeelDirection(Direction dir) {
         feetDirection = dir;
     }
-
-    // step height method
-
-    // gravity and wall walking
 
     public boolean forceBlock() {
         if (!MainUtil.isBlockWalkableSimplified(self.level().getBlockState(self.getOnPos())))
@@ -1667,6 +1746,127 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         return 0;
     }
+
+    /**
+     * Always enable auto corner-cutting while in zip mode if wall walking is
+     * enabled in config
+     */
+    public boolean canCutCorners() {
+        return inZipMode() && canWallZipConfig();
+    }
+
+    public boolean tryCut(Vec3 cutPos) {
+        BlockPos pos1 = BlockPos.containing(cutPos);
+        BlockState bs = this.self.level().getBlockState(pos1);
+        return MainUtil.isBlockWalkable(bs);
+    }
+
+    public boolean tryCutEast(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(0.1, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 1.1f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 1.4f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 1.6f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 2.0f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 2.5f, 0, 0))));
+    }
+
+    public boolean tryCutWest(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(-0.1, 0, 0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth() * 1.1f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth() * 1.4f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth() * 1.6f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth() * 2.0f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(-self.getBbWidth() * 2.5f, 0, 0))));
+    }
+
+    public boolean tryCutNorth(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(0, 0, -0.1)))
+                || tryCut(mpos.add(new Vec3(0, 0, -self.getBbWidth() * 1.1f)))
+                || tryCut(mpos.add(new Vec3(0, 0, -self.getBbWidth() * 1.4f)))
+                || tryCut(mpos.add(new Vec3(0, 0, -self.getBbWidth() * 1.6f)))
+                || tryCut(mpos.add(new Vec3(0, 0, -self.getBbWidth() * 2.0f)))
+                || tryCut(mpos.add(new Vec3(0, 0, -self.getBbWidth() * 2.5f))));
+    }
+
+    public boolean tryCutSouth(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(0, 0, 0.1)))
+                || tryCut(mpos.add(new Vec3(0, 0, self.getBbWidth() * 1.1f)))
+                || tryCut(mpos.add(new Vec3(0, 0, self.getBbWidth() * 1.4f)))
+                || tryCut(mpos.add(new Vec3(0, 0, self.getBbWidth() * 1.6f)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 2.0f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(self.getBbWidth() * 2.5f, 0, 0)))
+                || tryCut(mpos.add(new Vec3(0, 0, self.getBbWidth() * 2.0f)))
+                || tryCut(mpos.add(new Vec3(0, 0, self.getBbWidth() * 2.5f))));
+    }
+
+    public boolean tryCutUp(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(0, 0.1, 0)))
+                || tryCut(mpos.add(new Vec3(0, self.getBbWidth() * 1.1f, 0)))
+                || tryCut(mpos.add(new Vec3(0, self.getBbWidth() * 1.4f, 0)))
+                || tryCut(mpos.add(new Vec3(0, self.getBbWidth() * 1.6f, 0)))
+                || tryCut(mpos.add(new Vec3(0, self.getBbWidth() * 2.0f, 0)))
+                || tryCut(mpos.add(new Vec3(0, self.getBbWidth() * 2.5f, 0))));
+    }
+
+    public boolean tryCutDown(Vec3 mpos) {
+        return (tryCut(mpos.add(new Vec3(0, -0.1, 0)))
+                || tryCut(mpos.add(new Vec3(0, -self.getBbWidth() * 1.1f, 0)))
+                || tryCut(mpos.add(new Vec3(0, -self.getBbWidth() * 1.4f, 0)))
+                || tryCut(mpos.add(new Vec3(0, -self.getBbWidth() * 1.6f, 0)))
+                || tryCut(mpos.add(new Vec3(0, -self.getBbWidth() * 2.0f, 0)))
+                || tryCut(mpos.add(new Vec3(0, -self.getBbWidth() * 2.5f, 0))));
+    }
+
+    record DirDist(Direction dir, float dist) {
+    }
+
+    public boolean canCut() {
+        Vec3 mpos = this.self.getPosition(1F);
+        float northTest = (float) (lastGroundPosition.z - mpos.z);
+        float southTest = -1 * (float) (lastGroundPosition.z - mpos.z);
+        float eastTest = -1 * (float) (lastGroundPosition.x - mpos.x);
+        float westTest = (float) (lastGroundPosition.x - mpos.x);
+        float upTest = -1 * (float) (lastGroundPosition.y - mpos.y);
+        float downTest = (float) (lastGroundPosition.y - mpos.y);
+        List<DirDist> tests = List.of(
+                new DirDist(Direction.NORTH, northTest),
+                new DirDist(Direction.SOUTH, southTest),
+                new DirDist(Direction.EAST, eastTest),
+                new DirDist(Direction.WEST, westTest),
+                new DirDist(Direction.UP, upTest),
+                new DirDist(Direction.DOWN, downTest));
+        List<DirDist> ordered = new java.util.ArrayList<>(tests);
+        ordered.sort(java.util.Comparator.comparing(DirDist::dist));
+        for (DirDist test : ordered) {
+            boolean success = switch (test.dir()) {
+                case EAST -> tryCutEast(mpos);
+                case WEST -> tryCutWest(mpos);
+                case NORTH -> tryCutNorth(mpos);
+                case SOUTH -> tryCutSouth(mpos);
+                case UP -> tryCutUp(mpos);
+                case DOWN -> tryCutDown(mpos);
+            };
+            if (success) {
+                cutDirection = test.dir();
+                // Opposing wall sanity checks
+                if (cutDirection == Direction.EAST && tryCutWest(mpos))
+                    return false;
+                if (cutDirection == Direction.WEST && tryCutEast(mpos))
+                    return false;
+                if (cutDirection == Direction.NORTH && tryCutSouth(mpos))
+                    return false;
+                if (cutDirection == Direction.SOUTH && tryCutNorth(mpos))
+                    return false;
+                if (cutDirection == Direction.UP && tryCutDown(mpos))
+                    return false;
+                if (cutDirection == Direction.DOWN && tryCutUp(mpos))
+                    return false;
+                return true;
+            }
+        }
+        return false;
+    }
+
     // heel plant 2.0 stop
 
     /**
@@ -1703,10 +1903,31 @@ public class PowersDiverDown extends NewPunchingStand {
      * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
-        return hasLimbsDeployed() || isDiveActive() || isPiloting();
+        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode();
     }
 
-    // 4 overrides below are for making sure the stand can't do a variety of stuff
+    // disables PLAYER MOVES for zip mode
+    @Override
+    public boolean interceptAllInteractions() {
+        return inZipMode() || super.interceptAllInteractions();
+    }
+
+    //disables player mining in zip mode
+    @Override
+    public boolean cancelAllRandomMiningThatBreaksMoves() {
+        return inZipMode() || super.cancelAllRandomMiningThatBreaksMoves();
+    }
+
+    //disables player mining progress in zip mode (As a failsafe)
+    @Override
+    public float getBonusPassiveMiningSpeed() {
+        if (inZipMode()) {
+            return 0.0F;
+        }
+        return super.getBonusPassiveMiningSpeed();
+    }
+
+    // overrides below are for making sure the stand can't do a variety of stuff
     // while the stand moves are disabled
     @Override
     public boolean canAttack() {
@@ -1733,6 +1954,22 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public boolean canUseMiningStand() {
         return !areStandMovesDisabled() && super.canUseMiningStand();
+    }
+
+    @Override
+    public boolean canGuard() {
+        if (areStandMovesDisabled()) {
+            return false;
+        }
+        return super.canGuard();
+    }
+
+    @Override
+    public void buttonInputBarrage(boolean keyIsDown, Options options) {
+        if (areStandMovesDisabled()) {
+            return;
+        }
+        super.buttonInputBarrage(keyIsDown, options);
     }
 
     /*
@@ -1875,6 +2112,10 @@ public class PowersDiverDown extends NewPunchingStand {
         } else {
             return 1;
         }
+    }
+
+    public Direction getHeelDirection() {
+        return feetDirection;
     }
 
     private boolean setPowerChargePhase() {
