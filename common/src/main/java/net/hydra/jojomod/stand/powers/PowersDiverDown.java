@@ -107,7 +107,9 @@ public class PowersDiverDown extends NewPunchingStand {
     private boolean isChestScreenCurrentlyOpen = false;
 
     // used for ground barrage
-    private int diveBarrageTicks = 0;
+    private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
+                                               // + 9 for animation
+    private int barrageTicksLeft = 0;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -346,10 +348,6 @@ public class PowersDiverDown extends NewPunchingStand {
         else if (move == PowerIndex.SNEAK_ATTACK) {
             return setPowerPhasePunch();
         }
-        // barrages in ground dive
-        else if (move == GROUND_DIVE_BARRAGE) {
-            return groundDiveBarrage();
-        }
         return super.setPowerOther(move, lastMove);
     }
 
@@ -373,8 +371,15 @@ public class PowersDiverDown extends NewPunchingStand {
                 diveGetItems();
             }
             return true;
+        } else if (move == GROUND_DIVE_BARRAGE) {
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null) {
+                stand.setPos(pos.x, pos.y, pos.z);
+            }
+            this.barrageTicksLeft = MAX_GROUND_BARRAGE_TICKS;
+            this.setActivePower(GROUND_DIVE_BARRAGE);
+            return true;
         }
-        // could also maybe be used for barrage
         return super.tryPosPower(move, forced, pos);
     }
 
@@ -1020,8 +1025,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 boolean hasScreenNow = mc.screen != null;
                 if (hasScreenNow) {
                     this.isChestScreenCurrentlyOpen = true;
-                }
-                else if (this.isChestScreenCurrentlyOpen) {
+                } else if (this.isChestScreenCurrentlyOpen) {
                     this.isChestScreenCurrentlyOpen = false;
                     SoundEvent closeSound = this.isBarrel ? SoundEvents.BARREL_CLOSE : SoundEvents.CHEST_CLOSE;
                     mc.player.playSound(closeSound, 1.0F, 1.0F);
@@ -1047,8 +1051,68 @@ public class PowersDiverDown extends NewPunchingStand {
                     // same as earlier, if the player's container becomes their inventory
                     // then we know that they haev exited the chest.
                     if (this.self instanceof ServerPlayer sp && sp.containerMenu == sp.inventoryMenu) {
-                        setPiloting(0);
+                        exitGroundDive();
                     }
+                }
+            }
+            LivingEntity stand = getPilotingStand();
+            if (this.getActivePower() == GROUND_DIVE_BARRAGE && !this.self.level().isClientSide) {
+                if (this.barrageTicksLeft > 0) {
+                    this.barrageTicksLeft--;
+                    // need to filter targets still to account for that pesky boss immunity
+                    List<Entity> unfilteredTargets = getEntitiesBox();
+                    // for boss filtering function, taken from walking heart. It took me a while to
+                    // figure out that FE meant "Filtered Entities," so im leaving this variable as
+                    // the whole thing for future reference.
+                    List<Entity> filteredEntities = new ArrayList<>();
+                    for (Entity target : unfilteredTargets) {
+                        if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.wallPassingHitboxesOnBosses) {
+                            filteredEntities.add(target);
+                        } else if (MainUtil.isBossMob(target)) {
+                            // Bosses require direct line of sight
+                            if (MainUtil.canActuallyHitInvolved(target, this.self)) {
+                                filteredEntities.add(target);
+                            }
+                        } else {
+                            // Regular mobs can be hit through walls
+                            filteredEntities.add(target);
+                        }
+                    }
+                    // filter end
+                    for (Entity target : filteredEntities) {
+                        if (target instanceof LivingEntity living) {
+                            if (this.barrageTicksLeft > 11) {
+                                // motion stores the knockback from the move then immediately deletes it
+                                // this ensures that enemies can still run around while the move is hitting them
+                                // whilst also making sure that the move doesn't send them flying away
+                                Vec3 motion = living.getDeltaMovement();
+                                DamageHandler.StandDamageEntity(living, 1F, this.self);
+                                living.setDeltaMovement(motion);
+                                hitParticles(living);
+                                // animate the barrage and also sound here
+                            } else if (this.barrageTicksLeft == 9) {
+                                // BIG FINAL PUNCH!!! (does bleed)
+                                DamageHandler.StandDamageEntity(living, 7.0F, this.self);
+                                MainUtil.makeBleed(target, 1, 1000, stand);
+                                living.setDeltaMovement(living.getDeltaMovement().x * 0.3, 1.35D,
+                                        living.getDeltaMovement().z * 0.3);
+                                living.hurtMarked = true;
+                                MainUtil.knockShieldPlusStand(living, 60); // 60 ticks = 3 seconds
+                                // big final punch anim and sound here
+                                hitParticlesCenter(living);
+                                sendParticlesIfPossible(this.self.level(), ModParticles.AIR_CRACKLE,
+                                        living.getX(), living.getY() + (living.getBbHeight() * 0.5), living.getZ(),
+                                        1, 0.0, 0.0, 0.0, 0);
+                                exitGroundDive();
+                            } else {
+                                //do nothing, wait for animation to finish
+                                //revisit this with animated to adjust ticks based on animation
+                            }
+                        }
+                    }
+                } else {
+                    this.setPowerNone();
+                    exitGroundDive();
                 }
             }
         }
@@ -1077,6 +1141,11 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void pilotStandControls(KeyboardPilotInput kpi, LivingEntity entity) {
         if (entity instanceof DiverDownEntity diver) {
+            // locks movement during barrage
+            if (this.getActivePower() == GROUND_DIVE_BARRAGE) {
+                diver.setDeltaMovement(0, diver.getDeltaMovement().y, 0);
+                return;
+            }
             // autostep
             // need to think about if this should be 1.0, or 1.4F so it can go up things
             // like carpeted fences and stuff.
@@ -1240,11 +1309,7 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = getStandEntity(this.self);
         if (stand == null)
             return false;
-        AABB box = stand.getBoundingBox().inflate(2.0, 1.5, 2.0);
-        // reading through star platinum moves rn
-        // from what i understand i need to do the "gettargetenttiylistthroughwalls"
-        // command
-        List<Entity> allTargets = this.self.level().getEntities(stand, box);
+        List<Entity> allTargets = getEntitiesBox();
         // then check for all the entities that are items
         if (!allTargets.isEmpty()) {
             // for boss filtering function, taken from walking heart. It took me a while to
@@ -1257,19 +1322,16 @@ public class PowersDiverDown extends NewPunchingStand {
                 // unlike phase grab
                 boolean collected = false;
                 if (target instanceof ItemEntity || target instanceof ExperienceOrb) {
-                    // filter it out even more to only account for thing inside the hitbox
-                    if (isInDiveHitbox(target.getX(), target.getY(), target.getZ())) {
-                        // bring items to player yippee
-                        target.playerTouch(player);
-                        collected = true;
-                        // only trigger this once because otherwise it will get spammed and be really
-                        // annoying
-                        if (collected) {
-                            playSoundIfPossible(this.self.level(), null, stand.blockPosition(),
-                                    SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.85F, 1.0F);
-                        }
-                        exitGroundDive();
+                    // bring items to player yippee
+                    target.playerTouch(player);
+                    collected = true;
+                    // only trigger this once because otherwise it will get spammed and be really
+                    // annoying
+                    if (collected) {
+                        playSoundIfPossible(this.self.level(), null, stand.blockPosition(),
+                                SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.85F, 1.0F);
                     }
+                    exitGroundDive();
                 }
             }
         }
@@ -1282,16 +1344,43 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     @Override
     public void pilotInputAttack() {
-        ((StandUser) this.getSelf()).roundabout$tryPower(GROUND_DIVE_BARRAGE, true);
-        tryPowerPacket(GROUND_DIVE_BARRAGE);
+        // don't let the user barrage again if there's already an active one
+        if (this.getActivePower() == GROUND_DIVE_BARRAGE) {
+            return;
+        }
+        // test statement, comment out when done
+        /*
+         * if (this.self instanceof Player player) {
+         * player.sendSystemMessage(Component.literal("it's chesting time"));
+         * }
+         */
+        StandEntity stand = getStandEntity(this.self);
+        if (stand != null) {
+            Vec3 pos = stand.position();
+            tryPosPower(GROUND_DIVE_BARRAGE, true, pos);
+            tryPosPowerPacket(GROUND_DIVE_BARRAGE, pos);
+        }
     }
 
-    // dive barrage code
-    private boolean groundDiveBarrage() {
-        // insert mini barrage code here
-        // wait a bit to account for how long the move takes
-        // recall stand
-        return true;
+    /*
+     * helper method for ground dive and item grab that gets all entities in a
+     * bounding box
+     * if the hitbox ever becomes bigger, make sure to make this bigger too.
+     */
+    private List<Entity> getEntitiesBox() {
+        StandEntity stand = getStandEntity(this.self);
+        AABB box = stand.getBoundingBox().inflate(2.0, 2.0, 2.0);
+        List<Entity> allTargets = this.self.level().getEntities(stand, box);
+        // filter entities even more so it only counts those inside the ACTUAL hitbox
+        List<Entity> filteredTargets = new ArrayList<>();
+        for (Entity target : allTargets) {
+            if (target != null && target.isAlive() && target != this.self && target != stand) {
+                if (isInDiveHitbox(target.getX(), target.getY(), target.getZ())) {
+                    filteredTargets.add(target);
+                }
+            }
+        }
+        return filteredTargets;
     }
 
     // walking heart autostep works on the player, not on the stand. i can't copy
@@ -1521,7 +1610,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
         this.poseStand(OffsetIndex.GUARD);
         // uncomment the animation later when done
-        // animateStand((byte) 42);
+        // animateStand
         playStandUserOnlySoundsIfNearby(IMPALE_NOISE, 27, false, false);
         return true;
     }
@@ -1532,7 +1621,7 @@ public class PowersDiverDown extends NewPunchingStand {
         this.poseStand(OffsetIndex.ATTACK);
         this.chargedPhasePunch = Math.min(this.chargedPhasePunch, getMaxPhasePunchTime());
         // uncomment the animation later after done.
-        // animateStand((byte) 43);
+        // animateStand
         return true;
     }
 
