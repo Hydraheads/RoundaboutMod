@@ -112,6 +112,8 @@ public class Config implements Cloneable {
     @NestedOption(group = "modded")
     public EmperorSettings emperorSettings;
     @NestedOption(group = "modded")
+    public OhLonesomeMeSettings ohLonesomeMeSettings;
+    @NestedOption(group = "modded")
     public GreenDaySettings greenDaySettings;
     @NestedOption(group = "modded")
     public D4CSettings d4cSettings;
@@ -617,6 +619,8 @@ public class Config implements Cloneable {
         public Integer waterShieldCooldown;
         @IntOption(group = "inherit", value = 1000, min = 0, max = 72000)
         public Integer woundPlugCooldown;
+        @FloatOption(group = "inherit", value = 1f, min = 0, max = 72000)
+        public Float woundPlugHealAmount;
         @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer waterShieldBucketCooldown;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
@@ -981,7 +985,10 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer chessMultOnPlayers;
     }
-
+    public static class OhLonesomeMeSettings {
+        @BooleanOption(group = "inherit", value = true)
+        public Boolean enableOhLonesomeMe;
+    }
     public static class WhiteAlbumSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableWhiteAlbum;
