@@ -470,9 +470,9 @@ public class Config implements Cloneable {
         public Boolean bitesTheDustDayModeAffectGlobalTime;
     	@BooleanOption(group = "inherit", value = true)
         public Boolean blocksDestruction;
-    	@FloatOption(group = "inherit", value = 8.0F, min = 0, max = 200F)
+    	@FloatOption(group = "inherit", value = 7.2F, min = 0, max = 200F)
         public Float explosionDetonateMaxDamage;
-        @FloatOption(group = "inherit", value = 4.75F, min = 0, max = 200F)
+        @FloatOption(group = "inherit", value = 3.75F, min = 0, max = 200F)
         public Float SheerHeartAttackMaxDamage;
         @FloatOption(group = "inherit", value = 2.5F, min = 0, max = 200F)
         public Float StrayCatAirBubblesDamage;

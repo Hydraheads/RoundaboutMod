@@ -1270,7 +1270,7 @@
   "sounds.roundabout.purple_haze_barrage_cry":  "UBASHAAAA!!!",
   "sounds.roundabout.purple_haze_smoke":  "Purple Haze Spreads",
   "sounds.roundabout.purple_haze_distortion_smoke":  "Distortion Haze Spreads",
-  "sounds.roundabout.pod_bite":  "Pod Cracks",
+  "sounds.roundabout.purple_haze_pod_bite":  "Pod Cracks",
 
   "sounds.roundabout.bullet_ricochet":  "Bullet ricochetted",
 
@@ -3412,11 +3412,6 @@
   "config.roundabout.nerfedGasolineSpread.name": "Nerfed Gas Spread",
   "config.roundabout.nerfedGasolineSpread.desc": "Makes gasoline spread less.",
 
-  "config.roundabout.bitesTheDustDayMobsDamage.name":"BTD Mob Damage",
-  "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
-  "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
-  "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
-
   "config.roundabout.chanceForAltMobs.name": "Alternate Mob Chance",
   "config.roundabout.chanceForAltMobs.desc": "Small chance of select mobs having rare variations like shiny pokemon, from 0-1 (1 being 100 percent chance). Also rabbits can be killer rabbits...",
 
@@ -4501,7 +4496,7 @@
   "config.roundabout.mobPlantHitkillMobs.desc": "Toggle on/off if the mob plant should Hitkill mobs (off by default)",
   "config.roundabout.airBubbleGuardIncrease.name": "Air bubbles guard increase",
   "config.roundabout.airBubbleGuardIncrease.desc": "Set amount of guard increased by stray cat air bubbles",
-  "config.roundabout.maxAirBubbleTravelDistanceBeforePopping.name": "Air bubbles guard increase",
+  "config.roundabout.maxAirBubbleTravelDistanceBeforePopping.name": "Air bubbles max travel distance",
   "config.roundabout.maxAirBubbleTravelDistanceBeforePopping.desc": "How far air bubbles can go before popping",
   "config.roundabout.StrayCatAirBubblesDamage.name": "Stray Cat air bubbles damage",
   "config.roundabout.StrayCatAirBubblesDamage.desc": "Set how much damage Stray Cat air bubbles make",
@@ -4518,6 +4513,11 @@
   "config.roundabout.bitesTheDustDayCooldownBonus.desc": "Sets the cooldown bonus put on bites the dust day after it been activated.",
   "config.roundabout.bitesTheDustDayGlobalRewind.name": "Bites the dust Day global rewind",
   "config.roundabout.bitesTheDustDayGlobalRewind.desc": "Sets if Bites the dust day should rewind all players on the server, disabled by default.",
+
+  "config.roundabout.bitesTheDustDayMobsDamage.name":"BTD Mob Damage",
+  "config.roundabout.bitesTheDustDayMobsDamage.desc": "How much does bites the dust hurt mobs?",
+  "config.roundabout.bitesTheDustDayPlayersDamage.name":"BTD Player Damage",
+  "config.roundabout.bitesTheDustDayPlayersDamage.desc": "How much does bites the dust hurt players?",
 
 
   "config.roundabout.theWorldAttackMultOnPlayers.name": "Player Damage Multiplier",

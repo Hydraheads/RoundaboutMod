@@ -290,6 +290,12 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 attemptStrangle();
             }
             case PowerIndex.SNEAK_ATTACK_CHARGE -> attemptThrowPod();
+            case PowerIndex.EXTRA -> {
+                return this.fallBraceInit();
+            }
+            case PowerIndex.FALL_BRACE_FINISH -> {
+                return this.fallBrace();
+            }
         }
         return super.setPowerOther(move, lastMove);
     }
@@ -465,7 +471,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos, topPos+99,0, "ability.roundabout.guard",
                 "instruction.roundabout.hold_block", StandIcons.STAR_PLATINUM_GUARD,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+20+startPos,topPos+118,0, "ability.purple_haze.capsule_throw",
-                "instruction.roundabout.press_attack_crouch", StandIcons.KING_CRIMSON_FINAL_PUNCH,0,level,bypas));
+                "instruction.roundabout.press_attack_crouch", StandIcons.POD_THROW,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+80,0, "ability.purple_haze.punch_barrage",
                 "instruction.roundabout.barrage", StandIcons.PH_BARRAGE,0,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+39+startPos,topPos+99,0, "ability.purple_haze.kick_barrage",
@@ -489,7 +495,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+99,0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+96+startPos,topPos+118,0, "ability.purple_haze.falling_hit",
-                "instruction.roundabout.press_skill_air", StandIcons.KING_CRIMSON_FINAL_PUNCH,3,level,bypas));
+                "instruction.roundabout.press_skill_air", StandIcons.FALLING_ATTACK,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+80,0, "ability.roundabout.vault",
                 "instruction.roundabout.press_skill_air", StandIcons.PURPLE_HAZE_LEDGE_GRAB,3,level,bypas));
         $$1.add(drawSingleGUIIcon(context,18,leftPos+115+startPos,topPos+99,3, "ability.roundabout.stand_leap",
@@ -989,6 +995,68 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
     }
+
+
+    @Override
+    public boolean canFallBrace() {
+        return super.canFallBrace();
+    }
+    private static final float FALL_BRACE_SHOCKWAVE_RADIUS = 4.0F;
+    private static final float FALL_BRACE_SHOCKWAVE_DAMAGE = 3.0F;
+
+    @Override
+    public boolean fallBrace() {
+        boolean shouldResolve = this.getActivePower() == PowerIndex.EXTRA && this.attackTimeDuring >= 0;
+
+        boolean result = super.fallBrace();
+
+        if (shouldResolve && self != null && !self.level().isClientSide()) {
+            float wouldBeDamage = (float) Math.max(fallBraceOriginalDistance - 3.0, 0.0);
+            float halfDamage = wouldBeDamage * 0.5F;
+
+            if (halfDamage > 0.05F) {
+                self.hurt(ModDamageTypes.of(self.level(), DamageTypes.FALL), halfDamage);
+            }
+
+            if (getPods() > 0) {
+                if (!(self instanceof Player pl && pl.isCreative())) {
+                    setPods(getPods() - 1);
+                }
+                activatePurpleHazeField(self.position(), indistortionmode);
+            }
+
+            playFallBraceShockwave();
+
+            fallBraceOriginalDistance = 0;
+        }
+
+        return result;
+    }
+
+    private void playFallBraceShockwave() {
+        Vec3 pos = self.position();
+
+        sendParticlesIfPossible(self.level(),
+                ModParticles.PW_BLASTWAVE_EXPLOSION,
+                pos.x, pos.y + 0.05, pos.z,
+                1, 0.005, 0.01, 0.005, 0.02);
+
+        AABB sweep = new AABB(pos, pos).inflate(FALL_BRACE_SHOCKWAVE_RADIUS, 1.5, FALL_BRACE_SHOCKWAVE_RADIUS);
+        List<Entity> nearby = self.level().getEntities(self, sweep);
+        for (Entity e : nearby) {
+            if (e instanceof LivingEntity le && le.isAlive() && !le.isInvulnerable()) {
+                StandDamageEntityAttack(le, FALL_BRACE_SHOCKWAVE_DAMAGE, 0.6F, self);
+            }
+        }
+    }
+    private double fallBraceOriginalDistance = 0;
+
+    @Override
+    public boolean fallBraceInit() {
+        fallBraceOriginalDistance = this.getSelf().fallDistance;
+        return super.fallBraceInit();
+    }
+
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
