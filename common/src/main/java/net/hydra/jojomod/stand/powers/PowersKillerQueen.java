@@ -24,6 +24,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.*;
 import net.hydra.jojomod.event.index.*;
@@ -4669,7 +4670,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                     */
 
                 } else {
-                    if (mobsHitkill && !isBoss && target instanceof LivingEntity LE) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
+                    if ((mobsHitkill && !isBoss && target instanceof LivingEntity LE)) { LE.hurt(desintegrationDmg, LE.getMaxHealth());}
+                    else if ((target instanceof CloneEntity CE && playersHitkill)) { CE.hurt(desintegrationDmg, CE.getMaxHealth());}
                     else {target.hurt(desintegrationDmg, hitPoints);}
                 }
             }
