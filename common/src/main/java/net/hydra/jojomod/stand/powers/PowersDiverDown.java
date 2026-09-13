@@ -36,6 +36,7 @@ import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.ChatFormatting;
@@ -65,6 +66,7 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.ChestBlock;
@@ -78,6 +80,10 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +101,10 @@ public class PowersDiverDown extends NewPunchingStand {
             OPEN_CHEST = 60,
             GROUND_GET_ITEMS = 61,
             GROUND_DIVE_BARRAGE = 62,
-            DIVER_ZIP = 63;
+            DIVER_ZIP = 63,
+            STORE_KICK_TRAP = 64,
+            MANUAL_TRAP_RELEASE = 65,
+            TOGGLE_TRAP_MODE = 66;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -129,6 +138,24 @@ public class PowersDiverDown extends NewPunchingStand {
     private int mercyTicks = 0;
     private Vec3 lastGroundPosition = Vec3.ZERO;
     private Direction cutDirection;
+
+    // used for traps
+    public static class KickTrap {
+        public int ticks;
+        public Direction face;
+
+        public KickTrap(int ticks, Direction face) {
+            this.ticks = ticks;
+            this.face = face;
+        }
+    }
+
+    public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
+    private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
+    private static final float TRAP_RANGE = 4.0f;
+    private static final int MAX_NUMBER_OF_TRAPS = 10;
+    public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
+    private boolean isAutoRelease = true; // true = automatic, false = manual
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -182,8 +209,14 @@ public class PowersDiverDown extends NewPunchingStand {
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_AUTO, PowerIndex.SKILL_2_GUARD);
             else
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_GUARD);
+        } else if (isHoldingSneak()) {
+            // changes the icons for deletion vs releation (real)
+            if (releaseMode())
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
+            else
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
         } else {
-            setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_SELECTION, PowerIndex.SKILL_2);
+            setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_STORE, PowerIndex.SKILL_2);
         }
 
         // Ability 3 (C)
@@ -390,11 +423,23 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         switch (context) {
+            // kick storage
+            case SKILL_2_NORMAL -> {
+                tryPlantKickTrap();
+            }
+            // trap release (deletes/activates traps, depends on mode)
+            case SKILL_2_CROUCH -> {
+                tryManualTrapRelease();
+            }
+            // toggle between auto and manual
+            case SKILL_2_GUARD -> {
+                tryToggleTrapMode();
+            }
             // dash, need to figure out how other moves will work.
             case SKILL_3_NORMAL -> {
                 tryToDashClient();
             }
-            // dive zip
+            // diver zip
             case SKILL_3_CROUCH -> {
                 tryDiverZip();
             }
@@ -416,8 +461,24 @@ public class PowersDiverDown extends NewPunchingStand {
     // for activating all the moves
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        // does the store kick thing
+        if (move == STORE_KICK_TRAP) {
+            return plantKickTrap();
+        }
+        // releases/deletes traps
+        else if (move == MANUAL_TRAP_RELEASE) {
+            if (this.isAutoRelease) {
+                return clearKickTraps();
+            } else {
+                return manualReleaseTraps();
+            }
+        }
+        // toggles traps
+        else if (move == TOGGLE_TRAP_MODE) {
+            return toggleTrapMode();
+        }
         // does the limb scaffold move
-        if (move == LIMB_SCAFFOLD) {
+        else if (move == LIMB_SCAFFOLD) {
             return placeLimb();
         }
         // recalls limb scaffolds
@@ -1259,12 +1320,70 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
             }
         } else {
+            if (!this.self.level().isClientSide()) {
+                // trap detection
+                if (!this.storedKickTraps.isEmpty()) {
+                    Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<BlockPos, KickTrap> entry = it.next();
+                        BlockPos trapPos = entry.getKey();
+                        KickTrap trap = entry.getValue();
+
+                        // remove the traps if the timer runs out
+                        if (--trap.ticks <= 0 || this.self.level().getBlockState(trapPos).isAir()) {
+                            it.remove();
+                            continue;
+                        }
+
+                        // particle effects
+                        if (trap.ticks % 10 == 0) {
+                            double px = trapPos.getX() + 0.5 + trap.face.getStepX() * 0.52;
+                            double py = trapPos.getY() + 0.5 + trap.face.getStepY() * 0.52;
+                            double pz = trapPos.getZ() + 0.5 + trap.face.getStepZ() * 0.52;
+                            sendParticlesIfPossible(this.self.level(), ModParticles.ENERGY_DISTORTION,
+                                    px, py, pz, 1, 0.02, 0.02, 0.02, 0.0);
+                        }
+
+                        // check if something touches the trap
+                        if (this.isAutoRelease) {
+                            List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
+                            if (!victims.isEmpty()) {
+                                // trigger traps for players after 1 second, mobs trigger immediately
+                                if (trap.ticks > (MAX_TRAP_DURATION - 20)) {
+                                    victims.removeIf(v -> v instanceof Player);
+                                }
+                                if (!victims.isEmpty()) {
+                                    triggerKickTrap(victims, trapPos, trap.face);
+                                    it.remove(); //delete the triggered trap
+                                }
+                            }
+                        }
+                    }
+                }
+                // cleanup the limbs if they expire
+                if (!this.releasingLimbs.isEmpty()) {
+                    Iterator<Map.Entry<BlockPos, Integer>> limbIt = this.releasingLimbs.entrySet().iterator();
+                    while (limbIt.hasNext()) {
+                        Map.Entry<BlockPos, Integer> entry = limbIt.next();
+                        int remaining = entry.getValue() - 1;
+                        if (remaining <= 0) {
+                            BlockPos pos = entry.getKey();
+                            if (this.self.level().getBlockState(pos).is(ModBlocks.DIVER_LIMB)) {
+                                this.self.level().removeBlock(pos, false);
+                            }
+                            limbIt.remove();
+                        } else {
+                            entry.setValue(remaining);
+                        }
+                    }
+                }
+            }
             if (isPiloting()) {
                 if (this.diveTicksLeft > 0) {
                     this.diveTicksLeft--;
                 } else if (this.diveTicksLeft <= 0) {
                     // same as earlier, if the player's container becomes their inventory
-                    // then we know that they haev exited the chest.
+                    // then we know that they have exited the chest.
                     if (this.self instanceof ServerPlayer sp && sp.containerMenu == sp.inventoryMenu) {
                         exitGroundDive();
                     }
@@ -1874,7 +1993,188 @@ public class PowersDiverDown extends NewPunchingStand {
         return false;
     }
 
-    // heel plant 2.0 stop
+    // heel plant 2.0 end
+
+    // kick storage start
+
+    public void tryPlantKickTrap() {
+        if (this.canAttack() && !this.areStandMovesDisabled()) {
+            this.tryPower(STORE_KICK_TRAP, true);
+            tryPowerPacket(STORE_KICK_TRAP);
+        }
+    }
+
+    public boolean plantKickTrap() {
+        if (this.self.level().isClientSide()) {
+            return true;
+        }
+
+        // find ground block
+        Vec3 eyePos = this.self.getEyePosition(0);
+        Vec3 lookVec = this.self.getViewVector(0);
+        Vec3 reachVec = eyePos.add(lookVec.scale(TRAP_RANGE));
+
+        BlockHitResult blockHit = this.self.level().clip(
+                new ClipContext(eyePos, reachVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+        // If looking horizontally or up, also check directly below the player
+        if (blockHit.getType() != HitResult.Type.BLOCK) {
+            Vec3 downVec = eyePos.add(0, -TRAP_RANGE, 0);
+            blockHit = this.self.level().clip(
+                    new ClipContext(eyePos, downVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+        }
+
+        if (blockHit.getType() != HitResult.Type.BLOCK) {
+            return false;
+        }
+
+        BlockPos hitPos = blockHit.getBlockPos();
+        Direction face = blockHit.getDirection();
+
+        if (!this.storedKickTraps.containsKey(hitPos)) {
+            while (this.storedKickTraps.size() >= MAX_NUMBER_OF_TRAPS) {
+                BlockPos oldest = this.storedKickTraps.keySet().iterator().next();
+                this.storedKickTraps.remove(oldest);
+            }
+        }
+
+        // store the trap
+        this.storedKickTraps.put(hitPos, new KickTrap(MAX_TRAP_DURATION, face));
+
+        // animation here
+        // Sounds & ground impact particles here
+
+        // cooldown here
+
+        return true;
+    }
+
+    private List<LivingEntity> detectTrapTrigger(BlockPos pos, Direction face) {
+        // Check area directly on top of the trapped block
+        BlockPos triggerPos = pos.relative(face);
+        AABB triggerBox = new AABB(triggerPos).inflate(-0.05);
+        List<LivingEntity> victims = new ArrayList<>();
+        for (LivingEntity target : this.self.level().getEntitiesOfClass(LivingEntity.class, triggerBox)) {
+            if (target.equals(this.self)
+                    || target instanceof StandEntity
+                    || !target.isAlive()
+                    || target.isDeadOrDying()) {
+                continue;
+            }
+            victims.add(target);
+        }
+        return victims;
+    }
+
+    private void triggerKickTrap(List<LivingEntity> victims, BlockPos pos, Direction face) {
+        Level level = this.self.level();
+        StandEntity stand = this.getStandEntity(this.self);
+        BlockPos spawnPos = pos.relative(face);
+
+        // Spawn Diver Down's leg model
+        if (level.getBlockState(spawnPos).canBeReplaced()) {
+            BlockState limbState = ModBlocks.DIVER_LIMB.defaultBlockState();
+            level.setBlockAndUpdate(spawnPos, limbState);
+            if (level.getBlockEntity(spawnPos) instanceof DiverLimbBlockEntity be) {
+                be.ownerUUID = this.self.getUUID();
+                be.limbIndex = 2; // 2 = Right Leg (kick)
+                be.facing = face.getOpposite(); // Attaches back onto the wall/floor block
+                be.standSkin = ((StandUser) this.self).roundabout$getStandSkin();
+                be.setChanged();
+                level.sendBlockUpdated(spawnPos, limbState, limbState, 3);
+            }
+            // Keep the leg visible for a while (~0.6s)
+            this.releasingLimbs.put(spawnPos, 12);
+        }
+
+        for (LivingEntity victim : victims) {
+            // damage the enemy
+            DamageHandler.StandDamageEntity(victim, 8.0F, this.self);
+
+            // launch the poor sod
+            if (face == Direction.UP) {
+                // launches up
+                victim.setDeltaMovement(
+                        face.getStepX() * 0.7D,
+                        1.35D,
+                        face.getStepZ() * 0.7D);
+            } else if (face.getAxis().isHorizontal()) {
+                // launches sideways
+                victim.setDeltaMovement(
+                        face.getStepX() * 1.2D,
+                        0.85D,
+                        face.getStepZ() * 1.2D);
+            } else {
+                // for ceiling traps
+                victim.setDeltaMovement(0.0D, -1.0D, 0.0D);
+            }
+            victim.hurtMarked = true;
+
+            // play effects sounds and stuff here
+        }
+    }
+
+    private void tryToggleTrapMode() {
+        this.isAutoRelease = !this.isAutoRelease; // Immediate client-side update for GUI icon
+        this.tryPower(TOGGLE_TRAP_MODE, true);
+        tryPowerPacket(TOGGLE_TRAP_MODE);
+    }
+
+    private void tryManualTrapRelease() {
+        this.tryPower(MANUAL_TRAP_RELEASE, true);
+        tryPowerPacket(MANUAL_TRAP_RELEASE);
+    }
+
+    private boolean toggleTrapMode() {
+        if (!this.self.level().isClientSide()) {
+            this.isAutoRelease = !this.isAutoRelease;
+        }
+        return true;
+    }
+
+    private boolean manualReleaseTraps() {
+        if (this.self.level().isClientSide() || this.storedKickTraps.isEmpty()) {
+            return false;
+        }
+        boolean triggeredAny = false;
+        Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<BlockPos, KickTrap> entry = it.next();
+            BlockPos trapPos = entry.getKey();
+            KickTrap trap = entry.getValue();
+            // Detect any entity on the trap, used to instantly activate, even against
+            // players
+            List<LivingEntity> victims = detectTrapTrigger(trapPos, trap.face);
+            if (!victims.isEmpty()) {
+                triggerKickTrap(victims, trapPos, trap.face);
+                it.remove(); // Consume trap
+                triggeredAny = true;
+            }
+        }
+        return triggeredAny;
+    }
+
+    private boolean clearKickTraps() {
+        if (this.self.level().isClientSide() || this.storedKickTraps.isEmpty()) {
+            return false;
+        }
+
+        // add particles here when deleting the limbs, put it in a for loop like this
+        /*
+         * for (BlockPos pos : this.storedKickTraps.keySet()) {
+         * 
+         * }
+         */
+
+        // Remove all active traps
+        this.storedKickTraps.clear();
+
+        // sound here
+
+        return true;
+    }
+
+    // kick storage end
 
     /**
      * Placeholder function, right now returns false (because dive hasn't even been
@@ -1897,7 +2197,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // RELEASE
         // 🔥🔥🔥🔥🔥
-        return true;
+        return this.isAutoRelease;
     }
 
     /**
