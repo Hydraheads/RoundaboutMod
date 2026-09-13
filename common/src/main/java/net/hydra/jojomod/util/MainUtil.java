@@ -26,6 +26,7 @@ import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
@@ -4350,7 +4351,12 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static byte getPurpleHazeSkin(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getPurpleHazeSkin();
+        }
+        return PurpleHazeEntity.ANIME;
+    }
     public static Boolean isInDistortionHaze(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             return ((StandUser) LE).getDistortionHazeTicks() > 0;
