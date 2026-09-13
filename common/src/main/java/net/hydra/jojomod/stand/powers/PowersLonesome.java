@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import net.hydra.jojomod.access.IBlockState;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
@@ -16,6 +17,7 @@ import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -27,7 +29,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
@@ -185,7 +189,6 @@ public class PowersLonesome extends NewDashPreset {
 
             if ( blockDistance <= entityDistance ) { //if the block is closer than the entity
                 System.out.println(rayBlock.getBlockPos());
-                System.out.println(rayBlock.getType());
             } else {
                 System.out.println(rayEntity);
             }
@@ -193,6 +196,18 @@ public class PowersLonesome extends NewDashPreset {
         return true;
     }
 
+    public boolean renderRope(Vec3 startPos, Vec3 endPos){
+        double startX = startPos.x();
+        double startY = startPos.y();
+        double startZ = startPos.z();
+
+
+        return false;
+    }
+
+    public String getBlockNameAtWorldPos(BlockPos blockPos){
+        return this.self.level().getBlockState(blockPos).getBlock().getName().toString(); // proof that i don't use ai :sob:
+    }
 
     public boolean crawl(){
         LivingEntity player = this.self;
