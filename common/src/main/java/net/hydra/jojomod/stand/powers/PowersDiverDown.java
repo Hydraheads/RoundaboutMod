@@ -218,7 +218,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
             int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        int startPos = -0;
+        int startPos = -8;
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 80, 0, "ability.roundabout.punch",
                 "instruction.roundabout.press_attack", StandIcons.DIVER_DOWN_PUNCH, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 99, 0, "ability.roundabout.guard",
@@ -227,24 +227,27 @@ public class PowersDiverDown extends NewPunchingStand {
                 "ability.roundabout.diver_phase_punch",
                 "instruction.roundabout.hold_attack_crouch", StandIcons.DIVER_DOWN_PHASE_PUNCH, 0, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 80, 0,
+                "ability.roundabout.barrage",
+                "instruction.roundabout.barrage", StandIcons.DIVER_DOWN_BARRAGE, 0, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0,
                 "ability.roundabout.diver_submerge",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 99, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
                 "ability.roundabout.diver_disassemble",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_DISASSEMBLE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39 + startPos, topPos + 118, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_self_submerge",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_SELF_SUBMERGE, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 80, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0,
                 "ability.roundabout.diver_selection",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_SELECTION, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 99, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0,
                 "ability.roundabout.diver_store",
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_STORE, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58 + startPos, topPos + 118, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_release_toggle",
                 "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_RELEASE_AUTO, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, 0,
                 "ability.roundabout.diver_cancel_store",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_CANCEL_STORE, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96 + startPos, topPos + 80, 0, "ability.roundabout.dodge",
@@ -563,7 +566,8 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         if (inZipMode()) {
             if (isHoldingSneak()) {
-                basis *= 3.32F; // slow crawl when holding Shift (1.295 base crawl speed * 3.32 modifier = ~4.3 m/s)
+                basis *= 3.32F; // slow crawl when holding Shift (1.295 base crawl speed * 3.32 modifier = ~4.3
+                                // m/s)
             } else {
                 basis *= 5.503F; // 1.295 base crawl speed * 5.303 modifier = ~7.127 m/s
             }
@@ -1655,9 +1659,12 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         if (!this.self.level().isClientSide()) {
             // test message, comment out when done
-            /*if (this.getSelf() instanceof ServerPlayer serverPlayer) {
-                serverPlayer.displayClientMessage(Component.literal("it's zipping time"), false);
-            }*/
+            /*
+             * if (this.getSelf() instanceof ServerPlayer serverPlayer) {
+             * serverPlayer.displayClientMessage(Component.literal("it's zipping time"),
+             * false);
+             * }
+             */
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
@@ -1912,13 +1919,13 @@ public class PowersDiverDown extends NewPunchingStand {
         return inZipMode() || super.interceptAllInteractions();
     }
 
-    //disables player mining in zip mode
+    // disables player mining in zip mode
     @Override
     public boolean cancelAllRandomMiningThatBreaksMoves() {
         return inZipMode() || super.cancelAllRandomMiningThatBreaksMoves();
     }
 
-    //disables player mining progress in zip mode (As a failsafe)
+    // disables player mining progress in zip mode (As a failsafe)
     @Override
     public float getBonusPassiveMiningSpeed() {
         if (inZipMode()) {

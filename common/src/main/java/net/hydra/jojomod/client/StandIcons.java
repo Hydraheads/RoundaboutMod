@@ -1024,11 +1024,11 @@ public class StandIcons {
 
     //Diver Down icons start
         public static final ResourceLocation DIVER_DOWN_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/punch.png");
         public static final ResourceLocation DIVER_DOWN_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/barrage.png");
         public static final ResourceLocation DIVER_DOWN_GUARD = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/guard.png");
         public static final ResourceLocation DIVER_DOWN_PHASE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/phase_punch.png");
         public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,

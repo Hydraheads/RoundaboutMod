@@ -2428,7 +2428,7 @@
   "ability.roundabout.manhattan_dodge.desc": "Your stand gets a quick burst of speed. Ideal for dodging stand projectiles, which are one of your greatest weakness",
 
   "ability.roundabout.diver_phase_punch": "Phase Punch",
-  "ability.roundabout.diver_phase_punch.desc": "Charge up a powerful blow! At maximum charge, your punches will go through multiple enemies, go through walls, and even go through shields and guards!",
+  "ability.roundabout.diver_phase_punch.desc": "Charge up a powerful blow! At maximum charge, your punches will go through multiple mobs, walls, and even through shields!",
   "ability.roundabout.diver_submerge": "Diver Submerge",
   "ability.roundabout.diver_submerge.desc": "Submerge your stand into another person! Then, change their insides to suit you, whether that change is positive... or not.",
   "ability.roundabout.diver_disassemble": "I'm making Mac and Cheese",
@@ -2448,7 +2448,7 @@
   "ability.roundabout.diver_workstation": "Workstation Emulation",
   "ability.roundabout.diver_workstation.desc": "Your stand dives into your items and changes them from the inside out, allowing it emulate the functions of various workstations.",
   "ability.roundabout.diver_limb_platform": "Limb Platform",
-  "ability.roundabout.diver_limb_platform.desc": "Limbs emerge from the walls and ground as your stand dives inside them. This move allows you to climb on the limbs of your stand, and even lets others do the same. The limbs also reduce fall damage, allowing you to block clutch with them!",
+  "ability.roundabout.diver_limb_platform.desc": "Limbs emerge from the walls and ground as your stand dives inside them. This move allows you to climb on the limbs of your stand, and lets others do the same. The limbs also reduce fall damage, allowing you to block clutch with them!",
   "ability.roundabout.diver_ground_dive": "Ground Dive",
   "ability.roundabout.diver_ground_dive.desc": "Your stand dives into the ground, letting you control it! Gather items with skill 2, open chests with skill 3, and unleash a powerful barrage by attacking! Pressing skill 4 again recalls your stand.",
 
