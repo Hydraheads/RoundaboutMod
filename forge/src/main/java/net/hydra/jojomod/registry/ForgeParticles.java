@@ -314,7 +314,7 @@ public class ForgeParticles {
             PARTICLES.register("purple_haze_smoke", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
                 public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.CODEC;
+                    return HazeColorParticleOptions.codec(this);
                 }
             });
 
@@ -322,6 +322,13 @@ public class ForgeParticles {
             "distortion_smoke",
             () -> new SimpleParticleType(true)
     );
+    public static final RegistryObject<ParticleType<HazeColorParticleOptions>> PURPLE_HAZE_BLASTWAVE =
+            PARTICLES.register("purple_haze_blastwave", () -> new ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                    return HazeColorParticleOptions.codec(this);
+                }
+            });
     public static final RegistryObject<SimpleParticleType> RAGING_LIGHT = PARTICLES.register(
             "raging_light",
             () -> new SimpleParticleType(true)

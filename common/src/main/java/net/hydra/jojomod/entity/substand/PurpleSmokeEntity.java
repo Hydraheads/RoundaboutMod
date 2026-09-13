@@ -242,7 +242,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
                 } else {
                     int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(color),
+                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color),
                             x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
                 }
             }
