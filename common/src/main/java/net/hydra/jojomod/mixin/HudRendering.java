@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -232,8 +233,10 @@ public abstract class HudRendering implements IHudAccess {
                 //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
                     RenderSystem.enableBlend();
+                    float[] roundabout$hazeTint = roundabout$getPurpleHazeTint(MainUtil.getPurpleHazeSkin(this.minecraft.player));
                     roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
-                            "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"), 0.7F, 1F, 1F, 1F);
+                                    "textures/misc/purple_overlay/purple_overlay" + (minecraft.player.tickCount / 3 % 10) + ".png"),
+                            0.7F, roundabout$hazeTint[0], roundabout$hazeTint[1], roundabout$hazeTint[2]);
                 }
                 //Distortion Haze overlay
                 if (MainUtil.isInDistortionHaze(this.minecraft.player)) {
@@ -375,6 +378,14 @@ public abstract class HudRendering implements IHudAccess {
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+    @Unique
+    private static float[] roundabout$getPurpleHazeTint(byte skin) {
+        int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(skin, PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        return new float[]{r, g, b};
     }
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     private void roundabout$renderOverlay(GuiGraphics $$0, float $$1, CallbackInfo ci) {
