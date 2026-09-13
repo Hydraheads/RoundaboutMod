@@ -86,6 +86,10 @@ public class PowersSilverChariot extends NewPunchingStand {
             PLATFORM = (byte) 2;
 
     public static final byte
+            RIGHT = 1,
+            LEFT = 2;
+
+    public static final byte
             SUMMON_ARM_SOUND = 71,
             LAST_HIT_CRY_SOUND = 72,
             BARRAGE_CRY_SOUND = 73,
@@ -101,11 +105,11 @@ public class PowersSilverChariot extends NewPunchingStand {
     @Override
     public Component getSkinName(byte skinId) {
         switch (skinId) {
-            case SilverChariotEntity.PART_3_SILVER_CHARIOT_SILVER -> {
-                return Component.translatable("skins.roundabout.silver_chariot_anime_part_3_silver");
-            }
             case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT -> {
                 return Component.translatable("skins.roundabout.silver_chariot_anime_part_3");
+            }
+            case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT_GREY -> {
+                return Component.translatable("skins.roundabout.silver_chariot_anime_part_3_grey");
             }
             case SilverChariotEntity.MANGA_PART_3_SILVER_CHARIOT -> {
                 return Component.translatable("skins.roundabout.silver_chariot_manga_part_3");
@@ -113,23 +117,28 @@ public class PowersSilverChariot extends NewPunchingStand {
             case SilverChariotEntity.PART_5_SILVER_CHARIOT -> {
                 return Component.translatable("skins.roundabout.silver_chariot_anime_part_5");
             }
+            default -> {
+                return Component.translatable("skins.roundabout.silver_chariot_anime_part_3");
+            }
         }
-        return super.getSkinName(skinId);
     }
 
     @Override
     public List<Byte> getSkinList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT);
+        $$1.add(SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT_GREY);
+        $$1.add(SilverChariotEntity.MANGA_PART_3_SILVER_CHARIOT);
+        $$1.add(SilverChariotEntity.PART_5_SILVER_CHARIOT);
         return $$1;
     }
 
     @Override
     public Component getPosName(byte posID) {
         if (posID == 1){
-            return Component.translatable(  "idle.roundabout.sc_armoured");
+            return Component.translatable(  "idle.roundabout.sc_part_3");
         } else if (posID == 2){
-            return Component.translatable(  "idle.roundabout.sc_unarmoured");
+            return Component.translatable(  "idle.roundabout.sc_part_5");
         } else {
             return Component.translatable(  "idle.roundabout.passive");
         }
@@ -139,6 +148,8 @@ public class PowersSilverChariot extends NewPunchingStand {
     public List<Byte> getPosList() {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add((byte) 0);
+        $$1.add((byte) 1);
+        $$1.add((byte) 2);
         return $$1;
     }
 
@@ -1334,7 +1345,19 @@ public class PowersSilverChariot extends NewPunchingStand {
 
     @Override
     public boolean setPowerNone() {
-        return super.setPowerNone();
+        this.attackTimeDuring = -1;
+        this.setActivePower(PowerIndex.NONE);
+        poseStand(OffsetIndex.FOLLOW);
+        StandEntity stand = this.getStandEntity(this.self);
+        if (stand instanceof SilverChariotEntity silverChariot) {
+            if (silverChariot.getActiveHand() == SilverChariotEntity.RIGHT_HAND) {
+                this.animateStand(SilverChariotEntity.SC_TOGGLE_RIGHT_RAPIER);
+            } else if (silverChariot.getActiveHand() == SilverChariotEntity.LEFT_HAND) {
+                this.animateStand(SilverChariotEntity.SC_TOGGLE_LEFT_RAPIER);
+            }
+        }
+        animateStand(SilverChariotEntity.IDLE);
+        return true;
     }
 
     @Override

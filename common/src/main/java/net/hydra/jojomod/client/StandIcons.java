@@ -1024,13 +1024,13 @@ public class StandIcons {
 
     //Diver Down icons start
         public static final ResourceLocation DIVER_DOWN_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/punch.png");
         public static final ResourceLocation DIVER_DOWN_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/barrage.png");
         public static final ResourceLocation DIVER_DOWN_GUARD = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/guard.png");
         public static final ResourceLocation DIVER_DOWN_PHASE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/phase_punch.png");
         public static final ResourceLocation DIVER_DOWN_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_ledge_grab.png");
         public static final ResourceLocation DIVER_DOWN_SUBMERGE = new ResourceLocation(Roundabout.MOD_ID,
@@ -1058,7 +1058,7 @@ public class StandIcons {
         public static final ResourceLocation DIVER_DOWN_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/diver_climb.png");
         public static final ResourceLocation DIVER_DOWN_GROUND_DIVE = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
+            "textures/gui/icons/diver_down/ground_dive.png");
         public static final ResourceLocation DIVER_DOWN_RECALL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/stand_recall.png");
         //Diver Down icons end

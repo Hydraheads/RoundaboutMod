@@ -34,10 +34,10 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
     public static ResourceLocation getSkin(byte bt) {
         switch (bt) {
             case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT -> {
-                return ANIME_PART_3;
-            }
-            case SilverChariotEntity.PART_3_SILVER_CHARIOT_SILVER -> {
                 return DEFAULT;
+            }
+            case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT_GREY -> {
+                return ANIME_PART_3;
             }
             case SilverChariotEntity.MANGA_PART_3_SILVER_CHARIOT -> {
                 return MANGA_PART_3;
@@ -46,7 +46,7 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 return PART_5;
             }
         }
-        return ANIME_PART_3;
+        return DEFAULT;
     }
 
     @Override

@@ -715,7 +715,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     Roundabout.location("silver_chariot_rapier_platform"),
                     EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).
-                            sized(1.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
+                            sized(2.0f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier_platform")
             );
         public static final EntityType<HarpoonEntity> THROWN_HARPOON =
                 Registry.register(

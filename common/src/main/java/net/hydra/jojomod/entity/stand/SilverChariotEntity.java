@@ -24,15 +24,36 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public static final byte
-            ANIME_PART_3_SILVER_CHARIOT = 0,
-            PART_3_SILVER_CHARIOT_SILVER = 1,
-            MANGA_PART_3_SILVER_CHARIOT = 2,
-            PART_5_SILVER_CHARIOT = 3;
+            ANIME_PART_3_SILVER_CHARIOT = 1,
+            ANIME_PART_3_SILVER_CHARIOT_GREY = 2,
+            MANGA_PART_3_SILVER_CHARIOT = 3,
+            PART_5_SILVER_CHARIOT = 4;
 
     public static final byte
             CONTROL_MODE_NONE = 0,
             CONTROL_MODE_SELF_CARRY = 1,
             CONTROL_MODE_REMOTE = 2;
+
+    public static final byte
+            IS_PART_3_SKIN = 1,
+            IS_PART_5_SKIN = 2;
+
+    public boolean isPart3Skin() {
+        byte skin = this.getSkin();
+        return skin == ANIME_PART_3_SILVER_CHARIOT || skin == ANIME_PART_3_SILVER_CHARIOT_GREY || skin == MANGA_PART_3_SILVER_CHARIOT;
+    }
+
+    public void toggleActiveHandAnimation() {
+        if (isPart3Skin()) {
+            this.setActiveHand(RIGHT_HAND);
+            this.scToggleRightSword.startIfStopped(this.tickCount);
+            this.scToggleLeftSword.stop();
+        } else {
+            this.setActiveHand(LEFT_HAND);
+            this.scToggleLeftSword.startIfStopped(this.tickCount);
+            this.scToggleRightSword.stop();
+        }
+    }
 
     private static final EntityDataAccessor<Byte> CONTROL_MODE = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BYTE
@@ -156,45 +177,86 @@ public class SilverChariotEntity extends FollowingStandEntity {
             SC_TOGGLE_RIGHT_RAPIER = 65,
             SC_TOGGLE_LEFT_RAPIER = 66,
             SC_GUARD_HIT = 67,
-            SC_IDLE_SILVER_CHARIOT_1 = 68,
-            SC_IDLE_SILVER_CHARIOT_2 = 69;
+            SC_IDLE = 68,
+            SC_TOGGLE_ACTIVE_HAND = 69;
 
     public boolean isArmored = false;
 
     @Override
     public void setupAnimationStates() {
         byte animationState = getAnimation();
+        byte skin = getSkin();
 
         if (this.getUser() != null) {
+            if (animationState == IDLE) {
+                if (this.getIdleAnimation() == 0) {
+
+                } else {
+
+                }
+
+                if (this.getIdleAnimation() == 1) {
+                    this.scPart3Pose.startIfStopped(this.tickCount);
+                } else {
+
+                }
+
+                if (this.getIdleAnimation() == 2) {
+                    this.scPart5Pose.startIfStopped(this.tickCount);
+                } else {
+                    this.scPart5Pose.stop();
+                }
+            }
+
+            if (animationState == IDLE && this.getIdleAnimation() == 0 && this.getArmoured()) {
+                this.scIdleArmoured.startIfStopped(this.tickCount);
+            } else {
+                this.scIdleArmoured.stop();
+            }
+            if (animationState == IDLE && this.getIdleAnimation() == 0 && !this.getArmoured()) {
+                this.scIdleNotArmoured.startIfStopped(this.tickCount);
+            } else {
+                this.scIdleNotArmoured.stop();
+            }
+            if (animationState == IDLE && this.getIdleAnimation() == 1) {
+                this.scPart3Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3Pose.stop();
+            }
+            if (animationState == IDLE && this.getIdleAnimation() == 2) {
+                this.scPart5Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart5Pose.stop();
+            }
+
             if (animationState == BARRAGE) {
-                // this.scBarrage.startIfStopped(this.tickCount);
                 if (getActiveHand() == RIGHT_HAND) {
                     this.scRightBarrage.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrage.startIfStopped(this.tickCount);
                 }
+                this.scHideRapiers.stop();
             } else {
-                // this.scBarrage.stop();
                 if (getActiveHand() == RIGHT_HAND) {
                     this.scRightBarrage.stop();
                 } else {
                     this.scLeftBarrage.stop();
                 }
-            }
-            if (animationState != BARRAGE) {
                 this.scHideRapiers.startIfStopped(this.tickCount);
-            } else {
-                this.scHideRapiers.stop();
             }
+            if (animationState == SC_TOGGLE_ACTIVE_HAND) {
+
+            } else {
+
+            }
+
             if (animationState == SC_TOGGLE_RIGHT_RAPIER) {
                 this.scToggleRightSword.startIfStopped(this.tickCount);
-            } else {
-                this.scToggleRightSword.stop();
+                this.scToggleLeftSword.stop();
             }
             if (animationState == SC_TOGGLE_LEFT_RAPIER) {
                 this.scToggleLeftSword.startIfStopped(this.tickCount);
-            } else {
-                this.scToggleLeftSword.stop();
+                this.scToggleRightSword.stop();
             }
             if (animationState == SC_TOGGLE_NO_RAPIER) {
                 this.scToggleNoRapier.startIfStopped(this.tickCount);
@@ -274,14 +336,12 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 }
             }
             if (animationState == BARRAGE_CHARGE) {
-                // this.scBarrageCharge.startIfStopped(this.tickCount);
                 if (getActiveHand() == RIGHT_HAND) {
                     this.scRightBarrageWindup.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrageWindup.startIfStopped(this.tickCount);
                 }
             } else {
-                // this.scBarrageCharge.stop();
                 if (getActiveHand() == RIGHT_HAND) {
                     this.scRightBarrageWindup.stop();
                 } else {
@@ -292,19 +352,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.startIfStopped(this.tickCount);
             } else {
                 this.scBarrageDamage.stop();
-            }
-            if (animationState == MINING_BARRAGE) {
-                if (getActiveHand() == RIGHT_HAND) {
-                    this.scRightBarrage.startIfStopped(this.tickCount);
-                } else {
-                    this.scLeftBarrage.startIfStopped(this.tickCount);
-                }
-            } else {
-                if (getActiveHand() == RIGHT_HAND) {
-                    this.scRightBarrage.stop();
-                } else {
-                    this.scLeftBarrage.stop();
-                }
             }
             if (animationState == BROKEN_GUARD) {
                 if (getActiveHand() == RIGHT_HAND) {
@@ -323,12 +370,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scFallBrace.startIfStopped(this.tickCount);
             } else {
                 this.scFallBrace.stop();
-            }
-
-            if (animationState == SC_) {
-
-            } else {
-
             }
 
             if (animationState == SC_VAULT) {
@@ -504,7 +545,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
 
     @Override
     public boolean hasNoPhysics() {
-        return false;
+        return !isRemoteControlled();
     }
 
     @Override
