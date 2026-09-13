@@ -74,6 +74,11 @@ public class DiverDownEntity extends FollowingStandEntity {
         return !isRemoteControlled();
     }
 
+    @Override
+    public boolean standHasGravity() {
+        return isRemoteControlled();
+    }
+
     /*
      * Overriding hasNoPhysics lets the stand go through walls
      */
@@ -82,9 +87,15 @@ public class DiverDownEntity extends FollowingStandEntity {
         return !isRemoteControlled() || super.hasNoPhysics();
     }
 
+    /* autostep
+     * need to think about if this should be 1.0, or 1.4F so it can go up things
+     * like carpeted fences and stuff.
+     * will first try out this move with friends, and balance accordingly.
+     * @see net.minecraft.world.entity.LivingEntity#maxUpStep()
+     */
     @Override
     public float maxUpStep() {
-        return 1.0F;
+        return 3.0F;
     }
 
     /*
@@ -92,10 +103,12 @@ public class DiverDownEntity extends FollowingStandEntity {
      * Autosteps up 1-block ledges/slabs/stairs when there is headroom above,
      * but phases horizontally through full walls.
      * 
-     * This method checks every tick if diver down should step up. Normally this would be
+     * This method checks every tick if diver down should step up. Normally this
+     * would be
      * laggy, but it's 1 entity so it shouldn't be too bad.
      * 
-     * basically, it's minecraft's movement system but without those pesky wall boundaries and steps.
+     * basically, it's minecraft's movement system but without those pesky wall
+     * boundaries and steps.
      */
     @Override
     public void move(MoverType moverType, Vec3 movement) {
@@ -131,8 +144,7 @@ public class DiverDownEntity extends FollowingStandEntity {
                     // check if there's collision above the block
                     AABB clearanceBox = new AABB(
                             targetBox.minX, highestGround, targetBox.minZ,
-                            targetBox.maxX, highestGround + this.getBbHeight(), targetBox.maxZ
-                    );
+                            targetBox.maxX, highestGround + this.getBbHeight(), targetBox.maxZ);
                     // If there is no collision, it steps up, if there is no collision, it phases
                     if (this.level().noCollision(this, clearanceBox)) {
                         stepY = stepHeight;
@@ -142,49 +154,42 @@ public class DiverDownEntity extends FollowingStandEntity {
 
             double finalY;
             if (stepY > 0.0) {
-                // step up blocks
+                // Stepping up a block
                 finalY = stepY;
-            } else if (dx != 0.0 || dz != 0.0) {
-                // falling logic
+            } else if (this.onGround() && (dx != 0.0 || dz != 0.0)) {
+                // snaps straight down on the ground
                 AABB targetBox = this.getBoundingBox().move(dx, 0, dz);
-                double maxFallSnap = 1; // if the block below is only 1 block, autosteps down.
-                Vec3 downStep = Entity.collideBoundingBox(this, new Vec3(0, -maxFallSnap, 0),
+                Vec3 downStep = Entity.collideBoundingBox(this, new Vec3(0, -1.0, 0),
                         targetBox, this.level(), List.of());
-                if (downStep.y < 0.0) {
-                    finalY = downStep.y;
-                } else if (collidedY.y < 0.0) {
-                    finalY = collidedY.y;
-                } else {
-                    finalY = 0.0;
-                }
+                finalY = (downStep.y < 0.0) ? downStep.y : collidedY.y;
             } else {
+                // do you believe in gravitY?
                 finalY = collidedY.y;
             }
-
             // moves the stand
             this.setPos(this.getX() + dx, this.getY() + finalY, this.getZ() + dz);
-
-            // Update onGround flag
-            this.setOnGround((collidedY.y != movement.y && movement.y < 0.0) || stepY > 0.0 || (finalY < 0.0 && finalY > -maxStep));
+            // set on ground when touching the floor
+            boolean hitFloor = (collidedY.y != movement.y && movement.y < 0.0);
+            this.setOnGround(hitFloor || stepY > 0.0);
             return;
         }
         super.move(moverType, movement);
     }
 
-    //"""borrowed""" from justice pilot
+    // """borrowed""" from justice pilot
     @Override
     public boolean isControlledByLocalInstance() {
-        LivingEntity user =  this.getUser();
-        if (user != null){
-            Entity ent =  this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
-            if (ent != null && ent.is(this)){
+        LivingEntity user = this.getUser();
+        if (user != null) {
+            Entity ent = this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
+            if (ent != null && ent.is(this)) {
                 return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }
         }
         return super.isControlledByLocalInstance();
     }
 
-    //also """borrowed""" from justice
+    // also """borrowed""" from justice
     @Override
     public void travel(Vec3 vec3) {
         super.travel(vec3);

@@ -12,6 +12,7 @@ import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
 import net.hydra.jojomod.stand.powers.PowersManhattanTransfer;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -217,6 +218,10 @@ public class KnifeEntity extends AbstractArrow {
 
             if ($$4 instanceof LivingEntity LE) {
                 LE.setLastHurtMob($$1);
+
+                if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
+                    KQ.arrowContacted($$1);
+                }
             }
                 if (MainUtil.getMobBleed($$1)){
                     MainUtil.makeBleed($$1,0,400,getOwner());

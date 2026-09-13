@@ -56,7 +56,7 @@ public class PurpleSmokeEntity extends StandEntity {
     public int lifetime_add = 150;
     public int totalDuration = 0;
 
-    private static final java.util.Map<Byte, Integer> SKIN_COLORS = new java.util.HashMap<>();
+    public static final java.util.Map<Byte, Integer> SKIN_COLORS = new java.util.HashMap<>();
     static {
         SKIN_COLORS.put(PurpleHazeEntity.ANIME, 0xA62AAD);//
         SKIN_COLORS.put(PurpleHazeEntity.MANGA, 0xA62AAD);
@@ -67,7 +67,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.MIRROR_BATTLE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.ROTT, 0x4e1c1c);//
     }
-    private static final int DEFAULT_HAZE_COLOR = 0x8A2BE2;
+    public static final int DEFAULT_HAZE_COLOR = 0xA62AAD;
 
     public PurpleSmokeEntity(EntityType<? extends StandEntity> $$0, Level $$1) {
         super($$0, $$1);
@@ -146,6 +146,7 @@ public class PurpleSmokeEntity extends StandEntity {
                         ((StandUser) entity).SetInDistortionHazeTicks(5);
                     } else {
                         ((StandUser) entity).SetInPurpleHazeTicks(5);
+                        ((StandUser) entity).SetPurpleHazeSkin(this.getStandSkin());
                     }
                 }
             }
@@ -273,6 +274,7 @@ public class PurpleSmokeEntity extends StandEntity {
             } else {
                 boolean alreadyHasVirus = living.hasEffect(ModEffects.HAZE_VIRUS);
                 ((StandUser) living).SetInPurpleHazeTicks(5);
+                ((StandUser) living).SetPurpleHazeSkin(this.getStandSkin());
                 living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 300));
 
                 if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
@@ -302,10 +304,13 @@ public class PurpleSmokeEntity extends StandEntity {
             EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Boolean> DISTORTION_MODE =
             SynchedEntityData.defineId(PurpleSmokeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> DATA_STAND_SKIN =
+            SynchedEntityData.defineId(PurpleSmokeEntity.class, EntityDataSerializers.BYTE);
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DISTORTION_MODE, false);
+        this.entityData.define(DATA_STAND_SKIN, PurpleHazeEntity.ANIME);
     }
     public boolean isDistortionMode() {
         return this.entityData.get(DISTORTION_MODE);
@@ -313,6 +318,13 @@ public class PurpleSmokeEntity extends StandEntity {
 
     public void setDistortionMode(boolean value) {
         this.entityData.set(DISTORTION_MODE, value);
+    }
+    public void setStandSkin(byte skin) {
+        this.entityData.set(DATA_STAND_SKIN, skin);
+    }
+
+    public byte getStandSkin() {
+        return this.entityData.get(DATA_STAND_SKIN);
     }
     @Override
     public boolean hasNoPhysics() {

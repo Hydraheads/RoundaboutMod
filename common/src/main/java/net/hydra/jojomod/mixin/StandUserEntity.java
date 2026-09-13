@@ -75,6 +75,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.Turtle;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -347,7 +348,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
 
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$PURPLE_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
-
+    @Unique
+    private static final EntityDataAccessor<Byte> ROUNDABOUT$PURPLE_HAZE_SKIN = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BYTE);
     @Unique
     private static final EntityDataAccessor<Integer> ROUNDABOUT$DISTORTION_HAZE_TICKS = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
 
@@ -3664,6 +3666,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$MOLD_STARTING_Y_POS, 0.0f);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$GOING_DOWN, false);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_SKIN, PurpleHazeEntity.ANIME);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
 
         }
@@ -6475,7 +6478,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void SetInPurpleHazeTicks(int e) {
         this.entityData.set(ROUNDABOUT$PURPLE_HAZE_TICKS, e);
     }
+    @Override
+    public void SetPurpleHazeSkin(byte skin) {
+        this.entityData.set(ROUNDABOUT$PURPLE_HAZE_SKIN, skin);
+    }
 
+    @Override
+    public byte getPurpleHazeSkin() {
+        return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_SKIN);
+    }
     @Override
     public int getPurpleHazeTicks() {
         return this.entityData.get(ROUNDABOUT$PURPLE_HAZE_TICKS);
