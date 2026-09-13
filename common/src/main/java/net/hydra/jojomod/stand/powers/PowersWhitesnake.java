@@ -111,6 +111,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte AUTO_MODE_MOVE = 105;
     private static final byte AUTO_MODE_ATTACK = 106;
     private static final byte CONTROL_MODE_FROM_AUTO = 107;
+    private static final byte RETREAT_MODE = 108;
     private static final byte ROUNDABOUT_DODGE_NOISE = 59;
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte PHASE_GRAB_COOLDOWN = PowerIndex.SKILL_EXTRA_2;
@@ -131,6 +132,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private int meltingCrawlGraceTicks;
     private int meltingCrawlTransitionTicks;
     private boolean autoMode;
+    private boolean isRetreating = false;
+    private int retreatTicks = -1;
     private int autoAttackCooldown;
     private Vec3 autoMoveTarget;
     private int manualAutoTargetId = -1;
@@ -322,6 +325,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void toggleControlModeClient() {
         if (!(self instanceof Player)) return;
+        isRetreating = false;
         if (autoMode) {
             enterControlFromAutoClient();
             return;
@@ -340,6 +344,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void toggleAutoModeClient() {
         if (!(self instanceof Player)) return;
+        isRetreating = false;
         if (autoMode) {
             setAutoMode(false);
             tryIntPowerPacket(AUTO_MODE, 0);
@@ -368,6 +373,24 @@ public class PowersWhitesnake extends BlockGrabPreset {
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
     }
 
+    public void detectNeedToRetreat() {
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !stand.isAlive() || stand.isRemoved()
+                || !((StandUser) self).roundabout$getActive()) {
+            return;
+        }
+        double distance = stand.distanceTo(self);
+        boolean wasRetreating = isRetreating;
+
+        isRetreating = distance > 2.5D;
+        if (!isRetreating) {
+            retreatTicks = -1;
+            if (wasRetreating) {
+                stopRetreatModeServer();
+            }
+        }
+    }
+
     private void setAutoMode(boolean enabled) {
         StandEntity stand = getStandEntity(self);
         boolean wasAutoMode = autoMode;
@@ -384,10 +407,19 @@ public class PowersWhitesnake extends BlockGrabPreset {
         clearAutoModeTargets();
         setMeltingMode(false, false);
         if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+            if (autoMode || isPiloting()) {
+                following.setOffsetType(OffsetIndex.LOOSE);
+            }else {
+                detectNeedToRetreat();
+                if (!isRetreating) {
+                    following.setOffsetType(OffsetIndex.FOLLOW);
+                }
+            }
+
         }
         if (stand instanceof WhitesnakeEntity whitesnake) {
             whitesnake.setAutoMode(autoMode);
+            whitesnake.setRetreatMode(isRetreating);
             whitesnake.getNavigation().stop();
             whitesnake.clearControlInput();
             whitesnake.clearDisguise();
@@ -422,9 +454,18 @@ public class PowersWhitesnake extends BlockGrabPreset {
             setAutoMode(false);
             if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.clearAutoModeMovement();
         }
-        if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(entering || autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+        if (stand instanceof WhitesnakeEntity following) {
+            if (entering || autoMode) {
+                following.setOffsetType(OffsetIndex.LOOSE);
+            }else {
+                detectNeedToRetreat();
+                if (!isRetreating) {
+                    following.setOffsetType(OffsetIndex.FOLLOW);
+                }
+                following.setRetreatMode(isRetreating);
+            }
         }
+
         if (!entering) {
             clearForwardBarrageTravel();
             setMeltingMode(false, false);
@@ -499,6 +540,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void prepareStandForRemoteControl(StandEntity stand) {
         if (stand == null) return;
+        isRetreating = false;
         Vec3 position = stand.position();
         float yaw = stand.getYRot();
         float pitch = stand.getXRot();
@@ -835,6 +877,13 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return hasDetachedStand() && isUsableStand(stand) ? stand : self;
     }
 
+    public boolean doVault(){
+        if (isRetreating) {
+            return false;
+        }
+        return super.doVault();
+    }
+
     public void tryToDashClient() {
         if (hasBlock()) {
             return;
@@ -883,6 +932,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isRetreating) {
+            switch (context) {
+                case SKILL_3_NORMAL -> tryToDashClient();
+                case SKILL_4_NORMAL -> toggleControlModeClient();
+                case SKILL_4_CROUCH -> toggleAutoModeClient();
+            }
+
+            return;
+        }
+
         if (autoMode) {
             switch (context) {
                 case SKILL_1_NORMAL, SKILL_1_CROUCH, SKILL_1_GUARD, SKILL_1_CROUCH_GUARD ->
@@ -1551,6 +1610,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
             setAutoMode(data != 0);
             return;
         }
+        if (activePower == RETREAT_MODE) {
+            isRetreating = data != 0;
+        }
         if (activePower == ENTER_CONTROL_MODE && data == 0) {
             setPiloting(0);
             if (self.level().isClientSide()) WhitesnakeControlClient.exit();
@@ -1621,6 +1683,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             tickTimeSparkCropGrowth();
             tickControlModeServer();
             if (autoMode) tickAutoMode();
+            if (isRetreating) tickRetreatMode();
         }
         if (forwardBarrage && !isBarrageAttacking()) forwardBarrage = false;
         super.tickPower();
@@ -1772,6 +1835,36 @@ public class PowersWhitesnake extends BlockGrabPreset {
         S2CPacketUtil.sendIntPowerDataPacket(player, ENTER_CONTROL_MODE, 0);
     }
 
+    private void tickRetreatMode() {
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !stand.isAlive() || stand.isRemoved()
+                || !((StandUser) self).roundabout$getActive()) {
+            return;
+        }
+
+        stand.setTarget(null);
+        double distance = stand.distanceTo(self);
+        boolean sprinting = distance > 3.0D;
+        stand.setSprinting(sprinting);
+        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+
+        retreatTicks++;
+
+        if (distance > 2.5D && retreatTicks < 280) {
+            stand.getNavigation().moveTo(self, sprinting ? 1.5D : 1.0D);
+            stand.getLookControl().setLookAt(self, 30.0F, 30.0F);
+            rotateAutoStandToward(stand, self);
+        } else {
+            stand.getNavigation().stop();
+            stand.setOffsetType(OffsetIndex.FOLLOW);
+            isRetreating = false;
+            stopRetreatModeServer();
+            stand.setRetreatMode(false);
+            retreatTicks = -1;
+        }
+
+    }
+
     // Auto Mode AI
     private void tickAutoMode() {
         if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
@@ -1886,6 +1979,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setYRot(bodyYaw);
         stand.setYBodyRot(bodyYaw);
         stand.setYHeadRot(headYaw);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (isRetreating) {
+            return slot < 3;
+        }
+
+        return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
@@ -2054,6 +2156,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
         setAutoMode(false);
         if (self instanceof ServerPlayer player) {
             S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE, 0);
+        }
+    }
+    private void stopRetreatModeServer() {
+        if (self instanceof ServerPlayer player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, RETREAT_MODE, 0);
         }
     }
 

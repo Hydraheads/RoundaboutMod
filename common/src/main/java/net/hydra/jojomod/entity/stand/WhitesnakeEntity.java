@@ -79,6 +79,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private static final byte REMOTE_MODE_NONE = 0;
     private static final byte REMOTE_MODE_CONTROL = 1;
     private static final byte REMOTE_MODE_AUTO = 2;
+    private static final byte REMOTE_MODE_RETREAT = 3;
     private static final float MELTING_ANIMATION_BLEND_STEP = 0.2F;
     private boolean controlDimensionsActive;
     private boolean meltingDimensionsActive;
@@ -120,7 +121,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         goalSelector.addGoal(0, new FloatGoal(this) {
             @Override
             public boolean canUse() {
-                return isAutoModeActive() && super.canUse();
+                return (isRetreatActive() || isAutoModeActive()) && super.canUse();
             }
         });
     }
@@ -196,6 +197,15 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         else if (isAutoModeActive()) setRemoteMode(REMOTE_MODE_NONE);
     }
 
+    public boolean isRetreatActive() {
+        return entityData.get(REMOTE_MODE) == REMOTE_MODE_RETREAT;
+    }
+
+    public void setRetreatMode(boolean active) {
+        if (active) setRemoteMode(REMOTE_MODE_RETREAT);
+        else if (isRetreatActive()) setRemoteMode(REMOTE_MODE_NONE);
+    }
+
     public void setControlMode(boolean active) {
         if (active) setRemoteMode(REMOTE_MODE_CONTROL);
         else if (entityData.get(REMOTE_MODE) == REMOTE_MODE_CONTROL) setRemoteMode(REMOTE_MODE_NONE);
@@ -204,7 +214,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     private void setRemoteMode(byte mode) {
         if (entityData.get(REMOTE_MODE) == mode) return;
         entityData.set(REMOTE_MODE, mode);
-        boolean controlled = mode != REMOTE_MODE_NONE;
+        boolean controlled = mode != REMOTE_MODE_NONE || mode == REMOTE_MODE_RETREAT;
         if (controlled) ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
         controlDimensionsActive = controlled;
         meltingDimensionsActive = controlled && isMeltingModeActive();
@@ -633,7 +643,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public boolean isEffectiveAi() {
-        return isAutoModeActive() ? !level().isClientSide() : !isRemoteControlled() && super.isEffectiveAi();
+        return (isRetreatActive() || isAutoModeActive()) ? !level().isClientSide() : !isRemoteControlled() && super.isEffectiveAi();
     }
 
     public Vec3 threatMovement(Vec3 move) {
@@ -667,7 +677,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public void travel(Vec3 movement) {
-        if (isAutoModeActive()) {
+        if ((isRetreatActive() || isAutoModeActive())) {
             super.travel(movement);
             return;
         }
