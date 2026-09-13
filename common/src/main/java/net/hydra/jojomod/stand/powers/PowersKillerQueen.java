@@ -1640,14 +1640,14 @@ public class PowersKillerQueen extends NewPunchingStand {
                     && (move != PowerIndex.BARRAGE && move != PowerIndex.BARRAGE_CHARGE)){
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
             }
-            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA) {
+            if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
+                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT) {
                 this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
 
             StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
             if (standEntity != null) {
-                if (!standEntity.getHeldItem().isEmpty() && move != ITEM_CHARGE && move != ITEM_THROW
-                        /*&& move != ARROW_HOLDING*/) {
+                if (!standEntity.getHeldItem().isEmpty() && move != ITEM_CHARGE && move != ITEM_THROW){
                     animateStand(StandEntity.ITEM_RETRACT);
 
                     if (standEntity.canAcquireHeldItem) {
@@ -1661,7 +1661,6 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
         }
-
 
         return super.tryPower(move, forced);
     }
@@ -2496,10 +2495,10 @@ public class PowersKillerQueen extends NewPunchingStand {
 
     public void bubbleLaunchUpdate() {
         if (this.attackTimeDuring > -1) {
-            if (this.attackTimeDuring >= 33) {
+            if (this.attackTimeDuring == 33) {
                 bubbleSend();
-                this.setAttackTimeDuring(-15);
             }
+           setAttackTimeDuring(-15);
         }
     }
 
@@ -2965,10 +2964,6 @@ public class PowersKillerQueen extends NewPunchingStand {
     public boolean blockPlantBomb() {
     	if (!this.isClient() && currentBombStatus == BOMB_NONE) {
 
-            if ( self instanceof Player player
-                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
-                voice.playPrimaryBomb();
-            }
             float range = getRange(blockPlantRange);
 
             Vec3 vec3d = this.getSelf().getEyePosition(0);
@@ -2977,6 +2972,11 @@ public class PowersKillerQueen extends NewPunchingStand {
 
             BlockHitResult blockHit = this.getSelf().level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
             if (blockHit.getType() != HitResult.Type.BLOCK) { return true; }
+
+            if ( self instanceof Player player
+                    && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof KiraPartFourVoice voice) {
+                voice.playPrimaryBomb();
+            }
 
             BlockPos pos = blockHit.getBlockPos();
 

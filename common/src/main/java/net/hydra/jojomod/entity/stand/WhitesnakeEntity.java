@@ -10,6 +10,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,14 +21,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -642,6 +636,35 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         return isAutoModeActive() ? !level().isClientSide() : !isRemoteControlled() && super.isEffectiveAi();
     }
 
+    public Vec3 threatMovement(Vec3 move) {
+        if ((getUser() != null) && (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersWhitesnake PW)) {
+            // stops movement when reaching max range
+            double nextX = getX() + move.x;
+            double nextZ = getZ() + move.z;
+            //double distFromPlayer = Math.hypot(nextX - getUser().getX(), nextZ - getUser().getZ());
+            int maxRange = PW.getMaxPilotRange() - 1;
+
+            double moveX = move.x;
+            double moveZ = move.z;
+
+            int Xsign = (moveX > 0 ? 1 : -1);
+            int Zsign = (moveZ > 0 ? 1 : -1);
+
+            if (moveX != 0 && Math.abs(nextX - getUser().getX()) > maxRange) {
+                double stopX = getUser().getX() + (maxRange * Xsign);
+                moveX = stopX - getX();
+            }
+
+            if (moveZ != 0 && Math.abs(nextZ - getUser().getZ()) > maxRange) {
+                double stopZ = getUser().getZ() + (maxRange * Zsign);
+                moveZ = stopZ - getZ();
+            }
+
+            return new Vec3(moveX, move.y, moveZ);
+        }
+        return move;
+    }
+
     @Override
     public void travel(Vec3 movement) {
         if (isAutoModeActive()) {
@@ -658,6 +681,24 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             return;
         }
         super.travel(movement);
+    }
+
+    @Override
+    public void moveRelative(float p_19921_, Vec3 p_19922_) {
+        Vec3 vec3 = threatMovement(getInputVector(p_19922_, p_19921_, this.getYRot()));
+        this.setDeltaMovement(this.getDeltaMovement().add(vec3));
+    }
+
+    private static Vec3 getInputVector(Vec3 p_20016_, float p_20017_, float p_20018_) {
+        double d0 = p_20016_.lengthSqr();
+        if (d0 < 1.0E-7D) {
+            return Vec3.ZERO;
+        } else {
+            Vec3 vec3 = (d0 > 1.0D ? p_20016_.normalize() : p_20016_).scale((double)p_20017_);
+            float f = Mth.sin(p_20018_ * ((float)Math.PI / 180F));
+            float f1 = Mth.cos(p_20018_ * ((float)Math.PI / 180F));
+            return new Vec3(vec3.x * (double)f1 - vec3.z * (double)f, vec3.y, vec3.z * (double)f1 + vec3.x * (double)f);
+        }
     }
 
     @Override
