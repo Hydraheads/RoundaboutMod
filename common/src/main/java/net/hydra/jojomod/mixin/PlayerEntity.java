@@ -240,6 +240,9 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 && PW.hasExtendedHeelsForWalking()){
             cir.setReturnValue(false);
         }
+        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()){
+            cir.setReturnValue(false);
+        }
     }
     @Inject(
             method = "touch",

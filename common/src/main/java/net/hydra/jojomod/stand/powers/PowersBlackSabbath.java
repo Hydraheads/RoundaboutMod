@@ -265,9 +265,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
             }
         } else if (!blackSabbathTargets.isEmpty() && moveMode < 2){
-            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
+                setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE_OFF, PowerIndex.SKILL_2);
         } else if (moveMode == 1 || moveMode == 0){
-            setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE, PowerIndex.SKILL_2);
+                setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_MODE_OFF, PowerIndex.SKILL_2);
         } else {
             if(!isHoldingSneak()) {
                 setSkillIcon(context, x, y, 2, StandIcons.POLPO_SELECTING_TARGET_UNSELECTION, PowerIndex.SKILL_2);
@@ -842,19 +842,20 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     ) {
         int attempts = 100;
         double minDistance = 2.5D+ (0.5);
-        for (int i = 0; i < attempts; i++) {
-            double angle = Math.random() * Math.PI * 2.0D;
-            double distance = minDistance
-                    + Math.sqrt(Math.random()) * (radius - minDistance);
-            double x = lent.getX() + Math.cos(angle) * distance;
-            double z = lent.getZ() + Math.sin(angle) * distance;
-            int baseY = Mth.floor(lent.getY());
-            for (int yOffset = 0; yOffset <= 10; yOffset++) {
+
+        for (int yOffset = -1; yOffset <= 10; yOffset++) {
+            for (int i = 0; i < attempts; i++) {
+                double angle = Math.random() * Math.PI * 2.0D;
+                double distance = minDistance
+                        + Math.sqrt(Math.random()) * (radius - minDistance);
+                double x = lent.getX() + Math.cos(angle) * distance;
+                double z = lent.getZ() + Math.sin(angle) * distance;
+                int baseY = Mth.floor(lent.getY());
                 double y = baseY + yOffset;
                 Vec3 candidate = new Vec3(x, y, z);
                 BlockPos bpos = BlockPos.containing(x, y - 0.1, z);
                 var blockState = this.self.level().getBlockState(bpos);
-                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(),lent.getY(),lent.getZ());
+                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                 AABB testBox = yesbox.move(
                         candidate.x - lent.getX(),
                         candidate.y - lent.getY(),
@@ -862,21 +863,28 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 );
                 if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
                     return candidate;
-                } else {
-                    for (int yOffset2 = -1; yOffset2 >= -8; yOffset2--) {
+                } else if(y == 9){
+                    for (int yOffset2 = -2; yOffset2 >= -8; yOffset2--) {
+                    for (int i2 = 0; i2 < attempts; i2++) {
+                        System.out.println(attempts + " / " + yOffset2);
+                        double distance2 = minDistance
+                                + Math.sqrt(Math.random()) * (radius - minDistance);
+                        double x2 = lent.getX() + Math.cos(angle) * distance2;
+                        double z2 = lent.getZ() + Math.sin(angle) * distance2;
                         double y2 = baseY + yOffset2;
-                        Vec3 candidate2 = new Vec3(x, y2, z);
+                        Vec3 candidate2 = new Vec3(x2, y2, z2);
                         BlockPos bpos2 = BlockPos.containing(x, y2 - 0.1, z);
                         var blockState2 = this.self.level().getBlockState(bpos2);
-                        AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(),lent.getY(),lent.getZ());
+                        AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
                         AABB testBox2 = yesbox2.move(
                                 candidate2.x - lent.getX(),
                                 candidate2.y - lent.getY(),
                                 candidate2.z - lent.getZ()
                         );
-                        if (level.noCollision(lent, testBox2) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
+                        if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
                             return candidate2;
                         }
+                    }
                     }
                 }
             }
