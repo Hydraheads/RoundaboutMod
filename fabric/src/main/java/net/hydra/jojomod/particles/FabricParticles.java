@@ -101,10 +101,17 @@ public class FabricParticles {
             new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
                 @Override
                 public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
-                    return HazeColorParticleOptions.CODEC;
+                    return HazeColorParticleOptions.codec(this);
                 }
             };
     public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple();
+    public static final net.minecraft.core.particles.ParticleType<HazeColorParticleOptions> PURPLE_HAZE_BLASTWAVE =
+            new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                    return HazeColorParticleOptions.codec(this);
+                }
+            };
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FIRE_CRUMBLE = FabricParticleTypes.simple();
@@ -205,7 +212,8 @@ public class FabricParticles {
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_smoke"), PURPLE_HAZE_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("distortion_smoke"), DISTORTION_SMOKE);
-        
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("purple_haze_blastwave"), PURPLE_HAZE_BLASTWAVE);
+
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_explosion"), ROAD_ROLLER_EXPLOSION);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_smoke"), ROAD_ROLLER_SMOKE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("road_roller_scrap"), ROAD_ROLLER_SCRAP);
@@ -307,6 +315,7 @@ public class FabricParticles {
 
         ModParticles.PURPLE_HAZE_SMOKE = PURPLE_HAZE_SMOKE;
         ModParticles.DISTORTION_SMOKE = DISTORTION_SMOKE;
+        ModParticles.PURPLE_HAZE_BLASTWAVE = PURPLE_HAZE_BLASTWAVE;
 
         ModParticles.ROAD_ROLLER_EXPLOSION = ROAD_ROLLER_EXPLOSION;
         ModParticles.ROAD_ROLLER_SMOKE = ROAD_ROLLER_SMOKE;
