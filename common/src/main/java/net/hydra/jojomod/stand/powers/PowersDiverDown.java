@@ -152,9 +152,13 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
-    private static final float TRAP_RANGE = 4.0f;
+    private static final float TRAP_RANGE = 5.0f;
     private static final int MAX_NUMBER_OF_TRAPS = 10;
     public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
+    // water bucket
+
+    // RELEASE
+    // 🔥🔥🔥🔥🔥
     private boolean isAutoRelease = true; // true = automatic, false = manual
 
     // stand creation model floaty creation whatever thingy.
@@ -204,14 +208,14 @@ public class PowersDiverDown extends NewPunchingStand {
         if (isDiveActive()) {
             setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_AFFLICTION, PowerIndex.SKILL_2);
         } else if (isGuarding()) {
-            // releaseMode will be true if auto, false if manual
-            if (releaseMode())
+            // isAutoRelease will be true if auto, false if manual
+            if (this.isAutoRelease)
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_AUTO, PowerIndex.SKILL_2_GUARD);
             else
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_GUARD);
         } else if (isHoldingSneak()) {
             // changes the icons for deletion vs releation (real)
-            if (releaseMode())
+            if (this.isAutoRelease)
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_CANCEL_STORE, PowerIndex.SKILL_2_SNEAK);
             else
                 setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_SNEAK);
@@ -2017,13 +2021,7 @@ public class PowersDiverDown extends NewPunchingStand {
         BlockHitResult blockHit = this.self.level().clip(
                 new ClipContext(eyePos, reachVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
 
-        // If looking horizontally or up, also check directly below the player
-        if (blockHit.getType() != HitResult.Type.BLOCK) {
-            Vec3 downVec = eyePos.add(0, -TRAP_RANGE, 0);
-            blockHit = this.self.level().clip(
-                    new ClipContext(eyePos, downVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
-        }
-
+        // do nothing if nothing is found
         if (blockHit.getType() != HitResult.Type.BLOCK) {
             return false;
         }
@@ -2184,20 +2182,6 @@ public class PowersDiverDown extends NewPunchingStand {
      */
     private boolean isDiveActive() {
         return false;
-    }
-
-    /**
-     * Placeholder function, right now returns true
-     * 
-     * Will be given code to see if X release is manual or auto. true for auto,
-     * false for manual
-     */
-    private boolean releaseMode() {
-        // water bucket
-
-        // RELEASE
-        // 🔥🔥🔥🔥🔥
-        return this.isAutoRelease;
     }
 
     /**
