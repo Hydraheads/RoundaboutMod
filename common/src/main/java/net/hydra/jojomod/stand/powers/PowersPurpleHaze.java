@@ -1087,6 +1087,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 field.setPos(position);
                 PowerTypes.copyPlaneOfExisting(self, field);
                 field.setDistortionMode(distortionMode);
+                field.setStandSkin(getStandSkin());
                 field.totalDuration = distortionMode ? DISTORTION_FIELD_DURATION : PURPLE_HAZE_FIELD_DURATION;
                 field.lifetime = field.totalDuration;
                 this.self.level().addFreshEntity(field);
