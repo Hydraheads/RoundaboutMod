@@ -2623,8 +2623,8 @@
   "idle.roundabout.ckb_1": "Fun",
   "idle.roundabout.ckb_2": "Dangle",
 
-  "idle.roundabout.sc_armoured": "Idle Pose",
-  "idle.roundabout.sc_unarmoured": "Idle Pose",
+  "idle.roundabout.sc_part_3": "Part 3 Pose",
+  "idle.roundabout.sc_part_5": "Part 5 Pose",
 
   "skins.roundabout.king_crimson.base": "Part 5",
   "skins.roundabout.king_crimson.manga": "Manga",
@@ -3022,9 +3022,9 @@
   "skins.roundabout.purple_haze.mirror_battle": "Mirror Battle",
   "skins.roundabout.purple_haze.rott_haze": "Rott Haze",
 
-  "skins.roundabout.silver_chariot_anime_part_3_silver": "Part 3 Silver",
-  "skins.roundabout.silver_chariot_manga_part_3": "Part 3 Manga",
   "skins.roundabout.silver_chariot_anime_part_3": "Part 3 Anime",
+  "skins.roundabout.silver_chariot_anime_part_3_grey": "Part 3 Anime Grey",
+  "skins.roundabout.silver_chariot_manga_part_3": "Part 3 Manga",
   "skins.roundabout.silver_chariot_anime_part_5": "Part 5",
 
   "death.attack.anubis_possess": "%1$s couldn't challenge %2$s",

@@ -11,7 +11,7 @@ import net.minecraft.client.animation.KeyframeAnimations;
  * @author Author
  */
 public class SilverChariotAnimations {
-	public static AnimationDefinition PosePart3() {
+	public static AnimationDefinition Part3Pose() {
 		return AnimationDefinition.Builder.withLength(0.0F)
 				.addAnimation("stand2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 						new Keyframe(0.0F, KeyframeAnimations.degreeVec(-7.5F, -32.5F, -7.5F), AnimationChannel.Interpolations.LINEAR)
