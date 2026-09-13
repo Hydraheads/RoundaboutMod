@@ -286,7 +286,7 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		defaultModifiers(pEntity);
 		// defaultAnimations(pEntity, pAgeInTicks, 1 / ((float) Power.getBarrageWindup() / 20));
-
+		float windupLength = 1/((float) powers.getBarrageWindup() / 20f);
 		float partial = 1.4f;
 		float full = 1.16666f;
 		if (pEntity.getMeltLevel() > 0){
@@ -300,7 +300,6 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		// this.animate(pEntity.scBarrageCharge, SilverChariotAnimations.BarrageCharge, pAgeInTicks, 1f);
 		// this.animate(pEntity, SilverChariotAnimations, pAgeInTicks, 1f);
 		this.animate(pEntity.scFallBrace, SilverChariotAnimations.FallBrace, pAgeInTicks, 1f);
-		this.animate(pEntity.scHideRapiers, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardLeftBreak, SilverChariotAnimations.LeftGuardBreak(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardLeftStart, SilverChariotAnimations.LeftGuardStart(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardLeftHit, SilverChariotAnimations.LeftGuardHit(), pAgeInTicks, 1f);
@@ -308,20 +307,23 @@ public class SilverChariotModel<T extends SilverChariotEntity> extends StandMode
 		this.animate(pEntity.scGuardRightStart, SilverChariotAnimations.RightGuardStart(), pAgeInTicks, 1f);
 		this.animate(pEntity.scGuardRightHit, SilverChariotAnimations.RightGuardHit(), pAgeInTicks, 1f);
 		this.animate(pEntity.scBarrageDamage, StandAnimations.BARRAGEDAMAGE, pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftHit1, SilverChariotAnimations.LeftHit1, pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftHit2, SilverChariotAnimations.LeftHit2, pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftHit3, SilverChariotAnimations.LeftHit3, pAgeInTicks, 1f);
-		this.animate(pEntity.scLeftBarrageWindup, SilverChariotAnimations.LeftBarrageWindup, pAgeInTicks, 1f);
+		this.animate(pEntity.scLeftHit1, SilverChariotAnimations.LeftHit1, pAgeInTicks, partial);
+		this.animate(pEntity.scLeftHit2, SilverChariotAnimations.LeftHit2, pAgeInTicks, full);
+		this.animate(pEntity.scLeftHit3, SilverChariotAnimations.LeftHit3, pAgeInTicks, full);
+		this.animate(pEntity.scLeftBarrageWindup, SilverChariotAnimations.LeftBarrageWindup, pAgeInTicks, windupLength);
 		this.animate(pEntity.scLeftBarrage, SilverChariotAnimations.LeftBarrage, pAgeInTicks, 1f);
-		this.animate(pEntity.scRightHit1, SilverChariotAnimations.RightHit1, pAgeInTicks, 1f);
-		this.animate(pEntity.scRightHit2, SilverChariotAnimations.RightHit2, pAgeInTicks, 1f);
-		this.animate(pEntity.scRightHit3, SilverChariotAnimations.RightHit3, pAgeInTicks, 1f);
+		this.animate(pEntity.scRightHit1, SilverChariotAnimations.RightHit1, pAgeInTicks, partial);
+		this.animate(pEntity.scRightHit2, SilverChariotAnimations.RightHit2, pAgeInTicks, full);
+		this.animate(pEntity.scRightHit3, SilverChariotAnimations.RightHit3, pAgeInTicks, full);
 		this.animate(pEntity.scRightBarrageWindup, SilverChariotAnimations.RightBarrageWindup, pAgeInTicks, 1f);
 		this.animate(pEntity.scRightBarrage, SilverChariotAnimations.RightBarrage, pAgeInTicks, 1f);
 		this.animate(pEntity.scIdleArmoured, SilverChariotAnimations.Idle, pAgeInTicks, 1f);
 		this.animate(pEntity.scIdleNotArmoured, SilverChariotAnimations.IdleArmorless, pAgeInTicks, 1f);
+		this.animate(pEntity.scPart3Pose, SilverChariotAnimations.Part3Pose(), pAgeInTicks, 1f);
+		this.animate(pEntity.scPart5Pose, SilverChariotAnimations.Part5Pose(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleRightSword, SilverChariotAnimations.RightSword(), pAgeInTicks, 1f);
 		this.animate(pEntity.scToggleLeftSword, SilverChariotAnimations.LeftSword(), pAgeInTicks, 1f);
+		this.animate(pEntity.scHideRapiers, StandAnimations.HIDE_FISTS, pAgeInTicks, 1f);
 	}
 
 	@Override
