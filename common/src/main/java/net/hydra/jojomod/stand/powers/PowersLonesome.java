@@ -4,21 +4,29 @@ import com.google.common.collect.Lists;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.AbilityIconInstance;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.SoundIndex;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Arrays;
@@ -190,11 +198,32 @@ public class PowersLonesome extends NewDashPreset {
         LivingEntity player = this.self;
         if (crawlingOn()){
             ((StandUser) player).rdbt$SetCrawlTicks(1);
-            System.out.println(player.level().getBlockEntity(getRayBlockHit(player, 1f).getBlockPos()));
+            System.out.println(player.level().getBlockState(getRayBlockHit(player, 1f).getBlockPos()));
             // for future me, i'm trying to find the name of the block at the player raytrace
         }
         return true;
     }
+
+    public boolean cheatDeath(DamageSource dsource){
+        if (dsource.is(DamageTypes.EXPLOSION) || dsource.is(DamageTypes.FALL) || dsource.is(DamageTypes.PLAYER_EXPLOSION)) {
+            if (!onCooldown(PowerIndex.EXTRA)) {
+                LivingEntity player = this.self;
+                player.setHealth(1);
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2), player);
+                player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 0), player);
+                switchCrawlMode();
+
+                getStandUserSelf().roundabout$setDazed((byte)0);
+                // this.setCooldown(PowerIndex.EXTRA, ClientNetworking.getAppropriateConfig().vampireSettings.endOfYourRopeCooldown); // [NYI]
+                xTryPower(PowerIndex.EXTRA,true);
+                //playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.ROPE_SOUND_EFFECT, // [NOT YET IMPLEMENTED]
+                //SoundSource.PLAYERS, 1F, 1F);
+                }
+                return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void tickStandRejection(MobEffectInstance effect) {
