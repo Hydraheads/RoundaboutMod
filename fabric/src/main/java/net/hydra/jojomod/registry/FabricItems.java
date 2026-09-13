@@ -173,6 +173,9 @@ public class FabricItems {
     public static Item STAND_DISC_PEARL_JAM = registerItem("pearl_jam_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null)));
 
+    public static Item STAND_DISC_CATCH_THE_RAINBOW = registerItem("catch_the_rainbow_disc",
+            new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCatchTheRainbow(null)));
+
     public static Item STAND_DISC_CINDERELLA = registerItem("cinderella_disc",
             new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCinderella(null)));
     public static Item STAND_DISC_PLANET_WAVES = registerItem("planet_waves_disc",
@@ -788,6 +791,7 @@ public class FabricItems {
                         entries.accept(STAND_DISC_OASIS);
                         entries.accept(MAX_STAND_DISC_OASIS);
                         entries.accept(STAND_DISC_PEARL_JAM);
+                        entries.accept(STAND_DISC_CATCH_THE_RAINBOW);
 
                         entries.accept(STAND_DISC_SILVER_CHARIOT);
                         entries.accept(MAX_STAND_DISC_SILVER_CHARIOT);

@@ -834,6 +834,8 @@ public class ForgeItems {
 
     public static final RegistryObject<Item> STAND_DISC_PEARL_JAM = addToWIPTab(ITEMS.register("pearl_jam_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersPearlJam(null))));
+    public static final RegistryObject<Item> STAND_DISC_CATCH_THE_RAINBOW = addToWIPTab(ITEMS.register("catch_the_rainbow_disc",
+            () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersCatchTheRainbow(null))));
 
   /*  public static final RegistryObject<Item> STAND_DISC_D4C = ITEMS.register("d4c_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersD4C(null)));

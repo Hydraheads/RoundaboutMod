@@ -279,6 +279,19 @@ public class StandIcons {
     public static final ResourceLocation METALLICA_REPAIR = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/metallica/fix_tools.png");
 
+    public static final ResourceLocation CATCH_THE_RAINBOW_RAIN_MEND = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/rain_mend.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_CHOKE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/choke.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_RAIN_DASH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/rain_dash.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_DROP_DOWN = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/drop_down.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_FULL_DODGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/full_dodge.png");
+    public static final ResourceLocation CATCH_THE_RAINBOW_FULL_DODGE_LIFE_CLUTCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/catch_the_rainbow/full_dodge_life_clutch.png");
+
     public static final ResourceLocation MUSCLE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/entity/other_layers/muscle_full.png");
     public static final ResourceLocation MUSCLE_SLIM = new ResourceLocation(Roundabout.MOD_ID,
