@@ -857,10 +857,13 @@ public class SheerHeartAttackEntity extends StandEntity {
 		int points = 0;
 
 		if (entity instanceof TamableAnimal TM) {
-			if (TM.getOwner() == getUser()) { return 0; }
+			if (TM.getOwner() == getUser()) { return -1; }
 		}
 
-		if (PowerTypes.isInADifferentExistence(entity,this)) { return 0; }
+
+		if (!entity.isAttackable()
+				|| PowerTypes.isInADifferentExistence(entity,this)
+				|| entity instanceof StandEntity || entity.is(this.getUser())) { return -1; }
 
 		ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
 
@@ -869,14 +872,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			return MainUtil.SHA_CUSTOM_ENTITY_HEAT.get(tag);
 		}
 
-		if (entity instanceof StandEntity || entity.is(this.getUser())){ return -1;}
-
 		if (entity instanceof LivingEntity LE) {
-			if (LE.isDeadOrDying()
-					|| (LE instanceof Player pl && pl.isCreative())
-					|| PowerTypes.isInADifferentExistence((entity),this)) {
-				return 0;
-			}
 			points += 20;
 			points += HeatUtil.getHeat(LE);
 
@@ -896,6 +892,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 					&& (mobType.equals(MobType.UNDEAD) || mobType.equals(MobType.ARTHROPOD) )
 					|| FateTypes.isVampire(LE) || FateTypes.isZombie(LE)) { points -= 30;}
 		}
+
 		return points;
 	}
 

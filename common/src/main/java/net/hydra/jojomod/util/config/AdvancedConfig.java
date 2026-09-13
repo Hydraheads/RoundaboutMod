@@ -375,6 +375,25 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:light_block"
             )
     );
+    public Set<String> lootPoolForD4CChests = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:iron_ingot:1:2",
+                    "minecraft:slime_ball:1:5",
+                    "minecraft:apple:1:5",
+                    "minecraft:apple:1:5",
+                    "minecraft:cactus:1:5",
+                    "minecraft:leather:1:10",
+                    "minecraft:leather:1:10",
+                    "minecraft:sugar_cane:1:10",
+                    "minecraft:sugar_cane:1:10",
+                    "minecraft:lapis_lazuli:1:2",
+                    "roundabout:gasoline_can:1:3",
+                    "roundabout:gasoline_can:1:3",
+                    "roundabout:knife_bundle:1:3",
+                    "roundabout:knife_bundle:1:3",
+                    "minecraft:oak_sapling:1:2"
+            )
+    );
     public Set<String> unbreakableThrownItems = new HashSet<>(
             Arrays.asList(
                     "mod_id:add_mod_item",

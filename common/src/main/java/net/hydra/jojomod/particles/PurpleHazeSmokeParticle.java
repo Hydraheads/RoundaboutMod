@@ -14,13 +14,11 @@ public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
     protected PurpleHazeSmokeParticle(ClientLevel clientLevel, double d, double e, double f, double g, double h, double i, SpriteSet spriteSet) {
         super(clientLevel, d, e, f, spriteSet, 1f);
         this.xd = 0;
-        this.yd = h*0.03f;
+        this.yd = h * 0.03f;
         this.zd = 0;
-        //this.friction = 0.6F;
         this.gravity = 0;
-        this.quadSize *= 2f + ((float)this.random.nextInt(5) / 10.0f);
+        this.quadSize *= 2f + ((float) this.random.nextInt(5) / 10.0f);
         this.lifetime = 8 + this.random.nextInt(12);
-        this.setFadeColor(15916745);
         this.setSpriteFromAge(spriteSet);
     }
 
@@ -35,15 +33,20 @@ public class PurpleHazeSmokeParticle extends SimpleAnimatedParticle {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
+    public static class Provider implements ParticleProvider<HazeColorParticleOptions> {
         private final SpriteSet sprites;
 
-        public Provider(SpriteSet $$0) { this.sprites = $$0;}
+        public Provider(SpriteSet sprites) {
+            this.sprites = sprites;
+        }
 
-        public Particle createParticle(SimpleParticleType $$0, ClientLevel $$1, double $$2, double $$3, double $$4, double $$5, double $$6, double $$7) {
-            return new PurpleHazeSmokeParticle($$1, $$2, $$3, $$4, $$5, $$6, $$7, this.sprites);
+        @Override
+        public Particle createParticle(HazeColorParticleOptions options, ClientLevel level,
+                                       double x, double y, double z, double xd, double yd, double zd) {
+            PurpleHazeSmokeParticle particle = new PurpleHazeSmokeParticle(level, x, y, z, xd, yd, zd, sprites);
+            particle.setColor(options.getR(), options.getG(), options.getB());
+            particle.setFadeColor(0x1A1A1A);
+            return particle;
         }
     }
-
 }
-

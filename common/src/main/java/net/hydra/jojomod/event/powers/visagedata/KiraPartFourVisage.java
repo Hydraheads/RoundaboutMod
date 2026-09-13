@@ -5,6 +5,7 @@ import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.JotaroVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.KiraPartFourVoice;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import org.joml.Vector3f;
@@ -16,10 +17,14 @@ public class KiraPartFourVisage extends VisageData {
     public VisageData generateVisageData(LivingEntity entity){
         return new KiraPartFourVisage(entity);
     }
-    /*@Override
+    @Override
     public JojoNPC getModelNPC(LivingEntity pl){
-        return ModEntities.JOSUKE_PART_EIGHT.create(pl.level());
-    }*/
+        JojoNPC jojoNPC = ModEntities.KIRA4.create(pl.level());
+        if (jojoNPC !=null){
+            jojoNPC.setTrueBasis(ModItems.KIRA_PART_FOUR_MASK.getDefaultInstance());
+        }
+        return jojoNPC;
+    }
 
     public boolean hasVoices(){
         return true;

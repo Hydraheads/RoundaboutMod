@@ -1,27 +1,18 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.PacketDataIndex;
-import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
-import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +34,11 @@ public class FirearmItem extends Item {
         return 72000;
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack p_41456_) {
+        return false;
+    }
+
     public boolean interceptAttack(ItemStack itemStack, Player player) {
         if (player != null && player.getUseItem() != null) {
             if (player.getUseItem() == itemStack) {
@@ -51,7 +47,24 @@ public class FirearmItem extends Item {
         }
         return false;
     }
+    public static final String AMMO_COUNT_TAG = "AmmoCount";
+    public static final String RELOADING_TAG = "IsReloading";
 
+    public int getAmmo(ItemStack stack) {
+        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
+    }
+
+    public void setAmmo(ItemStack stack, int count) {
+        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
+    }
+
+    public boolean getReloading(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
+    }
+
+    public void setReloading(ItemStack stack, boolean value) {
+        stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
+    }
     public boolean isCrouchingOrSomething(Player player, ItemStack stack){
         return (player.isCrouching() && !(player.getUseItem() == stack)) || cycleReload;
     }
@@ -80,6 +93,24 @@ public class FirearmItem extends Item {
     }
 
     @Override
+    public UseAnim getUseAnimation(ItemStack $$0) {
+        return UseAnim.BOW;
+    }
+    public boolean isReloading(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
+    }
+
+    public void cancelReload(ItemStack stack, Player player) {
+        if (isReloading(stack)) {
+            setReloading(stack, false);
+            if (player != null) {
+                ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
+                player.getCooldowns().removeCooldown(stack.getItem());
+                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+        }
+    }
+    @Override
     public void releaseUsing(ItemStack stack, Level dimension, LivingEntity livingEntity, int timeLeft) {
         if (!dimension.isClientSide && livingEntity instanceof Player player) {
             ItemStack itemStack = player.getMainHandItem();
@@ -87,5 +118,17 @@ public class FirearmItem extends Item {
                 player.stopUsingItem();
             }
         }
+    }
+
+    public int getMaxAmmo(){
+        return 1;
+    }
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        int ammo = getAmmo(stack);
+        tooltip.add(
+                Component.literal("Ammo: " + ammo + " / " + getMaxAmmo())
+                        .withStyle(ChatFormatting.GRAY)
+        );
     }
 }

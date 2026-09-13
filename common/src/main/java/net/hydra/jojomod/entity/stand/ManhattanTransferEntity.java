@@ -214,27 +214,7 @@ public class ManhattanTransferEntity extends StandEntity {
     public boolean isSnubnose = false;
     public float manhattanDamageIncipit = 0;
     public boolean canAcquireHeldItem = false;
-    public boolean getCanPlace() {
-        return false;
-    }
-    public boolean canSnipe() {
-        return false;
-    }
-    public float getShotAccuracy() {
-        return 0.0F;
-    }
-    public float getBundleAccuracy() {
-        return 0.0F;
-    }
-    public float getThrowAngle() {
-        return 0.0F;
-    }
-    public float getThrowAngle2() {
-        return 0.0F;
-    }
-    public float getThrowAngle3() {
-        return 0.0F;
-    }
+
     public boolean canOthersLoadMT = ClientNetworking.getAppropriateConfig().manhattanTransferSettings.canOtherMobsLoadManhattanTransfer;
     public int fireTicksPrj = 0;
     public Projectile hattanDeflected = null;
@@ -424,8 +404,8 @@ public class ManhattanTransferEntity extends StandEntity {
                 pos = new Vec3(this.getX() + pos.x, this.getY() + pos.y, this.getZ() + pos.z);
             }
 
-            return manhattanShoot(this, canSnipe(), getHeldItemManhattan(), getShotAccuracy(), getBundleAccuracy(), getThrowAngle(),
-                    getThrowAngle2(), getThrowAngle3(), getCanPlace(), this.shootRotationXHattan, this.shootRotationYHattan,
+            return manhattanShoot(this, false, getHeldItemManhattan(), 0.0F, 0.0F, 0.0F,
+                    0.0F, 0.0F, false, this.shootRotationXHattan, this.shootRotationYHattan,
                     new Vec3(pos.x, pos.y, pos.z), true, 1, true);
         }
         return false;

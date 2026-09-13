@@ -382,7 +382,8 @@ public interface StandUser {
     int getPurpleHazeTicks();
     void SetInDistortionHazeTicks(int e);
     int getDistortionHazeTicks();
-
+    byte getPurpleHazeSkin();
+    void SetPurpleHazeSkin(byte skin);
 
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();

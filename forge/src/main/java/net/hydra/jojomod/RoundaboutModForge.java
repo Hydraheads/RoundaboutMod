@@ -48,6 +48,7 @@ public class RoundaboutModForge {
         ForgeItems.POTIONS.register(bus);
         ForgeCreativeTab.TABS.register(bus);
         ForgeParticles.PARTICLES.register(bus);
+        ForgeMenus.MENUS.register(bus);
         ForgeGamerules.registerGamerules();
 
         //

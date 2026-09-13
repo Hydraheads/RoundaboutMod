@@ -49,6 +49,7 @@ public class RoundaboutFabric implements ModInitializer {
         FabricSounds.register();
         FabricBlocks.register();
         FabricItems.register();
+        FabricMenus.register();
         FabricParticles.registerParticles();
         FabricGamerules.registerGamerules();
         CommandRegistryFabric.register();

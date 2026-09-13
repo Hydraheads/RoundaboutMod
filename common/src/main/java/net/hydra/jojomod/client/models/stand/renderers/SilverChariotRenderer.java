@@ -1,6 +1,8 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.SilverChariotModel;
@@ -12,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -19,19 +22,37 @@ import org.jetbrains.annotations.Nullable;
 
 public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<SilverChariotEntity> {
 
-    private static final ResourceLocation ANIME_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/anime_part_3.png");
+    private static final ResourceLocation DEFAULT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/silver_chariot.png");
+    private static final ResourceLocation ANIME_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/anime_silver_chariot.png");
+    private static final ResourceLocation MANGA_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/manga_silver_chariot.png");
+    private static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/part_5_silver_chariot.png");
 
     public SilverChariotRenderer(EntityRendererProvider.Context context) {
         super(context, new SilverChariotModel<>(context.bakeLayer(ModEntityRendererClient.SILVER_CHARIOT_LAYER)), 0f);
     }
 
+    public static ResourceLocation getSkin(byte bt) {
+        switch (bt) {
+            case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT -> {
+                return DEFAULT;
+            }
+            case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT_GREY -> {
+                return ANIME_PART_3;
+            }
+            case SilverChariotEntity.MANGA_PART_3_SILVER_CHARIOT -> {
+                return MANGA_PART_3;
+            }
+            case SilverChariotEntity.PART_5_SILVER_CHARIOT -> {
+                return PART_5;
+            }
+        }
+        return DEFAULT;
+    }
+
     @Override
     public ResourceLocation getTextureLocation(SilverChariotEntity entity) {
-        // Yes, I am aware that it is not proper to have only one case in a switch statement
-        // return switch (entity.getSkin()) {
-        //     default -> ANIME_PART_3;
-        // };
-        return ANIME_PART_3;
+        byte bt = entity.getSkin();
+        return getSkin(bt);
     }
 
     @Override
@@ -63,8 +84,29 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 this.model.getHead().visible = true;
             }
         }
+        if (!mobEntity.getArmoured()) {
+            //  y and z have switched cases for some odd reason
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 2.5D, -2.0D, -1.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 1.5D, -2.0D, -1.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -1.5D, -2.0D, -1.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -2.5D, -2.0D, -1.5D);
+        }
         // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         // this.model.getHead().visible = true;
+    }
+
+    public void renderAfterimage(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, float alpha, double x, double y, double z) {
+
+        matrixStack.pushPose();
+
+        this.setupRotations(mobEntity, matrixStack, mobEntity.tickCount + g, f, g);
+        this.scale(mobEntity, matrixStack, g);
+        matrixStack.mulPose((Axis.ZP.rotationDegrees(-180.0F)));
+        matrixStack.translate(x, y, z);
+
+        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(RenderType.entityTranslucent(getTextureLocation(mobEntity)));
+        this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+        matrixStack.popPose();
     }
 
     @Nullable

@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.visages.VisageRenderContext;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.visages.JojoNPC;
+import net.hydra.jojomod.item.ModItems;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,10 +21,14 @@ public class KosakuVisage extends VisageData {
     public VisageData generateVisageData(LivingEntity entity){
         return new KosakuVisage(entity);
     }
-    /*@Override
+    @Override
     public JojoNPC getModelNPC(LivingEntity pl){
-        return ModEntities.JOSUKE_PART_EIGHT.create(pl.level());
-    }*/
+        JojoNPC jojoNPC = ModEntities.KIRA4.create(pl.level());
+        if (jojoNPC !=null){
+            jojoNPC.setTrueBasis(ModItems.KOSAKU_MASK.getDefaultInstance());
+        }
+        return jojoNPC;
+    }
     @Override
     public Vec3i getHairColor(){
         return new Vec3i(23, 24, 30);

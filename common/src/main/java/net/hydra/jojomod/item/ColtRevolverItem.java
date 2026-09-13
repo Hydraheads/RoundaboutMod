@@ -39,39 +39,11 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         super($$0.durability(300));
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack p_41456_) {
-        return false;
-    }
-
-    private static final String AMMO_COUNT_TAG = "AmmoCount";
-    private static final String RELOADING_TAG = "IsReloading";
-
-    private int getAmmo(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
-    }
-
-    private void setAmmo(ItemStack stack, int count) {
-        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
-    }
-
-    private boolean getReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
-    private void setReloading(ItemStack stack, boolean value) {
-        stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
-    }
 
     int maxAmmo = 6;
-
-    private boolean isReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
     @Override
-    public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BOW;
+    public int getMaxAmmo(){
+        return maxAmmo;
     }
 
     private boolean hasColtAmmo(Player player) {
@@ -136,16 +108,6 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
         return consumed;
     }
 
-    public void cancelReload(ItemStack stack, Player player) {
-        if (isReloading(stack)) {
-            setReloading(stack, false);
-            if (player != null) {
-                ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
-                player.getCooldowns().removeCooldown(this);
-                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
-    }
 
 
 
@@ -290,12 +252,4 @@ public class ColtRevolverItem extends FirearmItem implements Vanishable {
     }
 
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        int ammo = getAmmo(stack);
-        tooltip.add(
-                Component.literal("Ammo: " + ammo + " / " + maxAmmo)
-                        .withStyle(ChatFormatting.GRAY)
-        );
-    }
 }

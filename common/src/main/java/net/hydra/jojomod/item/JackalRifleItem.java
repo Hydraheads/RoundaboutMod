@@ -1,6 +1,7 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.stand.KillerQueenEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -18,6 +19,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.ItemBasedSteering;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -38,39 +40,10 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         super($$0.durability(200));
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack p_41456_) {
-        return false;
-    }
-
-    private static final String AMMO_COUNT_TAG = "AmmoCount";
-    private static final String RELOADING_TAG = "IsReloading";
-
-    private int getAmmo(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(AMMO_COUNT_TAG);
-    }
-
-    private void setAmmo(ItemStack stack, int count) {
-        stack.getOrCreateTag().putInt(AMMO_COUNT_TAG, count);
-    }
-
-    private boolean getReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
-    private void setReloading(ItemStack stack, boolean value) {
-        stack.getOrCreateTag().putBoolean(RELOADING_TAG, value);
-    }
-
     int maxAmmo = 1;
-
-    private boolean isReloading(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(RELOADING_TAG);
-    }
-
     @Override
-    public UseAnim getUseAnimation(ItemStack $$0) {
-        return UseAnim.BOW;
+    public int getMaxAmmo(){
+        return maxAmmo;
     }
 
     private boolean hasSniperAmmo(Player player) {
@@ -127,17 +100,6 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
         }
 
         return consumed;
-    }
-
-    public void cancelReload(ItemStack stack, Player player) {
-        if (isReloading(stack)) {
-            setReloading(stack, false);
-            if (player != null) {
-                ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 8, false);
-                player.getCooldowns().removeCooldown(this);
-                player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
     }
 
 
@@ -276,12 +238,4 @@ public class JackalRifleItem extends FirearmItem implements Vanishable {
     }
 
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        int ammo = getAmmo(stack);
-        tooltip.add(
-                Component.literal("Ammo: " + ammo + " / " + maxAmmo)
-                        .withStyle(ChatFormatting.GRAY)
-        );
-    }
 }

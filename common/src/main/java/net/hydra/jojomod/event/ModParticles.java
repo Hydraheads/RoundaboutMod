@@ -1,5 +1,6 @@
 package net.hydra.jojomod.event;
 
+import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -115,6 +116,6 @@ public class ModParticles {
     public static SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION;
     public static SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION;
 
-    public static SimpleParticleType PURPLE_HAZE_SMOKE;
+    public static ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE;
     public static SimpleParticleType DISTORTION_SMOKE;
 }

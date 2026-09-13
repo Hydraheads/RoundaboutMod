@@ -1036,6 +1036,40 @@ public class StandHudRender {
         context.drawString(font, $$6, $$7, $$8, y, false);
     }
 
+    public static void renderGroundDiveHud(GuiGraphics context, Player playerEntity,
+                                     int scaledWidth, int scaledHeight, int x, PowersDiverDown pdido) {
+        //note: diver down is called dido instead of DD because dragon's dream exists
+        Minecraft client = Minecraft.getInstance();
+        int l;
+        //note: why didn't hydra rename distance? is he stupid? (don't tell him i put this here)
+        //maximum time in ticks
+        float maxTime = pdido.MAX_DIVE_TICKS;
+        //time in ticks
+        float time =  Math.max(pdido.diveTicksLeft, 0);
+        //time in seconds
+        int time2 = ((int) (time/20)) + 1;
+
+        int blt =  (int) Math.floor( ((double) 182 / maxTime) * (time));
+        l = scaledHeight - 32 + 3;
+
+        //86 and 76 are the light green thing, fitting for DD's color scheme.
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 86, 182, 5);
+        if (blt > 0) {
+            context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 76, blt, 5);
+        }
+
+        //light green text
+        int y = 0x55FFFF;
+        Font renderer = client.font;
+        String $$6 = time2 + "";
+        int $$7 = (scaledWidth - renderer.width($$6)) / 2;
+        int $$8 = scaledHeight - 31 - 4;
+        context.drawString(renderer, $$6, $$7 + 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7 - 1, $$8, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 + 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8 - 1, 0, false);
+        context.drawString(renderer, $$6, $$7, $$8, y, false);
+    }
 
     public static void renderClashHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int ticks, int x,

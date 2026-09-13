@@ -137,6 +137,7 @@ public class ModBlocks {
 
     public static Block MINING_ALERT_BLOCK;
     public static Block BUBBLE_SCAFFOLD;
+    public static Block DIVER_LIMB;
     public static Block INVISIBLOCK;
     public static Block D4C_PORTAL;
 
@@ -207,6 +208,7 @@ public class ModBlocks {
     public static BlockEntityType<FancyLighterBlockEntity> FANCY_LIGHTER_BLOCK_ENTITY;
     public static BlockEntityType<MirrorBlockEntity> MIRROR_BLOCK_ENTITY;
     public static BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+    public static BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY;
     public static BlockEntityType<InvisiBlockEntity> INVISIBLE_BLOCK_ENTITY;
     public static BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY;
     public static BlockEntityType<CoffinBlockEntity> COFFIN_BLOCK_ENTITY;
@@ -821,6 +823,11 @@ public class ModBlocks {
     );
     public static BubbleScaffoldBlock BUBBLE_SCAFFOLD_BLOCK_PROPERTIES = new BubbleScaffoldBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().speedFactor(0.7F).replaceable().instabreak().lightLevel((p_152607_) -> {
+                return 1;
+            }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
+        //copying the bubble scaffold code for diver down's limb, but removing the speed reducer since the tradeoff is that you're only limited to 4, and it's only placable on walls/floor.
+        public static DiverLimbBlock DIVER_LIMB_BLOCK_PROPERTIES = new DiverLimbBlock(
+            BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).noCollission().dynamicShape().instabreak().lightLevel((p_152607_) -> {
                 return 1;
             }).noParticlesOnBreak().pushReaction(PushReaction.DESTROY).sound(SoundType.EMPTY));
     public static StandFireBlock STAND_FIRE_PROPERTIES = new StandFireBlock(

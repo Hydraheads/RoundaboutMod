@@ -173,6 +173,42 @@
       "roundabout:summon_diver_down"
     ]
   },
+  "diver_down_hit": {
+    "subtitle": "sounds.roundabout.diver_down_hit",
+    "sounds": [
+      "roundabout:diver_down_hit"
+    ]
+  },
+  "diver_down_hit_heavy": {
+    "subtitle": "sounds.roundabout.diver_down_hit_heavy",
+    "sounds": [
+      "roundabout:diver_down_hit_heavy"
+    ]
+  },
+  "diver_down_ui_select": {
+    "subtitle": "sounds.roundabout.diver_down_ui_select",
+    "sounds": [
+      "roundabout:diver_down_ui_select"
+    ]
+  },
+  "diver_down_charge": {
+    "subtitle": "sounds.roundabout.diver_down_charge",
+    "sounds": [
+      "roundabout:diver_down_charge"
+    ]
+  },
+  "diver_down_dive": {
+    "subtitle": "sounds.roundabout.diver_down_dive",
+    "sounds": [
+      "roundabout:diver_down_dive"
+    ]
+  },
+  "diver_down_dive2": {
+    "subtitle": "sounds.roundabout.diver_down_dive2",
+    "sounds": [
+      "roundabout:diver_down_dive2"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
@@ -3805,6 +3841,24 @@
     "subtitle": "sounds.roundabout.kira4_sha",
     "sounds" : [
       "roundabout:kira4_sha_3"
+    ]
+  },
+  "kira4_kq_btd_1": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_1"
+    ]
+  },
+  "kira4_kq_btd_2": {
+    "subtitle": "sounds.roundabout.kira4_kq_btd",
+    "sounds" : [
+      "roundabout:kira4_kq_btd_2"
+    ]
+  },
+  "kira4_btd_range": {
+    "subtitle": "sounds.roundabout.kira4_btd_range",
+    "sounds" : [
+      "roundabout:kira4_btd_range"
     ]
   },
   "whitesnake_command_disc_create": {

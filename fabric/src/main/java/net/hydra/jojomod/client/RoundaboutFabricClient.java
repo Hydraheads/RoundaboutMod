@@ -13,6 +13,8 @@ import net.hydra.jojomod.particles.FabricParticlesClient;
 import net.hydra.jojomod.registry.FabricEntityClient;
 import net.hydra.jojomod.registry.FabricItems;
 import net.hydra.jojomod.registry.FabricKeyInputs;
+import net.hydra.jojomod.registry.FabricMenus;
+import net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture.*;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -70,6 +72,11 @@ public class RoundaboutFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.WALL_LANTERN);
         FabricParticlesClient.registerClientParticles();
         FabricEntityClient.register();
+        //diver down custom workbench menus registry
+        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_CRAFTING, DiverDownCraftingScreen::new);
+        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_ANVIL, DiverDownAnvilScreen::new);
+        net.minecraft.client.gui.screens.MenuScreens.register(FabricMenus.DIVER_DOWN_SMITHING, DiverDownSmithingScreen::new);
+        //DD menus end
         registerWhitesnakeClient();
         ClientPlayConnectionEvents.JOIN.register((clientPlayNetworkHandler, packetSender, minecraftClient) -> ClientNetworking.sendHandshake());
         ItemProperties.register(FabricItems.HARPOON, new ResourceLocation(Roundabout.MOD_ID,"throwing"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);

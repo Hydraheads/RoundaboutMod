@@ -8,6 +8,7 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.gui.*;
+import net.hydra.jojomod.client.gui.diverdown.DiverDownWorkbenchSelect;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsModel;
 import net.hydra.jojomod.client.models.visages.parts.FirstPersonArmsSlimModel;
@@ -1713,6 +1714,11 @@ public class ClientUtil {
     public static void openMemoryReadingScreen(ItemStack stack, InteractionHand hand){
         Minecraft.getInstance().setScreen(new MemoryReadingScreen(stack, hand));
     }
+
+    //Diver Down UI start
+    public static void openWorkbenchSelect() {Minecraft.getInstance().setScreen(new DiverDownWorkbenchSelect());}
+    //Diver Down UI end
+
     public static void strikePose(Player player, Minecraft C, boolean keyIsDown, Options option) {
         if (keyIsDown){
             if (!poseHeld){

@@ -8,6 +8,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
+
 public class FabricParticles {
     public static final SimpleParticleType HIT_IMPACT = FabricParticleTypes.simple();
     public static final SimpleParticleType HALLUCINATORY_ACID_DRIP = FabricParticleTypes.simple();
@@ -96,7 +97,13 @@ public class FabricParticles {
     public static final SimpleParticleType PW_BLUE_BLASTWAVE_EXPLOSION = FabricParticleTypes.simple();
     public static final SimpleParticleType PW_BLUE_MUSHROOM_EXPLOSION = FabricParticleTypes.simple();
 
-    public static final SimpleParticleType PURPLE_HAZE_SMOKE = FabricParticleTypes.simple();
+    public static final net.minecraft.core.particles.ParticleType<HazeColorParticleOptions> PURPLE_HAZE_SMOKE =
+            new net.minecraft.core.particles.ParticleType<>(false, HazeColorParticleOptions.DESERIALIZER) {
+                @Override
+                public com.mojang.serialization.Codec<HazeColorParticleOptions> codec() {
+                    return HazeColorParticleOptions.CODEC;
+                }
+            };
     public static final SimpleParticleType DISTORTION_SMOKE = FabricParticleTypes.simple();
 
     public static final SimpleParticleType DUST_CRUMBLE = FabricParticleTypes.simple();

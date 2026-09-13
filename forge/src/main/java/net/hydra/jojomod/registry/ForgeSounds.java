@@ -508,6 +508,12 @@ public class ForgeSounds {
             register(ModSounds.KIRA4_SHA_2, ModSounds.KIRA4_SHA_2_ID);
     public static final RegistryObject<SoundEvent> KIRA4_SHA_3_EVENT =
             register(ModSounds.KIRA4_SHA_3, ModSounds.KIRA4_SHA_3_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_1_EVENT =
+            register(ModSounds.KIRA4_BTD_1, ModSounds.KIRA4_BTD_1_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_2_EVENT =
+            register(ModSounds.KIRA4_BTD_2, ModSounds.KIRA4_BTD_2_ID);
+    public static final RegistryObject<SoundEvent> KIRA4_BTD_RANGE_EVENT =
+            register(ModSounds.KIRA4_BTD_RANGE, ModSounds.KIRA4_BTD_RANGE_ID);
 
 
     public static final RegistryObject<SoundEvent> EXPLOSIVE_PUNCH_EVENT =
@@ -934,8 +940,22 @@ public class ForgeSounds {
             register(ModSounds.SUMMON_ACHTUNG, ModSounds.SUMMON_ACHTUNG_ID);
     public static final RegistryObject<SoundEvent> SURVIVOR_REMOVE =
             register(ModSounds.SURVIVOR_REMOVE, ModSounds.SURVIVOR_REMOVE_ID);
-    public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
+
+        public static final RegistryObject<SoundEvent> SUMMON_DIVER_DOWN =
             register(ModSounds.SUMMON_DIVER_DOWN, ModSounds.SUMMON_DIVER_DOWN_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_HIT =
+            register(ModSounds.DIVER_DOWN_HIT, ModSounds.DIVER_DOWN_HIT_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_HIT_HEAVY =
+            register(ModSounds.DIVER_DOWN_HIT_HEAVY, ModSounds.DIVER_DOWN_HIT_HEAVY_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_UI_SELECT =
+            register(ModSounds.DIVER_DOWN_UI_SELECT, ModSounds.DIVER_DOWN_UI_SELECT_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_CHARGE =
+            register(ModSounds.DIVER_DOWN_CHARGE, ModSounds.DIVER_DOWN_CHARGE_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE =
+            register(ModSounds.DIVER_DOWN_DIVE, ModSounds.DIVER_DOWN_DIVE_ID);
+        public static final RegistryObject<SoundEvent> DIVER_DOWN_DIVE2 =
+            register(ModSounds.DIVER_DOWN_DIVE2, ModSounds.DIVER_DOWN_DIVE2_ID);
+
     public static final RegistryObject<SoundEvent> SUMMON_GREEN_DAY =
             register(ModSounds.SUMMON_GREEN_DAY, ModSounds.SUMMON_GREEN_DAY_ID);
     public static final RegistryObject<SoundEvent> GREEN_DAY_SPIN =

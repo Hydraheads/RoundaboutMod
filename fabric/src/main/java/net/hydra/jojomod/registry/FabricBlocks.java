@@ -218,6 +218,7 @@ public class FabricBlocks {
     public static final Block CEILING_LIGHT = registerBlock("ceiling_light",ModBlocks.CEILING_LIGHT_BLOCK_PROPERTIES);
     public static final Block MIRROR = registerBlock("mirror",ModBlocks.getMirrorBlockProperties());
     public static final Block BUBBLE_SCAFFOLD = registerBlockItemless("bubble_scaffold",ModBlocks.BUBBLE_SCAFFOLD_BLOCK_PROPERTIES);
+    public static final Block DIVER_LIMB = registerBlockItemless("diver_limb", ModBlocks.DIVER_LIMB_BLOCK_PROPERTIES);
     public static final Block INVISIBLOCK = registerBlockItemless("invisible_block",ModBlocks.INVISIBLE_BLOCK_PROPERTIES);
     public static final Block D4C_PORTAL = registerBlockItemless("d4c_portal", D4C_PORTAL_PROPERTIES);
 
@@ -279,6 +280,8 @@ public class FabricBlocks {
             registerBE("mirror",BlockEntityType.Builder.of(MirrorBlockEntity::new, MIRROR));
     public static final BlockEntityType<BubbleScaffoldBlockEntity> BUBBLE_SCAFFOLD_BLOCK_ENTITY =
             registerBE("bubble_scaffold",BlockEntityType.Builder.of(BubbleScaffoldBlockEntity::new, BUBBLE_SCAFFOLD));
+    public static final BlockEntityType<DiverLimbBlockEntity> DIVER_LIMB_BLOCK_ENTITY =
+        registerBE("diver_limb", BlockEntityType.Builder.of(DiverLimbBlockEntity::new, DIVER_LIMB));
     public static final BlockEntityType<InvisiBlockEntity> INVISI_BLOCK_ENTITY =
             registerBE("invisible_block",BlockEntityType.Builder.of(InvisiBlockEntity::new, INVISIBLOCK));
     public static final BlockEntityType<D4CPortalBlockEntity> D4C_PORTAL_BLOCK_ENTITY =
@@ -472,6 +475,7 @@ public class FabricBlocks {
         ModBlocks.HAND_BLOCK = HAND;
         ModBlocks.MINING_ALERT_BLOCK = MINING_ALERT_BLOCK;
         ModBlocks.BUBBLE_SCAFFOLD = BUBBLE_SCAFFOLD;
+        ModBlocks.DIVER_LIMB = DIVER_LIMB;
         ModBlocks.FLESH_BLOCK = FLESH_BLOCK;
         ModBlocks.CULTIVATION_POT = CULTIVATION_POT;
         ModBlocks.CULTIVATED_CHERRY_SAPLING = CULTIVATED_CHERRY_SAPLING;
@@ -495,6 +499,7 @@ public class FabricBlocks {
         ModBlocks.STAND_FIRE_BLOCK_ENTITY = STAND_FIRE_BLOCK_ENTITY;
         ModBlocks.MIRROR_BLOCK_ENTITY = MIRROR_BLOCK_ENTITY;
         ModBlocks.BUBBLE_SCAFFOLD_BLOCK_ENTITY = BUBBLE_SCAFFOLD_BLOCK_ENTITY;
+        ModBlocks.DIVER_LIMB_BLOCK_ENTITY = DIVER_LIMB_BLOCK_ENTITY;
         ModBlocks.INVISIBLE_BLOCK_ENTITY = INVISI_BLOCK_ENTITY;
         ModBlocks.D4C_PORTAL_BLOCK_ENTITY = D4C_PORTAL_BLOCK_ENTITY;
 

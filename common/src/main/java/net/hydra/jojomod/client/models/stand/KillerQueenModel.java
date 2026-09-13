@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T> {
 
 	private final ModelPart Stray_Cat;
+	private final ModelPart bubble;
 
 	public KillerQueenModel(ModelPart root) {
         this.stand = root.getChild("stand");
@@ -28,6 +29,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
                 .getChild("torso").getChild("upper_chest").getChild("right_arm").getChild("lower_right_arm");
 		this.Stray_Cat = this.body.getChild("body2")
 				.getChild("torso").getChild("lower_chest").getChild("lower_torso").getChild("Stray_Cat");
+		this.bubble = this.body.getChild("body2").getChild("torso").getChild("lower_chest").getChild("bubble");
 	}
 
 	protected ModelPart getArm(HumanoidArm p_102852_) {
@@ -109,6 +111,8 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
 				.texOffs(113, 93).addBox(-1.5F, -3.5F, -1.5F, 3.0F, 2.0F, 3.0F, new CubeDeformation(0.1F))
 				.texOffs(112, 85).addBox(-2.0F, -0.55F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(-0.2F)), PartPose.offset(0.0F, -2.25F, 0.0F));
 
+		PartDefinition bubble = lower_chest.addOrReplaceChild("bubble", CubeListBuilder.create().texOffs(112, 57).addBox(-2.0F, -1.5F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -6.0F));
+
 		PartDefinition legs = body2.addOrReplaceChild("legs", CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
 
 		PartDefinition right_leg = legs.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-2.0F, -1.0F, 0.0F));
@@ -174,7 +178,9 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
         this.animate(pEntity.finalKickWindup, KillerQueenAnimations.HeavyKickWindup, pAgeInTicks, 1f);
         this.animate(pEntity.finalKick, KillerQueenAnimations.HeavyKick, pAgeInTicks, 0.8f);
         this.animate(pEntity.finalPunch, StarPlatinumAnimations.FINAL_PUNCH, pAgeInTicks, 1.4f);
-        this.animate(pEntity.lid_open, KillerQueenAnimations.lid_open, pAgeInTicks, 1f);
+        this.animate(pEntity.lid_open, KillerQueenAnimations.bubbleShieldAnim, pAgeInTicks, 1f);
+        this.animate(pEntity.bubbleSpin, KillerQueenAnimations.bubblespin, pAgeInTicks, 1f);
+        this.animate(pEntity.hideBubble, KillerQueenAnimations.hideBubble, pAgeInTicks, 1f);
         this.animate(pEntity.hideFists, StandAnimations.HIDE_FISTS, pAgeInTicks, 1F);
         this.animate(pEntity.blockPlant, KillerQueenAnimations.BombPlant, pAgeInTicks, 1.4F);
         this.animate(pEntity.itemGrab, KillerQueenAnimations.Item_Grab, pAgeInTicks, 1F);

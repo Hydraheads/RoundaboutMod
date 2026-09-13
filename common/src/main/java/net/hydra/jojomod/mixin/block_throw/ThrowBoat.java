@@ -1,6 +1,7 @@
 package net.hydra.jojomod.mixin.block_throw;
 
 import net.hydra.jojomod.entity.stand.StandEntity;
+import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +20,16 @@ public abstract class ThrowBoat extends Entity{
     @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
     public void roundabout$canCollideWith(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof LivingEntity le && ((StandUser)le).roundabout$getStandPowers().cancelCollision(this)){
+            cir.setReturnValue(false);
+        }
+        if (PowerTypes.isInADifferentExistence($$0,this)){
+            cir.setReturnValue(false);
+        }
+    }
+    @Inject(method = "canVehicleCollide", at = @At("HEAD"), cancellable = true)
+    private static void roundabout$canVehicleCollide(Entity $$0, Entity $$1, CallbackInfoReturnable<Boolean> cir) {
+
+        if (PowerTypes.isInADifferentExistence($$0,$$1)){
             cir.setReturnValue(false);
         }
     }

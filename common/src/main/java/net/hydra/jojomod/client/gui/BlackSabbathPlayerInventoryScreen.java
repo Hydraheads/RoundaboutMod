@@ -1,5 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -8,6 +9,7 @@ import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersBlackSabbath;
 import net.hydra.jojomod.util.C2SPacketUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -30,7 +32,7 @@ public class BlackSabbathPlayerInventoryScreen
     protected int topPos;
 
     public BlackSabbathPlayerInventoryScreen(BlackSabbathPlayerInventoryMenu $$0, Inventory $$1, Player $$2) {
-        super($$0, $$1, Component.literal("Black Sabbath"));
+        super($$0, $$1, Component.literal("").withStyle(ChatFormatting.RESET));
         this.player = $$2;
     }
 
@@ -48,6 +50,11 @@ public class BlackSabbathPlayerInventoryScreen
             );
         }
         }
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 14335233, false);
     }
 
     @Override

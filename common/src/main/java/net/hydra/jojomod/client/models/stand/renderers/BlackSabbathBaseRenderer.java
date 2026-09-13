@@ -151,7 +151,7 @@ public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> 
     }
     @Override
     public boolean shouldRender(BlackSabbathEntity $$0, Frustum $$1, double $$2, double $$3, double $$4) {
-        if ($$0.getCrippled() || $$0.getUnrender() || !$$0.getRiding() && $$0.getUnrender() && $$0.isBlackSabbathUnderLight()){
+        if ($$0.getCrippled() || $$0.getUnrender()){
             return false;
         }
         return super.shouldRender($$0,$$1,$$2,$$3,$$4);

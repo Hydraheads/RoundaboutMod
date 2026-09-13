@@ -71,6 +71,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_jotaro").toString())
             );
+    public static final RegistryObject<EntityType<KiraPartFourNPC>> KIRA4 =
+            ENTITY_TYPES.register("jojo_npc_kira_part_four", () ->
+                    EntityType.Builder.of(KiraPartFourNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "jojo_npc_kira_part_four").toString())
+            );
     public static final RegistryObject<EntityType<PucciNPC>> PUCCI =
             ENTITY_TYPES.register("jojo_npc_pucci", () ->
                     EntityType.Builder.of(PucciNPC::new, MobCategory.MISC).sized(0.6f, 1.8f).
@@ -224,12 +230,6 @@ public class ForgeEntities {
                     EntityType.Builder.of(KingCrimsonProjectionEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "king_crimson_projection").toString())
-            );
-    public static final RegistryObject<EntityType<SilverChariotAfterimageEntity>> SILVER_CHARIOT_AFTERIMAGE =
-            ENTITY_TYPES.register("silver_chariot_afterimage", () ->
-                    EntityType.Builder.of(SilverChariotAfterimageEntity::new, MobCategory.MISC).sized(0.6f, 1.8f).
-                            clientTrackingRange(10).
-                            build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_afterimage").toString())
             );
     public static final RegistryObject<EntityType<FallenZombie>> FALLEN_ZOMBIE =
             ENTITY_TYPES.register("fallen_zombie", () ->
@@ -639,7 +639,7 @@ public class ForgeEntities {
             );
     public static final RegistryObject<EntityType<SilverChariotRapierPlatformEntity>> SILVER_CHARIOT_RAPIER_PLATFORM =
             ENTITY_TYPES.register("silver_chariot_rapier_platform", () ->
-                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(1.0f, 0.2f).
+                    EntityType.Builder.<SilverChariotRapierPlatformEntity>of(SilverChariotRapierPlatformEntity::new, MobCategory.MISC).sized(2.0f, 0.2f).
                             clientTrackingRange(16).
                             build(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot_rapier_platform").toString())
             );

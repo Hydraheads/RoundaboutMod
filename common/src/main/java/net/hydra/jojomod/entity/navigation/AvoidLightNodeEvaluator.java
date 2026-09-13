@@ -16,7 +16,7 @@ public class AvoidLightNodeEvaluator extends WalkNodeEvaluator {
         int light = mob.level().getBrightness(LightLayer.BLOCK, pos);
         int light2 = mob.level().getBrightness(LightLayer.SKY, pos);
         int lightSelf = mob.level().getBrightness(LightLayer.BLOCK, new BlockPos(mob.getBlockX(), mob.getBlockY(), mob.getBlockZ()));
-        int lightSelf2 = mob.level().getBrightness(LightLayer.BLOCK, new BlockPos(mob.getBlockX(), mob.getBlockY(), mob.getBlockZ()));
+        int lightSelf2 = mob.level().getBrightness(LightLayer.SKY, new BlockPos(mob.getBlockX(), mob.getBlockY(), mob.getBlockZ()));
         long timeOfDay = mob.level().getDayTime() % 24000L;
         boolean isWeatherNotClear = mob.level().isRaining() || mob.level().isThundering();
         boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
