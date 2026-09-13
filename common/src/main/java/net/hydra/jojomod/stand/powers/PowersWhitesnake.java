@@ -314,7 +314,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double horizontalDistance = MainUtil.cheapDistanceTo2(
                 stand.getX(), stand.getZ(), self.getX(), self.getZ());
         double verticalDistance = Math.abs(stand.getY() - self.getY());
-        return horizontalDistance <= getMaxPilotRange()
+        return horizontalDistance <= (getMaxPilotRange() + 1)
                 && verticalDistance <= getMaxPilotVerticalRange();
     }
 
@@ -636,7 +636,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
-        if (autoMode) return;
+        if (autoMode || isRetreating) return;
         if (keyIsDown && isControlHovering()) return;
         if (isPiloting() && keyIsDown
                 && WhitesnakeControlClient.tryMining(Minecraft.getInstance())) return;
@@ -645,27 +645,27 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
-        if (!autoMode) super.preCheckButtonInputUse(keyIsDown, options);
+        if (!autoMode && !isRetreating) super.preCheckButtonInputUse(keyIsDown, options);
     }
 
     @Override
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
-        if (!autoMode) super.preCheckButtonInputBarrage(keyIsDown, options);
+        if (!autoMode && !isRetreating) super.preCheckButtonInputBarrage(keyIsDown, options);
     }
 
     @Override
     public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
-        return !autoMode && super.preCheckButtonInputGuard(keyIsDown, options);
+        return !autoMode && super.preCheckButtonInputGuard(keyIsDown, options) && !isRetreating;
     }
 
     @Override
     public boolean interceptAttack() {
-        return !autoMode && super.interceptAttack();
+        return !autoMode && super.interceptAttack() && !isRetreating;
     }
 
     @Override
     public boolean interceptGuard() {
-        return !autoMode && super.interceptGuard();
+        return !autoMode && super.interceptGuard() && !isRetreating;
     }
 
     @Override
@@ -1858,6 +1858,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             stand.getNavigation().stop();
             stand.setOffsetType(OffsetIndex.FOLLOW);
             isRetreating = false;
+            resetRemoteStandMovement(stand);
             stopRetreatModeServer();
             stand.setRetreatMode(false);
             retreatTicks = -1;

@@ -652,7 +652,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             double nextX = getX() + move.x;
             double nextZ = getZ() + move.z;
             //double distFromPlayer = Math.hypot(nextX - getUser().getX(), nextZ - getUser().getZ());
-            int maxRange = PW.getMaxPilotRange() - 1;
+            int maxRange = PW.getMaxPilotRange();
 
             double moveX = move.x;
             double moveZ = move.z;
