@@ -1,6 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.access.IBlockState;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -184,6 +185,7 @@ public class PowersLonesome extends NewDashPreset {
             if (rayBlock != null) { // I HATE NULLCHECKS
                 blockDistance = (float) rayBlock.distanceTo(player);
             }
+
             System.out.println(blockDistance);
             System.out.println(entityDistance);
 
@@ -196,11 +198,8 @@ public class PowersLonesome extends NewDashPreset {
         return true;
     }
 
-    public boolean renderRope(Vec3 startPos, Vec3 endPos){
-        double startX = startPos.x();
-        double startY = startPos.y();
-        double startZ = startPos.z();
-
+    public boolean renderRopeOnPlayer(){
+        PoseStack poseStack;
 
         return false;
     }
@@ -229,7 +228,8 @@ public class PowersLonesome extends NewDashPreset {
                 switchCrawlMode();
 
                 getStandUserSelf().roundabout$setDazed((byte)0);
-                // this.setCooldown(PowerIndex.EXTRA, ClientNetworking.getAppropriateConfig().vampireSettings.endOfYourRopeCooldown); // [NYI]
+                this.setCooldown(PowerIndex.EXTRA, ClientNetworking.getAppropriateConfig().ohLonesomeMeSettings.endOfYourRopeCooldown);
+                System.out.println(PowerIndex.EXTRA);
                 xTryPower(PowerIndex.EXTRA,true);
                 //playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.ROPE_SOUND_EFFECT, // [NOT YET IMPLEMENTED]
                 //SoundSource.PLAYERS, 1F, 1F);

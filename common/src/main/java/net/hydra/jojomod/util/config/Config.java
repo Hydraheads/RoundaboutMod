@@ -988,6 +988,8 @@ public class Config implements Cloneable {
     public static class OhLonesomeMeSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableOhLonesomeMe;
+        @IntOption(group = "inherit", value = 60, min = 0, max = 72000)
+        public Integer endOfYourRopeCooldown;
     }
     public static class WhiteAlbumSettings {
         @BooleanOption(group = "inherit", value = true)
