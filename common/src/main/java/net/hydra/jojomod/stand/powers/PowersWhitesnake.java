@@ -421,11 +421,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
             whitesnake.setAutoMode(autoMode);
             whitesnake.setRetreatMode(isRetreating);
             whitesnake.getNavigation().stop();
-            whitesnake.clearControlInput();
-            whitesnake.clearDisguise();
             whitesnake.setTarget(null);
         }
-        resetRemoteStandMovement(stand);
+        resetRemoteStandState(stand);
         if (wasAutoMode && !autoMode && !isPiloting()) transferRemoteStandEffects(stand);
         if (!autoMode && getActivePower() == PowerIndex.ATTACK) tryPower(PowerIndex.NONE, true);
     }
@@ -470,13 +468,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
             clearForwardBarrageTravel();
             setMeltingMode(false, false);
             player.stopUsingItem();
-            if (stand instanceof WhitesnakeEntity whitesnake) {
-                whitesnake.clearControlInput();
-                whitesnake.clearDisguise();
-            }
-            resetRemoteStandMovement(stand);
+            resetRemoteStandState(stand);
             if (wasPiloting && !autoMode) transferRemoteStandEffects(stand);
-        } else if (entering && stand instanceof WhitesnakeEntity whitesnake) {
+        } else if (stand instanceof WhitesnakeEntity whitesnake) {
             whitesnake.getNavigation().stop();
             whitesnake.clearControlInput();
         }
@@ -507,6 +501,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (rotateCamera && isClient()) {
             WhitesnakeControlClient.rotateLookForGravityChange(whitesnake, oldGravity, Direction.DOWN);
         }
+    }
+
+    private static void resetRemoteStandState(StandEntity stand) {
+        if (stand instanceof WhitesnakeEntity whitesnake) {
+            whitesnake.clearControlInput();
+            whitesnake.clearDisguise();
+        }
+        resetRemoteStandMovement(stand);
     }
 
     private static void resetRemoteStandMovement(StandEntity stand) {
