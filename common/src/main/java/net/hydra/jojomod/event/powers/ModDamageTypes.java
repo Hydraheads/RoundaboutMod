@@ -47,7 +47,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> STAND_FIRE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "stand_fire"));
         public static final ResourceKey<DamageType> DISINTEGRATION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "disintegration"));
         public static final ResourceKey<DamageType> KQ_EXPLOSION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "kq_explosion"));
-    public static final ResourceKey<DamageType> IRON_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_ball"));
+        public static final ResourceKey<DamageType> IRON_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_ball"));
         public static final ResourceKey<DamageType> MELTING = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "melting"));
         public static final ResourceKey<DamageType> HEEL_SPIKE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "heel_spike"));
         public static final ResourceKey<DamageType> DAGGER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "dagger"));
@@ -58,13 +58,15 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> ANUBIS_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "anubis_spin"));
         public static final ResourceKey<DamageType> CREAM_VOID_BALL = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "cream_void_ball"));
         public static final ResourceKey<DamageType> BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bullet"));
-    public static final ResourceKey<DamageType> SNIPER_BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sniper_bullet"));
+        public static final ResourceKey<DamageType> SNIPER_BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sniper_bullet"));
         public static final ResourceKey<DamageType> KICKED = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "kick"));
         public static final ResourceKey<DamageType> RIPPER_EYES = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ripper_eyes"));
-    public static final ResourceKey<DamageType> ULTRAVIOLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ultraviolet"));
-    public static final ResourceKey<DamageType> BITES_THE_DUST = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bites_the_dust"));
-    public static final ResourceKey<DamageType> HAZE_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
-    public static final ResourceKey<DamageType> DISTORTION_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
+        public static final ResourceKey<DamageType> ULTRAVIOLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ultraviolet"));
+        public static final ResourceKey<DamageType> BITES_THE_DUST = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bites_the_dust"));
+        public static final ResourceKey<DamageType> HAZE_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
+        public static final ResourceKey<DamageType> DISTORTION_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
+        public static final ResourceKey<DamageType> INFINITE_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "infinite_spin"));
+        public static final ResourceKey<DamageType> DIVER_REDIRECTION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "diver_redirection"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

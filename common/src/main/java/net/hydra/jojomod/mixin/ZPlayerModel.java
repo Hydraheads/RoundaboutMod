@@ -13,6 +13,7 @@ import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisAnimations;
 import net.hydra.jojomod.client.models.layers.animations.FirstPersonLayerAnimations;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -731,7 +732,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     private void roundabout$modelRidingCancel(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0.isPassenger()) {
             Entity mount = $$0.getVehicle();
-            if (mount instanceof AnubisPossessorEntity) {
+            if (mount instanceof AnubisPossessorEntity || mount instanceof CommandDiscPossession) {
                 this.riding = false;
             }
         }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
+import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryDiscConversionService;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
@@ -52,11 +53,15 @@ public final class MemoryReadingScreen extends Screen {
 
     @Override
     protected void init() {
+        if (minecraft == null || !MemoryDiscConversionService.canConvert(minecraft.player)) return;
+
         String buttonText;
         if (DiscItemData.isCreeperMemory(disc)) {
             buttonText = "screen.roundabout.memory_create_explosive";
         } else if (DiscItemData.isSlimeMemory(disc)) {
             buttonText = "screen.roundabout.memory_create_jump_back";
+        } else if (DiscItemData.isWolfMemory(disc)) {
+            buttonText = "screen.roundabout.memory_create_attack";
         } else {
             return;
         }

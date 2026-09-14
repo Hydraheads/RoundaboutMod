@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -856,6 +857,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
             );
+    public static final RegistryObject<EntityType<ReturningObjectEntity>> RETURNING_OBJECT =
+            ENTITY_TYPES.register("returning_object", () ->
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "returning_object").toString())
+            );
     public static final RegistryObject<EntityType<ThrownAnubisEntity>> THROWN_ANUBIS =
             ENTITY_TYPES.register("thrown_anubis", () ->
                     EntityType.Builder.<ThrownAnubisEntity>of(ThrownAnubisEntity::new, MobCategory.MISC).sized(1f, 1f).
@@ -926,6 +933,12 @@ public class ForgeEntities {
                     EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).sized(0.6f, 2f).
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor").toString())
+            );
+    public static final RegistryObject<EntityType<CommandDiscPossession>> COMMAND_DISC_POSSESSION =
+            ENTITY_TYPES.register("command_disc_possession", () ->
+                    EntityType.Builder.<CommandDiscPossession>of(CommandDiscPossession::new, MobCategory.MISC).sized(0.6f, 2f).
+                            clientTrackingRange(10).noSave().
+                            build(new ResourceLocation(Roundabout.MOD_ID, "command_disc_possession").toString())
             );
     public static final RegistryObject<EntityType<AnubisSlipstreamEntity>> ANUBIS_SLIPSTREAM =
             ENTITY_TYPES.register("anubis_slipstream", () ->
