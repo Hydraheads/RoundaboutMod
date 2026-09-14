@@ -1,5 +1,6 @@
 package net.hydra.jojomod.mixin;
 
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -19,6 +20,7 @@ import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerSteveNPC;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
+import net.hydra.jojomod.event.powers.DiverDownDisguiseService;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -365,4 +367,17 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                && !(instance.getVehicle() instanceof AnubisPossessorEntity)
                && !(instance.getVehicle() instanceof CommandDiscPossession);
    }
+
+    // diver down disguise
+    @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
+    private void roundabout$renderDiverDownDisguise(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+        StandUser su = (StandUser) entity;
+        if (su.roundabout$isDisguised()) {
+            GameProfile profile = su.roundabout$getDisguiseProfile();
+            if (profile != null) {
+                DiverDownDisguiseRenderer.render(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
+                ci.cancel();
+            }
+        }
+    }
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.*;
@@ -3945,6 +3946,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_TICKS, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$PURPLE_HAZE_SKIN, PurpleHazeEntity.ANIME);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
 
         }
     }
@@ -4096,6 +4099,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             } finally {
                 this.rdbt$isRedirectingDamage = false;
             }
+        }
+        // diver down damage breaking disguise
+        if (!entity.level().isClientSide() && $$1 > 0 && this.roundabout$isDisguised()) {
+            this.roundabout$clearDisguise();
         }
         if ($$0.getEntity() instanceof Player pe) {
             if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1,
@@ -6895,6 +6902,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.entityData.get(ROUNDABOUT$DISTORTION_HAZE_TICKS);
     }
 
+    //for disguises
+    @Unique
+    private static final EntityDataAccessor<Optional<UUID>> ROUNDABOUT$DISGUISE_ID = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    @Unique
+    private static final EntityDataAccessor<String> ROUNDABOUT$DISGUISE_NAME = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.STRING);
+
     public PowersKillerQueen BtdPlantedUser = null;
 
     @Override
@@ -6966,5 +6981,27 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    @Override
+    public boolean roundabout$isDisguised() {
+        return this.entityData.get(ROUNDABOUT$DISGUISE_ID).isPresent() && !this.entityData.get(ROUNDABOUT$DISGUISE_NAME).isEmpty();
+    }
 
+    @Override
+    public @Nullable GameProfile roundabout$getDisguiseProfile() {
+        Optional<UUID> id = this.entityData.get(ROUNDABOUT$DISGUISE_ID);
+        String name = this.entityData.get(ROUNDABOUT$DISGUISE_NAME);
+        return id.isPresent() && !name.isEmpty() ? new GameProfile(id.get(), name) : null;
+    }
+
+    @Override
+    public void roundabout$setDisguise(GameProfile profile) {
+        this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.of(profile.getId()));
+        this.entityData.set(ROUNDABOUT$DISGUISE_NAME, profile.getName());
+    }
+
+    @Override
+    public void roundabout$clearDisguise() {
+        this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
+        this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
 }

@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.ibm.icu.number.Precision;
+import com.mojang.authlib.GameProfile;
 
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -1543,7 +1544,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 // this ensures that enemies can still run around while the move is hitting them
                                 // whilst also making sure that the move doesn't send them flying away
                                 Vec3 motion = living.getDeltaMovement();
-                                DamageHandler.StandDamageEntity(living, 1F, this.self);
+                                DamageHandler.StandDamageEntity(living, 0.25F, this.self);
                                 living.setDeltaMovement(motion);
                                 hitParticles(living);
                                 // animate the barrage and also sound here
@@ -2509,7 +2510,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 // test message, comment this out once done
                 // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
                 // crafting"), false);
-                disguise(submergedTarget);
+                tryDisguiseClient();
                 return true;
             }
             default -> {
@@ -2539,12 +2540,23 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
-    private void disguise(Entity target){
-        // test message, comment out once done
-       if (this.self instanceof Player player) {
-           player.sendSystemMessage(Component.literal("it's disguising time"));
-       }
+    //disguise start
+
+    private void tryDisguiseClient(){
+        if(this.self.level().isClientSide())
+            ClientUtil.openDisguiseScreen();
     }
+
+    public void applyDisguiseToTarget(Entity target, GameProfile profile) {
+        if (this.self.level().isClientSide()) return;
+
+        // it's testing time
+        /*if (this.self instanceof ServerPlayer serverPlayer) {
+            serverPlayer.sendSystemMessage(Component.literal("it's disguising time as " + profile.getName()));
+        }*/
+    }
+
+    //disguise end
 
     // dive afflictions end
 

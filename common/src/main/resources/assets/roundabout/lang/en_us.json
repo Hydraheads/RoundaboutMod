@@ -2520,6 +2520,7 @@
   "ability.roundabout.whitesnake_inventory": "Whitesnake Inventory",
   "ability.roundabout.whitesnake_inventory.desc": "Open Whitesnake's inventory. The first slot holds nothing, the second slot can hold pistols. The last 7 slots can store discs or ammunition.",
   "container.roundabout.whitesnake_inventory": "Whitesnake Inventory",
+  "roundabout.diver_down.disguise.title": "Reconstructory Disguise",
   "roundabout.whitesnake.disguise.title": "Hallucinatory Disguise",
   "roundabout.whitesnake.disguise.username": "Username",
   "roundabout.whitesnake.disguise.invalid": "Enter a valid username.",

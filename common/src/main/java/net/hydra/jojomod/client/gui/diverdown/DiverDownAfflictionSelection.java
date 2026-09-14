@@ -90,8 +90,11 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+            boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
             this.selectHoveredAffliction();
-            this.minecraft.setScreen(null);
+            if (!isDisguise) {
+                this.minecraft.setScreen(null);
+            }
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
                 if (SU.roundabout$getStandPowers().isBarraging()){
@@ -116,12 +119,15 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
         if ($$2 == 0 && (this.currentlyHovered != AfflictionType.NONE)) {
+            boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
             this.selectHoveredAffliction();
-            this.minecraft.setScreen(null);
+            if (!isDisguise) {
+                this.minecraft.setScreen(null);
+            }
             this.minecraft.options.keyUse.setDown(false);
             return true;
-        } 
-        
+        }
+
         return false;
     }
 
@@ -252,8 +258,11 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     private boolean checkToClose() {
         if (minecraft != null) {
             if (sameKeyOneX(KeyInputRegistry.abilityFourKey, this.minecraft.options)) {
+                boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
                 this.selectHoveredAffliction();
-                this.minecraft.setScreen(null);
+                if (!isDisguise) {
+                    this.minecraft.setScreen(null);
+                }
                 return true;
             }
         }
