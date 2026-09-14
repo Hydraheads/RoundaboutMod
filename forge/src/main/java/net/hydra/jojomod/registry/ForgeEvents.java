@@ -767,6 +767,8 @@ public class ForgeEvents {
         ModEffects.DREAMING = ForgeEffects.DREAMING.get();
         ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
+        ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();
+        ModEffects.SWAPPED = ForgeEffects.SWAPPED.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();

@@ -2723,6 +2723,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
@@ -2733,7 +2734,8 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }

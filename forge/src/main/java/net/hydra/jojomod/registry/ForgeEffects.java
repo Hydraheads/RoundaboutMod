@@ -99,6 +99,14 @@ public class ForgeEffects{
             POTION_EFFECTS.register("virus_immunity", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 10824365)
             );
+    public static final RegistryObject<MobEffect> IMPRINTING =
+            POTION_EFFECTS.register("imprinting", () ->
+                    new Effect(MobEffectCategory.NEUTRAL, 16134815)
+            );
+    public static final RegistryObject<MobEffect> SWAPPED =
+            POTION_EFFECTS.register("swapped", () ->
+                    new Effect(MobEffectCategory.NEUTRAL, 16134815)
+            );
 
 
     public static class Effect extends MobEffect{
