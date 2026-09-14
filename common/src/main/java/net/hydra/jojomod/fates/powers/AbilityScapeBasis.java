@@ -2197,6 +2197,8 @@ public class AbilityScapeBasis {
                             );
                         }
                     }
+                } else if ($$4 != null) {
+
                 }
             } else {
                 level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
