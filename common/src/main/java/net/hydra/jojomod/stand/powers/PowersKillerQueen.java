@@ -1773,7 +1773,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         } else if (this.getActivePower() == ITEM_CHARGE){
             updateArrowCharge();
         } else if (this.getActivePower() == ITEM_THROW){
-            updateArrowThrow();
+            updateItemThrow();
         } else if (this.getActivePower() == PowerIndex.POWER_2) {
             updateMobPlant();
         } else if (this.getActivePower() == PowerIndex.POWER_1_SNEAK) {
@@ -1953,13 +1953,13 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void updateArrowThrow() {
+    public void updateItemThrow() {
         if (this.attackTimeDuring > 4) {
             this.setAttackTimeMax(30);
             this.setAttackTime(0);
             this.setActivePowerPhase(this.getActivePowerPhaseMax());
             if (!isClient()) {
-                arrowThrow();
+                itemThrow();
             }
         }
     }
@@ -1973,7 +1973,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         return $$1;
     }
 
-    public void arrowThrow() {
+    public void itemThrow() {
         StandEntity KQ = getStandEntity(self);
         if (KQ != null) {
             ItemStack stack = KQ.getHeldItem();
@@ -1999,6 +1999,10 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bombEntity = pearl;
                 syncBombStatus(ARROW_BOMB);
 
+                if (self instanceof Player PE) {
+                    PE.getCooldowns().addCooldown(stack.getItem(), 20);
+                }
+
                 self.level().addFreshEntity(pearl);
 
             }else if (stack.getItem() instanceof SniperAmmoItem) {
@@ -2011,7 +2015,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 bombEntity = bullet;
                 syncBombStatus(ARROW_BOMB);
                 playSoundIfPossible(self.level(),bullet,ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS,  1.0F, 1.3F);
-                
+
             }else if (stack.getItem() instanceof SpectralArrowItem || stack.getItem() instanceof ArrowItem) {
                 float $$1 = getStrenghtFromTime(chargedFinal);
 
@@ -2037,8 +2041,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                             PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
                 }
                 syncBombStatus(ARROW_BOMB);
-                playSoundIfPossible(self.level(),arrow,ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS,  1.0F, 1.3F);
             }
+            playSoundIfPossible(self.level(), bombEntity, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS,  1.0F, 1.3F);
             KQ.setHeldItem(ItemStack.EMPTY);
         }
         this.setAttackTimeDuring(-20);
