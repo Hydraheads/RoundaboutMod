@@ -7,6 +7,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -49,7 +50,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (entity.isUsingItem() && !(entity.getUseItem().getItem() instanceof AnubisItem) )  {return null;}
 
         if ((entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode())
-                || user.roundabout$isPossessed()
+                || user.roundabout$getPossessor() instanceof AnubisPossessorEntity
                 || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
                 || user.roundabout$getAnubisVanishTicks() > 0 ) {
 
@@ -61,7 +62,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static boolean isSheathed(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
         if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
-            if (!user.roundabout$isPossessed()) {
+            if (!(user.roundabout$getPossessor() instanceof AnubisPossessorEntity)) {
                 return (user.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity))
                         || !(user.roundabout$getStandPowers() instanceof PowersAnubis);
             }
@@ -203,7 +204,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
         byte skin = 0;
-        if ( user.roundabout$isPossessed() ) {
+        if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 1);
         } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (user.roundabout$getAnubisVanishTicks() != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
@@ -249,7 +250,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         if (AnubisLayer.shouldRender(entity) != null
                 && entity.getMainHandItem().getItem().equals(ModItems.ANUBIS_ITEM) && !entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)
                 && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis )
-                && !((StandUser)entity).roundabout$isPossessed() ) {
+                && !(((StandUser)entity).roundabout$getPossessor() instanceof AnubisPossessorEntity) ) {
 
 
             ClientUtil.pushPoseAndCooperate(poseStack, 48);
@@ -284,4 +285,3 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
 
 }
-

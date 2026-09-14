@@ -12,6 +12,7 @@ import net.hydra.jojomod.client.models.layers.BigBubbleLayer;
 import net.hydra.jojomod.client.models.layers.FrozenLayer;
 import net.hydra.jojomod.client.models.stand.renderers.*;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.visages.JojoNPCPlayer;
 import net.hydra.jojomod.entity.visages.mobs.JosukePartEightNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerAlexNPC;
@@ -360,6 +361,8 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     // risky because it's brittle, but it honestly might just work
    @Redirect(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isPassenger()Z"))
     private boolean roundabout$allowWalkingAnimation(LivingEntity instance) {
-       return instance.isPassenger() && !(instance.getVehicle() instanceof AnubisPossessorEntity);
+       return instance.isPassenger()
+               && !(instance.getVehicle() instanceof AnubisPossessorEntity)
+               && !(instance.getVehicle() instanceof CommandDiscPossession);
    }
 }

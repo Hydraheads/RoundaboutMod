@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
@@ -1412,7 +1413,7 @@ public class MainUtil {
                 return ItemStack.EMPTY;
             }
 
-            if (su.roundabout$isPossessed()) {
+            if (su.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
                 return ItemStack.EMPTY;
             }
             if (su.roundabout$getEffectiveCombatMode()) {

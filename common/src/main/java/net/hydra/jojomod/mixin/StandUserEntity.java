@@ -1796,8 +1796,8 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     /// consider adding a tracked byte of some kind to possession to allow it to be used by several stands
     @Override
     public void roundabout$onPossessionFinish() {
-        if (this.rdbt$this() instanceof Player P) {
-            if (this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE && APE.getLifeSpan() < 290) {
+        if (this.rdbt$this() instanceof Player P && this.roundabout$getPossessor() instanceof AnubisPossessorEntity APE) {
+            if (APE.getLifeSpan() < 290) {
                 P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message2").withStyle(ChatFormatting.RED), true);
             } else {
                 P.displayClientMessage(Component.translatable("item.roundabout.anubis_item.message1").withStyle(ChatFormatting.RED), true);

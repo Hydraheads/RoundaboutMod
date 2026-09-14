@@ -9,6 +9,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.BlockWallEntity;
 import net.hydra.jojomod.entity.StepRuleEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.event.TimeStopInstance;
@@ -347,6 +348,10 @@ public class TimeStopWorld implements TimeStop {
     @Override
     public boolean CanTimeStopEntity(Entity entity){
         if (entity instanceof AnubisPossessorEntity APE && APE.getUser() != null && !this.CanTimeStopEntity(APE.getUser()) ) {
+            return false;
+        }
+        if (entity instanceof CommandDiscPossession possession && possession.getUser() != null
+                && !this.CanTimeStopEntity(possession.getUser())) {
             return false;
         }
         if (entity instanceof Player && ((Player) entity).isCreative() || entity.isSpectator()) {

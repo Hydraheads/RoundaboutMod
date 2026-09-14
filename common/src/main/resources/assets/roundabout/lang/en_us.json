@@ -282,9 +282,9 @@
   "roundabout.whitesnake.forget_command_disc": "Create Forget Command Disc",
   "roundabout.whitesnake.explosive_command_disc": "Create Explosive Command Disc",
   "message.roundabout.command.jump_back": "You have been commanded to back off.",
+  "message.roundabout.command.attack": "You have been commanded to attack.",
   "message.roundabout.command.forget": "You have been commanded to forget.",
   "message.roundabout.command.explosive": "You will explode after moving more than 10 meters away.",
-  "message.roundabout.command.attack": "You have been commanded to attack.",
 
   "screen.roundabout.memory_reading": "Memory Reading",
   "screen.roundabout.memory_owner": "Owner: %s",

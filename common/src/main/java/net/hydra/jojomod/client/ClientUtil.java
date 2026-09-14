@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerAmbientSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerExplosionSound;
 import net.hydra.jojomod.entity.TickableSoundInstances.RoadRollerMixingSound;
 import net.hydra.jojomod.entity.TimeSkipSnapshot;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
@@ -2549,7 +2550,7 @@ public class ClientUtil {
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
             if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && (!play.getMainHandItem().is(ModItems.ANUBIS_ITEM)
                     || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis)
-                    || standUser.roundabout$isPossessed()) ) {
+                    || standUser.roundabout$getPossessor() instanceof AnubisPossessorEntity) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
             } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
                 stack.pushPose();
