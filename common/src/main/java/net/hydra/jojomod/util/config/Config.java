@@ -831,6 +831,8 @@ public class Config implements Cloneable {
     public static class PurpleHazeSettings {
         @BooleanOption(group = "inherit", value = false)
         public Boolean ThirdPunchCapsuleBreak;
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean forwardBarrageCanSteer;
     }
     public static class HeyYaSettings {
         @BooleanOption(group = "inherit", value = true)
