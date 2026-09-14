@@ -432,7 +432,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 // stops everything else from working
                 return;
             } else if (isDiveActive()) {
-                if (context == PowerContext.SKILL_1_NORMAL) {
+                if (context == PowerContext.SKILL_4_NORMAL) {
                     tryEmergeClient();
                 }
                 return;
@@ -2293,12 +2293,7 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         if (this.submergedTarget != null) {
             ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
-            Level level = this.self.level();
-            level.playSound(null, this.submergedTarget.getX(), this.submergedTarget.getY(), this.submergedTarget.getZ(),
-                    ModSounds.SUMMON_DIVER_DOWN_EVENT, SoundSource.PLAYERS, 1.0F, 0.9F);
-            sendParticlesIfPossible(level, ModParticles.AIR_CRACKLE,
-                    this.submergedTarget.getX(), this.submergedTarget.getY() + 1.0, this.submergedTarget.getZ(),
-                    8, 0.2, 0.4, 0.2, 0.02);
+            //play sounds and effects here
             this.submergedTarget = null;
         }
         // Resummon stand to user
@@ -2436,12 +2431,15 @@ public class PowersDiverDown extends NewPunchingStand {
     /*
      * this override goes here cuz it goes with the rest of the overrides
      * This will be used for recalling "pilot" moves, such as the limb move,
-     * or the dive move when unsummoning stand.
+     * or the submerge move when unsummoning stand.
      */
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon) {
             recallLimbs();
+            if (isDiveActive()) {
+                emergeServer();
+            }
         }
         super.onStandSummon(desummon);
     }
