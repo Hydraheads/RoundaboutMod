@@ -85,6 +85,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -99,8 +100,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for move ids accessed here. update public bytes every time this is edited.
     private static final byte LIMB_SCAFFOLD = 53,
             LIMB_RECALL = 54,
-            // Workbench move ids start here
-            CRAFTING_TABLE = 55,
+    // Workbench move ids start here
+    CRAFTING_TABLE = 55,
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
@@ -114,7 +115,8 @@ public class PowersDiverDown extends NewPunchingStand {
             TOGGLE_TRAP_MODE = 66,
             DIVER_SUBMERGE_START = 67,
             DIVER_EMERGE = 68,
-            DISASSEMBLE_BLOCK = 69;
+            DISASSEMBLE_BLOCK = 69,
+            DIVER_SELF_SUBMERGE = 70;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -269,7 +271,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
-            int topPos, byte level, boolean bypas) {
+                                                  int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = -8;
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 80, 0, "ability.roundabout.punch",
@@ -354,7 +356,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * Additional changes need to be made to give the charged punch AOE
      *
      * @see net.hydra.jojomod.fates.powers.AbilityScapeBasis#buttonInputAttack(boolean,
-     *      net.minecraft.client.Options)
+     * net.minecraft.client.Options)
      */
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
@@ -436,6 +438,9 @@ public class PowersDiverDown extends NewPunchingStand {
                 if (context == PowerContext.SKILL_4_NORMAL) {
                     tryEmergeClient();
                 }
+                if (context == PowerContext.SKILL_2_NORMAL) {
+                    //insert affliction wheel here
+                }
                 return;
             }
         }
@@ -444,8 +449,13 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_1_NORMAL -> {
                 tryStartDiveClient();
             }
+            // block disassembly
             case SKILL_1_CROUCH -> {
                 tryDisassembleBlockClient();
+            }
+            // self dive (Guard + Z)
+            case SKILL_1_GUARD -> {
+                tryStartSelfDiveClient();
             }
             // kick storage
             case SKILL_2_NORMAL -> {
@@ -472,7 +482,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 tryGroundDive();
             }
             // workbench
-            case SKILL_4_GUARD-> {
+            case SKILL_4_GUARD -> {
                 tryWorkbenchSelectionClient();
             }
             // limb climbing move
@@ -555,6 +565,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case DIVER_ZIP -> {
                 activateZip();
             }
+            case DIVER_SELF_SUBMERGE -> {
+                startSelfDiveServer();
+            }
         }
         return super.tryPower(move, forced);
     }
@@ -563,8 +576,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
         if (move == OPEN_CHEST) {
             openChest(blockPos);
-        }
-        else if (move == DISASSEMBLE_BLOCK) {
+        } else if (move == DISASSEMBLE_BLOCK) {
             disassembleBlock(blockPos);
         }
         return super.tryBlockPosPower(move, forced, blockPos);
@@ -628,7 +640,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * tryIntPower
      *
      * @see net.hydra.jojomod.stand.powers.presets.NewDashPreset#tryIntPower(int,
-     *      boolean, int)
+     * boolean, int)
      */
     @Override
     public boolean tryIntPower(int move, boolean forced, int chargeTime) {
@@ -893,10 +905,10 @@ public class PowersDiverDown extends NewPunchingStand {
                     }
                 },
                 Component.translatable("container.crafting")));/**
-                                                                * test to see if the selection even works in the first
-                                                                * place.
-                                                                * comment this out when unneeded anymore :thumbsup:
-                                                                */
+         * test to see if the selection even works in the first
+         * place.
+         * comment this out when unneeded anymore :thumbsup:
+         */
         // serverPlayer.displayClientMessage(Component.literal("Selected: Crafting
         // Table"), false);
     }
@@ -1389,7 +1401,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         // cancel power if something bad happens
                         if (getStandUserSelf().rdbt$getJumping() || self.isSleeping()
                                 || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
-                                        && mercyTicks <= 0)
+                                && mercyTicks <= 0)
                                 || self.getRootVehicle() != this.self) {
                             feetDirection = Direction.DOWN;
                             toggleZip(false);
@@ -1636,7 +1648,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // replaces the exp bar with the timer
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-            boolean removeNum) {
+                                  boolean removeNum) {
         if (isPiloting()) {
             // shows the timer for how long diver down pilot is active for
             StandHudRender.renderGroundDiveHud(context, cameraPlayer, screenWidth, screenHeight, x, this);
@@ -2314,7 +2326,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive start
 
     private void tryStartDiveClient() {
-        if (!areStandMovesDisabled() && this.canAttack()) {
+        if (!areStandMovesDisabled() && !isDiveActive()) {
             this.tryPower(DIVER_SUBMERGE_START, true);
             tryPowerPacket(DIVER_SUBMERGE_START);
         }
@@ -2406,7 +2418,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * handles the damage transfer ability
      */
     public void onSubmergedTargetHurt(DamageSource source, float amount) {
-        if (this.isTransferringDamage || !isDiveActive())
+        if (this.isTransferringDamage || !isDiveActive() || isSelfDive())
             return;
         this.isTransferringDamage = true;
         try {
@@ -2423,6 +2435,43 @@ public class PowersDiverDown extends NewPunchingStand {
         }
     }
 
+    private void tryStartSelfDiveClient() {
+        if (!areStandMovesDisabled() && !isDiveActive()) {
+            this.tryPower(DIVER_SELF_SUBMERGE, true);
+            tryPowerPacket(DIVER_SELF_SUBMERGE);
+        }
+    }
+
+    public boolean startSelfDiveServer() {
+        if (this.self.level().isClientSide() || isDiveActive()) {
+            return false;
+        }
+
+        // Set target as self
+        this.submergedTarget = this.self;
+
+        // Desummon stand into player
+        if (hasStandEntity(this.self)) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                stand.discard();
+            }
+        }
+
+        // Sync with client so submergedTarget = self on client too
+        if (this.self instanceof Player player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.self.getId());
+        }
+
+        //play sounds and animations here
+
+        return true;
+    }
+
+    // simple check for self dive, will be used in afflictions wheel
+    public boolean isSelfDive() {
+        return isDiveActive() && this.submergedTarget == this.self;
+    }
 
     // dive end
 
@@ -2579,7 +2628,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * Used to check if stand able to be used or not.
      * Use this to render alternative icons for moves etc, depending on what move is
      * being used
-     *
+     * <p>
      * Update this if there are more moves that disable stand
      *
      * @return true if the stand moves are disabled, false otherwise
@@ -2591,7 +2640,7 @@ public class PowersDiverDown extends NewPunchingStand {
     //enables player attacks while DD is diving somewhere
     @Override
     public boolean interceptAttack() {
-        if(inZipMode()){
+        if (inZipMode()) {
             return true;
         }
         if (areStandMovesDisabled()) {
@@ -2603,7 +2652,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // disables PLAYER MOVES for zip mode
     @Override
     public boolean interceptAllInteractions() {
-        if(inZipMode()){
+        if (inZipMode()) {
             return true;
         }
         if (areStandMovesDisabled()) {
@@ -2615,7 +2664,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // disables player mining in zip mode
     @Override
     public boolean cancelAllRandomMiningThatBreaksMoves() {
-        if(inZipMode()){
+        if (inZipMode()) {
             return true;
         }
         if (areStandMovesDisabled()) {
@@ -2701,8 +2750,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
-            int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-            float flashAlpha, float otherFlashAlpha) {
+                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+                                float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
