@@ -502,7 +502,6 @@ public abstract class HudRendering implements IHudAccess {
         StandUser user = ((StandUser) minecraft.player);
         StandPowers standPowers = user.roundabout$getStandPowers();
         GeneralPowers powers = ((IPowersPlayer) minecraft.player).rdbt$getPowers();
-        Roundabout.LOGGER.info("B?");
         if (standPowers != null && standPowers.getInfiniteSpin() > 0 ) {
             StandHudRender.renderInfiniteSpinHUD(graphics,screenWidth,screenHeight,x,standPowers);
         }
@@ -782,7 +781,6 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
             } else if (powers.replaceHudActively()){
-                Roundabout.LOGGER.info("A?");
                 powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 if (removeNum){
                     if (displayCombatTicks){
