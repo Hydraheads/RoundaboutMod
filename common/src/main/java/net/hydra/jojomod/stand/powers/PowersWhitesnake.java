@@ -722,43 +722,32 @@ public class PowersWhitesnake extends BlockGrabPreset {
         Direction current = gravityEntity.roundabout$getGravityDirection();
         if (meltingCrawlTransitionTicks > 0) {
             meltingCrawlTransitionTicks--;
-            meltingCrawlGraceTicks = 4;
             return;
         }
         boolean moving = Math.abs(input.leftImpulse) > 0.01F || Math.abs(input.forwardImpulse) > 0.01F;
+        Vec3 movement = getMeltingMovementVector(whitesnake, input, current);
+        Direction movementDirection = Direction.getNearest(movement.x, movement.y, movement.z);
 
-        if (moving) {
-            Vec3 movement = getMeltingMovementVector(whitesnake, input, current);
-            Direction movementDirection = Direction.getNearest(movement.x, movement.y, movement.z);
-            if (movementDirection != current && movementDirection != current.getOpposite()
-                    && touchesMeltingCrawlSurface(whitesnake, movementDirection)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, movementDirection);
-                return;
-            }
-
-            Vec3 lookAhead = movement.normalize().scale(0.42D);
-            Direction outerSurface = movementDirection.getOpposite();
-            if (outerSurface != current && outerSurface != current.getOpposite()
-                    && touchesMeltingCrawlSurface(whitesnake, current)
-                    && !touchesMeltingCrawlSurface(whitesnake, current, lookAhead)
-                    && touchesMeltingCrawlSurface(whitesnake, outerSurface, lookAhead)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, outerSurface);
-                return;
-            }
-        }
-
-        if (touchesMeltingCrawlSurface(whitesnake, current)) {
-            meltingCrawlGraceTicks = 4;
+        if (moving && whitesnake.horizontalCollision
+                && movementDirection != current && movementDirection != current.getOpposite()
+                && touchesMeltingCrawlSurface(whitesnake, movementDirection)) {
+            beginMeltingCrawlTransition(whitesnake, movementDirection);
             return;
         }
 
-        for (Direction direction : Direction.values()) {
-            if (direction == current || direction == current.getOpposite()) continue;
-            if (touchesMeltingCrawlSurface(whitesnake, direction)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, direction);
+        if (touchesMeltingCrawlSurface(whitesnake, current)) {
+            meltingCrawlGraceTicks = 12;
+            return;
+        }
+
+        if (moving && meltingCrawlGraceTicks > 0) {
+            Vec3 probe = new Vec3(current.step()).scale(0.2D);
+            Direction outerSurface = movementDirection.getOpposite();
+            if (outerSurface != current && outerSurface != current.getOpposite()
+                    && touchesMeltingCrawlSurface(whitesnake, outerSurface, probe)
+                    && !touchesMeltingCrawlSurface(whitesnake, movementDirection, probe)) {
+                beginMeltingCrawlTransition(whitesnake, outerSurface);
+                meltingCrawlTransitionTicks = 5;
                 return;
             }
         }
@@ -771,7 +760,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void beginMeltingCrawlTransition(WhitesnakeEntity whitesnake, Direction direction) {
-        meltingCrawlTransitionTicks = 4;
+        meltingCrawlTransitionTicks = 7;
+        meltingCrawlGraceTicks = 12;
         whitesnake.resetFallDistance();
         setMeltingGravityClient(whitesnake, direction);
     }
@@ -789,13 +779,23 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private boolean touchesMeltingCrawlSurface(WhitesnakeEntity whitesnake, Direction direction) {
-        return touchesMeltingCrawlSurface(whitesnake, direction, Vec3.ZERO);
+        Vec3 probe = new Vec3(direction.step()).scale(0.18D);
+        return !whitesnake.level().noCollision(whitesnake,
+                whitesnake.getBoundingBox().deflate(0.03D).move(probe));
     }
 
     private boolean touchesMeltingCrawlSurface(WhitesnakeEntity whitesnake, Direction direction, Vec3 offset) {
-        Vec3 probe = new Vec3(direction.step()).scale(0.18D);
-        return !whitesnake.level().noCollision(whitesnake,
-                whitesnake.getBoundingBox().deflate(0.03D).move(offset).move(probe));
+        Vec3 mpos = whitesnake.position().add(offset);
+        for (double dist : new double[]{0.1D, whitesnake.getBbWidth() * 1.1D,
+                whitesnake.getBbWidth() * 1.4D, whitesnake.getBbWidth() * 1.6D,
+                whitesnake.getBbWidth() * 2.0D, whitesnake.getBbWidth() * 2.5D}) {
+            Vec3 cutPos = mpos.add(new Vec3(direction.step()).scale(dist));
+            if (MainUtil.isBlockWalkable(whitesnake.level().getBlockState(
+                    BlockPos.containing(cutPos)))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setMeltingGravityClient(WhitesnakeEntity whitesnake, Direction direction) {

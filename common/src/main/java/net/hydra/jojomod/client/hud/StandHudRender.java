@@ -1117,7 +1117,6 @@ public class StandHudRender {
         int l = scaledHeight - 32 + 3;
         int k = (int) (180.0F * ((float)basis.getInfiniteSpin()/basis.getMaxInfiniteSpin()) );
 
-        Roundabout.LOGGER.info(""+k);
 
         int tickcount = basis.getSelf().tickCount;
         int stage = 0;
@@ -1125,17 +1124,17 @@ public class StandHudRender {
             stage = (tickcount / 2) % 6 * 6;
         }
 
-        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 122, 182, 5);
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 135, 182, 5);
         if (k > 0) {
             final int spacing = 6;
             int n = 1;
             for(int i=0;i<k/spacing;i++) {
-                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage , 127, 6, 3);
+                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage , 140, 6, 3);
                 n += spacing;
             }
             int remainder = k % spacing;
             if (remainder != 0) {
-                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage, 127,remainder,3);
+                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage, 140,remainder,3);
             }
         }
     }

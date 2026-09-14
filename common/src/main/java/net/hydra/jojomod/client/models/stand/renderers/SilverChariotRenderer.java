@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<SilverChariotEntity> {
 
     private static final ResourceLocation DEFAULT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/silver_chariot.png");
-    private static final ResourceLocation ANIME_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/anime_silver_chariot.png");
+    private static final ResourceLocation ANIME_PART_3_GREY = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/anime_silver_chariot.png");
     private static final ResourceLocation MANGA_PART_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/manga_silver_chariot.png");
     private static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/part_5_silver_chariot.png");
 
@@ -37,7 +37,7 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
                 return DEFAULT;
             }
             case SilverChariotEntity.ANIME_PART_3_SILVER_CHARIOT_GREY -> {
-                return ANIME_PART_3;
+                return ANIME_PART_3_GREY;
             }
             case SilverChariotEntity.MANGA_PART_3_SILVER_CHARIOT -> {
                 return MANGA_PART_3;
@@ -58,24 +58,25 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
     @Override
     public void render(SilverChariotEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
-        if (!(mobEntity.getUser() != null && Minecraft.getInstance().player != null &&
-                mobEntity.getUser().is(Minecraft.getInstance().player))) {
-            float factor = 0.5F + (mobEntity.getSizePercent()/2);
-            if (mobEntity.isBaby()) {
-                matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
-            } else {
-                matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
-            }
+        float factor = 0.5F + (mobEntity.getSizePercent()/2);
+        if (mobEntity.isBaby()) {
+            matrixStack.scale(0.5f*factor, 0.5f*factor, 0.5f*factor);
+        } else {
+            matrixStack.scale(0.87f * factor, 0.87f * factor, 0.87f * factor);
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (!(mobEntity.getUser() != null && minecraft.player != null &&
+                mobEntity.getUser().is(minecraft.player))) {
             LivingEntity user = mobEntity.getUser();
             if (user != null) {
-                Player pl = Minecraft.getInstance().player;
+                Player pl = minecraft.player;
                 StandUser standUser = ((StandUser) mobEntity.getUser());
                 StandPowers standPowers = standUser.roundabout$getStandPowers();
                 if (standPowers.isPiloting()) {
                     if (standPowers.getPilotingStand() != null &&
                             standPowers.getPilotingStand().is(mobEntity)
                     ) {
-                        boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
+                        boolean fp = minecraft.options.getCameraType().isFirstPerson();
                         if (fp && !mobEntity.getDisplay() && pl != null && user.is(pl)) {
                             this.model.getHead().visible = false;
                         }
@@ -85,11 +86,10 @@ public class SilverChariotRenderer<T extends StandEntity> extends StandRenderer<
             }
         }
         if (!mobEntity.getArmoured()) {
-            //  y and z have switched cases for some odd reason
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 2.5D, -2.0D, -1.5D);
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 1.5D, -2.0D, -1.5D);
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -1.5D, -2.0D, -1.5D);
-            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -2.5D, -2.0D, -1.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 2.5D, -2.0D, -1.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, 1.5D, -2.0D, 3.5D);
+            renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -1.5D, -2.0D, 3.5D);
+            // renderAfterimage(mobEntity, f, g, matrixStack, vertexConsumerProvider, i, 0.30F, -2.5D, -2.0D, -1.5D);
         }
         // super.render(mobEntity, f, g, matrixStack, vertexConsumerProvider, i);
         // this.model.getHead().visible = true;
