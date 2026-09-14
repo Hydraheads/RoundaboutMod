@@ -22,10 +22,12 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
+import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
@@ -1411,7 +1413,7 @@ public class MainUtil {
                 return ItemStack.EMPTY;
             }
 
-            if (su.roundabout$isPossessed()) {
+            if (su.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
                 return ItemStack.EMPTY;
             }
             if (su.roundabout$getEffectiveCombatMode()) {
@@ -2564,7 +2566,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
                 || sauce.is(ModDamageTypes.KQ_EXPLOSION)
-                || sauce.is(ModDamageTypes.BITES_THE_DUST)) {
+                || sauce.is(ModDamageTypes.INFINITE_SPIN)
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
         return false;
@@ -4350,7 +4353,12 @@ public class MainUtil {
         }
         return false;
     }
-
+    public static byte getPurpleHazeSkin(Entity entity) {
+        if (entity instanceof LivingEntity LE) {
+            return ((StandUser) LE).getPurpleHazeSkin();
+        }
+        return PurpleHazeEntity.ANIME;
+    }
     public static Boolean isInDistortionHaze(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             return ((StandUser) LE).getDistortionHazeTicks() > 0;

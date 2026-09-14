@@ -54,6 +54,8 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
+    public static final MobEffect INFINITE_SPIN =
+            register("infinite_spin", new FabricEffects(MobEffectCategory.HARMFUL, 16411584));
     public static final MobEffect HAZE_VIRUS =
             register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect DISTORTION_VIRUS =
@@ -91,6 +93,7 @@ public class FabricEffects extends MobEffect{
         ModEffects.OLD = OLD;
         ModEffects.DREAMING = DREAMING;
         ModEffects.REFRESHED = REFRESHED;
+        ModEffects.INFINITE_SPIN = INFINITE_SPIN;
         ModEffects.HAZE_VIRUS = HAZE_VIRUS;
         ModEffects.DISTORTION_VIRUS = DISTORTION_VIRUS;
         ModEffects.VIRUS_IMMUNITY = VIRUS_IMMUNITY;

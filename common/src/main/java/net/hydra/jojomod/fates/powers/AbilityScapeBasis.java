@@ -64,6 +64,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -633,6 +634,8 @@ public class AbilityScapeBasis {
         self.level().isClientSide()){
             kickStarted = true;
         }
+
+        tickInfiniteSpin();
     }
 
 
@@ -2197,6 +2200,8 @@ public class AbilityScapeBasis {
                             );
                         }
                     }
+                } else if ($$4 != null) {
+
                 }
             } else {
                 level.playSound($$0, $$1, $$2, $$3, $$4, $$5, $$6, $$7);
@@ -3653,5 +3658,48 @@ public class AbilityScapeBasis {
         }
     }
     public void onJump(){
+    }
+
+
+    public boolean ableToSpin() {return false;}
+
+    private int infinite_spin = 0;
+    private boolean infinite_spinning = false;
+    public int getInfiniteSpin() {return infinite_spin;}
+    public void setInfiniteSpin(int value) {infinite_spin = Mth.clamp(value,0,getMaxInfiniteSpin());}
+    public int getMaxInfiniteSpin() {return 40*20;} // can be overridden for balance etc.
+
+    public boolean isInfiniteSpinning() {return infinite_spinning;}
+    public void tryInfiniteSpin(boolean forced) {
+        if ( (getInfiniteSpin() >= getMaxInfiniteSpin() && !infinite_spinning) || forced) {
+            onInfiniteSpinActivate(); // particles!
+            infinite_spinning = true;
+        }
+    }
+    public void onInfiniteSpinActivate() {
+        this.getSelf().level().playSound(null,this.getSelf().blockPosition(),ModSounds.LEVELUP_EVENT,SoundSource.PLAYERS,1F,1F);
+        sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD,
+                this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
+                20, 0.4, 0.4, 0.4, 0.4);
+    }
+    public void tickInfiniteSpin() {
+        if (ableToSpin()) {
+            int delta = isInfiniteSpinning() ? -2 : -1;
+            if (this.getSelf().isPassenger() && this.getSelf().getVehicle() instanceof AbstractHorse AH) {
+                if (AH.hurtTime == 0) {
+                    if (AH.isTamed() && AH.isSaddled() && (true /* is moving around */)) {
+                        delta = 20;
+                    }
+                } else {
+                    delta = -4;
+                }
+            }
+            this.setInfiniteSpin(infinite_spin + delta);
+            if (this.getInfiniteSpin() == 0) {
+                this.infinite_spinning = false;
+            } else {
+                tryInfiniteSpin(false);
+            }
+        }
     }
 }

@@ -22,10 +22,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -59,10 +56,10 @@ public class TuskNailEntity extends AbstractArrow {
         super($$0, $$1);
     }
 
-    public TuskNailEntity(LivingEntity $$1, Level $$2, byte type) {
+    public TuskNailEntity(LivingEntity $$1, Level $$2, byte act) {
         super(ModEntities.TUSK_NAIL, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
-        this.setAct(type);
+        this.setAct(act);
     }
 
     public static final byte
@@ -213,12 +210,13 @@ public class TuskNailEntity extends AbstractArrow {
                         float str = PT.getNailDamage(this,ent,this.getAct());
 
 
-                        if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()), str)) {
+                        if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()), str)) {;
                             float knockbackStrength = this.getAct() == 1 ? 0.3F : 0.5F;
                             if (this.getExtra() == GOLDEN) {
                                 knockbackStrength *= 1.5F;
                             }
                             PowersTusk.takeDeterminedKnockbackWithY2(LE, ent, knockbackStrength);
+
 
                             if (this.getAct() == 2) {
                                 TuskHoleEntity tuskHole = createHole(null,ent.getPosition(0));
@@ -226,6 +224,11 @@ public class TuskNailEntity extends AbstractArrow {
                                     if ( (this.getOwner() instanceof Player P && (P.getLastHurtMob() == null || P.getLastHurtMob() == ent)) || !(this.getOwner() instanceof Player)  ) {
                                         tuskHole.doHurtTarget(ent);
                                     }
+                                }
+                            } else if (this.getAct() == 4) {
+                                MainUtil.takeUnresistableKnockbackWithY(ent,0.05F,0,-1,0);
+                                if (ent instanceof Mob && !MainUtil.isBossMob(ent) && !MainUtil.getReducedDamage(ent)) {
+                                    ((StandUser)ent).roundabout$setDazed((byte) 2);
                                 }
                             }
 
@@ -244,7 +247,10 @@ public class TuskNailEntity extends AbstractArrow {
                                     tuskNailEntity.setExtra(REDUCED);
                                 }
                             }
+                        }
 
+                        if (this.getAct() == 4) {
+                            PT.punchOfDeath(this,$$0.getEntity());
                         }
 
                     }

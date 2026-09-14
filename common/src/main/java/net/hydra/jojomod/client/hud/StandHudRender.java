@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -18,6 +19,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
+import net.hydra.jojomod.fates.powers.AbilityScapeBasis;
 import net.hydra.jojomod.fates.powers.VampireFate;
 import net.hydra.jojomod.powers.power_types.PunchingGeneralPowers;
 import net.hydra.jojomod.powers.power_types.VampireGeneralPowers;
@@ -1108,6 +1110,32 @@ public class StandHudRender {
             context.drawString(client.font, text, n, o, 0xFFFFFF);
 
             context.blit(StandIcons.JOJO_ICONS, f, l+5, 183, 20, 9, 9);
+        }
+    }
+
+    public static void renderInfiniteSpinHUD(GuiGraphics context, int scaledWidth, int scaledHeight, int x, AbilityScapeBasis basis) {
+        int l = scaledHeight - 32 + 3;
+        int k = (int) (180.0F * ((float)basis.getInfiniteSpin()/basis.getMaxInfiniteSpin()) );
+
+
+        int tickcount = basis.getSelf().tickCount;
+        int stage = 0;
+        if (basis.isInfiniteSpinning()) {
+            stage = (tickcount / 2) % 6 * 6;
+        }
+
+        context.blit(StandIcons.JOJO_ICONS_2, x, l, 0, 135, 182, 5);
+        if (k > 0) {
+            final int spacing = 6;
+            int n = 1;
+            for(int i=0;i<k/spacing;i++) {
+                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage , 140, 6, 3);
+                n += spacing;
+            }
+            int remainder = k % spacing;
+            if (remainder != 0) {
+                context.blit(StandIcons.JOJO_ICONS_2, x+n, l+1, 1 + stage, 140,remainder,3);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
@@ -380,7 +381,8 @@ public interface StandUser {
     int getPurpleHazeTicks();
     void SetInDistortionHazeTicks(int e);
     int getDistortionHazeTicks();
-
+    byte getPurpleHazeSkin();
+    void SetPurpleHazeSkin(byte skin);
 
     boolean rdbt$isForceCrawl();
     int rdbt$getCrawlTicks();
@@ -392,4 +394,10 @@ public interface StandUser {
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
+    /* diver down diving down */
+    void roundabout$SetDiverUser(PowersDiverDown powers);
+    PowersDiverDown roundabout$getDiverUser();
+
+    boolean roundabout$hasInfiniteSpin();
+    void roundabout$clearInfiniteSpin();
 }

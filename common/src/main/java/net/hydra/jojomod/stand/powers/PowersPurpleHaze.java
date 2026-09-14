@@ -22,6 +22,7 @@ import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.particles.HazeColorParticleOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -1036,10 +1037,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private void playFallBraceShockwave() {
         Vec3 pos = self.position();
 
+        int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(getStandSkin(), PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+
         sendParticlesIfPossible(self.level(),
-                ModParticles.PW_BLASTWAVE_EXPLOSION,
+                HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
                 pos.x, pos.y + 0.05, pos.z,
                 1, 0.005, 0.01, 0.005, 0.02);
+        /*sendParticlesIfPossible(self.level(),
+                ModParticles.PW_BLASTWAVE_EXPLOSION,
+                pos.x, pos.y + 0.05, pos.z,
+                1, 0.005, 0.01, 0.005, 0.02);*/
 
         AABB sweep = new AABB(pos, pos).inflate(FALL_BRACE_SHOCKWAVE_RADIUS, 1.5, FALL_BRACE_SHOCKWAVE_RADIUS);
         List<Entity> nearby = self.level().getEntities(self, sweep);
@@ -1087,6 +1094,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 field.setPos(position);
                 PowerTypes.copyPlaneOfExisting(self, field);
                 field.setDistortionMode(distortionMode);
+                field.setStandSkin(getStandSkin());
                 field.totalDuration = distortionMode ? DISTORTION_FIELD_DURATION : PURPLE_HAZE_FIELD_DURATION;
                 field.lifetime = field.totalDuration;
                 this.self.level().addFreshEntity(field);

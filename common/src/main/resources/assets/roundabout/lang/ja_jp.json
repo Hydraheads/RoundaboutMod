@@ -271,9 +271,9 @@
   "roundabout.whitesnake.forget_command_disc": "忘却のDISCを作成",
   "roundabout.whitesnake.explosive_command_disc": "命令のDISC(破裂)を作成",
   "message.roundabout.command.jump_back": "後ろに飛びのくよう命令された",
+  "message.roundabout.command.attack": "対象を攻撃するよう命令された",
   "message.roundabout.command.forget": "忘れるよう命令された",
   "message.roundabout.command.explosive": "10メートル飛んでから破裂するよう命令された",
-  "message.roundabout.command.attack": "対象を攻撃するよう命令された",
 
   "screen.roundabout.memory_reading": "記憶を再生中",
   "screen.roundabout.memory_owner": "所有者:%s",

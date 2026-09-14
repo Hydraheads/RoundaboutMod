@@ -15,6 +15,7 @@ import net.hydra.jojomod.entity.corpses.*;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -144,6 +145,7 @@ public class ForgeEvents {
         event.put(ForgeEntities.GROUND_HURRICANE.get(), GroundHurricaneEntity.createStandAttributes().build());
         event.put(ForgeEntities.TUSK_HOLE.get(), TuskHoleEntity.createStandAttributes().build());
         event.put(ForgeEntities.ANUBIS_POSSESSOR.get(), AnubisPossessorEntity.createStandAttributes().build());
+        event.put(ForgeEntities.COMMAND_DISC_POSSESSION.get(), CommandDiscPossession.createAttributes().build());
         event.put(ForgeEntities.GROUND_BUBBLE.get(), GroundBubbleEntity.createStandAttributes().build());
         event.put(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerEntity.createStandAttributes().build());
         event.put(ForgeEntities.ROAD_ROLLER_ENTITY.get(), RoadRollerEntity.createAttributes().build());
@@ -738,6 +740,7 @@ public class ForgeEvents {
         ModParticles.PW_BLUE_BLASTWAVE_EXPLOSION = ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get();
         ModParticles.PW_BLUE_MUSHROOM_EXPLOSION = ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get();
         ModParticles.PURPLE_HAZE_SMOKE = ForgeParticles.PURPLE_HAZE_SMOKE.get();
+        ModParticles.PURPLE_HAZE_BLASTWAVE = ForgeParticles.PURPLE_HAZE_BLASTWAVE.get();
         ModParticles.DISTORTION_SMOKE = ForgeParticles.DISTORTION_SMOKE.get();
 
         FireBlock fire = (FireBlock) Blocks.FIRE;
@@ -763,6 +766,7 @@ public class ForgeEvents {
         ModEffects.OLD = ForgeEffects.OLD.get();
         ModEffects.DREAMING = ForgeEffects.DREAMING.get();
         ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
+        ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
@@ -884,6 +888,7 @@ public class ForgeEvents {
         ModEntities.ENCASEMENT_BUBBLE = ForgeEntities.ENCASEMENT_BUBBLE.get();
         ModEntities.CINDERELLA_VISAGE_DISPLAY = ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get();
         ModEntities.ANUBIS_POSSESSOR = ForgeEntities.ANUBIS_POSSESSOR.get();
+        ModEntities.COMMAND_DISC_POSSESSION = ForgeEntities.COMMAND_DISC_POSSESSION.get();
         ModEntities.ANUBIS_SLIPSTREAM = ForgeEntities.ANUBIS_SLIPSTREAM.get();
         ModEntities.TUSK_NAIL = ForgeEntities.TUSK_NAIL.get();
         ModEntities.TUSK_HOLE = ForgeEntities.TUSK_HOLE.get();

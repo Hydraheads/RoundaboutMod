@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -978,7 +979,14 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
-    public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
+        public static final EntityType<ReturningObjectEntity> RETURNING_OBJECT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "returning_object"),
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).
+                            sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":returning_object")
+            );
+        public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis"),
@@ -1005,6 +1013,13 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor"),
                     EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).
                             sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_possessor")
+            );
+    public static final EntityType<CommandDiscPossession> COMMAND_DISC_POSSESSION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "command_disc_possession"),
+                    EntityType.Builder.<CommandDiscPossession>of(CommandDiscPossession::new, MobCategory.MISC).
+                            sized(0.6f, 2f).clientTrackingRange(10).noSave().build(Roundabout.MOD_ID+":command_disc_possession")
             );
     public static final EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM =
             Registry.register(
@@ -1287,6 +1302,7 @@ public class FabricEntities {
                 ModEntities.GENTLY_WEEPS = GENTLY_WEEPS;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.RETURNING_OBJECT = RETURNING_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
@@ -1299,6 +1315,7 @@ public class FabricEntities {
                 ModEntities.STRAY_CAT_AIRBUBBLE = STRAY_CAT_AIRBUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
+                ModEntities.COMMAND_DISC_POSSESSION = COMMAND_DISC_POSSESSION;
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
                 ModEntities.TUSK_NAIL = TUSK_NAIL;
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
@@ -1460,6 +1477,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_HOLE, TuskHoleEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_POSSESSOR, AnubisPossessorEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(COMMAND_DISC_POSSESSION, CommandDiscPossession.createAttributes());
                 FabricDefaultAttributeRegistry.register(GROUND_BUBBLE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_LEGS, SeperatedLegsEntity.createStandAttributes());

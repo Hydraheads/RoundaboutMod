@@ -255,12 +255,12 @@ public class FabricBlocks {
     public static final Block OASIS_MUD_BLOCK = registerBlockItemless("oasis_mud_block", OASIS_MUD_BLOCK_PROPERTIES);
     public static final HallucinatoryAcidBlock HALLUCINATORY_ACID = (HallucinatoryAcidBlock) registerBlockItemless(
             "hallucinatory_acid", new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
-                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                    .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
                     .pushReaction(PushReaction.BLOCK)));
     public static final HallucinatoryAcidWallBlock HALLUCINATORY_ACID_WALL =
             (HallucinatoryAcidWallBlock) registerBlockItemless("hallucinatory_acid_wall",
                     new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
-                            .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
+                            .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks().sound(SoundType.MUD)
                             .pushReaction(PushReaction.BLOCK)));
     //public static final Block CHESSBOARD_BLOCK = registerChessBoardBlock("chessboard_block", CHESSBOARD_BLOCK_PROPERTIES);
 
