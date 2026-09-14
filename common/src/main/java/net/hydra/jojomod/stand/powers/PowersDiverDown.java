@@ -104,7 +104,10 @@ public class PowersDiverDown extends NewPunchingStand {
             DIVER_ZIP = 63,
             STORE_KICK_TRAP = 64,
             MANUAL_TRAP_RELEASE = 65,
-            TOGGLE_TRAP_MODE = 66;
+            TOGGLE_TRAP_MODE = 66,
+            DIVER_SUBMERGE_START = 67,
+            DIVER_SUBMERGE_EXECUTE = 68,
+            DIVER_EMERGE = 69;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -160,6 +163,14 @@ public class PowersDiverDown extends NewPunchingStand {
     // RELEASE
     // 🔥🔥🔥🔥🔥
     private boolean isAutoRelease = true; // true = automatic, false = manual
+
+    // used for dive
+    public Entity submergedTarget = null;
+    public int diveWindupTicks = 0; // tracks current tick
+    public static final int DIVE_WINDUP_MAX = 30; // 1.5 seconds uncancellable windup
+    public static final float DIVE_REACH = 5.0f; // how far it goes
+    private boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
+                                                  // each other
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -399,8 +410,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     tryDiverZip();
                 }
                 return;
-            }
-            if (hasLimbsDeployed()) {
+            } else if (hasLimbsDeployed()) {
                 // pressing V recalls limbs if limb move is active
                 if (context == PowerContext.SKILL_4_NORMAL) {
                     tryRecallLimbs();
@@ -411,8 +421,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
                 // stops everything else from working
                 return;
-            }
-            if (isPiloting()) {
+            } else if (isPiloting()) {
                 if (context == PowerContext.SKILL_4_NORMAL) {
                     exitGroundDive();
                     // note: still not sure about the heirarchy for sneak + guard moves. Replace
@@ -424,9 +433,18 @@ public class PowersDiverDown extends NewPunchingStand {
                 }
                 // stops everything else from working
                 return;
+            } else if (isDiveActive()) {
+                if (context == PowerContext.SKILL_1_NORMAL) {
+                    tryEmergeClient();
+                }
+                return;
             }
         }
         switch (context) {
+            // submerge
+            case SKILL_1_NORMAL -> {
+                tryStartDiveClient();
+            }
             // kick storage
             case SKILL_2_NORMAL -> {
                 tryPlantKickTrap();
@@ -465,8 +483,16 @@ public class PowersDiverDown extends NewPunchingStand {
     // for activating all the moves
     @Override
     public boolean setPowerOther(int move, int lastMove) {
+        // does the submerge
+        if (move == DIVER_SUBMERGE_START) {
+            return startDiveWindupServer();
+        }
+        // recalls stand
+        else if (move == DIVER_EMERGE) {
+            return emergeServer();
+        }
         // does the store kick thing
-        if (move == STORE_KICK_TRAP) {
+        else if (move == STORE_KICK_TRAP) {
             return plantKickTrap();
         }
         // releases/deletes traps
@@ -1088,30 +1114,32 @@ public class PowersDiverDown extends NewPunchingStand {
     // Ground dive move here
 
     private void tryGroundDive() {
-        StandEntity stand = getStandEntity(this.self);
-        if (stand != null && stand.isAlive()) {
-            Minecraft mc = Minecraft.getInstance();
-            // saves camera
-            if (this.previousCameraType == null) {
-                this.previousCameraType = mc.options.getCameraType();
+        if (this.self.level().isClientSide()) {
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null && stand.isAlive()) {
+                Minecraft mc = Minecraft.getInstance();
+                // saves camera
+                if (this.previousCameraType == null) {
+                    this.previousCameraType = mc.options.getCameraType();
+                }
+                // forces third person camera
+                mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+                if (mc.player != null && mc.getCameraEntity() != mc.player) {
+                    mc.setCameraEntity(mc.player);
+                }
+                setPiloting(stand.getId());
+                tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
+                if (mc.player != null) {
+                    ClientUtil.setCameraEntity(stand);
+                }
+                // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
+                // walls
+                stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
+                // note to self: get the last survivor ult sound effect for this. this is a
+                // placeholder for now
+                playSoundIfPossible(self.level(), null, stand.blockPosition(),
+                        ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
-            // forces third person camera
-            mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-            if (mc.player != null && mc.getCameraEntity() != mc.player) {
-                mc.setCameraEntity(mc.player);
-            }
-            setPiloting(stand.getId());
-            tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
-            if (mc.player != null) {
-                ClientUtil.setCameraEntity(stand);
-            }
-            // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
-            // walls
-            stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
-            // note to self: get the last survivor ult sound effect for this. this is a
-            // placeholder for now
-            playSoundIfPossible(self.level(), null, stand.blockPosition(),
-                    ModSounds.DIVER_DOWN_DIVE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 
@@ -1166,7 +1194,6 @@ public class PowersDiverDown extends NewPunchingStand {
                 this.diveTicksLeft = MAX_DIVE_TICKS;
             } else {
                 // move returns camera as a failsafe.
-                // NOTE TO SELF: MOVE CAMERA STILL DOESN'T WORK, IT'S NOT RETURNING PROPERLY.
                 this.diveTicksLeft = 0;
                 if (this.self.level().isClientSide()) {
                     Minecraft mc = Minecraft.getInstance();
@@ -1325,6 +1352,21 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         } else {
             if (!this.self.level().isClientSide()) {
+                // dive windup
+                if (this.diveWindupTicks > 0) {
+                    this.diveWindupTicks--;
+                    if (this.diveWindupTicks == 0) {
+                        completeDiveServer();
+                    }
+                }
+                // recall stand if target dies, or if they go too far
+                if (isDiveActive()) {
+                    if (!this.submergedTarget.isAlive()
+                            || this.submergedTarget.isRemoved()
+                            || this.self.distanceTo(this.submergedTarget) > (getMaxPilotRange())) {
+                        emergeServer();
+                    }
+                }
                 // trap detection
                 if (!this.storedKickTraps.isEmpty()) {
                     Iterator<Map.Entry<BlockPos, KickTrap>> it = this.storedKickTraps.entrySet().iterator();
@@ -1358,7 +1400,7 @@ public class PowersDiverDown extends NewPunchingStand {
                                 }
                                 if (!victims.isEmpty()) {
                                     triggerKickTrap(victims, trapPos, trap.face);
-                                    it.remove(); //delete the triggered trap
+                                    it.remove(); // delete the triggered trap
                                 }
                             }
                         }
@@ -2069,7 +2111,7 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = this.getStandEntity(this.self);
         BlockPos spawnPos = pos.relative(face);
 
-        // Spawn Diver Down's leg model
+        // Spawn Diver Down's leg
         if (level.getBlockState(spawnPos).canBeReplaced()) {
             BlockState limbState = ModBlocks.DIVER_LIMB.defaultBlockState();
             level.setBlockAndUpdate(spawnPos, limbState);
@@ -2157,7 +2199,7 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
 
-        // add particles here when deleting the limbs, put it in a for loop like this
+        // add particles here when deleting the traps, put it in a for loop like this
         /*
          * for (BlockPos pos : this.storedKickTraps.keySet()) {
          * 
@@ -2174,15 +2216,116 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // kick storage end
 
-    /**
-     * Placeholder function, right now returns false (because dive hasn't even been
-     * implemented yet. duh.)
-     * 
-     * Will be given code to see if diver down is inside someone or not
-     */
-    private boolean isDiveActive() {
-        return false;
+    // dive start
+
+    private void tryStartDiveClient() {
+        if (!areStandMovesDisabled() && this.canAttack()) {
+            this.tryPower(DIVER_SUBMERGE_START, true);
+            tryPowerPacket(DIVER_SUBMERGE_START);
+        }
     }
+
+    private void tryEmergeClient() {
+        this.tryPower(DIVER_EMERGE, true);
+        tryPowerPacket(DIVER_EMERGE);
+    }
+
+    public boolean startDiveWindupServer() {
+        if (this.self.level().isClientSide() || isDiveActive()) {
+            return false;
+        }
+        // run the get target method to find a target
+        Entity target = getTargetEntity(self, 5.5F);
+        if (target == null) {
+            return false;
+        }
+        // the windup
+        this.submergedTarget = target;
+        this.diveWindupTicks = DIVE_WINDUP_MAX;
+        this.setAttackTimeDuring(-DIVE_WINDUP_MAX);
+        // do animations and stuff here
+        return true;
+    }
+
+    public void completeDiveServer() {
+        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
+            cancelDiveServer();
+            return;
+        }
+        // Goes through shields: break/bypass shield if holding one
+        MainUtil.knockShieldPlusStand(this.submergedTarget, 40);
+        // Attach to target entity
+        ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
+        // desummon stand
+        if (hasStandEntity(this.self)) {
+            StandEntity stand = this.getStandEntity(this.self);
+            if (stand != null) {
+                stand.discard();
+            }
+        }
+        // sounds and particles here
+    }
+
+    public boolean emergeServer() {
+        if (!isDiveActive())
+            return false;
+        if (this.submergedTarget != null) {
+            ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
+            Level level = this.self.level();
+            level.playSound(null, this.submergedTarget.getX(), this.submergedTarget.getY(), this.submergedTarget.getZ(),
+                    ModSounds.SUMMON_DIVER_DOWN_EVENT, SoundSource.PLAYERS, 1.0F, 0.9F);
+            sendParticlesIfPossible(level, ModParticles.AIR_CRACKLE,
+                    this.submergedTarget.getX(), this.submergedTarget.getY() + 1.0, this.submergedTarget.getZ(),
+                    8, 0.2, 0.4, 0.2, 0.02);
+            this.submergedTarget = null;
+        }
+        // Resummon stand to user
+        if (!this.self.level().isClientSide() && hasStandActive(this.self)) {
+            ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+        }
+        return true;
+    }
+
+    public void cancelDiveServer() {
+        this.diveWindupTicks = 0;
+        this.submergedTarget = null;
+        this.setPowerNone();
+    }
+
+    public boolean isDiveActive() {
+        return this.submergedTarget != null && this.submergedTarget.isAlive() && !this.submergedTarget.isRemoved();
+    }
+
+    /*
+     * handles the damage transfer ability
+     */
+    public void onSubmergedTargetHurt(DamageSource source, float amount) {
+        if (this.isTransferringDamage || !isDiveActive())
+            return;
+        this.isTransferringDamage = true;
+        try {
+            float transferred = amount * 0.8F;
+            // Deal 80% damage to the Diver Down user
+            this.self.hurt(source, transferred);
+            // sounds here if possible, to showcase the target absorbing damage
+            // if user dies from the damage transfer, emerge immediately
+            if (!this.self.isAlive()) {
+                emergeServer();
+            }
+        } finally {
+            this.isTransferringDamage = false;
+        }
+    }
+
+    // dive end
+
+    // dive afflictions start
+
+    // dive afflictions end
+
+    // disassembly start
+
+    // disassembly end
 
     /**
      * Used to check if stand able to be used or not.
@@ -2194,7 +2337,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
-        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode();
+        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode() || this.diveWindupTicks > 0;
     }
 
     // disables PLAYER MOVES for zip mode
