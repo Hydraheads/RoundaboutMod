@@ -219,9 +219,9 @@ public class PowersDiverDown extends NewPunchingStand {
         } else if (isGuarding()) {
             // isAutoRelease will be true if auto, false if manual
             if (this.isAutoRelease)
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_AUTO, PowerIndex.SKILL_2_GUARD);
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_AUTO, PowerIndex.SKILL_2_GUARD);
             else
-                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_RELEASE_MANUAL, PowerIndex.SKILL_2_GUARD);
+                setSkillIcon(context, x, y, 2, StandIcons.DIVER_DOWN_TOGGLE_MANUAL, PowerIndex.SKILL_2_GUARD);
         } else if (isHoldingSneak()) {
             // changes the icons for deletion vs releation (real)
             if (this.isAutoRelease)
@@ -292,7 +292,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 "instruction.roundabout.press_skill", StandIcons.DIVER_DOWN_STORE, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 80, 0,
                 "ability.roundabout.diver_release_toggle",
-                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_RELEASE_AUTO, 2, level, bypas));
+                "instruction.roundabout.press_skill_block", StandIcons.DIVER_DOWN_TOGGLE_AUTO, 2, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77 + startPos, topPos + 99, 0,
                 "ability.roundabout.diver_cancel_store",
                 "instruction.roundabout.press_skill_crouch", StandIcons.DIVER_DOWN_CANCEL_STORE, 2, level, bypas));
