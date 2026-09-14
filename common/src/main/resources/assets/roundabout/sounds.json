@@ -2471,8 +2471,36 @@
       "roundabout:tusk_hole_impact"
     ]
   },
-
-
+  "tusk_reverse": {
+    "subtitle": "sounds.roundabout.tusk_reverse",
+    "sounds": [
+      "roundabout:tusk_reverse"
+    ]
+  },
+  "tusk_ora_rush": {
+    "subtitle": "sounds.roundabout.tusk_ora_rush",
+    "sounds": [
+      "roundabout:tusk_ora_rush"
+    ]
+  },
+  "tusk_final_ora": {
+    "subtitle": "sounds.roundabout.tusk_final_ora",
+    "sounds": [
+      "roundabout:tusk_final_ora"
+    ]
+  },
+  "tusk_wall_break": {
+    "subtitle": "sounds.roundabout.tusk_wall_break",
+    "sounds": [
+      "roundabout:tusk_wall_break"
+    ]
+  },
+  "tusk_advance": {
+    "subtitle": "sounds.roundabout.tusk_advance",
+    "sounds": [
+      "roundabout:tusk_advance"
+    ]
+  },
 
 
   "ova_summon": {

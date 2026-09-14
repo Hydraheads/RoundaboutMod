@@ -2552,7 +2552,7 @@ public class ClientUtil {
                     || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis)
                     || standUser.roundabout$getPossessor() instanceof AnubisPossessorEntity) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
-            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play)) {
+            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play) && !play.isUsingItem() ) {
                 stack.pushPose();
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;

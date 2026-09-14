@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "roundabout:knife_bundle"
+    }
+  ],
+  "result": {
+    "item": "roundabout:knife",
+    "count": 4
+  }
+}

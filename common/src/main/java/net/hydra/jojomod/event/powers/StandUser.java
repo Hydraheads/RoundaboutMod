@@ -397,4 +397,7 @@ public interface StandUser {
     /* diver down diving down */
     void roundabout$SetDiverUser(PowersDiverDown powers);
     PowersDiverDown roundabout$getDiverUser();
+
+    boolean roundabout$hasInfiniteSpin();
+    void roundabout$clearInfiniteSpin();
 }

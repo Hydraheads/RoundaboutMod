@@ -485,6 +485,7 @@ public abstract class HudRendering implements IHudAccess {
             roundabout$RenderHeatBars($$0, $$1);
             ci.cancel();
         }
+        roundabout$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "HEAD"), cancellable = true)
     public void roundabout$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
@@ -492,15 +493,30 @@ public abstract class HudRendering implements IHudAccess {
             roundabout$RenderHeatBars($$1, $$2);
             ci.cancel();
         }
+        roundabout$infiniteSpinHud($$1,$$2);
+
+    }
+
+    @Unique
+    private void roundabout$infiniteSpinHud(GuiGraphics graphics, int x) {
+        StandUser user = ((StandUser) minecraft.player);
+        StandPowers standPowers = user.roundabout$getStandPowers();
+        GeneralPowers powers = ((IPowersPlayer) minecraft.player).rdbt$getPowers();
+        Roundabout.LOGGER.info("B?");
+        if (standPowers != null && standPowers.getInfiniteSpin() > 0 ) {
+            StandHudRender.renderInfiniteSpinHUD(graphics,screenWidth,screenHeight,x,standPowers);
+        }
     }
 
     @Inject(method = "renderExperienceBar", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$RenderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
-            roundabout$RenderHeatBars($$0, $$1);
+        roundabout$RenderHeatBars($$0, $$1);
+        roundabout$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "TAIL"), cancellable = true)
     public void roundabout$RenderMountJumpBar2(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
-            roundabout$RenderHeatBars($$1, $$2);
+        roundabout$RenderHeatBars($$1, $$2);
+        roundabout$infiniteSpinHud($$1,$$2);
     }
 
 
@@ -766,6 +782,7 @@ public abstract class HudRendering implements IHudAccess {
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
             } else if (powers.replaceHudActively()){
+                Roundabout.LOGGER.info("A?");
                 powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 if (removeNum){
                     if (displayCombatTicks){

@@ -857,6 +857,12 @@ public class ForgeEntities {
                             clientTrackingRange(10).
                             build(new ResourceLocation(Roundabout.MOD_ID, "thrown_object").toString())
             );
+    public static final RegistryObject<EntityType<ReturningObjectEntity>> RETURNING_OBJECT =
+            ENTITY_TYPES.register("returning_object", () ->
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).sized(1f, 1f).
+                            clientTrackingRange(10).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "returning_object").toString())
+            );
     public static final RegistryObject<EntityType<ThrownAnubisEntity>> THROWN_ANUBIS =
             ENTITY_TYPES.register("thrown_anubis", () ->
                     EntityType.Builder.<ThrownAnubisEntity>of(ThrownAnubisEntity::new, MobCategory.MISC).sized(1f, 1f).
