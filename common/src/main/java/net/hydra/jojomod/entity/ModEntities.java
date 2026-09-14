@@ -144,6 +144,7 @@ public class ModEntities {
     public static EntityType<StandArrowEntity> STAND_ARROW;
     public static EntityType<IronBallEntity> IRON_BALL;
     public static EntityType<ThrownObjectEntity> THROWN_OBJECT;
+    public static EntityType<ReturningObjectEntity> RETURNING_OBJECT;
     public static EntityType<ThrownAnubisEntity> THROWN_ANUBIS;
     public static EntityType<CinderellaVisageDisplayEntity> CINDERELLA_VISAGE_DISPLAY;
     public static EntityType<ConcealedFlameObjectEntity> CONCEALED_FLAME_OBJECT;

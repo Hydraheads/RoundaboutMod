@@ -548,6 +548,7 @@
   "effect.roundabout.singe": "Char",
   "effect.roundabout.crippled": "Crippled",
   "effect.roundabout.refreshed": "Refreshed",
+  "effect.roundabout.infinite_spin": "Infinite Spin",
   "effect.roundabout.haze_virus": "Haze Virus",
   "effect.roundabout.distortion_virus": "Distortion Virus",
   "effect.roundabout.virus_immunity": "Virus Immunity",
@@ -689,6 +690,7 @@
   "entity.roundabout.uv": "UV Blast",
   "entity.roundabout.cold_blast": "Cold Blast",
   "entity.roundabout.thrown_object": "Thrown Object",
+  "entity.roundabout.returning_object": "Returning Object",
   "entity.roundabout.hallucinatory_acid_projectile": "Hallucinatory Acid",
   "entity.roundabout.ratt_dart": "Ratt Dart",
   "entity.roundabout.painting_van_gough": "VG Painting",
@@ -1443,7 +1445,11 @@
   "sounds.roundabout.tusk_hole_move": "???",
   "sounds.roundabout.tusk_grab": "Tusk Grabs",
   "sounds.roundabout.tusk_hole_impact": "Hole Impact",
-
+  "sounds.roundabout.tusk_reverse": "Spin Reversal",
+  "sounds.roundabout.tusk_ora_rush": "ORA",
+  "sounds.roundabout.tusk_final_ora": "ORA",
+  "sounds.roundabout.tusk_wall_break": "World Splitting",
+  "sounds.roundabout.tusk_advance": "???",
 
   "sounds.roundabout.arcade_impale":  "[Arcade Impale]",
   "sounds.roundabout.arcade_long_ts":  "[Stop Time]",

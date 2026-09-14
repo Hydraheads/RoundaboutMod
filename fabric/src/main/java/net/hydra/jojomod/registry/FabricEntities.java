@@ -979,7 +979,14 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
-    public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
+        public static final EntityType<ReturningObjectEntity> RETURNING_OBJECT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "returning_object"),
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).
+                            sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":returning_object")
+            );
+        public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis"),
@@ -1295,6 +1302,7 @@ public class FabricEntities {
                 ModEntities.GENTLY_WEEPS = GENTLY_WEEPS;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.RETURNING_OBJECT = RETURNING_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;

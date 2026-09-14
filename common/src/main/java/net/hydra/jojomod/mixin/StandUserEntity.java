@@ -6942,4 +6942,29 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         return this.diverSubmergedUser;
     }
     // for diver down end
+
+
+    @Unique
+    private boolean roundabout$hasInfiniteSpin = false;
+
+    @Unique
+    public boolean roundabout$hasInfiniteSpin() {return roundabout$hasInfiniteSpin;}
+    public void roundabout$clearInfiniteSpin() {
+        Roundabout.LOGGER.info(rdbt$this().getName().getString());
+        this.roundabout$hasInfiniteSpin = false;
+        this.removeEffect(ModEffects.INFINITE_SPIN);
+    }
+    @Inject(method = "tickEffects",at = @At("HEAD"))
+    private void roundabout$tickInfiniteSpin(CallbackInfo ci) {
+        MobEffectInstance instance = this.getEffect(ModEffects.INFINITE_SPIN);
+        if (instance != null) {
+            if (this.tickCount % 10 == 0 && !this.roundabout$isDazed() && this.isAlive()) {
+                this.level().playSound(null,this.blockPosition(),ModSounds.VAMPIRE_CRUMBLE_EVENT,SoundSource.PLAYERS,0.3F,1F);
+                this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.INFINITE_SPIN), (float) Math.pow(2, 1+instance.getAmplifier()*0.4F));
+                this.addEffect(new MobEffectInstance(ModEffects.INFINITE_SPIN, instance.getDuration(), instance.getAmplifier() + 1));
+            }
+        }
+    }
+
+
 }
