@@ -11,6 +11,7 @@ import net.hydra.jojomod.block.DiverLimbBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.DiverDownControlsClient;
 import net.hydra.jojomod.client.KeyboardPilotInput;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.ModEntities;
@@ -90,8 +91,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // for move ids accessed here. update public bytes every time this is edited.
     private static final byte LIMB_SCAFFOLD = 53,
             LIMB_RECALL = 54,
-    // Workbench move ids start here
-    CRAFTING_TABLE = 55,
+            // Workbench move ids start here
+            CRAFTING_TABLE = 55,
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
@@ -104,8 +105,7 @@ public class PowersDiverDown extends NewPunchingStand {
             MANUAL_TRAP_RELEASE = 65,
             TOGGLE_TRAP_MODE = 66,
             DIVER_SUBMERGE_START = 67,
-            DIVER_SUBMERGE_EXECUTE = 68,
-            DIVER_EMERGE = 69;
+            DIVER_EMERGE = 68;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -123,10 +123,8 @@ public class PowersDiverDown extends NewPunchingStand {
     // used for ground dive
     public static final int MAX_DIVE_TICKS = 200; // 10 seconds
     public int diveTicksLeft = 0;
-    //private CameraType previousCameraType = null;
     private boolean wasPilotingClient = false;
     private boolean isBarrel = false;
-    private boolean isChestScreenCurrentlyOpen = false;
 
     // used for ground barrage
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
@@ -153,7 +151,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public final Map<BlockPos, KickTrap> storedKickTraps = new LinkedHashMap<>();
     private static final int MAX_TRAP_DURATION = 2400; // 2 minute lifetime
-    private static final float TRAP_RANGE = 5.0f;
+    private static final float TRAP_RANGE = 4.5f;
     private static final int MAX_NUMBER_OF_TRAPS = 10;
     public final Map<BlockPos, Integer> releasingLimbs = new HashMap<>();
     // water bucket
@@ -262,7 +260,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
-                                                  int topPos, byte level, boolean bypas) {
+            int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
         int startPos = -8;
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20 + startPos, topPos + 80, 0, "ability.roundabout.punch",
@@ -524,7 +522,21 @@ public class PowersDiverDown extends NewPunchingStand {
         return super.setPowerOther(move, lastMove);
     }
 
-    // Used to stop sounds early
+    @Override
+    public void updatePowerInt(byte activePower, int data) {
+        if (activePower == DIVER_SUBMERGE_START) {
+            if (data == -1) {
+                this.submergedTarget = null;
+            } else {
+                this.submergedTarget = this.self.level().getEntity(data);
+            }
+        } else if (activePower == DIVER_EMERGE) {
+            this.submergedTarget = null;
+        }
+        super.updatePowerInt(activePower, data);
+    }
+
+    // check if allowed to use a move.
     @Override
     public boolean tryPower(int move, boolean forced) {
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
@@ -869,10 +881,10 @@ public class PowersDiverDown extends NewPunchingStand {
                     }
                 },
                 Component.translatable("container.crafting")));/**
-         * test to see if the selection even works in the first
-         * place.
-         * comment this out when unneeded anymore :thumbsup:
-         */
+                                                                * test to see if the selection even works in the first
+                                                                * place.
+                                                                * comment this out when unneeded anymore :thumbsup:
+                                                                */
         // serverPlayer.displayClientMessage(Component.literal("Selected: Crafting
         // Table"), false);
     }
@@ -1115,21 +1127,9 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) {
             StandEntity stand = getStandEntity(this.self);
             if (stand != null && stand.isAlive()) {
-                /*Minecraft mc = Minecraft.getInstance();
-                // saves camera
-                if (this.previousCameraType == null) {
-                    this.previousCameraType = mc.options.getCameraType();
-                }
-                // forces third person camera
-                mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-                if (mc.player != null && mc.getCameraEntity() != mc.player) {
-                    mc.setCameraEntity(mc.player);
-                }
+                DiverDownControlsClient.enter(stand);
                 setPiloting(stand.getId());
                 tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, stand.getId());
-                if (mc.player != null) {
-                    ClientUtil.setCameraEntity(stand);
-                }*/
                 // the 0.05 is there to fix the pilot enter bug, so it can enter pilot inside
                 // walls
                 stand.setPos(stand.getX(), stand.getY() + 0.05, stand.getZ());
@@ -1143,18 +1143,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void exitGroundDive() {
         if (this.self.level().isClientSide()) {
-            /*Minecraft mc = Minecraft.getInstance();
-            // return camera to player
-            ClientUtil.setCameraEntity(null);
-            if (mc.player != null) {
-                mc.setCameraEntity(mc.player);
-            }
-            // go back to first person/whatever the person was using when they used this
-            // move.
-            CameraType restore = (this.previousCameraType != null) ? this.previousCameraType : CameraType.FIRST_PERSON;
-            mc.options.setCameraType(restore);
-            this.previousCameraType = null;
-            this.wasPilotingClient = false;*/
+            DiverDownControlsClient.exit();
+            this.wasPilotingClient = false;
         }
         setPiloting(0);
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
@@ -1194,15 +1184,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 // move returns camera as a failsafe.
                 this.diveTicksLeft = 0;
                 if (this.self.level().isClientSide()) {
-                    /*Minecraft mc = Minecraft.getInstance();
-                    ClientUtil.setCameraEntity(null);
-                    //if (mc.player != null) {
-                    //    mc.setCameraEntity(mc.player);
-                    //}
-                    //CameraType restore = (this.previousCameraType != null) ? this.previousCameraType
-                    //        : CameraType.FIRST_PERSON;
-                    //mc.options.setCameraType(restore);
-                    //this.previousCameraType = null;*/
+                    DiverDownControlsClient.exit();
                 }
             }
         }
@@ -1219,26 +1201,25 @@ public class PowersDiverDown extends NewPunchingStand {
         }
         // timer for the pilot, kicks you out once it hits 0, all that good stuff.
         if (this.self.level().isClientSide()) {
+            if (this.getActivePower() == GROUND_DIVE_BARRAGE) {
+                if (this.barrageTicksLeft > 0) {
+                    this.barrageTicksLeft--;
+                } else {
+                    this.setPowerNone();
+                }
+            }
             boolean pilotingNow = isPiloting();
             if (pilotingNow) {
                 wasPilotingClient = true;
                 // plays chest closing noise if chest closes
-                //Minecraft mc = Minecraft.getInstance();
-                //boolean hasScreenNow = mc.screen != null;
-                //if (hasScreenNow) {
-                //    this.isChestScreenCurrentlyOpen = true;
-                //} else if (this.isChestScreenCurrentlyOpen) {
-                //    this.isChestScreenCurrentlyOpen = false;
-                //    SoundEvent closeSound = this.isBarrel ? SoundEvents.BARREL_CLOSE : SoundEvents.CHEST_CLOSE;
-                //    mc.player.playSound(closeSound, 1.0F, 1.0F);
-                //}
+                DiverDownControlsClient.handleChestAudio(this.isBarrel);
                 if (this.diveTicksLeft > 0) {
                     this.diveTicksLeft--;
                 } else if (this.diveTicksLeft <= 0) {
                     // make sure that the chest screen isn't open if player used open chest
-                    //if (Minecraft.getInstance().screen == null) {
-                    //    exitGroundDive();
-                    //}
+                    if (!DiverDownControlsClient.isScreenOpen()) {
+                        exitGroundDive();
+                    }
                 }
             } else if (wasPilotingClient) {
                 // if this runs again, it ends early.
@@ -1331,7 +1312,7 @@ public class PowersDiverDown extends NewPunchingStand {
                         // cancel power if something bad happens
                         if (getStandUserSelf().rdbt$getJumping() || self.isSleeping()
                                 || (!self.onGround() && !this.getStandUserSelf().roundabout$isPossessed()
-                                && mercyTicks <= 0)
+                                        && mercyTicks <= 0)
                                 || self.getRootVehicle() != this.self) {
                             feetDirection = Direction.DOWN;
                             toggleZip(false);
@@ -1525,11 +1506,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (isPiloting()) {
             LivingEntity stand = getPilotingStand();
             if (stand != null) {
-                //ClientUtil.synchToCamera(stand);
-                //Minecraft mc = Minecraft.getInstance();
-                //if (mc.options.getCameraType() != CameraType.THIRD_PERSON_BACK) {
-                //    mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-                //}
+                DiverDownControlsClient.enforceCamera(stand);
             }
         }
     }
@@ -1582,7 +1559,7 @@ public class PowersDiverDown extends NewPunchingStand {
     // replaces the exp bar with the timer
     @Override
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
-                                  boolean removeNum) {
+            boolean removeNum) {
         if (isPiloting()) {
             // shows the timer for how long diver down pilot is active for
             StandHudRender.renderGroundDiveHud(context, cameraPlayer, screenWidth, screenHeight, x, this);
@@ -1655,7 +1632,7 @@ public class PowersDiverDown extends NewPunchingStand {
                 BlockState state = this.self.level().getBlockState(chestPos);
                 this.isBarrel = state.getBlock() instanceof BarrelBlock;
                 SoundEvent openSound = this.isBarrel ? SoundEvents.BARREL_OPEN : SoundEvents.CHEST_OPEN;
-                //Minecraft.getInstance().player.playSound(openSound, 1.0F, 1.0F);
+                // Minecraft.getInstance().player.playSound(openSound, 1.0F, 1.0F);
             }
             tryBlockPosPower(OPEN_CHEST, true, chestPos);
             tryBlockPosPowerPacket(OPEN_CHEST, chestPos);
@@ -2228,24 +2205,26 @@ public class PowersDiverDown extends NewPunchingStand {
         tryPowerPacket(DIVER_EMERGE);
     }
 
+    //starts up the dive windup
     public boolean startDiveWindupServer() {
         if (this.self.level().isClientSide() || isDiveActive()) {
             return false;
         }
-        // run the get target method to find a target
-        Entity target = getTargetEntity(self, 5.5F);
-        if (target == null) {
-            return false;
-        }
         // the windup
-        this.submergedTarget = target;
         this.diveWindupTicks = DIVE_WINDUP_MAX;
         this.setAttackTimeDuring(-DIVE_WINDUP_MAX);
         // do animations and stuff here
         return true;
     }
 
+    //actually does the dive
     public void completeDiveServer() {
+        // run the get target method to find a target
+        Entity target = getTargetEntity(self, 5.5F);
+        if (target == null) {
+            return;
+        }
+        this.submergedTarget = target;
         if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
             cancelDiveServer();
             return;
@@ -2254,6 +2233,10 @@ public class PowersDiverDown extends NewPunchingStand {
         MainUtil.knockShieldPlusStand(this.submergedTarget, 40);
         // Attach to target entity
         ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
+        // sync with the client for isDiveActive
+        if (this.self instanceof Player player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
+        }
         // desummon stand
         if (hasStandEntity(this.self)) {
             StandEntity stand = this.getStandEntity(this.self);
@@ -2288,6 +2271,11 @@ public class PowersDiverDown extends NewPunchingStand {
         this.diveWindupTicks = 0;
         this.submergedTarget = null;
         this.setPowerNone();
+        // sync with client
+        if (this.self instanceof Player player) {
+            // S2C means server to client, for updating client/server desyncs
+            S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_EMERGE, -1);
+        }
     }
 
     public boolean isDiveActive() {
@@ -2421,8 +2409,8 @@ public class PowersDiverDown extends NewPunchingStand {
 
     @Override
     public void renderAttackHud(GuiGraphics context, Player playerEntity,
-                                int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
-                                float flashAlpha, float otherFlashAlpha) {
+            int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
+            float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
