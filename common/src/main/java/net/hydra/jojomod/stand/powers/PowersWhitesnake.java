@@ -314,7 +314,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double horizontalDistance = MainUtil.cheapDistanceTo2(
                 stand.getX(), stand.getZ(), self.getX(), self.getZ());
         double verticalDistance = Math.abs(stand.getY() - self.getY());
-        return horizontalDistance <= (getMaxPilotRange() + 1)
+        return horizontalDistance <= getMaxPilotRange() * 1.1D
                 && verticalDistance <= getMaxPilotVerticalRange();
     }
 
