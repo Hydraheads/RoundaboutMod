@@ -125,6 +125,8 @@ public class PowersDiverDown extends NewPunchingStand {
     public int diveTicksLeft = 0;
     private boolean wasPilotingClient = false;
     private boolean isBarrel = false;
+    public volatile List<BlockPos> detectedOres = new ArrayList<>();
+    private int oreScanCooldown = 0;
 
     // used for ground barrage
     private int MAX_GROUND_BARRAGE_TICKS = 20; // will count down from 10 ticks AKA half a second + 1 for the final hit
@@ -1145,6 +1147,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) {
             DiverDownControlsClient.exit();
             this.wasPilotingClient = false;
+            this.detectedOres = Collections.emptyList();
         }
         setPiloting(0);
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
@@ -1220,6 +1223,13 @@ public class PowersDiverDown extends NewPunchingStand {
                     if (!DiverDownControlsClient.isScreenOpen()) {
                         exitGroundDive();
                     }
+                }
+                if (this.oreScanCooldown <= 0) {
+                    scoutForOresBeneathClient();
+                    //prevents the person's pc from exploding by scanning too many highlights at once
+                    this.oreScanCooldown = 5;
+                } else {
+                    this.oreScanCooldown--;
                 }
             } else if (wasPilotingClient) {
                 // if this runs again, it ends early.
@@ -1647,11 +1657,15 @@ public class PowersDiverDown extends NewPunchingStand {
         if (chestPos == null) {
             return false;
         }
+        //sets the stand on the server
+        StandEntity stand = getStandEntity(this.self);
+        if (stand != null && !isPiloting()) {
+            setPiloting(stand.getId());
+        }
         BlockState state = this.self.level().getBlockState(chestPos);
         MenuProvider menuProvider = state.getMenuProvider(this.self.level(), chestPos);
         if (menuProvider != null) {
             serverPlayer.openMenu(menuProvider);
-            this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
             // test message, comment out once done
             /*
              * if (this.self instanceof Player player) {
@@ -1659,7 +1673,6 @@ public class PowersDiverDown extends NewPunchingStand {
              * }
              */
         }
-        this.self.level().blockEvent(chestPos, state.getBlock(), 1, 1);
         return true;
     }
 
@@ -1750,6 +1763,34 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
         return filteredTargets;
+    }
+
+    //method for looking for ores beneath diver down
+    public void scoutForOresBeneathClient() {
+        if (!this.self.level().isClientSide()) return;
+        StandEntity stand = getStandEntity(this.self);
+        BlockPos centerPos = (stand != null) ? stand.blockPosition() : this.self.blockPosition();
+        List<BlockPos> found = new ArrayList<>();
+        int hRange = 4;    // Horizontal radius (4 blocks each direction)
+        int depth = 17;    // Depth beneath the stand (add 2 to start from the stand's feet)
+        int maxOres = 32;   // Ore cap to prevent visual clutter
+        //start y from -1 to start from feet
+        for (int y = -1; y >= -depth; y--) {
+            for (int x = -hRange; x <= hRange; x++) {
+                for (int z = -hRange; z <= hRange; z++) {
+                    BlockPos pos = centerPos.offset(x, y, z);
+                    BlockState blk = this.self.level().getBlockState(pos);
+                    if (MainUtil.confirmIsOre(blk)) {
+                        found.add(pos);
+                        if (found.size() >= maxOres) {
+                            this.detectedOres = found;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        this.detectedOres = found;
     }
 
     // walking heart autostep works on the player, not on the stand. i can't copy
