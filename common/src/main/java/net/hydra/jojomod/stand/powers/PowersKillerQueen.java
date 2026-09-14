@@ -12,10 +12,7 @@ import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
-import net.hydra.jojomod.entity.BombPlantedArrow;
-import net.hydra.jojomod.entity.BombPlantedItemEntity;
-import net.hydra.jojomod.entity.BombPlantedSpectralArrow;
-import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.*;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.projectile.KnifeEntity;
 import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
@@ -1641,7 +1638,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                 this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100, false);
             }
             if (this.getActivePower() == PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_BLOCK && move != PowerIndex.POWER_2_EXTRA
-                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT) {
+                    && currentBombStatus != BOMB_BUBBLE && currentBombStatus != BUBBLE_CONTACT && attackTimeDuring <= -1) {
                 this.stopSoundsIfNearby(AIRBUBBLE, 100, false);
             }
 
@@ -1991,6 +1988,18 @@ public class PowersKillerQueen extends NewPunchingStand {
                 syncBombStatus(ARROW_BOMB);
 
                 self.level().addFreshEntity(knife);
+
+            }else if (stack.getItem() instanceof EnderpearlItem) {
+                BombPlantedEnderpearl pearl = new BombPlantedEnderpearl(self.level(), self);
+
+                pearl.setItem(stack);
+                pearl.shootFromRotation(self, self.getXRot(), self.getYRot(), 0.0F, 1.2F, 1.0F);
+                pearl.setOwner(self);
+
+                bombEntity = pearl;
+                syncBombStatus(ARROW_BOMB);
+
+                self.level().addFreshEntity(pearl);
 
             }else if (stack.getItem() instanceof SniperAmmoItem) {
                 RoundaboutBulletEntity bullet = new RoundaboutBulletEntity(self.level(), self);
@@ -2433,7 +2442,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void bubbleContacted(Entity ent) {
+    public void contactExplode(Entity ent) {
         if (this.isContactModeEnabled() || this.detonateTimer > -1) {
             this.bombEntity = ent;
             syncBombStatus(BUBBLE_CONTACT);
@@ -2445,7 +2454,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         }
     }
 
-    public void arrowContacted(Entity ent) {
+    public void contactDetonate(Entity ent) {
         this.bombEntity = ent;
         syncBombStatus(ARROW_CONTACT);
 
@@ -3064,6 +3073,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         stack.getItem() instanceof ArrowItem
                                 || stack.getItem() instanceof SpectralArrowItem
                                 || stack.getItem() instanceof SniperAmmoItem
+                                || stack.getItem() instanceof EnderpearlItem
                                 || stack.is(ModItems.KNIFE)
                     )) {
 
@@ -3469,7 +3479,7 @@ public class PowersKillerQueen extends NewPunchingStand {
                         }
                     }
                 }else if (this.currentBombStatus == BOMB_ENTITY || this.currentBombStatus == ARROW_BOMB) {
-                    if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2) {
+                    if(Objects.nonNull(this.getBombEntity()) && activePower != PowerIndex.POWER_2 && !(bombEntity instanceof BombPlantedEnderpearl)) {
                         if (!(
                                 this.getBombEntity() instanceof AbstractArrow A && !A.onGround()
                         )) {
@@ -4648,6 +4658,24 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
+            if (target instanceof BombPlantedEnderpearl) {
+                if (self instanceof ServerPlayer SP) {
+
+                    if (SP.level() == target.level() && !SP.isSleeping()) {
+
+                        if (self.isPassenger()) {
+                            SP.dismountTo(target.getX(), target.getY(), target.getZ());
+                        } else {
+                            SP.teleportTo(target.getX(), target.getY(), target.getZ());
+                        }
+
+                        self.resetFallDistance();
+                        self.hurt(self.damageSources().fall(), 5.0F);
+                        target.discard();
+                    }
+                }
+            }
+
             if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)
                     || (target instanceof BombPlantedArrow || target instanceof BombPlantedSpectralArrow)){
                 target.discard();
@@ -4818,11 +4846,19 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean setPowerArrowCharge() {
-        if (getStandEntity(self) != null && (
-                (getStandEntity(self).getHeldItem().getItem() instanceof SniperAmmoItem)
-                        || getStandEntity(self).getHeldItem().is(ModItems.KNIFE)
-        )) {
-            setPowerArrowThrow();
+
+
+        if (getStandEntity(self) != null) {
+            ItemStack stack = getStandEntity(self).getHeldItem();
+
+            if (
+                    (stack.getItem() instanceof SniperAmmoItem)
+                    || (stack.getItem() instanceof EnderpearlItem)
+                    || stack.is(ModItems.KNIFE)
+
+            ) {
+                setPowerArrowThrow();
+            }
         }else {
             this.attackTimeDuring = 0;
             this.setActivePower(ITEM_CHARGE);
