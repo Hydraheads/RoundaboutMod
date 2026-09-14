@@ -58,6 +58,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PowersSilverChariot extends NewPunchingStand {
 
@@ -2418,6 +2419,35 @@ public class PowersSilverChariot extends NewPunchingStand {
             user.roundabout$sealStand(sealTime);
         }
         user.roundabout$setActive(false);
+    }
+
+    @Override
+    public StandEntity getStandForHUDIfFake() {
+        // return super.getStandForHUDIfFake();
+        if (displayStand == null) {
+            displayStand = this.getNewStandEntity();
+        }
+        if (this.self instanceof Player player && ((IPlayerEntity) player).roundabout$getStandSkin() != displayStand.getSkin()) {
+            displayStand = this.getNewStandEntity();
+        }
+        if (displayStand != null) {
+            displayStand.setSkin(((StandUser) self).roundabout$getStandSkin());
+            displayStand.setAnimation(SilverChariotEntity.IDLE);
+            displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
+            displayStand.tickCount = self.tickCount;
+            displayStand.setUser(self);
+            displayStand.setupAnimationStates();
+        }
+        return displayStand;
+    }
+
+    @Override
+    public boolean returnFakeStandForHud() {
+        if(this.self != null) {
+            // return !(this.getStandEntity(this.self) != null);
+            return true;
+        }
+        return false;
     }
 
     @Override

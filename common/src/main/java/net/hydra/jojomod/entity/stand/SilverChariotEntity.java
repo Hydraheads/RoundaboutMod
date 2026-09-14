@@ -188,17 +188,30 @@ public class SilverChariotEntity extends FollowingStandEntity {
         byte skin = getSkin();
 
         if (this.getUser() != null) {
+            if (animationState != BARRAGE) {
+                this.scHideRapiers.startIfStopped(this.tickCount);
+            } else {
+                this.scHideRapiers.stop();
+            }
             if (animationState == IDLE) {
                 if (this.getIdleAnimation() == 0) {
-
+                    if (this.getArmoured()) {
+                        this.scIdleArmoured.startIfStopped(this.tickCount);
+                    } else {
+                        this.scIdleNotArmoured.startIfStopped(this.tickCount);
+                    }
                 } else {
-
+                    if (this.getArmoured()) {
+                        this.scIdleArmoured.stop();
+                    } else {
+                        this.scIdleNotArmoured.stop();
+                    }
                 }
 
                 if (this.getIdleAnimation() == 1) {
                     this.scPart3Pose.startIfStopped(this.tickCount);
                 } else {
-
+                    this.scPart3Pose.stop();
                 }
 
                 if (this.getIdleAnimation() == 2) {
@@ -206,27 +219,6 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 } else {
                     this.scPart5Pose.stop();
                 }
-            }
-
-            if (animationState == IDLE && this.getIdleAnimation() == 0 && this.getArmoured()) {
-                this.scIdleArmoured.startIfStopped(this.tickCount);
-            } else {
-                this.scIdleArmoured.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 0 && !this.getArmoured()) {
-                this.scIdleNotArmoured.startIfStopped(this.tickCount);
-            } else {
-                this.scIdleNotArmoured.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 1) {
-                this.scPart3Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart3Pose.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 2) {
-                this.scPart5Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart5Pose.stop();
             }
 
             if (animationState == BARRAGE) {
