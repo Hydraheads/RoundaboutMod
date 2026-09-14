@@ -1053,8 +1053,6 @@ public class StandIcons {
             "textures/gui/icons/diver_down/toggle_manual.png");
         public static final ResourceLocation DIVER_DOWN_RELEASE_MANUAL = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/manual_release.png");
-        public static final ResourceLocation DIVER_DOWN_SELECTION = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/diver_down/placeholder.png");
         public static final ResourceLocation DIVER_DOWN_CANCEL_STORE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/diver_down/delete_traps.png");
         public static final ResourceLocation DIVER_DOWN_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,

@@ -1124,6 +1124,8 @@
   "death.attack.haze_virus": "%1$s was consumed by the Purple Haze.",
   "death.attack.distortion_virus.player": "%1$s was consumed by the Distortion Virus.",
   "death.attack.distortion_virus": "%1$s was consumed by the Distortion Virus.",
+  "death.attack.diver_redirection": "%1$s died for the sake of others",
+  "death.attack.diver_redirection.player": "%1$s died for the sake of %2$s",
 
   "item.glaive.charge_power": "Charge Attack",
 
