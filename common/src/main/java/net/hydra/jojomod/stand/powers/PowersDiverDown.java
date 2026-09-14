@@ -20,6 +20,7 @@ import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -65,6 +66,12 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BarrelBlock;
@@ -105,7 +112,8 @@ public class PowersDiverDown extends NewPunchingStand {
             MANUAL_TRAP_RELEASE = 65,
             TOGGLE_TRAP_MODE = 66,
             DIVER_SUBMERGE_START = 67,
-            DIVER_EMERGE = 68;
+            DIVER_EMERGE = 68,
+            DISASSEMBLE_BLOCK = 69;
 
     // for all the move ids accessed elsewhere.
     public static final byte ACCESS_WORKBENCH = 119;
@@ -443,6 +451,9 @@ public class PowersDiverDown extends NewPunchingStand {
             case SKILL_1_NORMAL -> {
                 tryStartDiveClient();
             }
+            case SKILL_1_CROUCH -> {
+                tryDisassembleBlockClient();
+            }
             // kick storage
             case SKILL_2_NORMAL -> {
                 tryPlantKickTrap();
@@ -556,6 +567,9 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean tryBlockPosPower(int move, boolean forced, BlockPos blockPos) {
         if (move == OPEN_CHEST) {
             openChest(blockPos);
+        }
+        else if (move == DISASSEMBLE_BLOCK) {
+            disassembleBlock(blockPos);
         }
         return super.tryBlockPosPower(move, forced, blockPos);
     }
@@ -1508,7 +1522,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public int getMaxPilotRange() {
         // (this is in blocks)
-        return 15;
+        return 10;
     }
 
     @Override
@@ -1771,8 +1785,8 @@ public class PowersDiverDown extends NewPunchingStand {
         StandEntity stand = getStandEntity(this.self);
         BlockPos centerPos = (stand != null) ? stand.blockPosition() : this.self.blockPosition();
         List<BlockPos> found = new ArrayList<>();
-        int hRange = 4;    // Horizontal radius (4 blocks each direction)
-        int depth = 17;    // Depth beneath the stand (add 2 to start from the stand's feet)
+        int hRange = 2;    // Horizontal radius (4 blocks each direction)
+        int depth = 6;    // Depth beneath the stand (add 2 to start from the stand's feet)
         int maxOres = 32;   // Ore cap to prevent visual clutter
         //start y from -1 to start from feet
         for (int y = -1; y >= -depth; y--) {
@@ -2346,6 +2360,147 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive afflictions end
 
     // disassembly start
+
+    /**
+     * Checks if a targeted block at the given position is eligible for disassembly.
+     * Much like the block grab thing that blockgrab stands can do
+     */
+    public boolean canDisassembleBlock(BlockPos pos) {
+        Level level = this.self.level();
+        if (level == null || pos == null) return false;
+
+        // air
+        BlockState state = level.getBlockState(pos);
+        if (state.isAir()) return false;
+
+        // Unbreakable blocks check (bedrock, end portal frame, etc.)
+        if (state.getBlock().defaultDestroyTime() < 0) return false;
+
+        // Server config block blacklist check
+        if (MainUtil.isBlockBlacklisted(state)) return false;
+
+        // check for distance (like BlockGrabPreset.getGrabRange())
+        if (this.self.distanceToSqr(Vec3.atCenterOf(pos)) > 30.0) return false; // 30/6 = 5 blocks max
+
+        // check for stand griefing enabled
+        if (this.self instanceof ServerPlayer PE) {
+            if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) return false;
+            if (PE.blockActionRestricted(PE.serverLevel(), pos, PE.gameMode.getGameModeForPlayer())) return false;
+            if (!level.mayInteract(PE, pos)) return false;
+        }
+
+        // must have an associated Item
+        Item targetItem = state.getBlock().asItem();
+        if (targetItem == net.minecraft.world.item.Items.AIR) return false;
+
+        // check for recipes
+        // On server side, check the RecipeManager
+        if (!level.isClientSide() && this.self.getServer() != null) {
+            RecipeManager recipeManager = this.self.getServer().getRecipeManager();
+
+            java.util.List<CraftingRecipe> matchingRecipes = new java.util.ArrayList<>();
+            for (CraftingRecipe recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
+                if (recipe.getResultItem(level.registryAccess()).getItem() == targetItem) {
+                    matchingRecipes.add(recipe);
+                }
+            }
+
+            // Must have exactly one crafting recipe
+            if (matchingRecipes.size() != 1) return false;
+
+            CraftingRecipe recipe = matchingRecipes.get(0);
+
+            // Must only produce 1 item to prevent dupes (e.g. 6 blocks -> 4 stairs)
+            if (recipe.getResultItem(level.registryAccess()).getCount() != 1) return false;
+
+            // Must have no alternative ingredients (tags or multiple items)
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                if (ingredient.isEmpty()) continue;
+                if (ingredient.getItems().length != 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    //gets the block drops
+    private java.util.List<ItemStack> getDisassemblyDrops(BlockState state) {
+        java.util.List<ItemStack> drops = new java.util.ArrayList<>();
+        if (this.self.getServer() == null) return drops;
+
+        Item targetItem = state.getBlock().asItem();
+        RecipeManager recipeManager = this.self.getServer().getRecipeManager();
+
+        for (CraftingRecipe recipe : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
+            if (recipe.getResultItem(this.self.level().registryAccess()).getItem() == targetItem) {
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    if (!ingredient.isEmpty()) {
+                        drops.add(ingredient.getItems()[0].copy());
+                    }
+                }
+                break;
+            }
+        }
+        return drops;
+    }
+
+    //checks for a block to disassemble
+    private void tryDisassembleBlockClient() {
+        if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            Vec3 eyePos = this.self.getEyePosition(0);
+            Vec3 viewVec = this.self.getViewVector(0);
+            Vec3 targetVec = eyePos.add(viewVec.x * 6.0, viewVec.y * 6.0, viewVec.z * 6.0);
+
+            BlockHitResult hit = this.self.level().clip(new ClipContext(
+                    eyePos, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
+
+            if (hit.getType() == HitResult.Type.BLOCK) {
+                BlockPos pos = hit.getBlockPos();
+                if (canDisassembleBlock(pos)) {
+                    ((StandUser) this.getSelf()).roundabout$tryBlockPosPower(DISASSEMBLE_BLOCK, true, pos);
+                    tryBlockPosPowerPacket(DISASSEMBLE_BLOCK, pos);
+                }
+            }
+        }
+    }
+
+    private void disassembleBlock(BlockPos pos) {
+        if (this.self.level().isClientSide()) return;
+
+        // check with canDisassembleBlock
+        if (!canDisassembleBlock(pos)) return;
+
+        BlockState state = this.self.level().getBlockState(pos);
+        java.util.List<ItemStack> drops = getDisassemblyDrops(state);
+        if (drops.isEmpty()) return;
+
+        // DESTROY the block
+        boolean removed = this.self.level().destroyBlock(pos, false, this.self);
+        if (!removed) return;
+
+        // animate stand and sounds and stuff here
+
+        if (this.getSelf() instanceof ServerPlayer pl) {
+            S2CPacketUtil.sendCooldownSyncPacket(pl, PowerIndex.SKILL_1_SNEAK, 60);
+        }
+        this.setCooldown(PowerIndex.SKILL_1_SNEAK, 60);
+
+        // run the drops list
+        for (ItemStack drop : drops) {
+            drop.setCount(1);
+            ItemEntity itemEntity = new ItemEntity(
+                    this.self.level(),
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.5,
+                    pos.getZ() + 0.5,
+                    drop
+            );
+            itemEntity.setDefaultPickUpDelay();
+            this.self.level().addFreshEntity(itemEntity);
+        }
+    }
 
     // disassembly end
 
