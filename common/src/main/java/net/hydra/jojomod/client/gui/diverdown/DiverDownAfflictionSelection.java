@@ -30,27 +30,30 @@ import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class DiverDownAfflictionSelection extends Screen implements NoCancelInputScreen {
-    //Bytes for all the workbenches used in the move.
-    // NOTE: IF YOU EVER CHANGE THE BYTES FOR THE CRAFTING RECIPES IN PowersDiverDown, BE SURE TO CHANGE THEM HERE TOO!!!
+    //Bytes for all the affliction used in the move.
+    // NOTE: IF YOU EVER CHANGE THE BYTES FOR THE AFFLICTIONS IN PowersDiverDown, BE SURE TO CHANGE THEM HERE TOO!!!
     private static final byte
         CRAFTING_TABLE = 55,
         LOOM = 56,
         STONECUTTER = 57,
-        ANVIL = 58,
-        SMITHING_TABLE = 59;
+        DISGUISE = 71,
+        SMITHING_TABLE = 59,
+        ANVIL = 60,
+        PLACEHOLDER = 61,
+        PLACEHOLDER2 = 62;
 
     /**
      * Apparently the soft and wet and killer queen UI both change a config
      * in order to have their settings saved. Since this UI immediately opens
-     * a workbench UI without saving anything, a private variable is
+     * a affliction UI without saving anything, a private variable is
      * a better fit for this.
      */
-    private byte selectedWorkbench = 0;
+    private byte selectedAffliction = 0;
 
     //Check out GamemodeSwitcherScreen
     static final ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/workbench_icons/placeholder.png");
-    private WorkbenchType currentlyHovered;
+    private AfflictionType currentlyHovered;
     private int firstMouseX;
     private int firstMouseY;
     private boolean setFirstMousePos;
@@ -58,7 +61,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
     public ItemStack arrow = ItemStack.EMPTY;
 
-    private final List<WorkbenchSlot> slots = Lists.newArrayList();
+    private final List<AfflictionSlot> slots = Lists.newArrayList();
 
     public DiverDownAfflictionSelection() {
         super(GameNarrator.NO_TITLE);
@@ -78,16 +81,16 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         Player pl = Minecraft.getInstance().player;
 
 
-        this.currentlyHovered = WorkbenchType.NONE;
-            for (int i = 0; i < WorkbenchType.VALUES.length; ++i) {
-                WorkbenchType workbench = WorkbenchType.VALUES[i];
-                this.slots.add(new WorkbenchSlot(workbench, this.width / 2 + workbench.xoff - 13, this.height / 2 + workbench.yoff - 44));
+        this.currentlyHovered = AfflictionType.NONE;
+            for (int i = 0; i < AfflictionType.VALUES.length; ++i) {
+                AfflictionType affliction = AfflictionType.VALUES[i];
+                this.slots.add(new AfflictionSlot(affliction, this.width / 2 + affliction.xoff - 13, this.height / 2 + affliction.yoff - 44));
             }
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
         if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
-            this.selectHoveredWorkbench();
+            this.selectHoveredAffliction();
             this.minecraft.setScreen(null);
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
@@ -112,8 +115,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      */
     @Override
     public boolean mouseReleased(double $$0, double $$1, int $$2) {
-        if ($$2 == 0 && (this.currentlyHovered != WorkbenchType.NONE)) {
-            this.selectHoveredWorkbench();
+        if ($$2 == 0 && (this.currentlyHovered != AfflictionType.NONE)) {
+            this.selectHoveredAffliction();
             this.minecraft.setScreen(null);
             this.minecraft.options.keyUse.setDown(false);
             return true;
@@ -152,15 +155,15 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
         caughtSomething = false;
         boolean bl = this.firstMouseX == i && this.firstMouseY == j;
-        for (WorkbenchSlot MobSlot : this.slots) {
+        for (AfflictionSlot MobSlot : this.slots) {
             MobSlot.render(guiGraphics, i, j, f);
             MobSlot.setSelected(this.currentlyHovered == MobSlot.icon);
             if (bl || !MobSlot.isHoveredOrFocused()) continue;
             caughtSomething = true;
 
-            if (MobSlot.icon != WorkbenchType.NONE) {
-                setSelectedWorkbench(MobSlot.icon.id);
-                if (this.currentlyHovered == WorkbenchType.NONE) {
+            if (MobSlot.icon != AfflictionType.NONE) {
+                setSelectedAffliction(MobSlot.icon.id);
+                if (this.currentlyHovered == AfflictionType.NONE) {
                     SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                     soundmanager.play(SimpleSoundInstance.forUI(ModSounds.DIVER_DOWN_UI_SELECT_EVENT, (float) (0.95 + (Math.random() * 0.1F))));
                 }
@@ -169,7 +172,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
 
         if (!caughtSomething){
-            this.currentlyHovered = WorkbenchType.NONE;
+            this.currentlyHovered = AfflictionType.NONE;
         }
 
     }
@@ -210,18 +213,18 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      * UPDATE: I read the code some more, it seems like this is the code that updates what thing you select, maybe.
      * I'll have to read it some more, but basically this updates, the overload selects. again, maybe.
      */
-    private void selectHoveredWorkbench() {
-        selectHoveredWorkbench(this.minecraft, this.currentlyHovered);
+    private void selectHoveredAffliction() {
+        selectHoveredAffliction(this.minecraft, this.currentlyHovered);
     }
 
-    private void selectHoveredWorkbench(Minecraft minecraft, WorkbenchType workbench) {
-        if (minecraft.gameMode == null || minecraft.player == null || workbench == null || workbench == WorkbenchType.NONE) {
+    private void selectHoveredAffliction(Minecraft minecraft, AfflictionType affliction) {
+        if (minecraft.gameMode == null || minecraft.player == null || affliction == null || affliction == AfflictionType.NONE) {
             return;
         }
 
         if (((StandUser) minecraft.player).roundabout$getStandPowers()instanceof PowersDiverDown powers) {
-            powers.tryIntPower(PowersDiverDown.ACCESS_WORKBENCH, true, workbench.id);
-            powers.tryIntPowerPacket(PowersDiverDown.ACCESS_WORKBENCH, workbench.id);
+            powers.tryIntPower(PowersDiverDown.ACCESS_AFFLICTIONS, true, affliction.id);
+            powers.tryIntPowerPacket(PowersDiverDown.ACCESS_AFFLICTIONS, affliction.id);
         }
         /**
          * test to see if the selection even works in the first place.
@@ -248,8 +251,8 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     }
     private boolean checkToClose() {
         if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
-                this.selectHoveredWorkbench();
+            if (sameKeyOneX(KeyInputRegistry.abilityFourKey, this.minecraft.options)) {
+                this.selectHoveredAffliction();
                 this.minecraft.setScreen(null);
                 return true;
             }
@@ -289,26 +292,31 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     }
 
     /**
-     * WorkbenchType is what gets and places the icons for the UI. 
+     * AfflictionType is what gets and places the icons for the UI. 
      * The first translatable is for the name, while the second
      * is for the description box.
      */
-    public enum WorkbenchType {
-        CRAFTING_TABLE_ID(Component.translatable("roundabout.diver_workbench.crafting"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/crafting_table.png"),CRAFTING_TABLE,0,-11, Component.translatable("roundabout.diver_workbench.crafting.desc")),
-        LOOM_ID(Component.translatable("roundabout.diver_workbench.loom"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/loom.png"),LOOM,40,18, Component.translatable("roundabout.diver_workbench.loom.desc")),
-        STONECUTTER_ID(Component.translatable("roundabout.diver_workbench.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/stonecutter.png"),STONECUTTER,25,65, Component.translatable("roundabout.diver_workbench.stonecutter.desc")),
-        ANVIL_ID(Component.translatable("roundabout.diver_workbench.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/anvil.png"),ANVIL,-25,65, Component.translatable("roundabout.diver_workbench.anvil.desc")),
-        SMITHING_TABLE_ID(Component.translatable("roundabout.diver_workbench.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/smithing_table.png"),SMITHING_TABLE,-40,18, Component.translatable("roundabout.diver_workbench.smithing.desc")),
-
-        NONE(Component.translatable("roundabout.diver_workbench.none"), new ResourceLocation(Roundabout.MOD_ID,
+    public enum AfflictionType {
+        CRAFTING_TABLE_ID(Component.translatable("roundabout.diver_affliction.crafting"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),CRAFTING_TABLE,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
+        LOOM_ID(Component.translatable("roundabout.diver_affliction.loom"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),LOOM,-28,1, Component.translatable("roundabout.diver_affliction.loom.desc")),
+        STONECUTTER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),STONECUTTER,43,31, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
+        DISGUISE_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/disguise.png"),DISGUISE,0,-16, Component.translatable("roundabout.diver_affliction.anvil.desc")),
+        SMITHING_TABLE_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),SMITHING_TABLE,28,1, Component.translatable("roundabout.diver_affliction.smithing.desc")),
+        PLACEHOLDER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"),PLACEHOLDER,28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
+        ANVIL_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"),ANVIL,-28,61, Component.translatable("roundabout.diver_affliction.anvil.desc")),
+        PLACEHOLDER2_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/placeholder.png"),PLACEHOLDER2,0,78, Component.translatable("roundabout.diver_affliction.smithing.desc")),
+        NONE(Component.translatable("roundabout.diver_affliction.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("roundabout.stand_switch.main.desc"));
 
-        protected static final WorkbenchType[] VALUES;
+        protected static final AfflictionType[] VALUES;
         protected static final int ICON_TOP_LEFT = 5;
         final Component name;
         final Component desc;
@@ -318,7 +326,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         final int xoff;
         final int yoff;
 
-        private WorkbenchType(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc) {
+        private AfflictionType(Component component, ResourceLocation rl, byte id, int xoff, int yoff, Component desc) {
             this.name = component;
             this.rl = rl;
             this.id = id;
@@ -328,7 +336,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         }
 
         void drawIcon(GuiGraphics guiGraphics, int i, int j) {
-            guiGraphics.blit(rl, i-1, j-1, 0, 0, 24, 24, 24, 24);
+            guiGraphics.blit(rl, i-1, j-1, 0, 0, 18, 18, 18, 18);
         }
 
         Component getName() {
@@ -337,32 +345,35 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
 
         static {
-            VALUES = new WorkbenchType[]{
+            VALUES = new AfflictionType[]{
                     CRAFTING_TABLE_ID,
                     LOOM_ID,
                     STONECUTTER_ID,
+                    DISGUISE_ID,
                     ANVIL_ID,
-                    SMITHING_TABLE_ID
+                    SMITHING_TABLE_ID,
+                    PLACEHOLDER_ID,
+                    PLACEHOLDER2_ID
             };
         }
     }
 
-    public class WorkbenchSlot
+    public class AfflictionSlot
             extends AbstractWidget {
-        final WorkbenchType icon;
+        final AfflictionType icon;
         private boolean isSelected;
 
-        public WorkbenchSlot(WorkbenchType workbench, int i, int j) {
-            super(i, j, 26, 26, workbench.getName());
-            this.icon = workbench;
+        public AfflictionSlot(AfflictionType affliction, int i, int j) {
+            super(i, j, 26, 26, affliction.getName());
+            this.icon = affliction;
         }
 
         @Override
         public void renderWidget(GuiGraphics guiGraphics, int i, int j, float f) {
             RenderSystem.enableBlend();
-            if (!this.icon.equals(WorkbenchType.NONE)) {
+            if (!this.icon.equals(AfflictionType.NONE)) {
 
-                if (this.icon.id == getSelectedWorkbench()){
+                if (this.icon.id == getSelectedAffliction()){
                     if (this.isSelected) {
                         this.drawSlot4(guiGraphics);
                     } else {
@@ -413,14 +424,14 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     }
 
     /**
-     * getter and setter methods. Much like how the selectedWorkbench
+     * getter and setter methods. Much like how the selectedAffliction
      * variable was simplified to a byte, the code here can also be
      * simplified, as there is no need to save anything.
      */
-    public void setSelectedWorkbench(byte id){
-        this.selectedWorkbench = id;
+    public void setSelectedAffliction(byte id){
+        this.selectedAffliction = id;
     }
-    public byte getSelectedWorkbench(){
-        return this.selectedWorkbench;
+    public byte getSelectedAffliction(){
+        return this.selectedAffliction;
     }
 }

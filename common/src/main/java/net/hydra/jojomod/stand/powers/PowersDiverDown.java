@@ -98,14 +98,16 @@ import java.util.List;
 public class PowersDiverDown extends NewPunchingStand {
 
     // for move ids accessed here. update public bytes every time this is edited.
-    private static final byte LIMB_SCAFFOLD = 53,
+    private static final byte
+            LIMB_SCAFFOLD = 53,
             LIMB_RECALL = 54,
-    // Workbench move ids start here
-    CRAFTING_TABLE = 55,
+            // Workbench move ids start here
+            CRAFTING_TABLE = 55,
             LOOM = 56,
             STONECUTTER = 57,
             ANVIL = 58,
             SMITHING_TABLE = 59,
+            //workbench ID end
             OPEN_CHEST = 60,
             GROUND_GET_ITEMS = 61,
             GROUND_DIVE_BARRAGE = 62,
@@ -116,10 +118,13 @@ public class PowersDiverDown extends NewPunchingStand {
             DIVER_SUBMERGE_START = 67,
             DIVER_EMERGE = 68,
             DISASSEMBLE_BLOCK = 69,
-            DIVER_SELF_SUBMERGE = 70;
+            DIVER_SELF_SUBMERGE = 70,
+            DISGUISE = 71;
 
     // for all the move ids accessed elsewhere.
-    public static final byte ACCESS_WORKBENCH = 119;
+    public static final byte
+            ACCESS_WORKBENCH = 118,
+            ACCESS_AFFLICTIONS = 119;
 
     // NOISES GO BELOW HERE, starting from 120. I think that should be more than
     // enough.
@@ -439,7 +444,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     tryEmergeClient();
                 }
                 if (context == PowerContext.SKILL_2_NORMAL) {
-                    //insert affliction wheel here
+                    tryAfflictionSelectionClient();
                 }
                 return;
             }
@@ -613,14 +618,6 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     /**
-     * Opens the selection menu for the player to choose what
-     * workbench they want to access.
-     */
-    private void tryWorkbenchSelectionClient() {
-        ClientUtil.openWorkbenchSelect();
-    }
-
-    /**
      * (non-Javadoc)
      * tryLimbClimb is the client side activation for the limb move.
      */
@@ -658,7 +655,11 @@ public class PowersDiverDown extends NewPunchingStand {
             // ID
             // AKA what workbench is being accessed
             return openWorkbench(chargeTime);
-        } else if (move == PowerIndex.SNEAK_ATTACK) {
+        }
+        else if (move == ACCESS_AFFLICTIONS) {
+            return openAfflictions(chargeTime);
+        }
+        else if (move == PowerIndex.SNEAK_ATTACK) {
             this.chargedPhasePunch = chargeTime;
         }
         return super.tryIntPower(move, forced, chargeTime);
@@ -854,6 +855,14 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     // Workbench code start
+
+    /**
+     * Opens the selection menu for the player to choose what
+     * workbench they want to access.
+     */
+    private void tryWorkbenchSelectionClient() {
+        ClientUtil.openWorkbenchSelect();
+    }
 
     /**
      * This functions runs the method based on the workbench found in
@@ -2476,6 +2485,66 @@ public class PowersDiverDown extends NewPunchingStand {
     // dive end
 
     // dive afflictions start
+
+    /**
+     * Opens the selection menu for the player to choose what
+     * affliction they want to access.
+     */
+    private void tryAfflictionSelectionClient() {
+        ClientUtil.openAfflictionSelect();
+    }
+
+    /**
+     * This functions runs the method based on the affliction found in
+     * afflictionID. The next 5 functions that follow all open the corresponding
+     * affliction.
+     */
+    private boolean openAfflictions(int afflictionId) {
+        if (submergedTarget == null) {
+            return false;
+        }
+
+        switch (afflictionId) {
+            case DISGUISE -> {
+                // test message, comment this out once done
+                // serverPlayer.displayClientMessage(Component.literal("SERVER: calling
+                // crafting"), false);
+                disguise(submergedTarget);
+                return true;
+            }
+            default -> {
+                return false;
+            }
+            /*
+            case LOOM -> {
+                openLoom(serverPlayer);
+                return true;
+            }
+            case STONECUTTER -> {
+                openStonecutter(serverPlayer);
+                return true;
+            }
+            case ANVIL -> {
+                openAnvil(serverPlayer);
+                return true;
+            }
+            case SMITHING_TABLE -> {
+                openSmithingTable(serverPlayer);
+                return true;
+            }
+            default -> {
+                return false;
+            }
+            */
+        }
+    }
+
+    private void disguise(Entity target){
+        // test message, comment out once done
+       if (this.self instanceof Player player) {
+           player.sendSystemMessage(Component.literal("it's disguising time"));
+       }
+    }
 
     // dive afflictions end
 
