@@ -105,7 +105,8 @@ public class ForgeEffects{
             );
     public static final RegistryObject<MobEffect> SWAPPED =
             POTION_EFFECTS.register("swapped", () ->
-                    new Effect(MobEffectCategory.NEUTRAL, 16134815)
+                    new Effect(MobEffectCategory.NEUTRAL, 16134815).
+                            addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
             );
 
 
