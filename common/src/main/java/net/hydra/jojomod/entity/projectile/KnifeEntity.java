@@ -220,7 +220,7 @@ public class KnifeEntity extends AbstractArrow {
                 LE.setLastHurtMob($$1);
 
                 if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
-                    KQ.arrowContacted($$1);
+                    KQ.contactDetonate($$1);
                 }
             }
                 if (MainUtil.getMobBleed($$1)){

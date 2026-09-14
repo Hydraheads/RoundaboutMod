@@ -148,6 +148,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_ARROW.get(), StandArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ARROW.get(), BombPlantedArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get(), BombPlantedArrowRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ENDERPEARL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.IRON_BALL.get(), IronBallRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
