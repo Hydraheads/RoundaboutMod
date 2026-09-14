@@ -3804,7 +3804,13 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ci.setReturnValue(false);
             return;
         }
-
+        //diver down damage redirection
+        if (!this.level().isClientSide() && this.diverSubmergedUser != null && this.diverSubmergedUser.isDiveActive()) {
+            this.diverSubmergedUser.onSubmergedTargetHurt($$0, $$1);
+            // deal only 20% damage to the protected target
+            ci.setReturnValue(entity.hurt($$0, $$1 * 0.2F));
+            return;
+        }
         if ($$0.getEntity() instanceof Player pe) {
             if (((StandUser) pe).roundabout$getStandPowers().interceptDamageDealtEventTrue($$0, $$1, ((LivingEntity) (Object) this))) {
                 ci.setReturnValue(false);
@@ -6522,7 +6528,6 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if(!this.level().isClientSide) { BtdPlantedUser = e; }
     }
 
-
     @Inject(method = "attackable",at = @At("HEAD"),cancellable = true)
     private void roundabout$attackable(CallbackInfoReturnable<Boolean> cir) {
         if (this.roundabout$getStandPowers() instanceof PowersTusk PT) {
@@ -6532,4 +6537,17 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    // for diver down
+    public PowersDiverDown diverSubmergedUser = null;
+        @Override
+        public void roundabout$SetDiverUser(PowersDiverDown powers) {
+            if (!this.level().isClientSide) {
+                this.diverSubmergedUser = powers;
+            }
+        }
+        @Override
+        public PowersDiverDown roundabout$getDiverUser() {
+            return this.diverSubmergedUser;
+        }
+    // for diver down end
 }
