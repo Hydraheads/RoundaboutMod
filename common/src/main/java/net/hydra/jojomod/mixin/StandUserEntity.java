@@ -3715,6 +3715,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (((LivingEntity) (Object) this) instanceof Player PE && PE.isSpectator()) {
             return;
         }
+        if (!forced && roundabout$getActive()
+                && roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                && powers.tryRetreatBeforeUnsummon()) return;
         boolean active;
         if (!roundabout$getActive() || forced) {
             // world.getEntity

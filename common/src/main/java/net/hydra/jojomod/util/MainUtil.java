@@ -42,6 +42,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -2723,6 +2724,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
@@ -2733,7 +2735,8 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }

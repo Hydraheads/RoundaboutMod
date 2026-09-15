@@ -767,6 +767,8 @@ public class ForgeEvents {
         ModEffects.DREAMING = ForgeEffects.DREAMING.get();
         ModEffects.REFRESHED = ForgeEffects.REFRESHED.get();
         ModEffects.INFINITE_SPIN = ForgeEffects.INFINITE_SPIN.get();
+        ModEffects.IMPRINTING = ForgeEffects.IMPRINTING.get();
+        ModEffects.SWAPPED = ForgeEffects.SWAPPED.get();
 
         ModEffects.HAZE_VIRUS = ForgeEffects.HAZE_VIRUS.get();
         ModEffects.DISTORTION_VIRUS = ForgeEffects.DISTORTION_VIRUS.get();
@@ -865,6 +867,7 @@ public class ForgeEvents {
         ModEntities.STAND_ARROW = ForgeEntities.STAND_ARROW.get();
         ModEntities.BOMB_PLANTED_ARROW = ForgeEntities.BOMB_PLANTED_ARROW.get();
         ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get();
+        ModEntities.BOMB_PLANTED_ENDERPEARL = ForgeEntities.BOMB_PLANTED_ENDERPEARL.get();
         ModEntities.IRON_BALL = ForgeEntities.IRON_BALL.get();
         ModEntities.ROAD_ROLLER_ENTITY = ForgeEntities.ROAD_ROLLER_ENTITY.get();
         ModEntities.SEPERATED_LEGS = ForgeEntities.SEPERATED_LEGS.get();
