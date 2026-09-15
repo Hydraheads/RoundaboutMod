@@ -295,19 +295,19 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      * is for the description box.
      */
     public enum AfflictionType {
-        CRAFTING_TABLE_ID(Component.translatable("roundabout.diver_affliction.crafting"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),DIVER_LEGS,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
-        LOOM_ID(Component.translatable("roundabout.diver_affliction.loom"), new ResourceLocation(Roundabout.MOD_ID,
+        DIVER_LEGS_ID(Component.translatable("roundabout.diver_affliction.crafting"), new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/diver_down/affliction_icons/diver_legs.png"),DIVER_LEGS,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
+        EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.loom"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/affliction_icons/placeholder.png"),EFFECT_CURE,-28,1, Component.translatable("roundabout.diver_affliction.loom.desc")),
-        STONECUTTER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
+        COUNTER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/affliction_icons/placeholder.png"),COUNTER,43,31, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
         DISGUISE_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/affliction_icons/disguise.png"),DISGUISE,0,-16, Component.translatable("roundabout.diver_affliction.anvil.desc")),
-        SMITHING_TABLE_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
+        RIBCAGE_TRAP_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/affliction_icons/placeholder.png"),RIBCAGE_TRAP,28,1, Component.translatable("roundabout.diver_affliction.smithing.desc")),
-        PLACEHOLDER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
+        BONE_BOMB_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/diver_down/affliction_icons/placeholder.png"),BONE_BOMB,28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
-        ANVIL_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
+        SPRING_LEGS_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/diver_down/affliction_icons/placeholder.png"),SPRING_LEGS,-28,61, Component.translatable("roundabout.diver_affliction.anvil.desc")),
         EMBED_POTION_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/diver_down/affliction_icons/effects.png"),EMBED_POTION,0,78, Component.translatable("roundabout.diver_affliction.smithing.desc")),
@@ -344,13 +344,13 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
 
         static {
             VALUES = new AfflictionType[]{
-                    CRAFTING_TABLE_ID,
-                    LOOM_ID,
-                    STONECUTTER_ID,
+                    DIVER_LEGS_ID,
+                    EFFECT_CURE_ID,
+                    COUNTER_ID,
                     DISGUISE_ID,
-                    ANVIL_ID,
-                    SMITHING_TABLE_ID,
-                    PLACEHOLDER_ID,
+                    RIBCAGE_TRAP_ID,
+                    BONE_BOMB_ID,
+                    SPRING_LEGS_ID,
                     EMBED_POTION_ID
             };
         }
