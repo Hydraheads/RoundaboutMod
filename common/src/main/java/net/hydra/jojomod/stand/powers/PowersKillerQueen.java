@@ -2510,8 +2510,8 @@ public class PowersKillerQueen extends NewPunchingStand {
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring == 33) {
                 bubbleSend();
+                setAttackTimeDuring(-15);
             }
-           setAttackTimeDuring(-15);
         }
     }
 
