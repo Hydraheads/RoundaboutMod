@@ -57,7 +57,10 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -65,8 +68,14 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -120,7 +129,14 @@ public class PowersDiverDown extends NewPunchingStand {
             DIVER_EMERGE = 68,
             DISASSEMBLE_BLOCK = 69,
             DIVER_SELF_SUBMERGE = 70,
-            DISGUISE = 71;
+            DISGUISE = 71,
+            EMBED_POTION = 72,
+            DIVER_LEGS = 73,
+            EFFECT_CURE = 74,
+            COUNTER = 75,
+            RIBCAGE_TRAP = 76,
+            BONE_BOMB = 77,
+            SPRING_LEGS = 78;
 
     // for all the move ids accessed elsewhere.
     public static final byte
@@ -186,6 +202,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public static final float DIVE_REACH = 5.0f; // how far it goes
     public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
     // each other
+    public boolean hasDiverLegs = false;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -554,6 +571,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         } else if (activePower == DIVER_EMERGE) {
             this.submergedTarget = null;
+            this.hasDiverLegs = false;
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
             this.currentLimbIndex = 0;
@@ -626,7 +644,7 @@ public class PowersDiverDown extends NewPunchingStand {
         if (this.self.level().isClientSide()) {
             if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK)) {
                 // literally just to prevent the move from being spammed
-                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 30);
+                this.setCooldown(PowerIndex.SKILL_4_SNEAK, 10);
                 ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_SCAFFOLD, true);
                 tryPowerPacket(LIMB_SCAFFOLD);
             }
@@ -1165,7 +1183,7 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     /**
-     * This is a client side function that tries to recall all limb scaffolds
+     * This is a function that tries to recall all limb scaffolds
      */
     private void tryRecallLimbs() {
         ((StandUser) this.getSelf()).roundabout$tryPower(LIMB_RECALL, true);
@@ -2392,6 +2410,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean emergeServer() {
         if (!isDiveActive())
             return false;
+        removeDiverLegsFromTarget();
         if (this.submergedTarget != null) {
             ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
             //play sounds and effects here
@@ -2411,6 +2430,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void cancelDiveServer() {
         this.diveWindupTicks = 0;
+        removeDiverLegsFromTarget();
         this.submergedTarget = null;
         this.setPowerNone();
         // sync with client
@@ -2513,32 +2533,144 @@ public class PowersDiverDown extends NewPunchingStand {
                 tryDisguiseClient();
                 return true;
             }
-            default -> {
-                return false;
-            }
-            /*
-            case LOOM -> {
-                openLoom(serverPlayer);
+            case EMBED_POTION -> {
+                embedPotion();
                 return true;
             }
-            case STONECUTTER -> {
-                openStonecutter(serverPlayer);
+            case DIVER_LEGS -> {
+                diverLegs();
                 return true;
             }
-            case ANVIL -> {
-                openAnvil(serverPlayer);
-                return true;
-            }
-            case SMITHING_TABLE -> {
-                openSmithingTable(serverPlayer);
+            case EFFECT_CURE -> {
+                cureNegativeEffects();
                 return true;
             }
             default -> {
                 return false;
             }
-            */
         }
     }
+
+    // cleanse negative effects start
+
+    private void cureNegativeEffects() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+        boolean hadSlowness = false;
+
+        // get all the harmful effects
+        List<MobEffect> negativeEffects = new ArrayList<>();
+        for (MobEffectInstance instance : targetLiving.getActiveEffects()) {
+            MobEffect effect = instance.getEffect();
+            if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+                negativeEffects.add(effect);
+                if (effect == MobEffects.MOVEMENT_SLOWDOWN) {
+                    hadSlowness = true;
+                }
+            }
+        }
+        if (negativeEffects.isEmpty()) return;
+
+        // Remove all the effects
+        for (MobEffect effect : negativeEffects) {
+            targetLiving.removeEffect(effect);
+        }
+
+        // special turtle master cleanse like what is in the pearl jam docs
+        if (hadSlowness) {
+            targetLiving.removeEffect(MobEffects.DAMAGE_BOOST);      // Clears Strength
+            targetLiving.removeEffect(MobEffects.DAMAGE_RESISTANCE); // Clears Resistance (Turtle Master)
+        }
+
+        // sounds here
+    }
+
+    // cleanse negative effects end
+
+    // diver legs start
+
+    private void diverLegs() {
+        if (this.self.level().isClientSide()) return;
+        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
+
+        this.hasDiverLegs = true;
+        ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
+
+        //play sound here, replace entity legs with diver down legs
+    }
+
+    private void removeDiverLegsFromTarget() {
+        if (!this.hasDiverLegs) return;
+        if (this.self != null) {
+            ((StandUser) this.self).roundabout$setDiverLegs(false);
+        }
+        if (this.submergedTarget != null) {
+            ((StandUser) this.submergedTarget).roundabout$setDiverLegs(false);
+        }
+        this.hasDiverLegs = false;
+    }
+
+    //diver legs end
+
+    // potion start
+
+    private void embedPotion(){
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+        if (!(this.self instanceof Player player)) return;
+
+        // check for potions in both on and offhand
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        ItemStack stack = player.getMainHandItem();
+        List<MobEffectInstance> effects = PotionUtils.getMobEffects(stack);
+
+        if (effects.isEmpty()) {
+            hand = InteractionHand.OFF_HAND;
+            stack = player.getOffhandItem();
+            effects = PotionUtils.getMobEffects(stack);
+        }
+
+        // If neither hand is holding an item with potion effects, do nothing
+        if (effects.isEmpty()) return;
+
+        // apply the potion effect
+        for (MobEffectInstance effect : effects) {
+            int newDuration = effect.getDuration();
+            // make potions with durations longer
+            if (!effect.getEffect().isInstantenous()) {
+                newDuration = (int) (effect.getDuration() + 1200); // extra 60 seconds
+            }
+            MobEffectInstance boostedEffect = new MobEffectInstance(
+                    effect.getEffect(),
+                    newDuration,
+                    effect.getAmplifier() + 1, // extra potion amplifier
+                    effect.isAmbient(),
+                    effect.isVisible(),
+                    effect.showIcon()
+            );
+            targetLiving.addEffect(boostedEffect, this.self);
+        }
+
+        // sounds and animations here
+
+        // KILL the potion
+        //somebody wanted the bottle to return to your inventory so i guess we're doing that
+        if (!player.getAbilities().instabuild) {
+            Item item = stack.getItem();
+            stack.shrink(1);
+            if (item instanceof PotionItem && !(item instanceof SplashPotionItem) && !(item instanceof LingeringPotionItem)) {
+                if (stack.isEmpty()) {
+                    player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                } else {
+                    if (!player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE))) {
+                        player.drop(new ItemStack(Items.GLASS_BOTTLE), false);
+                    }
+                }
+            }
+        }
+    }
+
+    //potion end
 
     //disguise start
 
@@ -2819,6 +2951,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon) {
+            removeDiverLegsFromTarget();
             recallLimbs();
             if (isDiveActive()) {
                 emergeServer();

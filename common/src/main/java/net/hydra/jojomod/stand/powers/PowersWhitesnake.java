@@ -134,7 +134,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private boolean autoMode;
     private boolean isRetreating = false;
     private int retreatTicks = -1;
-    private int autoAttackCooldown;
     private Vec3 autoMoveTarget;
     private int manualAutoTargetId = -1;
     private int mobAbilityDecisionCooldown;
@@ -454,7 +453,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void clearAutoModeTargets() {
-        autoAttackCooldown = 0;
         autoMoveTarget = null;
         manualAutoTargetId = -1;
     }
@@ -1961,19 +1959,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
 
         stand.getNavigation().stop();
-        if (autoAttackCooldown > 0) {
-            autoAttackCooldown--;
-            return;
-        }
-        if (stand.hasLineOfSight(target) && getActivePower() == PowerIndex.NONE) {
+        if (stand.hasLineOfSight(target)
+                && (getActivePower() == PowerIndex.NONE || getActivePower() == PowerIndex.ATTACK)) {
             float specialRoll = self.getRandom().nextFloat();
-            if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
+            if (getActivePower() == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
                     && specialRoll < 0.12F) {
                 tryPower(PowerIndex.POWER_1_SNEAK, true);
-                autoAttackCooldown = 10;
-            } else {
+            } else if (canAttack()) {
                 tryPower(PowerIndex.ATTACK, true);
-                autoAttackCooldown = 4;
             }
         }
     }
@@ -2299,12 +2292,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            if (self.isCrouching()) {
+            if (!autoMode && self.isCrouching()) {
                 float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(self), 0.0F, 1.0F);
                 basis /= sneakSpeed;
             }
             basis *= 0.3F;
-        } else if (activePower == PowerIndex.POWER_1_SNEAK && self.isCrouching()) {
+        } else if (activePower == PowerIndex.POWER_1_SNEAK && !autoMode && self.isCrouching()) {
             float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(self), 0.0F, 1.0F);
             basis /= sneakSpeed;
         }
