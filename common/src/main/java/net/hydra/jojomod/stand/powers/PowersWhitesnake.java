@@ -1971,7 +1971,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                     && specialRoll < 0.12F) {
                 tryPower(PowerIndex.POWER_1_SNEAK, true);
                 autoAttackCooldown = 10;
-            } else {
+            } else if (canAttack()) {
                 tryPower(PowerIndex.ATTACK, true);
                 autoAttackCooldown = 4;
             }
