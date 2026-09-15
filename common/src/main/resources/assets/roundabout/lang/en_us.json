@@ -3097,6 +3097,8 @@
   "roundabout.anubis.memory_fail": "Memory is too long!",
 
   "roundabout.killer_queen.bomb_config": "Bomb Config",
+  "roundabout.bomb_config.contact_explosion": "Explosions when contacting",
+  "roundabout.bomb_config.block_destruction": "Explosions destroy blocks",
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",

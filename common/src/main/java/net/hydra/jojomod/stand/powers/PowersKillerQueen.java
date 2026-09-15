@@ -310,14 +310,18 @@ public class PowersKillerQueen extends NewPunchingStand {
     private CompoundTag strayCatData = null;
 
     public boolean canUseStrayCat() {
-        return this.hasStrayCat || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
+        return this.hasStrayCat
+                || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
+                || (self instanceof Player PL && PL.isCreative());
     }
 
 
     private boolean hasBitesTheDust = false;
 
     public boolean canBitesTheDust() {
-        return this.hasBitesTheDust || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
+        return this.hasBitesTheDust
+                || (((StandUser) self).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem)
+                || (self instanceof Player PL && PL.isCreative());
     }
 	public boolean wentForCharge = false;
 
