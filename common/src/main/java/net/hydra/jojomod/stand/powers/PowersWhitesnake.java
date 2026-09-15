@@ -314,7 +314,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double horizontalDistance = MainUtil.cheapDistanceTo2(
                 stand.getX(), stand.getZ(), self.getX(), self.getZ());
         double verticalDistance = Math.abs(stand.getY() - self.getY());
-        return horizontalDistance <= (getMaxPilotRange() + 1)
+        return horizontalDistance <= getMaxPilotRange() * 1.1D
                 && verticalDistance <= getMaxPilotVerticalRange();
     }
 
@@ -371,6 +371,31 @@ public class PowersWhitesnake extends BlockGrabPreset {
         setPiloting(0);
         WhitesnakeControlClient.exit();
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
+    }
+
+    public boolean tryRetreatBeforeUnsummon() {
+        if (!(self instanceof Player) || !getStandUserSelf().roundabout$getActive()
+                || !(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !isUsableStand(stand) || !hasDetachedStand()
+                || stand.distanceTo(self) <= 2.5D) return false;
+
+        if (isPiloting() || stand.isControlModeActive()) {
+            setPiloting(0);
+            if (self.level().isClientSide()) WhitesnakeControlClient.exit();
+            if (self instanceof ServerPlayer player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, ENTER_CONTROL_MODE, 0);
+            }
+        }
+        if (autoMode || stand.isAutoModeActive()) {
+            setAutoMode(false);
+            if (self instanceof ServerPlayer player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE, 0);
+            }
+        }
+        if (self instanceof ServerPlayer player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, RETREAT_MODE, 1);
+        }
+        return true;
     }
 
     public void detectNeedToRetreat() {
@@ -1614,6 +1639,10 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (activePower == RETREAT_MODE) {
             isRetreating = data != 0;
+            if (isRetreating && !getStandUserSelf().roundabout$getActive()) {
+                getStandUserSelf().roundabout$setActive(true);
+            }
+            return;
         }
         if (activePower == ENTER_CONTROL_MODE && data == 0) {
             setPiloting(0);

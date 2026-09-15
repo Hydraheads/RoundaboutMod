@@ -53,7 +53,9 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect IMPRINTING =
             register("imprinting", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815));
     public static final MobEffect SWAPPED =
-            register("swapped", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815));
+            register("swapped", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815)
+                    .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
+            );
 
 
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());

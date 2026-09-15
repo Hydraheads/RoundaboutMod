@@ -11,6 +11,7 @@ import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.event.powers.whitesnake.WhitesnakeControlInventory;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -651,28 +652,42 @@ public class WhitesnakeEntity extends FollowingStandEntity {
             // stops movement when reaching max range
             double nextX = getX() + move.x;
             double nextZ = getZ() + move.z;
-            //double distFromPlayer = Math.hypot(nextX - getUser().getX(), nextZ - getUser().getZ());
             int maxRange = PW.getMaxPilotRange();
 
             double moveX = move.x;
             double moveZ = move.z;
 
-            int Xsign = (moveX > 0 ? 1 : -1);
-            int Zsign = (moveZ > 0 ? 1 : -1);
-
             if (moveX != 0 && Math.abs(nextX - getUser().getX()) > maxRange) {
-                double stopX = getUser().getX() + (maxRange * Xsign);
-                moveX = stopX - getX();
+                double stopX = Mth.clamp(nextX, getUser().getX() - maxRange, getUser().getX() + maxRange);
+                moveX = Mth.clamp(stopX - getX(), Math.min(0.0D, moveX), Math.max(0.0D, moveX));
             }
 
             if (moveZ != 0 && Math.abs(nextZ - getUser().getZ()) > maxRange) {
-                double stopZ = getUser().getZ() + (maxRange * Zsign);
-                moveZ = stopZ - getZ();
+                double stopZ = Mth.clamp(nextZ, getUser().getZ() - maxRange, getUser().getZ() + maxRange);
+                moveZ = Mth.clamp(stopZ - getZ(), Math.min(0.0D, moveZ), Math.max(0.0D, moveZ));
             }
 
             return new Vec3(moveX, move.y, moveZ);
         }
         return move;
+    }
+
+    @Override
+    public void move(MoverType moverType, Vec3 movement) {
+        if (isControlModeActive()) {
+            Direction gravity = ((IGravityEntity) this).roundabout$getGravityDirection();
+            Vec3 move = RotationUtil.vecPlayerToWorld(movement, gravity);
+            Vec3 vec3 = threatMovement(move);
+            if (vec3.x != move.x || vec3.z != move.z) {
+                Vec3 velocity = RotationUtil.vecPlayerToWorld(getDeltaMovement(), gravity);
+                setDeltaMovement(RotationUtil.vecWorldToPlayer(new Vec3(
+                        vec3.x != move.x ? 0.0D : velocity.x,
+                        velocity.y,
+                        vec3.z != move.z ? 0.0D : velocity.z), gravity));
+                movement = RotationUtil.vecWorldToPlayer(vec3, gravity);
+            }
+        }
+        super.move(moverType, movement);
     }
 
     @Override
@@ -695,7 +710,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public void moveRelative(float p_19921_, Vec3 p_19922_) {
-        Vec3 vec3 = threatMovement(getInputVector(p_19922_, p_19921_, this.getYRot()));
+        Vec3 vec3 = getInputVector(p_19922_, p_19921_, this.getYRot());
+        if (!isControlModeActive()) vec3 = threatMovement(vec3);
         this.setDeltaMovement(this.getDeltaMovement().add(vec3));
     }
 

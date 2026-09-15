@@ -42,6 +42,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
