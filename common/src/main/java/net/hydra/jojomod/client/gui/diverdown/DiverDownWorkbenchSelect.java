@@ -86,7 +86,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey)) {
             this.selectHoveredWorkbench();
             this.minecraft.setScreen(null);
             if (this.minecraft.player != null){
@@ -247,14 +247,6 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         );
     }
     private boolean checkToClose() {
-        if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityTwoKey, this.minecraft.options)) {
-                this.selectHoveredWorkbench();
-                this.minecraft.setScreen(null);
-                return true;
-            }
-        }
-        Options options = Minecraft.getInstance().options;
         return false;
     }
 

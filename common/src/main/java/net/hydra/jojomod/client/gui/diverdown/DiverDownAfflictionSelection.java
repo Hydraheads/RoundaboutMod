@@ -33,14 +33,14 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     //Bytes for all the affliction used in the move.
     // NOTE: IF YOU EVER CHANGE THE BYTES FOR THE AFFLICTIONS IN PowersDiverDown, BE SURE TO CHANGE THEM HERE TOO!!!
     private static final byte
-        CRAFTING_TABLE = 55,
-        LOOM = 56,
-        STONECUTTER = 57,
-        DISGUISE = 71,
-        SMITHING_TABLE = 59,
-        ANVIL = 60,
-        PLACEHOLDER = 61,
-        PLACEHOLDER2 = 62;
+            DISGUISE = 71,
+            EMBED_POTION = 72,
+            DIVER_LEGS = 73,
+            EFFECT_CURE = 74,
+            COUNTER = 75,
+            RIBCAGE_TRAP = 76,
+            BONE_BOMB = 77,
+            SPRING_LEGS = 78;
 
     /**
      * Apparently the soft and wet and killer queen UI both change a config
@@ -89,7 +89,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
             boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
             this.selectHoveredAffliction();
             if (!isDisguise) {
@@ -256,17 +256,6 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         );
     }
     private boolean checkToClose() {
-        if (minecraft != null) {
-            if (sameKeyOneX(KeyInputRegistry.abilityFourKey, this.minecraft.options)) {
-                boolean isDisguise = this.currentlyHovered == AfflictionType.DISGUISE_ID;
-                this.selectHoveredAffliction();
-                if (!isDisguise) {
-                    this.minecraft.setScreen(null);
-                }
-                return true;
-            }
-        }
-        Options options = Minecraft.getInstance().options;
         return false;
     }
 
@@ -307,21 +296,21 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      */
     public enum AfflictionType {
         CRAFTING_TABLE_ID(Component.translatable("roundabout.diver_affliction.crafting"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),CRAFTING_TABLE,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),DIVER_LEGS,-43,31, Component.translatable("roundabout.diver_affliction.crafting.desc")),
         LOOM_ID(Component.translatable("roundabout.diver_affliction.loom"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),LOOM,-28,1, Component.translatable("roundabout.diver_affliction.loom.desc")),
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),EFFECT_CURE,-28,1, Component.translatable("roundabout.diver_affliction.loom.desc")),
         STONECUTTER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),STONECUTTER,43,31, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),COUNTER,43,31, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
         DISGUISE_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/diver_down/affliction_icons/disguise.png"),DISGUISE,0,-16, Component.translatable("roundabout.diver_affliction.anvil.desc")),
         SMITHING_TABLE_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/affliction_icons/placeholder.png"),SMITHING_TABLE,28,1, Component.translatable("roundabout.diver_affliction.smithing.desc")),
+            "textures/gui/diver_down/affliction_icons/placeholder.png"),RIBCAGE_TRAP,28,1, Component.translatable("roundabout.diver_affliction.smithing.desc")),
         PLACEHOLDER_ID(Component.translatable("roundabout.diver_affliction.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"),PLACEHOLDER,28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
+                "textures/gui/diver_down/affliction_icons/placeholder.png"),BONE_BOMB,28,61, Component.translatable("roundabout.diver_affliction.stonecutter.desc")),
         ANVIL_ID(Component.translatable("roundabout.diver_affliction.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"),ANVIL,-28,61, Component.translatable("roundabout.diver_affliction.anvil.desc")),
-        PLACEHOLDER2_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/placeholder.png"),PLACEHOLDER2,0,78, Component.translatable("roundabout.diver_affliction.smithing.desc")),
+                "textures/gui/diver_down/affliction_icons/placeholder.png"),SPRING_LEGS,-28,61, Component.translatable("roundabout.diver_affliction.anvil.desc")),
+        EMBED_POTION_ID(Component.translatable("roundabout.diver_affliction.smithing"), new ResourceLocation(Roundabout.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/effects.png"),EMBED_POTION,0,78, Component.translatable("roundabout.diver_affliction.smithing.desc")),
         NONE(Component.translatable("roundabout.diver_affliction.none"), new ResourceLocation(Roundabout.MOD_ID,
                 "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("roundabout.stand_switch.main.desc"));
 
@@ -362,7 +351,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
                     ANVIL_ID,
                     SMITHING_TABLE_ID,
                     PLACEHOLDER_ID,
-                    PLACEHOLDER2_ID
+                    EMBED_POTION_ID
             };
         }
     }
