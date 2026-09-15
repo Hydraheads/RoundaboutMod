@@ -57,7 +57,10 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -2538,11 +2541,51 @@ public class PowersDiverDown extends NewPunchingStand {
                 diverLegs();
                 return true;
             }
+            case EFFECT_CURE -> {
+                cureNegativeEffects();
+                return true;
+            }
             default -> {
                 return false;
             }
         }
     }
+
+    // cleanse negative effects start
+
+    private void cureNegativeEffects() {
+        if (this.self.level().isClientSide()) return;
+        if (!(this.submergedTarget instanceof LivingEntity targetLiving) || !targetLiving.isAlive()) return;
+        boolean hadSlowness = false;
+
+        // get all the harmful effects
+        List<MobEffect> negativeEffects = new ArrayList<>();
+        for (MobEffectInstance instance : targetLiving.getActiveEffects()) {
+            MobEffect effect = instance.getEffect();
+            if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+                negativeEffects.add(effect);
+                if (effect == MobEffects.MOVEMENT_SLOWDOWN) {
+                    hadSlowness = true;
+                }
+            }
+        }
+        if (negativeEffects.isEmpty()) return;
+
+        // Remove all the effects
+        for (MobEffect effect : negativeEffects) {
+            targetLiving.removeEffect(effect);
+        }
+
+        // special turtle master cleanse like what is in the pearl jam docs
+        if (hadSlowness) {
+            targetLiving.removeEffect(MobEffects.DAMAGE_BOOST);      // Clears Strength
+            targetLiving.removeEffect(MobEffects.DAMAGE_RESISTANCE); // Clears Resistance (Turtle Master)
+        }
+
+        // sounds here
+    }
+
+    // cleanse negative effects end
 
     // diver legs start
 
