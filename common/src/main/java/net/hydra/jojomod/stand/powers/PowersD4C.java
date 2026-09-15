@@ -2441,7 +2441,6 @@ public class PowersD4C extends NewPunchingStand {
                         ), self.getX(),
                         self.getY() + self.getEyeHeight(), self.getZ(),
                         20, 0.3, 0.3, 0.3, 0.3);
-                self.setHealth(self.getMaxHealth());
                 self.getActiveEffects().clear();
                 if (self instanceof Player pl){
                     pl.getFoodData().setFoodLevel(20);
@@ -2454,6 +2453,8 @@ public class PowersD4C extends NewPunchingStand {
                 }
                 self.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 100, 0), self);
                 self.addEffect(new MobEffectInstance(ModEffects.SWAPPED, 1800, effectLevel), self);
+                self.setHealth(self.getMaxHealth());
+                self.stopUsingItem();
                 setCooldown(PowerIndex.SKILL_2_SNEAK,100);
                 playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
 //                if (Math.random() < 0.5F){
