@@ -710,6 +710,10 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     @Override
     public void moveRelative(float p_19921_, Vec3 p_19922_) {
+        if (isAutoModeActive() && getUser() instanceof StandUser user
+                && user.roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+            p_19921_ = powers.inputSpeedModifiers(p_19921_);
+        }
         Vec3 vec3 = getInputVector(p_19922_, p_19921_, this.getYRot());
         if (!isControlModeActive()) vec3 = threatMovement(vec3);
         this.setDeltaMovement(this.getDeltaMovement().add(vec3));
