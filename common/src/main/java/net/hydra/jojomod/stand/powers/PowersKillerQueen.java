@@ -226,6 +226,10 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
+        if (!self.level().isClientSide()){
+            flipArmRendering();
+        }
+
         if (inBitesTheDustMode() && !desummon) {
             StandEntity stand = this.getStandEntity(this.self);
             if (stand instanceof KillerQueenEntity KQE) {
