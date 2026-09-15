@@ -2227,6 +2227,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             if (SU.roundabout$getStandPowers().cancelJump())
                 return 0;
         }
+        // diver down legs jump boost
+        if (this.roundabout$hasDiverLegs()) {
+            TOT += 2; // same jump boost that vamp has
+        }
         return TOT;
     }
 
@@ -3951,7 +3955,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISTORTION_HAZE_TICKS, 0);
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_ID, Optional.empty());
             ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DISGUISE_NAME, "");
-
+            ((LivingEntity) (Object) this).getEntityData().define(ROUNDABOUT$DIVER_LEGS, false);
         }
     }
 
@@ -5035,7 +5039,11 @@ public abstract class StandUserEntity extends Entity implements StandUser {
             basis = ((IFatePlayer) this).rdbt$getFatePowers().inputSpeedModifiers(basis);
             basis = ((IPowersPlayer) this).rdbt$getPowers().inputSpeedModifiers(basis);
         }
-
+        //diver down legs speed boost
+        StandUser SU = (StandUser) this;
+        if (this.roundabout$hasDiverLegs()) {
+            basis *= 1.2F; //20%, same as a speed 1 pot
+        }
         return basis;
     }
 
@@ -6912,6 +6920,9 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     @Unique
     private static final EntityDataAccessor<String> ROUNDABOUT$DISGUISE_NAME = SynchedEntityData.defineId(
             LivingEntity.class, EntityDataSerializers.STRING);
+    @Unique
+    private static final EntityDataAccessor<Boolean> ROUNDABOUT$DIVER_LEGS = SynchedEntityData.defineId(
+            LivingEntity.class, EntityDataSerializers.BOOLEAN);
 
     public PowersKillerQueen BtdPlantedUser = null;
 
@@ -7006,5 +7017,15 @@ public abstract class StandUserEntity extends Entity implements StandUser {
     public void roundabout$clearDisguise() {
         this.entityData.set(ROUNDABOUT$DISGUISE_ID, Optional.empty());
         this.entityData.set(ROUNDABOUT$DISGUISE_NAME, "");
+    }
+
+    @Override
+    public boolean roundabout$hasDiverLegs() {
+        return this.entityData.get(ROUNDABOUT$DIVER_LEGS);
+    }
+
+    @Override
+    public void roundabout$setDiverLegs(boolean legs) {
+        this.entityData.set(ROUNDABOUT$DIVER_LEGS, legs);
     }
 }

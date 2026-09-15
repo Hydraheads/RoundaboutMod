@@ -37,6 +37,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
@@ -375,7 +376,21 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         if (su.roundabout$isDisguised()) {
             GameProfile profile = su.roundabout$getDisguiseProfile();
             if (profile != null) {
+                //disguises with skin
                 DiverDownDisguiseRenderer.render(entity, profile, entityYaw, partialTicks, poseStack, buffer, packedLight);
+                //adds the nametag
+                if (entity != Minecraft.getInstance().player && !entity.isInvisible()) {
+                    String disguiseName = profile.getName();
+                    if (disguiseName != null && !disguiseName.isEmpty()) {
+                        float targetY = (entity.isCrouching() ? 1.9F : 2.25F);
+                        float yDiff = targetY - entity.getNameTagOffsetY();
+
+                        poseStack.pushPose();
+                        poseStack.translate(0.0D, yDiff, 0.0D);
+                        this.renderNameTag(entity, Component.literal(disguiseName), poseStack, buffer, packedLight);
+                        poseStack.popPose();
+                    }
+                }
                 ci.cancel();
             }
         }

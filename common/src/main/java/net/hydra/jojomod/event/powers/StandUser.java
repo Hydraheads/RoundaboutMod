@@ -402,6 +402,8 @@ public interface StandUser {
     @Nullable GameProfile roundabout$getDisguiseProfile();
     void roundabout$setDisguise(GameProfile profile);
     void roundabout$clearDisguise();
+    boolean roundabout$hasDiverLegs();
+    void roundabout$setDiverLegs(boolean legs);
 
     boolean roundabout$hasInfiniteSpin();
     void roundabout$clearInfiniteSpin();

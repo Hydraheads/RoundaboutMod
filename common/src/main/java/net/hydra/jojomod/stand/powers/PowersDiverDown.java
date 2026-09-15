@@ -199,6 +199,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public static final float DIVE_REACH = 5.0f; // how far it goes
     public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
     // each other
+    public boolean hasDiverLegs = false;
 
     // stand creation model floaty creation whatever thingy.
     @Override
@@ -567,6 +568,7 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         } else if (activePower == DIVER_EMERGE) {
             this.submergedTarget = null;
+            this.hasDiverLegs = false;
         } else if (activePower == LIMB_RECALL) {
             this.activeLimbs.clear();
             this.currentLimbIndex = 0;
@@ -2405,6 +2407,7 @@ public class PowersDiverDown extends NewPunchingStand {
     public boolean emergeServer() {
         if (!isDiveActive())
             return false;
+        removeDiverLegsFromTarget();
         if (this.submergedTarget != null) {
             ((StandUser) this.submergedTarget).roundabout$SetDiverUser(null);
             //play sounds and effects here
@@ -2424,6 +2427,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
     public void cancelDiveServer() {
         this.diveWindupTicks = 0;
+        removeDiverLegsFromTarget();
         this.submergedTarget = null;
         this.setPowerNone();
         // sync with client
@@ -2530,11 +2534,40 @@ public class PowersDiverDown extends NewPunchingStand {
                 embedPotion();
                 return true;
             }
+            case DIVER_LEGS -> {
+                diverLegs();
+                return true;
+            }
             default -> {
                 return false;
             }
         }
     }
+
+    // diver legs start
+
+    private void diverLegs() {
+        if (this.self.level().isClientSide()) return;
+        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) return;
+
+        this.hasDiverLegs = true;
+        ((StandUser) this.submergedTarget).roundabout$setDiverLegs(true);
+
+        //play sound here, replace entity legs with diver down legs
+    }
+
+    private void removeDiverLegsFromTarget() {
+        if (!this.hasDiverLegs) return;
+        if (this.self != null) {
+            ((StandUser) this.self).roundabout$setDiverLegs(false);
+        }
+        if (this.submergedTarget != null) {
+            ((StandUser) this.submergedTarget).roundabout$setDiverLegs(false);
+        }
+        this.hasDiverLegs = false;
+    }
+
+    //diver legs end
 
     // potion start
 
@@ -2593,8 +2626,6 @@ public class PowersDiverDown extends NewPunchingStand {
             }
         }
     }
-
-
 
     //potion end
 
@@ -2877,6 +2908,7 @@ public class PowersDiverDown extends NewPunchingStand {
     @Override
     public void onStandSummon(boolean desummon) {
         if (desummon) {
+            removeDiverLegsFromTarget();
             recallLimbs();
             if (isDiveActive()) {
                 emergeServer();
