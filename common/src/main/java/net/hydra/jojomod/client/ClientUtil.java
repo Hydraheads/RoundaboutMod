@@ -2386,6 +2386,8 @@ public class ClientUtil {
                         r, g, b, opacity, 0.89F);
                 ModStrayModels.killerQueenArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
                         r, g, b, opacity, 0.89F);
+                ModStrayModels.silverChariotArmsPart.render(cameraEnt, cameraEnt.tickCount + getFrameTime(), stack, source, light,
+                        r, g, b, opacity, 0.89F);
                 stack.popPose();
             }
             if (ClientUtil.isRenderingFlag(play)) {

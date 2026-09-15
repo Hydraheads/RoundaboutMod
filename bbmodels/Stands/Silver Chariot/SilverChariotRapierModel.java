@@ -18,9 +18,9 @@ public class unknown<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition blade = partdefinition.addOrReplaceChild("blade", CubeListBuilder.create().texOffs(92, 107).addBox(0.0F, -2.5F, 1.0F, 0.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.5F, 2.0F));
+		PartDefinition blade = partdefinition.addOrReplaceChild("blade", CubeListBuilder.create().texOffs(92, 107).addBox(0.0F, -2.5F, 7.0F, 0.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.5F, -4.0F));
 
-		PartDefinition tip = blade.addOrReplaceChild("tip", CubeListBuilder.create().texOffs(97, 110).addBox(0.0F, -2.5F, -6.0F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition tip = blade.addOrReplaceChild("tip", CubeListBuilder.create().texOffs(97, 110).addBox(0.0F, -2.5F, 0.0F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
