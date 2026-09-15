@@ -134,7 +134,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private boolean autoMode;
     private boolean isRetreating = false;
     private int retreatTicks = -1;
-    private int autoAttackCooldown;
     private Vec3 autoMoveTarget;
     private int manualAutoTargetId = -1;
     private int mobAbilityDecisionCooldown;
@@ -454,7 +453,6 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void clearAutoModeTargets() {
-        autoAttackCooldown = 0;
         autoMoveTarget = null;
         manualAutoTargetId = -1;
     }
@@ -1961,19 +1959,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
 
         stand.getNavigation().stop();
-        if (autoAttackCooldown > 0) {
-            autoAttackCooldown--;
-            return;
-        }
-        if (stand.hasLineOfSight(target) && getActivePower() == PowerIndex.NONE) {
+        if (stand.hasLineOfSight(target)
+                && (getActivePower() == PowerIndex.NONE || getActivePower() == PowerIndex.ATTACK)) {
             float specialRoll = self.getRandom().nextFloat();
-            if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
+            if (getActivePower() == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
                     && specialRoll < 0.12F) {
                 tryPower(PowerIndex.POWER_1_SNEAK, true);
-                autoAttackCooldown = 10;
             } else if (canAttack()) {
                 tryPower(PowerIndex.ATTACK, true);
-                autoAttackCooldown = 4;
             }
         }
     }
