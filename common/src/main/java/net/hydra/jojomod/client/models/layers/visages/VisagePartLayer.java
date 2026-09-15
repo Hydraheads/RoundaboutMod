@@ -749,6 +749,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 r, g, b, 1, 1);
         ModStrayModels.starPlatinumArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, 1);
+        ModStrayModels.silverChariotArmsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, 1);
         ClientUtil.popPoseAndCooperate(poseStack,32);
     }
     public void renderNormalBreast(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
