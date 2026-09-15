@@ -82,6 +82,7 @@ import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -285,7 +286,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     public Entity getBombEntity(){
         if (this.bombEntity != null && !this.bombEntity.isRemoved()) {
             return this.bombEntity;
-        }else {
+        }else if (bombEntityID != -1) {
             this.bombEntity = this.self.level().getEntity(this.bombEntityID);
         }
         return this.bombEntity;
@@ -722,7 +723,7 @@ public class PowersKillerQueen extends NewPunchingStand {
             setSkillIcon(context, x, y, 2, StandIcons.KILLER_QUEEN_PLANT_BOMB_BLOCK, PowerIndex.SKILL_1);
         }
 
-        if (isHoldingSneak() && !(inBitesTheDustMode())){
+        if (isHoldingSneak() && !(inBitesTheDustMode()) && !holdingItem){
             if (!canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
                 setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             } else if (this.currentShaStatus != SHA_NONE) {
@@ -734,7 +735,7 @@ public class PowersKillerQueen extends NewPunchingStand {
         	}else {
         		setSkillIcon(context, x, y, 3, StandIcons.KILLER_QUEEN_SHA_SUMMON, SHA_COOLDOWN);
         	}
-        } else if (isGuarding() && !(inBitesTheDustMode())){
+        } else if (isGuarding() && !(inBitesTheDustMode()) && !holdingItem){
             if (!canExecuteMoveWithLevel(getSheerHeartAttackLevel())) {
                 setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD,true);
             } else if (this.currentShaStatus != SHA_NONE) {
@@ -776,7 +777,7 @@ public class PowersKillerQueen extends NewPunchingStand {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (getStandEntity(self) != null && !getStandEntity(self).getHeldItem().isEmpty()) {
-            return slot > 2;
+            return slot == 4;
         }
 
         if (slot == 1) {
@@ -833,6 +834,9 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                         this.tryIntPower(ITEM_THROW, true, atd);
                         tryIntPowerPacket(ITEM_THROW, atd);
+                    }
+                    case SKILL_3_GUARD, SKILL_3_NORMAL, SKILL_3_CROUCH, SKILL_3_CROUCH_GUARD -> {
+                        dash();
                     }
                 }
 
@@ -1770,8 +1774,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
             case PowersKillerQueen.ENTITY_BOMB -> {
-                this.bombEntityID = data;
-                this.bombEntity = this.getSelf().level().getEntity(data);
+                if (data == -1) {
+                    bombEntityID = -1;
+                    bombEntity = null;
+                }else {
+                    this.bombEntityID = data;
+                    this.bombEntity = this.getSelf().level().getEntity(data);
+                }
             }
             case PowersKillerQueen.BTD_ENTITY -> {
                 if (data == -1) {
@@ -2071,11 +2080,12 @@ public class PowersKillerQueen extends NewPunchingStand {
 
                 self.level().addFreshEntity(arrow);
                 bombEntity = arrow;
-                if (this.self instanceof Player) {
-                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
-                            PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
-                }
+
                 syncBombStatus(ARROW_BOMB);
+            }
+            if (this.self instanceof Player) {
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),
+                        PowersKillerQueen.ENTITY_BOMB, bombEntity.getId());
             }
             playSoundIfPossible(self.level(), bombEntity, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS,  1.0F, 1.3F);
             KQ.setHeldItem(ItemStack.EMPTY);
@@ -2426,9 +2436,13 @@ public class PowersKillerQueen extends NewPunchingStand {
                     KN.pickup = AbstractArrow.Pickup.ALLOWED;
                 }
             }
-
-
             this.bombEntity = null;
+            this.bombEntityID = -1;
+
+            if (this.self instanceof Player) {
+                S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), ENTITY_BOMB, -1);
+            }
+
             if (currentBombStatus == BOMB_ENTITY) {
                 //int cooldownAmount = ClientNetworking.getAppropriateConfig().killerQueenSettings.mobPlantCooldown;
                 int cooldownAmount = 60;
@@ -2469,7 +2483,6 @@ public class PowersKillerQueen extends NewPunchingStand {
             }
         }
 
-    	
     	this.syncBombStatus(BOMB_NONE);
     	
     	return true;
@@ -4730,8 +4743,8 @@ public class PowersKillerQueen extends NewPunchingStand {
                 }
             }
 
-            if(target != null && !target.isAlive() && !MainUtil.isBossMob(target)
-                    || (target instanceof BombPlantedArrow || target instanceof BombPlantedSpectralArrow)){
+            if(target != null && !target.isRemoved() && !target.isAlive() && !MainUtil.isBossMob(target)
+                    || (target instanceof Projectile)){
                 target.discard();
             }
 
@@ -4900,25 +4913,24 @@ public class PowersKillerQueen extends NewPunchingStand {
     }
 
     public boolean setPowerArrowCharge() {
-
-
         if (getStandEntity(self) != null) {
             ItemStack stack = getStandEntity(self).getHeldItem();
 
             if (
                     (stack.getItem() instanceof SniperAmmoItem)
-                    || (stack.getItem() instanceof EnderpearlItem)
-                    || stack.is(ModItems.KNIFE)
+                            || (stack.getItem() instanceof EnderpearlItem)
+                            || stack.is(ModItems.KNIFE)
 
             ) {
                 setPowerArrowThrow();
+                return true;
             }
-        }else {
-            this.attackTimeDuring = 0;
-            this.setActivePower(ITEM_CHARGE);
-            this.animateStand(KillerQueenEntity.ARROW_CHARGE);
-            poseStand(OffsetIndex.FOLLOW_NOLEAN);
         }
+        this.attackTimeDuring = 0;
+        this.setActivePower(ITEM_CHARGE);
+        this.animateStand(KillerQueenEntity.ARROW_CHARGE);
+        poseStand(OffsetIndex.FOLLOW_NOLEAN);
+
         return true;
     }
  }
