@@ -369,6 +369,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void barrageImpact(Entity entity, int hitNumber) {
+        if (entity != null && moveStarted){
+            moveStarted = false;
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                stand.setXRot(getLookAtEntityPitch(stand, entity));
+                stand.setYRot(getLookAtEntityYaw(stand, entity));
+            }
+        }
+
         super.barrageImpact(entity, hitNumber);
 
         int actualHitNumber = hitNumber;
@@ -414,6 +423,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             }
             if (!forwardBarrage) {
                 forwardBarrage = true;
+                captureForwardBarrageDirection();
                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
             }
             return true;
@@ -961,9 +971,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!this.getSelf().level().isClientSide()) {
                 StandEntity stand = getStandEntity(this.self);
                 if (Objects.nonNull(stand)) {
-                    stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
-                    if (stand.isTechnicallyInWall() ||
-                            stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
+                    faceForwardBarrageDirection(stand);
+
+                    Entity target = getTargetEntity(stand, 2.7F, 50);
+                    boolean blockedByWall = stand.isTechnicallyInWall();
+                    boolean tooCloseToTarget = target != null
+                            && stand.position().distanceTo(target.position()) < 1.0;
+
+                    if (!blockedByWall && !tooCloseToTarget) {
+                        stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
+                    }
+
+                    if (stand.position().distanceTo(this.getSelf().position()) > 15F) {
                         ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
                     }
                 }
@@ -1285,6 +1304,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         super.tickPower();
         if (this.forwardBarrage && !this.isBarraging()){
             this.forwardBarrage = false;
+            forwardBarrageLockedRot = null;
         }
         if (!self.level().isClientSide) {
             tickPodReset();
