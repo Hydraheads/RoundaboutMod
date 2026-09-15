@@ -197,7 +197,6 @@ public class PowersDiverDown extends NewPunchingStand {
 
     // used for dive
     public Entity submergedTarget = null;
-    public int diveWindupTicks = 0; // tracks current tick
     public static final int DIVE_WINDUP_MAX = 30; // 1.5 seconds uncancellable windup
     public static final float DIVE_REACH = 5.0f; // how far it goes
     public boolean isTransferringDamage = false; // recursion guard, prevents things like 2 DDs repeatedly protecting
@@ -720,6 +719,7 @@ public class PowersDiverDown extends NewPunchingStand {
         return super.inputSpeedModifiers(basis);
     }
 
+    //used with attackTimeDuring to activate moves when it hits 0
     @Override
     public void updateUniqueMoves() {
         // this is specifically to destroy all limbs if the user dies while still having
@@ -731,6 +731,9 @@ public class PowersDiverDown extends NewPunchingStand {
             updatePhasePunchCharge();
         } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
             updatePhasePunch();
+        }
+        if (this.getActivePower() == DIVER_SUBMERGE_START) {
+            completeDiveServer();
         }
 
         super.updateUniqueMoves();
@@ -1446,15 +1449,10 @@ public class PowersDiverDown extends NewPunchingStand {
                     feetDirection = Direction.DOWN;
                 }
             }
-        } else {
+        }
+        // server side ticks
+        else {
             if (!this.self.level().isClientSide()) {
-                // dive windup
-                if (this.diveWindupTicks > 0) {
-                    this.diveWindupTicks--;
-                    if (this.diveWindupTicks == 0) {
-                        completeDiveServer();
-                    }
-                }
                 // recall stand if target dies, or if they go too far
                 if (isDiveActive()) {
                     if (!this.submergedTarget.isAlive()
@@ -2371,40 +2369,46 @@ public class PowersDiverDown extends NewPunchingStand {
             return false;
         }
         // the windup
-        this.diveWindupTicks = DIVE_WINDUP_MAX;
-        this.setAttackTimeDuring(-DIVE_WINDUP_MAX);
+        this.setActivePower(DIVER_SUBMERGE_START);
+        this.setAttackTimeDuring(0);
         // do animations and stuff here
         return true;
     }
 
     //actually does the dive
     public void completeDiveServer() {
-        // run the get target method to find a target
-        Entity target = getTargetEntity(self, 5.5F);
-        if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
-            return;
-        }
-        this.submergedTarget = target;
-        if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
-            cancelDiveServer();
-            return;
-        }
-        // Goes through shields: break/bypass shield if holding one
-        MainUtil.knockShieldPlusStand(this.submergedTarget, 40);
-        // Attach to target entity
-        ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
-        // sync with the client for isDiveActive
-        if (this.self instanceof Player player) {
-            S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
-        }
-        // desummon stand
-        if (hasStandEntity(this.self)) {
-            StandEntity stand = this.getStandEntity(this.self);
-            if (stand != null) {
-                stand.discard();
+        if(this.getAttackTimeDuring() >= DIVE_WINDUP_MAX) {
+            // run the get target method to find a target
+            Entity target = getTargetEntity(self, 5.5F);
+            if (target instanceof StandEntity stand && stand.getUser() != null) {
+                target = stand.getUser();
             }
+            if (!(target instanceof LivingEntity) || target instanceof StandEntity || target == null) {
+                cancelDiveServer();
+                this.setAttackTimeDuring(-5);
+                return;
+            }
+            this.submergedTarget = target;
+            if (this.submergedTarget == null || !this.submergedTarget.isAlive()) {
+                cancelDiveServer(); //.25 second cooldown
+                return;
+            }
+            this.setPowerNone();
+            // Attach to target entity
+            ((StandUser) this.submergedTarget).roundabout$SetDiverUser(this);
+            // sync with the client for isDiveActive
+            if (this.self instanceof Player player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, DIVER_SUBMERGE_START, this.submergedTarget.getId());
+            }
+            // desummon stand
+            if (hasStandEntity(this.self)) {
+                StandEntity stand = this.getStandEntity(this.self);
+                if (stand != null) {
+                    stand.discard();
+                }
+            }
+            // sounds and particles here
         }
-        // sounds and particles here
     }
 
     public boolean emergeServer() {
@@ -2429,7 +2433,6 @@ public class PowersDiverDown extends NewPunchingStand {
     }
 
     public void cancelDiveServer() {
-        this.diveWindupTicks = 0;
         removeDiverLegsFromTarget();
         this.submergedTarget = null;
         this.setPowerNone();
@@ -2479,6 +2482,7 @@ public class PowersDiverDown extends NewPunchingStand {
 
         // Set target as self
         this.submergedTarget = this.self;
+        ((StandUser) this.self).roundabout$SetDiverUser(this);
 
         // Desummon stand into player
         if (hasStandEntity(this.self)) {
@@ -2545,11 +2549,25 @@ public class PowersDiverDown extends NewPunchingStand {
                 cureNegativeEffects();
                 return true;
             }
+            /* to be replaced
+            case COUNTER -> {
+                //comment out when tested
+                //this.self.sendSystemMessage(Component.literal("it's countering get update from affliciton screen time"));
+                //prepareCounter();
+                return true;
+            }*/
+            case BONE_BOMB -> {
+                return true;
+            }
             default -> {
                 return false;
             }
         }
     }
+
+    // bone bomb start
+
+    // bone bomb end
 
     // cleanse negative effects start
 
@@ -2638,7 +2656,7 @@ public class PowersDiverDown extends NewPunchingStand {
             int newDuration = effect.getDuration();
             // make potions with durations longer
             if (!effect.getEffect().isInstantenous()) {
-                newDuration = (int) (effect.getDuration() + 1200); // extra 60 seconds
+                newDuration = (int) (effect.getDuration() + 400); // extra 20 seconds
             }
             MobEffectInstance boostedEffect = new MobEffectInstance(
                     effect.getEffect(),
@@ -2648,6 +2666,7 @@ public class PowersDiverDown extends NewPunchingStand {
                     effect.isVisible(),
                     effect.showIcon()
             );
+            // when bug fixing starts: add check here to see if the effect is harmful and kick out DD if it is
             targetLiving.addEffect(boostedEffect, this.self);
         }
 
@@ -2847,7 +2866,7 @@ public class PowersDiverDown extends NewPunchingStand {
      * @return true if the stand moves are disabled, false otherwise
      */
     public boolean areStandMovesDisabled() {
-        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode() || this.diveWindupTicks > 0;
+        return hasLimbsDeployed() || isDiveActive() || isPiloting() || inZipMode() || this.getActivePower() == DIVER_SUBMERGE_START;
     }
 
     //enables player attacks while DD is diving somewhere
