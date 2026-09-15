@@ -958,6 +958,13 @@ public class FabricEntities {
                         EntityType.Builder.<BombPlantedArrow>of(BombPlantedArrow::new, MobCategory.MISC).
                                 sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":bomb_planted_arrow")
                 );
+    public static final EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_enderpearl"),
+                        EntityType.Builder.<BombPlantedEnderpearl>of(BombPlantedEnderpearl::new, MobCategory.MISC).
+                                sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":bomb_planted_enderpearl")
+                );
     public static final EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -1295,6 +1302,7 @@ public class FabricEntities {
                 ModEntities.STAND_ARROW = STAND_ARROW;
                 ModEntities.BOMB_PLANTED_ARROW = BOMB_PLANTED_ARROW;
                 ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = BOMB_PLANTED_SPECTRAL_ARROW;
+                ModEntities.BOMB_PLANTED_ENDERPEARL = BOMB_PLANTED_ENDERPEARL;
                 ModEntities.IRON_BALL = IRON_BALL;
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;

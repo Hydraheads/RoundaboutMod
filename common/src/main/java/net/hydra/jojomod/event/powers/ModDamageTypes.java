@@ -66,6 +66,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> HAZE_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
         public static final ResourceKey<DamageType> DISTORTION_VIRUS = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "haze_virus"));
         public static final ResourceKey<DamageType> INFINITE_SPIN = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "infinite_spin"));
+        public static final ResourceKey<DamageType> DIVER_REDIRECTION = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "diver_redirection"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

@@ -7,10 +7,10 @@ import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.access.DiscBearer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.client.sounds.SoundEngineExecutor;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,10 +38,14 @@ public abstract class WhitesnakeSoundListenerMixin {
                 executor.execute(() -> listener.setListenerPosition(position));
             }
         }
-        float volume = minecraft.player == null
-                || !WhitesnakeDiscUtil.isHearingDiscEnabled()
-                || ((DiscBearer) minecraft.player).roundabout$hasHearingDisc()
-                ? minecraft.options.getSoundSourceVolume(SoundSource.MASTER) : 0.0F;
-        executor.execute(() -> listener.setGain(volume));
+    }
+
+    @Inject(method = "play", at = @At("HEAD"), cancellable = true)
+    public void roundabout$play(SoundInstance $$0, CallbackInfo ci) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player != null && WhitesnakeDiscUtil.isHearingDiscEnabled()
+                && !((DiscBearer) minecraft.player).roundabout$hasHearingDisc()) {
+            ci.cancel();
+        }
     }
 }

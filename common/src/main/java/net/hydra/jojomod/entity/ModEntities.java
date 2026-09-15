@@ -130,6 +130,7 @@ public class ModEntities {
     public static EntityType<HallucinatoryAcidProjectile> HALLUCINATORY_ACID_PROJECTILE;
     public static EntityType<BombPlantedItemEntity> BOMB_PLANTED_ITEM;
     public static EntityType<BombPlantedArrow> BOMB_PLANTED_ARROW;
+    public static EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL;
     public static EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW;
     public static EntityType<VirusSpitEntity> VIRUS_SPIT;
 

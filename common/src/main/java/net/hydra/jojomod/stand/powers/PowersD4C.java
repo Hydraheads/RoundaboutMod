@@ -17,6 +17,7 @@ import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
+import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModGamerules;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
@@ -54,6 +55,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.*;
@@ -2430,6 +2433,7 @@ public class PowersD4C extends NewPunchingStand {
     public void replaceBody(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
             if (self.level() instanceof ServerLevel sl) {
+                MobEffectInstance mei = self.getEffect(ModEffects.SWAPPED);
                 Vector3f color = new Vector3f(0.97F, 1F, 0.3F);
                 sl.sendParticles(new DustParticleOptions(
                                 color,
@@ -2437,15 +2441,29 @@ public class PowersD4C extends NewPunchingStand {
                         ), self.getX(),
                         self.getY() + self.getEyeHeight(), self.getZ(),
                         20, 0.3, 0.3, 0.3, 0.3);
-                self.setHealth(self.getMaxHealth());
                 self.getActiveEffects().clear();
+                if (self instanceof Player pl){
+                    pl.getFoodData().setFoodLevel(20);
+                    pl.getFoodData().setSaturation(5.4F);
+                    ((StandUser) pl).roundabout$setHeat(0);
+                }
+                int effectLevel = 0;
+                if (mei != null){
+                    effectLevel = mei.getAmplifier()+1;
+                }
+                self.addEffect(new MobEffectInstance(ModEffects.IMPRINTING, 100, 0), self);
+                self.addEffect(new MobEffectInstance(ModEffects.SWAPPED, 1800, effectLevel), self);
+                self.setHealth(self.getMaxHealth());
+                self.stopUsingItem();
                 setCooldown(PowerIndex.SKILL_2_SNEAK,100);
+                playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
 //                if (Math.random() < 0.5F){
 //                    playSoundsIfNearby(DOJONE, 27, false, true);
 //                } else {
 //                    playSoundsIfNearby(DOJTWO, 27, false, true);
 //                }
-                playStandUserOnlySoundsIfNearby(FUSE, 27, false, false);
+
+
             }
         }
     }
