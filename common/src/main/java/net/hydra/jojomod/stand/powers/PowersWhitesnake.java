@@ -433,13 +433,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (stand instanceof FollowingStandEntity following) {
             if (autoMode || isPiloting()) {
                 following.setOffsetType(OffsetIndex.LOOSE);
-            }else {
+            } else {
                 detectNeedToRetreat();
                 if (!isRetreating) {
                     following.setOffsetType(OffsetIndex.FOLLOW);
                 }
             }
-
         }
         if (stand instanceof WhitesnakeEntity whitesnake) {
             whitesnake.setAutoMode(autoMode);
@@ -1912,8 +1911,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             stand.setTarget(null);
             double distance = stand.position().distanceTo(autoMoveTarget);
             boolean sprinting = distance > 3.0D;
-            stand.setSprinting(sprinting);
-            stand.setSpeed(sprinting ? 0.3F : 0.2F);
+            updateAutoModeSpeed(stand, sprinting);
             if (distance > 1.0D) {
                 stand.getNavigation().moveTo(autoMoveTarget.x, autoMoveTarget.y, autoMoveTarget.z,
                         sprinting ? 1.5D : 1.0D);
@@ -1931,18 +1929,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
         if (target == null) {
             stand.setTarget(null);
-            double distance = stand.distanceTo(self);
-            boolean sprinting = distance > 3.0D;
-            stand.setSprinting(sprinting);
-            stand.setSpeed(sprinting ? 0.3F : 0.2F);
-            if (distance > 3.0D) {
-                stand.getNavigation().moveTo(self, sprinting ? 1.5D : 1.0D);
-                stand.getLookControl().setLookAt(self, 30.0F, 30.0F);
-                rotateAutoStandToward(stand, self);
-            } else {
-                stand.getNavigation().stop();
-                rotateAutoStandToward(stand, self);
-            }
+            stand.getNavigation().stop();
+            stand.setSprinting(false);
             return;
         }
 
@@ -1951,8 +1939,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         rotateAutoStandToward(stand, target);
         double distance = stand.distanceTo(target);
         boolean sprinting = distance > CONTROL_PUNCH_RANGE;
-        stand.setSprinting(sprinting);
-        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+        updateAutoModeSpeed(stand, sprinting);
         if (distance > CONTROL_PUNCH_RANGE) {
             stand.getNavigation().moveTo(target, sprinting ? 1.5D : 1.0D);
             return;
@@ -1961,14 +1948,18 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.getNavigation().stop();
         if (stand.hasLineOfSight(target)
                 && (getActivePower() == PowerIndex.NONE || getActivePower() == PowerIndex.ATTACK)) {
-            float specialRoll = self.getRandom().nextFloat();
             if (getActivePower() == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
-                    && specialRoll < 0.12F) {
+                    && self.getRandom().nextFloat() < 0.12F) {
                 tryPower(PowerIndex.POWER_1_SNEAK, true);
             } else if (canAttack()) {
                 tryPower(PowerIndex.ATTACK, true);
             }
         }
+    }
+
+    private void updateAutoModeSpeed(WhitesnakeEntity stand, boolean sprinting) {
+        stand.setSprinting(sprinting);
+        stand.setSpeed(sprinting ? 0.3F : 0.2F);
     }
 
     private LivingEntity getAutoAttackTarget() {
