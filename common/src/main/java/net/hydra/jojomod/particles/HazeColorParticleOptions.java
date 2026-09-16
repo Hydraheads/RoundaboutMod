@@ -8,18 +8,22 @@ import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class HazeColorParticleOptions implements ParticleOptions {
+    private final ParticleType<HazeColorParticleOptions> type;
     private final float r, g, b;
 
-    public HazeColorParticleOptions(float r, float g, float b) {
+    public HazeColorParticleOptions(ParticleType<HazeColorParticleOptions> type, float r, float g, float b) {
+        this.type = type;
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    public static HazeColorParticleOptions fromPackedColor(int color) {
+    public static HazeColorParticleOptions fromPackedColor(ParticleType<HazeColorParticleOptions> type, int color) {
         return new HazeColorParticleOptions(
+                type,
                 ((color >> 16) & 0xFF) / 255.0F,
                 ((color >> 8) & 0xFF) / 255.0F,
                 (color & 0xFF) / 255.0F
@@ -30,13 +34,13 @@ public class HazeColorParticleOptions implements ParticleOptions {
     public float getG() { return g; }
     public float getB() { return b; }
 
-    public static final Codec<HazeColorParticleOptions> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    Codec.FLOAT.fieldOf("r").forGetter(o -> o.r),
-                    Codec.FLOAT.fieldOf("g").forGetter(o -> o.g),
-                    Codec.FLOAT.fieldOf("b").forGetter(o -> o.b)
-            ).apply(instance, HazeColorParticleOptions::new)
-    );
+    public static Codec<HazeColorParticleOptions> codec(ParticleType<HazeColorParticleOptions> type) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                Codec.FLOAT.fieldOf("r").forGetter(o -> o.r),
+                Codec.FLOAT.fieldOf("g").forGetter(o -> o.g),
+                Codec.FLOAT.fieldOf("b").forGetter(o -> o.b)
+        ).apply(instance, (r, g, b) -> new HazeColorParticleOptions(type, r, g, b)));
+    }
 
     public static final Deserializer<HazeColorParticleOptions> DESERIALIZER = new Deserializer<>() {
         @Override
@@ -47,18 +51,18 @@ public class HazeColorParticleOptions implements ParticleOptions {
             float g = (float) reader.readDouble();
             reader.expect(' ');
             float b = (float) reader.readDouble();
-            return new HazeColorParticleOptions(r, g, b);
+            return new HazeColorParticleOptions(type, r, g, b);
         }
 
         @Override
         public HazeColorParticleOptions fromNetwork(ParticleType<HazeColorParticleOptions> type, FriendlyByteBuf buffer) {
-            return new HazeColorParticleOptions(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+            return new HazeColorParticleOptions(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
 
     @Override
     public ParticleType<?> getType() {
-        return ModParticles.PURPLE_HAZE_SMOKE;
+        return type;
     }
 
     @Override
@@ -70,6 +74,6 @@ public class HazeColorParticleOptions implements ParticleOptions {
 
     @Override
     public String writeToString() {
-        return String.format("purple_haze_smoke %.2f %.2f %.2f", r, g, b);
+        return String.format("%s %.2f %.2f %.2f", BuiltInRegistries.PARTICLE_TYPE.getKey(type), r, g, b);
     }
 }

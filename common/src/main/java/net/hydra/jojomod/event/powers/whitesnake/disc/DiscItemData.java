@@ -207,6 +207,11 @@ public final class DiscItemData {
                 && "minecraft:slime".equals(getMemoryEntityType(stack));
     }
 
+    public static boolean isWolfMemory(ItemStack stack) {
+        return stack.getItem() instanceof MemoryDiscItem
+                && "minecraft:wolf".equals(getMemoryEntityType(stack));
+    }
+
     private static ListTag captureInventory(Inventory inventory) {
         ListTag list = new ListTag();
         for (int slot = 0; slot < inventory.items.size(); slot++) {

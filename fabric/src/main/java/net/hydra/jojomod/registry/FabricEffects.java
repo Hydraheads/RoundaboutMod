@@ -49,11 +49,22 @@ public class FabricEffects extends MobEffect{
     public static final MobEffect CRIPPLED = register("crippled", new FabricEffects(MobEffectCategory.HARMFUL, 725255)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED,"6107DE5E-7CE8-4030-940E-514C1F160890",-0.3, AttributeModifier.Operation.MULTIPLY_TOTAL)
     );
+
+    public static final MobEffect IMPRINTING =
+            register("imprinting", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815));
+    public static final MobEffect SWAPPED =
+            register("swapped", new FabricEffects(MobEffectCategory.NEUTRAL, 16134815)
+                    .addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
+            );
+
+
     public static final MobEffect HALLUCINATION = register("hallucination", new HallucinationEffect());
     public static final MobEffect OLD = register("old", new OldEffect());
     public static final MobEffect DREAMING = register("dreaming", new DreamingEffect());
     public static final MobEffect REFRESHED =
             register("refreshed", new FabricEffects(MobEffectCategory.BENEFICIAL, 13302495));
+    public static final MobEffect INFINITE_SPIN =
+            register("infinite_spin", new FabricEffects(MobEffectCategory.HARMFUL, 16411584));
     public static final MobEffect HAZE_VIRUS =
             register("haze_virus", new FabricEffects(MobEffectCategory.HARMFUL, 10824365));
     public static final MobEffect DISTORTION_VIRUS =
@@ -91,8 +102,11 @@ public class FabricEffects extends MobEffect{
         ModEffects.OLD = OLD;
         ModEffects.DREAMING = DREAMING;
         ModEffects.REFRESHED = REFRESHED;
+        ModEffects.INFINITE_SPIN = INFINITE_SPIN;
         ModEffects.HAZE_VIRUS = HAZE_VIRUS;
         ModEffects.DISTORTION_VIRUS = DISTORTION_VIRUS;
         ModEffects.VIRUS_IMMUNITY = VIRUS_IMMUNITY;
+        ModEffects.IMPRINTING = IMPRINTING;
+        ModEffects.SWAPPED = SWAPPED;
     }
 }

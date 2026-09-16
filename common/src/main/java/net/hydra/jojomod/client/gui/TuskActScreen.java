@@ -69,7 +69,8 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
             this.currentlyHovered = PT.getAct();
             for (int i = 0; i < 5; ++i) {
                 int id = i == 0 ? PT.getAct() : i;
-                if (id == 4 && ((IPlayerEntity)pl).roundabout$getStandLevel() < 7) {
+                boolean bl = PT.canExecuteAct4();
+                if (id == 4 && !bl) {
                     id = -1;
                 }
                 actIcon pIcon = new actIcon(id,positions[i][0], positions[i][1]+31 );

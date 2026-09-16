@@ -22,6 +22,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
     public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/manga.png");
     public static final ResourceLocation MIRROR_BATTLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/mirror_battle.png");
     public static final ResourceLocation ROTT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/rott_haze.png");
+    public static final ResourceLocation PEPPERMINT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/peppermint.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -45,6 +46,8 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
                 return MIRROR_BATTLE;
             case (PurpleHazeEntity.ROTT):
                 return ROTT;
+            case (PurpleHazeEntity.PEPPERMINT):
+                return PEPPERMINT;
             default:
                 return ANIME;
         }

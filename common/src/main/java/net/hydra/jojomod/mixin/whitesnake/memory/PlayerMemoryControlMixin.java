@@ -1,7 +1,8 @@
 package net.hydra.jojomod.mixin.whitesnake.memory;
 
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
-import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryAiController;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +24,11 @@ public abstract class PlayerMemoryControlMixin {
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     private void roundaboutWhitesnake$blockAttack(Entity target, CallbackInfo ci) {
-        if (!DiscItemData.hasPlayerControl((Player) (Object) this) && !MemoryAiController.isAiAttack()) ci.cancel();
+        Player player = (Player) (Object) this;
+        if (((StandUser) player).roundabout$getPossessor() instanceof CommandDiscPossession possession) {
+            if (!possession.isAttacking() || target != possession.getCommandTarget()) ci.cancel();
+        } else if (!DiscItemData.hasPlayerControl(player)) {
+            ci.cancel();
+        }
     }
 }

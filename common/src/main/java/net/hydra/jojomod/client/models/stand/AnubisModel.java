@@ -10,6 +10,7 @@ import net.hydra.jojomod.client.ModItemModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisFirstPersonAnimations;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -245,7 +246,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
 
 
-        if (user.roundabout$isPossessed()) {
+        if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             skin = (byte)1;
            /* CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {
@@ -273,13 +274,13 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
         poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
-        if (renderItem || user.roundabout$isPossessed()) {
+        if (renderItem || user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             alphaTicks = 1;
         }
         poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.9) ,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
-        if (renderItem && !user.roundabout$isPossessed()) {
+        if (renderItem && !(user.roundabout$getPossessor() instanceof AnubisPossessorEntity)) {
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
             poseStack.translate(0,0.35,0);
             poseStack.translate(0.1,0,0);
@@ -389,4 +390,3 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
     }
 }
-

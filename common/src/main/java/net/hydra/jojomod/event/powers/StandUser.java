@@ -1,9 +1,11 @@
 package net.hydra.jojomod.event.powers;
 
+import com.mojang.authlib.GameProfile;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.sounds.SoundEvent;
@@ -395,4 +397,16 @@ public interface StandUser {
     List<CooldownInstance> rdbt$getPowerCooldowns();
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
+    /* diver down diving down */
+    void roundabout$SetDiverUser(PowersDiverDown powers);
+    PowersDiverDown roundabout$getDiverUser();
+    boolean roundabout$isDisguised();
+    @Nullable GameProfile roundabout$getDisguiseProfile();
+    void roundabout$setDisguise(GameProfile profile);
+    void roundabout$clearDisguise();
+    boolean roundabout$hasDiverLegs();
+    void roundabout$setDiverLegs(boolean legs);
+
+    boolean roundabout$hasInfiniteSpin();
+    void roundabout$clearInfiniteSpin();
 }

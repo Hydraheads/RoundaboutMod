@@ -2029,6 +2029,10 @@ public class StandPowers extends AbilityScapeBasis {
                     if (activePower != PowerIndex.POWER_3_BLOCK){
                         userSelf.roundabout$setStandAnimation(NONE);
                     }
+                } else if (animationType == SWITCH_INTO_BODY) {
+                    if (activePower != PowerIndex.POWER_2_SNEAK){
+                        userSelf.roundabout$setStandAnimation(NONE);
+                    }
                 }
             }
 

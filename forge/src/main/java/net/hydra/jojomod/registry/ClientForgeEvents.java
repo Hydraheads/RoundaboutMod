@@ -125,6 +125,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.TUSK_A3.get(), TuskAct3Renderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_A4.get(), TuskAct4Renderer::new);
         event.registerEntityRenderer(ForgeEntities.DIVER_DOWN.get(), DiverDownRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BONE_PROJECTILE.get(), BoneProjectileRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT.get(), SilverChariotRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER.get(), SilverChariotRapierRenderer::new);
         event.registerEntityRenderer(ForgeEntities.SILVER_CHARIOT_RAPIER_PLATFORM.get(), SilverChariotRapierPlatformRenderer::new);
@@ -148,6 +149,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.STAND_ARROW.get(), StandArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ARROW.get(), BombPlantedArrowRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_SPECTRAL_ARROW.get(), BombPlantedArrowRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.BOMB_PLANTED_ENDERPEARL.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.IRON_BALL.get(), IronBallRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CROSSFIRE_HURRICANE.get(), CrossfireHurricaneRenderer::new);
         event.registerEntityRenderer(ForgeEntities.LIFE_TRACKER.get(), LifeTrackerRenderer::new);
@@ -164,6 +166,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.BLOOD_SPLATTER.get(), BloodSplatterRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GASOLINE_CAN.get(), GasolineCanRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_OBJECT.get(), ThrownObjectRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.RETURNING_OBJECT.get(), ReturningObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_ANUBIS.get(), ThrownAnubisRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CONCEALED_FLAME_OBJECT.get(), ConcealedFlameObjectRenderer::new);
         event.registerEntityRenderer(ForgeEntities.CINDERELLA_VISAGE_DISPLAY.get(), CinderellaVisageDisplayRenderer::new);
@@ -175,6 +178,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GO_BEYOND.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ENCASEMENT_BUBBLE.get(), EncasementBubbleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_POSSESSOR.get(), NoRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.COMMAND_DISC_POSSESSION.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.ANUBIS_SLIPSTREAM.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_NAIL.get(), TuskNailRenderer::new);
         event.registerEntityRenderer(ForgeEntities.TUSK_HOLE.get(), TuskHoleRenderer::new);
@@ -386,6 +390,7 @@ public class ClientForgeEvents {
         ModStrayModels.killerQueenArmsPart = new KillerQueenArmsPart();
         ModStrayModels.theWorldArmsPart = new TheWorldArmsPart();
         ModStrayModels.starPlatinumArmsPart = new StarPlatinumArmsPart();
+        ModStrayModels.silverChariotArmsPart = new SilverChariotArmsPart();
         ModStrayModels.MoldSpine = new MoldSpineModel();
         ModStrayModels.MoldRightArm = new MoldRightArm<>();
         ModStrayModels.MoldLeftArm = new MoldLeftArm();
@@ -586,6 +591,7 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PW_BLUE_BLASTWAVE_EXPLOSION.get(), PWBlueBlastwaveExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PW_BLUE_MUSHROOM_EXPLOSION.get(), PWBlueMushroomExplosionParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_SMOKE.get(), PurpleHazeSmokeParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.PURPLE_HAZE_BLASTWAVE.get(), PurpleHazeSmokeParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.DISTORTION_SMOKE.get(), DistortionSmokeParticle.Provider::new);
     }
 

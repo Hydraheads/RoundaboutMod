@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "roundabout:match_bundle"
+    }
+  ],
+  "result": {
+    "item": "roundabout:match",
+    "count": 4
+  }
+}

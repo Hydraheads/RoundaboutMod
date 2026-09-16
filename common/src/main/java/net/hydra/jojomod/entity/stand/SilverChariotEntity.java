@@ -24,10 +24,26 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public static final byte
-            ANIME_PART_3_SILVER_CHARIOT = 1,
-            ANIME_PART_3_SILVER_CHARIOT_GREY = 2,
-            MANGA_PART_3_SILVER_CHARIOT = 3,
-            PART_5_SILVER_CHARIOT = 4;
+            PART_3 = 1,
+            PART_3_GREY = 2,
+            PART_3_MANGA = 3,
+            PART_5 = 4,
+            AQUA = 5,
+            AZURE = 6,
+            BLUE = 7,
+            CRYSTAL = 8,
+            END_OF_THE_WORLD = 9,
+            GENESIS_OF_THE_UNIVERSE = 10,
+            JOJONIUM_A = 11,
+            JOJONIUM_B = 12,
+            JOJONIUM_C = 13,
+            NIGHTMARE = 14,
+            ORANGE = 15,
+            PASSIONE = 16,
+            PURPLE = 17,
+            SANDY = 18,
+            TURQUOISE = 19,
+            YELLOW = 20;
 
     public static final byte
             CONTROL_MODE_NONE = 0,
@@ -38,21 +54,9 @@ public class SilverChariotEntity extends FollowingStandEntity {
             IS_PART_3_SKIN = 1,
             IS_PART_5_SKIN = 2;
 
-    public boolean isPart3Skin() {
+    public boolean isPart5Skin() {
         byte skin = this.getSkin();
-        return skin == ANIME_PART_3_SILVER_CHARIOT || skin == ANIME_PART_3_SILVER_CHARIOT_GREY || skin == MANGA_PART_3_SILVER_CHARIOT;
-    }
-
-    public void toggleActiveHandAnimation() {
-        if (isPart3Skin()) {
-            this.setActiveHand(RIGHT_HAND);
-            this.scToggleRightSword.startIfStopped(this.tickCount);
-            this.scToggleLeftSword.stop();
-        } else {
-            this.setActiveHand(LEFT_HAND);
-            this.scToggleLeftSword.startIfStopped(this.tickCount);
-            this.scToggleRightSword.stop();
-        }
+        return skin == PART_5;
     }
 
     private static final EntityDataAccessor<Byte> CONTROL_MODE = SynchedEntityData.defineId(
@@ -64,10 +68,22 @@ public class SilverChariotEntity extends FollowingStandEntity {
     private static final EntityDataAccessor<Boolean> HAS_RAPIER = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
     );
+    private static final EntityDataAccessor<Boolean> IS_FAKE = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
+
+    public void setIsFake() {
+
+    }
+
+    private static final EntityDataAccessor<Boolean> IS_DUAL_WIELDING = SynchedEntityData.defineId(
+            SilverChariotEntity.class, EntityDataSerializers.BOOLEAN
+    );
 
     public static final byte
-            RIGHT_HAND = 0,
-            LEFT_HAND = 1;
+            RIGHT_HAND = 1,
+            LEFT_HAND = 2,
+            DUAL_WIELD = 3;
 
     private static final EntityDataAccessor<Byte> ACTIVE_HAND = SynchedEntityData.defineId(
             SilverChariotEntity.class, EntityDataSerializers.BYTE
@@ -125,7 +141,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scPart5Pose = new AnimationState();
     public final AnimationState scIdleArmoured = new AnimationState();
     public final AnimationState scIdleNotArmoured = new AnimationState();
-    public final AnimationState scArmorShed = new AnimationState();
+    public final AnimationState scArmourShed = new AnimationState();
     public final AnimationState scToggleNotArmouredState = new AnimationState();
     public final AnimationState scToggleNoRapier = new AnimationState();
     public final AnimationState scToggleRightSword = new AnimationState();
@@ -149,172 +165,230 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public final AnimationState scLeftHit2 = new AnimationState();
     public final AnimationState scLeftHit3 = new AnimationState();
     public final AnimationState scHideRapiers = new AnimationState();
+    public final AnimationState scRightRapierSpin = new AnimationState();
+    public final AnimationState scLeftRapierSpin = new AnimationState();
+    public final AnimationState scDualRapierSpin = new AnimationState();
+    public final AnimationState scRightRapierSlash = new AnimationState();
+    public final AnimationState scLeftRapierSlash = new AnimationState();
+    // public final AnimationState scDualRapierSlash = new AnimationState();
+    public final AnimationState scLeftStatueCutting = new AnimationState();
+    public final AnimationState scRightStatueCutting = new AnimationState();
+    public final AnimationState scRightRapierShotHold = new AnimationState();
+    public final AnimationState scRightRapierShotRelease = new AnimationState();
+    public final AnimationState scLeftRapierShotHold = new AnimationState();
+    public final AnimationState scLeftRapierShotRelease = new AnimationState();
+    public final AnimationState scLeftVault = new AnimationState();
+    public final AnimationState scRightVault = new AnimationState();
+    public final AnimationState scRightOffhandSwipe = new AnimationState();
+    public final AnimationState scLeftOffhandSwipe = new AnimationState();
+    public final AnimationState scUserCarry = new AnimationState();
+    public final AnimationState scUserCarryIdle = new AnimationState();
+    public final AnimationState scUserThrow = new AnimationState();
+    public final AnimationState scArmIdle = new AnimationState();
+    public final AnimationState scHideRightArm = new AnimationState();
+    public final AnimationState scHideLeftArm = new AnimationState();
 
     public static final byte
             SC_ = 40,
-            SC_BARRAGE_CHARGE = 42,
-            SC_BARRAGE = 43,
-            SC_ATTACK_1 = 44,
-            SC_ATTACK_2 = 45,
-            SC_ATTACK_3 = 46,
-            SC_IDLE_1 = 47,
-            SC_IDLE_2 = 48,
-            SC_IDLE_3 = 49,
-            SC_IDLE_4 = 50,
-            SC_BARRAGE_DAMAGE = 52,
-            SC_MINING = 53,
-            SC_ARMOR_SHED = 54,
-            SC_RAPIER_SHOT = 55,
-            SC_FALL_BRACE = 56,
-            SC_ARMOR_SHED_GUARD_BROKEN = 57,
-            SC_VAULT = 58,
-            SC_SELF_GRAB = 59,
-            SC_SELF_THROW = 60,
-            SC_RAPIER_SHOT_CHARGE = 61,
-            SC_OFFHAND_WEAPON_SWIPE = 62,
-            SC_TOGGLE_ARMOURLESS = 63,
-            SC_TOGGLE_NO_RAPIER = 64,
-            SC_TOGGLE_RIGHT_RAPIER = 65,
-            SC_TOGGLE_LEFT_RAPIER = 66,
-            SC_GUARD_HIT = 67,
-            SC_IDLE = 68,
-            SC_TOGGLE_ACTIVE_HAND = 69;
+            SC_ARMOUR_SHED = 41,
+            SC_RAPIER_SHOT_HOLD = 42,
+            SC_RAPIER_SHOT_RELASE = 43,
+            SC_FALL_BRACE = 44,
+            SC_ARMOUR_SHED_GUARD_BROKEN = 45,
+            SC_VAULT = 46,
+            SC_USER_CARRY = 47,
+            SC_USER_THROW = 48,
+            SC_TOGGLE_ACTIVE_HAND = 49,
+            SC_OFFHAND_WEAPON_SWIPE = 50,
+            SC_TOGGLE_ARMOUR_OFF = 51,
+            SC_TOGGLE_ARMOUR_ON = 52,
+            SC_TOGGLE_NO_RAPIER = 53,
+            SC_TOGGLE_RIGHT_RAPIER = 54,
+            SC_TOGGLE_LEFT_RAPIER = 55,
+            SC_GUARD_HIT = 56,
+            SC_IDLE = 57,
+            SC_ARM_SUMMON = 58,
+            SC_RAPIER_SPIN = 59,
+            SC_RAPIER_SLASH = 60,
+            SC_STATUE_CUTTING = 61,
+            SC_SLAB_CUTTING = 62,
+            SC_USER_CARRY_IDLE = 63,
+            SC_HIDE_RIGHT_ARM = 64,
+            SC_HIDE_LEFT_ARM = 65;
 
     public boolean isArmored = false;
 
     @Override
     public void setupAnimationStates() {
         byte animationState = getAnimation();
-        byte skin = getSkin();
+        byte idle = getIdleAnimation();
+        boolean isPart3Skin = getSkin() != PART_5;
+        byte activeHand = getActiveHand();
 
         if (this.getUser() != null) {
-            if (animationState == IDLE) {
-                if (this.getIdleAnimation() == 0) {
-
-                } else {
-
-                }
-
-                if (this.getIdleAnimation() == 1) {
-                    this.scPart3Pose.startIfStopped(this.tickCount);
-                } else {
-
-                }
-
-                if (this.getIdleAnimation() == 2) {
-                    this.scPart5Pose.startIfStopped(this.tickCount);
-                } else {
-                    this.scPart5Pose.stop();
-                }
-            }
-
-            if (animationState == IDLE && this.getIdleAnimation() == 0 && this.getArmoured()) {
-                this.scIdleArmoured.startIfStopped(this.tickCount);
+            if (isPart3Skin) {
+                this.scToggleRightSword.startIfStopped(this.tickCount);
+                this.scToggleLeftSword.stop();
             } else {
-                this.scIdleArmoured.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 0 && !this.getArmoured()) {
-                this.scIdleNotArmoured.startIfStopped(this.tickCount);
-            } else {
-                this.scIdleNotArmoured.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 1) {
-                this.scPart3Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart3Pose.stop();
-            }
-            if (animationState == IDLE && this.getIdleAnimation() == 2) {
-                this.scPart5Pose.startIfStopped(this.tickCount);
-            } else {
-                this.scPart5Pose.stop();
+                this.scToggleLeftSword.startIfStopped(this.tickCount);
+                this.scToggleRightSword.stop();
             }
 
             if (animationState == BARRAGE) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightBarrage.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrage.startIfStopped(this.tickCount);
                 }
                 this.scHideRapiers.stop();
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightBarrage.stop();
                 } else {
                     this.scLeftBarrage.stop();
                 }
                 this.scHideRapiers.startIfStopped(this.tickCount);
             }
-            if (animationState == SC_TOGGLE_ACTIVE_HAND) {
+
+            if (animationState == IDLE && idle == 0 && this.getArmoured()) {
+                this.scIdleArmoured.startIfStopped(this.tickCount);
+            } else {
+                this.scIdleArmoured.stop();
+            }
+            if (animationState == IDLE && idle == 0 && !this.getArmoured()) {
+                this.scIdleNotArmoured.startIfStopped(this.tickCount);
+            } else {
+                this.scIdleNotArmoured.stop();
+            }
+            if (animationState == IDLE && idle == 1) {
+                this.scPart3Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart3Pose.stop();
+            }
+            if (animationState == IDLE && idle == 2) {
+                this.scPart5Pose.startIfStopped(this.tickCount);
+            } else {
+                this.scPart5Pose.stop();
+            }
+
+            if (animationState == SC_) {
 
             } else {
 
             }
 
-            if (animationState == SC_TOGGLE_RIGHT_RAPIER) {
-                this.scToggleRightSword.startIfStopped(this.tickCount);
-                this.scToggleLeftSword.stop();
-            }
-            if (animationState == SC_TOGGLE_LEFT_RAPIER) {
-                this.scToggleLeftSword.startIfStopped(this.tickCount);
-                this.scToggleRightSword.stop();
-            }
-            if (animationState == SC_TOGGLE_NO_RAPIER) {
-                this.scToggleNoRapier.startIfStopped(this.tickCount);
+            if (animationState == SC_RAPIER_SPIN) {
+                if (isPart3Skin) {
+                    this.scRightRapierSpin.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSpin.startIfStopped(this.tickCount);
+                }
             } else {
-                this.scToggleNoRapier.stop();
+                this.scRightRapierSpin.stop();
+                this.scLeftRapierSpin.stop();
             }
-            if (animationState == SC_TOGGLE_ARMOURLESS) {
-                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+            if (animationState == SC_RAPIER_SLASH) {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSlash.startIfStopped(this.tickCount);
+                }
             } else {
+                this.scRightRapierSlash.stop();
+                this.scLeftRapierSlash.stop();
+            }
+            if (animationState == SC_OFFHAND_WEAPON_SWIPE) {
+                if (isPart3Skin) {
+                    this.scLeftOffhandSwipe.startIfStopped(this.tickCount);
+                } else {
+                    this.scToggleLeftSword.stop();
+                    this.scLeftOffhandSwipe.startIfStopped(this.tickCount);
+                }
+            } else {
+                this.scLeftOffhandSwipe.stop();
+            }
+            if (animationState == SC_ARM_SUMMON) {
+                this.scArmIdle.startIfStopped(this.tickCount);
+            } else {
+                this.scArmIdle.stop();
+            }
+            if (animationState == SC_STATUE_CUTTING) {
+                if (isPart3Skin) {
+                    this.scRightStatueCutting.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftStatueCutting.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightStatueCutting.stop();
+                } else {
+                    this.scLeftStatueCutting.stop();
+                }
+            }
+            if (animationState == SC_SLAB_CUTTING) {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierSlash.startIfStopped(this.tickCount);
+                }
+            } else {
+                if (isPart3Skin) {
+                    this.scRightRapierSlash.stop();
+                } else {
+                    this.scLeftRapierSlash.stop();
+                }
+            }
+            if (animationState == SC_TOGGLE_ARMOUR_ON) {
                 this.scToggleNotArmouredState.stop();
             }
+
             if (animationState == SC_GUARD_HIT) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightHit.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftHit.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightHit.stop();
                 } else {
                     this.scGuardLeftHit.stop();
                 }
             }
             if (animationState == FIRST_PUNCH) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit1.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit1.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit1.stop();
                 } else {
                     this.scLeftHit1.stop();
                 }
             }
             if (animationState == SECOND_PUNCH) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit2.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit2.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit2.stop();
                 } else {
                     this.scLeftHit2.stop();
                 }
             }
             if (animationState == THIRD_PUNCH) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit3.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftHit3.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightHit3.stop();
                 } else {
                     this.scLeftHit3.stop();
@@ -322,27 +396,27 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
             if (animationState == BLOCK) {
                 // this.scGuard.startIfStopped(this.tickCount);
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightStart.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftStart.startIfStopped(this.tickCount);
                 }
             } else {
                 // this.scGuard.stop();
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightStart.stop();
                 } else  {
                     this.scGuardLeftStart.stop();
                 }
             }
             if (animationState == BARRAGE_CHARGE) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightBarrageWindup.startIfStopped(this.tickCount);
                 } else {
                     this.scLeftBarrageWindup.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scRightBarrageWindup.stop();
                 } else {
                     this.scLeftBarrageWindup.stop();
@@ -354,13 +428,13 @@ public class SilverChariotEntity extends FollowingStandEntity {
                 this.scBarrageDamage.stop();
             }
             if (animationState == BROKEN_GUARD) {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightBreak.startIfStopped(this.tickCount);
                 } else {
                     this.scGuardLeftBreak.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
+                if (isPart3Skin) {
                     this.scGuardRightBreak.stop();
                 } else {
                     this.scGuardLeftBreak.stop();
@@ -373,47 +447,71 @@ public class SilverChariotEntity extends FollowingStandEntity {
             }
 
             if (animationState == SC_VAULT) {
-                if (getActiveHand() == RIGHT_HAND) {
-                    this.scGuardRightBreak.startIfStopped(this.tickCount);
+                if (isPart3Skin) {
+                    this.scRightVault.startIfStopped(this.tickCount);
                 } else {
-                    this.scGuardLeftBreak.startIfStopped(this.tickCount);
+                    this.scLeftVault.startIfStopped(this.tickCount);
                 }
             } else {
-                if (getActiveHand() == RIGHT_HAND) {
-                    this.scGuardRightBreak.stop();
+                if (isPart3Skin) {
+                    this.scRightVault.stop();
                 } else {
-                    this.scGuardLeftBreak.stop();
+                    this.scLeftVault.stop();
                 }
             }
-            if (animationState == SC_SELF_GRAB) {
+            if (animationState == SC_USER_CARRY) {
+                this.scUserCarry.startIfStopped(this.tickCount);
+            } else {
+                this.scUserCarry.stop();
+            }
+            if (animationState == SC_USER_CARRY_IDLE) {
+                this.scUserCarryIdle.startIfStopped(this.tickCount);
+            } else {
+                this.scUserCarryIdle.stop();
+            }
+            if (animationState == SC_USER_THROW) {
+                this.scUserThrow.startIfStopped(this.tickCount);
+            } else {
+                this.scUserThrow.stop();
+            }
+
+            if (animationState == SC_ARMOUR_SHED) {
+                this.scArmourShed.startIfStopped(this.tickCount);
+                this.scToggleNotArmouredState.startIfStopped(this.tickCount);
+            } else {
+                this.scArmourShed.stop();
+            }
+            if (animationState == SC_ARMOUR_SHED_GUARD_BROKEN) {
 
             } else {
 
             }
-            if (animationState == SC_SELF_THROW) {
-
+            if (animationState == SC_RAPIER_SHOT_HOLD) {
+                if (isPart3Skin) {
+                    this.scRightRapierShotHold.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierShotHold.startIfStopped(this.tickCount);
+                }
             } else {
-
+                if (isPart3Skin) {
+                    this.scRightRapierShotHold.stop();
+                } else {
+                    this.scLeftRapierShotHold.stop();
+                }
             }
-            if (animationState == SC_ARMOR_SHED) {
-                this.scArmorShed.startIfStopped(this.tickCount);
+            if (animationState == SC_RAPIER_SHOT_RELASE) {
+                if (isPart3Skin) {
+                    this.scRightRapierShotRelease.startIfStopped(this.tickCount);
+                } else {
+                    this.scLeftRapierShotRelease.startIfStopped(this.tickCount);
+                }
+                this.scToggleNoRapier.startIfStopped(this.tickCount);
             } else {
-                this.scArmorShed.stop();
-            }
-            if (animationState == SC_ARMOR_SHED_GUARD_BROKEN) {
-
-            } else {
-
-            }
-            if (animationState == SC_RAPIER_SHOT) {
-
-            } else {
-
-            }
-            if (animationState == SC_RAPIER_SHOT_CHARGE) {
-
-            } else {
-
+                if (isPart3Skin) {
+                    this.scRightRapierShotRelease.stop();
+                } else {
+                    this.scLeftRapierShotRelease.stop();
+                }
             }
         }
     }
@@ -425,6 +523,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
         entityData.define(IS_ARMOURED, true);
         entityData.define(HAS_RAPIER, true);
         entityData.define(ACTIVE_HAND, RIGHT_HAND);
+        entityData.define(IS_FAKE, false);
+        entityData.define(IS_DUAL_WIELDING, false);
     }
 
     private float controlStrafe;
