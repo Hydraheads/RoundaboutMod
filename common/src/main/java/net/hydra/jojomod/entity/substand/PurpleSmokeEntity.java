@@ -66,6 +66,7 @@ public class PurpleSmokeEntity extends StandEntity {
         SKIN_COLORS.put(PurpleHazeEntity.BLAZING_HAZE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.MIRROR_BATTLE, 0xA62AAD);
         SKIN_COLORS.put(PurpleHazeEntity.ROTT, 0x4e1c1c);//
+        SKIN_COLORS.put(PurpleHazeEntity.PEPPERMINT, 0xe4f8ff);//
     }
     public static final int DEFAULT_HAZE_COLOR = 0xA62AAD;
 
@@ -242,7 +243,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     sl.sendParticles(ModParticles.DISTORTION_SMOKE, x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
                 } else {
                     int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(color),
+                    sl.sendParticles(HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color),
                             x, y, z, 30, range / 2, 1.5, range / 2, 0.01);
                 }
             }

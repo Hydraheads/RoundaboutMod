@@ -1,5 +1,7 @@
 package net.hydra.jojomod.event.powers.whitesnake.disc;
 
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.CommandDiscItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,21 +16,38 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 public final class CommandDiscController {
-    private static final int ATTACK_COMMAND_DURATION = 120;
+    private static final int ATTACK_COMMAND_DURATION = 100;
     private static final int EXPLOSIVE_COMMAND_DURATION = 400;
     private static final double EXPLOSIVE_COMMAND_DISTANCE_SQR = 100.0D;
-    private static final Map<LivingEntity, AttackCommand> ATTACK_COMMANDS = new WeakHashMap<>();
+    private static final Map<Mob, AttackCommand> ATTACK_COMMANDS = new WeakHashMap<>();
     private static final Map<LivingEntity, ExplosiveCommand> EXPLOSIVE_COMMANDS = new WeakHashMap<>();
 
     private CommandDiscController() {
     }
 
-    public static void commandAttack(LivingEntity commanded, LivingEntity target) {
+    public static void commandAttack(Mob commanded, LivingEntity target) {
         ATTACK_COMMANDS.put(commanded,
                 new AttackCommand(target.getUUID(), commanded.level().getGameTime() + ATTACK_COMMAND_DURATION));
     }
 
-    public static void clearAttackCommand(LivingEntity commanded) {
+    public static boolean commandAttack(ServerPlayer commanded, LivingEntity target) {
+        StandUser standUser = (StandUser) commanded;
+        if (standUser.roundabout$isPossessed()) return false;
+
+        CommandDiscPossession possession = new CommandDiscPossession(commanded.level(), commanded, target);
+        possession.setPos(commanded.position());
+        if (!commanded.level().addFreshEntity(possession)) return false;
+        if (!commanded.startRiding(possession, true)) {
+            possession.discard();
+            return false;
+        }
+        commanded.stopUsingItem();
+        standUser.roundabout$setPossessor(possession);
+        standUser.roundabout$setActive(false);
+        return true;
+    }
+
+    private static void clearAttackCommand(Mob commanded) {
         ATTACK_COMMANDS.remove(commanded);
     }
 
@@ -52,34 +71,30 @@ public final class CommandDiscController {
     }
 
     public static void tick(LivingEntity commanded) {
-        if (commanded.level().isClientSide() || !commanded.isAlive()) return;
-        AttackCommand command = ATTACK_COMMANDS.get(commanded);
-        if (command == null || !(commanded.level() instanceof ServerLevel level)) return;
+        if (!(commanded instanceof Mob mob)
+                || commanded.level().isClientSide() || !commanded.isAlive()) return;
+        AttackCommand command = ATTACK_COMMANDS.get(mob);
+        if (command == null || !(mob.level() instanceof ServerLevel level)) return;
         if (level.getGameTime() >= command.expiresAt()) {
-            clearAttackCommand(commanded);
-            if (commanded instanceof Mob mob) mob.setTarget(null);
+            clearAttackCommand(mob);
+            mob.setTarget(null);
             return;
         }
         Entity found = level.getEntity(command.targetId());
-        if (!(found instanceof LivingEntity target) || !target.isAlive() || target == commanded) {
-            clearAttackCommand(commanded);
-            if (commanded instanceof Mob mob) mob.setTarget(null);
+        if (!(found instanceof LivingEntity target) || !target.isAlive() || target == mob) {
+            clearAttackCommand(mob);
+            mob.setTarget(null);
             return;
         }
 
-        if (commanded instanceof Mob mob) {
-            if (mob.isNoAi()) mob.setNoAi(false);
-            mob.setTarget(target);
-            mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
-            mob.getNavigation().moveTo(target, 1.15D);
-            double reach = mob.getBbWidth() + target.getBbWidth() + 1.0D;
-            if (mob.distanceToSqr(target) <= reach * reach && mob.tickCount % 20 == 0) {
-                mob.swing(InteractionHand.MAIN_HAND);
-                target.hurt(mob.damageSources().mobAttack(mob), 3.0F);
-            }
-        } else if (commanded instanceof ServerPlayer player && player.distanceToSqr(target) <= 9.0D
-                && player.tickCount % 20 == 0) {
-            MemoryAiController.forcePlayerAttack(player, target);
+        if (mob.isNoAi()) mob.setNoAi(false);
+        mob.setTarget(target);
+        mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
+        mob.getNavigation().moveTo(target, 1.15D);
+        double reach = mob.getBbWidth() + target.getBbWidth() + 1.0D;
+        if (mob.distanceToSqr(target) <= reach * reach && mob.tickCount % 20 == 0) {
+            mob.swing(InteractionHand.MAIN_HAND);
+            target.hurt(mob.damageSources().mobAttack(mob), 3.0F);
         }
     }
 

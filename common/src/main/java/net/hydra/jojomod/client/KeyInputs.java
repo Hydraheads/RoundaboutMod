@@ -9,6 +9,7 @@ import net.hydra.jojomod.event.index.PowerIndex;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FirearmItem;
+import net.hydra.jojomod.stand.powers.PowersWhitesnake;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.PlayerMaskSlots;
@@ -35,8 +36,11 @@ public class KeyInputs {
                 if (((StandUser) player).roundabout$getSummonCD() && roundaboutClickCount == 0) {
                     if (user.roundabout$getActive()) {
                         user.roundabout$setSummonCD(8);
-                        user.roundabout$setActive(false);
-                        user.roundabout$tryPower(PowerIndex.NONE, true);
+                        if (!(user.roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                                && powers.tryRetreatBeforeUnsummon())) {
+                            user.roundabout$setActive(false);
+                            user.roundabout$tryPower(PowerIndex.NONE, true);
+                        }
                     } else {
                         user.roundabout$setActive(true);
                         user.roundabout$setSummonCD(2);

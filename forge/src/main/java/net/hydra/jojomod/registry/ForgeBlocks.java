@@ -13,6 +13,7 @@ import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
@@ -38,11 +39,11 @@ public class ForgeBlocks {
     public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
             "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
                     .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
-                    .pushReaction(PushReaction.BLOCK)));
+                    .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<HallucinatoryAcidWallBlock> HALLUCINATORY_ACID_WALL = BLOCKS.register(
             "hallucinatory_acid_wall", () -> new HallucinatoryAcidWallBlock(BlockBehaviour.Properties.of()
                     .noCollission().noOcclusion().strength(3.0F, 6.0F).noLootTable().randomTicks()
-                    .pushReaction(PushReaction.BLOCK)));
+                    .sound(SoundType.MUD).pushReaction(PushReaction.BLOCK)));
     public static final RegistryObject<BlockEntityType<HallucinatoryAcidBlockEntity>> HALLUCINATORY_ACID_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("hallucinatory_acid", () -> BlockEntityType.Builder.of(
                     HallucinatoryAcidBlockEntity::new, HALLUCINATORY_ACID.get(), HALLUCINATORY_ACID_WALL.get())

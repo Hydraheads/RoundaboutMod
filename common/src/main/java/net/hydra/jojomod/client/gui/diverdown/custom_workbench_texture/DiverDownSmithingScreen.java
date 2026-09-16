@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class DiverDownSmithingScreen extends SmithingScreen {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/anvil.png");
+        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/smithing_table.png");
 
     public DiverDownSmithingScreen(SmithingMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

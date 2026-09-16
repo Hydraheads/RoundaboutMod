@@ -1,16 +1,15 @@
 package net.hydra.jojomod.item;
 
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.whitesnake.disc.CommandDiscController;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
-import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryAiController;
 import net.hydra.jojomod.event.powers.whitesnake.disc.WhitesnakeDiscUtil;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.ExplosionUtil;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -107,15 +106,13 @@ public final class CommandDiscItem extends Item {
             mob.setTarget(commandedTarget);
             mob.getLookControl().setLookAt(commandedTarget, 30.0F, 30.0F);
             mob.getNavigation().moveTo(commandedTarget, 1.15D);
-            CommandDiscController.commandAttack(target, commandedTarget);
+            CommandDiscController.commandAttack(mob, commandedTarget);
             return true;
         }
         if (target instanceof ServerPlayer player) {
-            player.lookAt(EntityAnchorArgument.Anchor.EYES,
-                    commandedTarget.getEyePosition());
-            CommandDiscController.commandAttack(target, commandedTarget);
-            MemoryAiController.forcePlayerAttack(player, commandedTarget);
-            return true;
+            if (commandedTarget.isRemoved() || commandedTarget.level() != player.level()
+                    || player.distanceToSqr(commandedTarget) > CommandDiscPossession.MAX_TARGET_DISTANCE_SQR) return false;
+            return CommandDiscController.commandAttack(player, commandedTarget);
         }
         return false;
     }

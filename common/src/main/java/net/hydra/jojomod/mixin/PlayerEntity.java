@@ -9,6 +9,7 @@ import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.block.StoneMaskBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -759,7 +760,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
         if (SU.roundabout$getStandPowers().forceCrit()){
             return true;
         }
-        if ( SU.roundabout$isPossessed() ) {
+        if (SU.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
             return true;
         }
         return value;

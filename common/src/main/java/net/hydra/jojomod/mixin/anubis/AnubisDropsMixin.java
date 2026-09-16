@@ -31,13 +31,13 @@ public abstract class AnubisDropsMixin {
 
             if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
                 if (MainUtil.isTraitorDisc(SU.roundabout$getStandDisc())) {
+                    ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
 
                     if ($$0.getEntity() != null && $$0.getEntity() instanceof Player P
                             && ((StandUser) P).roundabout$getStandPowers() instanceof PowersAnubis PA
                             && !((IPlayerEntity) P).roundabout$getUnlockedBonusSkin()) {
                         PA.unlockSkin(SU.roundabout$getStandSkin());
                     } else {
-                        ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
                         CompoundTag tag = stack.getOrCreateTagElement("SkinType");
                         tag.putByte("SkinType", SU.roundabout$getStandSkin());
 
@@ -48,11 +48,9 @@ public abstract class AnubisDropsMixin {
                             skin = 2F;
                         }
                         stack.getTag().putFloat("CustomModelData",skin);
-
-                        This.spawnAtLocation(stack);
-
-
                     }
+                    This.spawnAtLocation(stack);
+
                 }
             }
         }

@@ -22,6 +22,7 @@ import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundPathfindingStandAttackEntity;
 import net.hydra.jojomod.entity.projectile.GasolineCanEntity;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
@@ -41,6 +42,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.fates.powers.VampiricFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.stand.powers.*;
 import net.hydra.jojomod.item.*;
@@ -1412,7 +1414,7 @@ public class MainUtil {
                 return ItemStack.EMPTY;
             }
 
-            if (su.roundabout$isPossessed()) {
+            if (su.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
                 return ItemStack.EMPTY;
             }
             if (su.roundabout$getEffectiveCombatMode()) {
@@ -2565,7 +2567,8 @@ public class MainUtil {
                 || sauce.is(ModDamageTypes.ANUBIS_SPIN)
                 || sauce.is(ModDamageTypes.DISINTEGRATION)
                 || sauce.is(ModDamageTypes.KQ_EXPLOSION)
-                || sauce.is(ModDamageTypes.BITES_THE_DUST)) {
+                || sauce.is(ModDamageTypes.INFINITE_SPIN)
+                || sauce.is(ModDamageTypes.BITES_THE_DUST)){
             return true;
         }
         return false;
@@ -2721,6 +2724,7 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
                 || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.STAND_VIRUS) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED) ||
                 value.equals(ModEffects.SINGE)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.CAPTURING_LOVE) || value.equals(ModEffects.MELTING)
@@ -2731,7 +2735,8 @@ public class MainUtil {
         return value.equals(ModEffects.BLEED) || value.equals(ModEffects.CAPTURING_LOVE)
                 || value.equals(ModEffects.FACELESS)
                 || value.equals(ModEffects.BANISH) || value.equals(ModEffects.WARDING) || value.equals(ModEffects.HEX)
-                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING)
+                || value.equals(ModEffects.SWITCH) || value.equals(ModEffects.MELTING) ||
+                value.equals(ModEffects.IMPRINTING) || value.equals(ModEffects.SWAPPED)
                 || value.equals(ModEffects.STAND_MELTING) ||
                 value.equals(ModEffects.SINGE);
     }

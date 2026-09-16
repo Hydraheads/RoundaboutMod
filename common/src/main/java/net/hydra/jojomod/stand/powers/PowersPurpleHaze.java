@@ -18,17 +18,16 @@ import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
-import net.hydra.jojomod.event.index.OffsetIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
+import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.hydra.jojomod.event.PermanentZoneCastInstance;
-import net.hydra.jojomod.event.index.PowerIndex;
-import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewPunchingStand;
@@ -81,6 +80,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case PurpleHazeEntity.NETHERITE -> {return Component.translatable("skins.roundabout.purple_haze.netherite");}
             case PurpleHazeEntity.MIRROR_BATTLE -> {return Component.translatable("skins.roundabout.purple_haze.mirror_battle");}
             case PurpleHazeEntity.ROTT -> {return Component.translatable("skins.roundabout.purple_haze.rott_haze");}
+            case PurpleHazeEntity.PEPPERMINT -> {return Component.translatable("skins.roundabout.purple_haze.peppermint");}
             default -> {
                 return Component.translatable("skins.roundabout.purple_haze.anime");
             }
@@ -122,6 +122,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 $$1.add(PurpleHazeEntity.MIRROR_BATTLE);
             } if (Level > 3 || bypass) {
                 $$1.add(PurpleHazeEntity.ROTT);
+                $$1.add(PurpleHazeEntity.PEPPERMINT);
             }
         }
         return $$1;
@@ -304,9 +305,15 @@ public class PowersPurpleHaze extends NewPunchingStand {
     public void powerActivate(PowerContext context) {
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_GUARD -> {
-                if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
-                    this.tryPowerPacket(PowerIndex.POWER_1_BONUS);
-                }else this.tryPowerPacket(PowerIndex.POWER_1);
+                if(isBarraging() && !isBarrageCharging()){
+                    clientForwardBarrage();
+                }
+                else if(isBarrageCharging()){
+
+                } else
+                    if(self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
+                        this.tryPowerPacket(PowerIndex.POWER_1_BONUS);
+                    }else this.tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_1_CROUCH,SKILL_1_CROUCH_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_1_SNEAK);
@@ -314,7 +321,11 @@ public class PowersPurpleHaze extends NewPunchingStand {
             case SKILL_2_NORMAL,SKILL_2_CROUCH,SKILL_2_CROUCH_GUARD, SKILL_2_GUARD -> {
                 this.tryPowerPacket(PowerIndex.POWER_2);
             }
-            case SKILL_3_NORMAL -> tryToDashClient();
+            case SKILL_3_NORMAL -> {
+                if (!clientForwardBarrage()) {
+                    tryToDashClient();
+                }
+            }
             case SKILL_3_CROUCH -> tryToStandLeapClient();
         }
     }
@@ -354,8 +365,18 @@ public class PowersPurpleHaze extends NewPunchingStand {
         return 70;
     }
 
+    private static final double FORWARD_BARRAGE_SPEED = 0.12;
+
     @Override
     public void barrageImpact(Entity entity, int hitNumber) {
+        if (entity != null && moveStarted){
+            moveStarted = false;
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)){
+                stand.setXRot(getLookAtEntityPitch(stand, entity));
+                stand.setYRot(getLookAtEntityYaw(stand, entity));
+            }
+        }
 
         super.barrageImpact(entity, hitNumber);
 
@@ -363,8 +384,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
         if (actualHitNumber > 1000) {
             actualHitNumber -= 1000;
         }
-
         boolean lastHit = actualHitNumber >= getBarrageLength();
+
+        if (forwardBarrage && entity instanceof LivingEntity && entity.isAlive() && !entity.isRemoved() && !lastHit) {
+            StandEntity stand = getStandEntity(this.self);
+            if (Objects.nonNull(stand)) {
+                Vec3 forward = stand.getForward();
+                Vec3 current = entity.getDeltaMovement();
+                entity.setDeltaMovement(
+                        forward.x * FORWARD_BARRAGE_SPEED,
+                        current.y * 0.5,
+                        forward.z * FORWARD_BARRAGE_SPEED
+                );
+                entity.hurtMarked = true;
+            }
+        }
 
         if (!lastHit || entity == null) {
             return;
@@ -378,16 +412,76 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (!(self instanceof Player pl && pl.isCreative())) {
                 setPods(getPods() - 1);
             }
-
-            activatePurpleHazeField(
-                    entity.position(),
-                    indistortionmode
-            );
+            activatePurpleHazeField(entity.position(), indistortionmode);
         }
+    }
+    private Vec2 forwardBarrageLockedRot = null;
+    public boolean clientForwardBarrage(){
+        if (this.isBarraging()){
+            if (attackTimeDuring < 0){
+                return true;
+            }
+            if (!forwardBarrage) {
+                forwardBarrage = true;
+                captureForwardBarrageDirection();
+                C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_FORWARD_BARRAGE);
+            }
+            return true;
+        }
+        return false;
+    }
+    private void captureForwardBarrageDirection(){
+        Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+        Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+        forwardBarrageLockedRot = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+    }
+    public float getRushDistance(){
+        if (forwardBarrage){
+            return 15;
+        }
+        return getReach();
+    }
+
+    public float getFloatOutRange(){
+        return 7F;
+    }
+    @Override
+    public void standBarrageHit(){
+        if (forwardBarrage) {
+            StandEntity stand = getStandEntity(this.self);
+            if (this.self instanceof Player) {
+                if (isPacketPlayer() && Objects.nonNull(stand)) {
+                    C2SPacketUtil.standBarrageHitPacket(getTargetEntityId2(2.7F, stand, 50), this.attackTimeDuring);
+                    if (this.isBarraging() && this.attackTimeDuring == this.getBarrageLength()) {
+                        this.attackTimeDuring = -10;
+                    }
+                }
+            } else if (Objects.nonNull(stand)) {
+                Entity targetEntity = getTargetEntity(stand, 2.7F, 50);
+                barrageImpact(targetEntity, this.attackTimeDuring);
+            }
+            findDeflectables();
+            return;
+        }
+        super.standBarrageHit();
     }
 
 
-
+    public void faceForwardBarrageDirection(StandEntity stand){
+        Vec2 rot;
+        if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.forwardBarrageCanSteer) {
+            Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
+            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+            rot = RotationUtil.rotPlayerToWorld(twoVec, gdir);
+        } else {
+            if (forwardBarrageLockedRot == null) {
+                captureForwardBarrageDirection();
+            }
+            rot = forwardBarrageLockedRot;
+        }
+        stand.setYRot(rot.x);
+        stand.setXRot(rot.y);
+    }
     private void breakPurpleHazePod(Vec3 position) {
         if (self.level().isClientSide()) {
             return;
@@ -425,7 +519,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
     @Override
     public void renderIcons(GuiGraphics context, int x, int y) {
-        if (isHoldingSneak()) {
+        if (isBarraging()||isBarrageAttacking()) {
+            setSkillIcon(context, x, y, 1, StandIcons.PH_FORWARD_BARRAGE, PowerIndex.SKILL_3);
+        } else if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(4)) {
                 if(indistortionmode()){
                     setSkillIcon(context, x, y, 1, StandIcons.DISTORTION_MODE, PowerIndex.SKILL_1_SNEAK);
@@ -867,6 +963,31 @@ public class PowersPurpleHaze extends NewPunchingStand {
 
             tickStrangleTravel(stand);
         }
+        if (this.forwardBarrage && !this.isBarraging()){
+            this.forwardBarrage = false;
+            forwardBarrageLockedRot = null;
+        }
+        if (this.forwardBarrage && this.attackTimeDuring >= 0 && this.isBarraging()) {
+            if (!this.getSelf().level().isClientSide()) {
+                StandEntity stand = getStandEntity(this.self);
+                if (Objects.nonNull(stand)) {
+                    faceForwardBarrageDirection(stand);
+
+                    Entity target = getTargetEntity(stand, 2.7F, 50);
+                    boolean blockedByWall = stand.isTechnicallyInWall();
+                    boolean tooCloseToTarget = target != null
+                            && stand.position().distanceTo(target.position()) < 1.0;
+
+                    if (!blockedByWall && !tooCloseToTarget) {
+                        stand.setPos(stand.getPosition(1).add(stand.getForward().scale(0.12)));
+                    }
+
+                    if (stand.position().distanceTo(this.getSelf().position()) > 15F) {
+                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    }
+                }
+            }
+        }
     }
     private void launchStrangle(StandEntity stand) {
         Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), this.getSelf().getXRot());
@@ -1036,10 +1157,16 @@ public class PowersPurpleHaze extends NewPunchingStand {
     private void playFallBraceShockwave() {
         Vec3 pos = self.position();
 
+        int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(getStandSkin(), PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+
         sendParticlesIfPossible(self.level(),
-                ModParticles.PW_BLASTWAVE_EXPLOSION,
+                HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
                 pos.x, pos.y + 0.05, pos.z,
                 1, 0.005, 0.01, 0.005, 0.02);
+        /*sendParticlesIfPossible(self.level(),
+                ModParticles.PW_BLASTWAVE_EXPLOSION,
+                pos.x, pos.y + 0.05, pos.z,
+                1, 0.005, 0.01, 0.005, 0.02);*/
 
         AABB sweep = new AABB(pos, pos).inflate(FALL_BRACE_SHOCKWAVE_RADIUS, 1.5, FALL_BRACE_SHOCKWAVE_RADIUS);
         List<Entity> nearby = self.level().getEntities(self, sweep);
@@ -1175,7 +1302,10 @@ public class PowersPurpleHaze extends NewPunchingStand {
         }
 
         super.tickPower();
-
+        if (this.forwardBarrage && !this.isBarraging()){
+            this.forwardBarrage = false;
+            forwardBarrageLockedRot = null;
+        }
         if (!self.level().isClientSide) {
             tickPodReset();
             tickPodRecharge();

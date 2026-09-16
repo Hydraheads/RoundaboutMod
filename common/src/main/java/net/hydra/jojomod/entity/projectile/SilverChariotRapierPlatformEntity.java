@@ -1,6 +1,7 @@
 package net.hydra.jojomod.entity.projectile;
 
 import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,9 +16,11 @@ public class SilverChariotRapierPlatformEntity extends Entity {
         super($$0, $$1);
     }
 
-    public SilverChariotRapierPlatformEntity(Level $$1) {
+    public SilverChariotEntity silverChariot = null;
+
+    public SilverChariotRapierPlatformEntity(Level $$1, SilverChariotEntity silverChariot) {
         this(ModEntities.SILVER_CHARIOT_RAPIER_PLATFORM, $$1);
-        this.life = 0;
+        this.silverChariot = silverChariot;
     }
 
     /*
@@ -54,12 +57,13 @@ public class SilverChariotRapierPlatformEntity extends Entity {
     }
      */
 
-    private int life;
+    private int life = 0;
 
     @Override
     public void tick() {
         super.tick();
-        if (this.tickCount > 600) {
+        this.life += 1;
+        if (this.life > 600) {
             this.discard();
         }
     }

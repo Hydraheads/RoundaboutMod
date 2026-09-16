@@ -83,6 +83,10 @@ public class ForgeEffects{
             POTION_EFFECTS.register("refreshed", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 13302495)
             );
+    public static final RegistryObject<MobEffect> INFINITE_SPIN =
+            POTION_EFFECTS.register("infinite_spin", () ->
+                    new Effect(MobEffectCategory.HARMFUL, 16411584)
+            );
     public static final RegistryObject<MobEffect> HAZE_VIRUS =
             POTION_EFFECTS.register("haze_virus", () ->
                     new Effect(MobEffectCategory.HARMFUL, 10824365)
@@ -94,6 +98,15 @@ public class ForgeEffects{
     public static final RegistryObject<MobEffect> VIRUS_IMMUNITY =
             POTION_EFFECTS.register("virus_immunity", () ->
                     new Effect(MobEffectCategory.BENEFICIAL, 10824365)
+            );
+    public static final RegistryObject<MobEffect> IMPRINTING =
+            POTION_EFFECTS.register("imprinting", () ->
+                    new Effect(MobEffectCategory.NEUTRAL, 16134815)
+            );
+    public static final RegistryObject<MobEffect> SWAPPED =
+            POTION_EFFECTS.register("swapped", () ->
+                    new Effect(MobEffectCategory.NEUTRAL, 16134815).
+                            addAttributeModifier(Attributes.MAX_HEALTH,"6107DE5A-7CE8-4030-940E-514C1F160890",-2, AttributeModifier.Operation.ADDITION)
             );
 
 

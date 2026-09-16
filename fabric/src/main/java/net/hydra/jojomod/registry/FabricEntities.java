@@ -18,6 +18,7 @@ import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
+import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
 import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
 import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
 import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
@@ -696,6 +697,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DiverDownEntity::new, MobCategory.MISC).
                                 sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":diver_down")
                 );
+        public static final EntityType<BoneProjectileEntity> BONE_PROJECTILE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "bone_projectile"),
+                    EntityType.Builder.<BoneProjectileEntity>of(BoneProjectileEntity::new, MobCategory.MISC).
+                            sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID + ":bone_projectile")
+            );
         public static final EntityType<SilverChariotEntity> SILVER_CHARIOT =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -708,7 +716,7 @@ public class FabricEntities {
                         BuiltInRegistries.ENTITY_TYPE,
                         Roundabout.location("silver_chariot_rapier"),
                         EntityType.Builder.<SilverChariotRapierShotEntity>of(SilverChariotRapierShotEntity::new, MobCategory.MISC).
-                                sized(0.2f, 0.2f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
+                                sized(0.5f, 0.5f).clientTrackingRange(16).build(Roundabout.MOD_ID+":silver_chariot_rapier")
                 );
     public static final EntityType<SilverChariotRapierPlatformEntity> SILVER_CHARIOT_RAPIER_PLATFORM =
             Registry.register(
@@ -957,6 +965,13 @@ public class FabricEntities {
                         EntityType.Builder.<BombPlantedArrow>of(BombPlantedArrow::new, MobCategory.MISC).
                                 sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":bomb_planted_arrow")
                 );
+    public static final EntityType<BombPlantedEnderpearl> BOMB_PLANTED_ENDERPEARL =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        new ResourceLocation(Roundabout.MOD_ID, "bomb_planted_enderpearl"),
+                        EntityType.Builder.<BombPlantedEnderpearl>of(BombPlantedEnderpearl::new, MobCategory.MISC).
+                                sized(0.7f, 0.7f).clientTrackingRange(6).build(Roundabout.MOD_ID+":bomb_planted_enderpearl")
+                );
     public static final EntityType<BombPlantedSpectralArrow> BOMB_PLANTED_SPECTRAL_ARROW =
                 Registry.register(
                         BuiltInRegistries.ENTITY_TYPE,
@@ -978,7 +993,14 @@ public class FabricEntities {
                         EntityType.Builder.<ThrownObjectEntity>of(ThrownObjectEntity::new, MobCategory.MISC).
                                 sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":thrown_object")
                 );
-    public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
+        public static final EntityType<ReturningObjectEntity> RETURNING_OBJECT =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "returning_object"),
+                    EntityType.Builder.<ReturningObjectEntity>of(ReturningObjectEntity::new, MobCategory.MISC).
+                            sized(1f, 1f).clientTrackingRange(10).build(Roundabout.MOD_ID+":returning_object")
+            );
+        public static final EntityType<ThrownAnubisEntity> THROWN_ANUBIS =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "thrown_anubis"),
@@ -1005,6 +1027,13 @@ public class FabricEntities {
                     new ResourceLocation(Roundabout.MOD_ID, "anubis_possessor"),
                     EntityType.Builder.<AnubisPossessorEntity>of(AnubisPossessorEntity::new, MobCategory.MISC).
                             sized(0.6f, 2f).clientTrackingRange(10).build(Roundabout.MOD_ID+":anubis_possessor")
+            );
+    public static final EntityType<CommandDiscPossession> COMMAND_DISC_POSSESSION =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    new ResourceLocation(Roundabout.MOD_ID, "command_disc_possession"),
+                    EntityType.Builder.<CommandDiscPossession>of(CommandDiscPossession::new, MobCategory.MISC).
+                            sized(0.6f, 2f).clientTrackingRange(10).noSave().build(Roundabout.MOD_ID+":command_disc_possession")
             );
     public static final EntityType<AnubisSlipstreamEntity> ANUBIS_SLIPSTREAM =
             Registry.register(
@@ -1251,6 +1280,7 @@ public class FabricEntities {
                 ModEntities.ROUNDABOUT_BULLET_ENTITY = ROUNDABOUT_BULLET_ENTITY;
                 ModEntities.THROWN_KNIFE = THROWN_KNIFE;
                 ModEntities.PH_CAPSULE = PH_CAPSULE;
+                ModEntities.BONE_PROJECTILE = BONE_PROJECTILE;
                 ModEntities.BLOCK_WALL = BLOCK_WALL;
                 ModEntities.PARALLEL_CHEST = PARALLEL_CHEST;
                 ModEntities.D4C_BLOCK = D4C_BLOCK;
@@ -1280,6 +1310,7 @@ public class FabricEntities {
                 ModEntities.STAND_ARROW = STAND_ARROW;
                 ModEntities.BOMB_PLANTED_ARROW = BOMB_PLANTED_ARROW;
                 ModEntities.BOMB_PLANTED_SPECTRAL_ARROW = BOMB_PLANTED_SPECTRAL_ARROW;
+                ModEntities.BOMB_PLANTED_ENDERPEARL = BOMB_PLANTED_ENDERPEARL;
                 ModEntities.IRON_BALL = IRON_BALL;
                 ModEntities.PW_METEOR = PW_METEOR;
                 ModEntities.PW_BIG_METEOR = PW_BIG_METEOR;
@@ -1287,6 +1318,7 @@ public class FabricEntities {
                 ModEntities.GENTLY_WEEPS = GENTLY_WEEPS;
 
                 ModEntities.THROWN_OBJECT = THROWN_OBJECT;
+                ModEntities.RETURNING_OBJECT = RETURNING_OBJECT;
                 ModEntities.THROWN_ANUBIS = THROWN_ANUBIS;
                 ModEntities.CONCEALED_FLAME_OBJECT = CONCEALED_FLAME_OBJECT;
                 ModEntities.GROUND_HURRICANE = GROUND_HURRICANE;
@@ -1299,6 +1331,7 @@ public class FabricEntities {
                 ModEntities.STRAY_CAT_AIRBUBBLE = STRAY_CAT_AIRBUBBLE;
                 ModEntities.CINDERELLA_VISAGE_DISPLAY = CINDERELLA_VISAGE_DISPLAY;
                 ModEntities.ANUBIS_POSSESSOR = ANUBIS_POSSESSOR;
+                ModEntities.COMMAND_DISC_POSSESSION = COMMAND_DISC_POSSESSION;
                 ModEntities.ANUBIS_SLIPSTREAM = ANUBIS_SLIPSTREAM;
                 ModEntities.TUSK_NAIL = TUSK_NAIL;
                 ModEntities.TUSK_HOLE = TUSK_HOLE;
@@ -1460,6 +1493,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GROUND_HURRICANE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_HOLE, TuskHoleEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(ANUBIS_POSSESSOR, AnubisPossessorEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(COMMAND_DISC_POSSESSION, CommandDiscPossession.createAttributes());
                 FabricDefaultAttributeRegistry.register(GROUND_BUBBLE, GroundHurricaneEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(LIFE_TRACKER, LifeTrackerEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SEPERATED_LEGS, SeperatedLegsEntity.createStandAttributes());

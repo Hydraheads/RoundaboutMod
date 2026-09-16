@@ -111,6 +111,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte AUTO_MODE_MOVE = 105;
     private static final byte AUTO_MODE_ATTACK = 106;
     private static final byte CONTROL_MODE_FROM_AUTO = 107;
+    private static final byte RETREAT_MODE = 108;
     private static final byte ROUNDABOUT_DODGE_NOISE = 59;
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte PHASE_GRAB_COOLDOWN = PowerIndex.SKILL_EXTRA_2;
@@ -131,7 +132,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private int meltingCrawlGraceTicks;
     private int meltingCrawlTransitionTicks;
     private boolean autoMode;
-    private int autoAttackCooldown;
+    private boolean isRetreating = false;
+    private int retreatTicks = -1;
     private Vec3 autoMoveTarget;
     private int manualAutoTargetId = -1;
     private int mobAbilityDecisionCooldown;
@@ -311,7 +313,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double horizontalDistance = MainUtil.cheapDistanceTo2(
                 stand.getX(), stand.getZ(), self.getX(), self.getZ());
         double verticalDistance = Math.abs(stand.getY() - self.getY());
-        return horizontalDistance <= getMaxPilotRange()
+        return horizontalDistance <= getMaxPilotRange() * 1.1D
                 && verticalDistance <= getMaxPilotVerticalRange();
     }
 
@@ -322,6 +324,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void toggleControlModeClient() {
         if (!(self instanceof Player)) return;
+        isRetreating = false;
         if (autoMode) {
             enterControlFromAutoClient();
             return;
@@ -340,6 +343,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void toggleAutoModeClient() {
         if (!(self instanceof Player)) return;
+        isRetreating = false;
         if (autoMode) {
             setAutoMode(false);
             tryIntPowerPacket(AUTO_MODE, 0);
@@ -368,6 +372,49 @@ public class PowersWhitesnake extends BlockGrabPreset {
         tryIntToServerPacket(PacketDataIndex.INT_UPDATE_PILOT, 0);
     }
 
+    public boolean tryRetreatBeforeUnsummon() {
+        if (!(self instanceof Player) || !getStandUserSelf().roundabout$getActive()
+                || !(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !isUsableStand(stand) || !hasDetachedStand()
+                || stand.distanceTo(self) <= 2.5D) return false;
+
+        if (isPiloting() || stand.isControlModeActive()) {
+            setPiloting(0);
+            if (self.level().isClientSide()) WhitesnakeControlClient.exit();
+            if (self instanceof ServerPlayer player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, ENTER_CONTROL_MODE, 0);
+            }
+        }
+        if (autoMode || stand.isAutoModeActive()) {
+            setAutoMode(false);
+            if (self instanceof ServerPlayer player) {
+                S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE, 0);
+            }
+        }
+        if (self instanceof ServerPlayer player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, RETREAT_MODE, 1);
+        }
+        return true;
+    }
+
+    public void detectNeedToRetreat() {
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !stand.isAlive() || stand.isRemoved()
+                || !((StandUser) self).roundabout$getActive()) {
+            return;
+        }
+        double distance = stand.distanceTo(self);
+        boolean wasRetreating = isRetreating;
+
+        isRetreating = distance > 2.5D;
+        if (!isRetreating) {
+            retreatTicks = -1;
+            if (wasRetreating) {
+                stopRetreatModeServer();
+            }
+        }
+    }
+
     private void setAutoMode(boolean enabled) {
         StandEntity stand = getStandEntity(self);
         boolean wasAutoMode = autoMode;
@@ -384,22 +431,28 @@ public class PowersWhitesnake extends BlockGrabPreset {
         clearAutoModeTargets();
         setMeltingMode(false, false);
         if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+            if (autoMode || isPiloting()) {
+                following.setOffsetType(OffsetIndex.LOOSE);
+            }else {
+                detectNeedToRetreat();
+                if (!isRetreating) {
+                    following.setOffsetType(OffsetIndex.FOLLOW);
+                }
+            }
+
         }
         if (stand instanceof WhitesnakeEntity whitesnake) {
             whitesnake.setAutoMode(autoMode);
+            whitesnake.setRetreatMode(isRetreating);
             whitesnake.getNavigation().stop();
-            whitesnake.clearControlInput();
-            whitesnake.clearDisguise();
             whitesnake.setTarget(null);
         }
-        resetRemoteStandMovement(stand);
+        resetRemoteStandState(stand);
         if (wasAutoMode && !autoMode && !isPiloting()) transferRemoteStandEffects(stand);
         if (!autoMode && getActivePower() == PowerIndex.ATTACK) tryPower(PowerIndex.NONE, true);
     }
 
     private void clearAutoModeTargets() {
-        autoAttackCooldown = 0;
         autoMoveTarget = null;
         manualAutoTargetId = -1;
     }
@@ -422,20 +475,25 @@ public class PowersWhitesnake extends BlockGrabPreset {
             setAutoMode(false);
             if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.clearAutoModeMovement();
         }
-        if (stand instanceof FollowingStandEntity following) {
-            following.setOffsetType(entering || autoMode ? OffsetIndex.LOOSE : OffsetIndex.FOLLOW);
+        if (stand instanceof WhitesnakeEntity following) {
+            if (entering || autoMode) {
+                following.setOffsetType(OffsetIndex.LOOSE);
+            }else {
+                detectNeedToRetreat();
+                if (!isRetreating) {
+                    following.setOffsetType(OffsetIndex.FOLLOW);
+                }
+                following.setRetreatMode(isRetreating);
+            }
         }
+
         if (!entering) {
             clearForwardBarrageTravel();
             setMeltingMode(false, false);
             player.stopUsingItem();
-            if (stand instanceof WhitesnakeEntity whitesnake) {
-                whitesnake.clearControlInput();
-                whitesnake.clearDisguise();
-            }
-            resetRemoteStandMovement(stand);
+            resetRemoteStandState(stand);
             if (wasPiloting && !autoMode) transferRemoteStandEffects(stand);
-        } else if (entering && stand instanceof WhitesnakeEntity whitesnake) {
+        } else if (stand instanceof WhitesnakeEntity whitesnake) {
             whitesnake.getNavigation().stop();
             whitesnake.clearControlInput();
         }
@@ -466,6 +524,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (rotateCamera && isClient()) {
             WhitesnakeControlClient.rotateLookForGravityChange(whitesnake, oldGravity, Direction.DOWN);
         }
+    }
+
+    private static void resetRemoteStandState(StandEntity stand) {
+        if (stand instanceof WhitesnakeEntity whitesnake) {
+            whitesnake.clearControlInput();
+            whitesnake.clearDisguise();
+        }
+        resetRemoteStandMovement(stand);
     }
 
     private static void resetRemoteStandMovement(StandEntity stand) {
@@ -499,6 +565,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void prepareStandForRemoteControl(StandEntity stand) {
         if (stand == null) return;
+        isRetreating = false;
         Vec3 position = stand.position();
         float yaw = stand.getYRot();
         float pitch = stand.getXRot();
@@ -594,7 +661,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void preCheckButtonInputAttack(boolean keyIsDown, Options options) {
-        if (autoMode) return;
+        if (autoMode || isRetreating) return;
         if (keyIsDown && isControlHovering()) return;
         if (isPiloting() && keyIsDown
                 && WhitesnakeControlClient.tryMining(Minecraft.getInstance())) return;
@@ -603,27 +670,27 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void preCheckButtonInputUse(boolean keyIsDown, Options options) {
-        if (!autoMode) super.preCheckButtonInputUse(keyIsDown, options);
+        if (!autoMode && !isRetreating) super.preCheckButtonInputUse(keyIsDown, options);
     }
 
     @Override
     public void preCheckButtonInputBarrage(boolean keyIsDown, Options options) {
-        if (!autoMode) super.preCheckButtonInputBarrage(keyIsDown, options);
+        if (!autoMode && !isRetreating) super.preCheckButtonInputBarrage(keyIsDown, options);
     }
 
     @Override
     public boolean preCheckButtonInputGuard(boolean keyIsDown, Options options) {
-        return !autoMode && super.preCheckButtonInputGuard(keyIsDown, options);
+        return !autoMode && super.preCheckButtonInputGuard(keyIsDown, options) && !isRetreating;
     }
 
     @Override
     public boolean interceptAttack() {
-        return !autoMode && super.interceptAttack();
+        return !autoMode && super.interceptAttack() && !isRetreating;
     }
 
     @Override
     public boolean interceptGuard() {
-        return !autoMode && super.interceptGuard();
+        return !autoMode && super.interceptGuard() && !isRetreating;
     }
 
     @Override
@@ -680,43 +747,32 @@ public class PowersWhitesnake extends BlockGrabPreset {
         Direction current = gravityEntity.roundabout$getGravityDirection();
         if (meltingCrawlTransitionTicks > 0) {
             meltingCrawlTransitionTicks--;
-            meltingCrawlGraceTicks = 4;
             return;
         }
         boolean moving = Math.abs(input.leftImpulse) > 0.01F || Math.abs(input.forwardImpulse) > 0.01F;
+        Vec3 movement = getMeltingMovementVector(whitesnake, input, current);
+        Direction movementDirection = Direction.getNearest(movement.x, movement.y, movement.z);
 
-        if (moving) {
-            Vec3 movement = getMeltingMovementVector(whitesnake, input, current);
-            Direction movementDirection = Direction.getNearest(movement.x, movement.y, movement.z);
-            if (movementDirection != current && movementDirection != current.getOpposite()
-                    && touchesMeltingCrawlSurface(whitesnake, movementDirection)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, movementDirection);
-                return;
-            }
-
-            Vec3 lookAhead = movement.normalize().scale(0.42D);
-            Direction outerSurface = movementDirection.getOpposite();
-            if (outerSurface != current && outerSurface != current.getOpposite()
-                    && touchesMeltingCrawlSurface(whitesnake, current)
-                    && !touchesMeltingCrawlSurface(whitesnake, current, lookAhead)
-                    && touchesMeltingCrawlSurface(whitesnake, outerSurface, lookAhead)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, outerSurface);
-                return;
-            }
-        }
-
-        if (touchesMeltingCrawlSurface(whitesnake, current)) {
-            meltingCrawlGraceTicks = 4;
+        if (moving && whitesnake.horizontalCollision
+                && movementDirection != current && movementDirection != current.getOpposite()
+                && touchesMeltingCrawlSurface(whitesnake, movementDirection)) {
+            beginMeltingCrawlTransition(whitesnake, movementDirection);
             return;
         }
 
-        for (Direction direction : Direction.values()) {
-            if (direction == current || direction == current.getOpposite()) continue;
-            if (touchesMeltingCrawlSurface(whitesnake, direction)) {
-                meltingCrawlGraceTicks = 4;
-                beginMeltingCrawlTransition(whitesnake, direction);
+        if (touchesMeltingCrawlSurface(whitesnake, current)) {
+            meltingCrawlGraceTicks = 12;
+            return;
+        }
+
+        if (moving && meltingCrawlGraceTicks > 0) {
+            Vec3 probe = new Vec3(current.step()).scale(0.2D);
+            Direction outerSurface = movementDirection.getOpposite();
+            if (outerSurface != current && outerSurface != current.getOpposite()
+                    && touchesMeltingCrawlSurface(whitesnake, outerSurface, probe)
+                    && !touchesMeltingCrawlSurface(whitesnake, movementDirection, probe)) {
+                beginMeltingCrawlTransition(whitesnake, outerSurface);
+                meltingCrawlTransitionTicks = 5;
                 return;
             }
         }
@@ -729,7 +785,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void beginMeltingCrawlTransition(WhitesnakeEntity whitesnake, Direction direction) {
-        meltingCrawlTransitionTicks = 4;
+        meltingCrawlTransitionTicks = 7;
+        meltingCrawlGraceTicks = 12;
         whitesnake.resetFallDistance();
         setMeltingGravityClient(whitesnake, direction);
     }
@@ -747,13 +804,23 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private boolean touchesMeltingCrawlSurface(WhitesnakeEntity whitesnake, Direction direction) {
-        return touchesMeltingCrawlSurface(whitesnake, direction, Vec3.ZERO);
+        Vec3 probe = new Vec3(direction.step()).scale(0.18D);
+        return !whitesnake.level().noCollision(whitesnake,
+                whitesnake.getBoundingBox().deflate(0.03D).move(probe));
     }
 
     private boolean touchesMeltingCrawlSurface(WhitesnakeEntity whitesnake, Direction direction, Vec3 offset) {
-        Vec3 probe = new Vec3(direction.step()).scale(0.18D);
-        return !whitesnake.level().noCollision(whitesnake,
-                whitesnake.getBoundingBox().deflate(0.03D).move(offset).move(probe));
+        Vec3 mpos = whitesnake.position().add(offset);
+        for (double dist : new double[]{0.1D, whitesnake.getBbWidth() * 1.1D,
+                whitesnake.getBbWidth() * 1.4D, whitesnake.getBbWidth() * 1.6D,
+                whitesnake.getBbWidth() * 2.0D, whitesnake.getBbWidth() * 2.5D}) {
+            Vec3 cutPos = mpos.add(new Vec3(direction.step()).scale(dist));
+            if (MainUtil.isBlockWalkable(whitesnake.level().getBlockState(
+                    BlockPos.containing(cutPos)))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setMeltingGravityClient(WhitesnakeEntity whitesnake, Direction direction) {
@@ -835,6 +902,13 @@ public class PowersWhitesnake extends BlockGrabPreset {
         return hasDetachedStand() && isUsableStand(stand) ? stand : self;
     }
 
+    public boolean doVault(){
+        if (isRetreating) {
+            return false;
+        }
+        return super.doVault();
+    }
+
     public void tryToDashClient() {
         if (hasBlock()) {
             return;
@@ -883,6 +957,16 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public void powerActivate(PowerContext context) {
+        if (isRetreating) {
+            switch (context) {
+                case SKILL_3_NORMAL -> tryToDashClient();
+                case SKILL_4_NORMAL -> toggleControlModeClient();
+                case SKILL_4_CROUCH -> toggleAutoModeClient();
+            }
+
+            return;
+        }
+
         if (autoMode) {
             switch (context) {
                 case SKILL_1_NORMAL, SKILL_1_CROUCH, SKILL_1_GUARD, SKILL_1_CROUCH_GUARD ->
@@ -1551,6 +1635,13 @@ public class PowersWhitesnake extends BlockGrabPreset {
             setAutoMode(data != 0);
             return;
         }
+        if (activePower == RETREAT_MODE) {
+            isRetreating = data != 0;
+            if (isRetreating && !getStandUserSelf().roundabout$getActive()) {
+                getStandUserSelf().roundabout$setActive(true);
+            }
+            return;
+        }
         if (activePower == ENTER_CONTROL_MODE && data == 0) {
             setPiloting(0);
             if (self.level().isClientSide()) WhitesnakeControlClient.exit();
@@ -1621,6 +1712,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             tickTimeSparkCropGrowth();
             tickControlModeServer();
             if (autoMode) tickAutoMode();
+            if (isRetreating) tickRetreatMode();
         }
         if (forwardBarrage && !isBarrageAttacking()) forwardBarrage = false;
         super.tickPower();
@@ -1772,6 +1864,37 @@ public class PowersWhitesnake extends BlockGrabPreset {
         S2CPacketUtil.sendIntPowerDataPacket(player, ENTER_CONTROL_MODE, 0);
     }
 
+    private void tickRetreatMode() {
+        if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
+                || !stand.isAlive() || stand.isRemoved()
+                || !((StandUser) self).roundabout$getActive()) {
+            return;
+        }
+
+        stand.setTarget(null);
+        double distance = stand.distanceTo(self);
+        boolean sprinting = distance > 3.0D;
+        stand.setSprinting(sprinting);
+        stand.setSpeed(sprinting ? 0.3F : 0.2F);
+
+        retreatTicks++;
+
+        if (distance > 2.5D && retreatTicks < 280) {
+            stand.getNavigation().moveTo(self, sprinting ? 1.5D : 1.0D);
+            stand.getLookControl().setLookAt(self, 30.0F, 30.0F);
+            rotateAutoStandToward(stand, self);
+        } else {
+            stand.getNavigation().stop();
+            stand.setOffsetType(OffsetIndex.FOLLOW);
+            isRetreating = false;
+            resetRemoteStandMovement(stand);
+            stopRetreatModeServer();
+            stand.setRetreatMode(false);
+            retreatTicks = -1;
+        }
+
+    }
+
     // Auto Mode AI
     private void tickAutoMode() {
         if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
@@ -1836,19 +1959,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
 
         stand.getNavigation().stop();
-        if (autoAttackCooldown > 0) {
-            autoAttackCooldown--;
-            return;
-        }
-        if (stand.hasLineOfSight(target) && getActivePower() == PowerIndex.NONE) {
+        if (stand.hasLineOfSight(target)
+                && (getActivePower() == PowerIndex.NONE || getActivePower() == PowerIndex.ATTACK)) {
             float specialRoll = self.getRandom().nextFloat();
-            if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
+            if (getActivePower() == PowerIndex.NONE && !onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale()
                     && specialRoll < 0.12F) {
                 tryPower(PowerIndex.POWER_1_SNEAK, true);
-                autoAttackCooldown = 10;
-            } else {
+            } else if (canAttack()) {
                 tryPower(PowerIndex.ATTACK, true);
-                autoAttackCooldown = 4;
             }
         }
     }
@@ -1886,6 +2004,15 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setYRot(bodyYaw);
         stand.setYBodyRot(bodyYaw);
         stand.setYHeadRot(headYaw);
+    }
+
+    @Override
+    public boolean isAttackIneptVisually(byte activeP, int slot) {
+        if (isRetreating) {
+            return slot < 3;
+        }
+
+        return super.isAttackIneptVisually(activeP, slot);
     }
 
     @Override
@@ -2056,6 +2183,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
             S2CPacketUtil.sendIntPowerDataPacket(player, AUTO_MODE, 0);
         }
     }
+    private void stopRetreatModeServer() {
+        if (self instanceof ServerPlayer player) {
+            S2CPacketUtil.sendIntPowerDataPacket(player, RETREAT_MODE, 0);
+        }
+    }
 
     @Override
     public void onStandSwitch() {
@@ -2160,12 +2292,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public float inputSpeedModifiers(float basis) {
         if (activePower == PowerIndex.SNEAK_ATTACK_CHARGE) {
-            if (self.isCrouching()) {
+            if (!autoMode && self.isCrouching()) {
                 float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(self), 0.0F, 1.0F);
                 basis /= sneakSpeed;
             }
             basis *= 0.3F;
-        } else if (activePower == PowerIndex.POWER_1_SNEAK && self.isCrouching()) {
+        } else if (activePower == PowerIndex.POWER_1_SNEAK && !autoMode && self.isCrouching()) {
             float sneakSpeed = Mth.clamp(0.3F + EnchantmentHelper.getSneakingSpeedBonus(self), 0.0F, 1.0F);
             basis /= sneakSpeed;
         }
