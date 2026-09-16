@@ -563,8 +563,16 @@ public class PowersD4C extends NewPunchingStand {
     @Override
     public void tickPower() {
         super.tickPower();
-        if (self.level().isClientSide() && seesBetween){
-            tickBetween();
+        if (self.level().isClientSide()){
+            if (seesBetween){
+                tickBetween();
+            }
+
+            if (getActivePower() != PowerIndex.POWER_2_SNEAK){
+                ticksSinceSwitch = 0;
+            } else {
+                ticksSinceSwitch++;
+            }
         }
         if (!this.self.level().isClientSide() && self instanceof ServerPlayer sp){
             if (altBlockPos != null) {
@@ -2430,6 +2438,8 @@ public class PowersD4C extends NewPunchingStand {
         return super.tryIntPower(move, forced, chargeTime);
     }
 
+    public int ticksSinceSwitch = 0;
+
     public void replaceBody(){
         if (!onCooldown(PowerIndex.SKILL_2_SNEAK)) {
             if (self.level() instanceof ServerLevel sl) {
@@ -2458,6 +2468,7 @@ public class PowersD4C extends NewPunchingStand {
                 self.stopUsingItem();
                 this.animateStand(D4CEntity.BODY_LEAP);
                 setActivePower(PowerIndex.POWER_2_SNEAK);
+                getStandUserSelf().roundabout$setStandAnimation(SWITCH_INTO_BODY);
                 setAttackTimeDuring(-length);
                 setCooldown(PowerIndex.SKILL_2_SNEAK,length);
                 this.poseStand(OffsetIndex.BEHIND);
@@ -2467,7 +2478,7 @@ public class PowersD4C extends NewPunchingStand {
 //                } else {
 //                    playSoundsIfNearby(DOJTWO, 27, false, true);
 //                }
-
+                enactEligability();
 
             }
         }

@@ -120,6 +120,7 @@ public class FakeCapeLayer<T extends LivingEntity, M extends EntityModel<T>> ext
 
 
                     $$0.popPose();
+                    return;
                 }
             }
             }
